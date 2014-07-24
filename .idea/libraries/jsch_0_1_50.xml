@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jsch-0.1.50">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.50/fae4a0b1f2a96cb8f58f38da2650814c991cea01/jsch-0.1.50.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.50/b6eca0935acca8dcd773df56f0fccec5d9877252/jsch-0.1.50-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

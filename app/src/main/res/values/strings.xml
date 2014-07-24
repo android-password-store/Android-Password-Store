@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PwdStore</string>
+    <string name="clone">Clone!</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="dialog_delete_title">Remove dir</string>
+    <string name="dialog_delete_msg">Target directory already exist. Current version support only a single store. Do you want to delete the current password store directory?</string>
+    <string name="dialog_delete">Delete directory</string>
+    <string name="dialog_do_not_delete">Cancel</string>
+
+    <string-array name="connection_modes">
+        <item>username/password</item>
+        <item>ssh-key</item>
+    </string-array>
+
+</resources>

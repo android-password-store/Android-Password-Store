@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.zeapo.pwdstore.GitClone">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layoutDirection="ltr"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:hint="Repository"
+            android:id="@+id/clone_uri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/connection_mode"></Spinner>
+
+        <LinearLayout
+            android:id="@+id/config_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
+
+        <Button
+            android:id="@+id/clone_button"
+            android:text="Clone!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="cloneRepository"/>
+        </LinearLayout>
+
+
+</RelativeLayout>
