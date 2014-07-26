@@ -28,6 +28,9 @@ import org.eclipse.jgit.api.Git;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
+import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.errors.NotSupportedException;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
@@ -36,7 +39,12 @@ import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URL;
+import java.net.UnknownHostException;
 
+// TODO move the messages to strings.xml
 
 public class GitClone extends Activity {
 
@@ -48,6 +56,7 @@ public class GitClone extends Activity {
 
     private File localDir;
     private String hostname;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +77,20 @@ public class GitClone extends Activity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         protocol = ((Spinner)findViewById(R.id.clone_protocol)).getSelectedItem().toString();
+                        if (protocol.equals("ssh://")) {
+                            ((EditText)findViewById(R.id.clone_uri)).setHint("user@hostname:path");
+                        } else {
+                            ((EditText)findViewById(R.id.clone_uri)).setHint("hostname/path");
+                            new AlertDialog.Builder(activity).
+                                    setMessage("You are about to use a read-only repository, you will not be able to push to it").
+                                    setCancelable(true).
+                                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    }).show();
+                        }
                     }
 
                     @Override
@@ -132,7 +155,7 @@ public class GitClone extends Activity {
     }
 
     /* The clone process has to be on a different thread than the main one */
-    private class CloneTask extends AsyncTask<CloneCommand, Integer, Long> {
+    private class CloneTask extends AsyncTask<CloneCommand, Integer, Integer> {
         private ProgressDialog dialog;
 
         public CloneTask(Activity activity) {
@@ -146,30 +169,57 @@ public class GitClone extends Activity {
             this.dialog.show();
         }
 
-        protected void onPostExecute(Long result) {
-            if (result < 0) {
-                new AlertDialog.Builder(activity).
-                        setTitle("Invalid remote repository path").
-                        setMessage("Please check that the repository path is correct.\nDid you forget to specify the path after the hostname?").
-                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+        protected void onPostExecute(Integer result) {
+            switch (result) {
+                case -1:
+                    new AlertDialog.Builder(activity).
+                            setTitle("Please check that the repository path is correct.").
+                            setMessage("Did you forget to specify the path after the hostname?").
+                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                            }
-                        }).show();
+                                }
+                            }).show();
+                    break;
+                case -2:
+                    new AlertDialog.Builder(activity).
+                            setTitle("Communication error").
+                            setMessage("JGit said that the server didn't like our request. Either an authentication issue or the host is not reachable. Check the debug messages.").
+                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
+                    break;
+                case -99:
+                    new AlertDialog.Builder(activity).
+                            setTitle("JGit raised an internal exception").
+                            setMessage("OUPS, JGit didn't like what you did... Check that you provided it with a correct URI. Check also debug messages.").
+                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            }).show();
             }
             this.dialog.dismiss();
         }
 
 
-        protected Long doInBackground(CloneCommand... cmd) {
+        protected Integer doInBackground(CloneCommand... cmd) {
             int count = cmd.length;
-            long totalSize = 0;
+            Integer totalSize = 0;
             for (int i = 0; i < count; i++) {
                 try {
                     cmd[i].call();
+                } catch (JGitInternalException e) {
+                    return -99;
                 } catch (InvalidRemoteException e) {
-                    return new Long(-1);
+                    return -1;
+                } catch (TransportException e) {
+                    return -2;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -205,7 +255,26 @@ public class GitClone extends Activity {
 
         // now cheat a little and prepend the real protocol
         // jGit does not accept a ssh:// but requires https://
-        if (!protocol.equals("ssh://"))  hostname = protocol + hostname;
+        if (!protocol.equals("ssh://")) {
+            hostname = protocol + hostname;
+        } else {
+            // did he forget the username?
+            if (!hostname.matches("^.+@.+")) {
+                new AlertDialog.Builder(this).
+                        setMessage("Did you forget to specify a username?").
+                        setPositiveButton("Oups...", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).
+                        show();
+                return;
+            }
+
+            username = hostname.split("@")[0];
+        }
+
 
         if (localDir.exists()) {
             new AlertDialog.Builder(this).
@@ -256,33 +325,22 @@ public class GitClone extends Activity {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
 
         } else {
-            // Set an EditText view to get user input
-            final LinearLayout layout = new LinearLayout(activity);
-            layout.setOrientation(LinearLayout.VERTICAL);
-
-            final EditText username = new EditText(activity);
-            username.setHint("Username");
-            username.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-
             final EditText password = new EditText(activity);
             password.setHint("Password");
             password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
             password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-            layout.addView(username);
-            layout.addView(password);
-
             new AlertDialog.Builder(activity)
                     .setTitle("Authenticate")
-                    .setMessage("Please provide your usename and password for this repository")
-                    .setView(layout)
+                    .setMessage("Please provide the password for this repository")
+                    .setView(password)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
                             SshSessionFactory.setInstance(new GitConfigSessionFactory());
 
                             CloneCommand cmd = Git.cloneRepository().
-                                    setCredentialsProvider(new UsernamePasswordCredentialsProvider("git", "nicomint")).
+                                    setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password.getText().toString())).
                                     setCloneAllBranches(true).
                                     setDirectory(localDir).
                                     setURI(hostname);
