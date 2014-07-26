@@ -13,20 +13,24 @@
         android:layoutDirection="ltr"
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
-        <EditText
-            android:hint="Repository"
-            android:id="@+id/clone_uri"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/clone_protocol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+            <EditText
+                android:hint="Repository URI"
+                android:id="@+id/clone_uri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            </LinearLayout>
+
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/connection_mode"></Spinner>
-
-        <LinearLayout
-            android:id="@+id/config_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></LinearLayout>
 
         <Button
             android:id="@+id/clone_button"
