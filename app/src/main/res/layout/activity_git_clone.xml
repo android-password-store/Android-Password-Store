@@ -35,7 +35,7 @@
         <Button
             android:id="@+id/clone_button"
             android:text="Clone!"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="cloneRepository"/>
         </LinearLayout>

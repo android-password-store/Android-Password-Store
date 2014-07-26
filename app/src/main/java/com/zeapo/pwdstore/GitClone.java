@@ -2,15 +2,11 @@ package com.zeapo.pwdstore;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,46 +18,24 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.UserInfo;
-import com.zeapo.pwdstore.R;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.diff.Edit;
-import org.eclipse.jgit.errors.NoRemoteRepositoryException;
-import org.eclipse.jgit.errors.UnsupportedCredentialItem;
-import org.eclipse.jgit.lib.TextProgressMonitor;
-import org.eclipse.jgit.transport.CredentialItem;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.CredentialsProviderUserInfo;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
-import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.util.FS;
-import org.eclipse.jgit.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Properties;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 
 public class GitClone extends Activity {
@@ -231,7 +205,7 @@ public class GitClone extends Activity {
 
         // now cheat a little and prepend the real protocol
         // jGit does not accept a ssh:// but requires https://
-        if (!protocol.equals("ssh://"))  hostname = new String(protocol + hostname);
+        if (!protocol.equals("ssh://"))  hostname = protocol + hostname;
 
         if (localDir.exists()) {
             new AlertDialog.Builder(this).

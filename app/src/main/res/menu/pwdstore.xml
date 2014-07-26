@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".pwdstore" >
     <item android:id="@+id/clone_setting"
-        android:title="@string/clone_setting"
+        android:title="@string/clone_settings"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
-        android:onClick="getClone"/>
+        android:showAsAction="ifRoom|withText"
+        android:icon="@android:drawable/stat_sys_download"/>
 </menu>
