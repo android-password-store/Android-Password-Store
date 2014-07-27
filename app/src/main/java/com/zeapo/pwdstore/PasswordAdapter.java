@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PasswordAdapter extends ArrayAdapter<String> {
     private final Context context;
