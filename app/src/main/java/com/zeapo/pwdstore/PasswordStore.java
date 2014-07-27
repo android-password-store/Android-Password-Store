@@ -50,6 +50,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         checkLocalRepository();
         Repository repository = PasswordRepository.getRepository(new File(getFilesDir() + "/store/.git"));
         PasswordRepository.getFilesList();
+        PasswordRepository.getPasswords();
     }
 
     @Override
@@ -82,11 +83,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 
     }
 
-    @Override
-    public void onFragmentInteraction(String id) {
-
-    }
-
     private void checkLocalRepository() {
         int status = 0;
         final File localDir = new File(getFilesDir() + "/store/.git");
@@ -114,6 +110,12 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 fragmentTransaction.replace(R.id.main_layout, passFrag);
                 fragmentTransaction.commit();
         }
+    }
+
+    /* If an item is clicked in the list of passwords, this will be triggered */
+    @Override
+    public void onFragmentInteraction(String id) {
+        System.out.println(id + " Clicked");
     }
 
 }
