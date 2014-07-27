@@ -1,5 +1,7 @@
 package com.zeapo.pwdstore;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
@@ -8,15 +10,14 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by zeapo on 7/27/14.
- */
-public class GitRepo {
+public class PasswordRepository {
 
     private static Repository repository;
 
-    protected GitRepo(){    }
+    protected PasswordRepository(){    }
 
     public static Repository getRepository(File localDir) {
         if (repository == null) {
@@ -37,5 +38,18 @@ public class GitRepo {
 
     public static void closeRepository() {
         repository.close();
+    }
+
+    public static ArrayList<String> getFilesList(){
+        return getFilesList(repository.getWorkTree());
+    }
+
+    public static ArrayList<String> getFilesList(File path){
+        List<File> files = (List<File>) FileUtils.listFiles(path, new String[] {"gpg"}, true);
+        ArrayList<String> filePaths = new ArrayList<String>();
+        for (File file : files) {
+            filePaths.add(file.getAbsolutePath().replace(repository.getWorkTree().getAbsolutePath(), ""));
+        }
+        return filePaths;
     }
 }

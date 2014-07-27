@@ -48,8 +48,9 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         super.onResume();
         // re-check that there was no change with the repository state
         checkLocalRepository();
+        Repository repository = PasswordRepository.getRepository(new File(getFilesDir() + "/store/.git"));
+        PasswordRepository.getFilesList();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,14 +114,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 fragmentTransaction.replace(R.id.main_layout, passFrag);
                 fragmentTransaction.commit();
         }
-    }
-
-    public void addItem(View view) {
-        ListView l = (ListView) findViewById(R.id.pass_list);
-
-        PasswordAdapter pad = (PasswordAdapter) l.getAdapter();
-
-        pad.add("Something");
     }
 
 }

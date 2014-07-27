@@ -47,7 +47,7 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new PasswordAdapter(getActivity(), new ArrayList<String>());
+        mAdapter = new PasswordAdapter(getActivity(), PasswordRepository.getFilesList());
     }
 
     @Override
