@@ -325,33 +325,43 @@ public class GitClone extends Activity {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
 
         } else {
-            final EditText password = new EditText(activity);
-            password.setHint("Password");
-            password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-            password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            if (protocol.equals("ssh://")) {
 
-            new AlertDialog.Builder(activity)
-                    .setTitle("Authenticate")
-                    .setMessage("Please provide the password for this repository")
-                    .setView(password)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
+                final EditText password = new EditText(activity);
+                password.setHint("Password");
+                password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+                password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                            SshSessionFactory.setInstance(new GitConfigSessionFactory());
+                new AlertDialog.Builder(activity)
+                        .setTitle("Authenticate")
+                        .setMessage("Please provide the password for this repository")
+                        .setView(password)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
-                            CloneCommand cmd = Git.cloneRepository().
-                                    setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password.getText().toString())).
-                                    setCloneAllBranches(true).
-                                    setDirectory(localDir).
-                                    setURI(hostname);
+                                SshSessionFactory.setInstance(new GitConfigSessionFactory());
 
-                            new CloneTask(activity).execute(cmd);
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Do nothing.
-                }
-            }).show();
+                                CloneCommand cmd = Git.cloneRepository().
+                                        setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password.getText().toString())).
+                                        setCloneAllBranches(true).
+                                        setDirectory(localDir).
+                                        setURI(hostname);
+
+                                new CloneTask(activity).execute(cmd);
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Do nothing.
+                    }
+                }).show();
+            } else {
+                CloneCommand cmd = Git.cloneRepository().
+                        setCloneAllBranches(true).
+                        setDirectory(localDir).
+                        setURI(hostname);
+
+                new CloneTask(activity).execute(cmd);
+            }
         }
     }
 

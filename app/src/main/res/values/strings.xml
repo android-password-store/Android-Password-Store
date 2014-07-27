@@ -6,7 +6,6 @@
     <string name="clone_settings">Clone</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
     <string name="dialog_delete_title">Directory already exist</string>
     <string name="dialog_delete_msg">Target directory already exist. Current version support only a single store. Do you want to delete the current password store directory?</string>
     <string name="dialog_delete">Delete directory</string>
@@ -16,11 +15,12 @@
         <item>username/password</item>
         <item>ssh-key</item>
     </string-array>
-
     <string-array name="clone_protocols">
         <item>ssh://</item>
         <item>https://</item>
         <item>http://</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

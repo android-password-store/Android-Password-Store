@@ -1,0 +1,37 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eee"
+    tools:context="com.zeapo.pwdstore.ToCloneOrNot">
+
+    <LinearLayout
+        android:id="@+id/myRectangleView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="You have no git repository for the password store."/>
+        <Button
+            android:id="@+id/main_clone_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/holo_green_light"
+            android:onClick="getClone"
+            android:text="Clone!"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/holo_red_light"
+            android:text="Initialize!"/>
+        </LinearLayout>
+
+</FrameLayout>
