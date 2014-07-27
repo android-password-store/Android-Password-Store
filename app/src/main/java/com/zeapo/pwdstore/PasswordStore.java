@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -115,7 +116,15 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     /* If an item is clicked in the list of passwords, this will be triggered */
     @Override
     public void onFragmentInteraction(String id) {
-        System.out.println(id + " Clicked");
+
+        try {
+            for (String l : (List<String>) FileUtils.readLines(PasswordRepository.getFile(id), null)) {
+                System.out.println(l);
+            }
+        } catch (IOException e) {
+            //TODO handle problems
+            e.printStackTrace();
+        }
     }
 
 }

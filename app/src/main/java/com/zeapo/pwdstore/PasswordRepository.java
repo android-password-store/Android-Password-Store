@@ -60,6 +60,10 @@ public class PasswordRepository {
         return mainPasswordMap;
     }
 
+    public static File getFile(String name) {
+        return new File(repository.getWorkTree() + "/" + name);
+    }
+
     public static ArrayList<String> getFilesList(File path){
         List<File> files = (List<File>) FileUtils.listFiles(path, new String[] {"gpg"}, true);
         ArrayList<String> filePaths = new ArrayList<String>();
