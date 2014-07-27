@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.commons.io.FileUtils;
@@ -19,6 +21,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -28,9 +32,10 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Collection;
+import java.util.List;
 
 
-public class pwdstore extends Activity  implements ToCloneOrNot.OnFragmentInteractionListener, PasswordFragment.OnFragmentInteractionListener {
+public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentInteractionListener, PasswordFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +88,10 @@ public class pwdstore extends Activity  implements ToCloneOrNot.OnFragmentIntera
 
     private void checkLocalRepository() {
         int status = 0;
-        final File localDir = new File(getCacheDir() + "/store");
+        final File localDir = new File(getFilesDir() + "/store/.git");
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 
         if (localDir.exists()) {
             File[] folders = localDir.listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
@@ -109,6 +113,14 @@ public class pwdstore extends Activity  implements ToCloneOrNot.OnFragmentIntera
                 fragmentTransaction.replace(R.id.main_layout, passFrag);
                 fragmentTransaction.commit();
         }
+    }
+
+    public void addItem(View view) {
+        ListView l = (ListView) findViewById(R.id.pass_list);
+
+        PasswordAdapter pad = (PasswordAdapter) l.getAdapter();
+
+        pad.add("Something");
     }
 
 }

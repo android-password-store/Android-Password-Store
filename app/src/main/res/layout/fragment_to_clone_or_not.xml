@@ -7,8 +7,10 @@
 
     <LinearLayout
         android:id="@+id/myRectangleView"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         android:background="@drawable/rectangle"
         android:layout_gravity="center"
         android:orientation="vertical">
@@ -16,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="You have no git repository for the password store."/>
+            android:gravity="center"
+            android:text="@string/clone_fragment_text"/>
         <Button
             android:id="@+id/main_clone_button"
             android:layout_width="match_parent"
@@ -25,13 +28,13 @@
             android:layout_marginBottom="8dp"
             android:background="@android:color/holo_green_light"
             android:onClick="getClone"
-            android:text="Clone!"/>
+            android:text="@string/clone"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="@android:color/holo_red_light"
-            android:text="Initialize!"/>
+            android:text="@string/initialize"/>
         </LinearLayout>
 
 </FrameLayout>

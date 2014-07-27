@@ -31,9 +31,17 @@ import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.errors.NotSupportedException;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
+import org.eclipse.jgit.transport.RefSpec;
+import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.Transport;
+import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.util.FS;
 
@@ -246,7 +254,7 @@ public class GitClone extends Activity {
 
 
     public void cloneRepository(View view) {
-        localDir = new File(getApplicationContext().getCacheDir().getAbsoluteFile() + "/store");
+        localDir = new File(getApplicationContext().getFilesDir().getAbsoluteFile() + "/store");
 
         hostname = ((TextView) findViewById(R.id.clone_uri)).getText().toString();
         // don't ask the user, take off the protocol that he puts in
@@ -355,10 +363,12 @@ public class GitClone extends Activity {
                     }
                 }).show();
             } else {
-                CloneCommand cmd = Git.cloneRepository().
-                        setCloneAllBranches(true).
-                        setDirectory(localDir).
-                        setURI(hostname);
+                CloneCommand cmd = Git.cloneRepository()
+                        .setDirectory(localDir)
+                        .setURI(hostname)
+                        .setBare(false)
+                        .setNoCheckout(false)
+                        .setCloneAllBranches(true);
 
                 new CloneTask(activity).execute(cmd);
             }
