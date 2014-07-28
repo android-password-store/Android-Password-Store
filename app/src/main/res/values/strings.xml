@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">PwdStore</string>
-
     <string name="clone_settings">Clone</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -11,21 +10,17 @@
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
 
-    <string-array name="connection_modes">
-        <item>username/password</item>
-        <item>ssh-key</item>
-    </string-array>
-    <string-array name="clone_protocols">
-        <item>ssh://</item>
-        <item>https://</item>
-        <item>http://</item>
-    </string-array>
 
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Password store empty</string>
     <string name="clone">Clone a git repository</string>
     <string name="initialize">Initialize a git repository</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- APG related -->
+    <string name="error_activity_not_found">No suitable application for this action found.</string>
+    <string name="error_apg_version_not_supported">The installed APG version is not supported.</string>
+    <string name="insufficient_apg_permissions">Password Store doesn\'t have permission to access APG fully, please reinstall Password Store to fix that.</string>
+    <string name="title_activity_agp_intents">AgpIntentsActivity</string>
 
 </resources>
