@@ -24,6 +24,12 @@
             android:name=".GitClone"
             android:label="@string/title_activity_git_clone" >
         </activity>
+        <activity android:name=".OpenPgpProviderActivity" />
+        <activity android:name=".UserPreference" />
+        <activity
+            android:name=".PgpHandler"
+            android:label="@string/title_activity_pgp_handler" >
+        </activity>
     </application>
 
     <!--

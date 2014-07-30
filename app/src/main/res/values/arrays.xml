@@ -9,4 +9,30 @@
         <item>https://</item>
         <item>http://</item>
     </string-array>
+
+    <string-array name="updateInterval">
+
+        <item name="1000">Every 1 second</item>
+
+        <item name="5000">Every 5 seconds</item>
+
+        <item name="30000">Every 30 seconds</item>
+
+        <item name="60000">Every 1 minute</item>
+
+        <item name="300000">Every 5 minutes</item>
+    </string-array>
+
+    <string-array name="updateIntervalValues">
+
+        <item name="1000">1000</item>
+
+        <item name="5000">5000</item>
+
+        <item name="30000">30000</item>
+
+        <item name="60000">60000</item>
+
+        <item name="300000">300000</item>
+    </string-array>
 </resources>

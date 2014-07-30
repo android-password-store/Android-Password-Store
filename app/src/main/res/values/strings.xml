@@ -9,7 +9,7 @@
     <string name="dialog_delete_msg">Target directory already exist. Current version support only a single store. Do you want to delete the current password store directory?</string>
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
-
+    <string name="title_activity_git_clone">Clone repository</string>
 
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Password store empty</string>
@@ -22,5 +22,6 @@
     <string name="error_apg_version_not_supported">The installed APG version is not supported.</string>
     <string name="insufficient_apg_permissions">Password Store doesn\'t have permission to access APG fully, please reinstall Password Store to fix that.</string>
     <string name="title_activity_agp_intents">AgpIntentsActivity</string>
+    <string name="title_activity_pgp_handler">PgpHandler</string>
 
 </resources>

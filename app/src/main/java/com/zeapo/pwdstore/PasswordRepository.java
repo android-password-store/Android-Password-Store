@@ -45,19 +45,11 @@ public class PasswordRepository {
     }
 
     public static ArrayList<String> getFilesList(){
-        // Avoid multiple queries
-        if (null == mainListOfFiles) {
-            mainListOfFiles = getFilesList(repository.getWorkTree());
-        }
-        return mainListOfFiles;
+        return getFilesList(repository.getWorkTree());
     }
 
     public static LinkedHashMap<String, ArrayList<String>> getPasswords() {
-        // avoid multiple queries
-        if (null == mainPasswordMap) {
-            mainPasswordMap = getPasswords(repository.getWorkTree());
-        }
-        return mainPasswordMap;
+        return getPasswords(repository.getWorkTree());
     }
 
     public static File getFile(String name) {
@@ -65,6 +57,8 @@ public class PasswordRepository {
     }
 
     public static ArrayList<String> getFilesList(File path){
+        if (!path.exists()) return new ArrayList<String>();
+
         List<File> files = (List<File>) FileUtils.listFiles(path, new String[] {"gpg"}, true);
         ArrayList<String> filePaths = new ArrayList<String>();
         for (File file : files) {
@@ -76,6 +70,9 @@ public class PasswordRepository {
     public static LinkedHashMap<String, ArrayList<String>> getPasswords(File path) {
         //We need to recover the passwords then parse the files
         ArrayList<String> passList = getFilesList(path);
+
+        if (passList.size() == 0) return new LinkedHashMap<String, ArrayList<String>>();
+
         LinkedHashMap<String, ArrayList<String>> passMap = new LinkedHashMap<String, ArrayList<String>>();
         passMap.put("Without Category", new ArrayList<String>());
 

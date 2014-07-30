@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Crypto">
+        <org.openintents.openpgp.util.OpenPgpListPreference
+            android:key="openpgp_provider_list"
+            android:title="Select OpenPGP Provider!" />
+        <Preference
+            android:key="openpgp_provider_demo"
+            android:title="OpenPGP Provider Demo" />
+    </PreferenceCategory>
+</PreferenceScreen>
