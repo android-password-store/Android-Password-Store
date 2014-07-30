@@ -19,6 +19,7 @@ import org.openintents.openpgp.util.OpenPgpListPreference;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentInteractionListener, PasswordFragment.OnFragmentInteractionListener {
@@ -114,14 +115,16 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     @Override
     public void onFragmentInteraction(String id) {
 
-        Intent intent = new Intent(this, PgpHandler.class);
-        intent.putExtra("FILE_NAME", id);
-        startActivity(intent);
 
         try {
             byte[] data = new byte[0];
             try {
                 data = FileUtils.readFileToByteArray(PasswordRepository.getFile(id));
+
+                Intent intent = new Intent(this, PgpHandler.class);
+                intent.putExtra("FILE_CONTENT", data);
+                intent.putExtra("FILE_PATH", PasswordRepository.getFile(id).getAbsolutePath());
+                startActivity(intent);
 
             } catch (IOException e) {
                 e.printStackTrace();
