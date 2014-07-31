@@ -6,18 +6,58 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.zeapo.pwdstore.PgpHandler">
+    tools:context="com.zeapo.pwdstore.crypto.PgpHandler">
 
-    <TextView
-        android:id="@+id/hhh"
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="getKey"
-        android:text="getkey"/>
+        <GridLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/crypto_account_name"
+                android:layout_row="0"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change account"
+                android:id="@+id/button"
+                android:layout_row="0"
+                android:layout_column="2" />
+        </GridLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_marginBottom="4dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/crypto_handler_name"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Key-id"
+            android:onClick="getKeyID"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show password"
+            android:onClick="decrypt"/>
+        </LinearLayout>
 </RelativeLayout>

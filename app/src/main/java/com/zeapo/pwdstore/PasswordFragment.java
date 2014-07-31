@@ -1,7 +1,6 @@
 package com.zeapo.pwdstore;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,9 +10,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.zeapo.pwdstore.utils.PasswordAdapter;
+import com.zeapo.pwdstore.utils.PasswordItem;
+import com.zeapo.pwdstore.utils.PasswordRepository;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -29,13 +33,13 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private ListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private PasswordAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -47,8 +51,8 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        System.out.println(PasswordRepository.getFilesList().size());
-        mAdapter = new PasswordAdapter(getActivity(), PasswordRepository.getFilesList());
+        String path = getArguments().getString("Path");
+        mAdapter = new PasswordAdapter(getActivity(), PasswordRepository.getPasswords(new File(path)));
     }
 
     @Override
@@ -57,11 +61,12 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
         View view = inflater.inflate(R.layout.fragment_password, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(R.id.pass_list);
+        mListView = (ListView) view.findViewById(R.id.pass_list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+        mListView.setSelectionFromTop(getArguments().getInt("Position"), 0);
 
         return view;
     }
@@ -84,17 +89,29 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mListener.savePosition(mListView.getFirstVisiblePosition());
+
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction((String) mAdapter.getItem(position));
+            mListener.onFragmentInteraction(mAdapter.getItem(position));
         }
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(PasswordItem item);
+        public void savePosition(Integer position);
+    }
+
+    public void updateAdapter() {
+        mAdapter.clear();
+        mAdapter.addAll(PasswordRepository.getPasswords());
     }
 
 }

@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.crypto;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -52,13 +52,21 @@ public class PgpHandler extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pgp_handler);
 
+        // Setup action buttons
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        Bundle extra = getIntent().getExtras();
+        ((TextView) findViewById(R.id.crypto_handler_name)).setText(extra.getString("NAME"));
+
         // some persistance
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
+        String accountName = settings.getString("openpgp_account_name", "");
 
-        System.out.println(getIntent().getExtras().getString("FILE_PATH"));
-        Bundle extra = getIntent().getExtras();
-        ((TextView) findViewById(R.id.hhh)).setText(extra.getString("FILE_PATH"));
+        if (accountName.isEmpty()) {
+            ((TextView) findViewById(R.id.crypto_account_name)).setText("No account selected");
+        }
 
         if (TextUtils.isEmpty(providerPackageName)) {
             Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
@@ -91,6 +99,10 @@ public class PgpHandler extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void decrypt(View view) {
+        decryptAndVerify(new Intent());
+//        getKeyIds(new Intent());
+    }
 
     private void handleError(final OpenPgpError error) {
         runOnUiThread(new Runnable() {
@@ -140,6 +152,12 @@ public class PgpHandler extends Activity {
                         try {
                             Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
                                     + " str=" + os.toString("UTF-8"));
+                            showToast(os.toString("UTF-8"));
+                            if (returnToCiphertextField) {
+//                                mCiphertext.setText(os.toString("UTF-8"));
+                            } else {
+//                                mMessage.setText(os.toString("UTF-8"));
+                            }
                         } catch (UnsupportedEncodingException e) {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                         }
@@ -187,14 +205,10 @@ public class PgpHandler extends Activity {
         }
     }
 
-    public void getKey(View view) {
-        decryptAndVerify(new Intent());
-    }
 
     public void decryptAndVerify(Intent data) {
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-        data.putExtra(OpenPgpApi.EXTRA_ACCOUNT_NAME, "Mohamed Zenadi");
 
         try {
             InputStream is = FileUtils.openInputStream(new File(getIntent().getExtras().getString("FILE_PATH")));
@@ -207,4 +221,56 @@ public class PgpHandler extends Activity {
             e.printStackTrace();
         }
     }
+
+
+    public void getKeyIds(Intent data) {
+        data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
+        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{getIntent().getExtras().getString("PGP-ID")});
+
+        OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+        api.executeApiAsync(data, null, null, new MyCallback(false, null, REQUEST_CODE_GET_KEY_IDS));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(Constants.TAG, "onActivityResult resultCode: " + resultCode);
+
+        // try again after user interaction
+        if (resultCode == RESULT_OK) {
+            /*
+             * The data originally given to one of the methods above, is again
+             * returned here to be used when calling the method again after user
+             * interaction. The Intent now also contains results from the user
+             * interaction, for example selected key ids.
+             */
+            switch (requestCode) {
+//                case REQUEST_CODE_SIGN: {
+//                    sign(data);
+//                    break;
+//                }
+//                case REQUEST_CODE_ENCRYPT: {
+//                    encrypt(data);
+//                    break;
+//                }
+//                case REQUEST_CODE_SIGN_AND_ENCRYPT: {
+//                    signAndEncrypt(data);
+//                    break;
+//                }
+                case REQUEST_CODE_DECRYPT_AND_VERIFY: {
+                    decryptAndVerify(data);
+                    break;
+                }
+//                case REQUEST_CODE_GET_KEY: {
+//                    getKey(data);
+//                    break;
+//                }
+                case REQUEST_CODE_GET_KEY_IDS: {
+                    getKeyIds(data);
+                    break;
+                }
+            }
+        }
+    }
+
 }

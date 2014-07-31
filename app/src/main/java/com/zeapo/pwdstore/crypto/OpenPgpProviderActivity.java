@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.crypto;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -29,6 +29,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.zeapo.pwdstore.R;
+
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -39,7 +41,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
 public class OpenPgpProviderActivity extends Activity {
     private EditText mMessage;

@@ -9,5 +9,7 @@ public class UserPreference extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }

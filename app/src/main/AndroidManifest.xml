@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zeapo.pwdstore" >
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,27 +18,35 @@
         </activity>
         <activity
             android:name=".GitClone"
-            android:label="@string/title_activity_git_clone" >
+            android:label="@string/title_activity_git_clone"
+            android:parentActivityName=".PasswordStore">
+            <meta-data
+                android:name="android.PARENT_ACTIVITY1"
+                android:value="com.zeapo.pwdstore.PasswordStore" />
         </activity>
-        <activity android:name=".OpenPgpProviderActivity" />
-        <activity android:name=".UserPreference" />
+        <activity android:name=".crypto.OpenPgpProviderActivity" />
+
+        <activity android:name=".UserPreference"
+            android:parentActivityName=".PasswordStore">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zeapo.pwdstore.PasswordStore" />
+        </activity>
+
         <activity
-            android:name=".PgpHandler"
-            android:label="@string/title_activity_pgp_handler" >
+            android:name=".crypto.PgpHandler"
+            android:label="@string/title_activity_pgp_handler"
+            android:parentActivityName=".PasswordStore">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zeapo.pwdstore.PasswordStore" />
         </activity>
     </application>
 
-    <!--
-     To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
-     option is required to comply with the Google+ Sign-In developer policies
-    -->
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
-    <!-- To retrieve the account name (email) as part of sign-in: -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
