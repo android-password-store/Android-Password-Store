@@ -75,7 +75,7 @@ public class PasswordRepository {
 
             String[] parts = fileName.split("/");
             if (parts.length == 1) {
-                passwordList.add(PasswordItem.newPassword(parts[0], file.getParentFile()));
+                passwordList.add(PasswordItem.newPassword(parts[0], file));
             } else {
                 if (!passwordList.contains(PasswordItem.newCategory(parts[0], file.getParentFile()))) {
                     passwordList.add(PasswordItem.newCategory(parts[0], file.getParentFile()));
