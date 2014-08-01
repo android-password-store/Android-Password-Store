@@ -1,7 +1,6 @@
 package com.zeapo.pwdstore;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -16,19 +15,16 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.transport.CredentialItem;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Stack;
 
 
 public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentInteractionListener, PasswordFragment.OnFragmentInteractionListener {
-    private int listState = 0;
     private Stack<Integer> scrollPositions;
+    /** if we leave the activity to do something, do not add any other fragment */
+    private boolean leftActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +42,12 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 
         // re-check that there was no change with the repository state
         checkLocalRepository();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.leftActivity = true;
     }
 
     @Override
@@ -98,7 +100,10 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     private void checkLocalRepository() {
-//        final File localDir = new File(getFilesDir() + "/store/.git");
+        // if we are coming back from gpg do not anything
+        if (this.leftActivity)
+            return;
+
         checkLocalRepository(PasswordRepository.getWorkTree());
     }
 
@@ -141,6 +146,8 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 fragmentTransaction.replace(R.id.main_layout, passFrag, "PasswordsList");
                 fragmentTransaction.commit();
         }
+
+        this.leftActivity = false;
     }
 
     /** Stack the positions the different fragments were at */
@@ -157,6 +164,8 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         } else {
             try {
                 try {
+                    this.leftActivity = true;
+
                     Intent intent = new Intent(this, PgpHandler.class);
                     intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
                     intent.putExtra("NAME", item.getName());
