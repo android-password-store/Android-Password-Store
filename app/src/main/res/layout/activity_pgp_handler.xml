@@ -23,6 +23,7 @@
             android:text="Large Text"
             android:id="@+id/crypto_password_file"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:layout_column="0"/>
 
         <ImageButton

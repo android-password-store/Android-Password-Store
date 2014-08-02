@@ -140,7 +140,7 @@ public class PgpHandler extends Activity {
             TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
 
             if (extraText.getText().length() != 0)
-                ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
+                ((LinearLayout) findViewById(R.id.crypto_extra_show_layout )).setVisibility(View.VISIBLE);
 
             this.pb = (ProgressBar) findViewById(R.id.pbLoading);
             this.pb.setVisibility(ProgressBar.VISIBLE);
