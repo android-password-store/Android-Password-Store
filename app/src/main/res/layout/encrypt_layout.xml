@@ -11,24 +11,26 @@
     android:orientation="vertical"
     android:background="#eee">
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_orange_dark"
-            android:text="Large Text"
-            android:id="@+id/crypto_password_file"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_column="0"
-            android:layout_row="0"/>
+            android:textStyle="bold"
+            android:text="Name: "/>
 
-    </GridLayout>
+        <EditText
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_orange_dark"/>
+
+    </LinearLayout>
 
 
     <LinearLayout
