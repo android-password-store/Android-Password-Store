@@ -24,73 +24,30 @@
             android:id="@+id/crypto_password_file"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="8dp"
-            android:layout_column="0"/>
+            android:layout_column="0"
+            android:layout_row="0"/>
 
         <ImageButton
+            android:id="@+id/crypto_show_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="2"
             android:src="@android:drawable/ic_input_get"
             android:background="@android:drawable/screen_background_light_transparent"
             android:layout_gravity="center_vertical"
-            android:onClick="decrypt"/>
+            android:visibility="invisible"
+            android:onClick="decrypt"
+            android:layout_column="2"
+            android:layout_row="0"/>
+
+
+        <LinearLayout
+            android:id="@+id/crypto_container"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:layout_columnSpan="3" />
 
     </GridLayout>
-
-    <LinearLayout
-        android:id="@+id/crypto_password_show_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:orientation="vertical"
-        android:background="@drawable/rectangle">
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Password: "/>
-            <TextView
-                android:id="@+id/crypto_password_show"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:typeface="monospace"
-                android:layout_column="2"/>
-        </GridLayout>
-
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            style="?android:attr/progressBarStyleHorizontal"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/crypto_extra_show_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rectangle"
-        android:orientation="vertical"
-        android:visibility="invisible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Extra content: "/>
-
-        <TextView
-            android:id="@+id/crypto_extra_show"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:typeface="monospace"/>
-
-    </LinearLayout>
 </LinearLayout>

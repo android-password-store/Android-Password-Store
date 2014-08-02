@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.zeapo.pwdstore.crypto.PgpHandler"
+    android:orientation="vertical"
+    android:background="#eee">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_orange_dark"
+            android:text="Large Text"
+            android:id="@+id/crypto_password_file"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_column="0"
+            android:layout_row="0"/>
+
+        <ImageButton
+            android:id="@+id/crypto_show_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_input_get"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:layout_gravity="center_vertical"
+            android:visibility="invisible"
+            android:onClick="decrypt"
+            android:layout_column="2"
+            android:layout_row="0"/>
+    </GridLayout>
+
+    <LinearLayout
+        android:id="@+id/crypto_container"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:visibility="invisible">
+
+        <GridLayout
+            android:id="@+id/crypto_password_show_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:text="Password: "
+                android:layout_row="0"
+                android:layout_column="0"/>
+            <TextView
+                android:id="@+id/crypto_password_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:typeface="monospace"
+                android:textColor="@android:color/black"
+                android:layout_column="2"
+                android:layout_row="0"/>
+
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_columnSpan="3"/>
+        </GridLayout>
+
+        <LinearLayout
+            android:id="@+id/crypto_extra_show_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:text="Extra content: "/>
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/crypto_extra_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:typeface="monospace"/>
+            </ScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

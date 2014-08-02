@@ -1,11 +1,11 @@
 package com.zeapo.pwdstore.crypto;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -15,10 +15,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.GridLayout.LayoutParams;
 
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
@@ -56,10 +58,19 @@ public class PgpHandler extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pgp_handler);
 
         Bundle extra = getIntent().getExtras();
-        ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+        if (extra.getString("Operation").equals("DECRYPT")) {
+            setContentView(R.layout.decrypt_layout);
+
+            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+            findViewById(R.id.crypto_show_button).setVisibility(View.VISIBLE);
+        } else if (extra.getString("Operation").equals("ENCRYPT")) {
+            setContentView(R.layout.encrypt_layout);
+
+            ((EditText) findViewById(R.id.crypto_password_edit)).setText(extra.getString("NAME"));
+            findViewById(R.id.crypto_password_edit_layout).setVisibility(View.VISIBLE);
+        }
 
         // some persistance
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -136,16 +147,16 @@ public class PgpHandler extends Activity {
 
         @Override
         protected void onPreExecute() {
-            ((LinearLayout) findViewById(R.id.crypto_password_show_layout)).setVisibility(View.VISIBLE);
+            LinearLayout container = (LinearLayout) findViewById(R.id.crypto_container);
+            container.setVisibility(View.VISIBLE);
+
             TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
 
             if (extraText.getText().length() != 0)
                 ((LinearLayout) findViewById(R.id.crypto_extra_show_layout )).setVisibility(View.VISIBLE);
 
             this.pb = (ProgressBar) findViewById(R.id.pbLoading);
-            this.pb.setVisibility(ProgressBar.VISIBLE);
             this.pb.setMax(SHOW_TIME);
-
         }
 
         @Override
@@ -161,10 +172,8 @@ public class PgpHandler extends Activity {
         protected void onPostExecute(Boolean b) {
             //clear password
             ((TextView) findViewById(R.id.crypto_password_show)).setText("");
-            ((LinearLayout) findViewById(R.id.crypto_password_show_layout)).setVisibility(View.INVISIBLE);
-            ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.INVISIBLE);
-            // run a background job and once complete
-            this.pb.setVisibility(ProgressBar.INVISIBLE);
+            findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
+            findViewById(R.id.crypto_container).setVisibility(View.INVISIBLE);
         }
 
 
@@ -197,7 +206,10 @@ public class PgpHandler extends Activity {
                         try {
                             Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
                                     + " str=" + os.toString("UTF-8"));
+
                             if (returnToCiphertextField) {
+                                findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
+
                                 String[] passContent = os.toString("UTF-8").split("\n");
                                 ((TextView) findViewById(R.id.crypto_password_show))
                                         .setText(passContent[0]);
