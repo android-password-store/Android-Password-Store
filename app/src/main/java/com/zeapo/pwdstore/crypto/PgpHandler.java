@@ -5,17 +5,23 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.UserPreference;
 
 import org.apache.commons.io.FileUtils;
 import org.openintents.openpgp.OpenPgpError;
@@ -52,31 +58,24 @@ public class PgpHandler extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pgp_handler);
 
-        // Setup action buttons
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
         Bundle extra = getIntent().getExtras();
-        ((TextView) findViewById(R.id.crypto_handler_name)).setText(extra.getString("NAME"));
+        ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
 
         // some persistance
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
         String accountName = settings.getString("openpgp_account_name", "");
 
-        if (accountName.isEmpty()) {
-            ((TextView) findViewById(R.id.crypto_account_name)).setText("No account selected");
-        }
-
         if (TextUtils.isEmpty(providerPackageName)) {
             Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
-            finish();
-        } else {
-            // bind to service
-            mServiceConnection = new OpenPgpServiceConnection(
-                    PgpHandler.this, providerPackageName);
-            mServiceConnection.bindToService();
+            Intent intent = new Intent(this, UserPreference.class);
+            startActivity(intent);
+
         }
+        // bind to service
+        mServiceConnection = new OpenPgpServiceConnection(
+                PgpHandler.this, providerPackageName);
+        mServiceConnection.bindToService();
     }
 
 
@@ -130,6 +129,52 @@ public class PgpHandler extends Activity {
         });
     }
 
+    public class DelayShow extends AsyncTask<Void, Integer, Boolean> {
+        int count = 0;
+        final int SHOW_TIME = 10;
+        ProgressBar pb;
+
+        @Override
+        protected void onPreExecute() {
+            ((LinearLayout) findViewById(R.id.crypto_password_show_layout)).setVisibility(View.VISIBLE);
+            TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
+
+            if (extraText.getText().length() != 0)
+                ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
+
+            this.pb = (ProgressBar) findViewById(R.id.pbLoading);
+            this.pb.setVisibility(ProgressBar.VISIBLE);
+            this.pb.setMax(SHOW_TIME);
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            while (this.count < SHOW_TIME) {
+                SystemClock.sleep(1000); this.count++;
+                publishProgress(this.count);
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean b) {
+            //clear password
+            ((TextView) findViewById(R.id.crypto_password_show)).setText("");
+            ((LinearLayout) findViewById(R.id.crypto_password_show_layout)).setVisibility(View.INVISIBLE);
+            ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.INVISIBLE);
+            // run a background job and once complete
+            this.pb.setVisibility(ProgressBar.INVISIBLE);
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            this.pb.setProgress(values[0]);
+        }
+
+    }
+
     private class MyCallback implements OpenPgpApi.IOpenPgpCallback {
         boolean returnToCiphertextField;
         ByteArrayOutputStream os;
@@ -152,11 +197,19 @@ public class PgpHandler extends Activity {
                         try {
                             Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
                                     + " str=" + os.toString("UTF-8"));
-                            showToast(os.toString("UTF-8"));
                             if (returnToCiphertextField) {
-//                                mCiphertext.setText(os.toString("UTF-8"));
+                                String[] passContent = os.toString("UTF-8").split("\n");
+                                ((TextView) findViewById(R.id.crypto_password_show))
+                                        .setText(passContent[0]);
+
+                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n","");
+                                if (extraContent.length() != 0) {
+                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                            .setText(extraContent);
+                                }
+                                new DelayShow().execute();
                             } else {
-//                                mMessage.setText(os.toString("UTF-8"));
+                                showToast(os.toString());
                             }
                         } catch (UnsupportedEncodingException e) {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
@@ -216,7 +269,7 @@ public class PgpHandler extends Activity {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
 
             OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-            api.executeApiAsync(data, is, os, new MyCallback(false, os, REQUEST_CODE_DECRYPT_AND_VERIFY));
+            api.executeApiAsync(data, is, os, new MyCallback(true, os, REQUEST_CODE_DECRYPT_AND_VERIFY));
         } catch (Exception e) {
             e.printStackTrace();
         }

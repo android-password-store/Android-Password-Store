@@ -3,12 +3,16 @@ package com.zeapo.pwdstore;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordItem;
@@ -25,6 +29,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     private Stack<Integer> scrollPositions;
     /** if we leave the activity to do something, do not add any other fragment */
     private boolean leftActivity = false;
+    private File currentDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +153,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         }
 
         this.leftActivity = false;
+        this.currentDir = localDir;
     }
 
     /** Stack the positions the different fragments were at */
@@ -184,4 +190,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         }
     }
 
+    public void createPassword(View v) {
+        System.out.println("Adding file to : " + this.currentDir.getAbsolutePath());
+    }
 }
