@@ -78,6 +78,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                     System.out.println("Exception caught :(");
                     e.printStackTrace();
                 }
+                this.leftActivity = true;
                 return true;
 
             case R.id.menu_add_password:
@@ -89,11 +90,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 
             case R.id.referesh:
                 refreshListAdapter();
-                return true;
-
-
-            case android.R.id.home:
-                getFragmentManager().popBackStack();
                 return true;
 
             default:
