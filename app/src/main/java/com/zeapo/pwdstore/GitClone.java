@@ -74,8 +74,6 @@ public class GitClone extends Activity {
         context = getApplicationContext();
         activity = this;
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         // init the spinner for protocols
         Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
         ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
@@ -213,6 +211,11 @@ public class GitClone extends Activity {
 
                                 }
                             }).show();
+                default:
+                    this.dialog.dismiss();
+                    setResult(RESULT_OK);
+                    finish();
+                    return;
             }
             this.dialog.dismiss();
         }

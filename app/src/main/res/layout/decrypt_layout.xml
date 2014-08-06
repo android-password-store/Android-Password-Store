@@ -37,7 +37,7 @@
                 android:id="@+id/crypto_show_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ico_add"
+                android:src="@drawable/ico_key"
                 android:background="@android:drawable/screen_background_light_transparent"
                 android:layout_gravity="center_vertical"
                 android:onClick="handleClick"
