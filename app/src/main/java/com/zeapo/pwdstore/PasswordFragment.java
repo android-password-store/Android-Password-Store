@@ -3,6 +3,7 @@ package com.zeapo.pwdstore;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +112,7 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
 
     public void updateAdapter() {
         mAdapter.clear();
-        mAdapter.addAll(PasswordRepository.getPasswords());
+        mAdapter.addAll(PasswordRepository.getPasswords(new File(getArguments().getString("Path"))));
     }
 
 }
