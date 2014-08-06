@@ -14,9 +14,10 @@ Feautres
 Libraries
 =========
 This project uses three libraries:
+
 - [OpenKeyChain](https://github.com/open-keychain/open-keychain) for encryption and decryption of passwords
-- [JGit]() a pretty good git lib 
-- [Apache's FileUtils]() for files manipulations
+- [JGit](http://www.eclipse.org/jgit/) a pretty good git lib 
+- [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for files manipulations
 
 TODOs
 =====
