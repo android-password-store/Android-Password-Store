@@ -94,8 +94,6 @@ public class PgpHandler extends Activity {
         mServiceConnection.bindToService();
 
         ActionBar actionBar = getActionBar();
-//        actionBar.setHomeButtonEnabled(true);
-//        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 

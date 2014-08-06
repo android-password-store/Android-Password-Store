@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -87,6 +88,11 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 }
                 return true;
 
+
+            case android.R.id.home:
+                getFragmentManager().popBackStack();
+                return true;
+
             default:
                 break;
         }
@@ -105,14 +111,14 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     private void checkLocalRepository() {
-        // if we are coming back from gpg do not anything
-        if (this.leftActivity)
-            return;
-
         checkLocalRepository(PasswordRepository.getWorkTree());
     }
 
     private void checkLocalRepository(File localDir) {
+        // if we are coming back from gpg do not anything
+        if (this.leftActivity)
+            return;
+
         int status = 0;
 
         FragmentManager fragmentManager = getFragmentManager();
