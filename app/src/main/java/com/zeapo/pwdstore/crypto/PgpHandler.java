@@ -32,15 +32,20 @@ import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
 import org.openintents.openpgp.util.OpenPgpUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 public class PgpHandler extends Activity {
 
 
     private OpenPgpServiceConnection mServiceConnection;
+    private String keyIDs = "";
+    SharedPreferences settings;
 
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
@@ -73,7 +78,7 @@ public class PgpHandler extends Activity {
         }
 
         // some persistance
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
         String accountName = settings.getString("openpgp_account_name", "");
 
@@ -109,8 +114,20 @@ public class PgpHandler extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void decrypt(View view) {
-        decryptAndVerify(new Intent());
+    public void handleClick(View view) {
+        switch (view.getId()) {
+            case R.id.crypto_show_button :
+                decryptAndVerify(new Intent());
+                break;
+            case R.id.crypto_confirm_add:
+                encrypt(new Intent());
+                break;
+            case R.id.crypto_cancel_add:
+                break;
+            default:
+                // should not happen
+
+        }
 //        getKeyIds(new Intent());
     }
 
@@ -124,6 +141,7 @@ public class PgpHandler extends Activity {
                         Toast.LENGTH_LONG).show();
                 Log.e(Constants.TAG, "onError getErrorId:" + error.getErrorId());
                 Log.e(Constants.TAG, "onError getMessage:" + error.getMessage());
+                Log.e(Constants.TAG, "  " + error.toString());
             }
         });
     }
@@ -202,7 +220,7 @@ public class PgpHandler extends Activity {
                     showToast("RESULT_CODE_SUCCESS");
 
                     // encrypt/decrypt/sign/verify
-                    if (os != null) {
+                    if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
                             Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
                                     + " str=" + os.toString("UTF-8"));
@@ -227,6 +245,29 @@ public class PgpHandler extends Activity {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                         }
                     }
+                    // encrypt
+                    if (requestCode == REQUEST_CODE_ENCRYPT && os != null) {
+                        try {
+                            Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
+                                    + " str=" + os.toString("UTF-8"));
+
+                            if (returnToCiphertextField) {
+                                String path = getIntent().getExtras().getString("FILE_PATH")
+                                        + "/" + ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString()
+                                        + ".gpg";
+                                OutputStream outputStream = FileUtils.openOutputStream(new File(path));
+                                outputStream.write(os.toByteArray());
+                                finishActivity(0);
+                            } else {
+                                showToast(os.toString());
+                            }
+
+                        } catch (Exception e) {
+                            Log.e(Constants.TAG, "UnsupportedEncodingException", e);
+                        }
+                    }
+
+
 
                     // verify
                     if (result.hasExtra(OpenPgpApi.RESULT_SIGNATURE)) {
@@ -237,13 +278,11 @@ public class PgpHandler extends Activity {
 
                     // get key ids
                     if (result.hasExtra(OpenPgpApi.RESULT_KEY_IDS)) {
-                        long[] keyIds = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS);
-                        String out = "keyIds: ";
-                        for (int i = 0; i < keyIds.length; i++) {
-                            out += OpenPgpUtils.convertKeyIdToHex(keyIds[i]) + ", ";
-                        }
+                        long[] ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS);
 
-                        showToast(out);
+                        for (int i = 0; i < ids.length; i++) {
+                            keyIDs += OpenPgpUtils.convertKeyIdToHex(ids[i]) + ", ";
+                        }
                     }
                     break;
                 }
@@ -288,6 +327,32 @@ public class PgpHandler extends Activity {
     }
 
 
+    public void encrypt(Intent data) {
+
+        data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[] {"default"});
+        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+
+        String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
+        String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
+
+        ByteArrayInputStream is;
+
+        try {
+            is = new ByteArrayInputStream((pass + "\n" + extra).getBytes("UTF-8"));
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+            api.executeApiAsync(data, is, os, new MyCallback(true, os, REQUEST_CODE_ENCRYPT));
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     public void getKeyIds(Intent data) {
         data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
         data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{getIntent().getExtras().getString("PGP-ID")});
@@ -314,10 +379,10 @@ public class PgpHandler extends Activity {
 //                    sign(data);
 //                    break;
 //                }
-//                case REQUEST_CODE_ENCRYPT: {
-//                    encrypt(data);
-//                    break;
-//                }
+                case REQUEST_CODE_ENCRYPT: {
+                    encrypt(data);
+                    break;
+                }
 //                case REQUEST_CODE_SIGN_AND_ENCRYPT: {
 //                    signAndEncrypt(data);
 //                    break;

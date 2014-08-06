@@ -36,7 +36,7 @@
             android:background="@android:drawable/screen_background_light_transparent"
             android:layout_gravity="center_vertical"
             android:visibility="invisible"
-            android:onClick="decrypt"
+            android:onClick="handleClick"
             android:layout_column="2"
             android:layout_row="0"/>
     </GridLayout>

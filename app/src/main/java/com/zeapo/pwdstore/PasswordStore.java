@@ -199,9 +199,9 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             Intent intent = new Intent(this, PgpHandler.class);
             intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
             intent.putExtra("NAME", "test.gpg");
-            intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath() + "/test.gpg");
+            intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath());
             intent.putExtra("Operation", "ENCRYPT");
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
