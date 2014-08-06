@@ -177,7 +177,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                     intent.putExtra("NAME", item.getName());
                     intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
                     intent.putExtra("Operation", "DECRYPT");
-                    startActivity(intent);
+                    startActivityForResult(intent, 0);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -201,9 +201,16 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             intent.putExtra("NAME", "test.gpg");
             intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath());
             intent.putExtra("Operation", "ENCRYPT");
+            // TODO Define different operations here
             startActivityForResult(intent, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        System.out.println(resultCode);
+        checkLocalRepository(this.currentDir);
     }
 }

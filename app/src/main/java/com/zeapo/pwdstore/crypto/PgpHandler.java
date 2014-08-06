@@ -92,6 +92,11 @@ public class PgpHandler extends Activity {
         mServiceConnection = new OpenPgpServiceConnection(
                 PgpHandler.this, providerPackageName);
         mServiceConnection.bindToService();
+
+        ActionBar actionBar = getActionBar();
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -108,8 +113,10 @@ public class PgpHandler extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -123,6 +130,7 @@ public class PgpHandler extends Activity {
                 encrypt(new Intent());
                 break;
             case R.id.crypto_cancel_add:
+                finish();
                 break;
             default:
                 // should not happen
@@ -257,11 +265,12 @@ public class PgpHandler extends Activity {
                                         + ".gpg";
                                 OutputStream outputStream = FileUtils.openOutputStream(new File(path));
                                 outputStream.write(os.toByteArray());
-                                finishActivity(0);
                             } else {
                                 showToast(os.toString());
                             }
 
+                            setResult(998);
+                            finish();
                         } catch (Exception e) {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                         }
@@ -330,6 +339,7 @@ public class PgpHandler extends Activity {
     public void encrypt(Intent data) {
 
         data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+        // TODO add preference so that the user sets his account name
         data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[] {"default"});
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 

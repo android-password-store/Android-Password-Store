@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PwdStore</string>
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+    <string name="activity_clone_name">Clone a Git repo</string>
+
     <string name="clone_settings">Clone</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
