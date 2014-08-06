@@ -46,6 +46,7 @@ public class PgpHandler extends Activity {
 
     private OpenPgpServiceConnection mServiceConnection;
     private String keyIDs = "";
+    private String accountName = "";
     SharedPreferences settings;
 
     public static final int REQUEST_CODE_SIGN = 9910;
@@ -80,7 +81,7 @@ public class PgpHandler extends Activity {
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
-        String accountName = settings.getString("openpgp_account_name", "");
+        accountName = settings.getString("openpgp_account_name", "");
 
         if (TextUtils.isEmpty(providerPackageName)) {
             Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
@@ -95,6 +96,7 @@ public class PgpHandler extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        Log.i("", accountName);
     }
 
 
@@ -122,7 +124,7 @@ public class PgpHandler extends Activity {
 
     public void handleClick(View view) {
         switch (view.getId()) {
-            case R.id.crypto_show_button :
+            case R.id.crypto_show_button:
                 decryptAndVerify(new Intent());
                 break;
             case R.id.crypto_confirm_add:
@@ -180,7 +182,7 @@ public class PgpHandler extends Activity {
             TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
 
             if (extraText.getText().length() != 0)
-                ((LinearLayout) findViewById(R.id.crypto_extra_show_layout )).setVisibility(View.VISIBLE);
+                ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
 
             this.pb = (ProgressBar) findViewById(R.id.pbLoading);
             this.pb.setMax(SHOW_TIME);
@@ -189,7 +191,8 @@ public class PgpHandler extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
             while (this.count < SHOW_TIME) {
-                SystemClock.sleep(1000); this.count++;
+                SystemClock.sleep(1000);
+                this.count++;
                 publishProgress(this.count);
             }
             return true;
@@ -241,7 +244,7 @@ public class PgpHandler extends Activity {
                                 ((TextView) findViewById(R.id.crypto_password_show))
                                         .setText(passContent[0]);
 
-                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n","");
+                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {
                                     ((TextView) findViewById(R.id.crypto_extra_show))
                                             .setText(extraContent);
@@ -276,7 +279,6 @@ public class PgpHandler extends Activity {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                         }
                     }
-
 
 
                     // verify
@@ -338,38 +340,62 @@ public class PgpHandler extends Activity {
 
 
     public void encrypt(Intent data) {
+        accountName = settings.getString("openpgp_account_name", "");
 
-        data.setAction(OpenPgpApi.ACTION_ENCRYPT);
-        // TODO add preference so that the user sets his account name
-        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[] {"default"});
-        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+        if (accountName.isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setMessage("Please set your OpenKeychain account (email) in the preferences")
+                    .setTitle("Account name empty!")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                Intent intent = new Intent(getApplicationContext(), UserPreference.class);
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                System.out.println("Exception caught :(");
+                                e.printStackTrace();
+                            }
+                        }
+                    }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Do nothing...
+                        }
+                    }).show();
+        } else {
 
-        String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
-        String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
-        String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
+            data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+            data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName});
+            data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
-        if (name.isEmpty()) {
-            showToast("Please provide a file name");
-            return;
-        }
+            String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
+            String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
+            String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
 
-        if (pass.isEmpty()) {
-            showToast("You cannot use an empty password or empty extra content");
-            return;
-        }
+            if (name.isEmpty()) {
+                showToast("Please provide a file name");
+                return;
+            }
 
-        ByteArrayInputStream is;
+            if (pass.isEmpty() || extra.isEmpty()) {
+                showToast("You cannot use an empty password or empty extra content");
+                return;
+            }
 
-        try {
-            is = new ByteArrayInputStream((pass + "\n" + extra).getBytes("UTF-8"));
+            ByteArrayInputStream is;
 
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            try {
+                is = new ByteArrayInputStream((pass + "\n" + extra).getBytes("UTF-8"));
 
-            OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-            api.executeApiAsync(data, is, os, new MyCallback(true, os, REQUEST_CODE_ENCRYPT));
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-        }catch (Exception e) {
-            e.printStackTrace();
+                OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+                api.executeApiAsync(data, is, os, new MyCallback(true, os, REQUEST_CODE_ENCRYPT));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -377,7 +403,7 @@ public class PgpHandler extends Activity {
     private void deletePassword() {
         new AlertDialog.Builder(this).
                 setMessage("Are you sure you want to delete the password \"" +
-                                getIntent().getExtras().getString("NAME") + "\"")
+                        getIntent().getExtras().getString("NAME") + "\"")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

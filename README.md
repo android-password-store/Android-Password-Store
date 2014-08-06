@@ -23,10 +23,11 @@ TODOs
 =====
 - Initialize a new pass repository
 - Pull from/Push to a pass repository
-- Create a new cateogry
+- Create a new category
 - Multi-select (for password deletion)
 - Multiple password stores (multiple git repositories). 
 - More UI enhancements
+- Clean-up the hard-coded strings
 
 Needed
 ======

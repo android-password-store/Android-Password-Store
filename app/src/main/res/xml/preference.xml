@@ -5,5 +5,10 @@
         <org.openintents.openpgp.util.OpenPgpListPreference
             android:key="openpgp_provider_list"
             android:title="Select OpenPGP Provider!" />
+
+        <EditTextPreference android:title="OpenPGP account"
+            android:hint="mail@somewhere.tld"
+            android:key="openpgp_account_name"/>
     </PreferenceCategory>
+
 </PreferenceScreen>
