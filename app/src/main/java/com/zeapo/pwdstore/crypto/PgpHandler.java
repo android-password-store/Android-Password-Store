@@ -371,9 +371,8 @@ public class PgpHandler extends Activity {
 
     private void deletePassword() {
         new AlertDialog.Builder(this).
-                setMessage("Are you sure you want to delete the password " +
-                                getIntent().getExtras().getString("NAME")
-                            )
+                setMessage("Are you sure you want to delete the password \"" +
+                                getIntent().getExtras().getString("NAME") + "\"")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
