@@ -25,17 +25,21 @@
             android:layout_column="0">
 
             <TextView
+                android:id="@+id/crypto_password_category"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="Name: "/>
+                android:textColor="@android:color/holo_blue_dark"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="CATEGORY/"/>
 
             <EditText
                 android:layout_gravity="center_vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/crypto_password_file_edit"
+                android:hint="@string/crypto_name_hint"
                 android:textColor="@android:color/holo_orange_dark"/>
 
         </LinearLayout>
@@ -65,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="Password: "/>
+                        android:text="@string/crypto_pass_label"/>
                     <EditText
                         android:id="@+id/crypto_password_edit"
                         android:layout_width="fill_parent"
@@ -78,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textStyle="bold"
-                    android:text="Extra content: "/>
+                    android:text="@string/crypto_extra_label"/>
 
                 <EditText
                     android:id="@+id/crypto_extra_edit"

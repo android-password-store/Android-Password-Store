@@ -20,11 +20,11 @@
     <string name="initialize">Initialize a git repository</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- APG related -->
-    <string name="error_activity_not_found">No suitable application for this action found.</string>
-    <string name="error_apg_version_not_supported">The installed APG version is not supported.</string>
-    <string name="insufficient_apg_permissions">Password Store doesn\'t have permission to access APG fully, please reinstall Password Store to fix that.</string>
-    <string name="title_activity_agp_intents">AgpIntentsActivity</string>
+    <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PgpHandler</string>
+    <string name="crypto_name_hint">name</string>
+    <string name="crypto_pass_label">Password</string>
+    <string name="crypto_extra_label">Extra</string>
+
 
 </resources>

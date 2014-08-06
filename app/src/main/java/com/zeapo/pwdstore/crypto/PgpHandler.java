@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
+import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.openintents.openpgp.OpenPgpError;
@@ -70,6 +71,10 @@ public class PgpHandler extends Activity {
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
         } else if (extra.getString("Operation").equals("ENCRYPT")) {
             setContentView(R.layout.encrypt_layout);
+            String cat = extra.getString("FILE_PATH");
+            cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
+            cat = cat + "/";
+            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
         }
 
         // some persistance
