@@ -2,7 +2,9 @@ package com.zeapo.pwdstore.crypto;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -20,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.GridLayout.LayoutParams;
 
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
@@ -37,7 +38,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 public class PgpHandler extends Activity {
@@ -67,14 +67,9 @@ public class PgpHandler extends Activity {
         Bundle extra = getIntent().getExtras();
         if (extra.getString("Operation").equals("DECRYPT")) {
             setContentView(R.layout.decrypt_layout);
-
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-            findViewById(R.id.crypto_show_button).setVisibility(View.VISIBLE);
         } else if (extra.getString("Operation").equals("ENCRYPT")) {
             setContentView(R.layout.encrypt_layout);
-
-            ((EditText) findViewById(R.id.crypto_password_edit)).setText(extra.getString("NAME"));
-            findViewById(R.id.crypto_password_edit_layout).setVisibility(View.VISIBLE);
         }
 
         // some persistance
@@ -113,6 +108,7 @@ public class PgpHandler extends Activity {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
+                setResult(RESULT_OK);
                 finish();
                 return true;
         }
@@ -130,6 +126,8 @@ public class PgpHandler extends Activity {
             case R.id.crypto_cancel_add:
                 finish();
                 break;
+            case R.id.crypto_delete_button:
+                deletePassword();
             default:
                 // should not happen
 
@@ -267,7 +265,7 @@ public class PgpHandler extends Activity {
                                 showToast(os.toString());
                             }
 
-                            setResult(998);
+                            setResult(RESULT_OK);
                             finish();
                         } catch (Exception e) {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
@@ -341,8 +339,19 @@ public class PgpHandler extends Activity {
         data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[] {"default"});
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
+        String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
         String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
         String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
+
+        if (name.isEmpty()) {
+            showToast("Please provide a file name");
+            return;
+        }
+
+        if (pass.isEmpty()) {
+            showToast("You cannot use an empty password or empty extra content");
+            return;
+        }
 
         ByteArrayInputStream is;
 
@@ -360,13 +369,26 @@ public class PgpHandler extends Activity {
 
     }
 
+    private void deletePassword() {
+        new AlertDialog.Builder(this).
+                setMessage("Are you sure you want to delete the password " +
+                                getIntent().getExtras().getString("NAME")
+                            )
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        (new File(getIntent().getExtras().getString("FILE_PATH"))).delete();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-    public void getKeyIds(Intent data) {
-        data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
-        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{getIntent().getExtras().getString("PGP-ID")});
-
-        OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-        api.executeApiAsync(data, null, null, new MyCallback(false, null, REQUEST_CODE_GET_KEY_IDS));
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -383,28 +405,12 @@ public class PgpHandler extends Activity {
              * interaction, for example selected key ids.
              */
             switch (requestCode) {
-//                case REQUEST_CODE_SIGN: {
-//                    sign(data);
-//                    break;
-//                }
                 case REQUEST_CODE_ENCRYPT: {
                     encrypt(data);
                     break;
                 }
-//                case REQUEST_CODE_SIGN_AND_ENCRYPT: {
-//                    signAndEncrypt(data);
-//                    break;
-//                }
                 case REQUEST_CODE_DECRYPT_AND_VERIFY: {
                     decryptAndVerify(data);
-                    break;
-                }
-//                case REQUEST_CODE_GET_KEY: {
-//                    getKey(data);
-//                    break;
-//                }
-                case REQUEST_CODE_GET_KEY_IDS: {
-                    getKeyIds(data);
                     break;
                 }
             }

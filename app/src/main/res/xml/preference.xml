@@ -5,8 +5,5 @@
         <org.openintents.openpgp.util.OpenPgpListPreference
             android:key="openpgp_provider_list"
             android:title="Select OpenPGP Provider!" />
-        <Preference
-            android:key="openpgp_provider_demo"
-            android:title="OpenPGP Provider Demo" />
     </PreferenceCategory>
 </PreferenceScreen>

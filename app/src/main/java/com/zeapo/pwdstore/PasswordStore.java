@@ -80,6 +80,13 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 }
                 return true;
 
+            case R.id.menu_add_password:
+                createPassword(getCurrentFocus());
+                break;
+
+            case R.id.menu_add_category:
+                break;
+
             case R.id.referesh:
                 PasswordFragment plist;
                 if  (null !=
@@ -204,7 +211,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         try {
             Intent intent = new Intent(this, PgpHandler.class);
             intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
-            intent.putExtra("NAME", "test.gpg");
             intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath());
             intent.putExtra("Operation", "ENCRYPT");
             // TODO Define different operations here
@@ -217,6 +223,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         System.out.println(resultCode);
-        checkLocalRepository(this.currentDir);
+        if (resultCode == RESULT_OK)
+            checkLocalRepository(this.currentDir);
     }
 }
