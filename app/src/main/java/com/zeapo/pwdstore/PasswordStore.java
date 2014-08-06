@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +54,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     @Override
     public void onPause() {
         super.onPause();
-        this.leftActivity = true;
     }
 
     @Override
@@ -88,11 +88,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 break;
 
             case R.id.referesh:
-                PasswordFragment plist;
-                if  (null !=
-                        (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
-                    plist.updateAdapter();
-                }
+                refreshListAdapter();
                 return true;
 
 
@@ -122,14 +118,16 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     private void checkLocalRepository(File localDir) {
-        // if we are coming back from gpg do not anything
-        if (this.leftActivity)
-            return;
-
-        int status = 0;
-
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // if we are coming back from gpg do not anything
+        if (this.leftActivity) {
+            this.leftActivity = false;
+            return;
+        }
+
+        int status = 0;
 
         if (localDir.exists()) {
             File[] folders = localDir.listFiles();
@@ -166,7 +164,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         }
 
         this.leftActivity = false;
-        this.currentDir = localDir;
     }
 
     /** Stack the positions the different fragments were at */
@@ -205,7 +202,8 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     public void createPassword(View v) {
-        System.out.println("Adding file to : " + this.currentDir.getAbsolutePath());
+        this.currentDir = new File(((PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList")).getArguments().getString("Path"));
+        Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
         this.leftActivity = true;
 
         try {
@@ -220,10 +218,18 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         }
     }
 
+    private void refreshListAdapter() {
+        PasswordFragment plist;
+        if  (null !=
+                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+            plist.updateAdapter();
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-        System.out.println(resultCode);
-        if (resultCode == RESULT_OK)
-            checkLocalRepository(this.currentDir);
+        if (resultCode == RESULT_OK) {
+            refreshListAdapter();
+        }
     }
 }
