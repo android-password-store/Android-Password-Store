@@ -202,7 +202,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     public void createPassword(View v) {
-        this.currentDir = new File(((PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList")).getArguments().getString("Path"));
+        this.currentDir = getCurrentDir();
         Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
         this.leftActivity = true;
 
@@ -224,6 +224,10 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
             plist.updateAdapter();
         }
+    }
+
+    private File getCurrentDir() {
+        return new File(((PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList")).getArguments().getString("Path"));
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
