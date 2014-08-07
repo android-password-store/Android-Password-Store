@@ -230,6 +230,11 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                                     Intent data) {
         if (resultCode == RESULT_OK) {
             refreshListAdapter();
+
+            // do not froget to commit the file
+            if (requestCode == PgpHandler.REQUEST_CODE_ENCRYPT) {
+
+            }
         }
     }
 }

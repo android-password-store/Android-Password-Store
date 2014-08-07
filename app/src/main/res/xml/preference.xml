@@ -6,9 +6,13 @@
             android:key="openpgp_provider_list"
             android:title="Select OpenPGP Provider!" />
 
-        <EditTextPreference android:title="OpenPGP account"
+        <EditTextPreference android:title="Set your OpenPGP account"
             android:hint="mail@somewhere.tld"
             android:key="openpgp_account_name"/>
+
+        <Preference
+            android:title="Select OpenPGP Key id"
+            android:key="openpgp_key_id"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

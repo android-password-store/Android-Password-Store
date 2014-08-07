@@ -4,8 +4,8 @@
     <item android:id="@+id/menu_add_password"
         android:title="New password"/>
 
-    <item android:id="@+id/menu_add_category"
-        android:title="New category"/>
+    <!--<item android:id="@+id/menu_add_category"-->
+        <!--android:title="New category"/>-->
 
     <item android:id="@+id/referesh"
         android:title="Refresh"

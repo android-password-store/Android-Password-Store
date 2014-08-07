@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -66,17 +68,6 @@ public class PgpHandler extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle extra = getIntent().getExtras();
-        if (extra.getString("Operation").equals("DECRYPT")) {
-            setContentView(R.layout.decrypt_layout);
-            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-        } else if (extra.getString("Operation").equals("ENCRYPT")) {
-            setContentView(R.layout.encrypt_layout);
-            String cat = extra.getString("FILE_PATH");
-            cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
-            cat = cat + "/";
-            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
-        }
 
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -89,16 +80,32 @@ public class PgpHandler extends Activity {
             startActivity(intent);
 
         }
+
         // bind to service
         mServiceConnection = new OpenPgpServiceConnection(
                 PgpHandler.this, providerPackageName);
         mServiceConnection.bindToService();
 
+
+        Bundle extra = getIntent().getExtras();
+        if (extra.getString("Operation").equals("DECRYPT")) {
+            setContentView(R.layout.decrypt_layout);
+            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+        } else if (extra.getString("Operation").equals("ENCRYPT")) {
+            setContentView(R.layout.encrypt_layout);
+            String cat = extra.getString("FILE_PATH");
+            cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
+            cat = cat + "/";
+            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
+        } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
+            // wait until the service is bound
+            while (!mServiceConnection.isBound());
+            getKeyIds(new Intent());
+        }
+
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        Log.i("", accountName);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,12 +221,39 @@ public class PgpHandler extends Activity {
 
     }
 
-    private class MyCallback implements OpenPgpApi.IOpenPgpCallback {
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(Constants.TAG, "onActivityResult resultCode: " + resultCode);
+
+        // try again after user interaction
+        if (resultCode == RESULT_OK) {
+            /*
+             * The data originally given to one of the methods above, is again
+             * returned here to be used when calling the method again after user
+             * interaction. The Intent now also contains results from the user
+             * interaction, for example selected key ids.
+             */
+            switch (requestCode) {
+                case REQUEST_CODE_ENCRYPT: {
+                    encrypt(data);
+                    break;
+                }
+                case REQUEST_CODE_DECRYPT_AND_VERIFY: {
+                    decryptAndVerify(data);
+                    break;
+                }
+            }
+        }
+    }
+
+    public class PgpCallback implements OpenPgpApi.IOpenPgpCallback {
         boolean returnToCiphertextField;
         ByteArrayOutputStream os;
         int requestCode;
 
-        private MyCallback(boolean returnToCiphertextField, ByteArrayOutputStream os, int requestCode) {
+        private PgpCallback(boolean returnToCiphertextField, ByteArrayOutputStream os, int requestCode) {
             this.returnToCiphertextField = returnToCiphertextField;
             this.os = os;
             this.requestCode = requestCode;
@@ -280,14 +314,6 @@ public class PgpHandler extends Activity {
                         }
                     }
 
-
-                    // verify
-                    if (result.hasExtra(OpenPgpApi.RESULT_SIGNATURE)) {
-                        OpenPgpSignatureResult sigResult
-                                = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
-                        showToast(sigResult.toString());
-                    }
-
                     // get key ids
                     if (result.hasExtra(OpenPgpApi.RESULT_KEY_IDS)) {
                         long[] ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS);
@@ -295,6 +321,7 @@ public class PgpHandler extends Activity {
                         for (int i = 0; i < ids.length; i++) {
                             keyIDs += OpenPgpUtils.convertKeyIdToHex(ids[i]) + ", ";
                         }
+                        settings.edit().putString("openpgp_key_ids", keyIDs);
                     }
                     break;
                 }
@@ -322,6 +349,17 @@ public class PgpHandler extends Activity {
     }
 
 
+    public void getKeyIds(Intent data) {
+        accountName = settings.getString("openpgp_account_name", "");
+
+        data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
+        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName});
+
+        OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+
+        api.executeApiAsync(data, null, null, new PgpCallback(false, null, PgpHandler.REQUEST_CODE_GET_KEY_IDS));
+    }
+
     public void decryptAndVerify(Intent data) {
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
@@ -332,7 +370,7 @@ public class PgpHandler extends Activity {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
 
             OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-            api.executeApiAsync(data, is, os, new MyCallback(true, os, REQUEST_CODE_DECRYPT_AND_VERIFY));
+            api.executeApiAsync(data, is, os, new PgpCallback(true, os, REQUEST_CODE_DECRYPT_AND_VERIFY));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -358,16 +396,17 @@ public class PgpHandler extends Activity {
                             }
                         }
                     }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // Do nothing...
-                        }
-                    }).show();
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    // Do nothing...
+                }
+            }).show();
         } else {
 
             data.setAction(OpenPgpApi.ACTION_ENCRYPT);
             data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName});
             data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+            Log.i("BABABOU", settings.getString("openpgpg_key_ids", "") + "");
 
             String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
             String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
@@ -391,7 +430,7 @@ public class PgpHandler extends Activity {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
 
                 OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-                api.executeApiAsync(data, is, os, new MyCallback(true, os, REQUEST_CODE_ENCRYPT));
+                api.executeApiAsync(data, is, os, new PgpCallback(true, os, REQUEST_CODE_ENCRYPT));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -420,31 +459,4 @@ public class PgpHandler extends Activity {
                 })
                 .show();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(Constants.TAG, "onActivityResult resultCode: " + resultCode);
-
-        // try again after user interaction
-        if (resultCode == RESULT_OK) {
-            /*
-             * The data originally given to one of the methods above, is again
-             * returned here to be used when calling the method again after user
-             * interaction. The Intent now also contains results from the user
-             * interaction, for example selected key ids.
-             */
-            switch (requestCode) {
-                case REQUEST_CODE_ENCRYPT: {
-                    encrypt(data);
-                    break;
-                }
-                case REQUEST_CODE_DECRYPT_AND_VERIFY: {
-                    decryptAndVerify(data);
-                    break;
-                }
-            }
-        }
-    }
-
 }
