@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +42,7 @@ import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 // TODO move the messages to strings.xml
 
@@ -54,6 +58,8 @@ public class GitHandler extends Activity {
     private String hostname;
     private String username;
 
+    private SharedPreferences settings;
+
     public static final int REQUEST_PULL = 101;
     public static final int REQUEST_PUSH = 102;
     public static final int REQUEST_CLONE = 103;
@@ -64,6 +70,11 @@ public class GitHandler extends Activity {
 
         context = getApplicationContext();
         activity = this;
+
+        settings = PreferenceManager.getDefaultSharedPreferences(this.context);
+
+        protocol = settings.getString("git_remote_protocol", "ssh://");
+        connectionMode = settings.getString("git_remote_auth", "username/password");
 
         switch (getIntent().getExtras().getInt("Operation")) {
             case REQUEST_CLONE:
@@ -114,7 +125,7 @@ public class GitHandler extends Activity {
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
 
-                        if (selection.equalsIgnoreCase("ssh-key")) {
+                        if (selection.equalsIgnoreCase("ssh-key (not yet implemented)")) {
                             new AlertDialog.Builder(activity)
                                     .setMessage("Authentication method not implemented yet")
                                     .setPositiveButton("OK",
@@ -138,11 +149,27 @@ public class GitHandler extends Activity {
                 });
                 break;
             case REQUEST_PULL:
-                authenticateThenPull(this);
+                authenticateAndRun("pullOperation");
                 break;
         }
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (findViewById(R.id.clone_uri) != null) {
+            ((EditText) findViewById(R.id.clone_uri)).setText(
+                    settings.getString("git_remote_username", "user")
+                            + "@" +
+                            settings.getString("git_remote_server", "server.com")
+                            + ":" +
+                            settings.getString("git_remote_location", "path/to/repository")
+            );
+
+        }
     }
 
     @Override
@@ -213,6 +240,7 @@ public class GitHandler extends Activity {
 
                                 }
                             }).show();
+                    break;
                 default:
                     this.dialog.dismiss();
                     setResult(RESULT_OK);
@@ -220,6 +248,13 @@ public class GitHandler extends Activity {
                     return;
             }
             this.dialog.dismiss();
+
+            // if we were unable to finish the job
+            try {
+                FileUtils.deleteDirectory(localDir);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -230,13 +265,17 @@ public class GitHandler extends Activity {
                 try {
                     cmd[i].call();
                 } catch (JGitInternalException e) {
+                    e.printStackTrace();
                     return -99;
                 } catch (InvalidRemoteException e) {
+                    e.printStackTrace();
                     return -1;
                 } catch (TransportException e) {
+                    e.printStackTrace();
                     return -2;
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return -99;
                 }
                 totalSize++;
             }
@@ -301,7 +340,7 @@ public class GitHandler extends Activity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     try {
                                         FileUtils.deleteDirectory(localDir);
-                                        authenticateThenClone(localDir);
+                                        authenticateAndRun("cloneOperation");
                                     } catch (IOException e) {
                                         //TODO Handle the exception correctly if we are unable to delete the directory...
                                         e.printStackTrace();
@@ -324,7 +363,7 @@ public class GitHandler extends Activity {
                     show();
         } else {
             try {
-                authenticateThenClone(localDir);
+                authenticateAndRun("cloneOperation");
             } catch (Exception e) {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
@@ -333,15 +372,54 @@ public class GitHandler extends Activity {
         }
     }
 
+    public void cloneOperation(UsernamePasswordCredentialsProvider provider) {
 
-    private void authenticateThenClone(final File localDir) {
-        String connectionMode = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
+        // remember the settings
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString("git_remote_server", hostname.split("@")[1].split(":")[0]);
+        editor.putString("git_remote_location", hostname.split("@")[1].split(":")[1]);
+        editor.putString("git_remote_username", hostname.split("@")[0]);
+        editor.putString("git_remote_protocol", protocol);
+        editor.putString("git_remote_auth", connectionMode);
+        editor.commit();
+
+        CloneCommand cmd = Git.cloneRepository().
+                setCredentialsProvider(provider).
+                setCloneAllBranches(true).
+                setDirectory(localDir).
+                setURI(hostname);
+
+        new CloneTask(activity).execute(cmd);
+    }
+
+    public void pullOperation(UsernamePasswordCredentialsProvider provider) {
+        new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+            .pull()
+            .setRebase(true)
+            .setCredentialsProvider(provider));
+    }
+
+    /** Finds the method and provides it with authentication paramters via invokeWithAuthentication */
+    private void authenticateAndRun(String operation) {
+        try {
+            invokeWithAuthentication(this, this.getClass().getMethod(operation, UsernamePasswordCredentialsProvider.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Calls a method encapsulating a GitCommand and providing it with authentication parameters
+     *
+     * @param activity
+     * @param method
+     */
+    private void invokeWithAuthentication(final GitHandler activity, final Method method) {
 
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
 
         } else {
             if (protocol.equals("ssh://")) {
-
                 final EditText password = new EditText(activity);
                 password.setHint("Password");
                 password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
@@ -355,14 +433,16 @@ public class GitHandler extends Activity {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 SshSessionFactory.setInstance(new GitConfigSessionFactory());
+                                try {
+                                    method.invoke(activity,
+                                            new UsernamePasswordCredentialsProvider(
+                                                    settings.getString("git_remote_username", "git"),
+                                                    password.getText().toString())
+                                    );
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
 
-                                CloneCommand cmd = Git.cloneRepository().
-                                        setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password.getText().toString())).
-                                        setCloneAllBranches(true).
-                                        setDirectory(localDir).
-                                        setURI(hostname);
-
-                                new CloneTask(activity).execute(cmd);
                             }
                         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -381,37 +461,5 @@ public class GitHandler extends Activity {
             }
         }
     }
-
-    private void authenticateThenPull(final Activity activity) {
-        //TODO recall the username
-        //TODO offer the choice ssh and user/pwd
-        final EditText password = new EditText(activity);
-        password.setHint("Password");
-        password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-        new AlertDialog.Builder(activity)
-                .setTitle("Authenticate")
-                .setMessage("Please provide the password for this repository")
-                .setView(password)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        SshSessionFactory.setInstance(new GitConfigSessionFactory());
-
-                        new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
-                                .pull()
-                                .setRebase(true)
-                                .setCredentialsProvider(new UsernamePasswordCredentialsProvider("git", password.getText().toString())));
-
-
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Do nothing.
-            }
-        }).show();
-    }
-
 
 }

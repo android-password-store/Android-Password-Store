@@ -2,9 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Git">
         <EditTextPreference android:title="Server"
-            android:key="git_remote_server"/>
+            android:key="git_remote_server"
+            android:hint="server.com"/>
+        <EditTextPreference android:title="Remote location"
+            android:key="git_remote_location"
+            android:hint="path/to/repository"/>
         <EditTextPreference android:title="Username"
-            android:key="git_remote_username"/>
+            android:key="git_remote_username"
+            android:hint="username"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Crypto">

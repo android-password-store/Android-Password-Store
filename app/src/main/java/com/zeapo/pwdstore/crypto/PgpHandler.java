@@ -316,7 +316,7 @@ public class PgpHandler extends Activity {
                         for (int i = 0; i < ids.length; i++) {
                             keyIDs += OpenPgpUtils.convertKeyIdToHex(ids[i]) + ", ";
                         }
-                        settings.edit().putString("openpgp_key_ids", keyIDs);
+                        settings.edit().putString("openpgp_key_ids", keyIDs).commit();
                     }
                     break;
                 }
