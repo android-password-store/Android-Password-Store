@@ -78,10 +78,12 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent intent;
+
         switch (id) {
             case R.id.user_pref:
                 try {
-                    Intent intent = new Intent(this, UserPreference.class);
+                    intent = new Intent(this, UserPreference.class);
                     startActivity(intent);
                 } catch (Exception e) {
                     System.out.println("Exception caught :(");
@@ -98,10 +100,14 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 //                break;
 
             case R.id.git_push:
-                break;
+                intent = new Intent(this, GitHandler.class);
+                intent.putExtra("Operation", GitHandler.REQUEST_PUSH);
+                startActivity(intent);
+                this.leftActivity = true;
+                return true;
 
             case R.id.git_pull:
-                Intent intent = new Intent(this, GitHandler.class);
+                intent = new Intent(this, GitHandler.class);
                 intent.putExtra("Operation", GitHandler.REQUEST_PULL);
                 startActivity(intent);
                 this.leftActivity = true;
@@ -255,7 +261,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                     Git git = new Git(PasswordRepository.getRepository(new File("")));
                     GitAsyncTask tasks = new GitAsyncTask(this, false);
                     tasks.execute(
-                            git.add().addFilepattern(data.getExtras().getString("CREATED_FILE")),
+                            git.add().addFilepattern("."),
                             git.commit().setMessage("Added " + data.getExtras().getString("NAME"))
                     );
                     break;

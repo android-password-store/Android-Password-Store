@@ -151,6 +151,10 @@ public class GitHandler extends Activity {
             case REQUEST_PULL:
                 authenticateAndRun("pullOperation");
                 break;
+
+            case REQUEST_PUSH:
+                authenticateAndRun("pushOperation");
+                break;
         }
 
 
@@ -398,6 +402,13 @@ public class GitHandler extends Activity {
             .pull()
             .setRebase(true)
             .setCredentialsProvider(provider));
+    }
+
+
+    public void pushOperation(UsernamePasswordCredentialsProvider provider) {
+        new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+                .push()
+                .setCredentialsProvider(provider));
     }
 
     /** Finds the method and provides it with authentication paramters via invokeWithAuthentication */
