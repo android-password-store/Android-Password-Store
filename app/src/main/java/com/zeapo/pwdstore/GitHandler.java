@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
@@ -30,31 +31,18 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.errors.NotSupportedException;
-import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
-import org.eclipse.jgit.transport.RefSpec;
-import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
-import org.eclipse.jgit.transport.Transport;
-import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.URL;
-import java.net.UnknownHostException;
 
 // TODO move the messages to strings.xml
 
-public class GitClone extends Activity {
+public class GitHandler extends Activity {
 
     private Activity activity;
     private Context context;
@@ -66,81 +54,95 @@ public class GitClone extends Activity {
     private String hostname;
     private String username;
 
+    public static final int REQUEST_PULL = 101;
+    public static final int REQUEST_PUSH = 102;
+    public static final int REQUEST_CLONE = 103;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_git_clone);
 
         context = getApplicationContext();
         activity = this;
 
-        // init the spinner for protocols
-        Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
-        ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
-                R.array.clone_protocols, android.R.layout.simple_spinner_item);
-        protocol_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        protcol_spinner.setAdapter(protocol_adapter);
-        protcol_spinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
+        switch (getIntent().getExtras().getInt("Operation")) {
+            case REQUEST_CLONE:
+                setContentView(R.layout.activity_git_clone);
+
+                // init the spinner for protocols
+                Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
+                ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
+                        R.array.clone_protocols, android.R.layout.simple_spinner_item);
+                protocol_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                protcol_spinner.setAdapter(protocol_adapter);
+                protcol_spinner.setOnItemSelectedListener(
+                        new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                protocol = ((Spinner)findViewById(R.id.clone_protocol)).getSelectedItem().toString();
+                                if (protocol.equals("ssh://")) {
+                                    ((EditText)findViewById(R.id.clone_uri)).setHint("user@hostname:path");
+                                } else {
+                                    ((EditText)findViewById(R.id.clone_uri)).setHint("hostname/path");
+                                    new AlertDialog.Builder(activity).
+                                            setMessage("You are about to use a read-only repository, you will not be able to push to it").
+                                            setCancelable(true).
+                                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                }
+                                            }).show();
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+
+                            }
+                        }
+                );
+
+                // init the spinner for connection modes
+                Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
+                ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
+                        R.array.connection_modes, android.R.layout.simple_spinner_item);
+                connection_mode_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                connection_mode_spinner.setAdapter(connection_mode_adapter);
+                connection_mode_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        protocol = ((Spinner)findViewById(R.id.clone_protocol)).getSelectedItem().toString();
-                        if (protocol.equals("ssh://")) {
-                            ((EditText)findViewById(R.id.clone_uri)).setHint("user@hostname:path");
-                        } else {
-                            ((EditText)findViewById(R.id.clone_uri)).setHint("hostname/path");
-                            new AlertDialog.Builder(activity).
-                                    setMessage("You are about to use a read-only repository, you will not be able to push to it").
-                                    setCancelable(true).
-                                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                        String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
 
-                                        }
-                                    }).show();
+                        if (selection.equalsIgnoreCase("ssh-key")) {
+                            new AlertDialog.Builder(activity)
+                                    .setMessage("Authentication method not implemented yet")
+                                    .setPositiveButton("OK",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            }
+                                    ).show();
+                            ((Button) findViewById(R.id.clone_button)).setEnabled(false);
+                        } else {
+                            ((Button) findViewById(R.id.clone_button)).setEnabled(true);
                         }
+                        connectionMode = selection;
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
 
                     }
-                }
-        );
+                });
+                break;
+            case REQUEST_PULL:
+                authenticateThenPull(this);
+                break;
+        }
 
-        // init the spinner for connection modes
-        Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
-        ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
-                R.array.connection_modes, android.R.layout.simple_spinner_item);
-        connection_mode_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        connection_mode_spinner.setAdapter(connection_mode_adapter);
-        connection_mode_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
 
-                if (selection.equalsIgnoreCase("ssh-key")) {
-                    new AlertDialog.Builder(activity)
-                            .setMessage("Authentication method not implemented yet")
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    }
-                            ).show();
-                    ((Button) findViewById(R.id.clone_button)).setEnabled(false);
-                } else {
-                    ((Button) findViewById(R.id.clone_button)).setEnabled(true);
-                }
-                connectionMode = selection;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     @Override
@@ -380,6 +382,36 @@ public class GitClone extends Activity {
         }
     }
 
+    private void authenticateThenPull(final Activity activity) {
+        //TODO recall the username
+        //TODO offer the choice ssh and user/pwd
+        final EditText password = new EditText(activity);
+        password.setHint("Password");
+        password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        new AlertDialog.Builder(activity)
+                .setTitle("Authenticate")
+                .setMessage("Please provide the password for this repository")
+                .setView(password)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        SshSessionFactory.setInstance(new GitConfigSessionFactory());
+
+                        new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+                                .pull()
+                                .setRebase(true)
+                                .setCredentialsProvider(new UsernamePasswordCredentialsProvider("git", password.getText().toString())));
+
+
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Do nothing.
+            }
+        }).show();
+    }
 
 
 }

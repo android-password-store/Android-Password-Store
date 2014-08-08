@@ -1,26 +1,35 @@
 package com.zeapo.pwdstore;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.transport.JschConfigSessionFactory;
+import org.eclipse.jgit.transport.OpenSshConfig;
+import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,8 +94,18 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 createPassword(getCurrentFocus());
                 break;
 
-            case R.id.menu_add_category:
+//            case R.id.menu_add_category:
+//                break;
+
+            case R.id.git_push:
                 break;
+
+            case R.id.git_pull:
+                Intent intent = new Intent(this, GitHandler.class);
+                intent.putExtra("Operation", GitHandler.REQUEST_PULL);
+                startActivity(intent);
+                this.leftActivity = true;
+                return true;
 
             case R.id.referesh:
                 refreshListAdapter();
@@ -100,7 +119,8 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     public void getClone(View view){
-        Intent intent = new Intent(this, GitClone.class);
+        Intent intent = new Intent(this, GitHandler.class);
+        intent.putExtra("Operation", GitHandler.REQUEST_CLONE);
         startActivity(intent);
     }
 
@@ -183,7 +203,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                     intent.putExtra("NAME", item.toString());
                     intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
                     intent.putExtra("Operation", "DECRYPT");
-                    startActivityForResult(intent, 0);
+                    startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -207,8 +227,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
             intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath());
             intent.putExtra("Operation", "ENCRYPT");
-            // TODO Define different operations here
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,10 +250,17 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         if (resultCode == RESULT_OK) {
             refreshListAdapter();
 
-            // do not froget to commit the file
-            if (requestCode == PgpHandler.REQUEST_CODE_ENCRYPT) {
-
+            switch (requestCode) {
+                case PgpHandler.REQUEST_CODE_ENCRYPT :
+                    Git git = new Git(PasswordRepository.getRepository(new File("")));
+                    GitAsyncTask tasks = new GitAsyncTask(this, false);
+                    tasks.execute(
+                            git.add().addFilepattern(data.getExtras().getString("CREATED_FILE")),
+                            git.commit().setMessage("Added " + data.getExtras().getString("NAME"))
+                    );
+                    break;
             }
+
         }
     }
 }

@@ -7,8 +7,13 @@
     <!--<item android:id="@+id/menu_add_category"-->
         <!--android:title="New category"/>-->
 
+    <item android:id="@+id/git_pull"
+        android:title="Pull from remote"/>
+    <item android:id="@+id/git_push"
+        android:title="Push to remote"/>
+
     <item android:id="@+id/referesh"
-        android:title="Refresh"
+        android:title="Refresh list"
         android:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_popup_sync"/>
 

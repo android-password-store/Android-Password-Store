@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GitClone"
+            android:name=".GitHandler"
             android:label="@string/title_activity_git_clone"
             android:parentActivityName=".PasswordStore">
             <meta-data

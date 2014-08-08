@@ -294,20 +294,15 @@ public class PgpHandler extends Activity {
                     // encrypt
                     if (requestCode == REQUEST_CODE_ENCRYPT && os != null) {
                         try {
-                            Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
-                                    + " str=" + os.toString("UTF-8"));
-
-                            if (returnToCiphertextField) {
-                                String path = getIntent().getExtras().getString("FILE_PATH")
-                                        + "/" + ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString()
-                                        + ".gpg";
-                                OutputStream outputStream = FileUtils.openOutputStream(new File(path));
-                                outputStream.write(os.toByteArray());
-                            } else {
-                                showToast(os.toString());
-                            }
-
-                            setResult(RESULT_OK);
+                            String path = getIntent().getExtras().getString("FILE_PATH")
+                                    + "/" + ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString()
+                                    + ".gpg";
+                            OutputStream outputStream = FileUtils.openOutputStream(new File(path));
+                            outputStream.write(os.toByteArray());
+                            Intent data = new Intent();
+                            data.putExtra("CREATED_FILE", path);
+                            data.putExtra("NAME", ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString());
+                            setResult(RESULT_OK, data);
                             finish();
                         } catch (Exception e) {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
@@ -406,7 +401,6 @@ public class PgpHandler extends Activity {
             data.setAction(OpenPgpApi.ACTION_ENCRYPT);
             data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName});
             data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-            Log.i("BABABOU", settings.getString("openpgpg_key_ids", "") + "");
 
             String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
             String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();

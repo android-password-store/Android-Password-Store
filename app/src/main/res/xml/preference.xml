@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Git">
+        <EditTextPreference android:title="Server"
+            android:key="git_remote_server"/>
+        <EditTextPreference android:title="Username"
+            android:key="git_remote_username"/>
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="Crypto">
         <org.openintents.openpgp.util.OpenPgpListPreference
