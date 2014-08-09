@@ -59,6 +59,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
         Log.i("GIT_ASYNC", result + "");
         this.dialog.dismiss();
         if (finishOnEnd) {
+            this.activity.setResult(Activity.RESULT_OK);
             this.activity.finish();
         }
     }

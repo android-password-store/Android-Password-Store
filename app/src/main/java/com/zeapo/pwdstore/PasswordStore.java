@@ -102,14 +102,14 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             case R.id.git_push:
                 intent = new Intent(this, GitHandler.class);
                 intent.putExtra("Operation", GitHandler.REQUEST_PUSH);
-                startActivity(intent);
+                startActivityForResult(intent, GitHandler.REQUEST_PUSH);
                 this.leftActivity = true;
                 return true;
 
             case R.id.git_pull:
                 intent = new Intent(this, GitHandler.class);
                 intent.putExtra("Operation", GitHandler.REQUEST_PULL);
-                startActivity(intent);
+                startActivityForResult(intent, GitHandler.REQUEST_PULL);
                 this.leftActivity = true;
                 return true;
 
@@ -253,6 +253,9 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
+        if (resultCode == RESULT_CANCELED)
+            refreshListAdapter();
+
         if (resultCode == RESULT_OK) {
             refreshListAdapter();
 

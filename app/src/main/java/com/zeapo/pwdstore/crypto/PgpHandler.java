@@ -452,7 +452,7 @@ public class PgpHandler extends Activity {
                                 git.rm().addFilepattern(getIntent().getExtras().getString("FILE_PATH").replace(PasswordRepository.getWorkTree() + "/", "")),
                                 git.commit().setMessage("[ANDROID PwdStore] Remove " + getIntent().getExtras().getString("FILE_PATH") + " from store.")
                         );
-                        setResult(RESULT_OK);
+                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 })
