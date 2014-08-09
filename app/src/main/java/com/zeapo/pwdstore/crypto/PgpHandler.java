@@ -415,7 +415,7 @@ public class PgpHandler extends Activity {
                 return;
             }
 
-            if (pass.isEmpty() || extra.isEmpty()) {
+            if (pass.isEmpty() && extra.isEmpty()) {
                 showToast("You cannot use an empty password or empty extra content");
                 return;
             }
