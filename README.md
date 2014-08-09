@@ -3,13 +3,15 @@ PwdStore
 
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
-Feautres
+Features
 ========
 - Clone an existing pass repository
 - List the passwords
 - Handle the directories as categories
 - Decrypt the password files (first line is the password, the rest is extra data)
 - Add a new password to the current category (or no category if added at the root)
+- Pull and Push changes to the remote repository
+- Ability to change remote repository info
 
 Libraries
 =========
@@ -22,7 +24,6 @@ This project uses three libraries:
 TODOs
 =====
 - Initialize a new pass repository
-- Pull from/Push to a pass repository
 - Create a new category
 - Multi-select (for password deletion)
 - Multiple password stores (multiple git repositories). 
