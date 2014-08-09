@@ -262,7 +262,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                     GitAsyncTask tasks = new GitAsyncTask(this, false);
                     tasks.execute(
                             git.add().addFilepattern("."),
-                            git.commit().setMessage("Added " + data.getExtras().getString("NAME"))
+                            git.commit().setMessage("[ANDROID PwdStore] Add " + data.getExtras().getString("NAME") + " from store.")
                     );
                     break;
             }

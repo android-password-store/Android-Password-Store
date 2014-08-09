@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,10 +16,21 @@ import org.eclipse.jgit.api.errors.TransportException;
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
     private Activity activity;
     private boolean finishOnEnd;
+    private ProgressDialog dialog;
+
     public GitAsyncTask(Activity activity, boolean finishOnEnd) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
+
+        dialog = new ProgressDialog(this.activity);
     }
+
+    protected void onPreExecute() {
+        this.dialog.setMessage("Running command...");
+        this.dialog.setCancelable(false);
+        this.dialog.show();
+    }
+
     @Override
     protected Integer doInBackground(GitCommand... cmd) {
         int count = cmd.length;
@@ -45,6 +57,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
 
     protected void onPostExecute(Integer result) {
         Log.i("GIT_ASYNC", result + "");
+        this.dialog.dismiss();
         if (finishOnEnd) {
             this.activity.finish();
         }

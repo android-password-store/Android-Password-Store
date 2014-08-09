@@ -25,11 +25,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zeapo.pwdstore.GitAsyncTask;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.Git;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -50,6 +52,7 @@ public class PgpHandler extends Activity {
     private String keyIDs = "";
     private String accountName = "";
     SharedPreferences settings;
+    private Activity activity;
 
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
@@ -68,6 +71,7 @@ public class PgpHandler extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        activity = this;
 
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -441,6 +445,13 @@ public class PgpHandler extends Activity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         (new File(getIntent().getExtras().getString("FILE_PATH"))).delete();
+
+                        Git git = new Git(PasswordRepository.getRepository(new File("")));
+                        GitAsyncTask tasks = new GitAsyncTask(activity, false);
+                        tasks.execute(
+                                git.rm().addFilepattern(getIntent().getExtras().getString("FILE_PATH").replace(PasswordRepository.getWorkTree() + "/", "")),
+                                git.commit().setMessage("[ANDROID PwdStore] Remove " + getIntent().getExtras().getString("FILE_PATH") + " from store.")
+                        );
                         setResult(RESULT_OK);
                         finish();
                     }
