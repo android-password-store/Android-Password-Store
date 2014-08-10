@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="@android:color/holo_red_light"
+            android:onClick="initRepository"
             android:text="@string/initialize"/>
         </LinearLayout>
 

@@ -32,6 +32,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.util.StringUtils;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class PgpHandler extends Activity {
 
@@ -77,6 +79,7 @@ public class PgpHandler extends Activity {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
         accountName = settings.getString("openpgp_account_name", "");
+        keyIDs = settings.getString("openpgp_key_ids", "");
 
         if (TextUtils.isEmpty(providerPackageName)) {
             Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
@@ -102,9 +105,11 @@ public class PgpHandler extends Activity {
             cat = cat + "/";
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
         } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
-            // wait until the service is bound
-            while (!mServiceConnection.isBound());
-            getKeyIds(new Intent());
+            setContentView(R.layout.key_id);
+            if (!keyIDs.isEmpty()) {
+                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
+                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
+            }
         }
 
         ActionBar actionBar = getActionBar();
@@ -146,11 +151,14 @@ public class PgpHandler extends Activity {
                 break;
             case R.id.crypto_delete_button:
                 deletePassword();
+                break;
+            case R.id.crypto_get_key_ids:
+                getKeyIds(new Intent());
+                break;
             default:
                 // should not happen
 
         }
-//        getKeyIds(new Intent());
     }
 
     private void handleError(final OpenPgpError error) {
@@ -316,11 +324,20 @@ public class PgpHandler extends Activity {
                     // get key ids
                     if (result.hasExtra(OpenPgpApi.RESULT_KEY_IDS)) {
                         long[] ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS);
+                        ArrayList<String> keys = new ArrayList<String>();
 
                         for (int i = 0; i < ids.length; i++) {
-                            keyIDs += OpenPgpUtils.convertKeyIdToHex(ids[i]) + ", ";
+                            keys.add(OpenPgpUtils.convertKeyIdToHex(ids[i]));
                         }
+                        keyIDs = StringUtils.join(keys, ", ");
+
                         settings.edit().putString("openpgp_key_ids", keyIDs).commit();
+
+                        if (!keyIDs.isEmpty()) {
+                            String mKeys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
+                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
+                        }
+
                     }
                     break;
                 }
