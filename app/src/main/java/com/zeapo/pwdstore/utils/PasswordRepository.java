@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
@@ -32,6 +33,32 @@ public class PasswordRepository {
             }
         }
         return repository;
+    }
+
+    public static void createRepository(File localDir) {
+        localDir.delete();
+
+        try {
+            Git.init()
+                    .setDirectory(localDir)
+                    .call();
+
+            getRepository(localDir);
+
+            new Git(repository)
+                    .branchCreate()
+                    .setName("master")
+                    .call();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    // TODO add remote branch
+    public static void addRemote() {
+
     }
 
     public static void closeRepository() {

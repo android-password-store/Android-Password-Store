@@ -6,8 +6,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -41,12 +43,16 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     /** if we leave the activity to do something, do not add any other fragment */
     private boolean leftActivity = false;
     private File currentDir;
+    private SharedPreferences settings;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwdstore);
         scrollPositions = new Stack<Integer>();
+        settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        activity = this;
     }
 
     @Override
@@ -130,6 +136,43 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         startActivity(intent);
     }
 
+    public void initRepository(View view) {
+        String keyId = settings.getString("openpgp_key_ids", "");
+
+        if (keyId.isEmpty())
+            new AlertDialog.Builder(this)
+                    .setMessage("You have to set the information about the server before synchronizing with the server")
+                    .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(activity, UserPreference.class);
+                            startActivityForResult(intent, GitHandler.REQUEST_INIT);
+                        }
+                    })
+                    .setNegativeButton("Nah... later", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do nothing :(
+                        }
+                    })
+                    .show();
+
+        else {
+            File localDir = new File(getFilesDir() + "/store/");
+            localDir.mkdir();
+            try {
+                // we take only the first key-id, we have to think about how to handle multiple keys, and why should we do that...
+                // also, for compatibility use short-version of the key-id
+                FileUtils.writeStringToFile(new File(localDir.getAbsolutePath() + "/.gpg-id"),
+                        keyId.substring(keyId.length() - 8));
+            } catch (Exception e) {
+                localDir.delete();
+                return;
+            }
+            PasswordRepository.createRepository(localDir);
+        }
+    }
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -154,6 +197,10 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         if (localDir.exists()) {
             File[] folders = localDir.listFiles();
             status = folders.length;
+
+            // this means that the repository has been correctly cloned
+            if ((new File(localDir.getAbsolutePath() + "/.gpg-id")).exists())
+                status++;
         }
 
         // either the repo is empty or it was not correctly cloned
@@ -267,6 +314,9 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                             git.add().addFilepattern("."),
                             git.commit().setMessage("[ANDROID PwdStore] Add " + data.getExtras().getString("NAME") + " from store.")
                     );
+                    break;
+                case GitHandler.REQUEST_INIT:
+                    initRepository(getCurrentFocus());
                     break;
             }
 

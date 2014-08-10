@@ -65,6 +65,7 @@ public class GitHandler extends Activity {
     public static final int REQUEST_PULL = 101;
     public static final int REQUEST_PUSH = 102;
     public static final int REQUEST_CLONE = 103;
+    public static final int REQUEST_INIT = 104;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
