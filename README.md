@@ -3,6 +3,8 @@ PwdStore
 
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
+Alpha version available at [PlayStore]
+
 Features
 ========
 - Clone an existing pass repository

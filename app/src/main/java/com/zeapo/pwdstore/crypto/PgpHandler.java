@@ -275,7 +275,7 @@ public class PgpHandler extends Activity {
         public void onReturn(Intent result) {
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
-                    showToast("RESULT_CODE_SUCCESS");
+                    showToast("SUCCESS");
 
                     // encrypt/decrypt/sign/verify
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
@@ -342,7 +342,7 @@ public class PgpHandler extends Activity {
                     break;
                 }
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
-                    showToast("RESULT_CODE_USER_INTERACTION_REQUIRED");
+                    Log.i("PgpHandler", "RESULT_CODE_USER_INTERACTION_REQUIRED");
 
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                     try {
@@ -354,7 +354,7 @@ public class PgpHandler extends Activity {
                     break;
                 }
                 case OpenPgpApi.RESULT_CODE_ERROR: {
-                    showToast("RESULT_CODE_ERROR");
+                    showToast("ERROR");
 
                     OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
                     handleError(error);
@@ -367,9 +367,11 @@ public class PgpHandler extends Activity {
 
     public void getKeyIds(Intent data) {
         accountName = settings.getString("openpgp_account_name", "");
+        if (accountName.isEmpty())
+            showToast("Please set your account name in settings whenever you can");
 
         data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
-        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName});
+        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName.isEmpty() ? "default" : accountName});
 
         OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
 
