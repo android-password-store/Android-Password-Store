@@ -36,6 +36,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
@@ -432,11 +433,20 @@ public class GitHandler extends Activity {
                     })
                     .show();
 
-        else
+        else {
+            // check that the remote origin is here, else add it
+            PasswordRepository.addRemote("origin", settings.getString("git_remote_username", "user")
+                    + "@" +
+                    settings.getString("git_remote_server", "server.com")
+                    + ":" +
+                    settings.getString("git_remote_location", "path/to/repository"));
+
             new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
-                .pull()
-                .setRebase(true)
-                .setCredentialsProvider(provider));
+                    .pull()
+                    .setRebase(true)
+                    .setRemote("origin")
+                    .setCredentialsProvider(provider));
+        }
     }
 
 
@@ -463,10 +473,20 @@ public class GitHandler extends Activity {
                     })
                     .show();
 
-        else
+        else {
+            // check that the remote origin is here, else add it
+            PasswordRepository.addRemote("origin", settings.getString("git_remote_username", "user")
+                    + "@" +
+                    settings.getString("git_remote_server", "server.com")
+                    + ":" +
+                    settings.getString("git_remote_location", "path/to/repository"));
+
             new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
-                .push()
-                .setCredentialsProvider(provider));
+                    .push()
+                    .setPushAll()
+                    .setRemote("origin")
+                    .setCredentialsProvider(provider));
+        }
     }
 
     /** Finds the method and provides it with authentication paramters via invokeWithAuthentication */
