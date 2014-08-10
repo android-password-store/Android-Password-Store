@@ -3,8 +3,6 @@ PwdStore
 
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
-Alpha version available at [PlayStore]
-
 Features
 ========
 - Clone an existing pass repository
@@ -25,7 +23,6 @@ This project uses three libraries:
 
 TODOs
 =====
-- Initialize a new pass repository
 - Create a new category
 - Multi-select (for password deletion)
 - Multiple password stores (multiple git repositories). 
