@@ -465,14 +465,13 @@ public class PgpHandler extends Activity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         (new File(getIntent().getExtras().getString("FILE_PATH"))).delete();
 
+                        setResult(RESULT_CANCELED);
                         Git git = new Git(PasswordRepository.getRepository(new File("")));
-                        GitAsyncTask tasks = new GitAsyncTask(activity, false);
+                        GitAsyncTask tasks = new GitAsyncTask(activity, true);
                         tasks.execute(
                                 git.rm().addFilepattern(getIntent().getExtras().getString("FILE_PATH").replace(PasswordRepository.getWorkTree() + "/", "")),
                                 git.commit().setMessage("[ANDROID PwdStore] Remove " + getIntent().getExtras().getString("FILE_PATH") + " from store.")
                         );
-                        setResult(RESULT_CANCELED);
-                        finish();
                     }
                 })
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {
