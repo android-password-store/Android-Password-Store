@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.CloneCommand;
@@ -407,15 +408,62 @@ public class GitHandler extends Activity {
     }
 
     public void pullOperation(UsernamePasswordCredentialsProvider provider) {
-        new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
-            .pull()
-            .setRebase(true)
-            .setCredentialsProvider(provider));
+
+        if (settings.getString("git_remote_username", "user").isEmpty() ||
+            settings.getString("git_remote_server", "server.com").isEmpty() ||
+            settings.getString("git_remote_location", "path/to/repository").isEmpty() )
+            new AlertDialog.Builder(this)
+                    .setMessage("You have to set the information about the server before synchronizing with the server")
+                    .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(activity, UserPreference.class);
+                            startActivityForResult(intent, REQUEST_PULL);
+                        }
+                    })
+                    .setNegativeButton("Nah... later", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do nothing :(
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    })
+                    .show();
+
+        else
+            new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+                .pull()
+                .setRebase(true)
+                .setCredentialsProvider(provider));
     }
 
 
     public void pushOperation(UsernamePasswordCredentialsProvider provider) {
-        new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+        if (settings.getString("git_remote_username", "user").isEmpty() ||
+                settings.getString("git_remote_server", "server.com").isEmpty() ||
+                settings.getString("git_remote_location", "path/to/repository").isEmpty() )
+            new AlertDialog.Builder(this)
+                    .setMessage("You have to set the information about the server before synchronizing with the server")
+                    .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(activity, UserPreference.class);
+                            startActivityForResult(intent, REQUEST_PUSH);
+                        }
+                    })
+                    .setNegativeButton("Nah... later", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do nothing :(
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    })
+                    .show();
+
+        else
+            new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
                 .push()
                 .setCredentialsProvider(provider));
     }
@@ -479,6 +527,28 @@ public class GitHandler extends Activity {
 
                 new CloneTask(activity).execute(cmd);
             }
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
+        }
+
+        if (resultCode == RESULT_OK) {
+
+            switch (requestCode) {
+                case REQUEST_PULL:
+                    authenticateAndRun("pullOperation");
+                    break;
+                case REQUEST_PUSH:
+                    authenticateAndRun("pushOperation");
+                    break;
+            }
+
         }
     }
 
