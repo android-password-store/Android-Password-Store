@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android-Password-Store.iml" filepath="$PROJECT_DIR$/Android-Password-Store.iml" />
       <module fileurl="file://$PROJECT_DIR$/PwdStore.iml" filepath="$PROJECT_DIR$/PwdStore.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libraries/openpgp-api-lib/openpgp-api-lib.iml" filepath="$PROJECT_DIR$/libraries/openpgp-api-lib/openpgp-api-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries/openpgp-api-lib/openpgp-api-lib.iml" filepath="$PROJECT_DIR$/libraries/openpgp-api-lib/openpgp-api-lib.iml" />
     </modules>
   </component>
