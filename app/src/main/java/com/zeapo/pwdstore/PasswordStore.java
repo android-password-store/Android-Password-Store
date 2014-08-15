@@ -171,6 +171,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 return;
             }
             PasswordRepository.createRepository(localDir);
+            checkLocalRepository();
         }
     }
 

@@ -26,5 +26,8 @@
     <string name="crypto_pass_label">Password</string>
     <string name="crypto_extra_label">Extra</string>
 
+    <!-- DECRYPT Layout -->
+    <string name="crypto_category">Category</string>
+
 
 </resources>

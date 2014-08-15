@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -98,6 +99,10 @@ public class PgpHandler extends Activity {
         if (extra.getString("Operation").equals("DECRYPT")) {
             setContentView(R.layout.decrypt_layout);
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
+                    .getParentFile().getName();
+
+            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
         } else if (extra.getString("Operation").equals("ENCRYPT")) {
             setContentView(R.layout.encrypt_layout);
             String cat = extra.getString("FILE_PATH");
@@ -221,6 +226,7 @@ public class PgpHandler extends Activity {
         protected void onPostExecute(Boolean b) {
             //clear password
             ((TextView) findViewById(R.id.crypto_password_show)).setText("");
+            ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
             findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
             findViewById(R.id.crypto_container).setVisibility(View.INVISIBLE);
         }
