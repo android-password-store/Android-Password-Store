@@ -3,6 +3,9 @@ PwdStore
 
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
+You can install the application either from the [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore),
+using the apk file found at `app/app-release.apk` or build everything from source.
+
 Features
 ========
 - Clone an existing pass repository
@@ -17,7 +20,7 @@ Libraries
 =========
 This project uses three libraries:
 
-- [OpenKeyChain](https://github.com/open-keychain/open-keychain) for encryption and decryption of passwords
+- [OpenKeyChain](https://github.com/open-keychain/open-keychain) for encryption and decryption of passwords.
     To download the library, run the following commands at the root of the project
 
         git submodule init
