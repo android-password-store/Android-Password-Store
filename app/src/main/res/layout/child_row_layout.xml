@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/crypto_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ico_del"
+            android:background="@drawable/red_rectangle"
+            android:layout_gravity="center_vertical"
+            android:onClick="handleClick"
+            android:layout_column="1"
+            android:layout_row="0"/>
+
+        <ImageButton
+            android:id="@+id/crypto_show_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ico_key"
+            android:background="@drawable/blue_rectangle"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:onClick="handleClick"
+            android:layout_column="2"
+            android:layout_row="0"/>
+
+</GridLayout>

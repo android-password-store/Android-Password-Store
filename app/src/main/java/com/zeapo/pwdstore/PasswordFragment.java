@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -27,14 +28,14 @@ import java.util.List;
  * with a GridView.
  * <p />
  */
-public class PasswordFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class PasswordFragment extends Fragment implements ExpandableListView.OnGroupClickListener {
 
     private OnFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private ListView mListView;
+    private ExpandableListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
@@ -62,11 +63,11 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
         View view = inflater.inflate(R.layout.fragment_password, container, false);
 
         // Set the adapter
-        mListView = (ListView) view.findViewById(R.id.pass_list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView = (ExpandableListView) view.findViewById(R.id.pass_list);
+        mListView.setAdapter((android.widget.ExpandableListAdapter) mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        mListView.setOnGroupClickListener(this);
         mListView.setSelectionFromTop(getArguments().getInt("Position"), 0);
 
         return view;
@@ -97,12 +98,22 @@ public class PasswordFragment extends Fragment implements AbsListView.OnItemClic
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(mAdapter.getItem(position));
+    public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
+        if( ((PasswordItem) mAdapter.getGroup(i)).getType() == PasswordItem.TYPE_CATEGORY ){
+            if (null != mListener) {
+    //            Notify the active callbacks interface (the activity, if the
+    //            fragment is attached to one) that an item has been selected.
+                mListener.onFragmentInteraction(mAdapter.getItem(i));
+            }
+        } else {
+            if (expandableListView.isGroupExpanded(i)) {
+                expandableListView.collapseGroup(i);
+            } else {
+                expandableListView.expandGroup(i);
+            }
         }
+
+        return true;
     }
 
     public interface OnFragmentInteractionListener {

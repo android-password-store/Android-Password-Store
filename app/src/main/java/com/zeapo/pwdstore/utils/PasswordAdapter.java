@@ -1,18 +1,21 @@
 package com.zeapo.pwdstore.utils;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
 
-public class PasswordAdapter extends ArrayAdapter<PasswordItem> {
+public class PasswordAdapter extends ArrayAdapter<PasswordItem>  implements  ExpandableListAdapter{
     private final Context context;
     private final ArrayList<PasswordItem> values;
 
@@ -28,9 +31,57 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public void registerDataSetObserver(DataSetObserver dataSetObserver) {
+
+    }
+
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
+
+    }
+
+    @Override
+    public int getGroupCount() {
+        return values.size();
+    }
+
+    @Override
+    public int getChildrenCount(int i) {
+        if (values.get(i).getType() == PasswordItem.TYPE_CATEGORY)
+            return 0;
+        else
+            return 1;
+    }
+
+    @Override
+    public Object getGroup(int i) {
+        return values.get(i);
+    }
+
+    @Override
+    public Object getChild(int i, int i2) {
+        return null;
+    }
+
+    @Override
+    public long getGroupId(int i) {
+        return 0;
+    }
+
+    @Override
+    public long getChildId(int i, int i2) {
+        return 0;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
         View rowView = convertView;
-        PasswordItem pass = values.get(position);
+        PasswordItem pass = values.get(i);
 
         // reuse for performance, holder pattern!
         if (rowView == null) {
@@ -59,5 +110,52 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem> {
         }
 
         return rowView;
+    }
+
+    @Override
+    public View getChildView(int i, int i2, boolean b, View view, ViewGroup viewGroup) {
+        PasswordItem pass = values.get(i);
+
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.child_row_layout, null);
+        Log.i("ADAPTER", "Child clicked");
+
+        return view;
+    }
+
+    @Override
+    public boolean isChildSelectable(int i, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public void onGroupExpanded(int i) {
+
+    }
+
+    @Override
+    public void onGroupCollapsed(int i) {
+
+    }
+
+    @Override
+    public long getCombinedChildId(long l, long l2) {
+        return 0;
+    }
+
+    @Override
+    public long getCombinedGroupId(long l) {
+        return 0;
     }
 }
