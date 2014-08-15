@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.jcraft.jsch.JSch;
@@ -42,7 +43,7 @@ import java.util.Stack;
 public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentInteractionListener, PasswordFragment.OnFragmentInteractionListener {
     private Stack<Integer> scrollPositions;
     /** if we leave the activity to do something, do not add any other fragment */
-    private boolean leftActivity = false;
+    public boolean leftActivity = false;
     private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
@@ -250,25 +251,27 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             checkLocalRepository(item.getFile());
         } else {
             try {
-                try {
-                    this.leftActivity = true;
-
-                    Intent intent = new Intent(this, PgpHandler.class);
-                    intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
-                    intent.putExtra("NAME", item.toString());
-                    intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
-                    intent.putExtra("Operation", "DECRYPT");
-                    startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
 
             } catch (Exception e) {
 //            TODO handle problems
                 e.printStackTrace();
             }
+        }
+    }
+    public void decryptPassword(PasswordItem item) {
+        try {
+            this.leftActivity = true;
+
+            Intent intent = new Intent(this, PgpHandler.class);
+            intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
+            intent.putExtra("NAME", item.toString());
+            intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
+            intent.putExtra("Operation", "DECRYPT");
+            startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -288,7 +291,36 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         }
     }
 
-    private void refreshListAdapter() {
+    public void deletePassword(final PasswordItem item) {
+        new AlertDialog.Builder(this).
+                setMessage("Are you sure you want to delete the password \"" +
+                        item + "\"")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String path = item.getFile().getAbsolutePath();
+                        item.getFile().delete();
+
+                        setResult(RESULT_CANCELED);
+                        Git git = new Git(PasswordRepository.getRepository(new File("")));
+                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true);
+                        System.out.println(tasks);
+                        tasks.execute(
+                                git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
+                                git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")
+                        );
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+    }
+
+    public void refreshListAdapter() {
         PasswordFragment plist;
         if  (null !=
                 (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
@@ -311,7 +343,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             switch (requestCode) {
                 case PgpHandler.REQUEST_CODE_ENCRYPT :
                     Git git = new Git(PasswordRepository.getRepository(new File("")));
-                    GitAsyncTask tasks = new GitAsyncTask(this, false);
+                    GitAsyncTask tasks = new GitAsyncTask(this, false, false);
                     tasks.execute(
                             git.add().addFilepattern("."),
                             git.commit().setMessage("[ANDROID PwdStore] Add " + data.getExtras().getString("NAME") + " from store.")

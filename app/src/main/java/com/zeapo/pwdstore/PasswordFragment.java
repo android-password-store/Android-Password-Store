@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -54,7 +55,7 @@ public class PasswordFragment extends Fragment implements ExpandableListView.OnG
         super.onCreate(savedInstanceState);
 
         String path = getArguments().getString("Path");
-        mAdapter = new PasswordAdapter(getActivity(), PasswordRepository.getPasswords(new File(path)));
+        mAdapter = new PasswordAdapter((PasswordStore) getActivity(), PasswordRepository.getPasswords(new File(path)));
     }
 
     @Override
@@ -124,6 +125,7 @@ public class PasswordFragment extends Fragment implements ExpandableListView.OnG
     public void updateAdapter() {
         mAdapter.clear();
         mAdapter.addAll(PasswordRepository.getPasswords(new File(getArguments().getString("Path"))));
+        mListView.setAdapter((ExpandableListAdapter) mAdapter);
     }
 
 }

@@ -16,11 +16,13 @@ import org.eclipse.jgit.api.errors.TransportException;
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
     private Activity activity;
     private boolean finishOnEnd;
+    private boolean refreshListOnEnd;
     private ProgressDialog dialog;
 
-    public GitAsyncTask(Activity activity, boolean finishOnEnd) {
+    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
+        this.refreshListOnEnd = refreshListOnEnd;
 
         dialog = new ProgressDialog(this.activity);
     }
@@ -61,6 +63,14 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
         if (finishOnEnd) {
             this.activity.setResult(Activity.RESULT_OK);
             this.activity.finish();
+        }
+
+        if (refreshListOnEnd) {
+            try {
+                ((PasswordStore) this.activity).refreshListAdapter();
+            } catch (ClassCastException e){
+                // oups, mistake
+            }
         }
     }
 }

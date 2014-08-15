@@ -1,6 +1,8 @@
 package com.zeapo.pwdstore.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -8,15 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.crypto.PgpHandler;
+
+import org.apache.commons.io.FileUtils;
 
 import java.util.ArrayList;
 
 public class PasswordAdapter extends ArrayAdapter<PasswordItem>  implements  ExpandableListAdapter{
-    private final Context context;
+    private final PasswordStore activity;
     private final ArrayList<PasswordItem> values;
 
     static class ViewHolder {
@@ -24,10 +32,10 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>  implements  Exp
         public TextView type;
     }
 
-    public PasswordAdapter(Context context, ArrayList<PasswordItem> values) {
-        super(context, R.layout.password_row_layout, values);
-        this.context = context;
+    public PasswordAdapter(PasswordStore activity, ArrayList<PasswordItem> values) {
+        super(activity, R.layout.password_row_layout, values);
         this.values = values;
+        this.activity = activity;
     }
 
     @Override
@@ -85,7 +93,7 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>  implements  Exp
 
         // reuse for performance, holder pattern!
         if (rowView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
+            LayoutInflater inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.password_row_layout, null);
 
@@ -100,12 +108,12 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>  implements  Exp
         holder.name.setText(pass.toString());
 
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
-            holder.name.setTextColor(this.context.getResources().getColor(android.R.color.holo_blue_dark));
+            holder.name.setTextColor(this.activity.getResources().getColor(android.R.color.holo_blue_dark));
             holder.name.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             holder.type.setText("Category: ");
         } else {
             holder.type.setText("Password: ");
-            holder.name.setTextColor(this.context.getResources().getColor(android.R.color.holo_orange_dark));
+            holder.name.setTextColor(this.activity.getResources().getColor(android.R.color.holo_orange_dark));
             holder.name.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
         }
 
@@ -114,12 +122,28 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>  implements  Exp
 
     @Override
     public View getChildView(int i, int i2, boolean b, View view, ViewGroup viewGroup) {
-        PasswordItem pass = values.get(i);
+        final PasswordItem pass = values.get(i);
 
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) this.activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.child_row_layout, null);
-        Log.i("ADAPTER", "Child clicked");
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.crypto_show_button:
+                        activity.decryptPassword(pass);
+                        break;
+                    case R.id.crypto_delete_button:
+                        activity.deletePassword(pass);
+                        break;
+                }
+            }
+        };
+
+        ((ImageButton) view.findViewById(R.id.crypto_show_button)).setOnClickListener(onClickListener);
+        ((ImageButton) view.findViewById(R.id.crypto_delete_button)).setOnClickListener(onClickListener);
 
         return view;
     }

@@ -441,7 +441,7 @@ public class GitHandler extends Activity {
                     + ":" +
                     settings.getString("git_remote_location", "path/to/repository"));
 
-            new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+            new GitAsyncTask(activity, true, false).execute(new Git(PasswordRepository.getRepository(new File("")))
                     .pull()
                     .setRebase(true)
                     .setRemote("origin")
@@ -481,7 +481,7 @@ public class GitHandler extends Activity {
                     + ":" +
                     settings.getString("git_remote_location", "path/to/repository"));
 
-            new GitAsyncTask(activity, true).execute(new Git(PasswordRepository.getRepository(new File("")))
+            new GitAsyncTask(activity, true, false).execute(new Git(PasswordRepository.getRepository(new File("")))
                     .push()
                     .setPushAll()
                     .setRemote("origin")

@@ -155,7 +155,7 @@ public class PgpHandler extends Activity {
                 finish();
                 break;
             case R.id.crypto_delete_button:
-                deletePassword();
+//                deletePassword();
                 break;
             case R.id.crypto_get_key_ids:
                 getKeyIds(new Intent());
@@ -462,30 +462,5 @@ public class PgpHandler extends Activity {
 
     }
 
-    private void deletePassword() {
-        new AlertDialog.Builder(this).
-                setMessage("Are you sure you want to delete the password \"" +
-                        getIntent().getExtras().getString("NAME") + "\"")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        (new File(getIntent().getExtras().getString("FILE_PATH"))).delete();
 
-                        setResult(RESULT_CANCELED);
-                        Git git = new Git(PasswordRepository.getRepository(new File("")));
-                        GitAsyncTask tasks = new GitAsyncTask(activity, true);
-                        tasks.execute(
-                                git.rm().addFilepattern(getIntent().getExtras().getString("FILE_PATH").replace(PasswordRepository.getWorkTree() + "/", "")),
-                                git.commit().setMessage("[ANDROID PwdStore] Remove " + getIntent().getExtras().getString("FILE_PATH") + " from store.")
-                        );
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
-                .show();
-    }
 }
