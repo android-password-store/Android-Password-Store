@@ -18,6 +18,12 @@ Libraries
 This project uses three libraries:
 
 - [OpenKeyChain](https://github.com/open-keychain/open-keychain) for encryption and decryption of passwords
+    To download the library, run the following commands at the root of the project
+
+        git submodule init
+        git submodule update
+
+
 - [JGit](http://www.eclipse.org/jgit/) a pretty good git lib 
 - [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for files manipulations
 
