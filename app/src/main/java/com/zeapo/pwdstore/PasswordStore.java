@@ -249,14 +249,6 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     public void onFragmentInteraction(PasswordItem item) {
         if (item.getType() == PasswordItem.TYPE_CATEGORY) {
             checkLocalRepository(item.getFile());
-        } else {
-            try {
-
-
-            } catch (Exception e) {
-//            TODO handle problems
-                e.printStackTrace();
-            }
         }
     }
     public void decryptPassword(PasswordItem item) {

@@ -34,6 +34,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.util.StringUtils;
+import org.openintents.openpgp.IOpenPgpService;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -48,7 +49,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-public class PgpHandler extends Activity {
+public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnBound{
 
 
     private OpenPgpServiceConnection mServiceConnection;
@@ -56,6 +57,8 @@ public class PgpHandler extends Activity {
     private String accountName = "";
     SharedPreferences settings;
     private Activity activity;
+
+    private ProgressDialog bindingDialog;
 
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
@@ -74,7 +77,7 @@ public class PgpHandler extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activity = this;
+        this.activity = this;
 
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -91,31 +94,13 @@ public class PgpHandler extends Activity {
 
         // bind to service
         mServiceConnection = new OpenPgpServiceConnection(
-                PgpHandler.this, providerPackageName);
+                PgpHandler.this, providerPackageName, this );
         mServiceConnection.bindToService();
 
-
-        Bundle extra = getIntent().getExtras();
-        if (extra.getString("Operation").equals("DECRYPT")) {
-            setContentView(R.layout.decrypt_layout);
-            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
-                    .getParentFile().getName();
-
-            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
-        } else if (extra.getString("Operation").equals("ENCRYPT")) {
-            setContentView(R.layout.encrypt_layout);
-            String cat = extra.getString("FILE_PATH");
-            cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
-            cat = cat + "/";
-            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
-        } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
-            setContentView(R.layout.key_id);
-            if (!keyIDs.isEmpty()) {
-                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
-                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
-            }
-        }
+        bindingDialog = new ProgressDialog(this);
+        bindingDialog.setMessage("Waiting for OpenKeychain...");
+        bindingDialog.setCancelable(false);
+        bindingDialog.show();
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -176,7 +161,6 @@ public class PgpHandler extends Activity {
                         Toast.LENGTH_LONG).show();
                 Log.e(Constants.TAG, "onError getErrorId:" + error.getErrorId());
                 Log.e(Constants.TAG, "onError getMessage:" + error.getMessage());
-                Log.e(Constants.TAG, "  " + error.toString());
             }
         });
     }
@@ -279,6 +263,8 @@ public class PgpHandler extends Activity {
 
         @Override
         public void onReturn(Intent result) {
+            bindingDialog.dismiss();
+
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
                     showToast("SUCCESS");
@@ -366,6 +352,7 @@ public class PgpHandler extends Activity {
                     handleError(error);
                     break;
                 }
+
             }
         }
     }
@@ -462,5 +449,32 @@ public class PgpHandler extends Activity {
 
     }
 
+    @Override
+    public void onBound(IOpenPgpService service) {
+        Log.i("PGP", "ISBOUND!!");
+
+        Bundle extra = getIntent().getExtras();
+        if (extra.getString("Operation").equals("DECRYPT")) {
+            setContentView(R.layout.decrypt_layout);
+            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
+                    .getParentFile().getName();
+
+            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
+            decryptAndVerify(new Intent());
+        } else if (extra.getString("Operation").equals("ENCRYPT")) {
+            setContentView(R.layout.encrypt_layout);
+            String cat = extra.getString("FILE_PATH");
+            cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
+            cat = cat + "/";
+            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
+        } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
+            setContentView(R.layout.key_id);
+            if (!keyIDs.isEmpty()) {
+                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
+                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
+            }
+        }
+    }
 
 }

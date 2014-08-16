@@ -9,13 +9,14 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle">
+            android:background="@drawable/rectangle"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -24,10 +25,7 @@
                 android:text="CATEGORY HERE"
                 android:id="@+id/crypto_password_category"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dp"
-                android:layout_column="0"
-                android:layout_row="0"
-                android:layout_columnSpan="2"/>
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,38 +36,8 @@
                 android:text="PASSWORD FILE NAME HERE"
                 android:id="@+id/crypto_password_file"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dp"
-                android:layout_column="0"
-                android:layout_columnSpan="2"
-                android:layout_row="1"/>
-
-
-            <ImageButton
-                android:id="@+id/crypto_delete_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ico_del"
-                android:background="@drawable/red_rectangle"
-                android:layout_gravity="center_vertical"
-                android:onClick="handleClick"
-                android:layout_column="3"
-                android:layout_row="0"
-                android:layout_rowSpan="2"/>
-
-            <ImageButton
-                android:id="@+id/crypto_show_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ico_key"
-                android:background="@drawable/blue_rectangle"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dp"
-                android:onClick="handleClick"
-                android:layout_column="4"
-                android:layout_row="0"
-                android:layout_rowSpan="2"/>
-
-        </GridLayout>
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/crypto_container"

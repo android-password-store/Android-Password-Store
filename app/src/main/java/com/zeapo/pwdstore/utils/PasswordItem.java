@@ -11,6 +11,7 @@ public class PasswordItem implements Comparable{
     private String name;
     private PasswordItem parent;
     private File file;
+    public boolean selected = false;
 
     /** Create a password item
      *
