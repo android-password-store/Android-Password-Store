@@ -247,6 +247,10 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                     break;
                 }
             }
+        } else if (resultCode == RESULT_CANCELED) {
+            bindingDialog.dismiss();
+            setResult(RESULT_CANCELED, data);
+            finish();
         }
     }
 
