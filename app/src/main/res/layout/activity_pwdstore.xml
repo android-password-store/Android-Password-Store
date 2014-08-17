@@ -16,17 +16,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"></LinearLayout>
 
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ico_add"
-        android:background="@drawable/oval"
-        android:layout_gravity="center_vertical"
-        android:onClick="createPassword"
-        android:layout_column="2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/main_layout"
-        android:layout_alignEnd="@+id/main_layout" />
-
 </RelativeLayout>

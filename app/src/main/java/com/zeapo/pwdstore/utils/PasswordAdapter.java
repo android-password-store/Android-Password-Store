@@ -58,24 +58,6 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>{
             viewHolder.back_name = (TextView) rowView.findViewById(R.id.label_back);
             viewHolder.type = (TextView) rowView.findViewById(R.id.type);
             rowView.setTag(viewHolder);
-
-
-            View.OnClickListener onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    switch (view.getId()) {
-                        case R.id.crypto_show_button:
-                            activity.decryptPassword(pass);
-                            break;
-                        case R.id.crypto_delete_button:
-                            activity.deletePassword(pass);
-                            break;
-                    }
-                }
-            };
-
-            ((ImageButton) rowView.findViewById(R.id.crypto_show_button)).setOnClickListener(onClickListener);
-            ((ImageButton) rowView.findViewById(R.id.crypto_delete_button)).setOnClickListener(onClickListener);
         }
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
@@ -94,6 +76,24 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>{
 
             holder.back_name.setTextColor(this.activity.getResources().getColor(android.R.color.white));
             holder.back_name.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD_ITALIC));
+
+
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switch (view.getId()) {
+                        case R.id.crypto_show_button:
+                            activity.decryptPassword(pass);
+                            break;
+                        case R.id.crypto_delete_button:
+                            activity.deletePassword(pass);
+                            break;
+                    }
+                }
+            };
+
+            ((ImageButton) rowView.findViewById(R.id.crypto_show_button)).setOnClickListener(onClickListener);
+            ((ImageButton) rowView.findViewById(R.id.crypto_delete_button)).setOnClickListener(onClickListener);
         }
 
         return rowView;
