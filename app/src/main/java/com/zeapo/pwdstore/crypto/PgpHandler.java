@@ -263,7 +263,6 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
 
         @Override
         public void onReturn(Intent result) {
-            bindingDialog.dismiss();
 
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
@@ -274,6 +273,8 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                         try {
                             Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
                                     + " str=" + os.toString("UTF-8"));
+
+                            bindingDialog.dismiss();
 
                             if (returnToCiphertextField) {
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
@@ -463,12 +464,16 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
             decryptAndVerify(new Intent());
         } else if (extra.getString("Operation").equals("ENCRYPT")) {
+            bindingDialog.dismiss();
+
             setContentView(R.layout.encrypt_layout);
             String cat = extra.getString("FILE_PATH");
             cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
             cat = cat + "/";
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
         } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
+            bindingDialog.dismiss();
+
             setContentView(R.layout.key_id);
             if (!keyIDs.isEmpty()) {
                 String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
