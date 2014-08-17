@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle"
         android:orientation="horizontal"
-        android:layout_row="1"
-        android:layout_column="0">
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
             android:id="@+id/crypto_password_category"
@@ -88,12 +88,17 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@android:color/darker_gray"
         android:layout_weight="0">
         <ImageButton
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/ico_check"
-            android:background="@drawable/oval"
+            android:src="@drawable/ico_confirm_add"
+            android:background="@drawable/blue_rectangle"
             android:id="@+id/crypto_confirm_add"
             android:onClick="handleClick"
             android:layout_alignParentTop="true"
@@ -104,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:src="@drawable/ico_cancel"
-            android:background="@drawable/oval"
+            android:background="@drawable/red_rectangle"
             android:id="@+id/crypto_cancel_add"
             android:onClick="handleClick"
             android:layout_alignParentTop="true"
