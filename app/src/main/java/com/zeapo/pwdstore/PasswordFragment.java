@@ -73,8 +73,6 @@ public class PasswordFragment extends Fragment implements SwipeListViewListener 
         // Set the adapter
         mListView = (SwipeListView) view.findViewById(R.id.pass_list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-        // Set OnItemClickListener so we can be notified on item clicks
-//        mListView.setOnItemClickListener(this);
         mListView.setSwipeListViewListener(this);
         mListView.setSelectionFromTop(getArguments().getInt("Position"), 0);
 
@@ -102,27 +100,7 @@ public class PasswordFragment extends Fragment implements SwipeListViewListener 
     public void onPause() {
         super.onPause();
         mListener.savePosition(mListView.getFirstVisiblePosition());
-
-    }
-
-//    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        PasswordItem item = mAdapter.getItem(position);
-        if (item.getType() == PasswordItem.TYPE_PASSWORD) {
-//            if (item.selected) {
-//                item.selected = false;
-//            } else {
-//                View right = view.findViewById(R.id.row_buttons);
-//                ScaleAnimation animation = new ScaleAnimation(view.getX(), 0, view.getY(), 0, Animation.RELATIVE_TO_SELF, (float)0.5, Animation.RELATIVE_TO_SELF, (float)0.5);
-//                right.setAnimation(animation);
-//                item.selected = true;
-//            }
-        } else if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(mAdapter.getItem(position));
-        }
-
+        mListView.closeOpenedItems();
     }
 
     @Override
