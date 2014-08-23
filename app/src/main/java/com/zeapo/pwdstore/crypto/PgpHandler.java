@@ -250,6 +250,9 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                     decryptAndVerify(data);
                     break;
                 }
+                case REQUEST_CODE_GET_KEY_IDS:
+                    getKeyIds(data);
+                    break;
             }
         } else if (resultCode == RESULT_CANCELED) {
             bindingDialog.dismiss();
@@ -332,13 +335,14 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                         }
                         keyIDs = StringUtils.join(keys, ", ");
 
-                        settings.edit().putString("openpgp_key_ids", keyIDs).commit();
-
                         if (!keyIDs.isEmpty()) {
                             String mKeys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
-                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
+//                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
+                            settings.edit().putString("openpgp_key_ids", keyIDs).apply();
+                            Log.i("PGP", mKeys);
                         }
-
+                        setResult(RESULT_OK);
+                        finish();
                     }
                     break;
                 }
@@ -481,12 +485,13 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
         } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
             bindingDialog.dismiss();
+            getKeyIds(new Intent());
 
-            setContentView(R.layout.key_id);
-            if (!keyIDs.isEmpty()) {
-                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
-                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
-            }
+//            setContentView(R.layout.key_id);
+//            if (!keyIDs.isEmpty()) {
+//                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
+//                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
+//            }
         }
     }
 

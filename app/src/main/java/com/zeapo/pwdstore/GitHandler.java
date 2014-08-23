@@ -166,7 +166,7 @@ public class GitHandler extends Activity {
             String hostname =
                     settings.getString("git_remote_username", "")
                             + "@" +
-                            settings.getString("git_remote_server", "")
+                            settings.getString("git_remote_server", "").trim()
                             + ":" +
                             settings.getString("git_remote_location", "");
 
@@ -483,7 +483,7 @@ public class GitHandler extends Activity {
             // check that the remote origin is here, else add it
             PasswordRepository.addRemote("origin", settings.getString("git_remote_username", "user")
                     + "@" +
-                    settings.getString("git_remote_server", "server.com")
+                    settings.getString("git_remote_server", "server.com").trim()
                     + ":" +
                     settings.getString("git_remote_location", "path/to/repository"));
 
@@ -507,7 +507,7 @@ public class GitHandler extends Activity {
 
     public void pushOperation(UsernamePasswordCredentialsProvider provider) {
         if (settings.getString("git_remote_username", "user").isEmpty() ||
-                settings.getString("git_remote_server", "server.com").isEmpty() ||
+                settings.getString("git_remote_server", "server.com").trim().isEmpty() ||
                 settings.getString("git_remote_location", "path/to/repository").isEmpty() )
             new AlertDialog.Builder(this)
                     .setMessage("You have to set the information about the server before synchronizing with the server")
@@ -532,7 +532,7 @@ public class GitHandler extends Activity {
             // check that the remote origin is here, else add it
             PasswordRepository.addRemote("origin", settings.getString("git_remote_username", "user")
                     + "@" +
-                    settings.getString("git_remote_server", "server.com")
+                    settings.getString("git_remote_server", "server.com").trim()
                     + ":" +
                     settings.getString("git_remote_location", "path/to/repository"));
 

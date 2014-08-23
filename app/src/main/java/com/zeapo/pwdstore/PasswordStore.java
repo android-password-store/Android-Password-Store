@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -138,12 +139,30 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         startActivity(intent);
     }
 
+    private void createRepository() {
+        final String keyId = settings.getString("openpgp_key_ids", "");
+
+        File localDir = new File(getFilesDir() + "/store/");
+        localDir.mkdir();
+        try {
+            // we take only the first key-id, we have to think about how to handle multiple keys, and why should we do that...
+            // also, for compatibility use short-version of the key-id
+            FileUtils.writeStringToFile(new File(localDir.getAbsolutePath() + "/.gpg-id"),
+                    keyId.substring(keyId.length() - 8));
+        } catch (Exception e) {
+            localDir.delete();
+            return;
+        }
+        PasswordRepository.createRepository(localDir);
+        checkLocalRepository();
+    }
+
     public void initRepository(View view) {
-        String keyId = settings.getString("openpgp_key_ids", "");
+        final String keyId = settings.getString("openpgp_key_ids", "");
 
         if (keyId.isEmpty())
             new AlertDialog.Builder(this)
-                    .setMessage("You have to set the information about the server before synchronizing with the server")
+                    .setMessage("You have to select your \"PGP-Key ID\" before initializing the repository")
                     .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -160,19 +179,27 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                     .show();
 
         else {
-            File localDir = new File(getFilesDir() + "/store/");
-            localDir.mkdir();
-            try {
-                // we take only the first key-id, we have to think about how to handle multiple keys, and why should we do that...
-                // also, for compatibility use short-version of the key-id
-                FileUtils.writeStringToFile(new File(localDir.getAbsolutePath() + "/.gpg-id"),
-                        keyId.substring(keyId.length() - 8));
-            } catch (Exception e) {
-                localDir.delete();
-                return;
-            }
-            PasswordRepository.createRepository(localDir);
-            checkLocalRepository();
+            new AlertDialog.Builder(this)
+                    .setMessage("Which connection method do you prefer?")
+                    .setPositiveButton("ssh-key", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            settings.edit().putString("git_remote_auth", "ssh-key").apply();
+                            createRepository();
+                        }
+                    })
+                    .setNegativeButton("username/password", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            settings.edit().putString("git_remote_auth", "username/password").apply();
+                            createRepository();
+                        }
+                    })
+                    .setCancelable(false)
+
+
+                    .show();
+
         }
     }
 

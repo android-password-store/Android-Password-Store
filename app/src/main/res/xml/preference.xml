@@ -3,13 +3,16 @@
     <PreferenceCategory android:title="Git">
         <EditTextPreference android:title="Server"
             android:key="git_remote_server"
-            android:hint="server.com"/>
+            android:hint="server.com"
+            android:inputType="textUri"/>
         <EditTextPreference android:title="Remote location"
             android:key="git_remote_location"
-            android:hint="path/to/repository"/>
+            android:hint="path/to/repository"
+            android:inputType="textUri"/>
         <EditTextPreference android:title="Username"
             android:key="git_remote_username"
-            android:hint="username"/>
+            android:hint="username"
+            android:inputType="textPersonName"/>
         <Preference
             android:title="SSH Key"
             android:key="ssh_key"/>
