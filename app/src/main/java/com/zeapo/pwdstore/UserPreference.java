@@ -1,9 +1,13 @@
 package com.zeapo.pwdstore;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +16,9 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.net.URI;
+
 public class UserPreference extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 
     @Override
@@ -19,6 +26,7 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
         findPreference("openpgp_key_id").setOnPreferenceClickListener(this);
+        findPreference("ssh_key").setOnPreferenceClickListener(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -46,6 +54,10 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
             Intent intent = new Intent(this, PgpHandler.class);
             intent.putExtra("Operation", "GET_KEY_ID");
             startActivityForResult(intent, 0);
+        } else if (pref.getKey().equals("ssh_key")) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("file/*");
+            startActivityForResult(intent, 1);
         }
         return true;
     }
@@ -53,6 +65,14 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                Uri sshFile = data.getData();
+                try {
+                    FileUtils.copyFile(new File(sshFile.getPath()), new File(getFilesDir() + "/.ssh_key"));
+                } catch (Exception e) {
+
+                }
+            }
         }
     }
 }

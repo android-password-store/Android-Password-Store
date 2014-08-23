@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
@@ -36,10 +37,15 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.merge.MergeStrategy;
+import org.eclipse.jgit.transport.CredentialItem;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.CredentialsProviderUserInfo;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.util.FS;
 
@@ -128,21 +134,6 @@ public class GitHandler extends Activity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
-
-                        if (selection.equalsIgnoreCase("ssh-key (not yet implemented)")) {
-                            new AlertDialog.Builder(activity)
-                                    .setMessage("Authentication method not implemented yet")
-                                    .setPositiveButton("OK",
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.cancel();
-                                                }
-                                            }
-                                    ).show();
-                            ((Button) findViewById(R.id.clone_button)).setEnabled(false);
-                        } else {
-                            ((Button) findViewById(R.id.clone_button)).setEnabled(true);
-                        }
                         connectionMode = selection;
                     }
 
@@ -506,7 +497,112 @@ public class GitHandler extends Activity {
     private void invokeWithAuthentication(final GitHandler activity, final Method method) {
 
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
+            final File sshKey = new File(getFilesDir() + "/.ssh_key");
+            if (!sshKey.exists()) {
+                new AlertDialog.Builder(this)
+                        .setMessage("Please import your SSH key file in the preferences")
+                        .setTitle("No SSH key")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                try {
+                                    Intent intent = new Intent(getApplicationContext(), UserPreference.class);
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    System.out.println("Exception caught :(");
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Do nothing...
+                    }
+                }).show();
+            } else {
+                final EditText passphrase = new EditText(activity);
+                passphrase.setHint("Passphrase");
+                passphrase.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+                passphrase.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
+                new AlertDialog.Builder(activity)
+                        .setTitle("Authenticate")
+                        .setMessage("Please provide the passphrase for your SSH key. Leave it empty if there is no passphrase.")
+                        .setView(passphrase)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                SshSessionFactory.setInstance(new GitConfigSessionFactory());
+                                try {
+
+                                    JschConfigSessionFactory sessionFactory = new JschConfigSessionFactory() {
+
+                                        @Override
+                                        protected JSch
+                                        getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
+                                            JSch jsch = super.getJSch(hc, fs);
+                                            jsch.removeAllIdentity();
+                                            jsch.addIdentity(sshKey.getAbsolutePath());
+                                            return jsch;
+                                        }
+
+                                        @Override
+                                        protected void configure(OpenSshConfig.Host hc, Session session) {
+                                            session.setConfig("StrictHostKeyChecking", "no");
+
+                                            CredentialsProvider provider = new CredentialsProvider() {
+                                                @Override
+                                                public boolean isInteractive() {
+                                                    return false;
+                                                }
+
+                                                @Override
+                                                public boolean supports(CredentialItem... items) {
+                                                    return true;
+                                                }
+
+                                                @Override
+                                                public boolean get(URIish uri, CredentialItem... items) throws UnsupportedCredentialItem {
+                                                    for (CredentialItem item : items) {
+                                                        if (item instanceof CredentialItem.Username) {
+                                                            ((CredentialItem.Username) item).setValue(settings.getString("git_remote_username", "git"));
+                                                            continue;
+                                                        }
+                                                        if (item instanceof CredentialItem.StringType) {
+                                                            ((CredentialItem.StringType) item).setValue(passphrase.getText().toString());
+                                                        }
+                                                    }
+                                                    return true;
+                                                }
+                                            };
+                                            UserInfo userInfo = new CredentialsProviderUserInfo(session, provider);
+                                            session.setUserInfo(userInfo);
+                                        }
+                                    };
+
+                                    SshSessionFactory.setInstance(sessionFactory);
+
+
+                                    CloneCommand cmd = Git.cloneRepository()
+                                            .setDirectory(localDir)
+                                            .setURI(hostname)
+                                            .setBare(false)
+                                            .setNoCheckout(false)
+                                            .setCloneAllBranches(true);
+
+                                    new CloneTask(activity).execute(cmd);
+
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Do nothing.
+                    }
+                }).show();
+            }
         } else {
             if (protocol.equals("ssh://")) {
                 final EditText password = new EditText(activity);

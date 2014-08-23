@@ -10,6 +10,9 @@
         <EditTextPreference android:title="Username"
             android:key="git_remote_username"
             android:hint="username"/>
+        <Preference
+            android:title="SSH Key"
+            android:key="ssh_key"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Crypto">
