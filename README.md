@@ -8,7 +8,7 @@ using the apk file found at `app/app-release.apk` or build everything from sourc
 
 Features
 ========
-- Clone an existing pass repository
+- Clone an existing pass repository (ssh-key and user/pass support)
 - List the passwords
 - Handle the directories as categories
 - Decrypt the password files (first line is the password, the rest is extra data)
