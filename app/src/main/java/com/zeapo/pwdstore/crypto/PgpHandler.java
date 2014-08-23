@@ -89,21 +89,25 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, UserPreference.class);
             startActivity(intent);
+            // a small hack to avoid eternal loop later, have to be solved via a startactivityforresult()
+            setResult(RESULT_CANCELED);
+            finish();
 
+        } else {
+
+            // bind to service
+            mServiceConnection = new OpenPgpServiceConnection(
+                    PgpHandler.this, providerPackageName, this);
+            mServiceConnection.bindToService();
+
+            bindingDialog = new ProgressDialog(this);
+            bindingDialog.setMessage("Waiting for OpenKeychain...");
+            bindingDialog.setCancelable(false);
+            bindingDialog.show();
+
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        // bind to service
-        mServiceConnection = new OpenPgpServiceConnection(
-                PgpHandler.this, providerPackageName, this );
-        mServiceConnection.bindToService();
-
-        bindingDialog = new ProgressDialog(this);
-        bindingDialog.setMessage("Waiting for OpenKeychain...");
-        bindingDialog.setCancelable(false);
-        bindingDialog.show();
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

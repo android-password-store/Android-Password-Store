@@ -22,7 +22,8 @@
 
         <EditTextPreference android:title="Set your OpenPGP account"
             android:hint="mail@somewhere.tld"
-            android:key="openpgp_account_name"/>
+            android:key="openpgp_account_name"
+            android:inputType="textEmailAddress"/>
 
         <Preference
             android:title="Select OpenPGP Key id"
