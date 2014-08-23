@@ -34,6 +34,7 @@ import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
@@ -135,6 +136,7 @@ public class GitHandler extends Activity {
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
                         connectionMode = selection;
+                        settings.edit().putString("git_remote_auth", selection).apply();
                     }
 
                     @Override
@@ -159,15 +161,16 @@ public class GitHandler extends Activity {
     public void onResume() {
         super.onResume();
 
-        if (findViewById(R.id.clone_uri) != null) {
-            ((EditText) findViewById(R.id.clone_uri)).setText(
-                    settings.getString("git_remote_username", "user")
+        EditText uri = (EditText) findViewById(R.id.clone_uri);
+        if (uri != null) {
+            String hostname =
+                    settings.getString("git_remote_username", "")
                             + "@" +
-                            settings.getString("git_remote_server", "server.com")
+                            settings.getString("git_remote_server", "")
                             + ":" +
-                            settings.getString("git_remote_location", "path/to/repository")
-            );
+                            settings.getString("git_remote_location", "");
 
+            if (!hostname.equals("@:")) uri.setText(hostname);
         }
     }
 
@@ -292,7 +295,7 @@ public class GitHandler extends Activity {
 
     protected class GitConfigSessionFactory extends JschConfigSessionFactory {
 
-        public void configure(OpenSshConfig.Host hc, Session session) {
+        protected void configure(OpenSshConfig.Host hc, Session session) {
             session.setConfig("StrictHostKeyChecking", "no");
         }
 
@@ -302,6 +305,58 @@ public class GitHandler extends Activity {
             JSch jsch = super.getJSch(hc, fs);
             jsch.removeAllIdentity();
             return jsch;
+        }
+    }
+
+    protected class SshConfigSessionFactory extends GitConfigSessionFactory {
+        private String sshKey;
+        private String passphrase;
+
+        public SshConfigSessionFactory(String sshKey, String passphrase) {
+            this.sshKey = sshKey;
+            this.passphrase = passphrase;
+        }
+
+        @Override
+        protected JSch
+        getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
+            JSch jsch = super.getJSch(hc, fs);
+            jsch.removeAllIdentity();
+            jsch.addIdentity(sshKey);
+            return jsch;
+        }
+
+        @Override
+        protected void configure(OpenSshConfig.Host hc, Session session) {
+            session.setConfig("StrictHostKeyChecking", "no");
+
+            CredentialsProvider provider = new CredentialsProvider() {
+                @Override
+                public boolean isInteractive() {
+                    return false;
+                }
+
+                @Override
+                public boolean supports(CredentialItem... items) {
+                    return true;
+                }
+
+                @Override
+                public boolean get(URIish uri, CredentialItem... items) throws UnsupportedCredentialItem {
+                    for (CredentialItem item : items) {
+                        if (item instanceof CredentialItem.Username) {
+                            ((CredentialItem.Username) item).setValue(settings.getString("git_remote_username", "git"));
+                            continue;
+                        }
+                        if (item instanceof CredentialItem.StringType) {
+                            ((CredentialItem.StringType) item).setValue(passphrase);
+                        }
+                    }
+                    return true;
+                }
+            };
+            UserInfo userInfo = new CredentialsProviderUserInfo(session, provider);
+            session.setUserInfo(userInfo);
         }
     }
 
@@ -432,11 +487,20 @@ public class GitHandler extends Activity {
                     + ":" +
                     settings.getString("git_remote_location", "path/to/repository"));
 
-            new GitAsyncTask(activity, true, false).execute(new Git(PasswordRepository.getRepository(new File("")))
-                    .pull()
-                    .setRebase(true)
-                    .setRemote("origin")
-                    .setCredentialsProvider(provider));
+            GitCommand cmd;
+            if (provider != null)
+                cmd = new Git(PasswordRepository.getRepository(new File("")))
+                        .pull()
+                        .setRebase(true)
+                        .setRemote("origin")
+                        .setCredentialsProvider(provider);
+            else
+                cmd = new Git(PasswordRepository.getRepository(new File("")))
+                        .pull()
+                        .setRebase(true)
+                        .setRemote("origin");
+
+            new GitAsyncTask(activity, true, false).execute(cmd);
         }
     }
 
@@ -472,11 +536,21 @@ public class GitHandler extends Activity {
                     + ":" +
                     settings.getString("git_remote_location", "path/to/repository"));
 
-            new GitAsyncTask(activity, true, false).execute(new Git(PasswordRepository.getRepository(new File("")))
-                    .push()
-                    .setPushAll()
-                    .setRemote("origin")
-                    .setCredentialsProvider(provider));
+            GitCommand cmd;
+            if (provider != null)
+                cmd = new Git(PasswordRepository.getRepository(new File("")))
+                        .push()
+                        .setPushAll()
+                        .setRemote("origin")
+                        .setCredentialsProvider(provider);
+            else
+                cmd = new Git(PasswordRepository.getRepository(new File("")))
+                        .push()
+                        .setPushAll()
+                        .setRemote("origin");
+
+
+            new GitAsyncTask(activity, true, false).execute(cmd);
         }
     }
 
@@ -535,62 +609,14 @@ public class GitHandler extends Activity {
                                 SshSessionFactory.setInstance(new GitConfigSessionFactory());
                                 try {
 
-                                    JschConfigSessionFactory sessionFactory = new JschConfigSessionFactory() {
-
-                                        @Override
-                                        protected JSch
-                                        getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
-                                            JSch jsch = super.getJSch(hc, fs);
-                                            jsch.removeAllIdentity();
-                                            jsch.addIdentity(sshKey.getAbsolutePath());
-                                            return jsch;
-                                        }
-
-                                        @Override
-                                        protected void configure(OpenSshConfig.Host hc, Session session) {
-                                            session.setConfig("StrictHostKeyChecking", "no");
-
-                                            CredentialsProvider provider = new CredentialsProvider() {
-                                                @Override
-                                                public boolean isInteractive() {
-                                                    return false;
-                                                }
-
-                                                @Override
-                                                public boolean supports(CredentialItem... items) {
-                                                    return true;
-                                                }
-
-                                                @Override
-                                                public boolean get(URIish uri, CredentialItem... items) throws UnsupportedCredentialItem {
-                                                    for (CredentialItem item : items) {
-                                                        if (item instanceof CredentialItem.Username) {
-                                                            ((CredentialItem.Username) item).setValue(settings.getString("git_remote_username", "git"));
-                                                            continue;
-                                                        }
-                                                        if (item instanceof CredentialItem.StringType) {
-                                                            ((CredentialItem.StringType) item).setValue(passphrase.getText().toString());
-                                                        }
-                                                    }
-                                                    return true;
-                                                }
-                                            };
-                                            UserInfo userInfo = new CredentialsProviderUserInfo(session, provider);
-                                            session.setUserInfo(userInfo);
-                                        }
-                                    };
-
+                                    JschConfigSessionFactory sessionFactory = new SshConfigSessionFactory(sshKey.getAbsolutePath(), passphrase.getText().toString());
                                     SshSessionFactory.setInstance(sessionFactory);
 
-
-                                    CloneCommand cmd = Git.cloneRepository()
-                                            .setDirectory(localDir)
-                                            .setURI(hostname)
-                                            .setBare(false)
-                                            .setNoCheckout(false)
-                                            .setCloneAllBranches(true);
-
-                                    new CloneTask(activity).execute(cmd);
+                                    try {
+                                        method.invoke(activity, (UsernamePasswordCredentialsProvider) null);
+                                    } catch (Exception e){
+                                        e.printStackTrace();
+                                    }
 
                                 } catch (Exception e){
                                     e.printStackTrace();
