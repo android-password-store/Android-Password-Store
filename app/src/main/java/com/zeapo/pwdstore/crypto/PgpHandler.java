@@ -217,6 +217,8 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
             findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
             findViewById(R.id.crypto_container).setVisibility(View.INVISIBLE);
+            activity.setResult(RESULT_CANCELED);
+            activity.finish();
         }
 
 
