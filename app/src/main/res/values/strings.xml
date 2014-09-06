@@ -15,9 +15,9 @@
     <string name="title_activity_git_clone">Clone repository</string>
 
     <!-- Clone fragment -->
-    <string name="clone_fragment_text">Password store empty</string>
-    <string name="clone">Clone a git repository</string>
-    <string name="initialize">Initialize a git repository</string>
+    <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
+    <string name="clone">Clone existing</string>
+    <string name="initialize">Create new</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- PGP Handler -->

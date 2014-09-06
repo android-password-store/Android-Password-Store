@@ -5,37 +5,43 @@
     android:background="#eee"
     tools:context="com.zeapo.pwdstore.ToCloneOrNot">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/myRectangleView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
-        android:background="@drawable/rectangle"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/rectangle">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:text="@string/clone_fragment_text"/>
+            android:gravity="center_horizontal"
+            android:text="@string/clone_fragment_text"
+            android:id="@+id/textView" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:onClick="initRepository"
+            android:text="@string/initialize"
+            android:id="@+id/button"
+            android:layout_alignTop="@+id/main_clone_button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
         <Button
             android:id="@+id/main_clone_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/holo_green_light"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/holo_orange_dark"
             android:onClick="getClone"
-            android:text="@string/clone"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@android:color/holo_red_light"
-            android:onClick="initRepository"
-            android:text="@string/initialize"/>
-        </LinearLayout>
+            android:text="@string/clone"
+            android:layout_below="@+id/textView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </FrameLayout>

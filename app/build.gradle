@@ -8,8 +8,8 @@ android {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 6
-        versionName "1.1-b1"
+        versionCode 7
+        versionName "1.1-b2"
     }
     buildTypes {
         release {
