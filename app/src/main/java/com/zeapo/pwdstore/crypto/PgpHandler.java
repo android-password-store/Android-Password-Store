@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +59,8 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
     private String accountName = "";
     SharedPreferences settings;
     private Activity activity;
+    ClipboardManager clipboard;
+
 
     private ProgressDialog bindingDialog;
 
@@ -78,6 +82,7 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
         super.onCreate(savedInstanceState);
 
         this.activity = this;
+        this.clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -128,6 +133,9 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                 setResult(RESULT_OK);
                 finish();
                 return true;
+            case R.id.copy_password:
+                ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
+                clipboard.setPrimaryClip(clip);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -212,6 +220,10 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
 
         @Override
         protected void onPostExecute(Boolean b) {
+
+            ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
+            clipboard.setPrimaryClip(clip);
+
             //clear password
             ((TextView) findViewById(R.id.crypto_password_show)).setText("");
             ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
