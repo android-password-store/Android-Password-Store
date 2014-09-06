@@ -44,6 +44,11 @@ public class PasswordRepository {
         localDir.delete();
 
         try {
+
+            // create the directory
+            Repository repository = FileRepositoryBuilder.create(new File(localDir, ".git"));
+            repository.create();
+
             Git.init()
                     .setDirectory(localDir)
                     .call();
