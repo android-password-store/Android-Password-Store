@@ -12,7 +12,7 @@ How-To
 
 Clone using SSH-key, then decrypt a password
 --------------------------------------------
-![Clone And Decrypt](tutorial_clone_ssh_then_decrypt.gif)
+![Clone And Decrypt](tutorial_clone_ssh_then_decrypt.gif =720x)
 
 Features
 ========
