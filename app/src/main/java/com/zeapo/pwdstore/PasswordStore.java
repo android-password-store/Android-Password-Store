@@ -72,6 +72,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     @Override
     public void onPause() {
         super.onPause();
+        this.leftActivity = true;
     }
 
     @Override
