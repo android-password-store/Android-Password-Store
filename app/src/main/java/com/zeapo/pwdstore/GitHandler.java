@@ -213,6 +213,7 @@ public class GitHandler extends Activity {
         protected void onPreExecute() {
             this.dialog.setMessage("Cloning...");
             this.dialog.setCancelable(false);
+            // TODO: Handle a dialog leak when there is no error
             this.dialog.show();
         }
 

@@ -56,7 +56,7 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
             startActivityForResult(intent, 0);
         } else if (pref.getKey().equals("ssh_key")) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("file/*");
+            intent.setType("*/*");
             startActivityForResult(intent, 1);
         }
         return true;
