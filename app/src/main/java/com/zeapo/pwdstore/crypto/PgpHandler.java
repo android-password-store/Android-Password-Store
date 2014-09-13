@@ -116,6 +116,12 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
     }
 
     @Override
+    public void onStop(){
+        super.onStop();
+        this.mServiceConnection.unbindFromService();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.pgp_handler, menu);
@@ -507,6 +513,11 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
 //                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
 //            }
         }
+    }
+
+    @Override
+    public void onError(Exception e) {
+
     }
 
 }
