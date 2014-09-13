@@ -4,7 +4,7 @@ PwdStore
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
 You can install the application either from the [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore),
-using the apk file found at `app/app-release.apk` or build everything from source.
+~~using the apk file found at `app/app-release.apk` or build everything from source.~~
 
 Features
 ========

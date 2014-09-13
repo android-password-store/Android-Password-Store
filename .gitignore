@@ -8,6 +8,8 @@ release.properties
 ant.properties
 *.class
 *.apk
+!app-release.apk
+!app-debug.apk
 
 #Gradle
 .gradle
