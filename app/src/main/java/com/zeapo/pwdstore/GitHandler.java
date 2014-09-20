@@ -75,6 +75,8 @@ public class GitHandler extends Activity {
     public static final int REQUEST_CLONE = 103;
     public static final int REQUEST_INIT = 104;
 
+    private static final int GET_SSH_KEY = 201;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -582,7 +584,7 @@ public class GitHandler extends Activity {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), UserPreference.class);
-                                    startActivity(intent);
+                                    startActivityForResult(intent, GET_SSH_KEY);
                                 } catch (Exception e) {
                                     System.out.println("Exception caught :(");
                                     e.printStackTrace();
@@ -691,6 +693,8 @@ public class GitHandler extends Activity {
                 case REQUEST_PUSH:
                     authenticateAndRun("pushOperation");
                     break;
+                case GET_SSH_KEY:
+                    authenticateAndRun("pullOperation");
             }
 
         }

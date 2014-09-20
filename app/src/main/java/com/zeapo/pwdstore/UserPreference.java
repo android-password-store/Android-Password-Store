@@ -15,8 +15,11 @@ import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URI;
 
 public class UserPreference extends PreferenceActivity implements Preference.OnPreferenceClickListener {
@@ -49,7 +52,6 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
 
     @Override
     public boolean onPreferenceClick(Preference pref) {
-        System.out.println(pref);
         if (pref.getKey().equals("openpgp_key_id")) {
             Intent intent = new Intent(this, PgpHandler.class);
             intent.putExtra("Operation", "GET_KEY_ID");
@@ -66,11 +68,16 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
                                     Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
-                Uri sshFile = data.getData();
+//                Uri sshFile = data.getData();
                 try {
-                    FileUtils.copyFile(new File(sshFile.getPath()), new File(getFilesDir() + "/.ssh_key"));
-                } catch (Exception e) {
+                    byte[] privateKey = IOUtils.toByteArray(this.getContentResolver().openInputStream(data.getData()));
+                    FileUtils.writeByteArrayToFile(new File(getFilesDir() + "/.ssh_key"), privateKey);
 
+                    Log.i("PREF", "Got key");
+                    setResult(RESULT_OK);
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
