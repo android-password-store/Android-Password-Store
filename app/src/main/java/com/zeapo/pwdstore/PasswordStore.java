@@ -137,7 +137,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     public void getClone(View view){
         Intent intent = new Intent(this, GitHandler.class);
         intent.putExtra("Operation", GitHandler.REQUEST_CLONE);
-        startActivity(intent);
+        startActivityForResult(intent, GitHandler.REQUEST_CLONE);
     }
 
     private void createRepository() {
@@ -358,7 +358,10 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             refreshListAdapter();
 
         if (resultCode == RESULT_OK) {
-            refreshListAdapter();
+            if (requestCode == GitHandler.REQUEST_CLONE)
+                checkLocalRepository();
+            else
+                refreshListAdapter();
 
             switch (requestCode) {
                 case PgpHandler.REQUEST_CODE_ENCRYPT :

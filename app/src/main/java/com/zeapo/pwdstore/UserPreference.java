@@ -70,8 +70,10 @@ public class UserPreference extends PreferenceActivity implements Preference.OnP
             if (requestCode == 1) {
 //                Uri sshFile = data.getData();
                 try {
-                    byte[] privateKey = IOUtils.toByteArray(this.getContentResolver().openInputStream(data.getData()));
+                    InputStream sshKey = this.getContentResolver().openInputStream(data.getData());
+                    byte[] privateKey = IOUtils.toByteArray(sshKey);
                     FileUtils.writeByteArrayToFile(new File(getFilesDir() + "/.ssh_key"), privateKey);
+                    sshKey.close();
 
                     Log.i("PREF", "Got key");
                     setResult(RESULT_OK);

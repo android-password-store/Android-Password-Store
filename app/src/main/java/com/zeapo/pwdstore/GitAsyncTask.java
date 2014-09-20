@@ -51,6 +51,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
                 return -2;
             } catch (Exception e) {
                 e.printStackTrace();
+                return -98;
             }
             totalSize++;
         }

@@ -11,13 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -27,7 +25,6 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
-import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.CloneCommand;
@@ -39,7 +36,6 @@ import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
-import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.CredentialsProviderUserInfo;
@@ -75,7 +71,7 @@ public class GitHandler extends Activity {
     public static final int REQUEST_CLONE = 103;
     public static final int REQUEST_INIT = 104;
 
-    private static final int GET_SSH_KEY = 201;
+    private static final int GET_SSH_KEY_FROM_CLONE = 201;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +195,7 @@ public class GitHandler extends Activity {
                     e.printStackTrace();
                 }
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -460,9 +457,9 @@ public class GitHandler extends Activity {
 
     public void pullOperation(UsernamePasswordCredentialsProvider provider) {
 
-        if (settings.getString("git_remote_username", "user").isEmpty() ||
-            settings.getString("git_remote_server", "server.com").isEmpty() ||
-            settings.getString("git_remote_location", "path/to/repository").isEmpty() )
+        if (settings.getString("git_remote_username", "").isEmpty() ||
+            settings.getString("git_remote_server", "").isEmpty() ||
+            settings.getString("git_remote_location", "").isEmpty() )
             new AlertDialog.Builder(this)
                     .setMessage("You have to set the information about the server before synchronizing with the server")
                     .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
@@ -584,7 +581,7 @@ public class GitHandler extends Activity {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), UserPreference.class);
-                                    startActivityForResult(intent, GET_SSH_KEY);
+                                    startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
                                 } catch (Exception e) {
                                     System.out.println("Exception caught :(");
                                     e.printStackTrace();
@@ -693,8 +690,8 @@ public class GitHandler extends Activity {
                 case REQUEST_PUSH:
                     authenticateAndRun("pushOperation");
                     break;
-                case GET_SSH_KEY:
-                    authenticateAndRun("pullOperation");
+                case GET_SSH_KEY_FROM_CLONE:
+                    authenticateAndRun("cloneOperation");
             }
 
         }
