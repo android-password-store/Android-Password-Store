@@ -119,7 +119,11 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
     public void onStop(){
         super.onStop();
         if (this.mServiceConnection.isBound())
-            this.mServiceConnection.unbindFromService();
+            try {
+                this.mServiceConnection.unbindFromService();
+            } catch (Exception e){
+
+            }
     }
 
     @Override

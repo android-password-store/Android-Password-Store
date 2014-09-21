@@ -1,10 +1,15 @@
 package com.zeapo.pwdstore;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zeapo.pwdstore.utils.PasswordRepository;
+
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.GitCommand;
@@ -13,16 +18,18 @@ import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.api.errors.TransportException;
 
 
-public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
+public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private Activity activity;
     private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
+    private Class operation;
 
-    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd) {
+    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, Class operation) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
+        this.operation = operation;
 
         dialog = new ProgressDialog(this.activity);
     }
@@ -34,43 +41,55 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(GitCommand... cmd) {
+    protected String doInBackground(GitCommand... cmd) {
         int count = cmd.length;
-        Integer totalSize = 0;
         for (int i = 0; i < count; i++) {
             try {
                 cmd[i].call();
-            } catch (JGitInternalException e) {
-                e.printStackTrace();
-                return -99;
-            } catch (InvalidRemoteException e) {
-                e.printStackTrace();
-                return -1;
-            } catch (TransportException e) {
-                e.printStackTrace();
-                return -2;
             } catch (Exception e) {
                 e.printStackTrace();
-                return -98;
+                return e.getMessage();
             }
-            totalSize++;
         }
-        return totalSize;
+        return "";
     }
 
-    protected void onPostExecute(Integer result) {
-        Log.i("GIT_ASYNC", result + "");
+    protected void onPostExecute(String result) {
         this.dialog.dismiss();
-        if (finishOnEnd) {
-            this.activity.setResult(Activity.RESULT_OK);
-            this.activity.finish();
-        }
 
-        if (refreshListOnEnd) {
-            try {
-                ((PasswordStore) this.activity).refreshListAdapter();
-            } catch (ClassCastException e){
-                // oups, mistake
+        if (!result.isEmpty()) {
+            new AlertDialog.Builder(activity).
+                    setTitle("Internal exception occurred").
+                    setMessage("Message from jgit:\n" + result).
+                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (operation.equals(CloneCommand.class)) {
+                                // if we were unable to finish the job
+                                try {
+                                    FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                activity.setResult(Activity.RESULT_CANCELED);
+                                activity.finish();
+                            }
+                        }
+                    }).show();
+
+        } else {
+            if (finishOnEnd) {
+                this.activity.setResult(Activity.RESULT_OK);
+                this.activity.finish();
+            }
+
+            if (refreshListOnEnd) {
+                try {
+                    ((PasswordStore) this.activity).refreshListAdapter();
+                } catch (ClassCastException e) {
+                    // oups, mistake
+                }
             }
         }
     }

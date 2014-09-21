@@ -28,6 +28,7 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -323,7 +324,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 
                         setResult(RESULT_CANCELED);
                         Git git = new Git(PasswordRepository.getRepository(new File("")));
-                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true);
+                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
                         System.out.println(tasks);
                         tasks.execute(
                                 git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
@@ -366,7 +367,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             switch (requestCode) {
                 case PgpHandler.REQUEST_CODE_ENCRYPT :
                     Git git = new Git(PasswordRepository.getRepository(new File("")));
-                    GitAsyncTask tasks = new GitAsyncTask(this, false, false);
+                    GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
                     tasks.execute(
                             git.add().addFilepattern("."),
                             git.commit().setMessage("[ANDROID PwdStore] Add " + data.getExtras().getString("NAME") + " from store.")
