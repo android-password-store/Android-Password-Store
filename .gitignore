@@ -27,6 +27,10 @@ pom.xml.*
 .settings
 .metadata
 
+#Eclipse/Gradle integration
+libs
+project.properties
+
 #IntelliJ IDEA
 .idea
 *.iml
