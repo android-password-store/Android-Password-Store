@@ -4,6 +4,7 @@ PwdStore
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
 You can install the application either from the [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore),
+from [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore), or
 using the apk file found at `app/app-release.apk` or build everything from source.
 
 How-To
@@ -36,14 +37,14 @@ This project uses three libraries:
         git submodule update
 
 
-- [JGit](http://www.eclipse.org/jgit/) a pretty good git lib 
+- [JGit](http://www.eclipse.org/jgit/) a pretty good git lib
 - [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for files manipulations
 
 TODOs
 =====
 - Create a new category
 - Multi-select (for password deletion)
-- Multiple password stores (multiple git repositories). 
+- Multiple password stores (multiple git repositories).
 - More UI enhancements
 - Clean-up the hard-coded strings
 
