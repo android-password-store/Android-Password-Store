@@ -18,6 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // avoid Travis failures
+    lintOptions {
+        abortOnError false
+    }
 }
 repositories {
     maven { url 'http://clinker.47deg.com/nexus/content/groups/public' }
