@@ -215,6 +215,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
     }
 
     private void checkLocalRepository(File localDir) {
+        Log.d("PASS", localDir.getAbsolutePath());
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
