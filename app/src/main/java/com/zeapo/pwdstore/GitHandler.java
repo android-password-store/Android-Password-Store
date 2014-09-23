@@ -2,12 +2,10 @@ package com.zeapo.pwdstore;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -32,9 +30,8 @@ import org.eclipse.jgit.api.Git;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.GitCommand;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -200,99 +197,6 @@ public class GitHandler extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /* The clone process has to be on a different thread than the main one */
-    private class CloneTask extends AsyncTask<CloneCommand, Integer, Integer> {
-        private ProgressDialog dialog;
-
-        public CloneTask(Activity activity) {
-            context = activity;
-            dialog = new ProgressDialog(context);
-        }
-
-        protected void onPreExecute() {
-            this.dialog.setMessage("Cloning...");
-            this.dialog.setCancelable(false);
-            // TODO: Handle a dialog leak when there is no error
-            this.dialog.show();
-        }
-
-        protected void onPostExecute(Integer result) {
-            switch (result) {
-                case -1:
-                    new AlertDialog.Builder(activity).
-                            setTitle("Please check that the repository path is correct.").
-                            setMessage("Did you forget to specify the path after the hostname?").
-                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            }).show();
-                    break;
-                case -2:
-                    new AlertDialog.Builder(activity).
-                            setTitle("Communication error").
-                            setMessage("JGit said that the server didn't like our request. Either an authentication issue or the host is not reachable. Check the debug messages.").
-                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            }).show();
-                    break;
-                case -99:
-                    new AlertDialog.Builder(activity).
-                            setTitle("JGit raised an internal exception").
-                            setMessage("OUPS, JGit didn't like what you did... Check that you provided it with a correct URI. Check also debug messages.").
-                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            }).show();
-                    break;
-                default:
-                    this.dialog.dismiss();
-                    setResult(RESULT_OK);
-                    finish();
-                    return;
-            }
-            this.dialog.dismiss();
-
-            // if we were unable to finish the job
-            try {
-                FileUtils.deleteDirectory(localDir);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        protected Integer doInBackground(CloneCommand... cmd) {
-            int count = cmd.length;
-            Integer totalSize = 0;
-            for (int i = 0; i < count; i++) {
-                try {
-                    cmd[i].call();
-                } catch (JGitInternalException e) {
-                    e.printStackTrace();
-                    return -99;
-                } catch (InvalidRemoteException e) {
-                    e.printStackTrace();
-                    return -1;
-                } catch (TransportException e) {
-                    e.printStackTrace();
-                    return -2;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return -99;
-                }
-                totalSize++;
-            }
-            return totalSize;
-        }
-    }
-
     protected class GitConfigSessionFactory extends JschConfigSessionFactory {
 
         protected void configure(OpenSshConfig.Host hc, Session session) {
@@ -452,7 +356,7 @@ public class GitHandler extends Activity {
                 setDirectory(localDir).
                 setURI(hostname);
 
-        new CloneTask(activity).execute(cmd);
+        new GitAsyncTask(activity, true, false, CloneCommand.class).execute(cmd);
     }
 
     public void pullOperation(UsernamePasswordCredentialsProvider provider) {
@@ -500,7 +404,7 @@ public class GitHandler extends Activity {
                         .setRebase(true)
                         .setRemote("origin");
 
-            new GitAsyncTask(activity, true, false).execute(cmd);
+            new GitAsyncTask(activity, true, false, PullCommand.class).execute(cmd);
         }
     }
 
@@ -550,7 +454,7 @@ public class GitHandler extends Activity {
                         .setRemote("origin");
 
 
-            new GitAsyncTask(activity, true, false).execute(cmd);
+            new GitAsyncTask(activity, true, false, PushCommand.class).execute(cmd);
         }
     }
 
@@ -661,14 +565,7 @@ public class GitHandler extends Activity {
                     }
                 }).show();
             } else {
-                CloneCommand cmd = Git.cloneRepository()
-                        .setDirectory(localDir)
-                        .setURI(hostname)
-                        .setBare(false)
-                        .setNoCheckout(false)
-                        .setCloneAllBranches(true);
-
-                new CloneTask(activity).execute(cmd);
+                // BUG: we do not support HTTP yet...
             }
         }
     }

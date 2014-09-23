@@ -1,6 +1,9 @@
 package com.zeapo.pwdstore.utils;
 
+import android.util.Log;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.lib.Repository;
@@ -10,7 +13,10 @@ import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -115,7 +121,10 @@ public class PasswordRepository {
     public static ArrayList<File> getFilesList(File path){
         if (!path.exists()) return new ArrayList<File>();
 
-        List<File> files = (List<File>) FileUtils.listFiles(path, new String[] {"gpg"}, true);
+        Log.d("REPO", path.getAbsolutePath());
+        ArrayList<File> files = new ArrayList<File>(Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter())));
+        files.addAll( new ArrayList<File>((List<File>)FileUtils.listFiles(path, new String[] {"gpg"}, false)));
+
         return new ArrayList<File>(files);
     }
 
@@ -129,15 +138,13 @@ public class PasswordRepository {
         ArrayList<PasswordItem> passwordList = new ArrayList<PasswordItem>();
 
         for (File file : passList) {
-            String fileName = file.getAbsolutePath().replace(path.getAbsolutePath() + "/", "");
-
-            String[] parts = fileName.split("/");
-            if (parts.length == 1) {
-                passwordList.add(PasswordItem.newPassword(parts[0], file));
+            if (file.isFile()) {
+                passwordList.add(PasswordItem.newPassword(file.getName(), file));
             } else {
-                if (!passwordList.contains(PasswordItem.newCategory(parts[0], file.getParentFile()))) {
-                    passwordList.add(PasswordItem.newCategory(parts[0], file.getParentFile()));
-                }
+                // ignore .git directory
+                if (file.getName().equals(".git"))
+                    continue;
+                passwordList.add(PasswordItem.newCategory(file.getName(), file));
             }
         }
         sort(passwordList);

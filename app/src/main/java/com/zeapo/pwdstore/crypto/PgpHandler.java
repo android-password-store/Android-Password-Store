@@ -63,6 +63,7 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
 
 
     private ProgressDialog bindingDialog;
+    private boolean registered;
 
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
@@ -90,6 +91,8 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
         accountName = settings.getString("openpgp_account_name", "");
         keyIDs = settings.getString("openpgp_key_ids", "");
 
+        registered = false;
+
         if (TextUtils.isEmpty(providerPackageName)) {
             Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, UserPreference.class);
@@ -110,6 +113,8 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             bindingDialog.setCancelable(false);
             bindingDialog.show();
 
+            registered = true;
+
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -118,8 +123,12 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
     @Override
     public void onStop(){
         super.onStop();
-        if (this.mServiceConnection.isBound())
-            this.mServiceConnection.unbindFromService();
+        if (this.registered && this.mServiceConnection.isBound())
+            try {
+                this.mServiceConnection.unbindFromService();
+            } catch (Exception e){
+
+            }
     }
 
     @Override
