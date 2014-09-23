@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Git">
-        <EditTextPreference android:title="Server"
-            android:key="git_remote_server"
-            android:hint="server.com"
-            android:inputType="textUri"/>
-        <EditTextPreference android:title="Remote location"
-            android:key="git_remote_location"
-            android:hint="path/to/repository"
-            android:inputType="textUri"/>
-        <EditTextPreference android:title="Username"
-            android:key="git_remote_username"
-            android:hint="username"
-            android:inputType="textPersonName"/>
-        <Preference
-            android:title="SSH Key"
-            android:key="ssh_key"/>
-    </PreferenceCategory>
+	<PreferenceCategory android:title="Git">
+		<EditTextPreference android:title="Server"
+			android:key="git_remote_server" android:hint="server.com"
+			android:inputType="textUri" />
+		<EditTextPreference android:title="Remote location"
+			android:key="git_remote_location" android:hint="path/to/repository"
+			android:inputType="textUri" />
+		<EditTextPreference android:title="Username"
+			android:key="git_remote_username" android:hint="username"
+			android:inputType="textPersonName" />
+		<Preference android:title="SSH Key" android:key="ssh_key" />
+	</PreferenceCategory>
 
-    <PreferenceCategory android:title="Crypto">
-        <org.openintents.openpgp.util.OpenPgpListPreference
-            android:key="openpgp_provider_list"
-            android:title="Select OpenPGP Provider!" />
+	<PreferenceCategory android:title="Crypto">
+		<org.openintents.openpgp.util.OpenPgpListPreference
+			android:key="openpgp_provider_list" android:title="Select OpenPGP Provider!" />
 
-        <EditTextPreference android:title="Set your OpenPGP account"
-            android:hint="mail@somewhere.tld"
-            android:key="openpgp_account_name"
-            android:inputType="textEmailAddress"/>
+		<EditTextPreference android:title="Set your OpenPGP account"
+			android:hint="mail@somewhere.tld" android:key="openpgp_account_name"
+			android:inputType="textEmailAddress" />
 
-        <Preference
-            android:title="Select OpenPGP Key id"
-            android:key="openpgp_key_id"/>
-    </PreferenceCategory>
+		<Preference android:title="Select OpenPGP Key id"
+			android:key="openpgp_key_id" />
+	</PreferenceCategory>
 
+	<PreferenceCategory android:title="General">
+		<EditTextPreference android:title="Password Show Time"
+			android:dialogTitle="Set the time you want the password to be in clipboard"
+			android:summary="Set the time you want the password to be in clipboard"
+			android:hint="45" android:key="general_show_time" />
+	</PreferenceCategory>
 </PreferenceScreen>

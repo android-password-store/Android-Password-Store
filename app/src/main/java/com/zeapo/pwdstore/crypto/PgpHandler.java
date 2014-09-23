@@ -1,5 +1,21 @@
 package com.zeapo.pwdstore.crypto;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.util.StringUtils;
+import org.openintents.openpgp.IOpenPgpService;
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
+import org.openintents.openpgp.util.OpenPgpUtils;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,7 +23,6 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -22,34 +37,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zeapo.pwdstore.GitAsyncTask;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
-import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.util.StringUtils;
-import org.openintents.openpgp.IOpenPgpService;
-import org.openintents.openpgp.OpenPgpError;
-import org.openintents.openpgp.OpenPgpSignatureResult;
-import org.openintents.openpgp.util.OpenPgpApi;
-import org.openintents.openpgp.util.OpenPgpServiceConnection;
-import org.openintents.openpgp.util.OpenPgpUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnBound{
 
@@ -206,8 +201,6 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
     }
 
     public class DelayShow extends AsyncTask<Void, Integer, Boolean> {
-        int count = 0;
-        final int SHOW_TIME = 10;
         ProgressBar pb;
 
         @Override
@@ -221,15 +214,20 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                 ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
 
             this.pb = (ProgressBar) findViewById(R.id.pbLoading);
+
+			// Make Show Time a user preference
+			// kLeZ: Changed to match the default for pass
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(container.getContext());
+			final int SHOW_TIME = Integer.parseInt(settings.getString("general_show_time", "45"));
             this.pb.setMax(SHOW_TIME);
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            while (this.count < SHOW_TIME) {
+			while (this.pb.getProgress() < this.pb.getMax())
+			{
                 SystemClock.sleep(1000);
-                this.count++;
-                publishProgress(this.count);
+				publishProgress(this.pb.getProgress() + 1);
             }
             return true;
         }
