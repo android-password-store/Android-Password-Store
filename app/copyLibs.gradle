@@ -67,7 +67,7 @@ task ('copyJarDependenciesIntoLibs', type: CopyJars) {
 
     description = 'Used for Eclipse. Copies JAR dependencies to the libs directory.'
 
-    destination = file(project.projectDir.canonicalPath + File.separator + 'libs')
+    destination = file(project.projectDir.canonicalPath + File.separator + 'src' + File.separator + 'main' + File.separator + 'libs')
 
     afterEvaluate {
         source = files(
@@ -87,7 +87,7 @@ task ('extractAarDependenciesIntoLibs', type: ExtractAars) {
 
     description = 'Used for Eclipse. Extracts AAR dependencies into the libs directory.'
 
-    destination = file(project.projectDir.canonicalPath + File.separator + 'libs')
+    destination = file(project.projectDir.canonicalPath + File.separator + 'src' + File.separator + 'main' + File.separator + 'libs')
 
     afterEvaluate {
         source = files(

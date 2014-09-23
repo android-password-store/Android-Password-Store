@@ -1,52 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zeapo.pwdstore" >
+	package="com.zeapo.pwdstore" android:versionCode="11"
+	android:versionName="1.1-b5">
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".PasswordStore"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+	<application android:allowBackup="true" android:icon="@drawable/ic_launcher"
+		android:label="@string/app_name" android:theme="@style/AppTheme">
+		<activity android:name=".PasswordStore" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".GitHandler"
-            android:label="@string/title_activity_git_clone"
-            android:parentActivityName=".PasswordStore">
-            <meta-data
-                android:name="android.PARENT_ACTIVITY1"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
-        <activity android:name=".crypto.OpenPgpProviderActivity" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".GitHandler" android:label="@string/title_activity_git_clone"
+			android:parentActivityName=".PasswordStore">
+			<meta-data android:name="android.PARENT_ACTIVITY1"
+				android:value="com.zeapo.pwdstore.PasswordStore" />
+		</activity>
+		<activity android:name=".crypto.OpenPgpProviderActivity" />
 
-        <activity android:name=".UserPreference"
-            android:parentActivityName=".PasswordStore">
+		<activity android:name=".UserPreference"
+			android:parentActivityName=".PasswordStore">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.zeapo.pwdstore.PasswordStore" />
+		</activity>
 
-        <activity
-            android:name=".crypto.PgpHandler"
-            android:label="@string/title_activity_pgp_handler"
-            android:parentActivityName=".PasswordStore">
+		<activity android:name=".crypto.PgpHandler" android:label="@string/title_activity_pgp_handler"
+			android:parentActivityName=".PasswordStore">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
-    </application>
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.zeapo.pwdstore.PasswordStore" />
+		</activity>
+	</application>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-sdk android:targetSdkVersion="19" android:minSdkVersion="15" />
 
 </manifest>
