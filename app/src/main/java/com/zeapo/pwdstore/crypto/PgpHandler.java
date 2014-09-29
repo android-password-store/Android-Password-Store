@@ -147,6 +147,9 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             case R.id.copy_password:
                 ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
                 clipboard.setPrimaryClip(clip);
+                showToast("Password copied to clipboard, you have "
+                        + Integer.parseInt(settings.getString("general_show_time", "45"))
+                        + " seconds to paste it somewhere.");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -387,10 +390,19 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
                     break;
                 }
                 case OpenPgpApi.RESULT_CODE_ERROR: {
+                    // TODO show what kind of error it is
+                    /* For example:
+                     * No suitable key found -> no key in OpenKeyChain
+                     *
+                     * Check in open-pgp-lib how their definitions and error code
+                     */
                     showToast("ERROR");
 
                     OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
                     handleError(error);
+
+                    // close the dialog
+                    bindingDialog.dismiss();
                     break;
                 }
 
