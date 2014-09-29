@@ -26,6 +26,7 @@ import static java.util.Collections.sort;
 public class PasswordRepository {
 
     private static Repository repository;
+    private static boolean initialized = false;
 
     protected PasswordRepository(){    }
 
@@ -37,13 +38,17 @@ public class PasswordRepository {
                         .readEnvironment()
                         .findGitDir()
                         .build();
-
+                initialized = true;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
         }
         return repository;
+    }
+
+    public static boolean isInitialized() {
+        return initialized;
     }
 
     public static void createRepository(File localDir) {

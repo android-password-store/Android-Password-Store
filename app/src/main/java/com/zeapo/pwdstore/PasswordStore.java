@@ -10,19 +10,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -30,12 +22,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.transport.JschConfigSessionFactory;
-import org.eclipse.jgit.transport.OpenSshConfig;
-import org.eclipse.jgit.transport.SshSessionFactory;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +77,14 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         int id = item.getItemId();
         Intent intent;
 
+        AlertDialog.Builder initBefore = new AlertDialog.Builder(this)
+                .setMessage("Please clone or create a new repository below before trying to add a password or any synchronization operation.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+
         switch (id) {
             case R.id.user_pref:
                 try {
@@ -104,6 +98,11 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 return true;
 
             case R.id.menu_add_password:
+                if (PasswordRepository.isInitialized()) {
+                    initBefore.show();
+                    break;
+                }
+
                 createPassword(getCurrentFocus());
                 break;
 
@@ -111,6 +110,11 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 //                break;
 
             case R.id.git_push:
+                if (PasswordRepository.isInitialized()) {
+                    initBefore.show();
+                    break;
+                }
+
                 intent = new Intent(this, GitHandler.class);
                 intent.putExtra("Operation", GitHandler.REQUEST_PUSH);
                 startActivityForResult(intent, GitHandler.REQUEST_PUSH);
@@ -118,6 +122,11 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 return true;
 
             case R.id.git_pull:
+                if (PasswordRepository.isInitialized()) {
+                    initBefore.show();
+                    break;
+                }
+
                 intent = new Intent(this, GitHandler.class);
                 intent.putExtra("Operation", GitHandler.REQUEST_PULL);
                 startActivityForResult(intent, GitHandler.REQUEST_PULL);
