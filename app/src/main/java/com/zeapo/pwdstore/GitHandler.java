@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,10 @@ import org.eclipse.jgit.util.FS;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // TODO move the messages to strings.xml
 
@@ -147,6 +152,7 @@ public class GitHandler extends Activity {
                 EditText server_port = ((EditText) findViewById(R.id.server_port));
                 EditText server_path = ((EditText) findViewById(R.id.server_path));
                 EditText server_user = ((EditText) findViewById(R.id.server_user));
+                final EditText server_uri = ((EditText)findViewById(R.id.clone_uri));
 
                 View.OnKeyListener updateListener = new View.OnKeyListener() {
                     @Override
@@ -165,6 +171,15 @@ public class GitHandler extends Activity {
                 server_port.setOnKeyListener(updateListener);
                 server_user.setOnKeyListener(updateListener);
                 server_path.setOnKeyListener(updateListener);
+
+                server_uri.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                        splitURI();
+                        return false;
+                    }
+                });
+
                 break;
             case REQUEST_PULL:
                 authenticateAndRun("pullOperation");
@@ -178,7 +193,8 @@ public class GitHandler extends Activity {
 
     }
 
-    public void updateURI() {
+    /** Fills in the server_uri field with the information coming from other fields */
+    private void updateURI() {
         EditText uri = (EditText) findViewById(R.id.clone_uri);
         EditText server_url = ((EditText) findViewById(R.id.server_url));
         EditText server_port = ((EditText) findViewById(R.id.server_port));
@@ -190,10 +206,50 @@ public class GitHandler extends Activity {
                     server_user.getText()
                             + "@" +
                             server_url.getText().toString().trim()
-                            + ":" +
-                            server_path.getText();
+                            + ":";
+            if (server_port.getText().toString().equals("22")) {
+                hostname += server_path.getText().toString();
+            } else {
+                TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                if (!server_path.getText().toString().matches("/.*")) {
+                    warn_url.setText(R.string.warn_malformed_url_port);
+                    warn_url.setVisibility(View.VISIBLE);
+                } else {
+                    warn_url.setVisibility(View.GONE);
+                }
+                hostname += server_port.getText().toString() + server_path.getText().toString();
+            }
 
             if (!hostname.equals("@:")) uri.setText(hostname);
+        }
+    }
+
+    /** Splits the information in server_uri into the other fields */
+    private void splitURI() {
+        EditText server_uri = (EditText) findViewById(R.id.clone_uri);
+        EditText server_url = ((EditText) findViewById(R.id.server_url));
+        EditText server_port = ((EditText) findViewById(R.id.server_port));
+        EditText server_path = ((EditText) findViewById(R.id.server_path));
+        EditText server_user = ((EditText) findViewById(R.id.server_user));
+
+        String uri = server_uri.getText().toString();
+        Pattern pattern = Pattern.compile("(.+)@([\\w\\d\\.]+):([\\d]+)*(.*)");
+        Matcher matcher = pattern.matcher(uri);
+        if (matcher.find()) {
+            int count = matcher.groupCount();
+            Log.i("GIT", ">> " + count);
+            if (count > 1) {
+                server_user.setText(matcher.group(1));
+                server_url.setText(matcher.group(2));
+            }
+            if (count == 3) {
+                server_path.setText(matcher.group(3));
+                server_port.setText("22");
+            }
+            if (count == 4) {
+                server_port.setText(matcher.group(3));
+                server_path.setText(matcher.group(4));
+            }
         }
     }
 

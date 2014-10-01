@@ -30,6 +30,9 @@
     <string name="server_user_hint">git_username</string>
 
     <string name="server_resulting_url">Resulting URL</string>
+    <string name="connection_mode">Authentication Mode</string>
+
+    <string name="warn_malformed_url_port">When using custom ports, provide an absolute path (starts with "/")</string>
 
     <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PgpHandler</string>
