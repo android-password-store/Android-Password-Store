@@ -98,7 +98,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 return true;
 
             case R.id.menu_add_password:
-                if (PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized()) {
                     initBefore.show();
                     break;
                 }
@@ -110,7 +110,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
 //                break;
 
             case R.id.git_push:
-                if (PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized()) {
                     initBefore.show();
                     break;
                 }
@@ -122,7 +122,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 return true;
 
             case R.id.git_pull:
-                if (PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized()) {
                     initBefore.show();
                     break;
                 }
@@ -250,12 +250,14 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             case 0:
                 if(!localDir.equals(PasswordRepository.getWorkTree()))
                     break;
+                PasswordRepository.setInitialized(false);
 
                 ToCloneOrNot cloneFrag = new ToCloneOrNot();
                 fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot");
                 fragmentTransaction.commit();
                 break;
             default:
+                PasswordRepository.setInitialized(true);
                 PasswordFragment passFrag = new PasswordFragment();
                 Bundle args = new Bundle();
                 args.putString("Path", localDir.getAbsolutePath());

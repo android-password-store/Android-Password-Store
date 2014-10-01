@@ -38,7 +38,6 @@ public class PasswordRepository {
                         .readEnvironment()
                         .findGitDir()
                         .build();
-                initialized = true;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -49,6 +48,10 @@ public class PasswordRepository {
 
     public static boolean isInitialized() {
         return initialized;
+    }
+
+    public static void setInitialized(boolean v) {
+        initialized = v;
     }
 
     public static void createRepository(File localDir) {
@@ -71,6 +74,7 @@ public class PasswordRepository {
                     .setName("master")
                     .call();
 
+            initialized = true;
         } catch (Exception e) {
             e.printStackTrace();
             return;
