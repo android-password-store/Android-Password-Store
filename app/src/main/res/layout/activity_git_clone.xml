@@ -53,6 +53,31 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/server_user"
+            android:id="@+id/label_server_user"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/server_user_hint"
+            android:id="@+id/server_user"
+            android:layout_toEndOf="@+id/label_server_user"
+            android:layout_toRightOf="@+id/label_server_user"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/server_url"
             android:id="@+id/label_server_url"
             android:layout_centerVertical="true"
@@ -105,33 +130,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/server_path_hint"
+            android:id="@+id/server_path"
             android:layout_toEndOf="@+id/label_server_path"
             android:layout_toRightOf="@+id/label_server_path"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/server_user"
-            android:id="@+id/label_server_user"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/server_user_hint"
-            android:id="@+id/editText"
-            android:layout_toEndOf="@+id/label_server_user"
-            android:layout_toRightOf="@+id/label_server_user"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>

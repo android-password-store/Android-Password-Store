@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -80,7 +82,7 @@ public class GitHandler extends Activity {
         settings = PreferenceManager.getDefaultSharedPreferences(this.context);
 
         protocol = settings.getString("git_remote_protocol", "ssh://");
-        connectionMode = settings.getString("git_remote_auth", "username/password");
+        connectionMode = settings.getString("git_remote_auth", "ssh-key");
 
         switch (getIntent().getExtras().getInt("Operation")) {
             case REQUEST_CLONE:
@@ -139,6 +141,30 @@ public class GitHandler extends Activity {
 
                     }
                 });
+
+                // init the server information
+                EditText server_url = ((EditText) findViewById(R.id.server_url));
+                EditText server_port = ((EditText) findViewById(R.id.server_port));
+                EditText server_path = ((EditText) findViewById(R.id.server_path));
+                EditText server_user = ((EditText) findViewById(R.id.server_user));
+
+                View.OnKeyListener updateListener = new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                        updateURI();
+                        return false;
+                    }
+                };
+
+                server_url.setText(settings.getString("git_remote_server", ""));
+                server_port.setText("" + settings.getInt("git_remote_server_port", 22));
+                server_user.setText(settings.getString("git_remote_username", ""));
+                server_path.setText(settings.getString("git_remote_location", ""));
+
+                server_url.setOnKeyListener(updateListener);
+                server_port.setOnKeyListener(updateListener);
+                server_user.setOnKeyListener(updateListener);
+                server_path.setOnKeyListener(updateListener);
                 break;
             case REQUEST_PULL:
                 authenticateAndRun("pullOperation");
@@ -152,21 +178,29 @@ public class GitHandler extends Activity {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
+    public void updateURI() {
         EditText uri = (EditText) findViewById(R.id.clone_uri);
+        EditText server_url = ((EditText) findViewById(R.id.server_url));
+        EditText server_port = ((EditText) findViewById(R.id.server_port));
+        EditText server_path = ((EditText) findViewById(R.id.server_path));
+        EditText server_user = ((EditText) findViewById(R.id.server_user));
+
         if (uri != null) {
             String hostname =
-                    settings.getString("git_remote_username", "")
+                    server_user.getText()
                             + "@" +
-                            settings.getString("git_remote_server", "").trim()
+                            server_url.getText().toString().trim()
                             + ":" +
-                            settings.getString("git_remote_location", "");
+                            server_path.getText();
 
             if (!hostname.equals("@:")) uri.setText(hostname);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateURI();
     }
 
     @Override
