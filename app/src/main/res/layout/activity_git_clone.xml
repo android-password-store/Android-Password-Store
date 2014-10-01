@@ -137,13 +137,6 @@
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/red_rectangle"
-        android:textColor="@android:color/white"
-        android:visibility="gone"
-        android:id="@+id/warn_url"/>
 
     <TextView
         android:layout_width="fill_parent"
@@ -163,6 +156,13 @@
         android:layout_height="wrap_content"
         android:inputType="textWebEmailAddress"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/red_rectangle"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        android:id="@+id/warn_url"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

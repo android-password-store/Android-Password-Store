@@ -67,6 +67,7 @@ public class GitHandler extends Activity {
     private File localDir;
     private String hostname;
     private String username;
+    private String port;
 
     private SharedPreferences settings;
 
@@ -163,7 +164,7 @@ public class GitHandler extends Activity {
                 };
 
                 server_url.setText(settings.getString("git_remote_server", ""));
-                server_port.setText("" + settings.getInt("git_remote_server_port", 22));
+                server_port.setText(settings.getString("git_remote_server_port", ""));
                 server_user.setText(settings.getString("git_remote_username", ""));
                 server_path.setText(settings.getString("git_remote_location", ""));
 
@@ -209,9 +210,11 @@ public class GitHandler extends Activity {
                             + ":";
             if (server_port.getText().toString().equals("22")) {
                 hostname += server_path.getText().toString();
+
+                ((TextView) findViewById(R.id.warn_url)).setVisibility(View.GONE);
             } else {
                 TextView warn_url = (TextView) findViewById(R.id.warn_url);
-                if (!server_path.getText().toString().matches("/.*")) {
+                if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                     warn_url.setText(R.string.warn_malformed_url_port);
                     warn_url.setVisibility(View.VISIBLE);
                 } else {
@@ -242,13 +245,17 @@ public class GitHandler extends Activity {
                 server_user.setText(matcher.group(1));
                 server_url.setText(matcher.group(2));
             }
-            if (count == 3) {
-                server_path.setText(matcher.group(3));
-                server_port.setText("22");
-            }
             if (count == 4) {
                 server_port.setText(matcher.group(3));
                 server_path.setText(matcher.group(4));
+
+                TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
+                    warn_url.setText(R.string.warn_malformed_url_port);
+                    warn_url.setVisibility(View.VISIBLE);
+                } else {
+                    warn_url.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -358,7 +365,8 @@ public class GitHandler extends Activity {
     public void cloneRepository(View view) {
         localDir = new File(getApplicationContext().getFilesDir().getAbsoluteFile() + "/store");
 
-        hostname = ((TextView) findViewById(R.id.clone_uri)).getText().toString();
+        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
+        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
         // don't ask the user, take off the protocol that he puts in
         hostname = hostname.replaceFirst("^.+://", "");
         ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
@@ -368,6 +376,13 @@ public class GitHandler extends Activity {
         if (!protocol.equals("ssh://")) {
             hostname = protocol + hostname;
         } else {
+
+            // if the port is explicitly given, jgit requires the ssh://
+            if (!port.isEmpty())
+                hostname = protocol + hostname;
+
+            Log.i("GIT", "> " + port);
+
             // did he forget the username?
             if (!hostname.matches("^.+@.+")) {
                 new AlertDialog.Builder(this).
@@ -433,11 +448,13 @@ public class GitHandler extends Activity {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
+        // TODO this is not pretty, use the information obtained earlier
         editor.putString("git_remote_server", hostname.split("@")[1].split(":")[0]);
         editor.putString("git_remote_location", hostname.split("@")[1].split(":")[1]);
         editor.putString("git_remote_username", hostname.split("@")[0]);
         editor.putString("git_remote_protocol", protocol);
         editor.putString("git_remote_auth", connectionMode);
+        editor.putString("git_remote_port", port);
         editor.commit();
 
         CloneCommand cmd = Git.cloneRepository().
