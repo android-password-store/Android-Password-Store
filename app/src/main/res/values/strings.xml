@@ -18,7 +18,21 @@
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
     <string name="clone">Clone existing</string>
     <string name="initialize">Create new</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="server_name">Server</string>
+    <string name="server_protocol">Protocol</string>
+    <string name="server_url">Server URL</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="server_path">Repo path</string>
+    <string name="server_path_hint">/path/to/pass</string>
+    <string name="server_user">Username</string>
+    <string name="server_user_hint">git_username</string>
+
+    <string name="server_resulting_url">Resulting URL</string>
+    <string name="connection_mode">Authentication Mode</string>
+
+    <string name="warn_malformed_url_port">When using custom ports, provide an absolute path (starts with "/")</string>
 
     <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PgpHandler</string>

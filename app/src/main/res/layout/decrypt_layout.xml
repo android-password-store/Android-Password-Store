@@ -77,7 +77,7 @@
                 <ProgressBar
                     android:id="@+id/pbLoading"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     style="?android:attr/progressBarStyleHorizontal"

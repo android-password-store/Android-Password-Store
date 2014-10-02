@@ -17,7 +17,7 @@
 
     <item android:id="@+id/referesh"
         android:title="Refresh list"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:icon="@drawable/ico_sync"/>
 
     <item android:id="@+id/user_pref"
