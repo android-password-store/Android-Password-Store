@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,193 +7,197 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.zeapo.pwdstore.GitHandler"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/server_name"
-        android:textStyle="bold"
-        style="@android:style/TextAppearance.Large"
-        android:gravity="left"
-        android:paddingBottom="6dp"
-        android:textColor="@android:color/holo_orange_dark"
-        android:background="@drawable/bottom_line"/>
-
-    <RelativeLayout
+    android:background="@android:color/white">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/server_protocol"
-            android:id="@+id/label_server_protocol"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:text="@string/server_name"
+            android:textStyle="bold"
+            style="@android:style/TextAppearance.Large"
+            android:gravity="left"
+            android:paddingBottom="6dp"
+            android:textColor="@android:color/holo_orange_dark"
+            android:background="@drawable/bottom_line"/>
 
-        <Spinner
-            android:id="@+id/clone_protocol"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/label_server_protocol"
-            android:layout_toRightOf="@+id/label_server_protocol" />
-    </RelativeLayout>
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_protocol"
+                android:id="@+id/label_server_protocol"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Spinner
+                android:id="@+id/clone_protocol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/label_server_protocol"
+                android:layout_toRightOf="@+id/label_server_protocol" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_user"
+                android:id="@+id/label_server_user"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/server_user_hint"
+                android:id="@+id/server_user"
+                android:layout_toEndOf="@+id/label_server_user"
+                android:layout_toRightOf="@+id/label_server_user"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_url"
+                android:id="@+id/label_server_url"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/server_url_hint"
+                android:id="@+id/server_url"
+                android:layout_toEndOf="@+id/label_server_url"
+                android:layout_toRightOf="@+id/label_server_url"
+                android:layout_toLeftOf="@+id/label_server_port"
+                android:layout_toStartOf="@+id/label_server_port" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:id="@+id/label_server_port"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/server_port"
+                android:layout_toStartOf="@+id/server_port" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/server_port_hint"
+                android:id="@+id/server_port"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_path"
+                android:id="@+id/label_server_path"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/server_path_hint"
+                android:id="@+id/server_path"
+                android:layout_toEndOf="@+id/label_server_path"
+                android:layout_toRightOf="@+id/label_server_path"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/server_user"
-            android:id="@+id/label_server_user"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:text="@string/server_resulting_url"
+            android:textStyle="bold"
+            style="@android:style/TextAppearance.Large"
+            android:gravity="left"
+            android:paddingBottom="6dp"
+            android:textColor="@android:color/holo_orange_dark"
+            android:background="@drawable/bottom_line"/>
 
         <EditText
+            android:hint="Repository URI"
+            android:id="@+id/clone_uri"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/server_user_hint"
-            android:id="@+id/server_user"
-            android:layout_toEndOf="@+id/label_server_user"
-            android:layout_toRightOf="@+id/label_server_user"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+            android:inputType="textWebEmailAddress"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/server_url"
-            android:id="@+id/label_server_url"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/server_url_hint"
-            android:id="@+id/server_url"
-            android:layout_toEndOf="@+id/label_server_url"
-            android:layout_toRightOf="@+id/label_server_url"
-            android:layout_toLeftOf="@+id/label_server_port"
-            android:layout_toStartOf="@+id/label_server_port" />
+            android:background="@drawable/red_rectangle"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:id="@+id/warn_url"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=":"
-            android:id="@+id/label_server_port"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/server_port"
-            android:layout_toStartOf="@+id/server_port" />
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/server_port_hint"
-            android:id="@+id/server_port"
-            android:layout_alignParentRight="true"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/server_path"
-            android:id="@+id/label_server_path"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/server_path_hint"
-            android:id="@+id/server_path"
-            android:layout_toEndOf="@+id/label_server_path"
-            android:layout_toRightOf="@+id/label_server_path"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
 
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/server_resulting_url"
-        android:textStyle="bold"
-        style="@android:style/TextAppearance.Large"
-        android:gravity="left"
-        android:paddingBottom="6dp"
-        android:textColor="@android:color/holo_orange_dark"
-        android:background="@drawable/bottom_line"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_mode"
+                android:id="@+id/label_connection_mode"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
-    <EditText
-        android:hint="Repository URI"
-        android:id="@+id/clone_uri"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textWebEmailAddress"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/connection_mode"
+                android:layout_toEndOf="@+id/label_connection_mode"
+                android:layout_toRightOf="@+id/label_connection_mode" />
+        </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/red_rectangle"
-        android:textColor="@android:color/white"
-        android:visibility="gone"
-        android:id="@+id/warn_url"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connection_mode"
-            android:id="@+id/label_connection_mode"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <Spinner
+        <Button
+            android:id="@+id/clone_button"
+            android:text="Clone!"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/connection_mode"
-            android:layout_toEndOf="@+id/label_connection_mode"
-            android:layout_toRightOf="@+id/label_connection_mode" />
-    </RelativeLayout>
+            android:onClick="cloneRepository"/>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/clone_button"
-        android:text="Clone!"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="cloneRepository"/>
-
-
-</LinearLayout>
+</ScrollView>

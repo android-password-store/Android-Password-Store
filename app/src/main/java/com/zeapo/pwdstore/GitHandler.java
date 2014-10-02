@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -149,17 +151,16 @@ public class GitHandler extends Activity {
                 });
 
                 // init the server information
-                EditText server_url = ((EditText) findViewById(R.id.server_url));
-                EditText server_port = ((EditText) findViewById(R.id.server_port));
-                EditText server_path = ((EditText) findViewById(R.id.server_path));
-                EditText server_user = ((EditText) findViewById(R.id.server_user));
+                final EditText server_url = ((EditText) findViewById(R.id.server_url));
+                final EditText server_port = ((EditText) findViewById(R.id.server_port));
+                final EditText server_path = ((EditText) findViewById(R.id.server_path));
+                final EditText server_user = ((EditText) findViewById(R.id.server_user));
                 final EditText server_uri = ((EditText)findViewById(R.id.clone_uri));
 
-                View.OnKeyListener updateListener = new View.OnKeyListener() {
+                View.OnFocusChangeListener updateListener = new View.OnFocusChangeListener() {
                     @Override
-                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    public void onFocusChange(View view, boolean b) {
                         updateURI();
-                        return false;
                     }
                 };
 
@@ -168,16 +169,72 @@ public class GitHandler extends Activity {
                 server_user.setText(settings.getString("git_remote_username", ""));
                 server_path.setText(settings.getString("git_remote_location", ""));
 
-                server_url.setOnKeyListener(updateListener);
-                server_port.setOnKeyListener(updateListener);
-                server_user.setOnKeyListener(updateListener);
-                server_path.setOnKeyListener(updateListener);
-
-                server_uri.setOnKeyListener(new View.OnKeyListener() {
+                server_url.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                        splitURI();
-                        return false;
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        if (server_url.isFocused())
+                            updateURI();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) { }
+                });
+                server_port.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        if (server_port.isFocused())
+                            updateURI();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) { }
+                });
+                server_user.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        if (server_user.isFocused())
+                            updateURI();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) { }
+                });
+                server_path.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        if (server_path.isFocused())
+                            updateURI();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) { }
+                });
+
+                server_uri.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                        if (server_uri.isFocused())
+                            splitURI();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
                     }
                 });
 
@@ -201,6 +258,7 @@ public class GitHandler extends Activity {
         EditText server_port = ((EditText) findViewById(R.id.server_port));
         EditText server_path = ((EditText) findViewById(R.id.server_path));
         EditText server_user = ((EditText) findViewById(R.id.server_user));
+        Log.i("GIT", "key entred");
 
         if (uri != null) {
             String hostname =
