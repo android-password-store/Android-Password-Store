@@ -156,15 +156,24 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         File localDir = new File(getFilesDir() + "/store/");
         localDir.mkdir();
         try {
+            PasswordRepository.createRepository(localDir);
+
             // we take only the first key-id, we have to think about how to handle multiple keys, and why should we do that...
             // also, for compatibility use short-version of the key-id
             FileUtils.writeStringToFile(new File(localDir.getAbsolutePath() + "/.gpg-id"),
                     keyId.substring(keyId.length() - 8));
+
+            Git git = new Git(PasswordRepository.getRepository(new File("")));
+            GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
+            tasks.execute(
+                    git.add().addFilepattern("."),
+                    git.commit().setMessage("[ANDROID PwdStore] Initialized store with keyID: " + keyId)
+            );
         } catch (Exception e) {
+            e.printStackTrace();
             localDir.delete();
             return;
         }
-        PasswordRepository.createRepository(localDir);
         checkLocalRepository();
     }
 
