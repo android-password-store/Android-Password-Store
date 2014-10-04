@@ -14,10 +14,8 @@ import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +32,7 @@ public class PasswordRepository {
         if (repository == null) {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             try {
-                repository = builder.setGitDir(localDir)
+                repository = builder.setWorkTree(localDir)
                         .readEnvironment()
                         .findGitDir()
                         .build();
@@ -54,31 +52,11 @@ public class PasswordRepository {
         initialized = v;
     }
 
-    public static void createRepository(File localDir) {
+    public static void createRepository(File localDir) throws Exception{
         localDir.delete();
 
-        try {
-
-            // create the directory
-            Repository repository = FileRepositoryBuilder.create(new File(localDir, ".git"));
-            repository.create();
-
-            Git.init()
-                    .setDirectory(localDir)
-                    .call();
-
-            getRepository(localDir);
-
-            new Git(repository)
-                    .branchCreate()
-                    .setName("master")
-                    .call();
-
-            initialized = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
+        Git.init().setDirectory(localDir).call();
+        getRepository(localDir);
     }
 
     // TODO add remote edition later-on
