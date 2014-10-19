@@ -21,7 +21,7 @@
             style="@android:style/TextAppearance.Large"
             android:gravity="left"
             android:paddingBottom="6dp"
-            android:textColor="@android:color/holo_orange_dark"
+            android:textColor="@color/blue_grey_700"
             android:background="@drawable/bottom_line"/>
 
         <RelativeLayout
@@ -61,6 +61,7 @@
                 android:id="@+id/label_server_user"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
+                android:paddingBottom="8dp"
                 android:layout_alignParentStart="true" />
 
             <EditText
@@ -68,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/server_user_hint"
                 android:id="@+id/server_user"
+                android:layout_marginLeft="8dp"
                 android:layout_toEndOf="@+id/label_server_user"
                 android:layout_toRightOf="@+id/label_server_user"
                 android:layout_alignParentRight="true"
@@ -83,6 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/server_url"
+                android:paddingBottom="8dp"
                 android:id="@+id/label_server_url"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
@@ -93,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/server_url_hint"
                 android:id="@+id/server_url"
+                android:layout_marginLeft="8dp"
                 android:layout_toEndOf="@+id/label_server_url"
                 android:layout_toRightOf="@+id/label_server_url"
                 android:layout_toLeftOf="@+id/label_server_port"
@@ -102,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=":"
+                android:paddingBottom="8dp"
                 android:id="@+id/label_server_port"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/server_port"
@@ -125,6 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/server_path"
+                android:paddingBottom="8dp"
                 android:id="@+id/label_server_path"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
@@ -134,6 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/server_path_hint"
+                android:layout_marginLeft="8dp"
                 android:id="@+id/server_path"
                 android:layout_toEndOf="@+id/label_server_path"
                 android:layout_toRightOf="@+id/label_server_path"
@@ -150,7 +157,7 @@
             style="@android:style/TextAppearance.Large"
             android:gravity="left"
             android:paddingBottom="6dp"
-            android:textColor="@android:color/holo_orange_dark"
+            android:textColor="@color/blue_grey_700"
             android:background="@drawable/bottom_line"/>
 
         <EditText

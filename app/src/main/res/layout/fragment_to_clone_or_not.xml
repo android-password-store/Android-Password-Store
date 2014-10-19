@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
     tools:context="com.zeapo.pwdstore.ToCloneOrNot">
 
     <RelativeLayout
@@ -25,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:textStyle="bold"
             android:onClick="initRepository"
             android:text="@string/initialize"
             android:id="@+id/button"
@@ -36,7 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:textColor="@android:color/holo_orange_dark"
+            android:textColor="@color/deep_orange_500"
+            android:textStyle="bold"
             android:onClick="getClone"
             android:text="@string/clone"
             android:layout_below="@+id/textView"

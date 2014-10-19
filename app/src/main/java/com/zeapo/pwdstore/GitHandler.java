@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -58,7 +59,7 @@ import java.util.regex.Pattern;
 
 // TODO move the messages to strings.xml
 
-public class GitHandler extends Activity {
+public class GitHandler extends ActionBarActivity {
 
     private Activity activity;
     private Context context;
