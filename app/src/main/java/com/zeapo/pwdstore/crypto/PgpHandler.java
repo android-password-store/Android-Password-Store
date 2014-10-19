@@ -31,6 +31,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -46,7 +47,7 @@ import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
-public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnBound{
+public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConnection.OnBound{
 
 
     private OpenPgpServiceConnection mServiceConnection;
@@ -109,9 +110,7 @@ public class PgpHandler extends Activity implements OpenPgpServiceConnection.OnB
             bindingDialog.show();
 
             registered = true;
-
-            ActionBar actionBar = getActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 

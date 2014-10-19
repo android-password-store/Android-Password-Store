@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.utils;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +58,29 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final PasswordItem pass = values.get(position);
-        holder.name.setText(pass.getName());
-        holder.type.setText((pass.getType() == PasswordItem.TYPE_CATEGORY ? "Category" : "Password"));
+        holder.name.setText(pass.toString());
+        int sdk = android.os.Build.VERSION.SDK_INT;
+
+        if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
+            holder.type.setText("C");
+            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                holder.type.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.category_rectangle));
+            } else {
+                holder.type.setBackground(activity.getResources().getDrawable(R.drawable.category_rectangle));
+            }
+
+            holder.type.setTextColor(activity.getResources().getColor(R.color.deep_orange_50));
+        } else {
+            holder.type.setText("P");
+            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                holder.type.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.password_rectangle));
+            } else {
+                holder.type.setBackground(activity.getResources().getDrawable(R.drawable.password_rectangle));
+            }
+
+            holder.type.setTextColor(activity.getResources().getColor(R.color.blue_grey_50));
+        }
+
         holder.position = position;
 
         holder.view.setOnClickListener(new View.OnClickListener() {

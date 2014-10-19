@@ -74,7 +74,7 @@ public class PasswordFragment extends Fragment{
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(final Activity activity) {
         super.onAttach(activity);
         try {
             mListener = new OnFragmentInteractionListener() {
@@ -89,6 +89,8 @@ public class PasswordFragment extends Fragment{
 
 
                         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    } else {
+                        ((PasswordStore) getActivity()).decryptPassword(item);
                     }
                 }
 
