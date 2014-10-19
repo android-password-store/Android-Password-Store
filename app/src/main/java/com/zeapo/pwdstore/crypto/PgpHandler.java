@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
@@ -220,7 +221,12 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
 			// Make Show Time a user preference
 			// kLeZ: Changed to match the default for pass
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(container.getContext());
-			final int SHOW_TIME = Integer.parseInt(settings.getString("general_show_time", "45"));
+            int SHOW_TIME;
+            try {
+                SHOW_TIME = Integer.parseInt(settings.getString("general_show_time", "45"));
+            } catch (NumberFormatException e) {
+                SHOW_TIME = 45;
+            }
             this.pb.setMax(SHOW_TIME);
         }
 
