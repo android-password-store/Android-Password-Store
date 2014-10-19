@@ -41,6 +41,9 @@ public class PasswordAdapter extends ArrayAdapter<PasswordItem>{
         this.activity = activity;
     }
 
+    public ArrayList<PasswordItem> getValues()  {
+        return values;
+    }
 
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {

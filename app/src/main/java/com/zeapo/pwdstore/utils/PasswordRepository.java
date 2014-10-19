@@ -32,9 +32,8 @@ public class PasswordRepository {
         if (repository == null) {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             try {
-                repository = builder.setWorkTree(localDir)
+                repository = builder.setGitDir(localDir)
                         .readEnvironment()
-                        .findGitDir()
                         .build();
             } catch (Exception e) {
                 e.printStackTrace();

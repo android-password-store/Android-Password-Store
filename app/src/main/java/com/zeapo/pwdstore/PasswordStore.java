@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,10 +26,11 @@ import org.eclipse.jgit.api.Git;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Stack;
 
 
-public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentInteractionListener, PasswordFragment.OnFragmentInteractionListener {
+public class PasswordStore extends ActionBarActivity implements ToCloneOrNot.OnFragmentInteractionListener {
     private Stack<Integer> scrollPositions;
     /** if we leave the activity to do something, do not add any other fragment */
     public boolean leftActivity = false;
@@ -76,6 +78,7 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent;
+        Log.d("PASS", "Menu item " + id + " pressed");
 
         AlertDialog.Builder initBefore = new AlertDialog.Builder(this)
                 .setMessage("Please clone or create a new repository below before trying to add a password or any synchronization operation.")
@@ -136,6 +139,11 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
             case R.id.referesh:
                 refreshListAdapter();
                 return true;
+
+            case android.R.id.home:
+                Log.d("PASS", "Home pressed");
+                this.onBackPressed();
+                break;
 
             default:
                 break;
@@ -266,41 +274,42 @@ public class PasswordStore extends Activity  implements ToCloneOrNot.OnFragmentI
                 fragmentTransaction.commit();
                 break;
             default:
-                PasswordRepository.setInitialized(true);
-                PasswordFragment passFrag = new PasswordFragment();
-                Bundle args = new Bundle();
-                args.putString("Path", localDir.getAbsolutePath());
 
-                if (!scrollPositions.isEmpty())
-                    args.putInt("Position", scrollPositions.pop());
-                else
-                    args.putInt("Position", 0);
+                if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
+                    PasswordRepository.setInitialized(true);
+                    PasswordFragment passFrag = new PasswordFragment();
+                    Bundle args = new Bundle();
+                    args.putString("Path", localDir.getAbsolutePath());
 
-                passFrag.setArguments(args);
+                    passFrag.setArguments(args);
 
-                if (fragmentManager.findFragmentByTag("PasswordsList") != null)
                     fragmentTransaction.addToBackStack("passlist");
 
-                fragmentTransaction.replace(R.id.main_layout, passFrag, "PasswordsList");
-                fragmentTransaction.commit();
+                    fragmentTransaction.replace(R.id.main_layout, passFrag, "PasswordsList");
+                    fragmentTransaction.commit();
+                }
         }
 
         this.leftActivity = false;
     }
 
-    /** Stack the positions the different fragments were at */
-    @Override
-    public void savePosition(Integer position) {
-        this.scrollPositions.push(position);
-    }
 
-    /* If an item is clicked in the list of passwords, this will be triggered */
+
     @Override
-    public void onFragmentInteraction(PasswordItem item) {
-        if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-            checkLocalRepository(item.getFile());
+    public void onBackPressed() {
+        PasswordFragment plist;
+        if  ((null != (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) &&
+                plist.isNotEmpty()) {
+            plist.popBack();
+        } else {
+            super.onBackPressed();
+        }
+
+        if (!plist.isNotEmpty()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
+
     public void decryptPassword(PasswordItem item) {
         try {
             this.leftActivity = true;

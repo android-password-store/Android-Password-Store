@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,9 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * A fragment representing a list of Items.
@@ -36,7 +40,10 @@ import java.util.List;
  * with a GridView.
  * <p />
  */
-public class PasswordFragment extends Fragment implements SwipeListViewListener {
+public class PasswordFragment extends Fragment implements SwipeListViewListener{
+
+    // store the pass files list in a stack
+    private Stack<ArrayList<PasswordItem>> passListStack;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,6 +69,9 @@ public class PasswordFragment extends Fragment implements SwipeListViewListener 
         super.onCreate(savedInstanceState);
 
         String path = getArguments().getString("Path");
+
+        passListStack = new Stack<ArrayList<PasswordItem>>();
+
         mAdapter = new PasswordAdapter((PasswordStore) getActivity(), PasswordRepository.getPasswords(new File(path)));
     }
 
@@ -74,8 +84,6 @@ public class PasswordFragment extends Fragment implements SwipeListViewListener 
         mListView = (SwipeListView) view.findViewById(R.id.pass_list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
         mListView.setSwipeListViewListener(this);
-        mListView.setSelectionFromTop(getArguments().getInt("Position"), 0);
-
         return view;
     }
 
@@ -83,7 +91,23 @@ public class PasswordFragment extends Fragment implements SwipeListViewListener 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = new OnFragmentInteractionListener() {
+                @Override
+                public void onFragmentInteraction(PasswordItem item) {
+                    if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                        passListStack.push((ArrayList<PasswordItem>) mAdapter.getValues().clone());
+                        mAdapter.clear();
+                        mAdapter.addAll(PasswordRepository.getPasswords(item.getFile()));
+
+                        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    }
+                }
+
+                @Override
+                public void savePosition(Integer position) {
+
+                }
+            };
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                 + " must implement OnFragmentInteractionListener");
@@ -195,4 +219,12 @@ public class PasswordFragment extends Fragment implements SwipeListViewListener 
         mListView.setAdapter((ListAdapter) mAdapter);
     }
 
+    public void popBack() {
+        mAdapter.clear();
+        mAdapter.addAll(passListStack.pop());
+    }
+
+    public boolean isNotEmpty() {
+        return !passListStack.isEmpty();
+    }
 }
