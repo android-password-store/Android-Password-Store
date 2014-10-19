@@ -41,6 +41,11 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent() != null) {
+            if (getIntent().getStringExtra("operation").equals("get_ssh_key")) {
+                getSshKey();
+            }
+        }
 
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new PrefsFragment()).commit();
@@ -63,6 +68,12 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
         return super.onOptionsItemSelected(item);
     }
 
+    public void getSshKey() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        startActivityForResult(intent, 1);
+    }
+
     @Override
     public boolean onPreferenceClick(Preference pref) {
         if (pref.getKey().equals("openpgp_key_id")) {
@@ -70,9 +81,7 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             intent.putExtra("Operation", "GET_KEY_ID");
             startActivityForResult(intent, 0);
         } else if (pref.getKey().equals("ssh_key")) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            startActivityForResult(intent, 1);
+            getSshKey();
         }
         return true;
     }

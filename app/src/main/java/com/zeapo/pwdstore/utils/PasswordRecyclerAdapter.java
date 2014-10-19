@@ -89,6 +89,8 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 listener.onFragmentInteraction(pass);
             }
         });
+
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

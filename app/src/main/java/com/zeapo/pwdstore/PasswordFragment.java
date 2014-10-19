@@ -82,7 +82,6 @@ public class PasswordFragment extends Fragment{
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
                         passListStack.push((ArrayList<PasswordItem>) recyclerAdapter.getValues().clone());
                         scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
-                        Log.d("FRAG", scrollPosition.peek() + "");
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
                         recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile()));

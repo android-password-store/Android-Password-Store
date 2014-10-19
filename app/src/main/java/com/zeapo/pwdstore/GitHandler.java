@@ -651,6 +651,7 @@ public class GitHandler extends ActionBarActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), UserPreference.class);
+                                    intent.putExtra("operation", "get_ssh_key");
                                     startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
                                 } catch (Exception e) {
                                     System.out.println("Exception caught :(");
