@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".pwdstore">
+
+    <item android:id="@+id/menu_delete_password"
+        android:icon="@drawable/ico_del"
+        app:showAsAction="always"
+        android:title="Delete"/>
+</menu>
+

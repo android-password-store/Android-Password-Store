@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +17,7 @@ import android.view.View;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.PasswordItem;
+import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
@@ -337,7 +337,8 @@ public class PasswordStore extends ActionBarActivity  {
         }
     }
 
-    public void deletePassword(final PasswordItem item) {
+    public void deletePassword(final PasswordRecyclerAdapter adapter, final int position) {
+        final PasswordItem item = adapter.getValues().get(position);
         new AlertDialog.Builder(this).
                 setMessage("Are you sure you want to delete the password \"" +
                         item + "\"")
@@ -346,6 +347,7 @@ public class PasswordStore extends ActionBarActivity  {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String path = item.getFile().getAbsolutePath();
                         item.getFile().delete();
+                        adapter.remove(position);
 
                         setResult(RESULT_CANCELED);
                         Git git = new Git(PasswordRepository.getRepository(new File("")));

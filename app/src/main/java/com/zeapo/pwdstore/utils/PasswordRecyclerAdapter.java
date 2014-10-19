@@ -1,8 +1,11 @@
 package com.zeapo.pwdstore.utils;
 
 import android.graphics.Color;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -56,7 +59,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final PasswordItem pass = values.get(position);
         holder.name.setText(pass.toString());
         int sdk = android.os.Build.VERSION.SDK_INT;
@@ -90,6 +93,26 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             }
         });
 
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu p = new PopupMenu(activity, v);
+                p.getMenuInflater().inflate(
+                        R.menu.context_pass, p.getMenu());
+                p.show();
+                p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.menu_delete_password) {
+                            activity.deletePassword(PasswordRecyclerAdapter.this, holder.position);
+                        }
+                        return false;
+                    }
+                });
+                return false;
+            }
+        });
+
 
     }
 
@@ -115,7 +138,12 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
 
     public void add(PasswordItem item) {
         this.values.add(item);
-        this.notifyDataSetChanged();
+        this.notifyItemInserted(values.size());
+    }
+
+    public void remove(int position) {
+        this.values.remove(position);
+        this.notifyItemRemoved(position);
     }
 
 }

@@ -42,7 +42,7 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
-            if (getIntent().getStringExtra("operation").equals("get_ssh_key")) {
+            if ((getIntent().getStringExtra("operation") != null) && (getIntent().getStringExtra("operation").equals("get_ssh_key"))) {
                 getSshKey();
             }
         }

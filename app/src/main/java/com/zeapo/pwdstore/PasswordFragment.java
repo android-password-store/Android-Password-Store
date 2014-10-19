@@ -1,13 +1,19 @@
 package com.zeapo.pwdstore;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -70,6 +76,8 @@ public class PasswordFragment extends Fragment{
 //
 //        // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
+
+        registerForContextMenu(recyclerView);
         return view;
     }
 
