@@ -9,6 +9,4 @@
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
 
-    <item name="fragment_password" type="layout">@layout/fragment_password_grid</item>
-
 </resources>

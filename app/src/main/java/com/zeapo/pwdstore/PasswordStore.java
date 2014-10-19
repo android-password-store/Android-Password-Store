@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 
-public class PasswordStore extends ActionBarActivity implements ToCloneOrNot.OnFragmentInteractionListener {
+public class PasswordStore extends ActionBarActivity  {
     private Stack<Integer> scrollPositions;
     /** if we leave the activity to do something, do not add any other fragment */
     public boolean leftActivity = false;
@@ -229,11 +229,6 @@ public class PasswordStore extends ActionBarActivity implements ToCloneOrNot.OnF
                     .show();
 
         }
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     private void checkLocalRepository() {
