@@ -94,7 +94,6 @@ public class PasswordFragment extends Fragment{
                         recyclerAdapter.clear();
                         recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile()));
 
-
                         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     } else {
                         ((PasswordStore) getActivity()).decryptPassword(item);
@@ -119,8 +118,12 @@ public class PasswordFragment extends Fragment{
     }
 
     public void updateAdapter() {
+        passListStack.clear();
+        scrollPosition.clear();
         recyclerAdapter.clear();
-        recyclerAdapter.addAll(PasswordRepository.getPasswords(new File(getArguments().getString("Path"))));
+        recyclerAdapter.addAll(PasswordRepository.getPasswords());
+
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     public void popBack() {

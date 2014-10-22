@@ -299,7 +299,6 @@ public class GitHandler extends ActionBarActivity {
         Matcher matcher = pattern.matcher(uri);
         if (matcher.find()) {
             int count = matcher.groupCount();
-            Log.i("GIT", ">> " + count);
             if (count > 1) {
                 server_user.setText(matcher.group(1));
                 server_url.setText(matcher.group(2));
@@ -627,7 +626,7 @@ public class GitHandler extends ActionBarActivity {
     /** Finds the method and provides it with authentication paramters via invokeWithAuthentication */
     private void authenticateAndRun(String operation) {
         try {
-            invokeWithAuthentication(this, this.getClass().getMethod(operation, UsernamePasswordCredentialsProvider.class));
+            invokeWithAuthentication(this, GitHandler.class.getMethod(operation, UsernamePasswordCredentialsProvider.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

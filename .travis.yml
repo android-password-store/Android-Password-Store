@@ -7,10 +7,10 @@ android:
     # - tools
 
     # The BuildTools version used by your project
-    - build-tools-19.1.0
+    - build-tools-21.0.1
 
     # The SDK version used to compile your project
-    - android-19
+    - android-21
 
     # Additional components
     - extra-google-m2repository
@@ -18,5 +18,4 @@ android:
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
-    - sys-img-armeabi-v7a-android-19
-    - sys-img-x86-android-17
+    # - sys-img-x86-android-21

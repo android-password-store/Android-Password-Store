@@ -382,14 +382,9 @@ public class PasswordStore extends ActionBarActivity  {
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-        if (resultCode == RESULT_CANCELED)
-            refreshListAdapter();
-
         if (resultCode == RESULT_OK) {
             if (requestCode == GitHandler.REQUEST_CLONE)
                 checkLocalRepository();
-            else
-                refreshListAdapter();
 
             switch (requestCode) {
                 case PgpHandler.REQUEST_CODE_ENCRYPT :
