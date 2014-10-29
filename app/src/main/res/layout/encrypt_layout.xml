@@ -97,7 +97,7 @@
         <ImageButton
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/ico_confirm_add"
+            android:src="@drawable/ic_action_save"
             android:background="@drawable/blue_rectangle"
             android:id="@+id/crypto_confirm_add"
             android:onClick="handleClick"
@@ -108,7 +108,7 @@
         <ImageButton
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/ico_cancel"
+            android:src="@drawable/ic_action_cancel"
             android:background="@drawable/red_rectangle"
             android:id="@+id/crypto_cancel_add"
             android:onClick="handleClick"
