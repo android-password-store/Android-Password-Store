@@ -145,13 +145,17 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                 finish();
                 return true;
             case R.id.copy_password:
-                ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
-                clipboard.setPrimaryClip(clip);
-                showToast("Password copied to clipboard, you have "
-                        + Integer.parseInt(settings.getString("general_show_time", "45"))
-                        + " seconds to paste it somewhere.");
+                copyToClipBoard();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void copyToClipBoard() {
+        ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
+        clipboard.setPrimaryClip(clip);
+        showToast("Password copied to clipboard, you have "
+                + Integer.parseInt(settings.getString("general_show_time", "45"))
+                + " seconds to paste it somewhere.");
     }
 
     public void handleClick(View view) {
@@ -313,8 +317,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
 
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
-                    showToast("SUCCESS");
-
                     // encrypt/decrypt/sign/verify
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
@@ -336,6 +338,9 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                                             .setText(extraContent);
                                 }
                                 new DelayShow().execute();
+                                if (settings.getBoolean("copy_on_decrypt", true)) {
+                                    copyToClipBoard();
+                                }
                             } else {
                                 showToast(os.toString());
                             }

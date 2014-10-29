@@ -30,5 +30,9 @@
 			android:dialogTitle="Set the time you want the password to be in clipboard"
 			android:summary="Set the time you want the password to be in clipboard"
 			android:hint="45" android:key="general_show_time" />
+    <CheckBoxPreference android:title="Automatically Copy Password"
+      android:dialogTitle="Automatically copy the password to the clipboard after decryption was successful."
+      android:summary="Automatically copy the password to the clipboard after decryption was successful."
+      android:key="copy_on_decrypt" android:defaultValue="true" />
 	</PreferenceCategory>
 </PreferenceScreen>
