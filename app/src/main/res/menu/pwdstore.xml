@@ -10,7 +10,7 @@
           pwstore:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item android:id="@+id/menu_add_password"
-        android:icon="@drawable/ico_add"
+        android:icon="@drawable/ic_action_new"
         pwstore:showAsAction="ifRoom"
         android:title="New password"/>
 
@@ -24,7 +24,7 @@
 
     <item android:id="@+id/refresh"
         android:title="Refresh list"
-        pwstore:showAsAction="never"
+        android:showAsAction="never"
         android:icon="@drawable/ico_sync"/>
 
     <item android:id="@+id/user_pref"
