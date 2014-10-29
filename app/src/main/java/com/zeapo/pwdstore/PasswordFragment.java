@@ -126,6 +126,20 @@ public class PasswordFragment extends Fragment{
         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
+    public void filterAdapter(String filter) {
+        if (filter.isEmpty()) {
+            updateAdapter();
+            return;
+        }
+        for (int i=0; i<recyclerAdapter.getItemCount(); i++) {
+            PasswordItem item = recyclerAdapter.getValues().get(i);
+            boolean matches = item.getName().toLowerCase().contains(filter);
+            if (!matches) {
+                recyclerAdapter.remove(i);
+            }
+        }
+    }
+
     public void popBack() {
         recyclerView.scrollToPosition(scrollPosition.pop());
         recyclerAdapter.clear();

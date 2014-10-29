@@ -1,10 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:pwstore="http://schemas.android.com/apk/res-auto"
     tools:context=".pwdstore" >
+
+    <item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@drawable/ic_action_search"
+          pwstore:showAsAction="ifRoom|collapseActionView"
+          pwstore:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item android:id="@+id/menu_add_password"
         android:icon="@drawable/ico_add"
-        android:showAsAction="always"
+        pwstore:showAsAction="ifRoom"
         android:title="New password"/>
 
     <!--<item android:id="@+id/menu_add_category"-->
@@ -17,7 +24,7 @@
 
     <item android:id="@+id/referesh"
         android:title="Refresh list"
-        android:showAsAction="never"
+        pwstore:showAsAction="never"
         android:icon="@drawable/ico_sync"/>
 
     <item android:id="@+id/user_pref"
