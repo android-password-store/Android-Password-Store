@@ -26,7 +26,6 @@ import org.eclipse.jgit.api.Git;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Stack;
 
 
@@ -136,7 +135,7 @@ public class PasswordStore extends ActionBarActivity  {
                 this.leftActivity = true;
                 return true;
 
-            case R.id.referesh:
+            case R.id.refresh:
                 refreshListAdapter();
                 return true;
 
