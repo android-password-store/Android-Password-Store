@@ -3,9 +3,20 @@ PwdStore
 
 This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
 
-You can install the application either from the [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore),
-from [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore), or
-using the apk file found at `app/app-release.apk` or build everything from source.
+You can install the application from:
+
+- [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore) (the prefered way)
+- [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore) (always lags behind)
+- Using the apk file found at `app/app-release.apk` or build everything from source (always updated before Play Store, but usually after F-Droid)
+
+Community
+=========
+
+A few ways to get in touch:
+
+- [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how somehting works or feature request
+- IRC : on irc://chat.freenode.net/Android-Password-Store (that means channel #Android-Password-Store on freenode), some of us hangout there
+- [reddit](https://www.reddit.com/r/androidpwd), want to discuss something and it's midnight, no one on irc and you really want to write more than a couple of lines? reddit is your way!
 
 How-To
 ======
