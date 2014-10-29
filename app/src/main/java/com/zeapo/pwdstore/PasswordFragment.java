@@ -91,9 +91,15 @@ public class PasswordFragment extends Fragment{
             mListener = new OnFragmentInteractionListener() {
                 public void onFragmentInteraction(PasswordItem item) {
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                        passListStack.push((ArrayList<PasswordItem>) recyclerAdapter.getValues().clone());
+                        // push the current password list (non filtered plz!)
+                        passListStack.push(pathStack.isEmpty() ?
+                                                PasswordRepository.getPasswords() :
+                                                PasswordRepository.getPasswords(pathStack.peek()));
+
+                        //push the category were we're going
                         pathStack.push(item.getFile());
                         scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
+
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
                         recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile()));
