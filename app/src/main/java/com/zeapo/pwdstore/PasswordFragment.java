@@ -129,13 +129,15 @@ public class PasswordFragment extends Fragment{
     public void filterAdapter(String filter) {
         if (filter.isEmpty()) {
             updateAdapter();
-            return;
-        }
-        for (int i=0; i<recyclerAdapter.getItemCount(); i++) {
-            PasswordItem item = recyclerAdapter.getValues().get(i);
-            boolean matches = item.getName().toLowerCase().contains(filter);
-            if (!matches) {
-                recyclerAdapter.remove(i);
+        } else {
+            for (PasswordItem item : PasswordRepository.getPasswords()) {
+                boolean matches = item.getName().toLowerCase().contains(filter);
+                boolean inAdapter = recyclerAdapter.getValues().contains(item);
+                if (matches && !inAdapter) {
+                    recyclerAdapter.add(item);
+                } else if (!matches && inAdapter) {
+                    recyclerAdapter.remove(recyclerAdapter.getValues().indexOf(item));
+                }
             }
         }
     }
