@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="3"
-            android:src="@drawable/ico_key"
+            android:src="@drawable/ic_action_accounts"
             android:background="@android:color/transparent"
             android:onClick="handleClick"
             android:layout_gravity="center_vertical"/>
