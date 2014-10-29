@@ -42,6 +42,7 @@
 
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Category</string>
+    <string name="action_search">Search</string>
 
 
 </resources>

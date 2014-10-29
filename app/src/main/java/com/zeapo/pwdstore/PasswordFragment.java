@@ -126,6 +126,22 @@ public class PasswordFragment extends Fragment{
         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
+    public void filterAdapter(String filter) {
+        if (filter.isEmpty()) {
+            updateAdapter();
+        } else {
+            for (PasswordItem item : PasswordRepository.getPasswords()) {
+                boolean matches = item.getName().toLowerCase().contains(filter);
+                boolean inAdapter = recyclerAdapter.getValues().contains(item);
+                if (matches && !inAdapter) {
+                    recyclerAdapter.add(item);
+                } else if (!matches && inAdapter) {
+                    recyclerAdapter.remove(recyclerAdapter.getValues().indexOf(item));
+                }
+            }
+        }
+    }
+
     public void popBack() {
         recyclerView.scrollToPosition(scrollPosition.pop());
         recyclerAdapter.clear();

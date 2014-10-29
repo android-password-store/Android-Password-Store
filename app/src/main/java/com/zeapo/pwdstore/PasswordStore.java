@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,7 +69,36 @@ public class PasswordStore extends ActionBarActivity  {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.pwdstore, menu);
-        return true;
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filterListAdapter(s);
+                return true;
+            }
+        });
+
+        // When using the support library, the setOnActionExpandListener() method is
+        // static and accepts the MenuItem object as an argument
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                refreshListAdapter();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -372,6 +403,14 @@ public class PasswordStore extends ActionBarActivity  {
         if  (null !=
                 (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
             plist.updateAdapter();
+        }
+    }
+
+    public void filterListAdapter(String filter) {
+        PasswordFragment plist;
+        if  (null !=
+                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+            plist.filterAdapter(filter);
         }
     }
 

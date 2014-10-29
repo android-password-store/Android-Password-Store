@@ -3,9 +3,15 @@
     xmlns:pwstore="http://schemas.android.com/apk/res-auto"
     tools:context=".pwdstore" >
 
+    <item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@drawable/ic_action_search"
+          pwstore:showAsAction="ifRoom|collapseActionView"
+          pwstore:actionViewClass="android.support.v7.widget.SearchView" />
+
     <item android:id="@+id/menu_add_password"
         android:icon="@drawable/ico_add"
-        pwstore:showAsAction="always"
+        pwstore:showAsAction="ifRoom"
         android:title="New password"/>
 
     <!--<item android:id="@+id/menu_add_category"-->
