@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.zeapo.pwdstore.crypto.PgpHandler" >
     <item android:title="Copy password"
-        android:icon="@drawable/ico_copy"
+        android:icon="@drawable/ic_action_copy"
         android:showAsAction="ifRoom"
         android:id="@+id/copy_password"
         />

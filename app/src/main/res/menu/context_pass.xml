@@ -4,7 +4,7 @@
     tools:context=".pwdstore">
 
     <item android:id="@+id/menu_delete_password"
-        android:icon="@drawable/ico_del"
+        android:icon="@drawable/ic_action_discard"
         app:showAsAction="always"
         android:title="Delete"/>
 </menu>
