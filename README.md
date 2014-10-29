@@ -57,3 +57,7 @@ Needed
 
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zeapo/android-password-store/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
