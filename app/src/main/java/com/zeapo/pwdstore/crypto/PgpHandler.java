@@ -338,7 +338,9 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                                             .setText(extraContent);
                                 }
                                 new DelayShow().execute();
-                                copyToClipBoard();
+                                if (settings.getBoolean("copy_on_decrypt", true)) {
+                                    copyToClipBoard();
+                                }
                             } else {
                                 showToast(os.toString());
                             }
