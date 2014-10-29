@@ -167,7 +167,7 @@ public class PasswordStore extends ActionBarActivity  {
                 return true;
 
             case R.id.refresh:
-                refreshListAdapter();
+                updateListAdapter();
                 return true;
 
             case android.R.id.home:
@@ -398,11 +398,25 @@ public class PasswordStore extends ActionBarActivity  {
                 .show();
     }
 
-    public void refreshListAdapter() {
+    /**
+     * clears adapter's content and updates it with a fresh list of passwords from the root
+     */
+    public void updateListAdapter() {
         PasswordFragment plist;
         if  (null !=
                 (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
             plist.updateAdapter();
+        }
+    }
+
+    /**
+     * Updates the adapter with the current view of passwords
+     */
+    public void refreshListAdapter() {
+        PasswordFragment plist;
+        if  (null !=
+                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+            plist.refreshAdapter();
         }
     }
 

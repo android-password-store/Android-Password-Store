@@ -23,6 +23,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -40,6 +41,7 @@ public class PasswordFragment extends Fragment{
 
     // store the pass files list in a stack
     private Stack<ArrayList<PasswordItem>> passListStack;
+    private Stack<File> pathStack;
     private Stack<Integer> scrollPosition;
     private PasswordRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
@@ -60,6 +62,7 @@ public class PasswordFragment extends Fragment{
 
         passListStack = new Stack<ArrayList<PasswordItem>>();
         scrollPosition = new Stack<Integer>();
+        pathStack = new Stack<File>();
         recyclerAdapter = new PasswordRecyclerAdapter((PasswordStore) getActivity(), mListener, PasswordRepository.getPasswords(new File(path)));
     }
 
@@ -89,6 +92,7 @@ public class PasswordFragment extends Fragment{
                 public void onFragmentInteraction(PasswordItem item) {
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
                         passListStack.push((ArrayList<PasswordItem>) recyclerAdapter.getValues().clone());
+                        pathStack.push(item.getFile());
                         scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
@@ -117,8 +121,12 @@ public class PasswordFragment extends Fragment{
 //        mListView.closeOpenedItems();
     }
 
+    /**
+     * clears the adapter content and sets it back to the root view
+     */
     public void updateAdapter() {
         passListStack.clear();
+        pathStack.clear();
         scrollPosition.clear();
         recyclerAdapter.clear();
         recyclerAdapter.addAll(PasswordRepository.getPasswords());
@@ -126,12 +134,29 @@ public class PasswordFragment extends Fragment{
         ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
+    /**
+     * refreshes the adapter with the latest opened category
+     */
+    public void refreshAdapter() {
+        recyclerAdapter.clear();
+        recyclerAdapter.addAll(pathStack.isEmpty() ?
+                                        PasswordRepository.getPasswords() :
+                                        PasswordRepository.getPasswords(pathStack.peek()));
+    }
+
     public void filterAdapter(String filter) {
+        Log.d("FRAG", "filter: " + filter);
+
         if (filter.isEmpty()) {
-            updateAdapter();
+            refreshAdapter();
         } else {
-            for (PasswordItem item : PasswordRepository.getPasswords()) {
-                boolean matches = item.getName().toLowerCase().contains(filter);
+            // on the root the pathStack is empty
+            List<PasswordItem> passwordItems = pathStack.isEmpty() ?
+                                                PasswordRepository.getPasswords() :
+                                                PasswordRepository.getPasswords(pathStack.peek());
+
+            for (PasswordItem item : passwordItems) {
+                boolean matches = item.toString().toLowerCase().contains(filter.toLowerCase());
                 boolean inAdapter = recyclerAdapter.getValues().contains(item);
                 if (matches && !inAdapter) {
                     recyclerAdapter.add(item);
@@ -142,10 +167,17 @@ public class PasswordFragment extends Fragment{
         }
     }
 
+    /**
+     * Goes back one level back in the path
+     */
     public void popBack() {
+        if (passListStack.isEmpty())
+            return;
+
         recyclerView.scrollToPosition(scrollPosition.pop());
         recyclerAdapter.clear();
         recyclerAdapter.addAll(passListStack.pop());
+        pathStack.pop();
     }
 
     public boolean isNotEmpty() {

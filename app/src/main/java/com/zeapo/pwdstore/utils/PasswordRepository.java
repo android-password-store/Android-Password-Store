@@ -28,6 +28,11 @@ public class PasswordRepository {
 
     protected PasswordRepository(){    }
 
+    /**
+     * Returns the git repository
+     * @param localDir needed only on the creation
+     * @return the git repository
+     */
     public static Repository getRepository(File localDir) {
         if (repository == null) {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -92,6 +97,10 @@ public class PasswordRepository {
         return getFilesList(repository.getWorkTree());
     }
 
+    /**
+     * Gets the password items in the root directory
+     * @return a list of passwords in the root direcotyr
+     */
     public static ArrayList<PasswordItem> getPasswords() {
         return getPasswords(repository.getWorkTree());
     }
@@ -100,27 +109,41 @@ public class PasswordRepository {
         return repository.getWorkTree();
     }
 
+    /**
+     * Gets a file from the working tree
+     * @param name the relative path of the file
+     * @return the file in the repository
+     */
     public static File getFile(String name) {
         return new File(repository.getWorkTree() + "/" + name);
     }
 
+    /**
+     * Gets the .gpg files in a directory
+     * @param path the directory path
+     * @return the list of gpg files in that directory
+     */
     public static ArrayList<File> getFilesList(File path){
         if (!path.exists()) return new ArrayList<File>();
 
-        Log.d("REPO", path.getAbsolutePath());
+        Log.d("REPO", "current path: " + path.getPath());
         ArrayList<File> files = new ArrayList<File>(Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter())));
         files.addAll( new ArrayList<File>((List<File>)FileUtils.listFiles(path, new String[] {"gpg"}, false)));
 
         return new ArrayList<File>(files);
     }
 
+    /**
+     * Gets the passwords (PasswordItem) in a directory
+     * @param path the directory path
+     * @return a list of password items
+     */
     public static ArrayList<PasswordItem> getPasswords(File path) {
         //We need to recover the passwords then parse the files
         ArrayList<File> passList = getFilesList(path);
 
         if (passList.size() == 0) return new ArrayList<PasswordItem>();
 
-        // TODO replace with a set
         ArrayList<PasswordItem> passwordList = new ArrayList<PasswordItem>();
 
         for (File file : passList) {

@@ -5,17 +5,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CloneCommand;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.GitCommand;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.api.errors.TransportException;
 
 
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
@@ -86,7 +81,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
 
             if (refreshListOnEnd) {
                 try {
-                    ((PasswordStore) this.activity).refreshListAdapter();
+                    ((PasswordStore) this.activity).updateListAdapter();
                 } catch (ClassCastException e) {
                     // oups, mistake
                 }
