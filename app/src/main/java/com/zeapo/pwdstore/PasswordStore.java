@@ -451,7 +451,7 @@ public class PasswordStore extends ActionBarActivity  {
                             git.add().addFilepattern("."),
                             git.commit().setMessage("[ANDROID PwdStore] Add " + data.getExtras().getString("NAME") + " from store.")
                     );
-                    updateListAdapter();
+                    refreshListAdapter();
                     break;
                 case GitHandler.REQUEST_INIT:
                     initRepository(getCurrentFocus());
