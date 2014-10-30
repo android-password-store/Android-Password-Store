@@ -58,8 +58,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
     private Activity activity;
     ClipboardManager clipboard;
 
-
-    private ProgressDialog bindingDialog;
     private boolean registered;
 
     public static final int REQUEST_CODE_SIGN = 9910;
@@ -104,12 +102,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
             mServiceConnection = new OpenPgpServiceConnection(
                     PgpHandler.this, providerPackageName, this);
             mServiceConnection.bindToService();
-
-            bindingDialog = new ProgressDialog(this);
-            bindingDialog.setMessage("Waiting for OpenKeychain...");
-            bindingDialog.setCancelable(false);
-            bindingDialog.show();
-
             registered = true;
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -295,7 +287,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                     break;
             }
         } else if (resultCode == RESULT_CANCELED) {
-            bindingDialog.dismiss();
             setResult(RESULT_CANCELED, data);
             finish();
         }
@@ -323,8 +314,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                             Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
                                     + " str=" + os.toString("UTF-8"));
 
-                            bindingDialog.dismiss();
-
                             if (returnToCiphertextField) {
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
@@ -342,7 +331,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                                     copyToClipBoard();
                                 }
                             } else {
-                                showToast(os.toString());
+                                Log.d("PGPHANDLER", "Error message after decrypt : " + os.toString());
                             }
                         } catch (UnsupportedEncodingException e) {
                             Log.e(Constants.TAG, "UnsupportedEncodingException", e);
@@ -406,13 +395,9 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                      *
                      * Check in open-pgp-lib how their definitions and error code
                      */
-                    showToast("ERROR");
-
                     OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
                     handleError(error);
 
-                    // close the dialog
-                    bindingDialog.dismiss();
                     break;
                 }
 
@@ -526,15 +511,12 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
             decryptAndVerify(new Intent());
         } else if (extra.getString("Operation").equals("ENCRYPT")) {
-            bindingDialog.dismiss();
-
             setContentView(R.layout.encrypt_layout);
             String cat = extra.getString("FILE_PATH");
             cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
             cat = cat + "/";
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
         } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
-            bindingDialog.dismiss();
             getKeyIds(new Intent());
 
 //            setContentView(R.layout.key_id);
