@@ -13,7 +13,12 @@
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
     <string name="title_activity_git_clone">Clone repository</string>
-
+    
+    <!-- Password Store -->
+    <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</strng>
+    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
+	<string name="store_git">/store/.git</string>
+    
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
     <string name="clone">Clone existing</string>
@@ -43,6 +48,9 @@
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Category</string>
     <string name="action_search">Search</string>
+    
+    <!-- Misc -->
+    <string name="ok">OK</string>
 
 
 </resources>

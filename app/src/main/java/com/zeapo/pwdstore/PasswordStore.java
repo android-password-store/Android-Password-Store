@@ -53,7 +53,7 @@ public class PasswordStore extends ActionBarActivity  {
         super.onResume();
 
         // create the repository static variable in PasswordRepository
-        PasswordRepository.getRepository(new File(getFilesDir() + "/store/.git"));
+        PasswordRepository.getRepository(new File(getFilesDir() + this.getResources().getString(R.string.git_store)));
 
         // re-check that there was no change with the repository state
         checkLocalRepository();
@@ -111,8 +111,8 @@ public class PasswordStore extends ActionBarActivity  {
         Log.d("PASS", "Menu item " + id + " pressed");
 
         AlertDialog.Builder initBefore = new AlertDialog.Builder(this)
-                .setMessage("Please clone or create a new repository below before trying to add a password or any synchronization operation.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setMessage(this.getResources().getString(R.string.creation_alert_text));
+                .setPositiveButton(this.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
@@ -205,7 +205,7 @@ public class PasswordStore extends ActionBarActivity  {
             GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
             tasks.execute(
                     git.add().addFilepattern("."),
-                    git.commit().setMessage("[ANDROID PwdStore] Initialized store with keyID: " + keyId)
+                    git.commit().setMessage(R.string.initialization_commit_text + keyId)
             );
         } catch (Exception e) {
             e.printStackTrace();
