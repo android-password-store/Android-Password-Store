@@ -38,6 +38,7 @@ public class PasswordStore extends ActionBarActivity  {
     private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
+    private PasswordFragment plist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,15 +303,15 @@ public class PasswordStore extends ActionBarActivity  {
 
                 if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
                     PasswordRepository.setInitialized(true);
-                    PasswordFragment passFrag = new PasswordFragment();
+                    plist = new PasswordFragment();
                     Bundle args = new Bundle();
                     args.putString("Path", localDir.getAbsolutePath());
 
-                    passFrag.setArguments(args);
+                    plist.setArguments(args);
 
                     fragmentTransaction.addToBackStack("passlist");
 
-                    fragmentTransaction.replace(R.id.main_layout, passFrag, "PasswordsList");
+                    fragmentTransaction.replace(R.id.main_layout, plist, "PasswordsList");
                     fragmentTransaction.commit();
                 }
         }
@@ -322,9 +323,7 @@ public class PasswordStore extends ActionBarActivity  {
 
     @Override
     public void onBackPressed() {
-        PasswordFragment plist;
-        if  ((null != (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) &&
-                plist.isNotEmpty()) {
+        if  ((null != plist) && plist.isNotEmpty()) {
             plist.popBack();
         } else {
             super.onBackPressed();
@@ -402,9 +401,7 @@ public class PasswordStore extends ActionBarActivity  {
      * clears adapter's content and updates it with a fresh list of passwords from the root
      */
     public void updateListAdapter() {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             plist.updateAdapter();
         }
     }
@@ -413,25 +410,19 @@ public class PasswordStore extends ActionBarActivity  {
      * Updates the adapter with the current view of passwords
      */
     public void refreshListAdapter() {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             plist.refreshAdapter();
         }
     }
 
     public void filterListAdapter(String filter) {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             plist.filterAdapter(filter);
         }
     }
 
     private File getCurrentDir() {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             return plist.getCurrentDir();
         }
         return null;
