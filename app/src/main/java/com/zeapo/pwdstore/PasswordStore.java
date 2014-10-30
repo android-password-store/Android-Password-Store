@@ -359,7 +359,7 @@ public class PasswordStore extends ActionBarActivity  {
         try {
             Intent intent = new Intent(this, PgpHandler.class);
             intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
-            intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath());
+            intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
             intent.putExtra("Operation", "ENCRYPT");
             startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
         } catch (Exception e) {
@@ -429,7 +429,12 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     private File getCurrentDir() {
-        return new File(((PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList")).getArguments().getString("Path"));
+        PasswordFragment plist;
+        if  (null !=
+                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+            return plist.getCurrentDir();
+        }
+        return null;
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
