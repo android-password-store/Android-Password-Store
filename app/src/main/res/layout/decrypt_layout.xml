@@ -101,6 +101,7 @@
                     android:text="Extra content: "/>
                 <TextView
                     android:id="@+id/crypto_extra_show"
+                    android:textIsSelectable="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
