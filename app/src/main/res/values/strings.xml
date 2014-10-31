@@ -37,6 +37,11 @@
     <string name="account_settings_dialog_title">Account name empty!</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Running command...</string>
+    <string name="jgit_error_dialog_title">Internal exception occurred</string>
+    <string name="jgit_error_dialog_text">Message from jgit: /n</string>
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
