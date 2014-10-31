@@ -26,6 +26,32 @@
     <string name="add_commit_text">[ANDROID PwdStore] Add </string>
     <string name="remove_commit_text">[ANDROID PwdStore] Remove </string>
     <string name="from_store"> from store.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">No OpenPGP Provider selected!</string>
+    <string name="okc_progress_text">Waiting for OpenKeychain...</string>
+    <string name="clipboard_beginning_toast_text">Password copied to clipboard, you have </string>
+    <string name="clipboard_ending_toast_text"> seconds to paste it somewhere.</string>
+    <string name="name_settings_toast_text">Please set your account name in settings whenever you can</string>
+    <string name="account_settings_dialog_text">Please set your OpenKeychain account (email) in the preferences</string>
+    <string name="account_settings_dialog_title">Account name empty!</string>
+    <string name="file_toast_text">Please provide a file name</string>
+    <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Running command...</string>
+    <string name="jgit_error_dialog_title">Internal exception occurred</string>
+    <string name="jgit_error_dialog_text">Message from jgit: /n</string>
+
+    <!-- Git Handler -->
+    <string name="read_only_dialog_text">You are about to use a read-only repository, you will not be able to push to it</string>
+    <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
+    <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
+    <string name="ssh_preferences_dialog_text">Please import your SSH key file in the preferences</string>
+    <string name="ssh_preferences_dialog_title">No SSH key</string>
+    <string name="passphrase_dialog_title">Authenticate</string>
+    <string name="passphrase_dialog_text">Please provide the passphrase for your SSH key. Leave it empty if there is no passphrase.</string>
+    <string name="password_dialog_text">Please provide the password for this repository</string>
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
@@ -63,5 +89,7 @@
     <string name="dialog_no">No</string>
     <string name="dialog_positive">On my way...</string>
     <string name="dialog_negative">Nah... later</string>
+    <string name="dialog_oops">Oops...</string>
+    <string name="dialog_cancel">Cancel</string>
 
 </resources>

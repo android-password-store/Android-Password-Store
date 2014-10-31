@@ -30,7 +30,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     }
 
     protected void onPreExecute() {
-        this.dialog.setMessage("Running command...");
+        this.dialog.setMessage(activity.getResources().getString(R.string.running_dialog_text));
         this.dialog.setCancelable(false);
         this.dialog.show();
     }
@@ -54,9 +54,9 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
 
         if (!result.isEmpty()) {
             new AlertDialog.Builder(activity).
-                    setTitle("Internal exception occurred").
-                    setMessage("Message from jgit:\n" + result).
-                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    setTitle(activity.getResources().getString(R.string.jgit_error_dialog_title)).
+                    setMessage(activity.getResources().getString(R.string.jgit_error_dialog_text) + result).
+                    setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (operation.equals(CloneCommand.class)) {
