@@ -91,7 +91,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
         registered = false;
 
         if (TextUtils.isEmpty(providerPackageName)) {
-            Toast.makeText(this, "No OpenPGP Provider selected!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getResources().getString(R.string.provider_toast_text), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, UserPreference.class);
             startActivity(intent);
             // a small hack to avoid eternal loop later, have to be solved via a startactivityforresult()
@@ -106,7 +106,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
             mServiceConnection.bindToService();
 
             bindingDialog = new ProgressDialog(this);
-            bindingDialog.setMessage("Waiting for OpenKeychain...");
+            bindingDialog.setMessage(this.getResources().getString(R.string.okc_progress_text));
             bindingDialog.setCancelable(false);
             bindingDialog.show();
 
@@ -153,9 +153,9 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
     public void copyToClipBoard() {
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
         clipboard.setPrimaryClip(clip);
-        showToast("Password copied to clipboard, you have "
+        showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
                 + Integer.parseInt(settings.getString("general_show_time", "45"))
-                + " seconds to paste it somewhere.");
+                + this.getResources().getString(R.string.clipboard_ending_toast_text));
     }
 
     public void handleClick(View view) {
@@ -424,7 +424,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
     public void getKeyIds(Intent data) {
         accountName = settings.getString("openpgp_account_name", "");
         if (accountName.isEmpty())
-            showToast("Please set your account name in settings whenever you can");
+            showToast(this.getResources().getString(R.string.name_settings_toast_text));
 
         data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
         data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName.isEmpty() ? "default" : accountName});
@@ -456,9 +456,9 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
 
         if (accountName.isEmpty()) {
             new AlertDialog.Builder(this)
-                    .setMessage("Please set your OpenKeychain account (email) in the preferences")
-                    .setTitle("Account name empty!")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    .setMessage(this.getResources().getString(R.string.account_settings_dialog_text))
+                    .setTitle(this.getResources().getString(R.string.account_settings_dialog_title))
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             try {
@@ -469,7 +469,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                                 e.printStackTrace();
                             }
                         }
-                    }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     // Do nothing...
@@ -486,12 +486,12 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
             String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
 
             if (name.isEmpty()) {
-                showToast("Please provide a file name");
+                showToast(this.getResources().getString(R.string.file_toast_text));
                 return;
             }
 
             if (pass.isEmpty() && extra.isEmpty()) {
-                showToast("You cannot use an empty password or empty extra content");
+                showToast(this.getResources().getString(R.string.empty_toast_text));
                 return;
             }
 

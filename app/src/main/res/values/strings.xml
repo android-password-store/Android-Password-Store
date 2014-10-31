@@ -26,6 +26,17 @@
     <string name="add_commit_text">[ANDROID PwdStore] Add </string>
     <string name="remove_commit_text">[ANDROID PwdStore] Remove </string>
     <string name="from_store"> from store.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">No OpenPGP Provider selected!</string>
+    <string name="okc_progress_text">Waiting for OpenKeychain...</string>
+    <string name="clipboard_beginning_toast_text">Password copied to clipboard, you have </string>
+    <string name="clipboard_ending_toast_text"> seconds to paste it somewhere.</string>
+    <string name="name_settings_toast_text">Please set your account name in settings whenever you can</string>
+    <string name="account_settings_dialog_text">Please set your OpenKeychain account (email) in the preferences</string>
+    <string name="account_settings_dialog_title">Account name empty!</string>
+    <string name="file_toast_text">Please provide a file name</string>
+    <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
