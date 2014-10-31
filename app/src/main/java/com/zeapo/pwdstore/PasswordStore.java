@@ -38,6 +38,7 @@ public class PasswordStore extends ActionBarActivity  {
     private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
+    private PasswordFragment plist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,15 +303,15 @@ public class PasswordStore extends ActionBarActivity  {
 
                 if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
                     PasswordRepository.setInitialized(true);
-                    PasswordFragment passFrag = new PasswordFragment();
+                    plist = new PasswordFragment();
                     Bundle args = new Bundle();
                     args.putString("Path", localDir.getAbsolutePath());
 
-                    passFrag.setArguments(args);
+                    plist.setArguments(args);
 
                     fragmentTransaction.addToBackStack("passlist");
 
-                    fragmentTransaction.replace(R.id.main_layout, passFrag, "PasswordsList");
+                    fragmentTransaction.replace(R.id.main_layout, plist, "PasswordsList");
                     fragmentTransaction.commit();
                 }
         }
@@ -322,9 +323,7 @@ public class PasswordStore extends ActionBarActivity  {
 
     @Override
     public void onBackPressed() {
-        PasswordFragment plist;
-        if  ((null != (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) &&
-                plist.isNotEmpty()) {
+        if  ((null != plist) && plist.isNotEmpty()) {
             plist.popBack();
         } else {
             super.onBackPressed();
@@ -359,7 +358,7 @@ public class PasswordStore extends ActionBarActivity  {
         try {
             Intent intent = new Intent(this, PgpHandler.class);
             intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
-            intent.putExtra("FILE_PATH", this.currentDir.getAbsolutePath());
+            intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
             intent.putExtra("Operation", "ENCRYPT");
             startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
         } catch (Exception e) {
@@ -402,9 +401,7 @@ public class PasswordStore extends ActionBarActivity  {
      * clears adapter's content and updates it with a fresh list of passwords from the root
      */
     public void updateListAdapter() {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             plist.updateAdapter();
         }
     }
@@ -413,23 +410,22 @@ public class PasswordStore extends ActionBarActivity  {
      * Updates the adapter with the current view of passwords
      */
     public void refreshListAdapter() {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             plist.refreshAdapter();
         }
     }
 
     public void filterListAdapter(String filter) {
-        PasswordFragment plist;
-        if  (null !=
-                (plist = (PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList"))) {
+        if  ((null != plist)) {
             plist.filterAdapter(filter);
         }
     }
 
     private File getCurrentDir() {
-        return new File(((PasswordFragment) getFragmentManager().findFragmentByTag("PasswordsList")).getArguments().getString("Path"));
+        if  ((null != plist)) {
+            return plist.getCurrentDir();
+        }
+        return null;
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -446,7 +442,7 @@ public class PasswordStore extends ActionBarActivity  {
                             git.add().addFilepattern("."),
                             git.commit().setMessage(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store))
                     );
-                    updateListAdapter();
+                    refreshListAdapter();
                     break;
                 case GitHandler.REQUEST_INIT:
                     initRepository(getCurrentFocus());

@@ -186,6 +186,17 @@ public class PasswordFragment extends Fragment{
         pathStack.pop();
     }
 
+    /**
+     * gets the current directory
+     * @return the current directory
+     */
+    public File getCurrentDir() {
+        if (pathStack.isEmpty())
+            return PasswordRepository.getWorkTree();
+        else
+            return pathStack.peek();
+    }
+
     public boolean isNotEmpty() {
         return !passListStack.isEmpty();
     }
