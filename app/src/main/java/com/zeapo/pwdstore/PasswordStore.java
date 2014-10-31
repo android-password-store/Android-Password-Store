@@ -329,7 +329,7 @@ public class PasswordStore extends ActionBarActivity  {
             super.onBackPressed();
         }
 
-        if (!plist.isNotEmpty()) {
+        if (null != plist && !plist.isNotEmpty()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
