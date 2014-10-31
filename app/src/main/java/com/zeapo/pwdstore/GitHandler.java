@@ -113,9 +113,9 @@ public class GitHandler extends ActionBarActivity {
                                 } else {
                                     ((EditText)findViewById(R.id.clone_uri)).setHint("hostname/path");
                                     new AlertDialog.Builder(activity).
-                                            setMessage("You are about to use a read-only repository, you will not be able to push to it").
+                                            setMessage(activity.getResources().getString(R.string.read_only_dialog_text)).
                                             setCancelable(true).
-                                            setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -444,8 +444,8 @@ public class GitHandler extends ActionBarActivity {
             // did he forget the username?
             if (!hostname.matches("^.+@.+")) {
                 new AlertDialog.Builder(this).
-                        setMessage("Did you forget to specify a username?").
-                        setPositiveButton("Oups...", new DialogInterface.OnClickListener() {
+                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
+                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -530,15 +530,15 @@ public class GitHandler extends ActionBarActivity {
             settings.getString("git_remote_server", "").isEmpty() ||
             settings.getString("git_remote_location", "").isEmpty() )
             new AlertDialog.Builder(this)
-                    .setMessage("You have to set the information about the server before synchronizing with the server")
-                    .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
+                    .setMessage(activity.getResources().getString(R.string.set_information_dialog_text))
+                    .setPositiveButton(activity.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(activity, UserPreference.class);
                             startActivityForResult(intent, REQUEST_PULL);
                         }
                     })
-                    .setNegativeButton("Nah... later", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(activity.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // do nothing :(
@@ -643,9 +643,9 @@ public class GitHandler extends ActionBarActivity {
             final File sshKey = new File(getFilesDir() + "/.ssh_key");
             if (!sshKey.exists()) {
                 new AlertDialog.Builder(this)
-                        .setMessage("Please import your SSH key file in the preferences")
-                        .setTitle("No SSH key")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setMessage(activity.getResources().getString(R.string.ssh_preferences_dialog_text))
+                        .setTitle(activity.getResources().getString(R.string.ssh_preferences_dialog_title))
+                        .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
@@ -657,7 +657,7 @@ public class GitHandler extends ActionBarActivity {
                                     e.printStackTrace();
                                 }
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // Do nothing...
@@ -670,10 +670,10 @@ public class GitHandler extends ActionBarActivity {
                 passphrase.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
                 new AlertDialog.Builder(activity)
-                        .setTitle("Authenticate")
-                        .setMessage("Please provide the passphrase for your SSH key. Leave it empty if there is no passphrase.")
+                        .setTitle(activity.getResources().getString(R.string.passphrase_dialog_title))
+                        .setMessage(activity.getResources().getString(R.string.passphrase_dialog_text))
                         .setView(passphrase)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 SshSessionFactory.setInstance(new GitConfigSessionFactory());
@@ -693,7 +693,7 @@ public class GitHandler extends ActionBarActivity {
                                 }
 
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // Do nothing.
                     }
@@ -707,10 +707,10 @@ public class GitHandler extends ActionBarActivity {
                 password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
                 new AlertDialog.Builder(activity)
-                        .setTitle("Authenticate")
-                        .setMessage("Please provide the password for this repository")
+                        .setTitle(activity.getResources().getString(R.string.passphrase_dialog_title))
+                        .setMessage(activity.getResources().getString(R.string.password_dialog_text))
                         .setView(password)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 SshSessionFactory.setInstance(new GitConfigSessionFactory());
@@ -725,7 +725,7 @@ public class GitHandler extends ActionBarActivity {
                                 }
 
                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // Do nothing.
                     }
