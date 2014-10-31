@@ -15,9 +15,17 @@
     <string name="title_activity_git_clone">Clone repository</string>
     
     <!-- Password Store -->
-    <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</strng>
-    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
+    <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
 	<string name="store_git">/store/.git</string>
+    <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
+    <string name="connection_dialog_text">Which connection method do you prefer?</string>
+    <string name="delete_dialog_text">Are you sure you want to delete the password /"</string>
+
+    <!-- git commits -->
+    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
+    <string name="add_commit_text">[ANDROID PwdStore] Add </string>
+    <string name="remove_commit_text">[ANDROID PwdStore] Remove </string>
+    <string name="from_store"> from store.</string>
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
@@ -50,7 +58,10 @@
     <string name="action_search">Search</string>
     
     <!-- Misc -->
-    <string name="ok">OK</string>
-
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_positive">On my way...</string>
+    <string name="dialog_negative">Nah... later</string>
 
 </resources>

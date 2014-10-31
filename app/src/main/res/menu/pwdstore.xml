@@ -24,8 +24,8 @@
 
     <item android:id="@+id/refresh"
         android:title="Refresh list"
-        android:showAsAction="never"
-        android:icon="@drawable/ico_sync"/>
+        pwstore:showAsAction="never"
+        android:icon="@drawable/ic_action_refresh"/>
 
     <item android:id="@+id/user_pref"
         android:title="Settings"

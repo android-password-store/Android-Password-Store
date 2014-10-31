@@ -53,7 +53,7 @@ public class PasswordStore extends ActionBarActivity  {
         super.onResume();
 
         // create the repository static variable in PasswordRepository
-        PasswordRepository.getRepository(new File(getFilesDir() + this.getResources().getString(R.string.git_store)));
+        PasswordRepository.getRepository(new File(getFilesDir() + this.getResources().getString(R.string.store_git)));
 
         // re-check that there was no change with the repository state
         checkLocalRepository();
@@ -111,8 +111,8 @@ public class PasswordStore extends ActionBarActivity  {
         Log.d("PASS", "Menu item " + id + " pressed");
 
         AlertDialog.Builder initBefore = new AlertDialog.Builder(this)
-                .setMessage(this.getResources().getString(R.string.creation_alert_text));
-                .setPositiveButton(this.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setMessage(this.getResources().getString(R.string.creation_dialog_text))
+                .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
@@ -220,15 +220,15 @@ public class PasswordStore extends ActionBarActivity  {
 
         if (keyId.isEmpty())
             new AlertDialog.Builder(this)
-                    .setMessage("You have to select your \"PGP-Key ID\" before initializing the repository")
-                    .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
+                    .setMessage(this.getResources().getString(R.string.key_dialog_text))
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(activity, UserPreference.class);
                             startActivityForResult(intent, GitHandler.REQUEST_INIT);
                         }
                     })
-                    .setNegativeButton("Nah... later", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(this.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             // do nothing :(
@@ -238,7 +238,7 @@ public class PasswordStore extends ActionBarActivity  {
 
         else {
             new AlertDialog.Builder(this)
-                    .setMessage("Which connection method do you prefer?")
+                    .setMessage(this.getResources().getString(R.string.connection_dialog_text))
                     .setPositiveButton("ssh-key", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -370,9 +370,9 @@ public class PasswordStore extends ActionBarActivity  {
     public void deletePassword(final PasswordRecyclerAdapter adapter, final int position) {
         final PasswordItem item = adapter.getValues().get(position);
         new AlertDialog.Builder(this).
-                setMessage("Are you sure you want to delete the password \"" +
+                setMessage(this.getResources().getString(R.string.delete_dialog_text) +
                         item + "\"")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String path = item.getFile().getAbsolutePath();
@@ -389,7 +389,7 @@ public class PasswordStore extends ActionBarActivity  {
                         );
                     }
                 })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                .setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -444,7 +444,7 @@ public class PasswordStore extends ActionBarActivity  {
                     GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
                     tasks.execute(
                             git.add().addFilepattern("."),
-                            git.commit().setMessage("[ANDROID PwdStore] Add " + data.getExtras().getString("NAME") + " from store.")
+                            git.commit().setMessage(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store))
                     );
                     updateListAdapter();
                     break;
