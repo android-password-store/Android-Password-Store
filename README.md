@@ -1,7 +1,7 @@
 PwdStore
 ========
 
-This application tries to be 100% compatible with [pass](http://www.zx2c4.com/projects/password-store/)
+This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
 
 You can install the application from:
 
@@ -26,6 +26,8 @@ Clone using SSH-key, then decrypt a password
 --------------------------------------------
 
 <img src="tutorial_clone_ssh_then_decrypt.gif" alt="Clone And Decrypt" style="width:720px">
+
+Make sure to only clone from bare repositories (see [git-clone(1)](http://git-scm.com/docs/git-clone) for how to create a bare repository from an existing one). Otherwise the clone will fail.
 
 Features
 ========
