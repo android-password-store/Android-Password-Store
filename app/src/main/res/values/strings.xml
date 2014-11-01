@@ -82,7 +82,27 @@
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Category</string>
     <string name="action_search">Search</string>
-    
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_server_title">Server</string>
+    <string name="pref_server_hint">server.com</string>
+    <string name="pref_remote_title">Remote location</string>
+    <string name="pref_remote_hint">path/to/repository</string>
+    <string name="pref_git_username_title">Username</string>
+    <string name="pref_git_username_hint">username</string>
+    <string name="pref_ssh_title">SSH Key</string>
+    <string name="pref_crypto_title">Crypto</string>
+    <string name="pref_provider_title">Select OpenPGP Provider!</string>
+    <string name="pref_provider_account_title">Set your OpenPGP account</string>
+    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
+    <string name="pref_key_title">Select OpenPGP Key id</string>
+    <string name="pref_general_title">General</string>
+    <string name="pref_password_title">Password Show Time</string>
+    <string name="pref_password_dialog_title">Set the time you want the password to be in clipboard</string>
+    <string name="pref_copy_title">Automatically Copy Password</string>
+    <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
+
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>
