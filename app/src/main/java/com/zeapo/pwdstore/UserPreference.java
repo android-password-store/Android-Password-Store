@@ -1,6 +1,8 @@
 package com.zeapo.pwdstore;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -19,9 +21,12 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jgit.api.CloneCommand;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
@@ -68,10 +73,21 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Opens a file explorer to import the private key
+     */
     public void getSshKey() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         startActivityForResult(intent, 1);
+    }
+
+
+    private void copySshKey(Uri uri) throws IOException {
+        InputStream sshKey = this.getContentResolver().openInputStream(uri);
+        byte[] privateKey = IOUtils.toByteArray(sshKey);
+        FileUtils.writeByteArrayToFile(new File(getFilesDir() + "/.ssh_key"), privateKey);
+        sshKey.close();
     }
 
     @Override
@@ -92,16 +108,21 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             if (requestCode == 1) {
 //                Uri sshFile = data.getData();
                 try {
-                    InputStream sshKey = this.getContentResolver().openInputStream(data.getData());
-                    byte[] privateKey = IOUtils.toByteArray(sshKey);
-                    FileUtils.writeByteArrayToFile(new File(getFilesDir() + "/.ssh_key"), privateKey);
-                    sshKey.close();
-
+                    copySshKey(data.getData());
                     Log.i("PREF", "Got key");
                     setResult(RESULT_OK);
                     finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (IOException e)
+                {
+                    new AlertDialog.Builder(this).
+                            setTitle(this.getResources().getString(R.string.ssh_key_error_dialog_title)).
+                            setMessage(this.getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage()).
+                            setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //pass
+                                }
+                            }).show();
                 }
             }
         }
