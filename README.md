@@ -18,6 +18,15 @@ A few ways to get in touch:
 - IRC : on irc://chat.freenode.net/Android-Password-Store (that means channel #Android-Password-Store on freenode), some of us hangout there
 - [reddit](https://www.reddit.com/r/androidpwd), want to discuss something and it's midnight, no one on irc and you really want to write more than a couple of lines? reddit is your way!
 
+FAQ
+====
+
+- **Q:** What kind of repository can I clone from?
+- **A:** Make sure to only clone from bare repositories (see [git-clone(1)](http://git-scm.com/docs/git-clone) for how to create a bare repository from an existing one). Otherwise the clone will fail.
+- **Q:** I get a "Permission Denied" error when trying to import my ssh-key, why?
+- **A:** ssh-key files are usually created with permissions set to `600`, meaning that only the creator of this key has the right to read from it. The application needs a read access, at least temporarily, make the permissions to `644`, import the key, then set them back to `600`.
+
+
 How-To
 ======
 *Note:* This section is work in progress
@@ -27,7 +36,6 @@ Clone using SSH-key, then decrypt a password
 
 <img src="tutorial_clone_ssh_then_decrypt.gif" alt="Clone And Decrypt" style="width:720px">
 
-Make sure to only clone from bare repositories (see [git-clone(1)](http://git-scm.com/docs/git-clone) for how to create a bare repository from an existing one). Otherwise the clone will fail.
 
 Features
 ========
@@ -58,19 +66,7 @@ TODOs
 - Create a new category
 - Multi-select (for password deletion)
 - Multiple password stores (multiple git repositories).
-- More UI enhancements
-- Clean-up the hard-coded strings
 
 Needed
 ======
-- Icons: the current ones are CC, but would be great to have our own icons
 - UI enhancements: any UI changes or suggestions are welcome
-
-
-
-
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zeapo/android-password-store/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
