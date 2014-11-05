@@ -143,6 +143,10 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
     }
 
     public void copyToClipBoard() {
+
+        if (findViewById(R.id.crypto_password_show) == null)
+            return;
+
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
         clipboard.setPrimaryClip(clip);
         showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
