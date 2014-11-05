@@ -52,6 +52,9 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     protected void onPostExecute(String result) {
         this.dialog.dismiss();
 
+        if (result == null)
+            result = "Unexpected error";
+
         if (!result.isEmpty()) {
             new AlertDialog.Builder(activity).
                     setTitle(activity.getResources().getString(R.string.jgit_error_dialog_title)).
