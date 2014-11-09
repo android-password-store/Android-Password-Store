@@ -149,9 +149,16 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
 
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
         clipboard.setPrimaryClip(clip);
-        showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
-                + Integer.parseInt(settings.getString("general_show_time", "45"))
-                + this.getResources().getString(R.string.clipboard_ending_toast_text));
+        try {
+            showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
+                    + Integer.parseInt(settings.getString("general_show_time", "45"))
+                    + this.getResources().getString(R.string.clipboard_ending_toast_text));
+        } catch (NumberFormatException e)
+        {
+            showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
+                    + "45"
+                    + this.getResources().getString(R.string.clipboard_ending_toast_text));
+        }
     }
 
     public void handleClick(View view) {
