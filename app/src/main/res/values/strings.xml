@@ -64,7 +64,7 @@
     <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="server_path">Repo path</string>
-    <string name="server_path_hint">/path/to/pass</string>
+    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">Username</string>
     <string name="server_user_hint">git_username</string>
 
