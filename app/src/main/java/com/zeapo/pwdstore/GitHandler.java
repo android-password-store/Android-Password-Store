@@ -97,8 +97,30 @@ public class GitHandler extends ActionBarActivity {
             case REQUEST_CLONE:
                 setContentView(R.layout.activity_git_clone);
 
+                final Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
+                final Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
+
+
+                // init the spinner for connection modes
+                final ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
+                        R.array.connection_modes, android.R.layout.simple_spinner_item);
+                connection_mode_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                connection_mode_spinner.setAdapter(connection_mode_adapter);
+                connection_mode_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
+                        connectionMode = selection;
+                        settings.edit().putString("git_remote_auth", selection).apply();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
                 // init the spinner for protocols
-                Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
                 ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
                         R.array.clone_protocols, android.R.layout.simple_spinner_item);
                 protocol_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -110,8 +132,22 @@ public class GitHandler extends ActionBarActivity {
                                 protocol = ((Spinner)findViewById(R.id.clone_protocol)).getSelectedItem().toString();
                                 if (protocol.equals("ssh://")) {
                                     ((EditText)findViewById(R.id.clone_uri)).setHint("user@hostname:path");
+
+                                    ((EditText) findViewById(R.id.server_port)).setHint(R.string.default_ssh_port);
+
+                                    // select ssh-key auth mode as default and enable the spinner in case it was disabled
+                                    connection_mode_spinner.setSelection(0);
+                                    connection_mode_spinner.setEnabled(true);
                                 } else {
                                     ((EditText)findViewById(R.id.clone_uri)).setHint("hostname/path");
+
+                                    ((EditText) findViewById(R.id.server_port)).setHint(R.string.default_https_port);
+
+                                    // select user/pwd auth-mode and disable the spinner
+                                    connection_mode_spinner.setSelection(1);
+                                    connection_mode_spinner.setEnabled(false);
+
+
                                     new AlertDialog.Builder(activity).
                                             setMessage(activity.getResources().getString(R.string.read_only_dialog_text)).
                                             setCancelable(true).
@@ -131,25 +167,6 @@ public class GitHandler extends ActionBarActivity {
                         }
                 );
 
-                // init the spinner for connection modes
-                Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
-                ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
-                        R.array.connection_modes, android.R.layout.simple_spinner_item);
-                connection_mode_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                connection_mode_spinner.setAdapter(connection_mode_adapter);
-                connection_mode_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
-                        connectionMode = selection;
-                        settings.edit().putString("git_remote_auth", selection).apply();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
 
                 // init the server information
                 final EditText server_url = ((EditText) findViewById(R.id.server_url));
@@ -259,30 +276,57 @@ public class GitHandler extends ActionBarActivity {
         EditText server_port = ((EditText) findViewById(R.id.server_port));
         EditText server_path = ((EditText) findViewById(R.id.server_path));
         EditText server_user = ((EditText) findViewById(R.id.server_user));
-        Log.i("GIT", "key entred");
 
-        if (uri != null) {
-            String hostname =
-                    server_user.getText()
-                            + "@" +
-                            server_url.getText().toString().trim()
-                            + ":";
-            if (server_port.getText().toString().equals("22")) {
-                hostname += server_path.getText().toString();
+        if (uri != null) { 
+            switch (protocol)
+            {
+                case "ssh://":
+                {
+                    String hostname =
+                            server_user.getText()
+                                    + "@" +
+                                    server_url.getText().toString().trim()
+                                    + ":";
+                    if (server_port.getText().toString().equals("22")) {
+                        hostname += server_path.getText().toString();
 
-                ((TextView) findViewById(R.id.warn_url)).setVisibility(View.GONE);
-            } else {
-                TextView warn_url = (TextView) findViewById(R.id.warn_url);
-                if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
-                    warn_url.setText(R.string.warn_malformed_url_port);
-                    warn_url.setVisibility(View.VISIBLE);
-                } else {
-                    warn_url.setVisibility(View.GONE);
+                        ((TextView) findViewById(R.id.warn_url)).setVisibility(View.GONE);
+                    } else {
+                        TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                        if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
+                            warn_url.setText(R.string.warn_malformed_url_port);
+                            warn_url.setVisibility(View.VISIBLE);
+                        } else {
+                            warn_url.setVisibility(View.GONE);
+                        }
+                        hostname += server_port.getText().toString() + server_path.getText().toString();
+                    }
+
+                    if (!hostname.equals("@:")) uri.setText(hostname);
                 }
-                hostname += server_port.getText().toString() + server_path.getText().toString();
+                break;
+                case "https://":
+                {
+                    StringBuilder hostname = new StringBuilder();
+                    hostname.append(server_url.getText().toString().trim());
+
+                    if (server_port.getText().toString().equals("443")) {
+                        hostname.append(server_path.getText().toString());
+
+                        ((TextView) findViewById(R.id.warn_url)).setVisibility(View.GONE);
+                    } else {
+                        hostname.append("/");
+                        hostname.append(server_port.getText().toString())
+                                .append(server_path.getText().toString());
+                    }
+
+                    if (!hostname.toString().equals("@/")) uri.setText(hostname);
+                }
+                break;
+                default:
+                break;
             }
 
-            if (!hostname.equals("@:")) uri.setText(hostname);
         }
     }
 
@@ -506,10 +550,9 @@ public class GitHandler extends ActionBarActivity {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
-        // TODO this is not pretty, use the information obtained earlier
-        editor.putString("git_remote_server", hostname.split("@")[1].split(":")[0]);
-        editor.putString("git_remote_location", hostname.split("@")[1].split(":")[1]);
-        editor.putString("git_remote_username", hostname.split("@")[0]);
+        editor.putString("git_remote_server", ((EditText) findViewById(R.id.server_url)).getText().toString());
+        editor.putString("git_remote_location", ((EditText) findViewById(R.id.server_path)).getText().toString());
+        editor.putString("git_remote_username", ((EditText) findViewById(R.id.server_user)).getText().toString());
         editor.putString("git_remote_protocol", protocol);
         editor.putString("git_remote_auth", connectionMode);
         editor.putString("git_remote_port", port);
@@ -731,7 +774,35 @@ public class GitHandler extends ActionBarActivity {
                     }
                 }).show();
             } else {
-                // BUG: we do not support HTTP yet...
+                final EditText password = new EditText(activity);
+                password.setHint("Password");
+                password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+                password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                new AlertDialog.Builder(activity)
+                        .setTitle(activity.getResources().getString(R.string.passphrase_dialog_title))
+                        .setMessage(activity.getResources().getString(R.string.password_dialog_text))
+                        .setView(password)
+                        .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                SshSessionFactory.setInstance(new GitConfigSessionFactory());
+                                try {
+                                    method.invoke(activity,
+                                            new UsernamePasswordCredentialsProvider(
+                                                    settings.getString("git_remote_username", "zeapo"),
+                                                    password.getText().toString())
+                                    );
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Do nothing.
+                    }
+                }).show();
             }
         }
     }

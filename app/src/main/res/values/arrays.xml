@@ -6,5 +6,6 @@
     </string-array>
     <string-array name="clone_protocols">
         <item>ssh://</item>
+        <item>https://</item>
     </string-array>
 </resources>
