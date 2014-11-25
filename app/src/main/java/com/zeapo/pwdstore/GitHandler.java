@@ -146,17 +146,6 @@ public class GitHandler extends ActionBarActivity {
                                     // select user/pwd auth-mode and disable the spinner
                                     connection_mode_spinner.setSelection(1);
                                     connection_mode_spinner.setEnabled(false);
-
-
-                                    new AlertDialog.Builder(activity).
-                                            setMessage(activity.getResources().getString(R.string.read_only_dialog_text)).
-                                            setCancelable(true).
-                                            setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                                }
-                                            }).show();
                                 }
                             }
 
@@ -483,8 +472,6 @@ public class GitHandler extends ActionBarActivity {
             if (!port.isEmpty())
                 hostname = protocol + hostname;
 
-            Log.i("GIT", "> " + port);
-
             // did he forget the username?
             if (!hostname.matches("^.+@.+")) {
                 new AlertDialog.Builder(this).
@@ -743,67 +730,35 @@ public class GitHandler extends ActionBarActivity {
                 }).show();
             }
         } else {
-            if (protocol.equals("ssh://")) {
-                final EditText password = new EditText(activity);
-                password.setHint("Password");
-                password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-                password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            final EditText password = new EditText(activity);
+            password.setHint("Password");
+            password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                new AlertDialog.Builder(activity)
-                        .setTitle(activity.getResources().getString(R.string.passphrase_dialog_title))
-                        .setMessage(activity.getResources().getString(R.string.password_dialog_text))
-                        .setView(password)
-                        .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
+            new AlertDialog.Builder(activity)
+                    .setTitle(activity.getResources().getString(R.string.passphrase_dialog_title))
+                    .setMessage(activity.getResources().getString(R.string.password_dialog_text))
+                    .setView(password)
+                    .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                                SshSessionFactory.setInstance(new GitConfigSessionFactory());
-                                try {
-                                    method.invoke(activity,
-                                            new UsernamePasswordCredentialsProvider(
-                                                    settings.getString("git_remote_username", "git"),
-                                                    password.getText().toString())
-                                    );
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                }
-
+                            SshSessionFactory.setInstance(new GitConfigSessionFactory());
+                            try {
+                                method.invoke(activity,
+                                        new UsernamePasswordCredentialsProvider(
+                                                settings.getString("git_remote_username", "git"),
+                                                password.getText().toString())
+                                );
+                            } catch (Exception e){
+                                e.printStackTrace();
                             }
-                        }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Do nothing.
-                    }
-                }).show();
-            } else {
-                final EditText password = new EditText(activity);
-                password.setHint("Password");
-                password.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-                password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                new AlertDialog.Builder(activity)
-                        .setTitle(activity.getResources().getString(R.string.passphrase_dialog_title))
-                        .setMessage(activity.getResources().getString(R.string.password_dialog_text))
-                        .setView(password)
-                        .setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                                SshSessionFactory.setInstance(new GitConfigSessionFactory());
-                                try {
-                                    method.invoke(activity,
-                                            new UsernamePasswordCredentialsProvider(
-                                                    settings.getString("git_remote_username", "zeapo"),
-                                                    password.getText().toString())
-                                    );
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Do nothing.
-                    }
-                }).show();
-            }
+                        }
+                    }).setNegativeButton(activity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Do nothing.
+                }
+            }).show();
         }
     }
 
