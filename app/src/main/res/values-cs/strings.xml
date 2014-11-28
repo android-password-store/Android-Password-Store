@@ -22,10 +22,10 @@
     <string name="delete_dialog_text">Opravdu chcete smazat heslo /"</string>
 
     <!-- git commits -->
-    <string name="initialization_commit_text">[ANDROID PwdStore] Úložiště vytvořeno s keyID: </string>
-    <string name="add_commit_text">[ANDROID PwdStore] Přidat </string>
-    <string name="remove_commit_text">[ANDROID PwdStore] Odstranit </string>
-    <string name="from_store"> z úložiště.</string>
+    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
+    <string name="add_commit_text">[ANDROID PwdStore] Add </string>
+    <string name="remove_commit_text">[ANDROID PwdStore] Remove </string>
+    <string name="from_store"> from store.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>
