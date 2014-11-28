@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+    <string name="activity_clone_name">Klonovat Git repozitář</string>
+
+    <string name="clone_settings">Klonování</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="dialog_delete_title">Adresář již existuje</string>
+    <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adreář úložiště?</string>
+    <string name="dialog_delete">Smazat adresář</string>
+    <string name="dialog_do_not_delete">Zrušit</string>
+    <string name="title_activity_git_clone">Klonovat repozitář</string>
+    
+    <!-- Password Store -->
+    <string name="creation_dialog_text">Naklonujte nebo vytvořte nový repozitář před pokusem přidat heslo nebo spustit synchronizaci.</string>
+	<string name="store_git">/store/.git</string>
+    <string name="key_dialog_text">Před inicializací repozitáře je třeba vybrat "ID PGP klíče"</string>
+    <string name="connection_dialog_text">Jakou metodu připojení upřednostňujete?</string>
+    <string name="delete_dialog_text">Opravdu chcete smazat heslo /"</string>
+
+    <!-- git commits -->
+    <string name="initialization_commit_text">[ANDROID PwdStore] Úložiště vytvořeno s keyID: </string>
+    <string name="add_commit_text">[ANDROID PwdStore] Přidat </string>
+    <string name="remove_commit_text">[ANDROID PwdStore] Odstranit </string>
+    <string name="from_store"> z úložiště.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>
+    <string name="okc_progress_text">Čekání na OpenKeychain...</string>
+    <string name="clipboard_beginning_toast_text">Heslo zkopírováno do schránky, máte </string>
+    <string name="clipboard_ending_toast_text"> sekund na jeho zkopírování.</string>
+    <string name="name_settings_toast_text">Až to bude možné, tak si zadejte jméno účtu v nastavení</string>
+    <string name="account_settings_dialog_text">Zadejte si v nastavení svůj OpenKeychain účet (email)</string>
+    <string name="account_settings_dialog_title">Jméno účtu je prázdné!</string>
+    <string name="file_toast_text">Zadejte prosím jméno souboru</string>
+    <string name="empty_toast_text">Nelze zadat prázdné heslo nebo další obsah</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Spustit příkaz...</string>
+    <string name="jgit_error_dialog_title">Došlo k vnitřní výjimce</string>
+    <string name="jgit_error_dialog_text">Zpráva od jgit: /n</string>
+
+    <!-- Git Handler -->
+    <string name="read_only_dialog_text">Chystáte se použít repozitář bez práva zápisu, nebudete schopni do něj ukládat</string>
+    <string name="forget_username_dialog_text">Zapomněli jste uvést přihlašovací jméno?</string>
+    <string name="set_information_dialog_text">Je třeba zadat informaci o serveru před vlastní synchronizací</string>
+    <string name="ssh_preferences_dialog_text">Importujte prosím svůj SSH klíč v ovládání</string>
+    <string name="ssh_preferences_dialog_title">Žádný SSH klíč</string>
+    <string name="passphrase_dialog_title">Ověření</string>
+    <string name="passphrase_dialog_text">Zadejte prosím heslo pro svůj SSH klíč. Nechte prázdné pokud je bez hesla.</string>
+    <string name="password_dialog_text">Zadejte prosím heslo k tomuto repozitáři</string>
+    
+    <!-- Clone fragment -->
+    <string name="clone_fragment_text">Vítejte v aplikaci Password Store\n\n Na této obrazovce můžete buď vytvořit nový repozitář nebo klonovat dostupný repozitář na svůj přístroj.</string>
+    <string name="clone">Klon existuje</string>
+    <string name="initialize">Vytvořit nový</string>
+
+    <string name="server_name">Server</string>
+    <string name="server_protocol">Protokol</string>
+    <string name="server_url">URL serveru</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">Cesta k repozitáři</string>
+    <string name="server_path_hint">cesta/k/heslům</string>
+    <string name="server_user">Jméno</string>
+    <string name="server_user_hint">git_username</string>
+
+    <string name="server_resulting_url">Výsledná URL</string>
+    <string name="connection_mode">Mód ověření</string>
+
+    <string name="warn_malformed_url_port">Při použití zvláštního portu, zadejte absolutní cestu (začíná s "/")</string>
+
+    <!-- PGP Handler -->
+    <string name="title_activity_pgp_handler">PgpHandler</string>
+    <string name="crypto_name_hint">jméno</string>
+    <string name="crypto_pass_label">Heslo</string>
+    <string name="crypto_extra_label">Extra</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="crypto_category">Kategorie</string>
+    <string name="action_search">Hledání</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_server_title">Server</string>
+    <string name="pref_server_hint">server.com</string>
+    <string name="pref_remote_title">Vzdálená lokace</string>
+    <string name="pref_remote_hint">cesta/k/repozitáři</string>
+    <string name="pref_git_username_title">Jméno</string>
+    <string name="pref_git_username_hint">username</string>
+    <string name="pref_ssh_title">SSH klíč</string>
+    <string name="pref_crypto_title">Šifrování</string>
+    <string name="pref_provider_title">Vybrat poskytovatele OpenPGP!</string>
+    <string name="pref_provider_account_title">Nastavit OpenPGP účet</string>
+    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
+    <string name="pref_key_title">Vybrat ID OpenPGP klíče</string>
+    <string name="pref_general_title">Všeobecné</string>
+    <string name="pref_password_title">Čas zobrazení hesla</string>
+    <string name="pref_password_dialog_title">Nastaví čas po který bude heslo uloženo ve schránce</string>
+    <string name="pref_copy_title">Automaticky kopírovat heslo</string>
+    <string name="pref_copy_dialog_title">Automatické kopírování hesla do schránky po úspěšném dešifrování.</string>
+    <string name="ssh_key_error_dialog_title">Chyba při importu SSH klíče</string>
+    <string name="ssh_key_error_dialog_text">Zpráva : /n</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Ano</string>
+    <string name="dialog_no">Ne</string>
+    <string name="dialog_positive">Je na cestě...</string>
+    <string name="dialog_negative">Ne... později</string>
+    <string name="dialog_oops">Ajaj...</string>
+    <string name="dialog_cancel">Zrušit</string>
+
+</resources>
