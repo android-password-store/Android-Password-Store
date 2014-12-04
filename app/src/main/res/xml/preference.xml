@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:title="@string/pref_git_title">
-		<EditTextPreference android:title= "@string/pref_server_title"
-			android:key="git_remote_server" android:hint="@string/pref_server_hint"
-			android:inputType="textUri" />
-		<EditTextPreference android:title="@string/pref_remote_title"
-			android:key="git_remote_location" android:hint="@string/pref_remote_hint"
-			android:inputType="textUri" />
-		<EditTextPreference android:title="@string/pref_git_username_title"
-			android:key="git_remote_username" android:hint="@string/pref_git_username_hint"
-			android:inputType="textPersonName" />
+		<Preference android:title="@string/pref_edit_server_info" android:key="git_server_info"/>
 		<Preference android:title="@string/pref_ssh_title" android:key="ssh_key" />
 	</PreferenceCategory>
 

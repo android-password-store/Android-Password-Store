@@ -12,8 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +35,6 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PushCommand;
-import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -52,8 +49,6 @@ import org.eclipse.jgit.util.FS;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +73,7 @@ public class GitHandler extends ActionBarActivity {
     public static final int REQUEST_PUSH = 102;
     public static final int REQUEST_CLONE = 103;
     public static final int REQUEST_INIT = 104;
+    public static final int EDIT_SERVER = 105;
 
     private static final int GET_SSH_KEY_FROM_CLONE = 201;
 
@@ -92,9 +88,13 @@ public class GitHandler extends ActionBarActivity {
 
         protocol = settings.getString("git_remote_protocol", "ssh://");
         connectionMode = settings.getString("git_remote_auth", "ssh-key");
+        int operationCode = getIntent().getExtras().getInt("Operation");
 
-        switch (getIntent().getExtras().getInt("Operation")) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        switch (operationCode) {
             case REQUEST_CLONE:
+            case EDIT_SERVER:
                 setContentView(R.layout.activity_git_clone);
 
                 final Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
@@ -244,6 +244,16 @@ public class GitHandler extends ActionBarActivity {
                     public void afterTextChanged(Editable editable) {
                     }
                 });
+
+                if (operationCode == EDIT_SERVER)
+                {
+                    findViewById(R.id.clone_button).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.save_button).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.clone_button).setVisibility(View.VISIBLE);
+                    findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
+                }
+
 
                 break;
             case REQUEST_PULL:
@@ -453,6 +463,10 @@ public class GitHandler extends ActionBarActivity {
     }
 
 
+    /**
+     * Clones the repository, the directory exists, deletes it
+     * @param view
+     */
     public void cloneRepository(View view) {
         localDir = new File(getApplicationContext().getFilesDir().getAbsoluteFile() + "/store");
 
@@ -532,8 +546,12 @@ public class GitHandler extends ActionBarActivity {
         }
     }
 
-    public void cloneOperation(UsernamePasswordCredentialsProvider provider) {
 
+    /**
+     * Save the repository information to the shared preferences settings
+     * @param view
+     */
+    public void saveConfiguration(View view) {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
@@ -544,6 +562,13 @@ public class GitHandler extends ActionBarActivity {
         editor.putString("git_remote_auth", connectionMode);
         editor.putString("git_remote_port", port);
         editor.commit();
+
+        PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
+    }
+
+    public void cloneOperation(UsernamePasswordCredentialsProvider provider) {
+
+        saveConfiguration(null);
 
         CloneCommand cmd = Git.cloneRepository().
                 setCredentialsProvider(provider).
@@ -584,7 +609,7 @@ public class GitHandler extends ActionBarActivity {
                     + "@" +
                     settings.getString("git_remote_server", "server.com").trim()
                     + ":" +
-                    settings.getString("git_remote_location", "path/to/repository"));
+                    settings.getString("git_remote_location", "path/to/repository"), false);
 
             GitCommand cmd;
             if (provider != null)
@@ -633,7 +658,7 @@ public class GitHandler extends ActionBarActivity {
                     + "@" +
                     settings.getString("git_remote_server", "server.com").trim()
                     + ":" +
-                    settings.getString("git_remote_location", "path/to/repository"));
+                    settings.getString("git_remote_location", "path/to/repository"), false);
 
             GitCommand cmd;
             if (provider != null)

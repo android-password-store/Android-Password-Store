@@ -63,16 +63,15 @@ public class PasswordRepository {
         getRepository(localDir);
     }
 
-    // TODO add remote edition later-on
     // TODO add multiple remotes support for pull/push
-    public static void addRemote(String name, String url) {
+    public static void addRemote(String name, String url, Boolean replace) {
         StoredConfig storedConfig = repository.getConfig();
         Set<String> remotes = storedConfig.getSubsections("remote");
 
         if (!remotes.contains(name)) {
             try {
                 URIish uri = new URIish(url);
-                RefSpec refSpec = new RefSpec("+refs/head/*:refs/remotes/"+ name + "/*");
+                RefSpec refSpec = new RefSpec("+refs/head/*:refs/remotes/" + name + "/*");
 
                 RemoteConfig remoteConfig = new RemoteConfig(storedConfig, name);
                 remoteConfig.addFetchRefSpec(refSpec);
@@ -84,7 +83,29 @@ public class PasswordRepository {
 
                 storedConfig.save();
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (replace) {
+            try {
+                URIish uri = new URIish(url);
 
+                RemoteConfig remoteConfig = new RemoteConfig(storedConfig, name);
+                // remove the first and eventually the only uri
+                if (remoteConfig.getURIs().size() > 0) {
+                    remoteConfig.removeURI(remoteConfig.getURIs().get(0));
+                }
+                if (remoteConfig.getPushURIs().size() > 0) {
+                    remoteConfig.removePushURI(remoteConfig.getPushURIs().get(0));
+                }
+
+                remoteConfig.addURI(uri);
+                remoteConfig.addPushURI(uri);
+
+                remoteConfig.update(storedConfig);
+
+                storedConfig.save();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

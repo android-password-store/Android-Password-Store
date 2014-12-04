@@ -93,7 +93,8 @@
     <string name="pref_remote_hint">path/to/repository</string>
     <string name="pref_git_username_title">Username</string>
     <string name="pref_git_username_hint">username</string>
-    <string name="pref_ssh_title">SSH Key</string>
+    <string name="pref_edit_server_info">Edit git server settings</string>
+    <string name="pref_ssh_title">Import ssh-key</string>
     <string name="pref_crypto_title">Crypto</string>
     <string name="pref_provider_title">Select OpenPGP Provider!</string>
     <string name="pref_provider_account_title">Set your OpenPGP account</string>

@@ -31,6 +31,9 @@ import java.io.InputStream;
 import java.net.URI;
 
 public class UserPreference extends ActionBarActivity implements Preference.OnPreferenceClickListener {
+    private final static int IMPORT_SSH_KEY = 1;
+    private final static int IMPORT_PGP_KEY = 2;
+    private final static int EDIT_GIT_INFO = 3;
 
     public static class PrefsFragment extends PreferenceFragment {
         @Override
@@ -40,6 +43,7 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             addPreferencesFromResource(R.xml.preference);
             findPreference("openpgp_key_id").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("ssh_key").setOnPreferenceClickListener((UserPreference) getActivity());
+            findPreference("git_server_info").setOnPreferenceClickListener((UserPreference) getActivity());
         }
     }
 
@@ -79,7 +83,7 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
     public void getSshKey() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, IMPORT_SSH_KEY);
     }
 
 
@@ -92,12 +96,27 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
 
     @Override
     public boolean onPreferenceClick(Preference pref) {
-        if (pref.getKey().equals("openpgp_key_id")) {
-            Intent intent = new Intent(this, PgpHandler.class);
-            intent.putExtra("Operation", "GET_KEY_ID");
-            startActivityForResult(intent, 0);
-        } else if (pref.getKey().equals("ssh_key")) {
-            getSshKey();
+        switch (pref.getKey())
+        {
+            case "openpgp_key_id":
+            {
+                Intent intent = new Intent(this, PgpHandler.class);
+                intent.putExtra("Operation", "GET_KEY_ID");
+                startActivityForResult(intent, IMPORT_PGP_KEY);
+            }
+            break;
+            case "ssh_key":
+            {
+                getSshKey();
+            }
+            break;
+            case "git_server_info":
+            {
+                Intent intent = new Intent(this, GitHandler.class);
+                intent.putExtra("Operation", GitHandler.EDIT_SERVER);
+                startActivityForResult(intent, EDIT_GIT_INFO);
+            }
+            break;
         }
         return true;
     }
@@ -105,25 +124,36 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-//                Uri sshFile = data.getData();
-                try {
-                    copySshKey(data.getData());
-                    Log.i("PREF", "Got key");
-                    setResult(RESULT_OK);
-                    finish();
-                } catch (IOException e)
+            switch (requestCode)
+            {
+                case IMPORT_SSH_KEY:
                 {
-                    new AlertDialog.Builder(this).
-                            setTitle(this.getResources().getString(R.string.ssh_key_error_dialog_title)).
-                            setMessage(this.getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage()).
-                            setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    //pass
-                                }
-                            }).show();
+                    try {
+                        copySshKey(data.getData());
+                        Log.i("PREF", "Got key");
+                        setResult(RESULT_OK);
+                        finish();
+                    } catch (IOException e)
+                    {
+                        new AlertDialog.Builder(this).
+                                setTitle(this.getResources().getString(R.string.ssh_key_error_dialog_title)).
+                                setMessage(this.getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage()).
+                                setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //pass
+                                    }
+                                }).show();
+                    }
                 }
+                break;
+                case EDIT_GIT_INFO:
+                {
+
+                }
+                break;
+                default:
+                break;
             }
         }
     }
