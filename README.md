@@ -9,6 +9,8 @@ You can install the application from:
 - [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore) (always lags behind)
 - Using the apk file found at `app/app-release.apk` or build everything from source (always updated before Play Store, but usually after F-Droid)
 
+[![Cookie](https://cdn.changetip.com/img/graphics/Cookie_Graphic.png)](https://www.changetip.com/tipme/zeapo)
+
 Community
 =========
 
