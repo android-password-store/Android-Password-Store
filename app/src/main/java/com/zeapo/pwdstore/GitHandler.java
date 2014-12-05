@@ -568,7 +568,16 @@ public class GitHandler extends ActionBarActivity {
 
     public void cloneOperation(UsernamePasswordCredentialsProvider provider) {
 
-        saveConfiguration(null);
+        // remember the settings
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString("git_remote_server", ((EditText) findViewById(R.id.server_url)).getText().toString());
+        editor.putString("git_remote_location", ((EditText) findViewById(R.id.server_path)).getText().toString());
+        editor.putString("git_remote_username", ((EditText) findViewById(R.id.server_user)).getText().toString());
+        editor.putString("git_remote_protocol", protocol);
+        editor.putString("git_remote_auth", connectionMode);
+        editor.putString("git_remote_port", port);
+        editor.commit();
 
         CloneCommand cmd = Git.cloneRepository().
                 setCredentialsProvider(provider).
