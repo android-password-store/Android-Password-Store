@@ -322,9 +322,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                     // encrypt/decrypt/sign/verify
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
-                            Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
-                                    + " str=" + os.toString("UTF-8"));
-
                             if (returnToCiphertextField) {
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
@@ -380,7 +377,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                             String mKeys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
 //                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
                             settings.edit().putString("openpgp_key_ids", keyIDs).apply();
-                            Log.i("PGP", mKeys);
                         }
                         setResult(RESULT_OK);
                         finish();
