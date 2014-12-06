@@ -156,7 +156,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
         } catch (NumberFormatException e)
         {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
-                    + "45"
+                    + " 45 "
                     + this.getResources().getString(R.string.clipboard_ending_toast_text));
         }
     }
