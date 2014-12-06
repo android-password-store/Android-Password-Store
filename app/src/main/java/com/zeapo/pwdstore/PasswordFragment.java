@@ -150,25 +150,41 @@ public class PasswordFragment extends Fragment{
                                         PasswordRepository.getPasswords(pathStack.peek()));
     }
 
+    /**
+     * filters the list adapter
+     * @param filter the filter to apply
+     */
     public void filterAdapter(String filter) {
         Log.d("FRAG", "filter: " + filter);
 
         if (filter.isEmpty()) {
             refreshAdapter();
         } else {
-            // on the root the pathStack is empty
-            List<PasswordItem> passwordItems = pathStack.isEmpty() ?
-                                                PasswordRepository.getPasswords() :
-                                                PasswordRepository.getPasswords(pathStack.peek());
+            recursiveFilter(filter, pathStack.isEmpty() ? null : pathStack.peek());
+        }
+    }
 
-            for (PasswordItem item : passwordItems) {
-                boolean matches = item.toString().toLowerCase().contains(filter.toLowerCase());
-                boolean inAdapter = recyclerAdapter.getValues().contains(item);
-                if (matches && !inAdapter) {
-                    recyclerAdapter.add(item);
-                } else if (!matches && inAdapter) {
-                    recyclerAdapter.remove(recyclerAdapter.getValues().indexOf(item));
-                }
+    /**
+     * recursively filters a directory and extract all the matching items
+     * @param filter the filter to apply
+     * @param dir the directory to filter
+     */
+    private void recursiveFilter(String filter, File dir) {
+        // on the root the pathStack is empty
+        ArrayList<PasswordItem> passwordItems = dir == null ?
+                PasswordRepository.getPasswords() :
+                PasswordRepository.getPasswords(dir);
+
+        for (PasswordItem item : passwordItems) {
+            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                recursiveFilter(filter, item.getFile());
+            }
+            boolean matches = item.toString().toLowerCase().contains(filter.toLowerCase());
+            boolean inAdapter = recyclerAdapter.getValues().contains(item);
+            if (matches && !inAdapter) {
+                recyclerAdapter.add(item);
+            } else if (!matches && inAdapter) {
+                recyclerAdapter.remove(recyclerAdapter.getValues().indexOf(item));
             }
         }
     }
