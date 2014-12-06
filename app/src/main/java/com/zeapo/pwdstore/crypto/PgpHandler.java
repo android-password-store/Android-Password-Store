@@ -151,7 +151,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
         clipboard.setPrimaryClip(clip);
         try {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
-                    + Integer.parseInt(settings.getString("general_show_time", "45"))
+                    + " " + Integer.parseInt(settings.getString("general_show_time", "45")) + " "
                     + this.getResources().getString(R.string.clipboard_ending_toast_text));
         } catch (NumberFormatException e)
         {
@@ -322,9 +322,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                     // encrypt/decrypt/sign/verify
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
-                            Log.d(OpenPgpApi.TAG, "result: " + os.toByteArray().length
-                                    + " str=" + os.toString("UTF-8"));
-
                             if (returnToCiphertextField) {
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
@@ -380,7 +377,6 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                             String mKeys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
 //                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
                             settings.edit().putString("openpgp_key_ids", keyIDs).apply();
-                            Log.i("PGP", mKeys);
                         }
                         setResult(RESULT_OK);
                         finish();
