@@ -2,9 +2,11 @@ package com.zeapo.pwdstore;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +49,7 @@ public class PasswordFragment extends Fragment{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
+    private SharedPreferences settings;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,6 +63,7 @@ public class PasswordFragment extends Fragment{
 
         String path = getArguments().getString("Path");
 
+        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         passListStack = new Stack<ArrayList<PasswordItem>>();
         scrollPosition = new Stack<Integer>();
         pathStack = new Stack<File>();
@@ -175,8 +179,9 @@ public class PasswordFragment extends Fragment{
                 PasswordRepository.getPasswords() :
                 PasswordRepository.getPasswords(dir);
 
+        boolean rec = settings.getBoolean("filter_recursively", true);
         for (PasswordItem item : passwordItems) {
-            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+            if (item.getType() == PasswordItem.TYPE_CATEGORY && rec) {
                 recursiveFilter(filter, item.getFile());
             }
             boolean matches = item.toString().toLowerCase().contains(filter.toLowerCase());
