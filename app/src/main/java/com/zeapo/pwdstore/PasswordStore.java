@@ -267,19 +267,19 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     private void checkLocalRepository(File localDir) {
-        Log.d("PASS", localDir.getAbsolutePath());
+        Log.d("PASS", "Check, dir: " + localDir.getAbsolutePath());
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        // if we are coming back from gpg do not anything
-        if (this.leftActivity) {
-            this.leftActivity = false;
-            return;
-        }
 
         int status = 0;
 
         if (localDir.exists()) {
+            // if we are coming back from gpg do not anything
+            if (this.leftActivity) {
+                this.leftActivity = false;
+                return;
+            }
+
             File[] folders = localDir.listFiles();
             status = folders.length;
 
@@ -291,9 +291,14 @@ public class PasswordStore extends ActionBarActivity  {
         // either the repo is empty or it was not correctly cloned
         switch (status) {
             case 0:
-                if(!localDir.equals(PasswordRepository.getWorkTree()))
+                if(!localDir.equals(PasswordRepository.getWorkTree()) && localDir.exists())
                     break;
                 PasswordRepository.setInitialized(false);
+
+                // if we still have the pass list (after deleting for instance) remove it
+                if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
+                    fragmentManager.popBackStack();
+                }
 
                 ToCloneOrNot cloneFrag = new ToCloneOrNot();
                 fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot");
@@ -302,6 +307,12 @@ public class PasswordStore extends ActionBarActivity  {
             default:
 
                 if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
+
+                    // clean things up
+                    if (fragmentManager.findFragmentByTag("ToCloneOrNot") != null) {
+                        fragmentManager.popBackStack();
+                    }
+
                     PasswordRepository.setInitialized(true);
                     plist = new PasswordFragment();
                     Bundle args = new Bundle();
@@ -315,7 +326,6 @@ public class PasswordStore extends ActionBarActivity  {
                     fragmentTransaction.commit();
                 }
         }
-
         this.leftActivity = false;
     }
 

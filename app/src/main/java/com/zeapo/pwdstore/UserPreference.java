@@ -22,6 +22,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +45,7 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             findPreference("openpgp_key_id").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("ssh_key").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("git_server_info").setOnPreferenceClickListener((UserPreference) getActivity());
+            findPreference("git_delete_repo").setOnPreferenceClickListener((UserPreference) getActivity());
         }
     }
 
@@ -117,6 +119,36 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
                 startActivityForResult(intent, EDIT_GIT_INFO);
             }
             break;
+            case "git_delete_repo":
+            {
+                new AlertDialog.Builder(this).
+                        setTitle(R.string.pref_dialog_delete_title).
+                        setMessage(R.string.pref_dialog_delete_msg).
+                        setCancelable(false).
+                        setPositiveButton(R.string.dialog_delete,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        try {
+                                            FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
+                                        } catch (Exception e) {
+                                            //This is what happens when jgit fails :(
+                                            //TODO Handle the diffent cases of exceptions
+                                        }
+
+                                        dialog.cancel();
+                                        finish();
+                                    }
+                                }
+                        ).
+                        setNegativeButton(R.string.dialog_do_not_delete,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                }
+                        ).
+                        show();
+            }
         }
         return true;
     }

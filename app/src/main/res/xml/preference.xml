@@ -3,6 +3,7 @@
 	<PreferenceCategory android:title="@string/pref_git_title">
 		<Preference android:title="@string/pref_edit_server_info" android:key="git_server_info"/>
 		<Preference android:title="@string/pref_ssh_title" android:key="ssh_key" />
+        <Preference android:title="@string/pref_git_delete_repo" android:key="git_delete_repo"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_crypto_title">
