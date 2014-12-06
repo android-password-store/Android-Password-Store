@@ -151,7 +151,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
         clipboard.setPrimaryClip(clip);
         try {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
-                    + Integer.parseInt(settings.getString("general_show_time", "45"))
+                    + " " + Integer.parseInt(settings.getString("general_show_time", "45")) + " "
                     + this.getResources().getString(R.string.clipboard_ending_toast_text));
         } catch (NumberFormatException e)
         {
