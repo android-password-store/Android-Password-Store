@@ -9,7 +9,7 @@ You can install the application from:
 - [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore) (always lags behind)
 - Using the apk file found at `app/app-release.apk` or build everything from source (always updated before Play Store, but usually after F-Droid)
 
-[![Cookie](https://cdn.changetip.com/img/graphics/Cookie_Graphic.png)](https://www.changetip.com/tipme/zeapo)
+Pull requests are more than welcome (see [TODO](#todo)).
 
 Community
 =========
@@ -28,6 +28,15 @@ FAQ
 - **Q:** I get a "Permission Denied" error when trying to import my ssh-key, why?
 - **A:** ssh-key files are usually created with permissions set to `600`, meaning that only the creator of this key has the right to read from it. The application needs a read access, at least temporarily, make the permissions to `644`, import the key, then set them back to `600`.
 
+TODOs
+=====
+**Urgent**
+- Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))
+**Less urgent**
+- Create a new category
+- Multi-select (for password deletion)
+- Multiple password stores (multiple git repositories).
+- Solve issues labeld as *enhancement* (see [enhancement issues](https://github.com/zeapo/Android-Password-Store/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement))
 
 How-To
 ======
@@ -63,12 +72,5 @@ This project uses three libraries:
 - [JGit](http://www.eclipse.org/jgit/) a pretty good git lib
 - [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for files manipulations
 
-TODOs
-=====
-- Create a new category
-- Multi-select (for password deletion)
-- Multiple password stores (multiple git repositories).
 
-Needed
-======
-- UI enhancements: any UI changes or suggestions are welcome
+[![Cookie](https://cdn.changetip.com/img/graphics/Cookie_Graphic.png)](https://www.changetip.com/tipme/zeapo)
