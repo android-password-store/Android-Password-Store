@@ -32,6 +32,7 @@ TODO
 =====
 **Urgent**
 - Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))
+
 **Less urgent**
 - Create a new category
 - Multi-select (for password deletion)
