@@ -1,3 +1,5 @@
+[![Android Arsenal](https://android-arsenal.com/details/1/1208" target='_blank'>https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1208)
+
 PwdStore
 ========
 
