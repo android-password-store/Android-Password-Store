@@ -32,6 +32,8 @@ FAQ
 - **A:** Make sure to only clone from bare repositories (see [git-clone(1)](http://git-scm.com/docs/git-clone) for how to create a bare repository from an existing one). Otherwise the clone will fail.
 - **Q:** I get a "Permission Denied" error when trying to import my ssh-key, why?
 - **A:** ssh-key files are usually created with permissions set to `600`, meaning that only the creator of this key has the right to read from it. The application needs a read access, at least temporarily, make the permissions to `644`, import the key, then set them back to `600`.
+- **Q:** I tried to use APG and it does not work... why?
+- **A:** We only support OpenKeychain.
 
 TODO
 =====
