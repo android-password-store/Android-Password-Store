@@ -1,5 +1,8 @@
 PwdStore
 ========
+[![IRC](tutorial_clone_ssh_then_decrypt.gif)](irc://chat.freenode.net/Android-Password-Store)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/zeapo/android-password-store?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1208)
 
 This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
 
@@ -17,11 +20,9 @@ Community
 A few ways to get in touch:
 
 - [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how somehting works or feature request
-- IRC : on irc://chat.freenode.net/Android-Password-Store (that means channel #Android-Password-Store on freenode), some of us hangout there
-- [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/zeapo/android-password-store?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 - [reddit](https://www.reddit.com/r/androidpwd), want to discuss something and it's midnight, no one on irc and you really want to write more than a couple of lines? reddit is your way!
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1208)
+
 
 
 FAQ
