@@ -3,6 +3,8 @@
 PwdStore
 ========
 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/zeapo/android-password-store?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
 
 You can install the application from:
