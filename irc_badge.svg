@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="150" height="18">
-<rect rx="3" width="117" height="18" fill="#162e34"></rect>
-<path fill="#ce1d73" d="M62 0h4v18h-4z"></path>
-<rect rx="3" width="88" height="18" x="62" fill="#ce1d73"></rect>
-<g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-<text x="10" y="13">#</text>
-<text x="36.5" y="13">IRC</text><text x="106.5" y="13">Freenode</text>
-</g>
-</svg>
