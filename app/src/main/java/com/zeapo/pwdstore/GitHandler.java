@@ -172,7 +172,7 @@ public class GitHandler extends ActionBarActivity {
                 };
 
                 server_url.setText(settings.getString("git_remote_server", ""));
-                server_port.setText(settings.getString("git_remote_server_port", ""));
+                server_port.setText(settings.getString("git_remote_port", ""));
                 server_user.setText(settings.getString("git_remote_username", ""));
                 server_path.setText(settings.getString("git_remote_location", ""));
 
