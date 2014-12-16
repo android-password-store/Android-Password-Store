@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,6 +26,8 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
+import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.CloneCommand;

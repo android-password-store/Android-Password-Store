@@ -11,7 +11,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".GitHandler"
+		<activity android:name=".git.GitHandler"
 			android:parentActivityName=".PasswordStore">
 			<meta-data android:name="android.PARENT_ACTIVITY1"
 				android:value="com.zeapo.pwdstore.PasswordStore" />

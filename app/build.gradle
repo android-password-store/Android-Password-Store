@@ -4,13 +4,13 @@ apply plugin: 'eclipse'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 29
-        versionName "1.2.0.9"
+        versionCode 30
+        versionName "1.2.0.10"
     }
 
     compileOptions {
@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:21.0.2"
+    compile "com.android.support:appcompat-v7:21.0.3"
     compile "com.android.support:recyclerview-v7:21.0.2"
 
     //compile fileTree(dir: 'libs', include: ['*.jar'])

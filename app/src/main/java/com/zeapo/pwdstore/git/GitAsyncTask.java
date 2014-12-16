@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 
+import com.zeapo.pwdstore.PasswordStore;
+import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;

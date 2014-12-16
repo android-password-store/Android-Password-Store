@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
+import com.zeapo.pwdstore.git.GitAsyncTask;
+import com.zeapo.pwdstore.git.GitHandler;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
