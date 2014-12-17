@@ -41,7 +41,7 @@
     <!-- Git Async Task -->
     <string name="running_dialog_text">Running command...</string>
     <string name="jgit_error_dialog_title">Internal exception occurred</string>
-    <string name="jgit_error_dialog_text">Message from jgit: /n</string>
+    <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="read_only_dialog_text">You are about to use a read-only repository, you will not be able to push to it</string>

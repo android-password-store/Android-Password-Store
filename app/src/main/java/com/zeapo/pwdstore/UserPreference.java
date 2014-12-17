@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
-import com.zeapo.pwdstore.git.GitHandler;
+import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
@@ -105,8 +105,8 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             break;
             case "git_server_info":
             {
-                Intent intent = new Intent(this, GitHandler.class);
-                intent.putExtra("Operation", GitHandler.EDIT_SERVER);
+                Intent intent = new Intent(this, GitActivity.class);
+                intent.putExtra("Operation", GitActivity.EDIT_SERVER);
                 startActivityForResult(intent, EDIT_GIT_INFO);
             }
             break;

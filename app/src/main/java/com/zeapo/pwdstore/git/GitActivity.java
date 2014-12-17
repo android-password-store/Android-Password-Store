@@ -28,6 +28,8 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
+import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
+import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.CloneCommand;
@@ -56,7 +58,7 @@ import java.util.regex.Pattern;
 
 // TODO move the messages to strings.xml
 
-public class GitHandler extends ActionBarActivity {
+public class GitActivity extends ActionBarActivity {
 
     private Activity activity;
     private Context context;
@@ -76,8 +78,6 @@ public class GitHandler extends ActionBarActivity {
     public static final int REQUEST_CLONE = 103;
     public static final int REQUEST_INIT = 104;
     public static final int EDIT_SERVER = 105;
-
-    private static final int GET_SSH_KEY_FROM_CLONE = 201;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,74 +397,6 @@ public class GitHandler extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected class GitConfigSessionFactory extends JschConfigSessionFactory {
-
-        protected void configure(OpenSshConfig.Host hc, Session session) {
-            session.setConfig("StrictHostKeyChecking", "no");
-        }
-
-        @Override
-        protected JSch
-        getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
-            JSch jsch = super.getJSch(hc, fs);
-            jsch.removeAllIdentity();
-            return jsch;
-        }
-    }
-
-    protected class SshConfigSessionFactory extends GitConfigSessionFactory {
-        private String sshKey;
-        private String passphrase;
-
-        public SshConfigSessionFactory(String sshKey, String passphrase) {
-            this.sshKey = sshKey;
-            this.passphrase = passphrase;
-        }
-
-        @Override
-        protected JSch
-        getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
-            JSch jsch = super.getJSch(hc, fs);
-            jsch.removeAllIdentity();
-            jsch.addIdentity(sshKey);
-            return jsch;
-        }
-
-        @Override
-        protected void configure(OpenSshConfig.Host hc, Session session) {
-            session.setConfig("StrictHostKeyChecking", "no");
-
-            CredentialsProvider provider = new CredentialsProvider() {
-                @Override
-                public boolean isInteractive() {
-                    return false;
-                }
-
-                @Override
-                public boolean supports(CredentialItem... items) {
-                    return true;
-                }
-
-                @Override
-                public boolean get(URIish uri, CredentialItem... items) throws UnsupportedCredentialItem {
-                    for (CredentialItem item : items) {
-                        if (item instanceof CredentialItem.Username) {
-                            ((CredentialItem.Username) item).setValue(settings.getString("git_remote_username", "git"));
-                            continue;
-                        }
-                        if (item instanceof CredentialItem.StringType) {
-                            ((CredentialItem.StringType) item).setValue(passphrase);
-                        }
-                    }
-                    return true;
-                }
-            };
-            UserInfo userInfo = new CredentialsProviderUserInfo(session, provider);
-            session.setUserInfo(userInfo);
-        }
-    }
-
-
     /**
      * Clones the repository, the directory exists, deletes it
      * @param view
@@ -539,7 +471,10 @@ public class GitHandler extends ActionBarActivity {
                     show();
         } else {
             try {
-                authenticateAndRun("cloneOperation");
+//                authenticateAndRun("cloneOperation");
+                new CloneOperation(localDir, activity)
+                        .setCommand(hostname)
+                        .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
             } catch (Exception e) {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
@@ -692,7 +627,7 @@ public class GitHandler extends ActionBarActivity {
     /** Finds the method and provides it with authentication paramters via invokeWithAuthentication */
     private void authenticateAndRun(String operation) {
         try {
-            invokeWithAuthentication(this, GitHandler.class.getMethod(operation, UsernamePasswordCredentialsProvider.class));
+            invokeWithAuthentication(this, GitActivity.class.getMethod(operation, UsernamePasswordCredentialsProvider.class));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -703,7 +638,7 @@ public class GitHandler extends ActionBarActivity {
      * @param activity
      * @param method
      */
-    private void invokeWithAuthentication(final GitHandler activity, final Method method) {
+    private void invokeWithAuthentication(final GitActivity activity, final Method method) {
 
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             final File sshKey = new File(getFilesDir() + "/.ssh_key");
@@ -717,7 +652,7 @@ public class GitHandler extends ActionBarActivity {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), UserPreference.class);
                                     intent.putExtra("operation", "get_ssh_key");
-                                    startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
+                                    startActivityForResult(intent, GitOperation.GET_SSH_KEY_FROM_CLONE);
                                 } catch (Exception e) {
                                     System.out.println("Exception caught :(");
                                     e.printStackTrace();
@@ -745,7 +680,9 @@ public class GitHandler extends ActionBarActivity {
                                 SshSessionFactory.setInstance(new GitConfigSessionFactory());
                                 try {
 
-                                    JschConfigSessionFactory sessionFactory = new SshConfigSessionFactory(sshKey.getAbsolutePath(), passphrase.getText().toString());
+                                    JschConfigSessionFactory sessionFactory = new SshConfigSessionFactory(sshKey.getAbsolutePath(),
+                                            settings.getString("git_remote_username", "git"),
+                                            passphrase.getText().toString());
                                     SshSessionFactory.setInstance(sessionFactory);
 
                                     try {
@@ -815,8 +752,14 @@ public class GitHandler extends ActionBarActivity {
                 case REQUEST_PUSH:
                     authenticateAndRun("pushOperation");
                     break;
-                case GET_SSH_KEY_FROM_CLONE:
-                    authenticateAndRun("cloneOperation");
+                case GitOperation.GET_SSH_KEY_FROM_CLONE:
+                    try {
+                        new CloneOperation(localDir, activity)
+                                .setCommand(hostname)
+                                .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
 
         }
