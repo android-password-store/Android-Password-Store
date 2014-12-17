@@ -387,6 +387,32 @@ public class GitActivity extends ActionBarActivity {
     }
 
     /**
+     * Saves the configuration found in the form
+     */
+    private void saveConfiguration() {
+        // remember the settings
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString("git_remote_server", ((EditText) findViewById(R.id.server_url)).getText().toString());
+        editor.putString("git_remote_location", ((EditText) findViewById(R.id.server_path)).getText().toString());
+        editor.putString("git_remote_username", ((EditText) findViewById(R.id.server_user)).getText().toString());
+        editor.putString("git_remote_protocol", protocol);
+        editor.putString("git_remote_auth", connectionMode);
+        editor.putString("git_remote_port", port);
+        editor.commit();
+    }
+
+    /**
+     * Save the repository information to the shared preferences settings
+     *
+     * @param view
+     */
+    public void saveConfiguration(View view) {
+        saveConfiguration();
+        PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
+    }
+
+    /**
      * Clones the repository, the directory exists, deletes it
      *
      * @param view
@@ -426,7 +452,6 @@ public class GitActivity extends ActionBarActivity {
 
             username = hostname.split("@")[0];
         }
-
 
         if (localDir.exists()) {
             new AlertDialog.Builder(this).
@@ -468,6 +493,8 @@ public class GitActivity extends ActionBarActivity {
                     ).
                     show();
         } else {
+            saveConfiguration();
+
             try {
                 new CloneOperation(localDir, activity)
                         .setCommand(hostname)
@@ -476,54 +503,28 @@ public class GitActivity extends ActionBarActivity {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
                 e.printStackTrace();
-            }
-        }
+            }        }
     }
-
 
     /**
-     * Save the repository information to the shared preferences settings
-     *
-     * @param view
+     * Pull the latest changes from the remote repository and merges them locally
      */
-    public void saveConfiguration(View view) {
-        // remember the settings
-        SharedPreferences.Editor editor = settings.edit();
-
-        editor.putString("git_remote_server", ((EditText) findViewById(R.id.server_url)).getText().toString());
-        editor.putString("git_remote_location", ((EditText) findViewById(R.id.server_path)).getText().toString());
-        editor.putString("git_remote_username", ((EditText) findViewById(R.id.server_user)).getText().toString());
-        editor.putString("git_remote_protocol", protocol);
-        editor.putString("git_remote_auth", connectionMode);
-        editor.putString("git_remote_port", port);
-        editor.commit();
-
-        PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
-    }
-
-    public void cloneOperation(UsernamePasswordCredentialsProvider provider) {
-
-        // remember the settings
-        SharedPreferences.Editor editor = settings.edit();
-
-        editor.putString("git_remote_server", ((EditText) findViewById(R.id.server_url)).getText().toString());
-        editor.putString("git_remote_location", ((EditText) findViewById(R.id.server_path)).getText().toString());
-        editor.putString("git_remote_username", ((EditText) findViewById(R.id.server_user)).getText().toString());
-        editor.putString("git_remote_protocol", protocol);
-        editor.putString("git_remote_auth", connectionMode);
-        editor.putString("git_remote_port", port);
-        editor.commit();
-
-        CloneCommand cmd = Git.cloneRepository().
-                setCredentialsProvider(provider).
-                setCloneAllBranches(true).
-                setDirectory(localDir).
-                setURI(hostname);
-
-        new GitAsyncTask(activity, true, false, CloneCommand.class).execute(cmd);
-    }
-
     public void pullFromRepository() {
+        syncRepository(REQUEST_PULL);
+    }
+
+    /**
+     * Pushes the latest changes from the local repository to the remote one
+     */
+    public void pushToRepository() {
+        syncRepository(REQUEST_PUSH);
+    }
+
+    /**
+     * Syncs the local repository with the remote one (either pull or push)
+     * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH
+     */
+    private void syncRepository(int operation) {
         if (settings.getString("git_remote_username", "").isEmpty() ||
                 settings.getString("git_remote_server", "").isEmpty() ||
                 settings.getString("git_remote_location", "").isEmpty())
@@ -549,48 +550,19 @@ public class GitActivity extends ActionBarActivity {
         else {
             // check that the remote origin is here, else add it
             PasswordRepository.addRemote("origin", hostname, false);
+            GitOperation op;
 
-            try {
-                new PullOperation(localDir, activity)
-                        .setCommand(hostname)
-                        .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (operation == REQUEST_PULL) {
+                op = new PullOperation(localDir, activity).setCommand(hostname);
+            } else if (operation == REQUEST_PUSH) {
+                op = new PushOperation(localDir, activity).setCommand(hostname);
+            } else {
+                Log.e(TAG, "Sync operation not recognized : " + operation);
+                return;
             }
-        }
-    }
-
-    public void pushToRepository() {
-        if (settings.getString("git_remote_username", "user").isEmpty() ||
-                settings.getString("git_remote_server", "server.com").trim().isEmpty() ||
-                settings.getString("git_remote_location", "path/to/repository").isEmpty())
-            new AlertDialog.Builder(this)
-                    .setMessage("You have to set the information about the server before synchronizing with the server")
-                    .setPositiveButton("On my way!", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, REQUEST_PUSH);
-                        }
-                    })
-                    .setNegativeButton("Nah... later", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // do nothing :(
-                            setResult(RESULT_OK);
-                            finish();
-                        }
-                    })
-                    .show();
-
-        else {
-            // check that the remote origin is here, else add it
-            PasswordRepository.addRemote("origin", hostname, false);
 
             try {
-                new PushOperation(localDir, activity)
-                        .setCommand(hostname)
-                        .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
