@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,7 @@ import java.util.regex.Pattern;
 // TODO move the messages to strings.xml
 
 public class GitActivity extends ActionBarActivity {
+    private static final String TAG = "GitAct";
 
     private Activity activity;
     private Context context;
@@ -604,33 +606,31 @@ public class GitActivity extends ActionBarActivity {
         }
 
         if (resultCode == RESULT_OK) {
+            GitOperation op;
 
             switch (requestCode) {
                 case REQUEST_PULL:
-                    try {
-                        new PullOperation(localDir, activity)
-                                .setCommand(hostname)
-                                .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    op = new PullOperation(localDir, activity).setCommand(hostname);
                     break;
+
                 case REQUEST_PUSH:
-                    try {
-                        new PushOperation(localDir, activity)
-                                .setCommand(hostname)
-                                .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }                    break;
+                    op = new PushOperation(localDir, activity).setCommand(hostname);
+                    break;
+
                 case GitOperation.GET_SSH_KEY_FROM_CLONE:
-                    try {
-                        new CloneOperation(localDir, activity)
-                                .setCommand(hostname)
-                                .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    op = new CloneOperation(localDir, activity).setCommand(hostname);
+                    break;
+                default:
+                    Log.e(TAG, "Operation not recognized : " + resultCode);
+                    setResult(RESULT_CANCELED);
+                    finish();
+                    return;
+            }
+
+            try {
+                op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
