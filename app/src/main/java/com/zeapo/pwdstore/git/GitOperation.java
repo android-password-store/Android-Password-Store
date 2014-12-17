@@ -36,7 +36,8 @@ public abstract class GitOperation {
 
     /**
      * Creates a new git operation
-     * @param fileDir the git working tree directory
+     *
+     * @param fileDir         the git working tree directory
      * @param callingActivity the calling activity
      */
     public GitOperation(File fileDir, Activity callingActivity) {
@@ -46,20 +47,22 @@ public abstract class GitOperation {
 
     /**
      * Sets the authentication using user/pwd scheme
+     *
      * @param username the username
      * @param password the password
      * @return the current object
      */
     public GitOperation setAuthentication(String username, String password) {
         SshSessionFactory.setInstance(new GitConfigSessionFactory());
-        this.provider = new UsernamePasswordCredentialsProvider(username,password);
+        this.provider = new UsernamePasswordCredentialsProvider(username, password);
         return this;
     }
 
     /**
      * Sets the authentication using ssh-key scheme
-     * @param sshKey the ssh-key file
-     * @param username the username
+     *
+     * @param sshKey     the ssh-key file
+     * @param username   the username
      * @param passphrase the passphrase
      * @return the current object
      */
@@ -72,13 +75,21 @@ public abstract class GitOperation {
 
     /**
      * Executes the GitCommand in an async task
+     *
      * @throws Exception
      */
     public void execute() throws Exception {
-        Log.d(TAG, command + " << ");
-        new GitAsyncTask(callingActivity, true, false, CloneCommand.class).execute(command);
+        new GitAsyncTask(callingActivity, true, false, GitCommand.class).execute(command);
     }
 
+    /**
+     * Executes the GitCommand in an async task after creating the authentication
+     *
+     * @param connectionMode the server-connection mode
+     * @param username       the username
+     * @param sshKey         the ssh-key file
+     * @throws Exception
+     */
     public void executeAfterAuthentication(String connectionMode, final String username, @Nullable final File sshKey) throws Exception {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
@@ -89,6 +100,8 @@ public abstract class GitOperation {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
+                                    // Ask the UserPreference to provide us with the ssh-key
+                                    // onResult has to be handled by the callingActivity
                                     Intent intent = new Intent(callingActivity.getApplicationContext(), UserPreference.class);
                                     intent.putExtra("operation", "get_ssh_key");
                                     callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
@@ -115,11 +128,10 @@ public abstract class GitOperation {
                         .setView(passphrase)
                         .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-
-                                SshSessionFactory.setInstance(new GitConfigSessionFactory());
                                 try {
+                                    // Authenticate using the ssh-key and then execute the command
                                     setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
-                                } catch (Exception e){
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
@@ -142,11 +154,10 @@ public abstract class GitOperation {
                     .setView(password)
                     .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-
-                            setAuthentication(username, password.getText().toString());
+                            // authenticate using the user/pwd and then execute the command
                             try {
-                                execute();
-                            } catch (Exception e){
+                                setAuthentication(username, password.getText().toString()).execute();
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
