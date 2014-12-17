@@ -46,6 +46,13 @@ public class CloneOperation extends GitOperation {
         return this;
     }
 
+    /**
+     * sets the authentication for the ssh-key scheme
+     * @param sshKey     the ssh-key file
+     * @param username   the username
+     * @param passphrase the passphrase
+     * @return the current object
+     */
     @Override
     public CloneOperation setAuthentication(File sshKey, String username, String passphrase) {
         super.setAuthentication(sshKey, username, passphrase);
