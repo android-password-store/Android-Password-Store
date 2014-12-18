@@ -73,7 +73,7 @@
     <string name="server_resulting_url">Výsledná URL</string>
     <string name="connection_mode">Mód ověření</string>
 
-    <string name="warn_malformed_url_port">Při použití zvláštního portu, zadejte absolutní cestu (začíná s "/")</string>
+    <string name="warn_malformed_url_port">Při použití zvláštního portu, zadejte absolutní cestu (začíná "/")</string>
 
     <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PgpHandler</string>
@@ -93,7 +93,11 @@
     <string name="pref_remote_hint">cesta/k/repozitáři</string>
     <string name="pref_git_username_title">Jméno</string>
     <string name="pref_git_username_hint">username</string>
-    <string name="pref_ssh_title">SSH klíč</string>
+    <string name="pref_edit_server_info">Upravit nastavení GIT serveru</string>
+    <string name="pref_ssh_title">Importovat SSH klíč</string>
+    <string name="pref_git_delete_repo">Smazat repozitář</string>
+    <string name="pref_dialog_delete_title">Vyčistit repozitář</string>
+    <string name="pref_dialog_delete_msg">Opravdu smazat aktuální adresář úložiště hesel? Toto neodstraní vaši konfiguraci.</string>
     <string name="pref_crypto_title">Šifrování</string>
     <string name="pref_provider_title">Vybrat poskytovatele OpenPGP!</string>
     <string name="pref_provider_account_title">Nastavit OpenPGP účet</string>
@@ -101,11 +105,13 @@
     <string name="pref_key_title">Vybrat ID OpenPGP klíče</string>
     <string name="pref_general_title">Všeobecné</string>
     <string name="pref_password_title">Čas zobrazení hesla</string>
-    <string name="pref_password_dialog_title">Nastaví čas po který bude heslo uloženo ve schránce</string>
+    <string name="pref_password_dialog_title">Nastavení času po který bude heslo uloženo ve schránce</string>
     <string name="pref_copy_title">Automaticky kopírovat heslo</string>
     <string name="pref_copy_dialog_title">Automatické kopírování hesla do schránky po úspěšném dešifrování.</string>
     <string name="ssh_key_error_dialog_title">Chyba při importu SSH klíče</string>
-    <string name="ssh_key_error_dialog_text">Zpráva : /n</string>
+    <string name="ssh_key_error_dialog_text">Zpráva : \n</string>
+    <string name="pref_recursive_filter">Rekurzivní filtrování</string>
+    <string name="pref_recursive_filter_hint">Rekurzivní hledání hesel v aktuálním adresáři.</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
