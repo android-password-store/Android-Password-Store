@@ -83,7 +83,6 @@ public class GitActivity extends ActionBarActivity {
                 final Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
                 final Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
 
-
                 // init the spinner for connection modes
                 final ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
                         R.array.connection_modes, android.R.layout.simple_spinner_item);
@@ -102,6 +101,13 @@ public class GitActivity extends ActionBarActivity {
 
                     }
                 });
+
+
+                if (protocol.equals("ssh://")) {
+                    protcol_spinner.setSelection(0);
+                } else {
+                    protcol_spinner.setSelection(1);
+                }
 
                 // init the spinner for protocols
                 ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
@@ -139,6 +145,11 @@ public class GitActivity extends ActionBarActivity {
                         }
                 );
 
+                if (connectionMode.equals("ssh-key")) {
+                    protcol_spinner.setSelection(0);
+                } else {
+                    protcol_spinner.setSelection(1);
+                }
 
                 // init the server information
                 final EditText server_url = ((EditText) findViewById(R.id.server_url));
@@ -503,7 +514,8 @@ public class GitActivity extends ActionBarActivity {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
                 e.printStackTrace();
-            }        }
+            }
+        }
     }
 
     /**
