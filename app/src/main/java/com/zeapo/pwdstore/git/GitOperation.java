@@ -78,9 +78,7 @@ public abstract class GitOperation {
      *
      * @throws Exception
      */
-    public void execute() throws Exception {
-        new GitAsyncTask(callingActivity, true, false, GitCommand.class).execute(command);
-    }
+    public abstract void execute() throws Exception;
 
     /**
      * Executes the GitCommand in an async task after creating the authentication

@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 
@@ -27,7 +26,6 @@ public class CloneOperation extends GitOperation {
      */
     public CloneOperation setCommand(String uri) {
         this.command = Git.cloneRepository().
-                setCredentialsProvider(provider).
                 setCloneAllBranches(true).
                 setDirectory(repository.getWorkTree()).
                 setURI(uri);
@@ -57,5 +55,13 @@ public class CloneOperation extends GitOperation {
     public CloneOperation setAuthentication(File sshKey, String username, String passphrase) {
         super.setAuthentication(sshKey, username, passphrase);
         return this;
+    }
+
+    @Override
+    public void execute() throws Exception  {
+        if (this.provider != null) {
+            ((CloneCommand) this.command).setCredentialsProvider(this.provider);
+        }
+        new GitAsyncTask(callingActivity, true, false, CloneCommand.class).execute(this.command);
     }
 }

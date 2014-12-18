@@ -3,6 +3,7 @@ package com.zeapo.pwdstore.git;
 import android.app.Activity;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
 
 import java.io.File;
 
@@ -27,8 +28,15 @@ public class PushOperation extends GitOperation {
         this.command = new Git(repository)
                 .push()
                 .setPushAll()
-                .setRemote("origin")
-                .setCredentialsProvider(provider);
+                .setRemote("origin");
         return this;
+    }
+
+    @Override
+    public void execute() throws Exception  {
+        if (this.provider != null) {
+            ((PushCommand) this.command).setCredentialsProvider(this.provider);
+        }
+        new GitAsyncTask(callingActivity, true, false, PushCommand.class).execute(this.command);
     }
 }

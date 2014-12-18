@@ -2,9 +2,8 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 
-import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PullCommand;
 
 import java.io.File;
 
@@ -29,8 +28,15 @@ public class PullOperation extends GitOperation {
         this.command = new Git(repository)
                 .pull()
                 .setRebase(true)
-                .setRemote("origin")
-                .setCredentialsProvider(provider);
+                .setRemote("origin");
         return this;
+    }
+
+    @Override
+    public void execute() throws Exception  {
+        if (this.provider != null) {
+            ((PullCommand) this.command).setCredentialsProvider(this.provider);
+        }
+        new GitAsyncTask(callingActivity, true, false, PullCommand.class).execute(this.command);
     }
 }
