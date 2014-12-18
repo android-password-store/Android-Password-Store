@@ -102,13 +102,6 @@ public class GitActivity extends ActionBarActivity {
                     }
                 });
 
-
-                if (protocol.equals("ssh://")) {
-                    protcol_spinner.setSelection(0);
-                } else {
-                    protcol_spinner.setSelection(1);
-                }
-
                 // init the spinner for protocols
                 ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
                         R.array.clone_protocols, android.R.layout.simple_spinner_item);
@@ -145,10 +138,16 @@ public class GitActivity extends ActionBarActivity {
                         }
                 );
 
-                if (connectionMode.equals("ssh-key")) {
+                if (protocol.equals("ssh://")) {
                     protcol_spinner.setSelection(0);
                 } else {
                     protcol_spinner.setSelection(1);
+                }
+
+                if (connectionMode.equals("ssh-key")) {
+                    connection_mode_spinner.setSelection(0);
+                } else {
+                    connection_mode_spinner.setSelection(1);
                 }
 
                 // init the server information
@@ -255,6 +254,7 @@ public class GitActivity extends ActionBarActivity {
                     findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
                 }
 
+                updateURI();
 
                 break;
             case REQUEST_PULL:
