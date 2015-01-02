@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="connection_modes">
+    <string-array name="connection_modes" translatable="false">
         <item>ssh-key</item>
         <item>username/password</item>
     </string-array>
-    <string-array name="clone_protocols">
+    <string-array name="clone_protocols" translatable="false">
         <item>ssh://</item>
         <item>https://</item>
     </string-array>
