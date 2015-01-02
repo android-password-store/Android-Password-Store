@@ -286,6 +286,7 @@ public class PasswordStore extends ActionBarActivity  {
             status = folders.length;
 
             // this means that the repository has been correctly cloned
+            // if this file does not exist, well... this will not work if there is no other files
             if ((new File(localDir.getAbsolutePath() + "/.gpg-id")).exists())
                 status++;
         }
@@ -347,19 +348,13 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     public void decryptPassword(PasswordItem item) {
-        try {
-            this.leftActivity = true;
+        this.leftActivity = true;
 
-            Intent intent = new Intent(this, PgpHandler.class);
-            intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
-            intent.putExtra("NAME", item.toString());
-            intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
-            intent.putExtra("Operation", "DECRYPT");
-            startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Intent intent = new Intent(this, PgpHandler.class);
+        intent.putExtra("NAME", item.toString());
+        intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
+        intent.putExtra("Operation", "DECRYPT");
+        startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
     public void createPassword(View v) {
@@ -367,15 +362,10 @@ public class PasswordStore extends ActionBarActivity  {
         Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
         this.leftActivity = true;
 
-        try {
-            Intent intent = new Intent(this, PgpHandler.class);
-            intent.putExtra("PGP-ID", FileUtils.readFileToString(PasswordRepository.getFile("/.gpg-id")));
-            intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
-            intent.putExtra("Operation", "ENCRYPT");
-            startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Intent intent = new Intent(this, PgpHandler.class);
+        intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
+        intent.putExtra("Operation", "ENCRYPT");
+        startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
     }
 
     public void deletePassword(final PasswordRecyclerAdapter adapter, final int position) {
