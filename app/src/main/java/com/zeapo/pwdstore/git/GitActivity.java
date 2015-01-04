@@ -79,6 +79,7 @@ public class GitActivity extends ActionBarActivity {
             case REQUEST_CLONE:
             case EDIT_SERVER:
                 setContentView(R.layout.activity_git_clone);
+                setTitle(R.string.title_activity_git_clone);
 
                 final Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
                 final Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
