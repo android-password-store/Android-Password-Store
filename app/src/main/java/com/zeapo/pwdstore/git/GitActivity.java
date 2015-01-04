@@ -465,6 +465,8 @@ public class GitActivity extends ActionBarActivity {
             username = hostname.split("@")[0];
         }
 
+        saveConfiguration();
+
         if (localDir.exists() && localDir.listFiles().length != 0) {
             new AlertDialog.Builder(this).
                     setTitle(R.string.dialog_delete_title).
@@ -505,8 +507,6 @@ public class GitActivity extends ActionBarActivity {
                     ).
                     show();
         } else {
-            saveConfiguration();
-
             try {
                 new CloneOperation(localDir, activity)
                         .setCommand(hostname)
