@@ -20,11 +20,10 @@ public class PushOperation extends GitOperation {
     }
 
     /**
-     * Sets the command using the repository uri
-     * @param uri the uri of the repository
+     * Sets the command
      * @return the current object
      */
-    public PushOperation setCommand(String uri) {
+    public PushOperation setCommand() {
         this.command = new Git(repository)
                 .push()
                 .setPushAll()

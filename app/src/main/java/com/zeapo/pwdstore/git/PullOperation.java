@@ -20,11 +20,10 @@ public class PullOperation extends GitOperation {
     }
 
     /**
-     * Sets the command using the repository uri
-     * @param uri the uri of the repository
+     * Sets the command
      * @return the current object
      */
-    public PullOperation setCommand(String uri) {
+    public PullOperation setCommand() {
         this.command = new Git(repository)
                 .pull()
                 .setRebase(true)

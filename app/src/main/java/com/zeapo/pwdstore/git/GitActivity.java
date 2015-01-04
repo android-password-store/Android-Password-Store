@@ -464,7 +464,7 @@ public class GitActivity extends ActionBarActivity {
             username = hostname.split("@")[0];
         }
 
-        if (localDir.exists()) {
+        if (localDir.exists() && localDir.listFiles().length != 0) {
             new AlertDialog.Builder(this).
                     setTitle(R.string.dialog_delete_title).
                     setMessage(R.string.dialog_delete_msg).
@@ -565,9 +565,9 @@ public class GitActivity extends ActionBarActivity {
             GitOperation op;
 
             if (operation == REQUEST_PULL) {
-                op = new PullOperation(localDir, activity).setCommand(hostname);
+                op = new PullOperation(localDir, activity).setCommand();
             } else if (operation == REQUEST_PUSH) {
-                op = new PushOperation(localDir, activity).setCommand(hostname);
+                op = new PushOperation(localDir, activity).setCommand();
             } else {
                 Log.e(TAG, "Sync operation not recognized : " + operation);
                 return;
@@ -594,11 +594,11 @@ public class GitActivity extends ActionBarActivity {
 
             switch (requestCode) {
                 case REQUEST_PULL:
-                    op = new PullOperation(localDir, activity).setCommand(hostname);
+                    op = new PullOperation(localDir, activity).setCommand();
                     break;
 
                 case REQUEST_PUSH:
-                    op = new PushOperation(localDir, activity).setCommand(hostname);
+                    op = new PushOperation(localDir, activity).setCommand();
                     break;
 
                 case GitOperation.GET_SSH_KEY_FROM_CLONE:
