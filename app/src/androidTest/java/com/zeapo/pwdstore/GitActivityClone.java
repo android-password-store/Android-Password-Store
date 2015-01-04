@@ -79,7 +79,6 @@ public class GitActivityClone extends ActivityInstrumentationTestCase2<GitActivi
         gitActivity.runOnUiThread(new Runnable() {
             public void run() {
                 protocolSpinner.setSelection(0); // ssh://
-                connectionModeSpinner.setSelection(1); // user/pwd
             }
         });
 
@@ -92,11 +91,11 @@ public class GitActivityClone extends ActivityInstrumentationTestCase2<GitActivi
         solo.clearEditText(server_url);
         solo.enterText(server_url, "192.168.1.28");
 
-
         mInstrumentation.waitForIdleSync();
 
         gitActivity.runOnUiThread(new Runnable() {
             public void run() {
+                connectionModeSpinner.setSelection(1); // user/pwd
                 ((Button) gitActivity.findViewById(R.id.clone_button)).performClick();
             }
         });

@@ -10,6 +10,7 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
@@ -153,7 +154,7 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
                 {
                     try {
                         copySshKey(data.getData());
-                        Log.i("PREF", "Got key");
+                        Toast.makeText(this, this.getResources().getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show();
                         setResult(RESULT_OK);
                         finish();
                     } catch (IOException e)
