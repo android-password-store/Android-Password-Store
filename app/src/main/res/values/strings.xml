@@ -12,7 +12,7 @@
     <string name="dialog_delete_msg">Target directory already exist. Current version support only a single store. Do you want to delete the current password store directory?</string>
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
-    <string name="title_activity_git_clone">Clone repository</string>
+    <string name="title_activity_git_clone">Repository information</string>
     
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
@@ -41,7 +41,7 @@
     <!-- Git Async Task -->
     <string name="running_dialog_text">Running command...</string>
     <string name="jgit_error_dialog_title">Internal exception occurred</string>
-    <string name="jgit_error_dialog_text">Message from jgit: /n</string>
+    <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="read_only_dialog_text">You are about to use a read-only repository, you will not be able to push to it</string>
@@ -108,6 +108,7 @@
     <string name="pref_password_dialog_title">Set the time you want the password to be in clipboard</string>
     <string name="pref_copy_title">Automatically Copy Password</string>
     <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
+    <string name="ssh_key_success_dialog_title" translatable="false">SSH-key imported</string>
     <string name="ssh_key_error_dialog_title">Error while trying to import the ssh-key</string>
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Recursive filtering</string>

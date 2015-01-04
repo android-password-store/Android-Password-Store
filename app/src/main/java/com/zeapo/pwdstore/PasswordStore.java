@@ -18,8 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
+import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
-import com.zeapo.pwdstore.git.GitHandler;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -151,9 +151,9 @@ public class PasswordStore extends ActionBarActivity  {
                     break;
                 }
 
-                intent = new Intent(this, GitHandler.class);
-                intent.putExtra("Operation", GitHandler.REQUEST_PUSH);
-                startActivityForResult(intent, GitHandler.REQUEST_PUSH);
+                intent = new Intent(this, GitActivity.class);
+                intent.putExtra("Operation", GitActivity.REQUEST_PUSH);
+                startActivityForResult(intent, GitActivity.REQUEST_PUSH);
                 this.leftActivity = true;
                 return true;
 
@@ -163,9 +163,9 @@ public class PasswordStore extends ActionBarActivity  {
                     break;
                 }
 
-                intent = new Intent(this, GitHandler.class);
-                intent.putExtra("Operation", GitHandler.REQUEST_PULL);
-                startActivityForResult(intent, GitHandler.REQUEST_PULL);
+                intent = new Intent(this, GitActivity.class);
+                intent.putExtra("Operation", GitActivity.REQUEST_PULL);
+                startActivityForResult(intent, GitActivity.REQUEST_PULL);
                 this.leftActivity = true;
                 return true;
 
@@ -186,9 +186,9 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     public void getClone(View view){
-        Intent intent = new Intent(this, GitHandler.class);
-        intent.putExtra("Operation", GitHandler.REQUEST_CLONE);
-        startActivityForResult(intent, GitHandler.REQUEST_CLONE);
+        Intent intent = new Intent(this, GitActivity.class);
+        intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+        startActivityForResult(intent, GitActivity.REQUEST_CLONE);
     }
 
     private void createRepository() {
@@ -228,7 +228,7 @@ public class PasswordStore extends ActionBarActivity  {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, GitHandler.REQUEST_INIT);
+                            startActivityForResult(intent, GitActivity.REQUEST_INIT);
                         }
                     })
                     .setNegativeButton(this.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
@@ -433,7 +433,7 @@ public class PasswordStore extends ActionBarActivity  {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == GitHandler.REQUEST_CLONE)
+            if (requestCode == GitActivity.REQUEST_CLONE)
                 checkLocalRepository();
 
             switch (requestCode) {
@@ -446,10 +446,10 @@ public class PasswordStore extends ActionBarActivity  {
                     );
                     refreshListAdapter();
                     break;
-                case GitHandler.REQUEST_INIT:
+                case GitActivity.REQUEST_INIT:
                     initRepository(getCurrentFocus());
                     break;
-                case GitHandler.REQUEST_PULL:
+                case GitActivity.REQUEST_PULL:
                     updateListAdapter();
                     break;
             }
