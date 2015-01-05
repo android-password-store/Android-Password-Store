@@ -2,7 +2,7 @@ PwdStore
 ========
 [![IRC](irc_badge.png)](https://webchat.freenode.net/?channels=%23Android-Password-Store&uio=d4)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/zeapo/android-password-store?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1208)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-blue.svg?style=flat)](https://android-arsenal.com/details/1/1208)
 
 This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
 
