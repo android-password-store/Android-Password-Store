@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -123,10 +124,10 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
                                         try {
                                             FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
                                         } catch (Exception e) {
-                                            //This is what happens when jgit fails :(
                                             //TODO Handle the diffent cases of exceptions
                                         }
 
+                                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("repository_initialized", false).commit();
                                         dialog.cancel();
                                         finish();
                                     }

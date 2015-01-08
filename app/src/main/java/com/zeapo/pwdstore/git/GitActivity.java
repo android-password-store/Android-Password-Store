@@ -130,6 +130,13 @@ public class GitActivity extends ActionBarActivity {
                                     connection_mode_spinner.setSelection(1);
                                     connection_mode_spinner.setEnabled(false);
                                 }
+
+                                // however, if we have some saved that, that's more important!
+                                if (connectionMode.equals("ssh-key")) {
+                                    connection_mode_spinner.setSelection(0);
+                                } else {
+                                    connection_mode_spinner.setSelection(1);
+                                }
                             }
 
                             @Override
@@ -143,12 +150,6 @@ public class GitActivity extends ActionBarActivity {
                     protcol_spinner.setSelection(0);
                 } else {
                     protcol_spinner.setSelection(1);
-                }
-
-                if (connectionMode.equals("ssh-key")) {
-                    connection_mode_spinner.setSelection(0);
-                } else {
-                    connection_mode_spinner.setSelection(1);
                 }
 
                 // init the server information
@@ -594,6 +595,10 @@ public class GitActivity extends ActionBarActivity {
             GitOperation op;
 
             switch (requestCode) {
+                case REQUEST_CLONE:
+                    setResult(RESULT_OK);
+                    finish();
+                    return;
                 case REQUEST_PULL:
                     op = new PullOperation(localDir, activity).setCommand();
                     break;
