@@ -1,3 +1,8 @@
+Update
+========
+I am currently unavailable for few weeks. Will restart working on the project whenever I can.
+Meanwhile, check https://assembly.com/aps-android-password-store/bounties/ , I will post new bounties soon and get the project on the front page afterwards. 
+
 PwdStore
 ========
 [![IRC](irc_badge.png)](https://webchat.freenode.net/?channels=%23Android-Password-Store&uio=d4)
