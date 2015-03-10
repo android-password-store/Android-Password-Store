@@ -1,7 +1,3 @@
-Poll
-=====
-http://www.poll-maker.com/poll264179x2406412a-10
-
 PwdStore
 ========
 [![IRC](irc_badge.png)](https://webchat.freenode.net/?channels=%23Android-Password-Store&uio=d4)
