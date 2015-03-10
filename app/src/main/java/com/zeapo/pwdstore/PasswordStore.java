@@ -32,11 +32,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
-
 public class PasswordStore extends ActionBarActivity  {
-    private Stack<Integer> scrollPositions;
-    /** if we leave the activity to do something, do not add any other fragment */
-    public boolean leftActivity = false;
+    private static final String TAG = "PwdStrAct";
     private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
@@ -46,7 +43,6 @@ public class PasswordStore extends ActionBarActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwdstore);
-        scrollPositions = new Stack<Integer>();
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         activity = this;
     }
@@ -54,18 +50,15 @@ public class PasswordStore extends ActionBarActivity  {
     @Override
     public void onResume(){
         super.onResume();
-
         // create the repository static variable in PasswordRepository
         PasswordRepository.getRepository(new File(getFilesDir() + this.getResources().getString(R.string.store_git)));
 
-        // re-check that there was no change with the repository state
         checkLocalRepository();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        this.leftActivity = true;
     }
 
     @Override
@@ -74,6 +67,7 @@ public class PasswordStore extends ActionBarActivity  {
         getMenuInflater().inflate(R.menu.pwdstore, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -130,7 +124,6 @@ public class PasswordStore extends ActionBarActivity  {
                     System.out.println("Exception caught :(");
                     e.printStackTrace();
                 }
-                this.leftActivity = true;
                 return true;
 
             case R.id.menu_add_password:
@@ -154,7 +147,6 @@ public class PasswordStore extends ActionBarActivity  {
                 intent = new Intent(this, GitActivity.class);
                 intent.putExtra("Operation", GitActivity.REQUEST_PUSH);
                 startActivityForResult(intent, GitActivity.REQUEST_PUSH);
-                this.leftActivity = true;
                 return true;
 
             case R.id.git_pull:
@@ -166,7 +158,6 @@ public class PasswordStore extends ActionBarActivity  {
                 intent = new Intent(this, GitActivity.class);
                 intent.putExtra("Operation", GitActivity.REQUEST_PULL);
                 startActivityForResult(intent, GitActivity.REQUEST_PULL);
-                this.leftActivity = true;
                 return true;
 
             case R.id.refresh:
@@ -210,6 +201,7 @@ public class PasswordStore extends ActionBarActivity  {
                     git.add().addFilepattern("."),
                     git.commit().setMessage(R.string.initialization_commit_text + keyId)
             );
+            settings.edit().putBoolean("repository_initialized", true).commit();
         } catch (Exception e) {
             e.printStackTrace();
             localDir.delete();
@@ -273,63 +265,38 @@ public class PasswordStore extends ActionBarActivity  {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        int status = 0;
 
-        if (localDir.exists()) {
-            // if we are coming back from gpg do not anything
-            if (this.leftActivity) {
-                this.leftActivity = false;
-                return;
-            }
+        if (settings.getBoolean("repository_initialized", false)) {
+            // do not push the fragment if we already have it
+            if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
 
-            File[] folders = localDir.listFiles();
-            status = folders.length;
-
-            // this means that the repository has been correctly cloned
-            // if this file does not exist, well... this will not work if there is no other files
-            if ((new File(localDir.getAbsolutePath() + "/.gpg-id")).exists())
-                status++;
-        }
-
-        // either the repo is empty or it was not correctly cloned
-        switch (status) {
-            case 0:
-                if(!localDir.equals(PasswordRepository.getWorkTree()) && localDir.exists())
-                    break;
-                PasswordRepository.setInitialized(false);
-
-                // if we still have the pass list (after deleting for instance) remove it
-                if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
+                // clean things up
+                if (fragmentManager.findFragmentByTag("ToCloneOrNot") != null) {
                     fragmentManager.popBackStack();
                 }
 
-                ToCloneOrNot cloneFrag = new ToCloneOrNot();
-                fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot");
+                PasswordRepository.setInitialized(true);
+                plist = new PasswordFragment();
+                Bundle args = new Bundle();
+                args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
+
+                plist.setArguments(args);
+
+                fragmentTransaction.addToBackStack("passlist");
+
+                fragmentTransaction.replace(R.id.main_layout, plist, "PasswordsList");
                 fragmentTransaction.commit();
-                break;
-            default:
+            }
+        } else {
+            // if we still have the pass list (after deleting the repository for instance) remove it
+            if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
+                fragmentManager.popBackStack();
+            }
 
-                if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
-
-                    // clean things up
-                    if (fragmentManager.findFragmentByTag("ToCloneOrNot") != null) {
-                        fragmentManager.popBackStack();
-                    }
-
-                    PasswordRepository.setInitialized(true);
-                    plist = new PasswordFragment();
-                    Bundle args = new Bundle();
-                    args.putString("Path", localDir.getAbsolutePath());
-
-                    plist.setArguments(args);
-
-                    fragmentTransaction.addToBackStack("passlist");
-
-                    fragmentTransaction.replace(R.id.main_layout, plist, "PasswordsList");
-                    fragmentTransaction.commit();
-                }
+            ToCloneOrNot cloneFrag = new ToCloneOrNot();
+            fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot");
+            fragmentTransaction.commit();
         }
-        this.leftActivity = false;
     }
 
 
@@ -348,8 +315,6 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     public void decryptPassword(PasswordItem item) {
-        this.leftActivity = true;
-
         Intent intent = new Intent(this, PgpHandler.class);
         intent.putExtra("NAME", item.toString());
         intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
@@ -360,7 +325,6 @@ public class PasswordStore extends ActionBarActivity  {
     public void createPassword(View v) {
         this.currentDir = getCurrentDir();
         Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
-        this.leftActivity = true;
 
         Intent intent = new Intent(this, PgpHandler.class);
         intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
@@ -433,10 +397,11 @@ public class PasswordStore extends ActionBarActivity  {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == GitActivity.REQUEST_CLONE)
-                checkLocalRepository();
-
             switch (requestCode) {
+                case GitActivity.REQUEST_CLONE:
+                    // if we get here with a RESULT_OK then it's probably OK :)
+                    settings.edit().putBoolean("repository_initialized", true).commit();
+                    break;
                 case PgpHandler.REQUEST_CODE_ENCRYPT :
                     Git git = new Git(PasswordRepository.getRepository(new File("")));
                     GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
