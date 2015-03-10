@@ -82,30 +82,30 @@ public class GitActivityClone extends ActivityInstrumentationTestCase2<GitActivi
             }
         });
 
-        mInstrumentation.waitForIdleSync();
-
-        solo.clearEditText(server_user);
-        solo.enterText(server_user, "testpwd");
-        solo.clearEditText(server_path);
-        solo.enterText(server_path, "repo-test");
-        solo.clearEditText(server_url);
-        solo.enterText(server_url, "192.168.1.28");
-
-        mInstrumentation.waitForIdleSync();
-
-        gitActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                connectionModeSpinner.setSelection(1); // user/pwd
-                ((Button) gitActivity.findViewById(R.id.clone_button)).performClick();
-            }
-        });
-
-        mInstrumentation.waitForIdleSync();
-
-        assertTrue("Could not find the dialog!", solo.searchText(gitActivity.getResources().getString(R.string.passphrase_dialog_title)));
-        solo.enterText(solo.getEditText("Password"), "test");
-        solo.clickOnButton(gitActivity.getResources().getString(R.string.dialog_ok));
-
-        mInstrumentation.waitForIdleSync();
+//        mInstrumentation.waitForIdleSync();
+//
+//        solo.clearEditText(server_user);
+//        solo.enterText(server_user, "testpwd");
+//        solo.clearEditText(server_path);
+//        solo.enterText(server_path, "repo-test");
+//        solo.clearEditText(server_url);
+//        solo.enterText(server_url, "192.168.1.28");
+//
+//        mInstrumentation.waitForIdleSync();
+//
+//        gitActivity.runOnUiThread(new Runnable() {
+//            public void run() {
+//                connectionModeSpinner.setSelection(1); // user/pwd
+//                ((Button) gitActivity.findViewById(R.id.clone_button)).performClick();
+//            }
+//        });
+//
+//        mInstrumentation.waitForIdleSync();
+//
+//        assertTrue("Could not find the dialog!", solo.searchText(gitActivity.getResources().getString(R.string.passphrase_dialog_title)));
+//        solo.enterText(solo.getEditText("Password"), "test");
+//        solo.clickOnButton(gitActivity.getResources().getString(R.string.dialog_ok));
+//
+//        mInstrumentation.waitForIdleSync();
     }
 }
