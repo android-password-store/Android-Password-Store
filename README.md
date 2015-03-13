@@ -1,7 +1,6 @@
-Update
-========
-I am currently unavailable for few weeks. Will restart working on the project whenever I can.
-Meanwhile, check https://assembly.com/aps-android-password-store/bounties/ , I will post new bounties soon and get the project on the front page afterwards. 
+Poll
+=====
+http://www.poll-maker.com/poll264179x2406412a-10
 
 PwdStore
 ========
