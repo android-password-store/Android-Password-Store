@@ -8,6 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.zeapo.pwdstore.git.GitActivity"
     android:background="@android:color/white">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +22,7 @@
             style="@android:style/TextAppearance.Large"
             android:gravity="left"
             android:paddingBottom="6dp"
-            android:textColor="@color/blue_grey_700"
+            android:textColor="@color/blue_grey_500"
             android:background="@drawable/bottom_line"/>
 
         <RelativeLayout
@@ -161,7 +162,7 @@
             style="@android:style/TextAppearance.Large"
             android:gravity="left"
             android:paddingBottom="6dp"
-            android:textColor="@color/blue_grey_700"
+            android:textColor="@color/blue_grey_500"
             android:background="@drawable/bottom_line"/>
 
         <EditText
