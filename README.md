@@ -36,13 +36,12 @@ FAQ
 - **A:** ssh-key files are usually created with permissions set to `600`, meaning that only the creator of this key has the right to read from it. The application needs a read access, at least temporarily, make the permissions to `644`, import the key, then set them back to `600`.
 - **Q:** I tried to use APG and it does not work... why?
 - **A:** We only support OpenKeychain.
+- **Q** I get the error *No encrypted data with known secret key found in stream*
+- **A** In OpenKeyChain **(under the left drawer) Apps > Password Store > Accounts > (select the account) > Account key** select the key used to encrypt your passwords.
 
 TODO
 =====
-**Urgent**
 - Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))
-
-**Less urgent**
 - Create a new category
 - Multi-select (for password deletion)
 - Multiple password stores (multiple git repositories).
