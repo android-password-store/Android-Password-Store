@@ -52,6 +52,28 @@ How-To
 ======
 *Note:* This section is work in progress
 
+Generate a ssh key for your git repo
+--------------------------------------------
+- Generate the private and public key
+```
+ssh-keygen -C droid_phone -b 2048 -t rsa -f /tmp/id_rsa_droid
+```
+- Copy the public key `/tmp/id_rsa_droid.pub` on your ssh server and add in to the `~/.ssh/authorized_keys` file
+```
+cat id_rsa_droid.pub >> ~/.ssh/authorized_keys
+```
+- Copy the private key `/tmp/id_rsa_droid`to your phone and import it in your Android-Password_Store app through the settings
+
+Export your gpg private key
+--------------------------------------------
+- Get your pass script gpg id(s) ie: `cat ~/.password-store/.gpg-id`
+- You can also get a full ids list using `gpg -k`
+- Export your private key with 
+```
+gpg --export-secret-key [the_id] > keys.asc
+```
+- Import it in OpenKeychain
+
 Clone using SSH-key, then decrypt a password
 --------------------------------------------
 
