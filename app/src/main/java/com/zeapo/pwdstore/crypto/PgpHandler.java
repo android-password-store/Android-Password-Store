@@ -190,7 +190,7 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
             @Override
             public void run() {
                 Toast.makeText(PgpHandler.this,
-                        "onError id:" + error.getErrorId() + "\n\n" + error.getMessage(),
+                        "Error from OpenKeyChain : " + error.getMessage(),
                         Toast.LENGTH_LONG).show();
                 Log.e(Constants.TAG, "onError getErrorId:" + error.getErrorId());
                 Log.e(Constants.TAG, "onError getMessage:" + error.getMessage());

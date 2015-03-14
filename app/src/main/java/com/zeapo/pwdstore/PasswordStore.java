@@ -176,6 +176,18 @@ public class PasswordStore extends ActionBarActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+    public void openSettings(View view) {
+        Intent intent;
+
+        try {
+            intent = new Intent(this, UserPreference.class);
+            startActivity(intent);
+        } catch (Exception e) {
+            System.out.println("Exception caught :(");
+            e.printStackTrace();
+        }
+    }
+
     public void getClone(View view){
         Intent intent = new Intent(this, GitActivity.class);
         intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
@@ -284,6 +296,8 @@ public class PasswordStore extends ActionBarActivity  {
 
                 fragmentTransaction.addToBackStack("passlist");
 
+                getSupportActionBar().show();
+
                 fragmentTransaction.replace(R.id.main_layout, plist, "PasswordsList");
                 fragmentTransaction.commit();
             }
@@ -292,6 +306,8 @@ public class PasswordStore extends ActionBarActivity  {
             if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
                 fragmentManager.popBackStack();
             }
+
+            getSupportActionBar().hide();
 
             ToCloneOrNot cloneFrag = new ToCloneOrNot();
             fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot");
