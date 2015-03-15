@@ -54,17 +54,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="@string/crypto_pass_label"/>
+                    android:text="@string/crypto_pass_label"
+                    />
                 <EditText
                     android:id="@+id/crypto_password_edit"
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:typeface="monospace"/>
+                    android:typeface="monospace"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_action_accounts"
+                    android:background="@drawable/blue_rectangle"
+                    android:id="@+id/crypto_pass_gen"
+                    android:onClick="handleClick"/>
             </LinearLayout>
 
             <TextView
