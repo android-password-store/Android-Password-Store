@@ -154,6 +154,9 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
                 case IMPORT_SSH_KEY:
                 {
                     try {
+                        if (data.getData() == null) {
+                            throw new IOException("Unable to open file");
+                        }
                         copySshKey(data.getData());
                         Toast.makeText(this, this.getResources().getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show();
                         setResult(RESULT_OK);
