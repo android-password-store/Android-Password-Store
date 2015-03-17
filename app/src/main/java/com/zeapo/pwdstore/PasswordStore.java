@@ -407,7 +407,7 @@ public class PasswordStore extends ActionBarActivity  {
         if  ((null != plist)) {
             return plist.getCurrentDir();
         }
-        return null;
+        return PasswordRepository.getWorkTree();
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
