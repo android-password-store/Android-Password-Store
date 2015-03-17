@@ -277,8 +277,8 @@ public class PasswordStore extends ActionBarActivity  {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-
-        if (settings.getBoolean("repository_initialized", false)) {
+        // TODO: Remove the getpaswords() as it is a temporary fix until every user has the repository_initialized set
+        if (settings.getBoolean("repository_initialized", false) || PasswordRepository.getPasswords(localDir).size() > 0) {
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
 
