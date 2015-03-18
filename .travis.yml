@@ -1,17 +1,17 @@
 language: android
 
- android:
-   components:
-     - android-22
-     - build-tools-22.0.0
-     - platform-tools
-     - extra-google-m2repository
-     - extra-android-m2repository
+android:
+    components:
+        - android-22
+        - build-tools-22.0.0
+        - platform-tools
+        - extra-google-m2repository
+        - extra-android-m2repository
 
-     # ok no tests for now
-     # - sys-img-x86-android-22
+ # ok no tests for now
+ # - sys-img-x86-android-22
 
- before_script:
-     - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
+before_script:
+    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
- script: "./gradlew clean build test -Dpre-dex=false"
+script: "./gradlew clean build test -Dpre-dex=false"
