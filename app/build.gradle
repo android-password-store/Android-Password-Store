@@ -3,14 +3,14 @@ apply from: 'copyLibs.gradle'    // enable 'copyLibs.gradle' script plugin
 apply plugin: 'eclipse'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 34
-        versionName "1.2.0.14"
+        targetSdkVersion 21
+        versionCode 35
+        versionName "1.2.0.15"
     }
 
     compileOptions {
@@ -25,8 +25,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:recyclerview-v7:21.0.3'
     //compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':libraries:openpgp-api-lib')
     compile 'org.eclipse.jgit:org.eclipse.jgit:3.7.0.201502260915-r'
