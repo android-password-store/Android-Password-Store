@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/zeapo/Android-Password-Store.png?label=ready&title=Ready)](https://waffle.io/zeapo/Android-Password-Store)
 PwdStore
 ========
 [![IRC](irc_badge.png)](https://webchat.freenode.net/?channels=%23Android-Password-Store&uio=d4)
