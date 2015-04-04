@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -35,7 +34,9 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             super.onCreate(savedInstanceState);
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preference);
-            findPreference("openpgp_key_id").setOnPreferenceClickListener((UserPreference) getActivity());
+            Preference keyPref = findPreference("openpgp_key_id");
+            keyPref.setSummary(getPreferenceManager().getSharedPreferences().getString("openpgp_key_ids", "No key selected"));
+            keyPref.setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("ssh_key").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("git_server_info").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("git_delete_repo").setOnPreferenceClickListener((UserPreference) getActivity());

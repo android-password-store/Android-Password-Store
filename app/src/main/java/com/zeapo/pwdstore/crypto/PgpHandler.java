@@ -1,27 +1,8 @@
 package com.zeapo.pwdstore.crypto;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
-import java.util.ArrayList;
-
-import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.util.StringUtils;
-import org.openintents.openpgp.IOpenPgpService;
-import org.openintents.openpgp.OpenPgpError;
-import org.openintents.openpgp.util.OpenPgpApi;
-import org.openintents.openpgp.util.OpenPgpServiceConnection;
-import org.openintents.openpgp.util.OpenPgpUtils;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
@@ -47,6 +28,22 @@ import android.widget.Toast;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.util.StringUtils;
+import org.openintents.openpgp.IOpenPgpService;
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
+import org.openintents.openpgp.util.OpenPgpUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConnection.OnBound{
 
@@ -378,6 +375,8 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
 //                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
                             settings.edit().putString("openpgp_key_ids", keyIDs).apply();
                         }
+
+                        showToast("PGP key selected");
                         setResult(RESULT_OK);
                         finish();
                     }
