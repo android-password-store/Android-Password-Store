@@ -9,11 +9,6 @@
           pwstore:showAsAction="ifRoom|collapseActionView"
           pwstore:actionViewClass="android.support.v7.widget.SearchView" />
 
-    <item android:id="@+id/menu_add_password"
-        android:icon="@drawable/ic_action_new"
-        pwstore:showAsAction="ifRoom"
-        android:title="New password"/>
-
     <!--<item android:id="@+id/menu_add_category"-->
         <!--android:title="New category"/>-->
 

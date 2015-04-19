@@ -123,19 +123,6 @@ public class PasswordStore extends ActionBarActivity  {
                     e.printStackTrace();
                 }
                 return true;
-
-            case R.id.menu_add_password:
-                if (!PasswordRepository.isInitialized()) {
-                    initBefore.show();
-                    break;
-                }
-
-                createPassword(getCurrentFocus());
-                break;
-
-//            case R.id.menu_add_category:
-//                break;
-
             case R.id.git_push:
                 if (!PasswordRepository.isInitialized()) {
                     initBefore.show();
@@ -348,6 +335,17 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     public void createPassword(View v) {
+        if (!PasswordRepository.isInitialized()) {
+            new AlertDialog.Builder(this)
+                    .setMessage(this.getResources().getString(R.string.creation_dialog_text))
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();
+            return;
+        }
+
         this.currentDir = getCurrentDir();
         Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
 
