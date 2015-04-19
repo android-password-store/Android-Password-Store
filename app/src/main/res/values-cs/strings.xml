@@ -121,5 +121,8 @@
     <string name="dialog_negative">Ne... později</string>
     <string name="dialog_oops">Ajaj...</string>
     <string name="dialog_cancel">Zrušit</string>
+    <string name="git_sync">Syncronize repository</string>
+    <string name="git_pull">Pull from remote</string>
+    <string name="git_push">Push to remote</string>
 
 </resources>

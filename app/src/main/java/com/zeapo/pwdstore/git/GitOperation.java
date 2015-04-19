@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -16,7 +15,6 @@ import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;

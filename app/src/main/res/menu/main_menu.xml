@@ -17,10 +17,12 @@
     <!--<item android:id="@+id/menu_add_category"-->
         <!--android:title="New category"/>-->
 
+    <item android:id="@+id/git_sync"
+        android:title="@string/git_sync"/>
     <item android:id="@+id/git_pull"
-        android:title="Pull from remote"/>
+        android:title="@string/git_pull"/>
     <item android:id="@+id/git_push"
-        android:title="Push to remote"/>
+        android:title="@string/git_push"/>
 
     <item android:id="@+id/refresh"
         android:title="Refresh list"

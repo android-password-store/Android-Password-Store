@@ -25,11 +25,7 @@ import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.eclipse.jgit.api.CloneCommand;
-import org.eclipse.jgit.api.Git;
-
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +55,7 @@ public class GitActivity extends ActionBarActivity {
     public static final int REQUEST_CLONE = 103;
     public static final int REQUEST_INIT = 104;
     public static final int EDIT_SERVER = 105;
+    public static final int REQUEST_SYNC = 106;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,11 +257,15 @@ public class GitActivity extends ActionBarActivity {
 
                 break;
             case REQUEST_PULL:
-                pullFromRepository();
+                syncRepository(REQUEST_PULL);
                 break;
 
             case REQUEST_PUSH:
-                pushToRepository();
+                syncRepository(REQUEST_PUSH);
+                break;
+
+            case REQUEST_SYNC:
+                syncRepository(REQUEST_SYNC);
                 break;
         }
 
@@ -521,20 +522,6 @@ public class GitActivity extends ActionBarActivity {
     }
 
     /**
-     * Pull the latest changes from the remote repository and merges them locally
-     */
-    public void pullFromRepository() {
-        syncRepository(REQUEST_PULL);
-    }
-
-    /**
-     * Pushes the latest changes from the local repository to the remote one
-     */
-    public void pushToRepository() {
-        syncRepository(REQUEST_PUSH);
-    }
-
-    /**
      * Syncs the local repository with the remote one (either pull or push)
      * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH
      */
@@ -566,13 +553,19 @@ public class GitActivity extends ActionBarActivity {
             PasswordRepository.addRemote("origin", hostname, false);
             GitOperation op;
 
-            if (operation == REQUEST_PULL) {
-                op = new PullOperation(localDir, activity).setCommand();
-            } else if (operation == REQUEST_PUSH) {
-                op = new PushOperation(localDir, activity).setCommand();
-            } else {
-                Log.e(TAG, "Sync operation not recognized : " + operation);
-                return;
+            switch (operation) {
+                case REQUEST_PULL:
+                    op = new PullOperation(localDir, activity).setCommand();
+                    break;
+                case REQUEST_PUSH:
+                    op = new PushOperation(localDir, activity).setCommand();
+                    break;
+                case REQUEST_SYNC:
+                    op = new SyncOperation(localDir, activity).setCommands();
+                    break;
+                default:
+                    Log.e(TAG, "Sync operation not recognized : " + operation);
+                    return;
             }
 
             try {

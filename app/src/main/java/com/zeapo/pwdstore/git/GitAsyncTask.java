@@ -39,10 +39,9 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
 
     @Override
     protected String doInBackground(GitCommand... cmd) {
-        int count = cmd.length;
-        for (int i = 0; i < count; i++) {
+        for (GitCommand aCmd : cmd) {
             try {
-                cmd[i].call();
+                aCmd.call();
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.getMessage();
@@ -52,7 +51,8 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     }
 
     protected void onPostExecute(String result) {
-        this.dialog.dismiss();
+        if (this.dialog != null)
+            this.dialog.dismiss();
 
         if (result == null)
             result = "Unexpected error";

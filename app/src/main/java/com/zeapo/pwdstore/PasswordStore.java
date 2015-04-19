@@ -29,8 +29,6 @@ import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Stack;
 
 public class PasswordStore extends ActionBarActivity  {
     private static final String TAG = "PwdStrAct";
@@ -64,7 +62,7 @@ public class PasswordStore extends ActionBarActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.pwdstore, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
@@ -158,6 +156,17 @@ public class PasswordStore extends ActionBarActivity  {
                 intent = new Intent(this, GitActivity.class);
                 intent.putExtra("Operation", GitActivity.REQUEST_PULL);
                 startActivityForResult(intent, GitActivity.REQUEST_PULL);
+                return true;
+
+            case R.id.git_sync:
+                if (!PasswordRepository.isInitialized()) {
+                    initBefore.show();
+                    break;
+                }
+
+                intent = new Intent(this, GitActivity.class);
+                intent.putExtra("Operation", GitActivity.REQUEST_SYNC);
+                startActivityForResult(intent, GitActivity.REQUEST_SYNC);
                 return true;
 
             case R.id.refresh:
