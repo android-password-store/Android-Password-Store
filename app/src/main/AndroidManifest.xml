@@ -30,9 +30,12 @@
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
+
+        <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
 	</application>
 
 	<uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

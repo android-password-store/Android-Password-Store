@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -18,6 +19,8 @@ import com.google.common.collect.Iterables;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+
+import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -34,6 +37,7 @@ public class UserPreference extends AppCompatActivity {
     private final static int IMPORT_PGP_KEY = 2;
     private final static int EDIT_GIT_INFO = 3;
     private OpenPgpKeyPreference mKey;
+    private final static int SELECT_GIT_DIRECTORY = 4;
 
     public static class PrefsFragment extends PreferenceFragment {
         @Override
@@ -108,6 +112,22 @@ public class UserPreference extends AppCompatActivity {
                 callingActivity.mKey.setOpenPgpProvider((String) o);
                 return false;
             });
+
+            findPreference("pref_select_external").setOnPreferenceClickListener((Preference pref) -> {
+                Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(selectedUri);
+
+                if (intent.resolveActivity(callingActivity.getPackageManager()) != null) {
+                    startActivityForResult(Intent.createChooser(intent, "Open folder"), SELECT_GIT_DIRECTORY);
+                } else {
+                    intent = new Intent(callingActivity, DirectoryChooserActivity.class);
+                    intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,  "DirChooserSample");
+
+                    startActivityForResult(intent, SELECT_GIT_DIRECTORY);
+                }
+                return true;
+            });
         }
     }
 
@@ -149,7 +169,6 @@ public class UserPreference extends AppCompatActivity {
         intent.setType("*/*");
         startActivityForResult(intent, IMPORT_SSH_KEY);
     }
-
 
     private void copySshKey(Uri uri) throws IOException {
         InputStream sshKey = this.getContentResolver().openInputStream(uri);

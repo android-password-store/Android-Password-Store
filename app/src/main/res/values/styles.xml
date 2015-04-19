@@ -6,7 +6,7 @@
         <item name="colorPrimaryDark">@color/blue_grey_500</item>
         <item name="android:windowBackground">@color/blue_grey_50</item>
         <item name="android:textColorPrimary">@color/teal_900</item>
-        <item name="android:textColor">@color/blue_grey_900</item>
+        <item name="android:textColor">@color/text_color</item>
         <item name="actionModeStyle">@style/ActionMode</item>
     </style>
 
