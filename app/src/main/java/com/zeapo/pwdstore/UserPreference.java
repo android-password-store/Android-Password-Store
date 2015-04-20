@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -112,18 +111,11 @@ public class UserPreference extends AppCompatActivity {
             });
 
             findPreference("pref_select_external").setOnPreferenceClickListener((Preference pref) -> {
-                Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath());
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(selectedUri);
+                Intent intent = new Intent(callingActivity, DirectoryChooserActivity.class);
+                intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
+                        "passwordstore");
 
-                if (intent.resolveActivity(callingActivity.getPackageManager()) != null) {
-                    startActivityForResult(Intent.createChooser(intent, "Open folder"), SELECT_GIT_DIRECTORY);
-                } else {
-                    intent = new Intent(callingActivity, DirectoryChooserActivity.class);
-                    intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,  "DirChooserSample");
-
-                    startActivityForResult(intent, SELECT_GIT_DIRECTORY);
-                }
+                startActivityForResult(intent, SELECT_GIT_DIRECTORY);
                 return true;
             });
         }
