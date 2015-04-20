@@ -46,8 +46,6 @@ public class UserPreference extends AppCompatActivity {
             final UserPreference callingActivity = (UserPreference) getActivity();
             final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
 
-            addPreferencesFromResource(R.xml.preference);
-
             Preference keyPref = findPreference("openpgp_key_id_pref");
             String selectedKeys = sharedPreferences.getString("openpgp_key_ids", "");
             if (Strings.isNullOrEmpty(selectedKeys)) {
@@ -220,6 +218,14 @@ public class UserPreference extends AppCompatActivity {
                 default:
                 break;
             }
+        }
+
+        // why do they have to use a different resultCode than OK :/
+        if (requestCode == SELECT_GIT_DIRECTORY && resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED) {
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                    .edit()
+                    .putString("git_external_repo", data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR))
+                    .commit();
         }
     }
 }
