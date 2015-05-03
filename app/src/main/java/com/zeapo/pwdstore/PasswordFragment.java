@@ -5,7 +5,7 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -105,7 +105,7 @@ public class PasswordFragment extends Fragment{
                         recyclerAdapter.clear();
                         recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile()));
 
-                        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     } else {
                         ((PasswordStore) getActivity()).decryptPassword(item);
                     }
@@ -138,7 +138,7 @@ public class PasswordFragment extends Fragment{
         recyclerAdapter.clear();
         recyclerAdapter.addAll(PasswordRepository.getPasswords());
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     /**

@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
@@ -29,12 +29,16 @@ import org.eclipse.jgit.api.Git;
 
 import java.io.File;
 
-public class PasswordStore extends ActionBarActivity  {
+public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
     private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
     private PasswordFragment plist;
+    private AlertDialog selectDestinationDialog;
+
+    private final static int CLONE_REPO_BUTTON = 401;
+    private final static int NEW_REPO_BUTTON = 402;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class PasswordStore extends ActionBarActivity  {
         }
 
         // uninitialize the repo if the dir does not exist or is absolutely empty
-        if (!dir.exists() || !dir.isDirectory()) {
+        if (!dir.exists() || !dir.isDirectory() || FileUtils.listFiles(dir, null, false).isEmpty()) {
             settings.edit().putBoolean("repository_initialized", false).apply();
         }
 
@@ -208,10 +212,12 @@ public class PasswordStore extends ActionBarActivity  {
         }
     }
 
-    public void getClone(View view){
-        Intent intent = new Intent(this, GitActivity.class);
-        intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-        startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+    public void cloneExistingRepository(View view) {
+        initRepository(CLONE_REPO_BUTTON);
+    }
+
+    public void createNewRepository(View view) {
+        initRepository(NEW_REPO_BUTTON);
     }
 
     private void createRepository() {
@@ -232,7 +238,7 @@ public class PasswordStore extends ActionBarActivity  {
         checkLocalRepository();
     }
 
-    public void initRepository(View view) {
+    public void initializeRepositoryInfo() {
         final String keyId = settings.getString("openpgp_key_ids", "");
 
         if (keyId != null && keyId.isEmpty())
@@ -267,7 +273,13 @@ public class PasswordStore extends ActionBarActivity  {
 
         if (settings.getBoolean("repository_initialized", false)) {
             // do not push the fragment if we already have it
-            if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
+            if (fragmentManager.findFragmentByTag("PasswordsList") == null || settings.getBoolean("repo_changed", false)) {
+                settings.edit().putBoolean("repo_changed", false).apply();
+
+                // todo move this as it is duplicated upthere!
+                if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
 
                 // clean things up
                 if (fragmentManager.findFragmentByTag("ToCloneOrNot") != null) {
@@ -425,13 +437,55 @@ public class PasswordStore extends ActionBarActivity  {
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
-                    initRepository(getCurrentFocus());
+                    initializeRepositoryInfo();
                     break;
                 case GitActivity.REQUEST_PULL:
                     updateListAdapter();
                     break;
+                case NEW_REPO_BUTTON:
+                    initializeRepositoryInfo();
+                    break;
+                case CLONE_REPO_BUTTON:
+                    Intent intent = new Intent(activity, GitActivity.class);
+                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                    break;
             }
-
         }
+    }
+
+    protected void initRepository(final int operation) {
+        new AlertDialog.Builder(this)
+                .setTitle("Repositiory location")
+                .setMessage("Select where to create or clone your password repository.")
+                .setPositiveButton("External", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        settings.edit().putBoolean("git_external", true).apply();
+
+                        if (settings.getString("git_external_repo", null) == null) {
+                            Intent intent = new Intent(activity, UserPreference.class);
+                            intent.putExtra("operation", "git_external");
+                            startActivityForResult(intent, operation);
+                        } else {
+                            checkLocalRepository();
+                        }
+                    }
+                })
+                .setNegativeButton("Internal", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        settings.edit().putBoolean("git_external", false).apply();
+                        switch (operation) {
+                            case NEW_REPO_BUTTON:
+                                initializeRepositoryInfo();
+                                break;
+                            case CLONE_REPO_BUTTON:
+                                Intent intent = new Intent(activity, GitActivity.class);
+                                intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                                startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                                break;
+                        }
+                    }
+                })
+                .show();
     }
 }

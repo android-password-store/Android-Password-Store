@@ -110,10 +110,24 @@ public class UserPreference extends AppCompatActivity {
                 return false;
             });
 
-            findPreference("pref_select_external").setOnPreferenceClickListener((Preference pref) -> {
+            final Preference externalRepo = findPreference("pref_select_external");
+            externalRepo.setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
+            externalRepo.setOnPreferenceClickListener((Preference pref) -> {
                 callingActivity.selectExternalGitRepository();
                 return true;
             });
+
+            Preference.OnPreferenceChangeListener resetRepo = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    PasswordRepository.closeRepository();
+                    getPreferenceManager().getSharedPreferences().edit().putBoolean("repo_changed", true).apply();
+                    return true;
+                }
+            };
+
+            findPreference("pref_select_external").setOnPreferenceChangeListener(resetRepo);
+            findPreference("git_external").setOnPreferenceChangeListener(resetRepo);
         }
     }
 

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4">
+        android:layout_weight="1">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,8 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="openSettings"
-            android:background="@android:color/transparent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            style="?android:attr/borderlessButtonStyle"
             android:text="@string/action_settings"
             android:textColor="@android:color/white"
             android:layout_alignParentTop="true"
@@ -45,32 +44,22 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:textStyle="bold"
             android:textAllCaps="true"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/myRectangleView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_height="48dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:background="@android:color/white">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_horizontal"
-            android:text="@string/clone_fragment_text"
-            android:id="@+id/textView" />
-
+        
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textStyle="bold"
-            android:onClick="initRepository"
+            style="?android:attr/borderlessButtonStyle"
+            android:onClick="createNewRepository"
             android:text="@string/initialize"
             android:id="@+id/button"
             android:layout_alignTop="@+id/main_clone_button"
@@ -80,14 +69,14 @@
             android:id="@+id/main_clone_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textColor="@color/deep_orange_500"
-            android:textStyle="bold"
-            android:onClick="getClone"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/teal_A700"
+            android:onClick="cloneExistingRepository"
             android:text="@string/clone"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 
 </LinearLayout>

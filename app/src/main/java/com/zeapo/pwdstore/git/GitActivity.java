@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 // TODO move the messages to strings.xml
 
-public class GitActivity extends ActionBarActivity {
+public class GitActivity extends AppCompatActivity {
     private static final String TAG = "GitAct";
 
     private Activity activity;
@@ -56,6 +56,7 @@ public class GitActivity extends ActionBarActivity {
     public static final int REQUEST_INIT = 104;
     public static final int EDIT_SERVER = 105;
     public static final int REQUEST_SYNC = 106;
+    public static final int REQUEST_CREATE = 107;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
