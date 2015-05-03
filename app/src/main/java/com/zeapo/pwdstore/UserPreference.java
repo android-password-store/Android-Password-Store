@@ -82,7 +82,7 @@ public class UserPreference extends AppCompatActivity {
                         setPositiveButton(R.string.dialog_delete,
                                 (dialog, id) -> {
                                     try {
-                                        FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
+                                        FileUtils.cleanDirectory(PasswordRepository.getWorkTree());
                                     } catch (Exception e) {
                                         //TODO Handle the diffent cases of exceptions
                                     }
