@@ -111,11 +111,7 @@ public class UserPreference extends AppCompatActivity {
             });
 
             findPreference("pref_select_external").setOnPreferenceClickListener((Preference pref) -> {
-                Intent intent = new Intent(callingActivity, DirectoryChooserActivity.class);
-                intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
-                        "passwordstore");
-
-                startActivityForResult(intent, SELECT_GIT_DIRECTORY);
+                callingActivity.selectExternalGitRepository();
                 return true;
             });
         }
@@ -125,8 +121,15 @@ public class UserPreference extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
-            if ((getIntent().getStringExtra("operation") != null) && (getIntent().getStringExtra("operation").equals("get_ssh_key"))) {
-                getSshKey();
+            if (getIntent().getStringExtra("operation") != null) {
+                switch (getIntent().getStringExtra("operation")) {
+                    case "get_ssh_key":
+                        getSshKey();
+                        break;
+                    case "git_external":
+                        selectExternalGitRepository();
+                        break;
+                }
             }
         }
 
@@ -134,6 +137,14 @@ public class UserPreference extends AppCompatActivity {
                 .replace(android.R.id.content, new PrefsFragment()).commit();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void selectExternalGitRepository() {
+        Intent intent = new Intent(this, DirectoryChooserActivity.class);
+        intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
+                "passwordstore");
+
+        startActivityForResult(intent, SELECT_GIT_DIRECTORY);
     }
 
     @Override

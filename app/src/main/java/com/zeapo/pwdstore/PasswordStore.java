@@ -50,16 +50,19 @@ public class PasswordStore extends ActionBarActivity  {
         File dir = null;
 
         if (settings.getBoolean("git_external", false)) {
-            if (settings.getString("git_external_repo", null) == null)
-            {
-                // todo: show the main screen
-            } else {
+            if (settings.getString("git_external_repo", null) != null) {
                 dir = new File(settings.getString("git_external_repo", null));
             }
         } else {
             dir = new File(getFilesDir() + "/store");
         }
-        assert dir != null;
+        // temp for debug
+        if (dir == null) {
+            Intent intent = new Intent(this, UserPreference.class);
+            intent.putExtra("operation", "git_external");
+            startActivity(intent);
+            return;
+        }
 
         // uninitialize the repo if the dir does not exist or is absolutely empty
         if (!dir.exists() || !dir.isDirectory()) {
