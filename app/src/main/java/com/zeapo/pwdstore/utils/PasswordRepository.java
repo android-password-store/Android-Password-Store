@@ -5,8 +5,8 @@ import android.util.Log;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
@@ -49,11 +49,7 @@ public class PasswordRepository {
     }
 
     public static boolean isInitialized() {
-        return initialized;
-    }
-
-    public static void setInitialized(boolean v) {
-        initialized = v;
+        return repository != null;
     }
 
     public static void createRepository(File localDir) throws Exception{
@@ -112,6 +108,7 @@ public class PasswordRepository {
 
     public static void closeRepository() {
         repository.close();
+        repository = null;
     }
 
     public static ArrayList<File> getFilesList(){
@@ -128,15 +125,6 @@ public class PasswordRepository {
 
     public static File getWorkTree() {
         return repository.getWorkTree();
-    }
-
-    /**
-     * Gets a file from the working tree
-     * @param name the relative path of the file
-     * @return the file in the repository
-     */
-    public static File getFile(String name) {
-        return new File(repository.getWorkTree() + "/" + name);
     }
 
     /**

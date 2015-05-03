@@ -47,9 +47,31 @@ public class PasswordStore extends ActionBarActivity  {
     @Override
     public void onResume(){
         super.onResume();
-        // create the repository static variable in PasswordRepository
-        PasswordRepository.getRepository(new File(getFilesDir() + this.getResources().getString(R.string.store_git)));
+        File dir = null;
 
+        if (settings.getBoolean("git_external", false)) {
+            if (settings.getString("git_external_repo", null) == null)
+            {
+                // todo: show the main screen
+            } else {
+                dir = new File(settings.getString("git_external_repo", null));
+            }
+        } else {
+            dir = new File(getFilesDir() + "/store");
+        }
+        assert dir != null;
+
+        // uninitialize the repo if the dir does not exist or is absolutely empty
+        if (!dir.exists() || !dir.isDirectory()) {
+            settings.edit().putBoolean("repository_initialized", false).apply();
+        }
+
+        if (!PasswordRepository.getPasswords(dir).isEmpty()) {
+            settings.edit().putBoolean("repository_initialized", true).apply();
+        }
+
+        // create the repository static variable in PasswordRepository
+        PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
         checkLocalRepository();
     }
 
@@ -192,7 +214,8 @@ public class PasswordStore extends ActionBarActivity  {
     private void createRepository() {
 //        final String keyId = settings.getString("openpgp_key_ids", "");
 
-        File localDir = new File(getFilesDir() + "/store/");
+        File localDir = PasswordRepository.getWorkTree();
+
         localDir.mkdir();
         try {
             PasswordRepository.createRepository(localDir);
@@ -239,8 +262,7 @@ public class PasswordStore extends ActionBarActivity  {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // TODO: Remove the getpaswords() as it is a temporary fix until every user has the repository_initialized set
-        if (settings.getBoolean("repository_initialized", false) || PasswordRepository.getPasswords(localDir).size() > 0) {
+        if (settings.getBoolean("repository_initialized", false)) {
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null) {
 
@@ -249,7 +271,6 @@ public class PasswordStore extends ActionBarActivity  {
                     fragmentManager.popBackStack();
                 }
 
-                PasswordRepository.setInitialized(true);
                 plist = new PasswordFragment();
                 Bundle args = new Bundle();
                 args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());

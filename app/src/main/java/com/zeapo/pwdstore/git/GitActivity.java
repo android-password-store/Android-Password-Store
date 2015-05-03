@@ -432,8 +432,7 @@ public class GitActivity extends ActionBarActivity {
      * @param view
      */
     public void cloneRepository(View view) {
-        localDir = new File(getApplicationContext().getFilesDir().getAbsoluteFile() + "/store");
-
+        localDir = PasswordRepository.getWorkTree();
         hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
         port = ((EditText) findViewById(R.id.server_port)).getText().toString();
         // don't ask the user, take off the protocol that he puts in
