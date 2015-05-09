@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -325,13 +326,17 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
                         try {
                             if (returnToCiphertextField) {
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
-
+                                Typeface type = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
                                 String[] passContent = os.toString("UTF-8").split("\n");
+                                ((TextView) findViewById(R.id.crypto_password_show))
+                                        .setTypeface(type);
                                 ((TextView) findViewById(R.id.crypto_password_show))
                                         .setText(passContent[0]);
 
                                 String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {
+                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                            .setTypeface(type);
                                     ((TextView) findViewById(R.id.crypto_extra_show))
                                             .setText(extraContent);
                                 }
