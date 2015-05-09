@@ -118,6 +118,13 @@ public class GitActivity extends ActionBarActivity {
                                     // select ssh-key auth mode as default and enable the spinner in case it was disabled
                                     connection_mode_spinner.setSelection(0);
                                     connection_mode_spinner.setEnabled(true);
+
+                                    // however, if we have some saved that, that's more important!
+                                    if (connectionMode.equals("ssh-key")) {
+                                        connection_mode_spinner.setSelection(0);
+                                    } else {
+                                        connection_mode_spinner.setSelection(1);
+                                    }
                                 } else {
                                     ((EditText) findViewById(R.id.clone_uri)).setHint("hostname/path");
 
@@ -126,13 +133,6 @@ public class GitActivity extends ActionBarActivity {
                                     // select user/pwd auth-mode and disable the spinner
                                     connection_mode_spinner.setSelection(1);
                                     connection_mode_spinner.setEnabled(false);
-                                }
-
-                                // however, if we have some saved that, that's more important!
-                                if (connectionMode.equals("ssh-key")) {
-                                    connection_mode_spinner.setSelection(0);
-                                } else {
-                                    connection_mode_spinner.setSelection(1);
                                 }
                             }
 
