@@ -1,3 +1,0 @@
-[submodule "openpgp-api-lib"]
-    path = libraries/openpgp-api-lib
-    url = https://github.com/open-keychain/openpgp-api-lib.git
