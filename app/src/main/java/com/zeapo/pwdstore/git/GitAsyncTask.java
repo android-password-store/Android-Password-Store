@@ -52,7 +52,12 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
 
     protected void onPostExecute(String result) {
         if (this.dialog != null)
-            this.dialog.dismiss();
+            try {
+                this.dialog.dismiss();
+            } catch (Exception e)
+            {
+                // ignore
+            }
 
         if (result == null)
             result = "Unexpected error";
