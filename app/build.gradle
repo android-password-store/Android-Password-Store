@@ -9,8 +9,8 @@ android {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 35
-        versionName "1.2.0.15"
+        versionCode 36
+        versionName "1.2.0.16"
     }
 
     compileOptions {
@@ -27,8 +27,6 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:recyclerview-v7:22.0.0'
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile project(':libraries:openpgp-api-lib')
     compile 'org.sufficientlysecure:openpgp-api:7.0'
     compile 'org.eclipse.jgit:org.eclipse.jgit:3.7.0.201502260915-r'
     compile 'com.jcraft:jsch:0.1.52'
