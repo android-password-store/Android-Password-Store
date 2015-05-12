@@ -14,7 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +47,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConnection.OnBound{
+public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConnection.OnBound{
 
 
     private OpenPgpServiceConnection mServiceConnection;
@@ -422,21 +422,13 @@ public class PgpHandler extends ActionBarActivity implements OpenPgpServiceConne
 
 
     public void getKeyIds(Intent data) {
-        accountName = settings.getString("openpgp_account_name", "");
-        if (accountName.isEmpty())
-            showToast(this.getResources().getString(R.string.name_settings_toast_text));
-
         data.setAction(OpenPgpApi.ACTION_GET_KEY_IDS);
-        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName.isEmpty() ? "default" : accountName});
-
         OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-
         api.executeApiAsync(data, null, null, new PgpCallback(false, null, PgpHandler.REQUEST_CODE_GET_KEY_IDS));
     }
 
     public void decryptAndVerify(Intent data) {
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
-        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
         try {
             InputStream is = FileUtils.openInputStream(new File(getIntent().getExtras().getString("FILE_PATH")));

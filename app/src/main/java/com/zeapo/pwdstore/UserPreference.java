@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -18,15 +18,17 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.openintents.openpgp.util.OpenPgpKeyPreference;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class UserPreference extends ActionBarActivity implements Preference.OnPreferenceClickListener {
+public class UserPreference extends AppCompatActivity implements Preference.OnPreferenceClickListener {
     private final static int IMPORT_SSH_KEY = 1;
     private final static int IMPORT_PGP_KEY = 2;
     private final static int EDIT_GIT_INFO = 3;
+    private OpenPgpKeyPreference mKey;
 
     public static class PrefsFragment extends PreferenceFragment {
         @Override
@@ -34,12 +36,24 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
             super.onCreate(savedInstanceState);
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preference);
-            Preference keyPref = findPreference("openpgp_key_id");
-            keyPref.setSummary(getPreferenceManager().getSharedPreferences().getString("openpgp_key_ids", "No key selected"));
-            keyPref.setOnPreferenceClickListener((UserPreference) getActivity());
+//            Preference keyPref = findPreference("openpgp_key_id");
+//            keyPref.setSummary(getPreferenceManager().getSharedPreferences().getString("openpgp_key_ids", "No key selected"));
+//            keyPref.setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("ssh_key").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("git_server_info").setOnPreferenceClickListener((UserPreference) getActivity());
             findPreference("git_delete_repo").setOnPreferenceClickListener((UserPreference) getActivity());
+//            ((UserPreference) getActivity()).mKey = (OpenPgpKeyPreference) findPreference("openpgp_key");
+
+//            if (getPreferenceManager().getSharedPreferences().getString("openpgp_provider_list", null) != null)
+//                ((UserPreference) getActivity()).mKey.setOpenPgpProvider(getPreferenceManager().getSharedPreferences().getString("openpgp_provider_list", ""));
+
+//            findPreference("openpgp_provider_list").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object o) {
+//                    ((UserPreference) getActivity()).mKey.setOpenPgpProvider((String) o);
+//                    return false;
+//                }
+//            });
         }
     }
 
@@ -179,6 +193,14 @@ public class UserPreference extends ActionBarActivity implements Preference.OnPr
                 case EDIT_GIT_INFO:
                 {
 
+                }
+                break;
+                case OpenPgpKeyPreference.REQUEST_CODE_KEY_PREFERENCE:
+                {
+                    if (mKey.handleOnActivityResult(requestCode, resultCode, data)) {
+                        // handled by OpenPgpKeyPreference
+                        return;
+                    }
                 }
                 break;
                 default:

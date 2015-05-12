@@ -24,7 +24,6 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 
@@ -191,25 +190,14 @@ public class PasswordStore extends ActionBarActivity  {
     }
 
     private void createRepository() {
-        final String keyId = settings.getString("openpgp_key_ids", "");
+//        final String keyId = settings.getString("openpgp_key_ids", "");
 
         File localDir = new File(getFilesDir() + "/store/");
         localDir.mkdir();
         try {
             PasswordRepository.createRepository(localDir);
 
-            // we take only the first key-id, we have to think about how to handle multiple keys, and why should we do that...
-            // also, for compatibility use short-version of the key-id
-            FileUtils.writeStringToFile(new File(localDir.getAbsolutePath() + "/.gpg-id"),
-                    keyId.substring(keyId.length() - 8));
-
-            Git git = new Git(PasswordRepository.getRepository(new File("")));
-            GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
-            tasks.execute(
-                    git.add().addFilepattern("."),
-                    git.commit().setMessage(R.string.initialization_commit_text + keyId)
-            );
-            settings.edit().putBoolean("repository_initialized", true).commit();
+            settings.edit().putBoolean("repository_initialized", true).apply();
         } catch (Exception e) {
             e.printStackTrace();
             localDir.delete();
@@ -221,7 +209,7 @@ public class PasswordStore extends ActionBarActivity  {
     public void initRepository(View view) {
         final String keyId = settings.getString("openpgp_key_ids", "");
 
-        if (keyId.isEmpty())
+        if (keyId != null && keyId.isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
@@ -239,29 +227,7 @@ public class PasswordStore extends ActionBarActivity  {
                     })
                     .show();
 
-        else {
-            new AlertDialog.Builder(this)
-                    .setMessage(this.getResources().getString(R.string.connection_dialog_text))
-                    .setPositiveButton("ssh-key", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            settings.edit().putString("git_remote_auth", "ssh-key").apply();
-                            createRepository();
-                        }
-                    })
-                    .setNegativeButton("username/password", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            settings.edit().putString("git_remote_auth", "username/password").apply();
-                            createRepository();
-                        }
-                    })
-                    .setCancelable(false)
-
-
-                    .show();
-
-        }
+        createRepository();
     }
 
     private void checkLocalRepository() {

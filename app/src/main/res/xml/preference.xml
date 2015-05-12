@@ -7,15 +7,8 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_crypto_title">
-		<org.openintents.openpgp.util.OpenPgpListPreference
+		<org.openintents.openpgp.util.OpenPgpAppPreference
 			android:key="openpgp_provider_list" android:title="@string/pref_provider_title" />
-
-		<EditTextPreference android:title="@string/pref_provider_account_title"
-			android:hint="@string/pref_provider_account_hint" android:key="openpgp_account_name"
-			android:inputType="textEmailAddress" />
-
-		<Preference android:title="@string/pref_key_title"
-			android:key="openpgp_key_id" />
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_general_title">
