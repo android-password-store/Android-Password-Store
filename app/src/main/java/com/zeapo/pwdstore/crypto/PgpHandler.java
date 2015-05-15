@@ -1,11 +1,9 @@
 package com.zeapo.pwdstore.crypto;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -52,7 +50,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     private OpenPgpServiceConnection mServiceConnection;
     private String keyIDs = "";
-    private String accountName = "";
     SharedPreferences settings;
     private Activity activity;
     ClipboardManager clipboard;
@@ -85,7 +82,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
-        accountName = settings.getString("openpgp_account_name", "");
         keyIDs = settings.getString("openpgp_key_ids", "");
 
         registered = false;
@@ -444,62 +440,35 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
 
     public void encrypt(Intent data) {
-        accountName = settings.getString("openpgp_account_name", "");
+        data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
-        if (accountName.isEmpty()) {
-            new AlertDialog.Builder(this)
-                    .setMessage(this.getResources().getString(R.string.account_settings_dialog_text))
-                    .setTitle(this.getResources().getString(R.string.account_settings_dialog_title))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            try {
-                                Intent intent = new Intent(getApplicationContext(), UserPreference.class);
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                System.out.println("Exception caught :(");
-                                e.printStackTrace();
-                            }
-                        }
-                    }).setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    // Do nothing...
-                }
-            }).show();
-        } else {
+        String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
+        String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
+        String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
 
-            data.setAction(OpenPgpApi.ACTION_ENCRYPT);
-            data.putExtra(OpenPgpApi.EXTRA_USER_IDS, new String[]{accountName});
-            data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+        if (name.isEmpty()) {
+            showToast(this.getResources().getString(R.string.file_toast_text));
+            return;
+        }
 
-            String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();
-            String pass = ((EditText) findViewById(R.id.crypto_password_edit)).getText().toString();
-            String extra = ((EditText) findViewById(R.id.crypto_extra_edit)).getText().toString();
+        if (pass.isEmpty() && extra.isEmpty()) {
+            showToast(this.getResources().getString(R.string.empty_toast_text));
+            return;
+        }
 
-            if (name.isEmpty()) {
-                showToast(this.getResources().getString(R.string.file_toast_text));
-                return;
-            }
+        ByteArrayInputStream is;
 
-            if (pass.isEmpty() && extra.isEmpty()) {
-                showToast(this.getResources().getString(R.string.empty_toast_text));
-                return;
-            }
+        try {
+            is = new ByteArrayInputStream((pass + "\n" + extra).getBytes("UTF-8"));
 
-            ByteArrayInputStream is;
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-            try {
-                is = new ByteArrayInputStream((pass + "\n" + extra).getBytes("UTF-8"));
+            OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+            api.executeApiAsync(data, is, os, new PgpCallback(true, os, REQUEST_CODE_ENCRYPT));
 
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-                OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
-                api.executeApiAsync(data, is, os, new PgpCallback(true, os, REQUEST_CODE_ENCRYPT));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

@@ -389,7 +389,7 @@ public class PasswordStore extends ActionBarActivity  {
             switch (requestCode) {
                 case GitActivity.REQUEST_CLONE:
                     // if we get here with a RESULT_OK then it's probably OK :)
-                    settings.edit().putBoolean("repository_initialized", true).commit();
+                    settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
                 case PgpHandler.REQUEST_CODE_ENCRYPT :
                     Git git = new Git(PasswordRepository.getRepository(new File("")));
