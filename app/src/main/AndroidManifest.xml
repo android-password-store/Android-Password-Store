@@ -30,6 +30,13 @@
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
+
+        <activity android:name=".PasswordGenerator"
+            android:label="@string/activity_passgen_name"
+            android:parentActivityName=".crypto.PgpHandler">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".crypto.PgpHandler" />
+            </activity>
 	</application>
 
 	<uses-permission android:name="android.permission.INTERNET" />

@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zeapo.pwdstore.PasswordGenerator;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -169,6 +170,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 break;
             case R.id.crypto_cancel_add:
                 finish();
+                break;
+            case R.id.crypto_pass_gen:
+                startActivity(new Intent(this, PasswordGenerator.class));
                 break;
             case R.id.crypto_delete_button:
 //                deletePassword();

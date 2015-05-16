@@ -81,6 +81,14 @@
     <string name="crypto_pass_label">Password</string>
     <string name="crypto_extra_label">Extra</string>
 
+    <!-- Password Generator Activity -->
+    <string name="activity_passgen_name">Password Generator</string>
+    <string-array name="optionChoices">
+        <item>Must</item>
+        <item>May</item>
+        <item>Must not</item>
+    </string-array>
+
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Category</string>
     <string name="action_search">Search</string>
