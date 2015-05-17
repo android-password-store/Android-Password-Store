@@ -9,6 +9,8 @@
             android:summary="Use an external password repository"/>
         <Preference android:title="Select external repository" android:key="pref_select_external"
             android:dependency="git_external"/>
+        <CheckBoxPreference android:title="Enable git" android:key="git_enabled"
+            android:summary="Enable Git" android:enabled="false"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_crypto_title">

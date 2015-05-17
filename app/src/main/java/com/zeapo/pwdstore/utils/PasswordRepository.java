@@ -107,7 +107,7 @@ public class PasswordRepository {
     }
 
     public static void closeRepository() {
-        repository.close();
+        if (repository != null) repository.close();
         repository = null;
     }
 

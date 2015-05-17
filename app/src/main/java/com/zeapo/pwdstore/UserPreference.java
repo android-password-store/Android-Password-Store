@@ -45,6 +45,8 @@ public class UserPreference extends AppCompatActivity {
             final UserPreference callingActivity = (UserPreference) getActivity();
             final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
 
+            addPreferencesFromResource(R.xml.preference);
+
             Preference keyPref = findPreference("openpgp_key_id_pref");
             String selectedKeys = sharedPreferences.getString("openpgp_key_ids", "");
             if (Strings.isNullOrEmpty(selectedKeys)) {
