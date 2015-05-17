@@ -9,6 +9,10 @@
 	<PreferenceCategory android:title="@string/pref_crypto_title">
 		<org.openintents.openpgp.util.OpenPgpAppPreference
 			android:key="openpgp_provider_list" android:title="@string/pref_provider_title" />
+		<org.openintents.openpgp.util.OpenPgpKeyPreference
+			android:key="openpgp_key" android:title="Select key" />
+		<Preference android:title="@string/pref_key_title"
+			android:key="openpgp_key_id_pref" />
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_general_title">

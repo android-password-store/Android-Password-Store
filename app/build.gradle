@@ -14,8 +14,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     // avoid Travis failures
@@ -33,9 +33,13 @@ dependencies {
     compile 'org.apache.commons:commons-io:1.3.2'
     compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
     compile 'com.melnykov:floatingactionbutton:1.2.0'
+    compile group: 'com.google.guava', name: 'guava', version: '18.0'
 }
 tasks.findAll {    // make all tasks whose name starts with 'assemble'...
     it.name.startsWith 'assemble'
 }.each {           // ... depending on 'copyDependenciesIntoLibs' task from 'copyLibs.gradle' script plugin
     it.dependsOn copyDependenciesIntoLibs
 }
+
+apply plugin: 'com.android.application' //or apply plugin: 'java'
+apply plugin: 'me.tatarka.retrolambda'

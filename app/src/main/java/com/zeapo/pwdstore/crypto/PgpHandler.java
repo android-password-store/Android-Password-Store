@@ -25,17 +25,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.primitives.Longs;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.util.StringUtils;
 import org.openintents.openpgp.IOpenPgpService;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
-import org.openintents.openpgp.util.OpenPgpUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,12 +43,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConnection.OnBound{
 
 
     private OpenPgpServiceConnection mServiceConnection;
-    private String keyIDs = "";
+    private Set<String> keyIDs = new HashSet<>();
     SharedPreferences settings;
     private Activity activity;
     ClipboardManager clipboard;
@@ -82,7 +83,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
-        keyIDs = settings.getString("openpgp_key_ids", "");
+        keyIDs = settings.getStringSet("openpgp_key_ids_set", new HashSet<>());
 
         registered = false;
 
@@ -355,6 +356,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                     + ".gpg";
                             OutputStream outputStream = FileUtils.openOutputStream(new File(path));
                             outputStream.write(os.toByteArray());
+                            outputStream.close();
                             Intent data = new Intent();
                             data.putExtra("CREATED_FILE", path);
                             data.putExtra("NAME", ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString());
@@ -368,18 +370,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     // get key ids
                     if (result.hasExtra(OpenPgpApi.RESULT_KEY_IDS)) {
                         long[] ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS);
-                        ArrayList<String> keys = new ArrayList<String>();
+                        Set<String> keys = new HashSet<String>();
 
-                        for (int i = 0; i < ids.length; i++) {
-                            keys.add(OpenPgpUtils.convertKeyIdToHex(ids[i]));
-                        }
-                        keyIDs = StringUtils.join(keys, ", ");
-
-                        if (!keyIDs.isEmpty()) {
-                            String mKeys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
-//                            ((TextView) findViewById(R.id.crypto_key_ids)).setText(mKeys);
-                            settings.edit().putString("openpgp_key_ids", keyIDs).apply();
-                        }
+                        for (long id : ids) keys.add(String.valueOf(id)); // use Long
+                        settings.edit().putStringSet("openpgp_key_ids_set", keys).apply();
 
                         showToast("PGP key selected");
                         setResult(RESULT_OK);
@@ -438,9 +432,17 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         }
     }
 
-
+    /**
+     * Encrypts a password file
+     * @param data
+     */
     public void encrypt(Intent data) {
         data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+
+        ArrayList<Long> longKeys = new ArrayList<>();
+        for (String keyId : keyIDs) longKeys.add(Long.valueOf(keyId));
+        data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, Longs.toArray(longKeys));
+
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
         String name = ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString();

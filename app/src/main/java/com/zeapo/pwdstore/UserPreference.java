@@ -1,8 +1,8 @@
 package com.zeapo.pwdstore;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -19,12 +22,14 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openintents.openpgp.util.OpenPgpKeyPreference;
+import org.openintents.openpgp.util.OpenPgpUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
-public class UserPreference extends AppCompatActivity implements Preference.OnPreferenceClickListener {
+public class UserPreference extends AppCompatActivity {
     private final static int IMPORT_SSH_KEY = 1;
     private final static int IMPORT_PGP_KEY = 2;
     private final static int EDIT_GIT_INFO = 3;
@@ -34,26 +39,75 @@ public class UserPreference extends AppCompatActivity implements Preference.OnPr
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            // Load the preferences from an XML resource
+            final UserPreference callingActivity = (UserPreference) getActivity();
+            final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+
             addPreferencesFromResource(R.xml.preference);
-//            Preference keyPref = findPreference("openpgp_key_id");
-//            keyPref.setSummary(getPreferenceManager().getSharedPreferences().getString("openpgp_key_ids", "No key selected"));
-//            keyPref.setOnPreferenceClickListener((UserPreference) getActivity());
-            findPreference("ssh_key").setOnPreferenceClickListener((UserPreference) getActivity());
-            findPreference("git_server_info").setOnPreferenceClickListener((UserPreference) getActivity());
-            findPreference("git_delete_repo").setOnPreferenceClickListener((UserPreference) getActivity());
-//            ((UserPreference) getActivity()).mKey = (OpenPgpKeyPreference) findPreference("openpgp_key");
 
-//            if (getPreferenceManager().getSharedPreferences().getString("openpgp_provider_list", null) != null)
-//                ((UserPreference) getActivity()).mKey.setOpenPgpProvider(getPreferenceManager().getSharedPreferences().getString("openpgp_provider_list", ""));
+            Preference keyPref = findPreference("openpgp_key_id_pref");
+            String selectedKeys = sharedPreferences.getString("openpgp_key_ids", "");
+            if (Strings.isNullOrEmpty(selectedKeys)) {
+                keyPref.setSummary("No key selected");
+            } else {
+                keyPref.setSummary(
+                        Joiner.on(',')
+                        .join(Iterables.transform(Arrays.asList(selectedKeys.split(",")), input -> OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input))))
+                );
+            }
+            keyPref.setOnPreferenceClickListener((Preference pref) -> {
+                Intent intent = new Intent(callingActivity, PgpHandler.class);
+                intent.putExtra("Operation", "GET_KEY_ID");
+                startActivityForResult(intent, IMPORT_PGP_KEY);
+                return true;
+            });
 
-//            findPreference("openpgp_provider_list").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                @Override
-//                public boolean onPreferenceChange(Preference preference, Object o) {
-//                    ((UserPreference) getActivity()).mKey.setOpenPgpProvider((String) o);
-//                    return false;
-//                }
-//            });
+            findPreference("ssh_key").setOnPreferenceClickListener((Preference pref) -> {
+                callingActivity.getSshKey();
+                return true;
+            });
+
+            findPreference("git_server_info").setOnPreferenceClickListener((Preference pref) -> {
+                Intent intent = new Intent(callingActivity, GitActivity.class);
+                intent.putExtra("Operation", GitActivity.EDIT_SERVER);
+                startActivityForResult(intent, EDIT_GIT_INFO);
+                return true;
+            });
+
+            findPreference("git_delete_repo").setOnPreferenceClickListener((Preference pref) -> {
+                new AlertDialog.Builder(callingActivity).
+                        setTitle(R.string.pref_dialog_delete_title).
+                        setMessage(R.string.pref_dialog_delete_msg).
+                        setCancelable(false).
+                        setPositiveButton(R.string.dialog_delete,
+                                (dialog, id) -> {
+                                    try {
+                                        FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
+                                    } catch (Exception e) {
+                                        //TODO Handle the diffent cases of exceptions
+                                    }
+
+                                    sharedPreferences.edit().putBoolean("repository_initialized", false).commit();
+                                    dialog.cancel();
+                                    callingActivity.finish();
+                                }
+                        ).
+                        setNegativeButton(R.string.dialog_do_not_delete,
+                                (dialog, id) -> {
+                                    dialog.cancel();
+                                }
+                        ).
+                        show();
+                return true;
+            });
+
+            callingActivity.mKey = (OpenPgpKeyPreference) findPreference("openpgp_key");
+            if (sharedPreferences.getString("openpgp_provider_list", null) != null)
+                ((UserPreference) getActivity()).mKey.setOpenPgpProvider(sharedPreferences.getString("openpgp_provider_list", ""));
+
+            findPreference("openpgp_provider_list").setOnPreferenceChangeListener((preference, o) -> {
+                callingActivity.mKey.setOpenPgpProvider((String) o);
+                return false;
+            });
         }
     }
 
@@ -104,63 +158,6 @@ public class UserPreference extends AppCompatActivity implements Preference.OnPr
         sshKey.close();
     }
 
-    @Override
-    public boolean onPreferenceClick(Preference pref) {
-        switch (pref.getKey())
-        {
-            case "openpgp_key_id":
-            {
-                Intent intent = new Intent(this, PgpHandler.class);
-                intent.putExtra("Operation", "GET_KEY_ID");
-                startActivityForResult(intent, IMPORT_PGP_KEY);
-            }
-            break;
-            case "ssh_key":
-            {
-                getSshKey();
-            }
-            break;
-            case "git_server_info":
-            {
-                Intent intent = new Intent(this, GitActivity.class);
-                intent.putExtra("Operation", GitActivity.EDIT_SERVER);
-                startActivityForResult(intent, EDIT_GIT_INFO);
-            }
-            break;
-            case "git_delete_repo":
-            {
-                new AlertDialog.Builder(this).
-                        setTitle(R.string.pref_dialog_delete_title).
-                        setMessage(R.string.pref_dialog_delete_msg).
-                        setCancelable(false).
-                        setPositiveButton(R.string.dialog_delete,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        try {
-                                            FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
-                                        } catch (Exception e) {
-                                            //TODO Handle the diffent cases of exceptions
-                                        }
-
-                                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("repository_initialized", false).commit();
-                                        dialog.cancel();
-                                        finish();
-                                    }
-                                }
-                        ).
-                        setNegativeButton(R.string.dialog_do_not_delete,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                }
-                        ).
-                        show();
-            }
-        }
-        return true;
-    }
-
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
@@ -181,11 +178,8 @@ public class UserPreference extends AppCompatActivity implements Preference.OnPr
                         new AlertDialog.Builder(this).
                                 setTitle(this.getResources().getString(R.string.ssh_key_error_dialog_title)).
                                 setMessage(this.getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage()).
-                                setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        //pass
-                                    }
+                                setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
+                                    //pass
                                 }).show();
                     }
                 }
@@ -199,6 +193,7 @@ public class UserPreference extends AppCompatActivity implements Preference.OnPr
                 {
                     if (mKey.handleOnActivityResult(requestCode, resultCode, data)) {
                         // handled by OpenPgpKeyPreference
+                        PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putLong("openpgp_sign_key", mKey.getValue()).apply();
                         return;
                     }
                 }
