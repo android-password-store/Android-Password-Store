@@ -99,7 +99,7 @@
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_dialog_delete_msg">Do you want to delete the current password store directory? This will not clear your configuration.</string>
     <string name="pref_crypto_title">Crypto</string>
-    <string name="pref_provider_title">Select OpenPGP Provider!</string>
+    <string name="pref_provider_title">Select OpenPGP Provider</string>
     <string name="pref_provider_account_title">Set your OpenPGP account</string>
     <string name="pref_provider_account_hint">mail@somewhere.tld</string>
     <string name="pref_key_title">Select OpenPGP Key id</string>
@@ -122,7 +122,7 @@
     <string name="dialog_negative">Nah... later</string>
     <string name="dialog_oops">Oops...</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="git_sync">Syncronize repository</string>
+    <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
 
