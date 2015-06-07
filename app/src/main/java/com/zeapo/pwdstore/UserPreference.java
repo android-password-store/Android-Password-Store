@@ -109,7 +109,7 @@ public class UserPreference extends AppCompatActivity {
 
             findPreference("openpgp_provider_list").setOnPreferenceChangeListener((preference, o) -> {
                 callingActivity.mKey.setOpenPgpProvider((String) o);
-                return false;
+                return true;
             });
 
             final Preference externalRepo = findPreference("pref_select_external");
@@ -119,13 +119,10 @@ public class UserPreference extends AppCompatActivity {
                 return true;
             });
 
-            Preference.OnPreferenceChangeListener resetRepo = new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object o) {
-                    PasswordRepository.closeRepository();
-                    getPreferenceManager().getSharedPreferences().edit().putBoolean("repo_changed", true).apply();
-                    return true;
-                }
+            Preference.OnPreferenceChangeListener resetRepo = (preference, o) -> {
+                PasswordRepository.closeRepository();
+                getPreferenceManager().getSharedPreferences().edit().putBoolean("repo_changed", true).apply();
+                return true;
             };
 
             findPreference("pref_select_external").setOnPreferenceChangeListener(resetRepo);
