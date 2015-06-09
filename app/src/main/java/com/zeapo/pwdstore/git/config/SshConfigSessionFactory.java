@@ -38,6 +38,7 @@ public class SshConfigSessionFactory extends GitConfigSessionFactory {
     @Override
     protected void configure(OpenSshConfig.Host hc, Session session) {
         session.setConfig("StrictHostKeyChecking", "no");
+        session.setConfig("PreferredAuthentications", "publickey,password");
 
         CredentialsProvider provider = new CredentialsProvider() {
             @Override
