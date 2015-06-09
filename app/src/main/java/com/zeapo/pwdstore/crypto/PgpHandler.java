@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConnection.OnBound{
+public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConnection.OnBound {
 
 
     private OpenPgpServiceConnection mServiceConnection;
@@ -68,8 +68,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         public static final String TAG = "Keychain";
     }
 
-    private String filePath;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +81,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
-        keyIDs = settings.getStringSet("openpgp_key_ids_set", new HashSet<>());
+        keyIDs = settings.getStringSet("openpgp_key_ids_set", new HashSet<String>());
 
         registered = false;
 
@@ -107,12 +105,12 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         if (this.registered && this.mServiceConnection.isBound())
             try {
                 this.mServiceConnection.unbindFromService();
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
     }
@@ -152,8 +150,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
                     + " " + Integer.parseInt(settings.getString("general_show_time", "45")) + " "
                     + this.getResources().getString(R.string.clipboard_ending_toast_text));
-        } catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
                     + " 45 "
                     + this.getResources().getString(R.string.clipboard_ending_toast_text));
@@ -224,9 +221,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
             this.pb = (ProgressBar) findViewById(R.id.pbLoading);
 
-			// Make Show Time a user preference
-			// kLeZ: Changed to match the default for pass
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(container.getContext());
+            // Make Show Time a user preference
+            // kLeZ: Changed to match the default for pass
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(container.getContext());
             int SHOW_TIME;
             try {
                 SHOW_TIME = Integer.parseInt(settings.getString("general_show_time", "45"));
@@ -238,10 +235,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
         @Override
         protected Boolean doInBackground(Void... params) {
-			while (this.pb.getProgress() < this.pb.getMax())
-			{
+            while (this.pb.getProgress() < this.pb.getMax()) {
                 SystemClock.sleep(1000);
-				publishProgress(this.pb.getProgress() + 1);
+                publishProgress(this.pb.getProgress() + 1);
             }
             return true;
         }
@@ -434,6 +430,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     /**
      * Encrypts a password file
+     *
      * @param data
      */
     public void encrypt(Intent data) {
