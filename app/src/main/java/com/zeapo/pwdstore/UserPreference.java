@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -54,35 +56,52 @@ public class UserPreference extends AppCompatActivity {
             } else {
                 keyPref.setSummary(
                         Joiner.on(',')
-                        .join(Iterables.transform(Arrays.asList(selectedKeys.split(",")), input -> OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input))))
+                                .join(Iterables.transform(Arrays.asList(selectedKeys.split(",")), new Function<String, Object>() {
+                                    @Override
+                                    public Object apply(String input) {
+                                        return OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input));
+                                    }
+                                }))
                 );
             }
-            keyPref.setOnPreferenceClickListener((Preference pref) -> {
-                Intent intent = new Intent(callingActivity, PgpHandler.class);
-                intent.putExtra("Operation", "GET_KEY_ID");
-                startActivityForResult(intent, IMPORT_PGP_KEY);
-                return true;
+            keyPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(callingActivity, PgpHandler.class);
+                    intent.putExtra("Operation", "GET_KEY_ID");
+                    startActivityForResult(intent, IMPORT_PGP_KEY);
+                    return true;
+                }
             });
 
-            findPreference("ssh_key").setOnPreferenceClickListener((Preference pref) -> {
-                callingActivity.getSshKey();
-                return true;
+            findPreference("ssh_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    callingActivity.getSshKey();
+                    return true;
+                }
             });
 
-            findPreference("git_server_info").setOnPreferenceClickListener((Preference pref) -> {
-                Intent intent = new Intent(callingActivity, GitActivity.class);
-                intent.putExtra("Operation", GitActivity.EDIT_SERVER);
-                startActivityForResult(intent, EDIT_GIT_INFO);
-                return true;
+            findPreference("git_server_info").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(callingActivity, GitActivity.class);
+                    intent.putExtra("Operation", GitActivity.EDIT_SERVER);
+                    startActivityForResult(intent, EDIT_GIT_INFO);
+                    return true;
+                }
             });
 
-            findPreference("git_delete_repo").setOnPreferenceClickListener((Preference pref) -> {
-                new AlertDialog.Builder(callingActivity).
-                        setTitle(R.string.pref_dialog_delete_title).
-                        setMessage(R.string.pref_dialog_delete_msg).
-                        setCancelable(false).
-                        setPositiveButton(R.string.dialog_delete,
-                                (dialog, id) -> {
+            findPreference("git_delete_repo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new AlertDialog.Builder(callingActivity).
+                            setTitle(R.string.pref_dialog_delete_title).
+                            setMessage(R.string.pref_dialog_delete_msg).
+                            setCancelable(false).
+                            setPositiveButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
                                     try {
                                         FileUtils.cleanDirectory(PasswordRepository.getWorkTree());
                                     } catch (Exception e) {
@@ -90,39 +109,55 @@ public class UserPreference extends AppCompatActivity {
                                     }
 
                                     sharedPreferences.edit().putBoolean("repository_initialized", false).commit();
-                                    dialog.cancel();
+                                    dialogInterface.cancel();
                                     callingActivity.finish();
                                 }
-                        ).
-                        setNegativeButton(R.string.dialog_do_not_delete,
-                                (dialog, id) -> {
-                                    dialog.cancel();
-                                }
-                        ).
-                        show();
-                return true;
+                            }).
+                            setNegativeButton(R.string.dialog_do_not_delete,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            {
+                                                dialogInterface.cancel();
+                                            }
+                                        }
+                                    }).show();
+
+                    return true;
+                }
             });
 
             callingActivity.mKey = (OpenPgpKeyPreference) findPreference("openpgp_key");
-            if (sharedPreferences.getString("openpgp_provider_list", null) != null)
-                ((UserPreference) getActivity()).mKey.setOpenPgpProvider(sharedPreferences.getString("openpgp_provider_list", ""));
 
-            findPreference("openpgp_provider_list").setOnPreferenceChangeListener((preference, o) -> {
-                callingActivity.mKey.setOpenPgpProvider((String) o);
-                return true;
+            if (sharedPreferences.getString("openpgp_provider_list", null) != null) {
+                ((UserPreference) getActivity()).mKey.setOpenPgpProvider(sharedPreferences.getString("openpgp_provider_list", ""));
+            }
+
+            findPreference("openpgp_provider_list").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    callingActivity.mKey.setOpenPgpProvider((String) o);
+                    return true;
+                }
             });
 
             final Preference externalRepo = findPreference("pref_select_external");
             externalRepo.setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
-            externalRepo.setOnPreferenceClickListener((Preference pref) -> {
-                callingActivity.selectExternalGitRepository();
-                return true;
+            externalRepo.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    callingActivity.selectExternalGitRepository();
+                    return true;
+                }
             });
 
-            Preference.OnPreferenceChangeListener resetRepo = (preference, o) -> {
-                PasswordRepository.closeRepository();
-                getPreferenceManager().getSharedPreferences().edit().putBoolean("repo_changed", true).apply();
-                return true;
+            Preference.OnPreferenceChangeListener resetRepo = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    PasswordRepository.closeRepository();
+                    getPreferenceManager().getSharedPreferences().edit().putBoolean("repo_changed", true).apply();
+                    return true;
+                }
             };
 
             findPreference("pref_select_external").setOnPreferenceChangeListener(resetRepo);
@@ -194,10 +229,8 @@ public class UserPreference extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
-            switch (requestCode)
-            {
-                case IMPORT_SSH_KEY:
-                {
+            switch (requestCode) {
+                case IMPORT_SSH_KEY: {
                     try {
                         if (data.getData() == null) {
                             throw new IOException("Unable to open file");
@@ -206,24 +239,24 @@ public class UserPreference extends AppCompatActivity {
                         Toast.makeText(this, this.getResources().getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show();
                         setResult(RESULT_OK);
                         finish();
-                    } catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         new AlertDialog.Builder(this).
                                 setTitle(this.getResources().getString(R.string.ssh_key_error_dialog_title)).
                                 setMessage(this.getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage()).
-                                setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
-                                    //pass
+                                setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        // pass
+                                    }
                                 }).show();
                     }
                 }
                 break;
-                case EDIT_GIT_INFO:
-                {
+                case EDIT_GIT_INFO: {
 
                 }
                 break;
-                case OpenPgpKeyPreference.REQUEST_CODE_KEY_PREFERENCE:
-                {
+                case OpenPgpKeyPreference.REQUEST_CODE_KEY_PREFERENCE: {
                     if (mKey.handleOnActivityResult(requestCode, resultCode, data)) {
                         // handled by OpenPgpKeyPreference
                         PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putLong("openpgp_sign_key", mKey.getValue()).apply();
@@ -232,7 +265,7 @@ public class UserPreference extends AppCompatActivity {
                 }
                 break;
                 default:
-                break;
+                    break;
             }
         }
 
