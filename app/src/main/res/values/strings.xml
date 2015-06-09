@@ -23,9 +23,9 @@
 
     <!-- git commits -->
     <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
-    <string name="add_commit_text">[ANDROID PwdStore] Add </string>
-    <string name="remove_commit_text">[ANDROID PwdStore] Remove </string>
-    <string name="from_store"> from store.</string>
+    <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
+    <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
+    <string name="from_store">&#160; from store.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
