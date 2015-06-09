@@ -108,7 +108,7 @@ public class UserPreference extends AppCompatActivity {
                                         //TODO Handle the diffent cases of exceptions
                                     }
 
-                                    sharedPreferences.edit().putBoolean("repository_initialized", false).commit();
+                                    sharedPreferences.edit().putBoolean("repository_initialized", false).apply();
                                     dialogInterface.cancel();
                                     callingActivity.finish();
                                 }
