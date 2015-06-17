@@ -29,6 +29,8 @@ import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
@@ -223,9 +225,9 @@ public class PasswordStore extends AppCompatActivity {
             }
         }
 
-        final String keyId = settings.getString("openpgp_key_ids", "");
+        final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<String>());
 
-        if (keyId != null && keyId.isEmpty())
+        if (keyIds.isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
