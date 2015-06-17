@@ -203,7 +203,7 @@ public class PasswordStore extends AppCompatActivity {
         localDir.mkdir();
         try {
             PasswordRepository.createRepository(localDir);
-
+            new File(localDir.getAbsolutePath() + "/.gpg-id").createNewFile();
             settings.edit().putBoolean("repository_initialized", true).apply();
         } catch (Exception e) {
             e.printStackTrace();
