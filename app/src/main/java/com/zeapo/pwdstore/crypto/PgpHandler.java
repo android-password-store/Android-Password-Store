@@ -318,22 +318,29 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
                             if (returnToCiphertextField) {
-                                findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
-                                Typeface type = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-                                String[] passContent = os.toString("UTF-8").split("\n");
-                                ((TextView) findViewById(R.id.crypto_password_show))
-                                        .setTypeface(type);
-                                ((TextView) findViewById(R.id.crypto_password_show))
-                                        .setText(passContent[0]);
+                                boolean showPassword = settings.getBoolean("show_password", true);
 
-                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
-                                if (extraContent.length() != 0) {
-                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                if (showPassword) {
+                                    findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
+                                    Typeface type = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
+                                    String[] passContent = os.toString("UTF-8").split("\n");
+                                    ((TextView) findViewById(R.id.crypto_password_show))
                                             .setTypeface(type);
-                                    ((TextView) findViewById(R.id.crypto_extra_show))
-                                            .setText(extraContent);
+                                    ((TextView) findViewById(R.id.crypto_password_show))
+                                            .setText(passContent[0]);
+
+                                    String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
+                                    if (extraContent.length() != 0) {
+                                        ((TextView) findViewById(R.id.crypto_extra_show))
+                                                .setTypeface(type);
+                                        ((TextView) findViewById(R.id.crypto_extra_show))
+                                                .setText(extraContent);
+                                    }
+                                    new DelayShow().execute();
+                                } else {
+                                    activity.setResult(RESULT_CANCELED);
+                                    activity.finish();
                                 }
-                                new DelayShow().execute();
                                 if (settings.getBoolean("copy_on_decrypt", true)) {
                                     copyToClipBoard();
                                 }

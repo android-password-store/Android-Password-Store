@@ -1,40 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/pref_git_title">
-		<Preference android:title="@string/pref_edit_server_info" android:key="git_server_info"/>
-		<Preference android:title="@string/pref_ssh_title" android:key="ssh_key" />
-        <Preference android:title="@string/pref_git_delete_repo" android:key="git_delete_repo"
-            android:summary="Deletes local repository"/>
-        <CheckBoxPreference android:title="External repository" android:key="git_external"
-            android:summary="Use an external password repository"/>
-        <Preference android:title="Select external repository" android:key="pref_select_external"
-            android:dependency="git_external"/>
-        <CheckBoxPreference android:title="Enable git" android:key="git_enabled"
-            android:summary="Enable Git" android:enabled="false"/>
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_git_title">
+        <Preference
+            android:key="git_server_info"
+            android:title="@string/pref_edit_server_info" />
+        <Preference
+            android:key="ssh_key"
+            android:title="@string/pref_ssh_title" />
+        <Preference
+            android:key="git_delete_repo"
+            android:summary="Deletes local repository"
+            android:title="@string/pref_git_delete_repo" />
+        <CheckBoxPreference
+            android:key="git_external"
+            android:summary="Use an external password repository"
+            android:title="External repository" />
+        <Preference
+            android:dependency="git_external"
+            android:key="pref_select_external"
+            android:title="Select external repository" />
+        <CheckBoxPreference
+            android:enabled="false"
+            android:key="git_enabled"
+            android:summary="Enable Git"
+            android:title="Enable git" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/pref_crypto_title">
-		<org.openintents.openpgp.util.OpenPgpAppPreference
-			android:key="openpgp_provider_list" android:title="@string/pref_provider_title" />
-		<org.openintents.openpgp.util.OpenPgpKeyPreference
-			android:key="openpgp_key" android:title="Select key"
-            android:enabled="false"/>
-		<Preference android:title="@string/pref_key_title"
-			android:key="openpgp_key_id_pref" />
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_crypto_title">
+        <org.openintents.openpgp.util.OpenPgpAppPreference
+            android:key="openpgp_provider_list"
+            android:title="@string/pref_provider_title" />
+        <org.openintents.openpgp.util.OpenPgpKeyPreference
+            android:enabled="false"
+            android:key="openpgp_key"
+            android:title="Select key" />
+        <Preference
+            android:key="openpgp_key_id_pref"
+            android:title="@string/pref_key_title" />
+    </PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/pref_general_title">
-		<EditTextPreference android:title="@string/pref_password_title"
-			android:dialogTitle="@string/pref_password_dialog_title"
-			android:summary="@string/pref_password_dialog_title"
-			android:defaultValue="45" android:key="general_show_time"
-            android:inputType="number" />
-    <CheckBoxPreference android:title="@string/pref_copy_title"
-      android:dialogTitle="@string/pref_copy_dialog_title"
-      android:summary="@string/pref_copy_dialog_title"
-      android:key="copy_on_decrypt" android:defaultValue="true" />
-    <CheckBoxPreference android:title="@string/pref_recursive_filter"
-        android:summary="@string/pref_recursive_filter_hint"
-        android:key="filter_recursively" android:defaultValue="true"/>
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_general_title">
+        <EditTextPreference
+            android:defaultValue="45"
+            android:dialogTitle="@string/pref_password_dialog_title"
+            android:inputType="number"
+            android:key="general_show_time"
+            android:summary="@string/pref_password_dialog_title"
+            android:title="@string/pref_password_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:title="@string/show_password_pref_title"
+            android:summary="@string/show_password_pref_summary"
+            android:key="show_password" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dialogTitle="@string/pref_copy_dialog_title"
+            android:key="copy_on_decrypt"
+            android:summary="@string/pref_copy_dialog_title"
+            android:title="@string/pref_copy_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="filter_recursively"
+            android:summary="@string/pref_recursive_filter_hint"
+            android:title="@string/pref_recursive_filter" />
+    </PreferenceCategory>
 </PreferenceScreen>

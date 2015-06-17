@@ -125,5 +125,8 @@
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
+    <string name="show_password_pref_title">Show the password</string>
+    <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
+    <string name="toast_password_copied">Password copied into the clipboard</string>
 
 </resources>
