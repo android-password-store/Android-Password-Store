@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
@@ -31,7 +30,8 @@ import org.openintents.openpgp.util.OpenPgpUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserPreference extends AppCompatActivity {
     private final static int IMPORT_SSH_KEY = 1;
@@ -50,13 +50,13 @@ public class UserPreference extends AppCompatActivity {
             addPreferencesFromResource(R.xml.preference);
 
             Preference keyPref = findPreference("openpgp_key_id_pref");
-            String selectedKeys = sharedPreferences.getString("openpgp_key_ids", "");
-            if (Strings.isNullOrEmpty(selectedKeys)) {
+            Set<String> selectedKeys = sharedPreferences.getStringSet("openpgp_key_ids_set", new HashSet<String>());
+            if (selectedKeys.isEmpty()) {
                 keyPref.setSummary("No key selected");
             } else {
                 keyPref.setSummary(
                         Joiner.on(',')
-                                .join(Iterables.transform(Arrays.asList(selectedKeys.split(",")), new Function<String, Object>() {
+                                .join(Iterables.transform(selectedKeys, new Function<String, Object>() {
                                     @Override
                                     public Object apply(String input) {
                                         return OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input));
