@@ -414,6 +414,12 @@ public class GitActivity extends AppCompatActivity {
         editor.putString("git_remote_protocol", protocol);
         editor.putString("git_remote_auth", connectionMode);
         editor.putString("git_remote_port", ((EditText) findViewById(R.id.server_port)).getText().toString());
+        editor.putString("git_remote_uri", ((EditText) findViewById(R.id.clone_uri)).getText().toString());
+
+        if (PasswordRepository.isInitialized()) {
+            PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
+        }
+
         editor.apply();
     }
 
@@ -424,7 +430,6 @@ public class GitActivity extends AppCompatActivity {
      */
     public void saveConfiguration(View view) {
         saveConfiguration();
-        PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
         finish();
     }
 
