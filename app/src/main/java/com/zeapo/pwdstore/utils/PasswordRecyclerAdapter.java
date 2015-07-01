@@ -98,6 +98,9 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             public void onClick(View v) {
                 if (mActionMode != null) {
                     toggleSelection(holder.position);
+                    if (selectedItems.size() == 0) {
+                        mActionMode.finish();
+                    }
                 } else {
                     listener.onFragmentInteraction(pass);
                 }
