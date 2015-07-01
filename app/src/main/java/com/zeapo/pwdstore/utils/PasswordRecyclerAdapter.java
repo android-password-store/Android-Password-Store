@@ -1,12 +1,9 @@
 package com.zeapo.pwdstore.utils;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,12 +16,14 @@ import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecyclerAdapter.ViewHolder> {
     private final PasswordStore activity;
     private final ArrayList<PasswordItem> values;
     private final PasswordFragment.OnFragmentInteractionListener listener;
-    private final SparseBooleanArray selectedItems;
+    private final Set<Integer> selectedItems;
     private ActionMode mActionMode;
 
     // Provide a reference to the views for each data item
@@ -50,7 +49,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         this.values = values;
         this.activity = activity;
         this.listener = listener;
-        selectedItems = new SparseBooleanArray();
+        selectedItems = new TreeSet<>();
     }
 
     // Create new views (invoked by the layout manager)
@@ -98,7 +97,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             public void onClick(View v) {
                 if (mActionMode != null) {
                     toggleSelection(holder.position);
-                    if (selectedItems.size() == 0) {
+                    if (selectedItems.isEmpty()) {
                         mActionMode.finish();
                     }
                 } else {
@@ -114,13 +113,13 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                     return false;
                 }
                 toggleSelection(holder.position);
-                // Start the CAB using the ActionMode.Callback defined above
+                // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
                 return true;
             }
         });
 
-        holder.view.setSelected(selectedItems.get(position));
+        holder.view.setSelected(selectedItems.contains(position));
 
     }
 
@@ -146,10 +145,8 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_delete_password:
-                    for (int i = 0; i < selectedItems.size(); i++) {
-                        if (selectedItems.valueAt(i)) {
-                            activity.deletePassword(PasswordRecyclerAdapter.this, selectedItems.keyAt(i));
-                        }
+                    for (int position : selectedItems) {
+                        activity.deletePassword(PasswordRecyclerAdapter.this, position);
                     }
                     mode.finish(); // Action picked, so close the CAB
                     return true;
@@ -197,14 +194,11 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         this.notifyItemRemoved(position);
     }
 
-    public void toggleSelection(int pos) {
-        if (selectedItems.get(pos, false)) {
-            selectedItems.delete(pos);
+    public void toggleSelection(int position) {
+        if (!selectedItems.remove(position)) {
+            selectedItems.add(position);
         }
-        else {
-            selectedItems.put(pos, true);
-        }
-        notifyItemChanged(pos);
+        notifyItemChanged(position);
     }
 
 }
