@@ -1,10 +1,11 @@
 package com.zeapo.pwdstore.utils;
 
 import android.graphics.Color;
-import android.support.v7.widget.PopupMenu;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,15 @@ import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecyclerAdapter.ViewHolder> {
     private final PasswordStore activity;
     private final ArrayList<PasswordItem> values;
     private final PasswordFragment.OnFragmentInteractionListener listener;
+    private final Set<Integer> selectedItems;
+    private ActionMode mActionMode;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -44,6 +49,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         this.values = values;
         this.activity = activity;
         this.listener = listener;
+        selectedItems = new TreeSet<>();
     }
 
     // Create new views (invoked by the layout manager)
@@ -89,32 +95,74 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onFragmentInteraction(pass);
+                if (mActionMode != null) {
+                    toggleSelection(holder.position);
+                    if (selectedItems.isEmpty()) {
+                        mActionMode.finish();
+                    }
+                } else {
+                    listener.onFragmentInteraction(pass);
+                }
             }
         });
 
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                PopupMenu p = new PopupMenu(activity, v);
-                p.getMenuInflater().inflate(
-                        R.menu.context_pass, p.getMenu());
-                p.show();
-                p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.menu_delete_password) {
-                            activity.deletePassword(PasswordRecyclerAdapter.this, holder.position);
-                        }
-                        return false;
-                    }
-                });
-                return false;
+                if (mActionMode != null) {
+                    return false;
+                }
+                toggleSelection(holder.position);
+                // Start the CAB using the ActionMode.Callback
+                mActionMode = activity.startSupportActionMode(mActionModeCallback);
+                return true;
             }
         });
 
+        holder.view.setSelected(selectedItems.contains(position));
 
     }
+
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            mode.getMenuInflater().inflate(R.menu.context_pass, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_delete_password:
+                    for (int position : selectedItems) {
+                        activity.deletePassword(PasswordRecyclerAdapter.this, position);
+                    }
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            selectedItems.clear();
+            mActionMode = null;
+            notifyDataSetChanged();
+        }
+    };
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
@@ -144,6 +192,13 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void remove(int position) {
         this.values.remove(position);
         this.notifyItemRemoved(position);
+    }
+
+    public void toggleSelection(int position) {
+        if (!selectedItems.remove(position)) {
+            selectedItems.add(position);
+        }
+        notifyItemChanged(position);
     }
 
 }
