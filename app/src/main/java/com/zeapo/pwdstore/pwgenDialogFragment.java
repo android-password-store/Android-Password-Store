@@ -50,46 +50,35 @@ public class pwgenDialogFragment extends DialogFragment {
         checkBox.setChecked(!prefs.getBoolean("B", false));
 
         checkBox = (CheckBox) view.findViewById(R.id.pronounceable);
-        checkBox.setChecked(!prefs.getBoolean("s", false));
+        checkBox.setChecked(!prefs.getBoolean("s", true));
 
         TextView textView = (TextView) view.findViewById(R.id.lengthNumber);
-        textView.setText(Integer.toString(prefs.getInt("length", 8)));
+        textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
         textView = (TextView) view.findViewById(R.id.passwordText);
         textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                TextView edit = (TextView) getActivity().findViewById(R.id.crypto_password_edit);
-                TextView generate = (TextView) getDialog().findViewById(R.id.passwordText);
-                edit.append(generate.getText());
-            }
+        builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {
+            setPreferences();
+            TextView edit = (TextView) getActivity().findViewById(R.id.crypto_password_edit);
+            TextView generate = (TextView) getDialog().findViewById(R.id.passwordText);
+            edit.append(generate.getText());
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), (dialog, which) -> {
 
-            }
         });
 
-        builder.setNeutralButton("Generate", null);
+        builder.setNeutralButton(getResources().getString(R.string.pwgen_generate), null);
 
         final AlertDialog ad = builder.setTitle("Generate Password").create();
-        ad.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setPreferences();
-                        TextView textView = (TextView) getDialog().findViewById(R.id.passwordText);
-                        textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
-                    }
-                });
-            }
+        ad.setOnShowListener(dialog -> {
+            Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
+            b.setOnClickListener(v -> {
+                setPreferences();
+                TextView textView1 = (TextView) getDialog().findViewById(R.id.passwordText);
+                textView1.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+            });
         });
         return ad;
     }

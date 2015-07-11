@@ -39,7 +39,7 @@
                     android:id="@+id/include"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Include"
+                    android:text="@string/pwgen_include"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_marginBottom="8dp"/>
 
@@ -47,26 +47,26 @@
                     android:id="@+id/numerals"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Numerals"/>
+                    android:text="@string/pwgen_numerals"/>
 
 
                 <CheckBox
                     android:id="@+id/symbols"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Symbols"/>
+                    android:text="@string/pwgen_symbols"/>
 
                 <CheckBox
                     android:id="@+id/uppercase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Uppercase"/>
+                    android:text="@string/pwgen_uppercase"/>
 
                 <CheckBox
                     android:id="@+id/ambiguous"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ambiguous"/>
+                    android:text="@string/pwgen_ambiguous"/>
 
             </LinearLayout>
 
