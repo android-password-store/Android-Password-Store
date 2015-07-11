@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore.crypto;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.google.common.primitives.Longs;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
+import com.zeapo.pwdstore.pwgenDialogFragment;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
@@ -174,6 +176,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             case R.id.crypto_get_key_ids:
                 getKeyIds(new Intent());
                 break;
+            case R.id.generate_password:
+                DialogFragment df = new pwgenDialogFragment();
+                df.show(getFragmentManager(), "generator");
             default:
                 // should not happen
 

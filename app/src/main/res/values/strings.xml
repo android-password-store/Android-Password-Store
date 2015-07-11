@@ -114,6 +114,14 @@
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
 
+    <!-- pwgen fragment -->
+    <string name="pwgen_generate">Generate</string>
+    <string name="pwgen_include">Include</string>
+    <string name="pwgen_numerals">Numerals</string>
+    <string name="pwgen_symbols">Symbols</string>
+    <string name="pwgen_uppercase">Uppercase</string>
+    <string name="pwgen_ambiguous">Ambiguous</string>
+
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>

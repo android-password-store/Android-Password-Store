@@ -64,7 +64,15 @@
                     android:id="@+id/crypto_password_edit"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:typeface="monospace"/>
+                    android:typeface="monospace"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_action_new"
+                    android:background="@drawable/blue_rectangle"
+                    android:id="@+id/generate_password"
+                    android:onClick="handleClick"/>
             </LinearLayout>
 
             <TextView

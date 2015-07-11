@@ -20,6 +20,7 @@ import android.view.View;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
+import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -49,6 +50,7 @@ public class PasswordStore extends AppCompatActivity {
         setContentView(R.layout.activity_pwdstore);
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         activity = this;
+        PRNGFixes.apply();
     }
 
     @Override
