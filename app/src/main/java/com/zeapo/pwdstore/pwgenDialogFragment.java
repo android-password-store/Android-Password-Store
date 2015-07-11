@@ -55,13 +55,9 @@ public class pwgenDialogFragment extends DialogFragment {
         TextView textView = (TextView) view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
-        textView = (TextView) view.findViewById(R.id.passwordText);
-        textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
-
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                pwgenDialogFragment.this.setPreferences();
                 TextView edit = (TextView) pwgenDialogFragment.this.getActivity().findViewById(R.id.crypto_password_edit);
                 TextView generate = (TextView) pwgenDialogFragment.this.getDialog().findViewById(R.id.passwordText);
                 edit.append(generate.getText());
@@ -81,13 +77,17 @@ public class pwgenDialogFragment extends DialogFragment {
         ad.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
+                setPreferences();
+                TextView textView = (TextView) view.findViewById(R.id.passwordText);
+                textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pwgenDialogFragment.this.setPreferences();
-                        TextView textView1 = (TextView) pwgenDialogFragment.this.getDialog().findViewById(R.id.passwordText);
-                        textView1.setText(pwgen.generate(pwgenDialogFragment.this.getActivity().getApplicationContext()).get(0));
+                        setPreferences();
+                        TextView textView = (TextView) getDialog().findViewById(R.id.passwordText);
+                        textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
                     }
                 });
             }
@@ -97,7 +97,7 @@ public class pwgenDialogFragment extends DialogFragment {
 
     private boolean setPreferences () {
         ArrayList<String> preferences = new ArrayList<>();
-        if (!((CheckBox)getDialog().findViewById(R.id.numerals)).isChecked()) {
+        if (!((CheckBox) getDialog().findViewById(R.id.numerals)).isChecked()) {
             preferences.add("0");
         }
         if (((CheckBox) getDialog().findViewById(R.id.symbols)).isChecked()) {
