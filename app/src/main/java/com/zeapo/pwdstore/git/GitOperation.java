@@ -92,7 +92,7 @@ public abstract class GitOperation {
                 new AlertDialog.Builder(callingActivity)
                         .setMessage(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_text))
                         .setTitle(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_title))
-                        .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_import), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
@@ -106,12 +106,28 @@ public abstract class GitOperation {
                                     e.printStackTrace();
                                 }
                             }
-                        }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Do nothing...
-                    }
-                }).show();
+                        })
+                        .setNegativeButton(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_generate), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    // Duplicated code
+                                    Intent intent = new Intent(callingActivity.getApplicationContext(), UserPreference.class);
+                                    intent.putExtra("operation", "make_ssh_key");
+                                    callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
+                                } catch (Exception e) {
+                                    System.out.println("Exception caught :(");
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNeutralButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Finish the blank GitActivity so user doesn't have to press back
+                                callingActivity.finish();
+                            }
+                        }).show();
             } else {
                 final EditText passphrase = new EditText(callingActivity);
                 passphrase.setHint("Passphrase");
