@@ -1,9 +1,13 @@
 package com.zeapo.pwdstore;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -37,7 +41,7 @@ public class SshKeyGen extends AppCompatActivity {
 
             Spinner spinner = (Spinner) v.findViewById(R.id.length);
             Integer[] lengths = new Integer[]{2048, 4096};
-            ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getActivity(),
+            ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, lengths);
             spinner.setAdapter(adapter);
 
@@ -59,7 +63,6 @@ public class SshKeyGen extends AppCompatActivity {
             File file = new File(getActivity().getFilesDir() + "/.ssh_key.pub");
             try {
                 textView.setText(FileUtils.readFileToString(file));
-                Toast.makeText(getActivity(), "SSH-key generated", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 System.out.println("Exception caught :(");
                 e.printStackTrace();
@@ -81,7 +84,8 @@ public class SshKeyGen extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle("Generate SSH Key");
 
@@ -93,40 +97,76 @@ public class SshKeyGen extends AppCompatActivity {
         }
     }
 
+    private class generateTask extends AsyncTask<View, Void, Exception> {
+        private ProgressDialog pd;
+
+        protected Exception doInBackground(View... views) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(views[0].getWindowToken(), 0);
+
+            Spinner spinner = (Spinner) findViewById(R.id.length);
+            int length = (Integer) spinner.getSelectedItem();
+
+            TextView textView = (TextView) findViewById(R.id.passphrase);
+            String passphrase = textView.getText().toString();
+
+            textView = (TextView) findViewById(R.id.comment);
+            String comment = textView.getText().toString();
+
+            JSch jsch = new JSch();
+            try {
+                KeyPair kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, length);
+
+                File file = new File(getFilesDir() + "/.ssh_key");
+                FileOutputStream out = new FileOutputStream(file, false);
+                kp.writePrivateKey(out, passphrase.getBytes());
+
+                file = new File(getFilesDir() + "/.ssh_key.pub");
+                out = new FileOutputStream(file, false);
+                kp.writePublicKey(out, comment);
+                return null;
+            } catch (Exception e) {
+                System.out.println("Exception caught :(");
+                e.printStackTrace();
+                return e;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = ProgressDialog.show(SshKeyGen.this, "", "Generating keys");
+
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            super.onPostExecute(e);
+            pd.dismiss();
+            if (e == null) {
+                Toast.makeText(SshKeyGen.this, "SSH-key generated", Toast.LENGTH_LONG).show();
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new ShowSshKeyFragment()).commit();
+            } else {
+                new AlertDialog.Builder(SshKeyGen.this)
+                        .setTitle("Error while trying to generate the ssh-key")
+                        .setMessage(getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage())
+                        .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // pass
+                            }
+                        }).show();
+            }
+
+        }
+    }
+
     // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
     // private and public key, then replaces the SshKeyGenFragment with a
     // ShowSshKeyFragment which displays the public key.
     public void generate(View view) {
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-        Spinner spinner = (Spinner) findViewById(R.id.length);
-        int length = (Integer) spinner.getSelectedItem();
-
-        TextView textView = (TextView) findViewById(R.id.passphrase);
-        String passphrase = textView.getText().toString();
-
-        textView = (TextView) findViewById(R.id.comment);
-        String comment = textView.getText().toString();
-
-        JSch jsch = new JSch();
-        try {
-            KeyPair kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, length);
-
-            File file = new File(getFilesDir() + "/.ssh_key");
-            FileOutputStream out = new FileOutputStream(file, false);
-            kp.writePrivateKey(out, passphrase.getBytes());
-
-            file = new File(getFilesDir() + "/.ssh_key.pub");
-            out = new FileOutputStream(file, false);
-            kp.writePublicKey(out, comment);
-        } catch (Exception e) {
-            System.out.println("Exception caught :(");
-            e.printStackTrace();
-            return;
-        }
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new ShowSshKeyFragment()).commit();
+        new generateTask().execute(view);
     }
 
     // Invoked when 'Copy' button of ShowSshKeyFragment clicked. Copies the
