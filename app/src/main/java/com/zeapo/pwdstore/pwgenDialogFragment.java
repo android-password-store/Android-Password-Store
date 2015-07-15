@@ -116,7 +116,7 @@ public class pwgenDialogFragment extends DialogFragment {
         try {
             int length = Integer.valueOf(textView.getText().toString());
             return pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }
