@@ -8,6 +8,9 @@
             android:key="ssh_key"
             android:title="@string/pref_ssh_title" />
         <Preference
+            android:key="ssh_keygen"
+            android:title="@string/pref_ssh_keygen_title" />
+        <Preference
             android:key="git_delete_repo"
             android:summary="Deletes local repository"
             android:title="@string/pref_git_delete_repo" />
