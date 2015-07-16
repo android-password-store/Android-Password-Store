@@ -96,8 +96,9 @@
     <string name="pref_git_username_title">Username</string>
     <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Edit git server settings</string>
-    <string name="pref_ssh_title">Import ssh-key</string>
-    <string name="pref_ssh_keygen_title">Generate ssh-key</string>
+    <string name="pref_ssh_title">Import SSH key</string>
+    <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
+    <string name="pref_ssh_see_key_title">View generated public SSH key</string>
     <string name="pref_git_delete_repo">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_dialog_delete_msg">Do you want to delete the current password store directory? This will not clear your configuration.</string>

@@ -58,8 +58,8 @@ public class pwgenDialogFragment extends DialogFragment {
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView edit = (TextView) pwgenDialogFragment.this.getActivity().findViewById(R.id.crypto_password_edit);
-                TextView generate = (TextView) pwgenDialogFragment.this.getDialog().findViewById(R.id.passwordText);
+                TextView edit = (TextView) getActivity().findViewById(R.id.crypto_password_edit);
+                TextView generate = (TextView) getDialog().findViewById(R.id.passwordText);
                 edit.append(generate.getText());
             }
         });

@@ -24,27 +24,5 @@
             android:text="@string/ssh_keygen_tip"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/copy_public_key"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ssh_keygen_copy"
-                android:onClick="copy" />
-
-            <Button
-                android:id="@+id/ok_ssh_key"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dialog_ok"/>
-        </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

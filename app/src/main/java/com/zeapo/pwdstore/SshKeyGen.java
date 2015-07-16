@@ -1,20 +1,25 @@
 package com.zeapo.pwdstore;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,14 +55,16 @@ public class SshKeyGen extends AppCompatActivity {
     }
 
     // Displays the generated public key .ssh_key.pub
-    public static class ShowSshKeyFragment extends Fragment {
+    public static class ShowSshKeyFragment extends DialogFragment {
         public ShowSshKeyFragment() {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.fragment_show_ssh_key, container, false);
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
+            builder.setView(v);
 
             TextView textView = (TextView) v.findViewById(R.id.public_key);
             File file = new File(getActivity().getFilesDir() + "/.ssh_key.pub");
@@ -68,14 +75,40 @@ public class SshKeyGen extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            v.findViewById(R.id.ok_ssh_key).setOnClickListener(new View.OnClickListener() {
+            builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    getActivity().finish();
+                public void onClick(DialogInterface dialog, int which) {
+                    if (getActivity() instanceof SshKeyGen)
+                        getActivity().finish();
                 }
             });
 
-            return v;
+            builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            builder.setNeutralButton(getResources().getString(R.string.ssh_keygen_copy), null);
+
+            final AlertDialog ad = builder.setTitle("Your public key").create();
+            ad.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    b.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            TextView textView = (TextView) getDialog().findViewById(R.id.public_key);
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("public key", textView.getText().toString());
+                            clipboard.setPrimaryClip(clip);
+                        }
+                    });
+                }
+            });
+            return ad;
         }
     }
 
@@ -145,8 +178,12 @@ public class SshKeyGen extends AppCompatActivity {
             pd.dismiss();
             if (e == null) {
                 Toast.makeText(SshKeyGen.this, "SSH-key generated", Toast.LENGTH_LONG).show();
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new ShowSshKeyFragment()).commit();
+                DialogFragment df = new ShowSshKeyFragment();
+                df.show(getFragmentManager(), "public_key");
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("use_generated_key", true);
+                editor.apply();
             } else {
                 new AlertDialog.Builder(SshKeyGen.this)
                         .setTitle("Error while trying to generate the ssh-key")
@@ -168,14 +205,4 @@ public class SshKeyGen extends AppCompatActivity {
     public void generate(View view) {
         new generateTask().execute(view);
     }
-
-    // Invoked when 'Copy' button of ShowSshKeyFragment clicked. Copies the
-    // displayed public key to the clipboard.
-    public void copy (View view) {
-        TextView textView = (TextView) findViewById(R.id.public_key);
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("public key", textView.getText().toString());
-        clipboard.setPrimaryClip(clip);
-    }
-
 }

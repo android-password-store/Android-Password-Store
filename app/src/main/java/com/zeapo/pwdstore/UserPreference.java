@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -90,6 +91,16 @@ public class UserPreference extends AppCompatActivity {
                 }
             });
 
+            findPreference("ssh_see_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    DialogFragment df = new SshKeyGen.ShowSshKeyFragment();
+                    df.show(getFragmentManager(), "public_key");
+                    return true;
+                }
+            });
+
+
             findPreference("git_server_info").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -170,6 +181,13 @@ public class UserPreference extends AppCompatActivity {
 
             findPreference("pref_select_external").setOnPreferenceChangeListener(resetRepo);
             findPreference("git_external").setOnPreferenceChangeListener(resetRepo);
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+            findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
         }
     }
 
@@ -256,6 +274,10 @@ public class UserPreference extends AppCompatActivity {
                         }
                         copySshKey(data.getData());
                         Toast.makeText(this, this.getResources().getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show();
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("use_generated_key", false);
+                        editor.apply();
                         setResult(RESULT_OK);
                         finish();
                     } catch (IOException e) {
