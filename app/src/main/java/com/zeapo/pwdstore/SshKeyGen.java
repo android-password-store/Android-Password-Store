@@ -48,6 +48,7 @@ public class SshKeyGen extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View v = inflater.inflate(R.layout.fragment_ssh_keygen, container, false);
+            Typeface monoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/sourcecodepro.ttf");
 
             Spinner spinner = (Spinner) v.findViewById(R.id.length);
             Integer[] lengths = new Integer[]{2048, 4096};
@@ -55,7 +56,6 @@ public class SshKeyGen extends AppCompatActivity {
                     android.R.layout.simple_spinner_dropdown_item, lengths);
             spinner.setAdapter(adapter);
 
-            Typeface monoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/sourcecodepro.ttf");
             ((EditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
 
             CheckBox checkbox = (CheckBox) v.findViewById(R.id.show_passphrase);
