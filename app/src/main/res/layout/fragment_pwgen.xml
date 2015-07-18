@@ -21,7 +21,8 @@
             android:layout_marginBottom="8dp"
             android:editable="false"
             android:textIsSelectable="true"
-            android:inputType="textVisiblePassword"/>
+            android:inputType="textVisiblePassword"
+            android:fontFamily="monospace"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -36,8 +36,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/ssh_keygen_passphrase"
-                android:inputType="textVisiblePassword"/>
+                android:inputType="textPassword"
+                android:fontFamily="monospace"/>
         </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ssh_keygen_show_passphrase"
+            android:id="@+id/show_passphrase"
+            android:checked="false"
+            android:layout_marginTop="8dp"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

@@ -14,12 +14,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,13 +46,28 @@ public class SshKeyGen extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.fragment_ssh_keygen, container, false);
+            final View v = inflater.inflate(R.layout.fragment_ssh_keygen, container, false);
 
             Spinner spinner = (Spinner) v.findViewById(R.id.length);
             Integer[] lengths = new Integer[]{2048, 4096};
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, lengths);
             spinner.setAdapter(adapter);
+
+            CheckBox checkbox = (CheckBox) v.findViewById(R.id.show_passphrase);
+            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    EditText editText = (EditText) v.findViewById(R.id.passphrase);
+                    int selection = editText.getSelectionEnd();
+                    if (isChecked) {
+                        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    } else {
+                        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    }
+                    editText.setSelection(selection);
+                }
+            });
 
             return v;
         }

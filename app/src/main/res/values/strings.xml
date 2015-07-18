@@ -133,6 +133,7 @@
     <string name="ssh_keygen_generate">Generate</string>
     <string name="ssh_keygen_copy">Copy</string>
     <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
+    <string name="ssh_keygen_show_passphrase">Show passphrase</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
