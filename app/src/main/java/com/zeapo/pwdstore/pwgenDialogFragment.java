@@ -1,16 +1,19 @@
 package com.zeapo.pwdstore;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.pwgen.pwgen;
@@ -30,8 +33,11 @@ public class pwgenDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final Activity callingActivity = getActivity();
+        LayoutInflater inflater = callingActivity.getLayoutInflater();
         final View view = inflater.inflate(R.layout.fragment_pwgen, null);
+        Typeface monoTypeface = Typeface.createFromAsset(callingActivity.getAssets(), "fonts/sourcecodepro.ttf");
+
         builder.setView(view);
 
         SharedPreferences prefs
@@ -55,11 +61,13 @@ public class pwgenDialogFragment extends DialogFragment {
         TextView textView = (TextView) view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
+        ((EditText) view.findViewById(R.id.passwordText)).setTypeface(monoTypeface);
+
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView edit = (TextView) pwgenDialogFragment.this.getActivity().findViewById(R.id.crypto_password_edit);
-                TextView generate = (TextView) pwgenDialogFragment.this.getDialog().findViewById(R.id.passwordText);
+                EditText edit = (EditText) callingActivity.findViewById(R.id.crypto_password_edit);
+                EditText generate = (EditText) callingActivity.findViewById(R.id.passwordText);
                 edit.append(generate.getText());
             }
         });
@@ -78,7 +86,7 @@ public class pwgenDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 setPreferences();
-                TextView textView = (TextView) view.findViewById(R.id.passwordText);
+                EditText textView = (EditText) view.findViewById(R.id.passwordText);
                 textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
@@ -86,7 +94,7 @@ public class pwgenDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         setPreferences();
-                        TextView textView = (TextView) getDialog().findViewById(R.id.passwordText);
+                        EditText textView = (EditText) getDialog().findViewById(R.id.passwordText);
                         textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
                     }
                 });
@@ -112,7 +120,7 @@ public class pwgenDialogFragment extends DialogFragment {
         if (!((CheckBox) getDialog().findViewById(R.id.pronounceable)).isChecked()) {
             preferences.add("s");
         }
-        TextView textView = (TextView) getDialog().findViewById(R.id.lengthNumber);
+        EditText textView = (EditText) getDialog().findViewById(R.id.lengthNumber);
         try {
             int length = Integer.valueOf(textView.getText().toString());
             return pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
