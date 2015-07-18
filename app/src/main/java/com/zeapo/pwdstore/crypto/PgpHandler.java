@@ -213,59 +213,66 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     public class DelayShow extends AsyncTask<Void, Integer, Boolean> {
         ProgressBar pb;
+        int current, SHOW_TIME;
+        boolean showPassword;
 
         @Override
         protected void onPreExecute() {
-            LinearLayout container = (LinearLayout) findViewById(R.id.crypto_container);
-            container.setVisibility(View.VISIBLE);
-
-            TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
-
-            if (extraText.getText().length() != 0)
-                ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
-
-            this.pb = (ProgressBar) findViewById(R.id.pbLoading);
-
-            // Make Show Time a user preference
-            // kLeZ: Changed to match the default for pass
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(container.getContext());
-            int SHOW_TIME;
             try {
                 SHOW_TIME = Integer.parseInt(settings.getString("general_show_time", "45"));
             } catch (NumberFormatException e) {
                 SHOW_TIME = 45;
             }
-            this.pb.setMax(SHOW_TIME);
+            current = 0;
+
+            showPassword = settings.getBoolean("show_password", true);
+            if (showPassword) {
+                LinearLayout container = (LinearLayout) findViewById(R.id.crypto_container);
+                container.setVisibility(View.VISIBLE);
+
+                TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
+
+                if (extraText.getText().length() != 0)
+                    ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
+
+                this.pb = (ProgressBar) findViewById(R.id.pbLoading);
+                this.pb.setMax(SHOW_TIME);
+            }
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            while (this.pb.getProgress() < this.pb.getMax()) {
+            while (current < SHOW_TIME) {
                 SystemClock.sleep(1000);
-                publishProgress(this.pb.getProgress() + 1);
+                current++;
+                if (showPassword) {
+                    publishProgress(current);
+                }
             }
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean b) {
-
             ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
             clipboard.setPrimaryClip(clip);
-
-            //clear password
-            ((TextView) findViewById(R.id.crypto_password_show)).setText("");
-            ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
-            findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
-            findViewById(R.id.crypto_container).setVisibility(View.INVISIBLE);
-            activity.setResult(RESULT_CANCELED);
-            activity.finish();
+            if (showPassword) {
+                //clear password
+                ((TextView) findViewById(R.id.crypto_password_show)).setText("");
+                ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
+                findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
+                findViewById(R.id.crypto_container).setVisibility(View.INVISIBLE);
+                activity.setResult(RESULT_CANCELED);
+                activity.finish();
+            }
         }
 
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            this.pb.setProgress(values[0]);
+            if (showPassword) {
+                this.pb.setProgress(values[0]);
+            }
         }
 
     }
@@ -327,27 +334,31 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
                                 if (showPassword) {
                                     findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
-                                    Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-                                    String[] passContent = os.toString("UTF-8").split("\n");
-                                    ((TextView) findViewById(R.id.crypto_password_show))
-                                            .setTypeface(monoTypeface);
-                                    ((TextView) findViewById(R.id.crypto_password_show))
-                                            .setText(passContent[0]);
-
-                                    String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
-                                    if (extraContent.length() != 0) {
-                                        ((TextView) findViewById(R.id.crypto_extra_show))
-                                                .setTypeface(monoTypeface);
-                                        ((TextView) findViewById(R.id.crypto_extra_show))
-                                                .setText(extraContent);
-                                    }
-                                    new DelayShow().execute();
-                                } else {
-                                    activity.setResult(RESULT_CANCELED);
-                                    activity.finish();
                                 }
+
+                                Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
+                                String[] passContent = os.toString("UTF-8").split("\n");
+                                ((TextView) findViewById(R.id.crypto_password_show))
+                                        .setTypeface(monoTypeface);
+                                ((TextView) findViewById(R.id.crypto_password_show))
+                                        .setText(passContent[0]);
+
+                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
+                                if (extraContent.length() != 0) {
+                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                            .setTypeface(monoTypeface);
+                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                            .setText(extraContent);
+                                }
+
                                 if (settings.getBoolean("copy_on_decrypt", true)) {
                                     copyToClipBoard();
+                                }
+
+                                new DelayShow().execute();
+                                if (!showPassword) {
+                                    activity.setResult(RESULT_CANCELED);
+                                    activity.finish();
                                 }
                             } else {
                                 Log.d("PGPHANDLER", "Error message after decrypt : " + os.toString());
