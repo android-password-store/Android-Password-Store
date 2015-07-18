@@ -6,54 +6,60 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="@dimen/activity_horizontal_margin"
+                  android:paddingRight="@dimen/activity_horizontal_margin"
                   android:orientation="vertical">
 
         <TextView
             android:id="@+id/label_length"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
             android:gravity="center_vertical"
-            android:text="Length"/>
+            android:text="@string/ssh_keygen_length"/>
 
         <Spinner
             android:id="@+id/length"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:spinnerMode="dropdown"/>
 
-        <EditText
-            android:id="@+id/passphrase"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:hint="Passphrase"
-            android:inputType="textVisiblePassword"/>
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat"
+            android:layout_marginTop="8dp">
 
-        <EditText
-            android:id="@+id/comment"
+            <EditText
+                android:id="@+id/passphrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/ssh_keygen_passphrase"
+                android:inputType="textVisiblePassword"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:hint="Comment"
-            android:inputType="textShortMessage"/>
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat"
+            android:layout_marginTop="8dp">
+            <EditText
+                android:id="@+id/comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/ssh_keygen_comment"
+                android:inputType="textShortMessage"/>
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/generate_ssh_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:onClick="generate"
-            android:text="Generate"/>
+            android:text="@string/ssh_keygen_generate"/>
 
     </LinearLayout>
 </ScrollView>
