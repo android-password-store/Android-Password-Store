@@ -86,16 +86,16 @@ public class pwgenDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 setPreferences();
-                EditText textView = (EditText) view.findViewById(R.id.passwordText);
-                textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+                EditText editText = (EditText) view.findViewById(R.id.passwordText);
+                editText.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setPreferences();
-                        EditText textView = (EditText) getDialog().findViewById(R.id.passwordText);
-                        textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+                        EditText editText = (EditText) view.findViewById(R.id.passwordText);
+                        editText.setText(pwgen.generate(callingActivity.getApplicationContext()).get(0));
                     }
                 });
             }
@@ -120,9 +120,9 @@ public class pwgenDialogFragment extends DialogFragment {
         if (!((CheckBox) getDialog().findViewById(R.id.pronounceable)).isChecked()) {
             preferences.add("s");
         }
-        EditText textView = (EditText) getDialog().findViewById(R.id.lengthNumber);
+        EditText editText = (EditText) getDialog().findViewById(R.id.lengthNumber);
         try {
-            int length = Integer.valueOf(textView.getText().toString());
+            int length = Integer.valueOf(editText.getText().toString());
             return pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
         } catch(NumberFormatException e) {
             return pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
