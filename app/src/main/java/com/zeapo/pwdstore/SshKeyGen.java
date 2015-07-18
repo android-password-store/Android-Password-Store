@@ -9,6 +9,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -53,6 +54,9 @@ public class SshKeyGen extends AppCompatActivity {
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, lengths);
             spinner.setAdapter(adapter);
+
+            Typeface monoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/sourcecodepro.ttf");
+            ((EditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
 
             CheckBox checkbox = (CheckBox) v.findViewById(R.id.show_passphrase);
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -159,11 +163,11 @@ public class SshKeyGen extends AppCompatActivity {
             Spinner spinner = (Spinner) findViewById(R.id.length);
             int length = (Integer) spinner.getSelectedItem();
 
-            TextView textView = (TextView) findViewById(R.id.passphrase);
-            String passphrase = textView.getText().toString();
+            EditText editText = (EditText) findViewById(R.id.passphrase);
+            String passphrase = editText.getText().toString();
 
-            textView = (TextView) findViewById(R.id.comment);
-            String comment = textView.getText().toString();
+            editText = (EditText) findViewById(R.id.comment);
+            String comment = editText.getText().toString();
 
             JSch jsch = new JSch();
             try {
