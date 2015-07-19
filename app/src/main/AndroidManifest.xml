@@ -6,7 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<application android:allowBackup="true" android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name" android:theme="@style/AppTheme">
-		<activity android:name=".PasswordStore" android:label="@string/app_name">
+		<activity android:name=".PasswordStore" android:label="@string/app_name"
+			android:configChanges="orientation|screenSize">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +28,8 @@
 		</activity>
 
 		<activity android:name=".crypto.PgpHandler"
-			android:parentActivityName=".PasswordStore">
+			android:parentActivityName=".PasswordStore"
+            android:configChanges="orientation|screenSize">
 
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.zeapo.pwdstore.PasswordStore" />
