@@ -16,3 +16,7 @@
 #   public *;
 #}
 -dontwarn java.lang.invoke.*
+-dontwarn org.eclipse.jgit.**
+-dontwarn com.jcraft.jsch.**
+-dontwarn com.google.common.**
+-dontwarn org.slf4j.**
