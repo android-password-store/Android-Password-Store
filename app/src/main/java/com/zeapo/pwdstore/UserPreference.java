@@ -254,6 +254,8 @@ public class UserPreference extends AppCompatActivity {
     public void makeSshKey() {
         Intent intent = new Intent(getApplicationContext(), SshKeyGen.class);
         startActivity(intent);
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void copySshKey(Uri uri) throws IOException {
