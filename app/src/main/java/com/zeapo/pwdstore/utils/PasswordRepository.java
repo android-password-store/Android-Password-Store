@@ -1,6 +1,12 @@
 package com.zeapo.pwdstore.utils;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.zeapo.pwdstore.UserPreference;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -109,6 +115,38 @@ public class PasswordRepository {
     public static void closeRepository() {
         if (repository != null) repository.close();
         repository = null;
+    }
+
+    public static void initialize(Activity callingActivity) {
+        File dir = null;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
+
+        if (settings.getBoolean("git_external", false)) {
+            if (settings.getString("git_external_repo", null) != null) {
+                dir = new File(settings.getString("git_external_repo", null));
+            }
+        } else {
+            dir = new File(callingActivity.getFilesDir() + "/store");
+        }
+        // temp for debug
+        if (dir == null) {
+            Intent intent = new Intent(callingActivity, UserPreference.class);
+            intent.putExtra("operation", "git_external");
+            callingActivity.startActivity(intent);
+            return;
+        }
+
+        // uninitialize the repo if the dir does not exist or is absolutely empty
+        if (!dir.exists() || !dir.isDirectory() || FileUtils.listFiles(dir, null, false).isEmpty()) {
+            settings.edit().putBoolean("repository_initialized", false).apply();
+        }
+
+        if (!PasswordRepository.getPasswords(dir).isEmpty()) {
+            settings.edit().putBoolean("repository_initialized", true).apply();
+        }
+
+        // create the repository static variable in PasswordRepository
+        PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
     }
 
     public static ArrayList<File> getFilesList(){

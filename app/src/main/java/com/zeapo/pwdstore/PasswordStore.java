@@ -198,7 +198,9 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     private void createRepository() {
-//        final String keyId = settings.getString("openpgp_key_ids", "");
+        if (!PasswordRepository.isInitialized()) {
+            PasswordRepository.initialize(this);
+        }
 
         File localDir = PasswordRepository.getWorkTree();
 
@@ -251,35 +253,7 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     private void checkLocalRepository() {
-        File dir = null;
-
-        if (settings.getBoolean("git_external", false)) {
-            if (settings.getString("git_external_repo", null) != null) {
-                dir = new File(settings.getString("git_external_repo", null));
-            }
-        } else {
-            dir = new File(getFilesDir() + "/store");
-        }
-        // temp for debug
-        if (dir == null) {
-            Intent intent = new Intent(this, UserPreference.class);
-            intent.putExtra("operation", "git_external");
-            startActivity(intent);
-            return;
-        }
-
-        // uninitialize the repo if the dir does not exist or is absolutely empty
-        if (!dir.exists() || !dir.isDirectory() || FileUtils.listFiles(dir, null, false).isEmpty()) {
-            settings.edit().putBoolean("repository_initialized", false).apply();
-        }
-
-        if (!PasswordRepository.getPasswords(dir).isEmpty()) {
-            settings.edit().putBoolean("repository_initialized", true).apply();
-        }
-
-        // create the repository static variable in PasswordRepository
-        PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
-
+        PasswordRepository.initialize(this);
         checkLocalRepository(PasswordRepository.getWorkTree());
     }
 
@@ -287,7 +261,6 @@ public class PasswordStore extends AppCompatActivity {
         Log.d("PASS", "Check, dir: " + localDir.getAbsolutePath());
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
         if (settings.getBoolean("repository_initialized", false)) {
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null || settings.getBoolean("repo_changed", false)) {
@@ -483,6 +456,8 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     protected void initRepository(final int operation) {
+        PasswordRepository.closeRepository();
+
         new AlertDialog.Builder(this)
                 .setTitle("Repositiory location")
                 .setMessage("Select where to create or clone your password repository.")
@@ -495,19 +470,32 @@ public class PasswordStore extends AppCompatActivity {
                             intent.putExtra("operation", "git_external");
                             startActivityForResult(intent, operation);
                         } else {
-                            PasswordRepository.closeRepository();
-                            checkLocalRepository();
+                            switch (operation) {
+                                case NEW_REPO_BUTTON:
+                                    initializeRepositoryInfo();
+                                    break;
+                                case CLONE_REPO_BUTTON:
+                                    PasswordRepository.initialize(PasswordStore.this);
+
+                                    Intent intent = new Intent(activity, GitActivity.class);
+                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                                    break;
+                            }
                         }
                     }
                 })
                 .setNegativeButton("Internal", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         settings.edit().putBoolean("git_external", false).apply();
+
                         switch (operation) {
                             case NEW_REPO_BUTTON:
                                 initializeRepositoryInfo();
                                 break;
                             case CLONE_REPO_BUTTON:
+                                PasswordRepository.initialize(PasswordStore.this);
+
                                 Intent intent = new Intent(activity, GitActivity.class);
                                 intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
                                 startActivityForResult(intent, GitActivity.REQUEST_CLONE);

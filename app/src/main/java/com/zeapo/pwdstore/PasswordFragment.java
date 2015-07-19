@@ -54,7 +54,6 @@ public class PasswordFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         String path = getArguments().getString("Path");
 
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());

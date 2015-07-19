@@ -104,6 +104,7 @@ public class UserPreference extends AppCompatActivity {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     try {
                                         FileUtils.cleanDirectory(PasswordRepository.getWorkTree());
+                                        PasswordRepository.closeRepository();
                                     } catch (Exception e) {
                                         //TODO Handle the diffent cases of exceptions
                                     }
