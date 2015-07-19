@@ -123,7 +123,7 @@ public class SshKeyGen extends AppCompatActivity {
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            TextView textView = (TextView) v.findViewById(R.id.public_key);
+                            TextView textView = (TextView) getDialog().findViewById(R.id.public_key);
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("public key", textView.getText().toString());
                             clipboard.setPrimaryClip(clip);
