@@ -47,7 +47,6 @@ TODO
 =====
 - Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))
 - Create a new category
-- Multi-select (for password deletion)
 - Multiple password stores (multiple git repositories).
 - Solve issues labeld as *enhancement* (see [enhancement issues](https://github.com/zeapo/Android-Password-Store/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement))
 
@@ -57,6 +56,14 @@ How-To
 
 Generate a ssh key for your git repo
 --------------------------------------------
+###From the application###
+- Go to **settings** > **Generate SSH key pair**
+- Select the key size (length)
+- Set the passphrase (optional) and a comment (optional)
+- Press **Generate**
+- Press **Copy** to copy the public key and add it to your ssh server
+
+###From a terminal###
 - Generate the private and public key
 ```
 ssh-keygen -C droid_phone -b 2048 -t rsa -f /tmp/id_rsa_droid
