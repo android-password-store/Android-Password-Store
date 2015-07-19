@@ -47,8 +47,10 @@
     <string name="read_only_dialog_text">You are about to use a read-only repository, you will not be able to push to it</string>
     <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
     <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
-    <string name="ssh_preferences_dialog_text">Please import your SSH key file in the preferences</string>
+    <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
     <string name="ssh_preferences_dialog_title">No SSH key</string>
+    <string name="ssh_preferences_dialog_import">Import</string>
+    <string name="ssh_preferences_dialog_generate">Generate</string>
     <string name="passphrase_dialog_title">Authenticate</string>
     <string name="passphrase_dialog_text">Please provide the passphrase for your SSH key. Leave it empty if there is no passphrase.</string>
     <string name="password_dialog_text">Please provide the password for this repository</string>
@@ -94,7 +96,9 @@
     <string name="pref_git_username_title">Username</string>
     <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Edit git server settings</string>
-    <string name="pref_ssh_title">Import ssh-key</string>
+    <string name="pref_ssh_title">Import SSH key</string>
+    <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
+    <string name="pref_ssh_see_key_title">View generated public SSH key</string>
     <string name="pref_git_delete_repo">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_dialog_delete_msg">Do you want to delete the current password store directory? This will not clear your configuration.</string>
@@ -121,6 +125,15 @@
     <string name="pwgen_symbols">Symbols</string>
     <string name="pwgen_uppercase">Uppercase</string>
     <string name="pwgen_ambiguous">Ambiguous</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">Length</string>
+    <string name="ssh_keygen_passphrase">Passphrase</string>
+    <string name="ssh_keygen_comment">Comment</string>
+    <string name="ssh_keygen_generate">Generate</string>
+    <string name="ssh_keygen_copy">Copy</string>
+    <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
+    <string name="ssh_keygen_show_passphrase">Show passphrase</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>

@@ -326,7 +326,7 @@ public class PasswordStore extends AppCompatActivity {
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
-    public void createPassword(View v) {
+    public void createPassword() {
         if (!PasswordRepository.isInitialized()) {
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.creation_dialog_text))

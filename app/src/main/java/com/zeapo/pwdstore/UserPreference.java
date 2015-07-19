@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -81,6 +82,24 @@ public class UserPreference extends AppCompatActivity {
                     return true;
                 }
             });
+
+            findPreference("ssh_keygen").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    callingActivity.makeSshKey();
+                    return true;
+                }
+            });
+
+            findPreference("ssh_see_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    DialogFragment df = new SshKeyGen.ShowSshKeyFragment();
+                    df.show(getFragmentManager(), "public_key");
+                    return true;
+                }
+            });
+
 
             findPreference("git_server_info").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -164,6 +183,13 @@ public class UserPreference extends AppCompatActivity {
             findPreference("pref_select_external").setOnPreferenceChangeListener(resetRepo);
             findPreference("git_external").setOnPreferenceChangeListener(resetRepo);
         }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+            findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
+        }
     }
 
     @Override
@@ -174,6 +200,9 @@ public class UserPreference extends AppCompatActivity {
                 switch (getIntent().getStringExtra("operation")) {
                     case "get_ssh_key":
                         getSshKey();
+                        break;
+                    case "make_ssh_key":
+                        makeSshKey();
                         break;
                     case "git_external":
                         selectExternalGitRepository();
@@ -220,6 +249,16 @@ public class UserPreference extends AppCompatActivity {
         startActivityForResult(intent, IMPORT_SSH_KEY);
     }
 
+    /**
+     * Opens a key generator to generate a public/private key pair
+     */
+    public void makeSshKey() {
+        Intent intent = new Intent(getApplicationContext(), SshKeyGen.class);
+        startActivity(intent);
+        setResult(RESULT_OK);
+        finish();
+    }
+
     private void copySshKey(Uri uri) throws IOException {
         InputStream sshKey = this.getContentResolver().openInputStream(uri);
         byte[] privateKey = IOUtils.toByteArray(sshKey);
@@ -238,6 +277,10 @@ public class UserPreference extends AppCompatActivity {
                         }
                         copySshKey(data.getData());
                         Toast.makeText(this, this.getResources().getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show();
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("use_generated_key", false);
+                        editor.apply();
                         setResult(RESULT_OK);
                         finish();
                     } catch (IOException e) {
