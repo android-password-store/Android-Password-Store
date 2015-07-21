@@ -20,3 +20,4 @@
 -dontwarn com.jcraft.jsch.**
 -dontwarn com.google.common.**
 -dontwarn org.slf4j.**
+-keep class android.support.v7.widget.SearchView { *; }
