@@ -117,6 +117,8 @@
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
+    <string name="pref_clear_clipboard_hint">Store nonsense in the clipboard 20 times instead of just once. Useful on Samsung phones that feature clipboard history.</string>
+    <string name="pref_clear_clipboard">Clear clipboard 20 times</string>
 
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Generate</string>

@@ -256,6 +256,12 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         protected void onPostExecute(Boolean b) {
             ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
             clipboard.setPrimaryClip(clip);
+            if (settings.getBoolean("clear_clipboard_20x", false)) {
+                for (int i = 0; i < 19; i++) {
+                    clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
+                    clipboard.setPrimaryClip(clip);
+                }
+            }
             if (showPassword) {
                 //clear password
                 ((TextView) findViewById(R.id.crypto_password_show)).setText("");

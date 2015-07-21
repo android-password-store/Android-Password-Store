@@ -70,4 +70,11 @@
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Misc">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="clear_clipboard_20x"
+            android:summary="@string/pref_clear_clipboard_hint"
+            android:title="@string/pref_clear_clipboard" />
+    </PreferenceCategory>
 </PreferenceScreen>
