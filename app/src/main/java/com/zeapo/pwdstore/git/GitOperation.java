@@ -9,6 +9,8 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.KeyPair;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
@@ -133,26 +135,31 @@ public abstract class GitOperation {
                 passphrase.setHint("Passphrase");
                 passphrase.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
                 passphrase.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                JSch jsch = new JSch();
+                KeyPair keyPair = KeyPair.load(jsch, callingActivity.getFilesDir() + "/.ssh_key");
+                if (keyPair.isEncrypted()) {
+                    new AlertDialog.Builder(callingActivity)
+                            .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
+                            .setMessage(callingActivity.getResources().getString(R.string.passphrase_dialog_text))
+                            .setView(passphrase)
+                            .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    try {
+                                        // Authenticate using the ssh-key and then execute the command
+                                        setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
-                new AlertDialog.Builder(callingActivity)
-                        .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
-                        .setMessage(callingActivity.getResources().getString(R.string.passphrase_dialog_text))
-                        .setView(passphrase)
-                        .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                try {
-                                    // Authenticate using the ssh-key and then execute the command
-                                    setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
-
-                            }
-                        }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Do nothing.
-                    }
-                }).show();
+                            }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // Do nothing.
+                        }
+                    }).show();
+                } else {
+                    setAuthentication(sshKey, username, "").execute();
+                }
             }
         } else {
             final EditText password = new EditText(callingActivity);
