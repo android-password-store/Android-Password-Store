@@ -1,12 +1,9 @@
 package com.zeapo.pwdstore.utils;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.zeapo.pwdstore.UserPreference;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -117,7 +114,7 @@ public class PasswordRepository {
         repository = null;
     }
 
-    public static void initialize(Activity callingActivity) {
+    public static Repository initialize(Activity callingActivity) {
         File dir = null;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
 
@@ -128,12 +125,9 @@ public class PasswordRepository {
         } else {
             dir = new File(callingActivity.getFilesDir() + "/store");
         }
-        // temp for debug
+
         if (dir == null) {
-            Intent intent = new Intent(callingActivity, UserPreference.class);
-            intent.putExtra("operation", "git_external");
-            callingActivity.startActivity(intent);
-            return;
+            return null;
         }
 
         // uninitialize the repo if the dir does not exist or is absolutely empty
@@ -146,7 +140,7 @@ public class PasswordRepository {
         }
 
         // create the repository static variable in PasswordRepository
-        PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
+        return PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
     }
 
     public static ArrayList<File> getFilesList(){

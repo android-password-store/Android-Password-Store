@@ -28,6 +28,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
 import java.util.HashSet;
@@ -43,6 +44,7 @@ public class PasswordStore extends AppCompatActivity {
 
     private final static int CLONE_REPO_BUTTON = 401;
     private final static int NEW_REPO_BUTTON = 402;
+    private final static int HOME = 403;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,15 +255,21 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     private void checkLocalRepository() {
-        PasswordRepository.initialize(this);
-        checkLocalRepository(PasswordRepository.getWorkTree());
+        Repository repo = PasswordRepository.initialize(this);
+        if (repo == null) {
+            Intent intent = new Intent(activity, UserPreference.class);
+            intent.putExtra("operation", "git_external");
+            startActivityForResult(intent, HOME);
+        } else {
+            checkLocalRepository(PasswordRepository.getWorkTree());
+        }
     }
 
     private void checkLocalRepository(File localDir) {
-        Log.d("PASS", "Check, dir: " + localDir.getAbsolutePath());
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (settings.getBoolean("repository_initialized", false)) {
+        if (localDir != null && settings.getBoolean("repository_initialized", false)) {
+            Log.d("PASS", "Check, dir: " + localDir.getAbsolutePath());
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null || settings.getBoolean("repo_changed", false)) {
                 settings.edit().putBoolean("repo_changed", false).apply();
@@ -431,6 +439,9 @@ public class PasswordStore extends AppCompatActivity {
                     break;
                 case GitActivity.REQUEST_PULL:
                     updateListAdapter();
+                    break;
+                case HOME:
+                    checkLocalRepository();
                     break;
                 case NEW_REPO_BUTTON:
                     initializeRepositoryInfo();

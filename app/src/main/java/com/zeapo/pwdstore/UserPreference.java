@@ -318,7 +318,7 @@ public class UserPreference extends AppCompatActivity {
             PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .edit()
                     .putString("git_external_repo", data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR))
-                    .commit();
+                    .apply();
         }
     }
 }
