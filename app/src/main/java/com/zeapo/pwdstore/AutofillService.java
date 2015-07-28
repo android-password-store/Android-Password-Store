@@ -162,8 +162,7 @@ public class AutofillService extends AccessibilityService {
                     String[] passContent = os.toString("UTF-8").split("\n");
                     // if the user focused on something else, take focus back
                     // but this will open another dialog...hack to ignore this
-                    ignoreActionFocus = true;
-                    info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
+                    ignoreActionFocus = info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Bundle args = new Bundle();
                         args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
