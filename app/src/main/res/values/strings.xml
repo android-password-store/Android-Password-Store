@@ -154,4 +154,6 @@
     <string name="pwd_generate_button">Generate</string>
     <string name="category_string">"Category: "</string>
 
+    <!-- Autofill -->
+    <string name="autofill_description">Auto-fills login fields.</string>
 </resources>
