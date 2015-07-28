@@ -155,5 +155,5 @@
     <string name="category_string">"Category: "</string>
 
     <!-- Autofill -->
-    <string name="autofill_description">Auto-fills login fields.</string>
+    <string name="autofill_description">Auto-fills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
 </resources>

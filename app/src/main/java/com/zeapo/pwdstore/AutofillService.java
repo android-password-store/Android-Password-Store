@@ -61,6 +61,7 @@ public class AutofillService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && unlockOK) {
             decryptAndVerify();
@@ -78,6 +79,7 @@ public class AutofillService extends AccessibilityService {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
+        // ignore the ACTION_FOCUS from decryptAndVerify
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
             return;
@@ -107,7 +109,6 @@ public class AutofillService extends AccessibilityService {
             });
             dialog = builder.create();
             dialog.setIcon(R.drawable.ic_launcher);
-
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -120,7 +121,7 @@ public class AutofillService extends AccessibilityService {
     private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
         ArrayList<PasswordItem> items = new ArrayList<>();
         if (!PasswordRepository.isInitialized()) {
-            return items;
+            initialize();
         }
         ArrayList<PasswordItem> passwordItems = dir == null ?
                 PasswordRepository.getPasswords() :
@@ -134,6 +135,39 @@ public class AutofillService extends AccessibilityService {
             }
         }
         return items;
+    }
+
+    // just like PasswordRepository.initialize().
+    private void initialize() {
+        File dir = null;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if (settings.getBoolean("git_external", false)) {
+            if (settings.getString("git_external_repo", null) != null) {
+                dir = new File(settings.getString("git_external_repo", null));
+            }
+        } else {
+            dir = new File(getFilesDir() + "/store");
+        }
+        // temp for debug
+        if (dir == null) {
+            Intent intent = new Intent(this, UserPreference.class);
+            intent.putExtra("operation", "git_external");
+            startActivity(intent);
+            return;
+        }
+
+        // uninitialize the repo if the dir does not exist or is absolutely empty
+        if (!dir.exists() || !dir.isDirectory() || FileUtils.listFiles(dir, null, false).isEmpty()) {
+            settings.edit().putBoolean("repository_initialized", false).apply();
+        }
+
+        if (!PasswordRepository.getPasswords(dir).isEmpty()) {
+            settings.edit().putBoolean("repository_initialized", true).apply();
+        }
+
+        // create the repository static variable in PasswordRepository
+        PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
     }
 
     @Override
