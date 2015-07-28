@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-
+// blank activity started by service for calling startIntentSenderForResult
 public class AutofillActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
     private boolean bound = false;
@@ -27,9 +27,9 @@ public class AutofillActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        finish();
+        finish();   // go back to the password field app
         if (resultCode == RESULT_OK) {
-            AutofillService.getService().decryptAndVerify();
+            AutofillService.setUnlockOK();    // report the result to service
         }
     }
 }

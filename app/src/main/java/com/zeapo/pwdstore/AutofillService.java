@@ -40,12 +40,17 @@ public class AutofillService extends AccessibilityService {
     private OpenPgpServiceConnection serviceConnection;
     private SharedPreferences settings;
     private AccessibilityNodeInfo info; // the original source of the event (the edittext field)
-    private ArrayList<PasswordItem> items;
-    private static AutofillService service;
+    private ArrayList<PasswordItem> items; // password choices
+    private AlertDialog dialog;
+    private static boolean unlockOK = false; // if openkeychain user interaction was successful
+    private static CharSequence packageName;
+    private static boolean ignoreActionFocus = false;
 
     public final class Constants {
         public static final String TAG = "Keychain";
     }
+
+    public static void setUnlockOK() { unlockOK = true; }
 
     @Override
     protected void onServiceConnected() {
@@ -53,16 +58,22 @@ public class AutofillService extends AccessibilityService {
         serviceConnection = new OpenPgpServiceConnection(AutofillService.this, "org.sufficientlysecure.keychain");
         serviceConnection.bindToService();
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        service = this;
-    }
-
-    public static AutofillService getService() {
-        return service;
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (!event.isPassword() || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                && event.getPackageName().equals(packageName) && unlockOK) {
+            decryptAndVerify();
+        }
+        if (!event.isPassword()
+                || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
+                || (dialog != null && dialog.isShowing())
+                || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
+            return;
+        }
+        if (ignoreActionFocus) {
+            ignoreActionFocus = false;
             return;
         }
         info = event.getSource();
@@ -74,29 +85,23 @@ public class AutofillService extends AccessibilityService {
             applicationInfo = null;
         }
         String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
-        if (appName.equals("OpenKeychain")) {
-            return;
-        }
         items = recursiveFilter(appName, null);
         if (items.isEmpty()) {
             return;
         }
-        ArrayList<CharSequence> itemNames = new ArrayList<>();
-        for (PasswordItem item : items) {
-            itemNames.add(item.toString());
+
+        if (dialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
+            builder.setNegativeButton("Cancel", null);
+            builder.setView(R.layout.autofill_layout);
+            dialog = builder.create();
+            dialog.setTitle("Fill with Password Store");
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
-        builder.setNegativeButton("Cancel", null);
-        builder.setView(R.layout.autofill_layout);
-        final AlertDialog dialog = builder.create();
-
-        dialog.setTitle("Fill with Password Store");
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
-        ((Button) dialog.findViewById(R.id.button)).setText(itemNames.get(0).toString());
+        ((Button) dialog.findViewById(R.id.button)).setText(items.get(0).getName());
         dialog.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +136,8 @@ public class AutofillService extends AccessibilityService {
     }
 
     public void decryptAndVerify() {
+        unlockOK = false;
+        packageName = info.getPackageName();
         Intent data = new Intent();
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
         InputStream is = null;
@@ -147,16 +154,16 @@ public class AutofillService extends AccessibilityService {
             case OpenPgpApi.RESULT_CODE_SUCCESS: {
                 try {
                     String[] passContent = os.toString("UTF-8").split("\n");
+                    // if the user focused on something else, take focus back
+                    // but this will open another dialog...hack to ignore this
+                    ignoreActionFocus = true;
+                    info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        // if the user focused on something else, take focus back
-                        // but this will open another dialog...
-                        info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
                         Bundle args = new Bundle();
                         args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
                                 passContent[0]);
                         info.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args);
                     } else {
-                        info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("autofill_pm", passContent[0]);
                         clipboard.setPrimaryClip(clip);
