@@ -43,8 +43,8 @@ public class AutofillService extends AccessibilityService {
     private ArrayList<PasswordItem> items; // password choices
     private AlertDialog dialog;
     private static boolean unlockOK = false; // if openkeychain user interaction was successful
-    private static CharSequence packageName;
-    private static boolean ignoreActionFocus = false;
+    private CharSequence packageName;
+    private boolean ignoreActionFocus = false;
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -68,9 +68,14 @@ public class AutofillService extends AccessibilityService {
         }
         if (!event.isPassword()
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
-                || (dialog != null && dialog.isShowing())
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
             return;
+        }
+        if (!event.getSource().equals(info) && dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
         }
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
