@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -14,11 +15,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.zeapo.pwdstore.utils.PasswordItem;
@@ -96,24 +95,24 @@ public class AutofillService extends AccessibilityService {
         }
 
         if (dialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
             builder.setNegativeButton("Cancel", null);
-            builder.setView(R.layout.autofill_layout);
+            builder.setPositiveButton("Fill", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    decryptAndVerify();
+                }
+            });
             dialog = builder.create();
-            dialog.setTitle("Fill with Password Store");
+            dialog.setIcon(R.drawable.ic_launcher);
+
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         }
+        dialog.setTitle(items.get(0).getName());
         dialog.show();
-        ((Button) dialog.findViewById(R.id.button)).setText(items.get(0).getName());
-        dialog.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                decryptAndVerify();
-                dialog.dismiss();
-            }
-        });
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
