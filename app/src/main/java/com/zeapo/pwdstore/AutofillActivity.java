@@ -28,6 +28,8 @@ public class AutofillActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         finish();
-        AutofillService.getService().decryptAndVerify();
+        if (resultCode == RESULT_OK) {
+            AutofillService.getService().decryptAndVerify();
+        }
     }
 }
