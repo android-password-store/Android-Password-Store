@@ -68,12 +68,14 @@ public class AutofillService extends AccessibilityService {
         if (!event.isPassword()
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
-            if (dialog != null && dialog.isShowing()) {
+            if (!(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                    && event.getPackageName().toString().contains("com.android.inputmethod"))
+                    && dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
             return;
         }
-        if (!event.getSource().equals(info) && dialog != null && dialog.isShowing()) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         if (ignoreActionFocus) {
