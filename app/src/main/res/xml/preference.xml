@@ -70,6 +70,14 @@
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Autofill">
+        <Preference
+            android:key="autofill_apps"
+            android:summary="Configure behaviour of autofill for specific apps."
+            android:title="Autofill Apps"/>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Misc">
         <CheckBoxPreference
             android:defaultValue="false"

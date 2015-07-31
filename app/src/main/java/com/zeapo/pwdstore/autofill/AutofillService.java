@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.autofill;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.PendingIntent;
@@ -20,6 +20,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
@@ -105,6 +107,12 @@ public class AutofillService extends AccessibilityService {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     decryptAndVerify();
+                }
+            });
+            builder.setNeutralButton("Match", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
                 }
             });
             dialog = builder.create();

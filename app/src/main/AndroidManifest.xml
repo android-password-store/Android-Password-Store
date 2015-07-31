@@ -45,7 +45,7 @@
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
 
-		<service android:name=".AutofillService"
+		<service android:name=".autofill.AutofillService"
 				 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 			<intent-filter>
 				<action android:name="android.accessibilityservice.AccessibilityService" />
@@ -54,7 +54,7 @@
 					   android:resource="@xml/autofill_config" />
 		</service>
 
-		<activity android:name=".AutofillActivity">
+		<activity android:name=".autofill.AutofillActivity">
 
 		</activity>
 
