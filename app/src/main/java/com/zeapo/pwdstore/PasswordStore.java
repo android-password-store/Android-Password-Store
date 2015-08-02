@@ -449,9 +449,13 @@ public class PasswordStore extends AppCompatActivity {
                 case CLONE_REPO_BUTTON:
                     // duplicate code
                     if (settings.getBoolean("git_external", false) && settings.getString("git_external_repo", null) != null) {
-                        File dir = new File(settings.getString("git_external_repo", null));
+                        String externalRepoPath = settings.getString("git_external_repo", null);
+                        File dir = externalRepoPath != null ? new File(externalRepoPath) : null;
 
-                        if (dir.exists() && dir.isDirectory() && !FileUtils.listFiles(dir, null, true).isEmpty() &&
+                        if (dir != null &&
+                                dir.exists() &&
+                                dir.isDirectory() &&
+                                !FileUtils.listFiles(dir, null, true).isEmpty() &&
                                 !PasswordRepository.getPasswords(dir).isEmpty()) {
                             PasswordRepository.closeRepository();
                             checkLocalRepository();
