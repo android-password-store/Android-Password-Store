@@ -49,11 +49,11 @@
     <string name="set_information_dialog_text">Je třeba zadat informaci o serveru před vlastní synchronizací</string>
     <string name="ssh_preferences_dialog_text">Importujte prosím svůj SSH klíč v ovládání</string>
     <string name="ssh_preferences_dialog_title">Žádný SSH klíč</string>
+    <string name="ssh_preferences_dialog_import">Import</string>
+    <string name="ssh_preferences_dialog_generate">Generate</string>
     <string name="passphrase_dialog_title">Ověření</string>
     <string name="passphrase_dialog_text">Zadejte prosím heslo pro svůj SSH klíč. Nechte prázdné pokud je bez hesla.</string>
     <string name="password_dialog_text">Zadejte prosím heslo k tomuto repozitáři</string>
-    <string name="ssh_preferences_dialog_import">Import</string>
-    <string name="ssh_preferences_dialog_generate">Generate</string>
 
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Vítejte v aplikaci Password Store\n\n Na této obrazovce můžete buď vytvořit nový repozitář nebo klonovat dostupný repozitář na svůj přístroj.</string>
@@ -97,8 +97,8 @@
     <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Upravit nastavení GIT serveru</string>
     <string name="pref_ssh_title">Importovat SSH klíč</string>
-    <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
-    <string name="pref_ssh_see_key_title">View generated public SSH key</string>
+    <string name="pref_ssh_keygen_title">Generovat SSH klíč</string>
+    <string name="pref_ssh_see_key_title">Zobrazit vygenerovaný veřejný SSH klíč</string>
     <string name="pref_git_delete_repo">Smazat repozitář</string>
     <string name="pref_dialog_delete_title">Vyčistit repozitář</string>
     <string name="pref_dialog_delete_msg">Opravdu smazat aktuální adresář úložiště hesel? Toto neodstraní vaši konfiguraci.</string>
@@ -116,25 +116,25 @@
     <string name="ssh_key_error_dialog_text">Zpráva : \n</string>
     <string name="pref_recursive_filter">Rekurzivní filtrování</string>
     <string name="pref_recursive_filter_hint">Rekurzivní hledání hesel v aktuálním adresáři.</string>
-    <string name="pref_clear_clipboard_hint">Store nonsense in the clipboard 20 times instead of just once. Useful on Samsung phones that feature clipboard history.</string>
-    <string name="pref_clear_clipboard">Clear clipboard 20 times</string>
+    <string name="pref_clear_clipboard_hint">Uložit dvacet náhodných textů do schránky namísto pouze jednoho. Užitečné pro telefony Samsug, které nabízejí funkci historie schránky.</string>
+    <string name="pref_clear_clipboard">Zaplnit schránku 20krát</string>
 
     <!-- pwgen fragment -->
-    <string name="pwgen_generate">Generate</string>
-    <string name="pwgen_include">Include</string>
-    <string name="pwgen_numerals">Numerals</string>
-    <string name="pwgen_symbols">Symbols</string>
-    <string name="pwgen_uppercase">Uppercase</string>
-    <string name="pwgen_ambiguous">Ambiguous</string>
+    <string name="pwgen_generate">Generovat</string>
+    <string name="pwgen_include">Vložit</string>
+    <string name="pwgen_numerals">Čísla</string>
+    <string name="pwgen_symbols">Symboly</string>
+    <string name="pwgen_uppercase">Velká písmena</string>
+    <string name="pwgen_ambiguous">Dvouznačné</string>
 
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Length</string>
-    <string name="ssh_keygen_passphrase">Passphrase</string>
-    <string name="ssh_keygen_comment">Comment</string>
-    <string name="ssh_keygen_generate">Generate</string>
-    <string name="ssh_keygen_copy">Copy</string>
-    <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
-    <string name="ssh_keygen_show_passphrase">Show passphrase</string>
+    <string name="ssh_keygen_length">Délka</string>
+    <string name="ssh_keygen_passphrase">Bezpečnostní fráze</string>
+    <string name="ssh_keygen_comment">Komentář</string>
+    <string name="ssh_keygen_generate">Generovat</string>
+    <string name="ssh_keygen_copy">Kopírovat</string>
+    <string name="ssh_keygen_tip">Přidat tento veřejný klíč na Git server.</string>
+    <string name="ssh_keygen_show_passphrase">Zobrazit bezpečnostní frázi</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
@@ -144,11 +144,11 @@
     <string name="dialog_negative">Ne... později</string>
     <string name="dialog_oops">Ajaj...</string>
     <string name="dialog_cancel">Zrušit</string>
-    <string name="git_sync">Synchronize repository</string>
-    <string name="git_pull">Pull from remote</string>
-    <string name="git_push">Push to remote</string>
-    <string name="show_password_pref_title">Show the password</string>
-    <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
-    <string name="toast_password_copied">Password copied into the clipboard</string>
-    <string name="pwd_generate_button">Generate</string>
+    <string name="git_sync">Synchronizovat repozitář</string>
+    <string name="git_pull">Stáhnout ze serveru</string>
+    <string name="git_push">Uložit na server</string>
+    <string name="show_password_pref_title">Zobrazit heslo</string>
+    <string name="show_password_pref_summary">Hlídat viditelnost hesel po dešifrování, toto nevypíná možnost kopírovat heslo</string>
+    <string name="toast_password_copied">Heslo zkopírováno do schránky</string>
+    <string name="pwd_generate_button">Generovat</string>
 </resources>
