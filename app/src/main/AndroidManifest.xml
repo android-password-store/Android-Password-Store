@@ -55,7 +55,10 @@
 		</service>
 
 		<activity android:name=".autofill.AutofillActivity">
+			android:parentActivityName=".PasswordStore">
 
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+					   android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
 
         <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
