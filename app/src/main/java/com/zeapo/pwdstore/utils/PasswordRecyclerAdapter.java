@@ -59,8 +59,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.password_row_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -197,6 +196,12 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void toggleSelection(int position) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
+        }
+        for (int selected : selectedItems) {
+            if (selected > position) {
+                selectedItems.remove(selected);
+                selectedItems.add(selected - 1);
+            }
         }
         notifyItemChanged(position);
     }
