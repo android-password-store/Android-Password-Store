@@ -37,7 +37,7 @@ public class PasswordRepository {
      * @return the git repository
      */
     public static Repository getRepository(File localDir) {
-        if (repository == null) {
+        if (repository == null && localDir != null) {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             try {
                 repository = builder.setGitDir(localDir)
