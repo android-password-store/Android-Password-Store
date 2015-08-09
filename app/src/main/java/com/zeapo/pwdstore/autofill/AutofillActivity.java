@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,7 @@ public class AutofillActivity extends AppCompatActivity {
     private boolean bound = false;
 
     private RecyclerView recyclerView;
-    private AutofillRecyclerAdapter recyclerAdapter;
+    AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -41,6 +42,7 @@ public class AutofillActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+
         // if called by service just for startIntentSenderForResult
         if (extras != null) {
             try {
@@ -64,21 +66,26 @@ public class AutofillActivity extends AppCompatActivity {
 
         // apps for which the user has custom settings should be in the recycler
         final PackageManager pm = getPackageManager();
-        final List<ApplicationInfo> allApps = pm.getInstalledApplications(0);
         SharedPreferences prefs
                 = getSharedPreferences("autofill", Context.MODE_PRIVATE);
         Map<String, ?> prefApps = prefs.getAll();
         ArrayList<ApplicationInfo> apps = new ArrayList<>();
-        for (ApplicationInfo applicationInfo : allApps) {
-            if (prefApps.containsKey(applicationInfo.packageName)) {
-                apps.add(applicationInfo);
+        for (String packageName : prefApps.keySet()) {
+            try {
+                apps.add(pm.getApplicationInfo(packageName, 0));
+            } catch (PackageManager.NameNotFoundException e) {
+                // remove invalid entries (from uninstalled apps?)
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove(packageName).apply();
             }
         }
-        recyclerAdapter = new AutofillRecyclerAdapter(apps, pm);
+        recyclerAdapter = new AutofillRecyclerAdapter(apps, pm, this);
         recyclerView.setAdapter(recyclerAdapter);
 
+        // show the search bar by default but don't open the keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         final SearchView searchView = (SearchView) findViewById(R.id.app_search);
+        searchView.clearFocus();
 
         // create search suggestions of apps with icons & names
         final SimpleCursorAdapter.ViewBinder viewBinder = new SimpleCursorAdapter.ViewBinder() {
@@ -97,6 +104,8 @@ public class AutofillActivity extends AppCompatActivity {
                 return true;
             }
         };
+
+        final List<ApplicationInfo> allApps = pm.getInstalledApplications(0);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -108,7 +117,9 @@ public class AutofillActivity extends AppCompatActivity {
                 // should be a better/faster way to do this?
                 MatrixCursor matrixCursor = new MatrixCursor(new String[]{"_id", "package", "label"});
                 for (ApplicationInfo applicationInfo : allApps) {
-                    if (applicationInfo.loadLabel(pm).toString().toLowerCase().contains(newText.toLowerCase())) {
+                    // exclude apps that already have settings; the search is just for adding
+                    if (applicationInfo.loadLabel(pm).toString().toLowerCase().contains(newText.toLowerCase())
+                            && !recyclerAdapter.contains(applicationInfo.packageName)) {
                         matrixCursor.addRow(new Object[]{0, applicationInfo.packageName, applicationInfo.loadLabel(pm)});
                     }
                 }
@@ -117,6 +128,30 @@ public class AutofillActivity extends AppCompatActivity {
                         , new int[]{android.R.id.icon1, android.R.id.text1}, 0);
                 simpleCursorAdapter.setViewBinder(viewBinder);
                 searchView.setSuggestionsAdapter(simpleCursorAdapter);
+                return false;
+            }
+        });
+
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
+                String packageName = cursor.getString(1);
+                String appName = cursor.getString(2);
+
+                // similar to what happens in ViewHolder.onClick but position -1
+                DialogFragment df = new AutofillFragment();
+                Bundle args = new Bundle();
+                args.putString("packageName", packageName);
+                args.putString("appName", appName);
+                args.putInt("position", -1);
+                df.setArguments(args);
+                df.show(getFragmentManager(), "autofill_dialog");
                 return false;
             }
         });

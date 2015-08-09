@@ -68,9 +68,13 @@ public class AutofillService extends AccessibilityService {
                 && event.getPackageName().equals(packageName) && unlockOK) {
             decryptAndVerify();
         }
+
+        // nothing to do if not password field focus, android version, or field is keychain app
         if (!event.isPassword()
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
+            // dismiss dialog if WINDOW_STATE_CHANGED unless the keyboard caused it
+            // there may be other exceptions...
             if (!(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                     && event.getPackageName().toString().contains("com.android.inputmethod"))
                     && dialog != null && dialog.isShowing()) {
@@ -78,14 +82,19 @@ public class AutofillService extends AccessibilityService {
             }
             return;
         }
+
+        // if past this point, a new dialog will be created, so dismiss the existing
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
+
         // ignore the ACTION_FOCUS from decryptAndVerify
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
             return;
         }
+
+        // get the app name and find a corresponding password
         info = event.getSource();
         PackageManager packageManager = getPackageManager();
         ApplicationInfo applicationInfo;
@@ -109,7 +118,7 @@ public class AutofillService extends AccessibilityService {
                     decryptAndVerify();
                 }
             });
-            builder.setNeutralButton("Match", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -121,7 +130,7 @@ public class AutofillService extends AccessibilityService {
             dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         }
-        dialog.setTitle(items.get(0).getName());
+        dialog.setTitle(items.get(0).toString());
         dialog.show();
         dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
@@ -202,6 +211,7 @@ public class AutofillService extends AccessibilityService {
             case OpenPgpApi.RESULT_CODE_SUCCESS: {
                 try {
                     String[] passContent = os.toString("UTF-8").split("\n");
+
                     // if the user focused on something else, take focus back
                     // but this will open another dialog...hack to ignore this
                     ignoreActionFocus = info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
@@ -215,6 +225,7 @@ public class AutofillService extends AccessibilityService {
                         ClipData clip = ClipData.newPlainText("autofill_pm", passContent[0]);
                         clipboard.setPrimaryClip(clip);
                         info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
+
                         clip = ClipData.newPlainText("autofill_pm", "MyPasswordIsDaBest!");
                         clipboard.setPrimaryClip(clip);
                         if (settings.getBoolean("clear_clipboard_20x", false)) {
