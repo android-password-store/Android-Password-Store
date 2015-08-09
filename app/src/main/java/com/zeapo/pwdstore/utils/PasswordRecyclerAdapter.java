@@ -1,9 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
-import android.graphics.Color;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +32,6 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         public View view;
         public TextView name;
         public TextView type;
-        public int position;
 
         public ViewHolder(View v) {
             super(v);
@@ -89,13 +86,11 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             holder.type.setTextColor(activity.getResources().getColor(R.color.blue_grey_50));
         }
 
-        holder.position = position;
-
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mActionMode != null) {
-                    toggleSelection(holder.position);
+                    toggleSelection(holder.getAdapterPosition(), holder.view);
                     if (selectedItems.isEmpty()) {
                         mActionMode.finish();
                     }
@@ -111,14 +106,13 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 if (mActionMode != null) {
                     return false;
                 }
-                toggleSelection(holder.position);
+                toggleSelection(holder.getAdapterPosition(), holder.view);
                 // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
                 return true;
             }
         });
 
-        holder.view.setSelected(selectedItems.contains(position));
 
     }
 
@@ -159,7 +153,6 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         public void onDestroyActionMode(ActionMode mode) {
             selectedItems.clear();
             mActionMode = null;
-            notifyDataSetChanged();
         }
     };
 
@@ -191,19 +184,21 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void remove(int position) {
         this.values.remove(position);
         this.notifyItemRemoved(position);
-    }
-
-    public void toggleSelection(int position) {
-        if (!selectedItems.remove(position)) {
-            selectedItems.add(position);
-        }
         for (int selected : selectedItems) {
             if (selected > position) {
                 selectedItems.remove(selected);
                 selectedItems.add(selected - 1);
             }
         }
-        notifyItemChanged(position);
+    }
+
+    public void toggleSelection(int position, View view) {
+        if (!selectedItems.remove(position)) {
+            selectedItems.add(position);
+            view.setSelected(true);
+        } else {
+            view.setSelected(false);
+        }
     }
 
 }
