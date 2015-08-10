@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
 public class AutofillFragment extends DialogFragment {
@@ -49,6 +51,17 @@ public class AutofillFragment extends DialogFragment {
                 ((RadioButton) view.findViewById(R.id.match)).toggle();
                 ((EditText) view.findViewById(R.id.matched)).setText(preference);
         }
+
+        View.OnClickListener matchPassword = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO figure out UI for this
+                Intent intent = new Intent(getActivity(), PasswordStore.class);
+                startActivity(intent);
+            }
+        };
+        view.findViewById(R.id.match).setOnClickListener(matchPassword);
+        view.findViewById(R.id.matched).setOnClickListener(matchPassword);
 
         final SharedPreferences.Editor editor = prefs.edit();
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

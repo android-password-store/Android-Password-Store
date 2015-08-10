@@ -1,6 +1,6 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
                        android:description="@string/autofill_description"
-                       android:accessibilityEventTypes="typeViewFocused|typeWindowStateChanged"
+                       android:accessibilityEventTypes="typeViewFocused|typeWindowStateChanged|typeViewClicked"
                        android:accessibilityFlags="flagDefault"
                        android:accessibilityFeedbackType="feedbackGeneric"
                        android:notificationTimeout="100"

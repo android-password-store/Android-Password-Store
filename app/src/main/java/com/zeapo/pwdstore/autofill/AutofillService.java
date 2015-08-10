@@ -60,7 +60,7 @@ public class AutofillService extends AccessibilityService {
         serviceConnection.bindToService();
         settings = PreferenceManager.getDefaultSharedPreferences(this);
     }
-    // TODO handle CLICKS and change search/search results (just use first result)
+    // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         // if returning to the source app from a successful AutofillActivity
