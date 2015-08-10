@@ -14,12 +14,11 @@ public class AutofillActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
             try {
-                PendingIntent pi = intent.getExtras().getParcelable("pending_intent");
+                PendingIntent pi = extras.getParcelable("pending_intent");
                 if (pi == null) {
                     return;
                 }

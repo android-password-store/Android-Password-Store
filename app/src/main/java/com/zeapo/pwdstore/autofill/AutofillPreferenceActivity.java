@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +21,8 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,12 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
                 editor.remove(packageName).apply();
             }
         }
+        Collections.sort(apps, new Comparator<ApplicationInfo>() {
+            @Override
+            public int compare(ApplicationInfo lhs, ApplicationInfo rhs) {
+                return lhs.loadLabel(pm).toString().compareTo(rhs.loadLabel(pm).toString());
+            }
+        });
         recyclerAdapter = new AutofillRecyclerAdapter(apps, pm, this);
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -95,9 +102,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
                 // should be a better/faster way to do this?
                 MatrixCursor matrixCursor = new MatrixCursor(new String[]{"_id", "package", "label"});
                 for (ApplicationInfo applicationInfo : allApps) {
-                    // exclude apps that already have settings; the search is just for adding
-                    if (applicationInfo.loadLabel(pm).toString().toLowerCase().contains(newText.toLowerCase())
-                            && !recyclerAdapter.contains(applicationInfo.packageName)) {
+                    if (applicationInfo.loadLabel(pm).toString().toLowerCase().contains(newText.toLowerCase())) {
                         matrixCursor.addRow(new Object[]{0, applicationInfo.packageName, applicationInfo.loadLabel(pm)});
                     }
                 }
@@ -121,19 +126,26 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
                 Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
                 String packageName = cursor.getString(1);
                 String appName = cursor.getString(2);
-
-                // similar to what happens in ViewHolder.onClick but position -1
-                DialogFragment df = new AutofillFragment();
-                Bundle args = new Bundle();
-                args.putString("packageName", packageName);
-                args.putString("appName", appName);
-                args.putInt("position", -1);
-                df.setArguments(args);
-                df.show(getFragmentManager(), "autofill_dialog");
-                return false;
+                showDialog(packageName, appName);
+                return true;
             }
         });
 
         setTitle("Autofill Apps");
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            showDialog(extras.getString("packageName"), extras.getString("appName"));
+        }
+    }
+
+    public void showDialog(String packageName, String appName) {
+        DialogFragment df = new AutofillFragment();
+        Bundle args = new Bundle();
+        args.putString("packageName", packageName);
+        args.putString("appName", appName);
+        args.putInt("position", recyclerAdapter.getPosition(packageName));
+        df.setArguments(args);
+        df.show(getFragmentManager(), "autofill_dialog");
     }
 }

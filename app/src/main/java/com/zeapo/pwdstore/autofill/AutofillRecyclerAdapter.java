@@ -40,13 +40,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
         @Override
         public void onClick(View v) {
-            DialogFragment df = new AutofillFragment();
-            Bundle args = new Bundle();
-            args.putString("packageName", packageName);
-            args.putString("appName", name.getText().toString());
-            args.putInt("position", getAdapterPosition());
-            df.setArguments(args);
-            df.show(activity.getFragmentManager(), "autofill_dialog");
+            activity.showDialog(packageName, name.getText().toString());
         }
     }
 
@@ -90,15 +84,6 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         return apps.size();
     }
 
-    public boolean contains(String packageName) {
-        for (ApplicationInfo app : apps) {
-            if (app.packageName.equals(packageName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void add(String packageName) {
         try {
             ApplicationInfo app = pm.getApplicationInfo(packageName, 0);
@@ -107,5 +92,14 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getPosition(String packageName) {
+        for (int i = 0; i < apps.size(); i++) {
+            if (apps.get(i).packageName.equals(packageName)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
