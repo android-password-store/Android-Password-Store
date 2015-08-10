@@ -31,7 +31,6 @@ import java.util.Map;
 // blank activity started by service for calling startIntentSenderForResult
 public class AutofillActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
-    private boolean bound = false;
 
     private RecyclerView recyclerView;
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access

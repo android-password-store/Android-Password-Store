@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
 
 import com.zeapo.pwdstore.R;
@@ -43,6 +44,7 @@ public class AutofillService extends AccessibilityService {
     private AccessibilityNodeInfo info; // the original source of the event (the edittext field)
     private ArrayList<PasswordItem> items; // password choices
     private AlertDialog dialog;
+    private AccessibilityWindowInfo window;
     private static boolean unlockOK = false; // if openkeychain user interaction was successful
     private CharSequence packageName;
     private boolean ignoreActionFocus = false;
@@ -73,11 +75,18 @@ public class AutofillService extends AccessibilityService {
         if (!event.isPassword()
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
-            // dismiss dialog if WINDOW_STATE_CHANGED unless the keyboard caused it
+            // the default keyboard showing/hiding is a window state changed event
+            // on Android 5+ we can use getWindows() to determine when the original window is not visible
+            // on Android 4.3 we have to use window state changed events and filter out the keyboard ones
             // there may be other exceptions...
-            if (!(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                    && event.getPackageName().toString().contains("com.android.inputmethod"))
-                    && dialog != null && dialog.isShowing()) {
+            boolean dismiss;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                dismiss = !getWindows().contains(window);
+            } else {
+                dismiss = !(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                        && event.getPackageName().toString().contains("inputmethod"));
+            }
+            if (dismiss && dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
             return;
@@ -99,8 +108,14 @@ public class AutofillService extends AccessibilityService {
             return;
         }
 
-        // get the app name and find a corresponding password
         info = event.getSource();
+
+        // save the dialog's corresponding window so we can use getWindows() above to check whether dismiss
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window = info.getWindow();
+        }
+
+        // get the app name and find a corresponding password
         PackageManager packageManager = getPackageManager();
         ApplicationInfo applicationInfo;
         try {
@@ -134,10 +149,10 @@ public class AutofillService extends AccessibilityService {
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
         dialog.setTitle(items.get(0).toString());
         dialog.show();
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
