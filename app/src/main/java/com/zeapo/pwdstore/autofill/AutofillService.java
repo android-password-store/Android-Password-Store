@@ -83,8 +83,13 @@ public class AutofillService extends AccessibilityService {
             return;
         }
 
-        // if past this point, a new dialog will be created, so dismiss the existing
         if (dialog != null && dialog.isShowing()) {
+            // if the view was clicked, the click event follows the focus event
+            // since the focus event was already handled, ignore click event
+            if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+                return;
+            }
+            // if past this point, a new dialog will be created, so dismiss the existing
             dialog.dismiss();
         }
 
@@ -145,7 +150,7 @@ public class AutofillService extends AccessibilityService {
                 PasswordRepository.getPasswords(dir);
         for (PasswordItem item : passwordItems) {
             if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                recursiveFilter(filter, item.getFile());
+                items.addAll(recursiveFilter(filter, item.getFile()));
             }
             if (item.toString().toLowerCase().contains(filter.toLowerCase())) {
                 items.add(item);
