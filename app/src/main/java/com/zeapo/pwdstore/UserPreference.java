@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import com.zeapo.pwdstore.autofill.AutofillActivity;
+import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -187,9 +187,9 @@ public class UserPreference extends AppCompatActivity {
             findPreference("autofill_apps").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(callingActivity, AutofillActivity.class);
+                    Intent intent = new Intent(callingActivity, AutofillPreferenceActivity.class);
                     startActivity(intent);
-                    return false;
+                    return true;
                 }
             });
         }

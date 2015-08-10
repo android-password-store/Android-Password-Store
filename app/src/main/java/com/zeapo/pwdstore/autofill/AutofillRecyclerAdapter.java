@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
     private ArrayList<ApplicationInfo> apps;
     private PackageManager pm;
-    private AutofillActivity activity;
+    private AutofillPreferenceActivity activity;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public View view;
@@ -50,7 +50,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         }
     }
 
-    public AutofillRecyclerAdapter(ArrayList<ApplicationInfo> apps, PackageManager pm, AutofillActivity activity) {
+    public AutofillRecyclerAdapter(ArrayList<ApplicationInfo> apps, PackageManager pm, AutofillPreferenceActivity activity) {
         this.apps = apps;
         this.pm = pm;
         this.activity = activity;

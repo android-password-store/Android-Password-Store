@@ -25,9 +25,9 @@ public class AutofillFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // this fragment is only created from the settings page (AutofillActivity)
+        // this fragment is only created from the settings page (AutofillPreferenceActivity)
         // need to interact with the recyclerAdapter which is a member of activity
-        final AutofillActivity callingActivity = (AutofillActivity) getActivity();
+        final AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
         final View view = inflater.inflate(R.layout.fragment_autofill, null);
 
