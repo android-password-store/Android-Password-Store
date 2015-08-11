@@ -75,7 +75,7 @@
         <Preference
             android:key="autofill_apps"
             android:summary="Customize autofill settings for specific apps."
-            android:title="Autofill Apps"/>
+            android:title="Per-app settings"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Misc">

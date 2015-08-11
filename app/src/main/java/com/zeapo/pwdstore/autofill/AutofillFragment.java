@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,7 @@ import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
 public class AutofillFragment extends DialogFragment {
+    private static final int MATCH_WITH = 777;
 
     public AutofillFragment() {
     }
@@ -57,7 +59,8 @@ public class AutofillFragment extends DialogFragment {
             public void onClick(View v) {
                 // TODO figure out UI for this
                 Intent intent = new Intent(getActivity(), PasswordStore.class);
-                startActivity(intent);
+                intent.putExtra("matchWith", true);
+                startActivityForResult(intent, MATCH_WITH);
             }
         };
         view.findViewById(R.id.match).setOnClickListener(matchPassword);
@@ -91,5 +94,13 @@ public class AutofillFragment extends DialogFragment {
         });
         builder.setNegativeButton("Cancel", null);
         return builder.create();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            ((EditText) getDialog().findViewById(R.id.matched)).setText(data.getStringExtra("path"));
+        }
+
     }
 }

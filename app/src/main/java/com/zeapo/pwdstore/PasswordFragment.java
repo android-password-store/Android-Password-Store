@@ -112,7 +112,11 @@ public class PasswordFragment extends Fragment{
 
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     } else {
-                        ((PasswordStore) getActivity()).decryptPassword(item);
+                        if (getArguments().getBoolean("matchWith", false)) {
+                            ((PasswordStore) getActivity()).matchPasswordWithApp(item);
+                        } else {
+                            ((PasswordStore) getActivity()).decryptPassword(item);
+                        }
                     }
                 }
 
