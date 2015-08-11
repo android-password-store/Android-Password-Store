@@ -3,6 +3,7 @@ package com.zeapo.pwdstore.autofill;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -39,9 +40,14 @@ public class AutofillFragment extends DialogFragment {
         String appName = getArguments().getString("appName");
 
         builder.setTitle(appName);
+
+        // when an app is added for the first time, the radio button selection should reflect
+        // the autofill_default setting: hence, defValue
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity);
+        String defValue = settings.getBoolean("autofill_default", true) ? "first" : "never";
         SharedPreferences prefs
                 = getActivity().getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(packageName, "first");
+        String preference = prefs.getString(packageName, defValue);
         switch (preference) {
             case "first":
                 ((RadioButton) view.findViewById(R.id.first)).toggle();
@@ -57,7 +63,6 @@ public class AutofillFragment extends DialogFragment {
         View.OnClickListener matchPassword = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO figure out UI for this
                 Intent intent = new Intent(getActivity(), PasswordStore.class);
                 intent.putExtra("matchWith", true);
                 startActivityForResult(intent, MATCH_WITH);

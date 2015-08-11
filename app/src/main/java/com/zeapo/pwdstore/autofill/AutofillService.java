@@ -102,7 +102,7 @@ public class AutofillService extends AccessibilityService {
             dialog.dismiss();
         }
 
-        // ignore the ACTION_FOCUS from decryptAndVerify
+        // ignore the ACTION_FOCUS from decryptAndVerify otherwise dialog will appear after Fill
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
             return;
@@ -124,7 +124,23 @@ public class AutofillService extends AccessibilityService {
             applicationInfo = null;
         }
         final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
-        items = recursiveFilter(appName, null);
+
+        // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
+        String defValue = settings.getBoolean("autofill_default", true) ? "first" : "never";
+        SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        String preference = prefs.getString(event.getPackageName().toString(), defValue);
+        switch (preference) {
+            case "first":
+                items = recursiveFilter(appName, null);
+                break;
+            case "never":
+                return;
+            default:
+                String path = PasswordRepository.getWorkTree() + "/" + preference + ".gpg";
+                File file = new File(path);
+                items = new ArrayList<>();
+                items.add(PasswordItem.newPassword(file.getName(), file));
+        }
         if (items.isEmpty()) {
             return;
         }

@@ -76,6 +76,11 @@
             android:key="autofill_apps"
             android:summary="Customize autofill settings for specific apps."
             android:title="Per-app settings"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="autofill_default"
+            android:summary="Default to 'Automatically match with password' for apps without custom settings."
+            android:title="Automatically match by default"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Misc">

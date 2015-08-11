@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,9 +60,13 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     public void onBindViewHolder(AutofillRecyclerAdapter.ViewHolder holder, int position) {
         ApplicationInfo app = apps.get(position);
         holder.name.setText(pm.getApplicationLabel(app));
+
+        // it shouldn't be possible for prefs.getString to not find the app...use defValue anyway
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(activity);
+        String defValue = settings.getBoolean("autofill_default", true) ? "first" : "never";
         SharedPreferences prefs
                 = activity.getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(app.packageName, "first");
+        String preference = prefs.getString(app.packageName, defValue);
         switch (preference) {
             case "first":
                 holder.secondary.setText("Automatically match with password");
