@@ -14,6 +14,7 @@ import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -113,7 +114,8 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             }
         });
 
-
+        // after removal, everything is rebound for some reason; views are shuffled?
+        holder.view.setSelected(selectedItems.contains(position));
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -151,7 +153,11 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            selectedItems.clear();
+            for (Iterator it = selectedItems.iterator(); it.hasNext();) {
+                // need the setSelected line in onBind
+                notifyItemChanged((Integer) it.next());
+                it.remove();
+            }
             mActionMode = null;
         }
     };
