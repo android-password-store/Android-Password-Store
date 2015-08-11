@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="64dp"
-              android:background="@color/grey_white_1000">
+              android:background="@drawable/autofill_row_background">
 
     <LinearLayout
         android:layout_width="match_parent"

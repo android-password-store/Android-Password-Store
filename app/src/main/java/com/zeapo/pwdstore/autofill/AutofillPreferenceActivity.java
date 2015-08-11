@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -149,7 +148,6 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         args.putInt("position", recyclerAdapter.getPosition(packageName));
         df.setArguments(args);
         df.show(getFragmentManager(), "autofill_dialog");
-
         // TODO if called from dialog 'Settings' button, should activity finish at OK?
     }
 }
