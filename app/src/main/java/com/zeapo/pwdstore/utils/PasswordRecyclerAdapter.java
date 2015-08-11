@@ -140,9 +140,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_delete_password:
-                    for (int position : selectedItems) {
-                        activity.deletePassword(PasswordRecyclerAdapter.this, position);
-                    }
+                    activity.deletePasswords(PasswordRecyclerAdapter.this, new TreeSet<>(selectedItems));
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -193,16 +191,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
 
         // keep selectedItems updated so we know what to notifyItemChanged
         // (instead of just using notifyDataSetChanged)
-        Set<Integer> temp = new TreeSet<>();
-        for (int selected : selectedItems) {
-            if (selected > position) {
-                temp.add(selected - 1);
-            } else {
-                temp.add(selected);
-            }
-        }
-        selectedItems.clear();
-        selectedItems.addAll(temp);
+        updateSelectedItems(position, selectedItems);
     }
 
     public void toggleSelection(int position, View view) {
@@ -214,4 +203,18 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         }
     }
 
+    // use this after an item is removed to update the positions of items in set
+    // that followed the removed position
+    public void updateSelectedItems(int position, Set<Integer> selectedItems) {
+        Set<Integer> temp = new TreeSet<>();
+        for (int selected : selectedItems) {
+            if (selected > position) {
+                temp.add(selected - 1);
+            } else {
+                temp.add(selected);
+            }
+        }
+        selectedItems.clear();
+        selectedItems.addAll(temp);
+    }
 }

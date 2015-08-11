@@ -32,7 +32,9 @@ import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
@@ -355,7 +357,13 @@ public class PasswordStore extends AppCompatActivity {
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
     }
 
-    public void deletePassword(final PasswordRecyclerAdapter adapter, final int position) {
+    // deletes passwords in order from top to bottom
+    public void deletePasswords(final PasswordRecyclerAdapter adapter, final Set<Integer> selectedItems) {
+        final Iterator it = selectedItems.iterator();
+        if (!it.hasNext()) {
+            return;
+        }
+        final int position = (int) it.next();
         final PasswordItem item = adapter.getValues().get(position);
         new AlertDialog.Builder(this).
                 setMessage(this.getResources().getString(R.string.delete_dialog_text) +
@@ -366,6 +374,8 @@ public class PasswordStore extends AppCompatActivity {
                         String path = item.getFile().getAbsolutePath();
                         item.getFile().delete();
                         adapter.remove(position);
+                        it.remove();
+                        adapter.updateSelectedItems(position, selectedItems);
 
                         setResult(RESULT_CANCELED);
                         Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
@@ -375,12 +385,14 @@ public class PasswordStore extends AppCompatActivity {
                                 git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
                                 git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")
                         );
+                        deletePasswords(adapter, selectedItems);
                     }
                 })
                 .setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        it.remove();
+                        deletePasswords(adapter, selectedItems);
                     }
                 })
                 .show();
