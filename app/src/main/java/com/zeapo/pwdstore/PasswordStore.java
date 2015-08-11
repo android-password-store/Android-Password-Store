@@ -368,9 +368,9 @@ public class PasswordStore extends AppCompatActivity {
                         adapter.remove(position);
 
                         setResult(RESULT_CANCELED);
-                        Git git = new Git(PasswordRepository.getRepository(new File("")));
+                        Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
+                        Git git = new Git(repo);
                         GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
-                        System.out.println(tasks);
                         tasks.execute(
                                 git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
                                 git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")

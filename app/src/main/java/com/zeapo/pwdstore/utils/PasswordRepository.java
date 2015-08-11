@@ -114,17 +114,25 @@ public class PasswordRepository {
         repository = null;
     }
 
-    public static Repository initialize(Activity callingActivity) {
+    public static File getRepositoryDirectory(Activity callingActivity) {
         File dir = null;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
 
         if (settings.getBoolean("git_external", false)) {
-            if (settings.getString("git_external_repo", null) != null) {
-                dir = new File(settings.getString("git_external_repo", null));
+            String external_repo  = settings.getString("git_external_repo", null);
+            if (external_repo != null) {
+                dir = new File(external_repo);
             }
         } else {
             dir = new File(callingActivity.getFilesDir() + "/store");
         }
+
+        return dir;
+    }
+
+    public static Repository initialize(Activity callingActivity) {
+        File dir = getRepositoryDirectory(callingActivity);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
 
         if (dir == null) {
             return null;
@@ -141,10 +149,6 @@ public class PasswordRepository {
 
         // create the repository static variable in PasswordRepository
         return PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
-    }
-
-    public static ArrayList<File> getFilesList(){
-        return getFilesList(repository.getWorkTree());
     }
 
     /**
