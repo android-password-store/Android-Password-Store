@@ -190,12 +190,19 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void remove(int position) {
         this.values.remove(position);
         this.notifyItemRemoved(position);
+
+        // keep selectedItems updated so we know what to notifyItemChanged
+        // (instead of just using notifyDataSetChanged)
+        Set<Integer> temp = new TreeSet<>();
         for (int selected : selectedItems) {
             if (selected > position) {
-                selectedItems.remove(selected);
-                selectedItems.add(selected - 1);
+                temp.add(selected - 1);
+            } else {
+                temp.add(selected);
             }
         }
+        selectedItems.clear();
+        selectedItems.addAll(temp);
     }
 
     public void toggleSelection(int position, View view) {
