@@ -42,7 +42,8 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        
         // apps for which the user has custom settings should be in the recycler
         final PackageManager pm = getPackageManager();
         SharedPreferences prefs
