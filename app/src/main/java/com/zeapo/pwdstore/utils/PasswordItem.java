@@ -90,9 +90,8 @@ public class PasswordItem implements Comparable{
     public boolean equals(Object o){
         PasswordItem other = (PasswordItem) o;
         // Makes it possible to have a category and a password with the same name
-        return (other.getType() + other.getName())
-                .equals(this.getType() + this.getName());
-    }
+        return (other.getFile().equals(this.getFile()));
+}
 
     @Override
     public int compareTo(Object o) {
