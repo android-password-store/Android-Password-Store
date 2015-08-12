@@ -31,6 +31,7 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'org.sufficientlysecure:openpgp-api:7.0'
     compile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'

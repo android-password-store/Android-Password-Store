@@ -34,7 +34,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
@@ -226,7 +225,7 @@ public class PasswordStore extends AppCompatActivity {
             File dir = new File(settings.getString("git_external_repo", null));
 
             if (dir.exists() && dir.isDirectory() && !FileUtils.listFiles(dir, null, true).isEmpty() &&
-                    !PasswordRepository.getPasswords(dir).isEmpty()) {
+                    !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
                 PasswordRepository.closeRepository();
                 checkLocalRepository();
                 return; // if not empty, just show me the passwords!
@@ -468,7 +467,7 @@ public class PasswordStore extends AppCompatActivity {
                                 dir.exists() &&
                                 dir.isDirectory() &&
                                 !FileUtils.listFiles(dir, null, true).isEmpty() &&
-                                !PasswordRepository.getPasswords(dir).isEmpty()) {
+                                !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
                             PasswordRepository.closeRepository();
                             checkLocalRepository();
                             return; // if not empty, just show me the passwords!

@@ -155,8 +155,8 @@ public class PasswordRepository {
      * Gets the password items in the root directory
      * @return a list of passwords in the root direcotyr
      */
-    public static ArrayList<PasswordItem> getPasswords() {
-        return getPasswords(repository.getWorkTree());
+    public static ArrayList<PasswordItem> getPasswords(File rootDir) {
+        return getPasswords(rootDir, rootDir);
     }
 
     public static File getWorkTree() {
@@ -183,7 +183,7 @@ public class PasswordRepository {
      * @param path the directory path
      * @return a list of password items
      */
-    public static ArrayList<PasswordItem> getPasswords(File path) {
+    public static ArrayList<PasswordItem> getPasswords(File path, File rootDir) {
         //We need to recover the passwords then parse the files
         ArrayList<File> passList = getFilesList(path);
 
@@ -193,12 +193,12 @@ public class PasswordRepository {
 
         for (File file : passList) {
             if (file.isFile()) {
-                passwordList.add(PasswordItem.newPassword(file.getName(), file));
+                passwordList.add(PasswordItem.newPassword(file.getName(), file, rootDir));
             } else {
                 // ignore .git directory
                 if (file.getName().equals(".git"))
                     continue;
-                passwordList.add(PasswordItem.newCategory(file.getName(), file));
+                passwordList.add(PasswordItem.newCategory(file.getName(), file, rootDir));
             }
         }
         sort(passwordList);

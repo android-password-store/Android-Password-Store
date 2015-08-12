@@ -152,5 +152,6 @@
     <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
     <string name="toast_password_copied">Password copied into the clipboard</string>
     <string name="pwd_generate_button">Generate</string>
+    <string name="category_string">"Category: "</string>
 
 </resources>

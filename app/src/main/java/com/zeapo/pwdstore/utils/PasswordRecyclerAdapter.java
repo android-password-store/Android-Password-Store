@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,12 +32,14 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public View view;
+        public CardView card;
         public TextView name;
         public TextView type;
 
         public ViewHolder(View v) {
             super(v);
             view = v;
+            card = (CardView) view.findViewById(R.id.password_card);
             name = (TextView) view.findViewById(R.id.label);
             type = (TextView) view.findViewById(R.id.type);
         }
@@ -68,23 +71,11 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         int sdk = android.os.Build.VERSION.SDK_INT;
 
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
-            holder.type.setText("C");
-            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.type.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.category_rectangle));
-            } else {
-                holder.type.setBackground(activity.getResources().getDrawable(R.drawable.category_rectangle));
-            }
-
-            holder.type.setTextColor(activity.getResources().getColor(R.color.deep_orange_50));
+            holder.type.setText(pass.getFullPathName());
+            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
         } else {
-            holder.type.setText("P");
-            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.type.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.password_rectangle));
-            } else {
-                holder.type.setBackground(activity.getResources().getDrawable(R.drawable.password_rectangle));
-            }
-
-            holder.type.setTextColor(activity.getResources().getColor(R.color.blue_grey_50));
+            holder.type.setText(pass.getFullPathName());
+            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.light_blue_600));
         }
 
         holder.view.setOnClickListener(new View.OnClickListener() {

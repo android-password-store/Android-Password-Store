@@ -11,6 +11,7 @@ public class PasswordItem implements Comparable{
     private String name;
     private PasswordItem parent;
     private File file;
+    private String fullPathName;
     public boolean selected = false;
 
     /** Create a password item
@@ -20,11 +21,12 @@ public class PasswordItem implements Comparable{
      * @param parent
      * @param type
      */
-    protected PasswordItem(String name, PasswordItem parent, char type, File file) {
+    protected PasswordItem(String name, PasswordItem parent, char type, File file, File rootDir) {
         this.name = name;
         this.parent = parent;
         this.type = type;
         this.file = file;
+        this.fullPathName = file.getAbsolutePath().replace(rootDir.getAbsolutePath(), "").replace(file.getName(), "");
     }
 
     /** Create a new Category item
@@ -33,8 +35,8 @@ public class PasswordItem implements Comparable{
      * @param parent
      * @return
      */
-    public static PasswordItem newCategory(String name, File file, PasswordItem parent) {
-        return new PasswordItem(name, parent, TYPE_CATEGORY, file);
+    public static PasswordItem newCategory(String name, File file, PasswordItem parent, File rootDir) {
+        return new PasswordItem(name, parent, TYPE_CATEGORY, file, rootDir);
     }
 
     /** Create a new parentless category item
@@ -42,8 +44,8 @@ public class PasswordItem implements Comparable{
      * @param name
      * @return
      */
-    public static PasswordItem newCategory(String name, File file) {
-        return new PasswordItem(name, null, TYPE_CATEGORY, file);
+    public static PasswordItem newCategory(String name, File file, File rootDir) {
+        return new PasswordItem(name, null, TYPE_CATEGORY, file, rootDir);
     }
 
     /** Create a new password item
@@ -52,8 +54,8 @@ public class PasswordItem implements Comparable{
      * @param parent
      * @return
      */
-    public static PasswordItem newPassword(String name, File file,  PasswordItem parent) {
-        return new PasswordItem(name, parent, TYPE_PASSWORD, file);
+    public static PasswordItem newPassword(String name, File file,  PasswordItem parent, File rootDir) {
+        return new PasswordItem(name, parent, TYPE_PASSWORD, file, rootDir);
     }
 
     /** Create a new parentless password item
@@ -61,8 +63,8 @@ public class PasswordItem implements Comparable{
      * @param name
      * @return
      */
-    public static PasswordItem newPassword(String name, File file) {
-        return new PasswordItem(name, null, TYPE_PASSWORD, file);
+    public static PasswordItem newPassword(String name, File file, File rootDir) {
+        return new PasswordItem(name, null, TYPE_PASSWORD, file, rootDir);
     }
 
     public char getType(){
@@ -79,6 +81,10 @@ public class PasswordItem implements Comparable{
 
     public File getFile() {
         return this.file;
+    }
+
+    public String getFullPathName() {
+        return this.fullPathName;
     }
 
     @Override
