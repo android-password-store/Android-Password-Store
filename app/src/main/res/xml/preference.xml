@@ -79,7 +79,7 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="autofill_default"
-            android:summary="Default to 'Automatically match with password' for apps without custom settings."
+            android:summary="Default to 'Automatically match' for apps without custom settings. Otherwise, 'Never match.'"
             android:title="Automatically match by default"/>
     </PreferenceCategory>
 

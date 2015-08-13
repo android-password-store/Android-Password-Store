@@ -31,15 +31,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="App"
                 android:id="@+id/app_name"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="The matched file.gpg/Don't ask"
-                android:id="@+id/secondary_text"/>
+                android:id="@+id/secondary_text"
+                android:textColor="@color/grey_600"/>
         </LinearLayout>
 
 

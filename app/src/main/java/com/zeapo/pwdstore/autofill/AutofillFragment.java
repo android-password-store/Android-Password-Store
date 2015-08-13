@@ -3,7 +3,7 @@ package com.zeapo.pwdstore.autofill;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.preference.PreferenceManager;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -40,15 +40,20 @@ public class AutofillFragment extends DialogFragment {
         String appName = getArguments().getString("appName");
 
         builder.setTitle(appName);
+        try {
+            // since we can't (easily?) pass the drawable as an argument
+            builder.setIcon(callingActivity.getPackageManager().getApplicationIcon(packageName));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        // when an app is added for the first time, the radio button selection should reflect
-        // the autofill_default setting: hence, defValue
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity);
-        String defValue = settings.getBoolean("autofill_default", true) ? "first" : "never";
         SharedPreferences prefs
                 = getActivity().getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(packageName, defValue);
+        String preference = prefs.getString(packageName, "");
         switch (preference) {
+            case "":
+                ((RadioButton) view.findViewById(R.id.use_default)).toggle();
+                break;
             case "first":
                 ((RadioButton) view.findViewById(R.id.first)).toggle();
                 break;
@@ -77,6 +82,9 @@ public class AutofillFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.autofill_radiogroup);
                 switch (radioGroup.getCheckedRadioButtonId()) {
+                    case R.id.use_default:
+                        editor.remove(packageName);
+                        break;
                     case R.id.first:
                         editor.putString(packageName, "first");
                         break;
@@ -90,10 +98,10 @@ public class AutofillFragment extends DialogFragment {
                 }
                 editor.apply();
                 int position = getArguments().getInt("position");
-                if (position == -1) {
-                    callingActivity.recyclerAdapter.add(packageName);
-                } else {
-                    callingActivity.recyclerAdapter.notifyItemChanged(position);
+                callingActivity.recyclerAdapter.notifyItemChanged(position);
+
+                if (getArguments().getBoolean("finish")) {
+                    callingActivity.finish();
                 }
             }
         });
@@ -105,7 +113,8 @@ public class AutofillFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             ((EditText) getDialog().findViewById(R.id.matched)).setText(data.getStringExtra("path"));
+        } else {
+            ((RadioButton) getDialog().findViewById(R.id.use_default)).toggle();
         }
-
     }
 }

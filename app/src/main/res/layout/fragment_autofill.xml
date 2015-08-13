@@ -13,11 +13,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/autofill_radiogroup"
         >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use default setting"
+            android:id="@+id/use_default"
+            android:layout_gravity="center_vertical"
+            android:checked="false"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Automatically match with password"
+            android:text="Automatically match"
             android:id="@+id/first"
             android:layout_gravity="center_vertical"
             android:checked="false"/>
@@ -29,7 +36,7 @@
             android:id="@+id/match"
             android:layout_gravity="center_vertical"
             android:checked="false"
-            android:layout_marginTop="8dp"/>
+            />
 
         <EditText
             android:layout_width="match_parent"
@@ -41,11 +48,11 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Never autofill"
+            android:text="Never match"
             android:id="@+id/never"
             android:layout_gravity="center_vertical"
             android:checked="false"
-            android:layout_marginTop="8dp"/>
+            />
 
     </RadioGroup>
 
