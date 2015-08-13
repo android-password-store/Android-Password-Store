@@ -22,7 +22,6 @@ import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
 
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
@@ -139,7 +138,7 @@ public class AutofillService extends AccessibilityService {
                 String path = PasswordRepository.getWorkTree() + "/" + preference + ".gpg";
                 File file = new File(path);
                 items = new ArrayList<>();
-                items.add(PasswordItem.newPassword(file.getName(), file));
+                items.add(PasswordItem.newPassword(file.getName(), file, PasswordRepository.getRepositoryDirectory(this)));
         }
         if (items.isEmpty()) {
             return;
@@ -178,11 +177,11 @@ public class AutofillService extends AccessibilityService {
     private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
         ArrayList<PasswordItem> items = new ArrayList<>();
         if (!PasswordRepository.isInitialized()) {
-            initialize();
+            PasswordRepository.initialize(this);
         }
         ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords() :
-                PasswordRepository.getPasswords(dir);
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
+                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
         for (PasswordItem item : passwordItems) {
             if (item.getType() == PasswordItem.TYPE_CATEGORY) {
                 items.addAll(recursiveFilter(filter, item.getFile()));
@@ -192,39 +191,6 @@ public class AutofillService extends AccessibilityService {
             }
         }
         return items;
-    }
-
-    // just like PasswordRepository.initialize().
-    private void initialize() {
-        File dir = null;
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (settings.getBoolean("git_external", false)) {
-            if (settings.getString("git_external_repo", null) != null) {
-                dir = new File(settings.getString("git_external_repo", null));
-            }
-        } else {
-            dir = new File(getFilesDir() + "/store");
-        }
-        // temp for debug
-        if (dir == null) {
-            Intent intent = new Intent(this, UserPreference.class);
-            intent.putExtra("operation", "git_external");
-            startActivity(intent);
-            return;
-        }
-
-        // uninitialize the repo if the dir does not exist or is absolutely empty
-        if (!dir.exists() || !dir.isDirectory() || FileUtils.listFiles(dir, null, false).isEmpty()) {
-            settings.edit().putBoolean("repository_initialized", false).apply();
-        }
-
-        if (!PasswordRepository.getPasswords(dir).isEmpty()) {
-            settings.edit().putBoolean("repository_initialized", true).apply();
-        }
-
-        // create the repository static variable in PasswordRepository
-        PasswordRepository.getRepository(new File(dir.getAbsolutePath() + "/.git"));
     }
 
     @Override
