@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.utils;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -114,9 +114,9 @@ public class PasswordRepository {
         repository = null;
     }
 
-    public static File getRepositoryDirectory(Activity callingActivity) {
+    public static File getRepositoryDirectory(Context context) {
         File dir = null;
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
         if (settings.getBoolean("git_external", false)) {
             String external_repo  = settings.getString("git_external_repo", null);
@@ -124,15 +124,15 @@ public class PasswordRepository {
                 dir = new File(external_repo);
             }
         } else {
-            dir = new File(callingActivity.getFilesDir() + "/store");
+            dir = new File(context.getFilesDir() + "/store");
         }
 
         return dir;
     }
 
-    public static Repository initialize(Activity callingActivity) {
-        File dir = getRepositoryDirectory(callingActivity);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
+    public static Repository initialize(Context context) {
+        File dir = getRepositoryDirectory(context);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
         if (dir == null) {
             return null;
