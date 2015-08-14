@@ -16,7 +16,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Use default setting"
+            android:text="@string/autofill_apps_default"
             android:id="@+id/use_default"
             android:layout_gravity="center_vertical"
             android:checked="false"/>
@@ -24,7 +24,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Automatically match"
+            android:text="@string/autofill_apps_first"
             android:id="@+id/first"
             android:layout_gravity="center_vertical"
             android:checked="false"/>
@@ -32,7 +32,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Match with..."
+            android:text="@string/autofill_apps_match_ellipsis"
             android:id="@+id/match"
             android:layout_gravity="center_vertical"
             android:checked="false"
@@ -48,7 +48,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Never match"
+            android:text="@string/autofill_apps_never"
             android:id="@+id/never"
             android:layout_gravity="center_vertical"
             android:checked="false"

@@ -68,6 +68,7 @@ public class AutofillFragment extends DialogFragment {
         View.OnClickListener matchPassword = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((RadioButton) view.findViewById(R.id.match)).toggle();
                 Intent intent = new Intent(getActivity(), PasswordStore.class);
                 intent.putExtra("matchWith", true);
                 startActivityForResult(intent, MATCH_WITH);
@@ -77,7 +78,7 @@ public class AutofillFragment extends DialogFragment {
         view.findViewById(R.id.matched).setOnClickListener(matchPassword);
 
         final SharedPreferences.Editor editor = prefs.edit();
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.autofill_radiogroup);
@@ -105,7 +106,7 @@ public class AutofillFragment extends DialogFragment {
                 }
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(R.string.dialog_cancel, null);
         return builder.create();
     }
 

@@ -105,10 +105,10 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
                 holder.view.setBackgroundResource(R.color.indigo_50);
                 break;
             case "first":
-                holder.secondary.setText("Automatically match");
+                holder.secondary.setText(R.string.autofill_apps_first);
                 break;
             case "never":
-                holder.secondary.setText("Never match");
+                holder.secondary.setText(R.string.autofill_apps_never);
                 break;
             default:
                 holder.secondary.setText("Match with " + preference);

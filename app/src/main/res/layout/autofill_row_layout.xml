@@ -20,7 +20,6 @@
             android:id="@+id/app_icon"
             />
 
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
@@ -40,7 +39,6 @@
                 android:id="@+id/secondary_text"
                 android:textColor="@color/grey_600"/>
         </LinearLayout>
-
 
     </LinearLayout>
 

@@ -1,17 +1,22 @@
 package com.zeapo.pwdstore;
 
-import android.app.AlertDialog;
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.google.common.base.Function;
@@ -33,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserPreference extends AppCompatActivity {
@@ -192,6 +198,30 @@ public class UserPreference extends AppCompatActivity {
                     return true;
                 }
             });
+
+            findPreference("autofill_enable").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new AlertDialog.Builder(callingActivity).
+                            setTitle(R.string.pref_autofill_enable_title).
+                            setMessage(R.string.pref_autofill_enable_msg).
+                            setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                                    startActivity(intent);
+                                }
+                            }).
+                            setNegativeButton(R.string.dialog_cancel,new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ((CheckBoxPreference) findPreference("autofill_enable"))
+                                            .setChecked(((UserPreference) getActivity()).isServiceEnabled());
+                                }
+                            }).show();
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -199,6 +229,10 @@ public class UserPreference extends AppCompatActivity {
             super.onStart();
             final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
             findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
+
+            // see if the autofill service is enabled and check the preference accordingly
+            ((CheckBoxPreference) findPreference("autofill_enable"))
+                    .setChecked(((UserPreference) getActivity()).isServiceEnabled());
         }
     }
 
@@ -277,6 +311,21 @@ public class UserPreference extends AppCompatActivity {
         FileUtils.writeByteArrayToFile(new File(getFilesDir() + "/.ssh_key"), privateKey);
         sshKey.close();
     }
+
+    // Returns whether the autofill service is enabled
+    private boolean isServiceEnabled() {
+        AccessibilityManager am = (AccessibilityManager) this
+                .getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List<AccessibilityServiceInfo> runningServices = am
+                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC);
+        for (AccessibilityServiceInfo service : runningServices) {
+            if ("com.zeapo.pwdstore/.autofill.AutofillService".equals(service.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {

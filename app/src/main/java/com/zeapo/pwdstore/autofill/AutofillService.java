@@ -152,8 +152,8 @@ public class AutofillService extends AccessibilityService {
 
         if (dialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-            builder.setNegativeButton("Cancel", null);
-            builder.setPositiveButton("Fill", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.dialog_cancel, null);
+            builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     decryptAndVerify();
@@ -161,7 +161,7 @@ public class AutofillService extends AccessibilityService {
             });
             builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
                     // the user will have to return to the app themselves.
                     Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
