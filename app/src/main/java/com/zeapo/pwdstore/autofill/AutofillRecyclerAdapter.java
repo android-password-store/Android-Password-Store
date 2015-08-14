@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     private ArrayList<ResolveInfo> apps;
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
-    private ActionMode actionMode;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public View view;
@@ -61,7 +59,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     @Override
     public void onBindViewHolder(AutofillRecyclerAdapter.ViewHolder holder, int position) {
         ResolveInfo app = apps.get(position);
-        holder.name.setText(app.loadLabel(pm));
+        holder.name.setText(app.loadLabel(pm)); // 'No package identifier when getting value for resource number 0x00000000' 5+
         holder.icon.setImageDrawable(app.loadIcon(pm));
         holder.packageName = app.activityInfo.packageName;
 
@@ -103,4 +101,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         return -1;
     }
 
+    public void filter(String s) {
+
+    }
 }

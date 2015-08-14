@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.zeapo.pwdstore.R;
 
@@ -28,6 +30,8 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
     private RecyclerView.LayoutManager layoutManager;
 
+    private PackageManager pm;
+
     private boolean recreate;
 
     @Override
@@ -41,27 +45,47 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> allApps = getPackageManager().queryIntentActivities(intent, 0);
-        final PackageManager pm = getPackageManager();
-        Collections.sort(allApps, new Comparator<ResolveInfo>() {
-            @Override
-            public int compare(ResolveInfo lhs, ResolveInfo rhs) {
-                return lhs.loadLabel(pm).toString().compareTo(rhs.loadLabel(pm).toString());
-            }
-        });
-        recyclerAdapter = new AutofillRecyclerAdapter(new ArrayList<>(allApps), pm, this);
-        recyclerView.setAdapter(recyclerAdapter);
+        pm = getPackageManager();
+
+        new populateTask().execute();
 
         setTitle("Autofill Apps");
+    }
 
-        recreate = false;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            recreate = true;
-            recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("packageName")));
-            showDialog(extras.getString("packageName"), extras.getString("appName"));
+    private class populateTask extends AsyncTask<Void, Void, List<ResolveInfo>> {
+        @Override
+        protected void onPreExecute() {
+            findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<ResolveInfo> doInBackground(Void... params) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            List<ResolveInfo> allApps = pm.queryIntentActivities(intent, 0);
+            Collections.sort(allApps, new Comparator<ResolveInfo>() {
+                @Override
+                public int compare(ResolveInfo lhs, ResolveInfo rhs) {
+                    return lhs.loadLabel(pm).toString().compareTo(rhs.loadLabel(pm).toString());
+                }
+            });
+            return allApps;
+        }
+
+        @Override
+        protected void onPostExecute(List<ResolveInfo> allApps) {
+            findViewById(R.id.progress_bar).setVisibility(View.GONE);
+
+            recyclerAdapter = new AutofillRecyclerAdapter(new ArrayList<>(allApps), pm, AutofillPreferenceActivity.this);
+            recyclerView.setAdapter(recyclerAdapter);
+
+            recreate = false;
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                recreate = true;
+                recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("packageName")));
+                showDialog(extras.getString("packageName"), extras.getString("appName"));
+            }
         }
     }
 
@@ -75,11 +99,12 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                recyclerAdapter.filter(s);
                 return true;
             }
         });
@@ -99,6 +124,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
