@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,11 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
-    private ArrayList<ResolveInfo> apps;
+    private SortedList<ResolveInfo> apps;
+    private ArrayList<ResolveInfo> allApps;
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
 
@@ -43,8 +47,26 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     }
 
-    public AutofillRecyclerAdapter(ArrayList<ResolveInfo> apps, PackageManager pm, AutofillPreferenceActivity activity) {
-        this.apps = apps;
+    public AutofillRecyclerAdapter(List<ResolveInfo> allApps, final PackageManager pm, AutofillPreferenceActivity activity) {
+         SortedList.Callback<ResolveInfo> callback = new SortedListAdapterCallback<ResolveInfo>(this) {
+            @Override
+            public int compare(ResolveInfo o1, ResolveInfo o2) {
+                return o1.loadLabel(pm).toString().compareTo(o2.loadLabel(pm).toString());
+            }
+
+            @Override
+            public boolean areContentsTheSame(ResolveInfo oldItem, ResolveInfo newItem) {
+                return oldItem.loadLabel(pm).toString().equals(newItem.loadLabel(pm).toString());
+            }
+
+            @Override
+            public boolean areItemsTheSame(ResolveInfo item1, ResolveInfo item2) {
+                return item1.loadLabel(pm).toString().equals(item2.loadLabel(pm).toString());
+            }
+        };
+        this.apps = new SortedList<>(ResolveInfo.class, callback);
+        this.apps.addAll(allApps);
+        this.allApps = new ArrayList<>(allApps);
         this.pm = pm;
         this.activity = activity;
     }
@@ -102,6 +124,18 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     }
 
     public void filter(String s) {
-
+        if (s.isEmpty()) {
+            apps.addAll(allApps);
+            return;
+        }
+        apps.beginBatchedUpdates();
+        for (ResolveInfo app : allApps) {
+            if (app.loadLabel(pm).toString().toLowerCase().contains(s.toLowerCase())) {
+                apps.add(app);
+            } else {
+                apps.remove(app);
+            }
+        }
+        apps.endBatchedUpdates();
     }
 }

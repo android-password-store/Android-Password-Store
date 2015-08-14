@@ -19,9 +19,6 @@ import android.view.View;
 
 import com.zeapo.pwdstore.R;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AutofillPreferenceActivity extends AppCompatActivity {
@@ -52,31 +49,25 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         setTitle("Autofill Apps");
     }
 
-    private class populateTask extends AsyncTask<Void, Void, List<ResolveInfo>> {
+    private class populateTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected List<ResolveInfo> doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             List<ResolveInfo> allApps = pm.queryIntentActivities(intent, 0);
-            Collections.sort(allApps, new Comparator<ResolveInfo>() {
-                @Override
-                public int compare(ResolveInfo lhs, ResolveInfo rhs) {
-                    return lhs.loadLabel(pm).toString().compareTo(rhs.loadLabel(pm).toString());
-                }
-            });
-            return allApps;
+            recyclerAdapter = new AutofillRecyclerAdapter(allApps, pm, AutofillPreferenceActivity.this);
+            return null;
         }
 
         @Override
-        protected void onPostExecute(List<ResolveInfo> allApps) {
+        protected void onPostExecute(Void aVoid) {
             findViewById(R.id.progress_bar).setVisibility(View.GONE);
 
-            recyclerAdapter = new AutofillRecyclerAdapter(new ArrayList<>(allApps), pm, AutofillPreferenceActivity.this);
             recyclerView.setAdapter(recyclerAdapter);
 
             recreate = false;
@@ -104,24 +95,13 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                recyclerAdapter.filter(s);
+                if (recyclerAdapter != null) {
+                    recyclerAdapter.filter(s);
+                }
                 return true;
             }
         });
 
-        // When using the support library, the setOnActionExpandListener() method is
-        // static and accepts the MenuItem object as an argument
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-        });
         return super.onCreateOptionsMenu(menu);
     }
 
