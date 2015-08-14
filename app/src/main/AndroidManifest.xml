@@ -55,7 +55,9 @@
 		</service>
 
 		<activity android:name=".autofill.AutofillActivity"
-			android:parentActivityName=".PasswordStore">
+			android:parentActivityName=".PasswordStore"
+			android:documentLaunchMode="intoExisting"
+			android:excludeFromRecents="true">
 
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.zeapo.pwdstore.PasswordStore" />

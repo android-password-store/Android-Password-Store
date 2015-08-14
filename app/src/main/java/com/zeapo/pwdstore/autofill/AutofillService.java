@@ -130,11 +130,17 @@ public class AutofillService extends AccessibilityService {
         String preference = prefs.getString(event.getPackageName().toString(), defValue);
         switch (preference) {
             case "first":
+                if (!PasswordRepository.isInitialized()) {
+                    PasswordRepository.initialize(this);
+                }
                 items = recursiveFilter(appName, null);
                 break;
             case "never":
                 return;
             default:
+                if (!PasswordRepository.isInitialized()) {
+                    PasswordRepository.initialize(this);
+                }
                 String path = PasswordRepository.getWorkTree() + "/" + preference + ".gpg";
                 File file = new File(path);
                 items = new ArrayList<>();
@@ -177,9 +183,6 @@ public class AutofillService extends AccessibilityService {
 
     private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
         ArrayList<PasswordItem> items = new ArrayList<>();
-        if (!PasswordRepository.isInitialized()) {
-            PasswordRepository.initialize(this);
-        }
         ArrayList<PasswordItem> passwordItems = dir == null ?
                 PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
                 PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
@@ -252,8 +255,7 @@ public class AutofillService extends AccessibilityService {
                 PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                 // need to start a blank activity to call startIntentSenderForResult
                 Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("pending_intent", pi);
                 startActivity(intent);
                 break;
