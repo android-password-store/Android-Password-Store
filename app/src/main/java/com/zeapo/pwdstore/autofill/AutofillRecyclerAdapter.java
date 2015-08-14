@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,13 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
     private SortedList<ResolveInfo> apps;
     private ArrayList<ResolveInfo> allApps;
+    private HashMap<String, Pair<Drawable, String>> iconMap;
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
 
@@ -47,11 +51,12 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     }
 
-    public AutofillRecyclerAdapter(List<ResolveInfo> allApps, final PackageManager pm, AutofillPreferenceActivity activity) {
+    public AutofillRecyclerAdapter(List<ResolveInfo> allApps, HashMap<String, Pair<Drawable, String>> iconMap
+            , final PackageManager pm, AutofillPreferenceActivity activity) {
          SortedList.Callback<ResolveInfo> callback = new SortedListAdapterCallback<ResolveInfo>(this) {
             @Override
             public int compare(ResolveInfo o1, ResolveInfo o2) {
-                return o1.loadLabel(pm).toString().compareTo(o2.loadLabel(pm).toString());
+                return o1.loadLabel(pm).toString().toLowerCase().compareTo(o2.loadLabel(pm).toString().toLowerCase());
             }
 
             @Override
@@ -67,6 +72,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         this.apps = new SortedList<>(ResolveInfo.class, callback);
         this.apps.addAll(allApps);
         this.allApps = new ArrayList<>(allApps);
+        this.iconMap = new HashMap<>(iconMap);
         this.pm = pm;
         this.activity = activity;
     }
@@ -81,9 +87,10 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     @Override
     public void onBindViewHolder(AutofillRecyclerAdapter.ViewHolder holder, int position) {
         ResolveInfo app = apps.get(position);
-        holder.name.setText(app.loadLabel(pm)); // 'No package identifier when getting value for resource number 0x00000000' 5+
-        holder.icon.setImageDrawable(app.loadIcon(pm));
         holder.packageName = app.activityInfo.packageName;
+
+        holder.icon.setImageDrawable(iconMap.get(holder.packageName).first);
+        holder.name.setText(iconMap.get(holder.packageName).second);
 
         holder.secondary.setVisibility(View.VISIBLE);
         holder.view.setBackgroundResource(R.color.grey_white_1000);

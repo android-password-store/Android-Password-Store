@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,12 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.zeapo.pwdstore.R;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AutofillPreferenceActivity extends AppCompatActivity {
@@ -60,7 +63,14 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             List<ResolveInfo> allApps = pm.queryIntentActivities(intent, 0);
-            recyclerAdapter = new AutofillRecyclerAdapter(allApps, pm, AutofillPreferenceActivity.this);
+
+            HashMap<String, Pair<Drawable, String>> iconMap = new HashMap<>(allApps.size());
+            for (ResolveInfo app : allApps) {
+                iconMap.put(app.activityInfo.packageName
+                        , Pair.create(app.loadIcon(pm), app.loadLabel(pm).toString()));
+            }
+
+            recyclerAdapter = new AutofillRecyclerAdapter(allApps, iconMap, pm, AutofillPreferenceActivity.this);
             return null;
         }
 
