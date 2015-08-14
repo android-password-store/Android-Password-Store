@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:text="@string/ssh_keygen_tip"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 

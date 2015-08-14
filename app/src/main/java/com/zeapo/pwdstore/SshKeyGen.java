@@ -153,21 +153,19 @@ public class SshKeyGen extends AppCompatActivity {
         }
     }
 
-    private class generateTask extends AsyncTask<View, Void, Exception> {
+    private class generateTask extends AsyncTask<String, Void, Exception> {
         private ProgressDialog pd;
 
-        protected Exception doInBackground(View... views) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(views[0].getWindowToken(), 0);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = ProgressDialog.show(SshKeyGen.this, "", "Generating keys");
+        }
 
-            Spinner spinner = (Spinner) findViewById(R.id.length);
-            int length = (Integer) spinner.getSelectedItem();
-
-            EditText editText = (EditText) findViewById(R.id.passphrase);
-            String passphrase = editText.getText().toString();
-
-            editText = (EditText) findViewById(R.id.comment);
-            String comment = editText.getText().toString();
+        protected Exception doInBackground(String... strings) {
+            int length = Integer.parseInt(strings[0]);
+            String passphrase = strings[1];
+            String comment = strings[2];
 
             JSch jsch = new JSch();
             try {
@@ -190,13 +188,6 @@ public class SshKeyGen extends AppCompatActivity {
                 e.printStackTrace();
                 return e;
             }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = ProgressDialog.show(SshKeyGen.this, "", "Generating keys");
-
         }
 
         @Override
@@ -230,6 +221,12 @@ public class SshKeyGen extends AppCompatActivity {
     // private and public key, then replaces the SshKeyGenFragment with a
     // ShowSshKeyFragment which displays the public key.
     public void generate(View view) {
-        new generateTask().execute(view);
+        String length = Integer.toString((Integer) ((Spinner) findViewById(R.id.length)).getSelectedItem());
+        String passphrase = ((EditText) findViewById(R.id.passphrase)).getText().toString();
+        String comment = ((EditText) findViewById(R.id.comment)).getText().toString();
+        new generateTask().execute(length, passphrase, comment);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

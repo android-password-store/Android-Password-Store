@@ -86,7 +86,7 @@ public class UserPreference extends AppCompatActivity {
             findPreference("ssh_keygen").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    callingActivity.makeSshKey();
+                    callingActivity.makeSshKey(true);
                     return true;
                 }
             });
@@ -202,7 +202,7 @@ public class UserPreference extends AppCompatActivity {
                         getSshKey();
                         break;
                     case "make_ssh_key":
-                        makeSshKey();
+                        makeSshKey(false);
                         break;
                     case "git_external":
                         selectExternalGitRepository();
@@ -252,11 +252,13 @@ public class UserPreference extends AppCompatActivity {
     /**
      * Opens a key generator to generate a public/private key pair
      */
-    public void makeSshKey() {
+    public void makeSshKey(boolean fromPreferences) {
         Intent intent = new Intent(getApplicationContext(), SshKeyGen.class);
         startActivity(intent);
-        setResult(RESULT_OK);
-        finish();
+        if (!fromPreferences) {
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     private void copySshKey(Uri uri) throws IOException {
