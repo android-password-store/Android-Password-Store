@@ -158,7 +158,7 @@ public class AutofillService extends AccessibilityService {
                 public void onClick(DialogInterface dialog, int which) {
                     // the user will have to return to the app themselves.
                     Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("packageName", info.getPackageName());
                     intent.putExtra("appName", appName);
                     startActivity(intent);

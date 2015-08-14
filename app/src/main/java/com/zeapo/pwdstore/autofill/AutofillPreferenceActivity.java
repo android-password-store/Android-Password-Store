@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +28,12 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
     private RecyclerView.LayoutManager layoutManager;
 
+    private boolean recreate;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // otherwise if called from settings
         setContentView(R.layout.autofill_recycler_view);
         recyclerView = (RecyclerView) findViewById(R.id.autofill_recycler);
 
@@ -53,8 +56,10 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         setTitle("Autofill Apps");
 
+        recreate = false;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            recreate = true;
             recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("packageName")));
             showDialog(extras.getString("packageName"), extras.getString("appName"));
         }
@@ -94,6 +99,24 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // in service, we CLEAR_TASK. then we set the recreate flag.
+            // something of a hack, but w/o CLEAR_TASK, behaviour was unpredictable
+            case android.R.id.home:
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (recreate) {
+                    TaskStackBuilder.create(this)
+                            .addNextIntentWithParentStack(upIntent)
+                            .startActivities();
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void showDialog(String packageName, String appName) {
         DialogFragment df = new AutofillFragment();
@@ -103,6 +126,5 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         args.putInt("position", recyclerAdapter.getPosition(packageName));
         df.setArguments(args);
         df.show(getFragmentManager(), "autofill_dialog");
-        // TODO if called from dialog 'Settings' button, should activity finish at OK?
     }
 }
