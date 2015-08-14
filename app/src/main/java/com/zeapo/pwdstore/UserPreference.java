@@ -212,14 +212,15 @@ public class UserPreference extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             }).
-                            setNegativeButton(R.string.dialog_cancel,new DialogInterface.OnClickListener() {
+                            setNegativeButton(R.string.dialog_cancel, null).
+                            setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                                public void onDismiss(DialogInterface dialog) {
                                     ((CheckBoxPreference) findPreference("autofill_enable"))
                                             .setChecked(((UserPreference) getActivity()).isServiceEnabled());
                                 }
                             }).show();
-                    return false;
+                    return true;
                 }
             });
         }
