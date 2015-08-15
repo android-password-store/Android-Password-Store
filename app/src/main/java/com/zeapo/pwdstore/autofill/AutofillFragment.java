@@ -54,10 +54,10 @@ public class AutofillFragment extends DialogFragment {
             case "":
                 ((RadioButton) view.findViewById(R.id.use_default)).toggle();
                 break;
-            case "first":
+            case "/first":
                 ((RadioButton) view.findViewById(R.id.first)).toggle();
                 break;
-            case "never":
+            case "/never":
                 ((RadioButton) view.findViewById(R.id.never)).toggle();
                 break;
             default:
@@ -87,10 +87,10 @@ public class AutofillFragment extends DialogFragment {
                         editor.remove(packageName);
                         break;
                     case R.id.first:
-                        editor.putString(packageName, "first");
+                        editor.putString(packageName, "/first");
                         break;
                     case R.id.never:
-                        editor.putString(packageName, "never");
+                        editor.putString(packageName, "/never");
                         break;
                     default:
                         EditText matched = (EditText) view.findViewById(R.id.matched);

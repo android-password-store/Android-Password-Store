@@ -125,17 +125,17 @@ public class AutofillService extends AccessibilityService {
         final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
-        String defValue = settings.getBoolean("autofill_default", true) ? "first" : "never";
+        String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
         SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
         String preference = prefs.getString(event.getPackageName().toString(), defValue);
         switch (preference) {
-            case "first":
+            case "/first":
                 if (!PasswordRepository.isInitialized()) {
                     PasswordRepository.initialize(this);
                 }
                 items = recursiveFilter(appName, null);
                 break;
-            case "never":
+            case "/never":
                 return;
             default:
                 if (!PasswordRepository.isInitialized()) {
