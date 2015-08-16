@@ -77,10 +77,12 @@
             android:key="autofill_enable"
             android:title="@string/pref_autofill_enable_title"/>
         <Preference
+            android:dependency="autofill_enable"
             android:key="autofill_apps"
             android:summary="@string/pref_autofill_apps_hint"
             android:title="@string/pref_autofill_apps_title"/>
         <CheckBoxPreference
+            android:dependency="autofill_enable"
             android:defaultValue="true"
             android:key="autofill_default"
             android:summary="@string/pref_autofill_default_hint"
