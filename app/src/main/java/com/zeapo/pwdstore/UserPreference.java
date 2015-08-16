@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
@@ -204,7 +205,7 @@ public class UserPreference extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     new AlertDialog.Builder(callingActivity).
                             setTitle(R.string.pref_autofill_enable_title).
-                            setMessage(R.string.pref_autofill_enable_msg).
+                            setView(R.layout.autofill_instructions).
                             setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

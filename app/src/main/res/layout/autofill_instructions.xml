@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<LinearLayout android:orientation="vertical"
+              android:layout_height="fill_parent"
+              android:layout_width="fill_parent"
+              android:paddingLeft="24dp"
+              android:paddingRight="24dp"
+              android:paddingTop="20dp"
+              android:paddingBottom="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/abc_text_size_menu_material"
+        android:text="@string/pref_autofill_enable_msg"
+        android:id="@+id/textView"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/autofill_ins_1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/imageView2"
+        android:src="@drawable/autofill_ins_2"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/abc_text_size_menu_material"
+        android:text="@string/pref_autofill_enable_msg2"
+        android:id="@+id/textView3"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="114dp"
+        android:id="@+id/imageView3"
+        android:src="@drawable/autofill_ins_3"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/abc_text_size_menu_material"
+        android:text="@string/pref_autofill_enable_msg3"
+        android:id="@+id/textView4"/>
+
+
+</LinearLayout>
+</ScrollView>
