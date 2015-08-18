@@ -57,7 +57,7 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         checkLocalRepository();
     }
@@ -256,14 +256,8 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     private void checkLocalRepository() {
-        Repository repo = PasswordRepository.initialize(this);
-        if (repo == null) {
-            Intent intent = new Intent(activity, UserPreference.class);
-            intent.putExtra("operation", "git_external");
-            startActivityForResult(intent, HOME);
-        } else {
-            checkLocalRepository(PasswordRepository.getWorkTree());
-        }
+        PasswordRepository.initialize(this);
+        checkLocalRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
     }
 
     private void checkLocalRepository(File localDir) {
@@ -287,7 +281,7 @@ public class PasswordStore extends AppCompatActivity {
 
                 plist = new PasswordFragment();
                 Bundle args = new Bundle();
-                args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
+                args.putString("Path", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
 
                 plist.setArguments(args);
 
@@ -313,10 +307,9 @@ public class PasswordStore extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onBackPressed() {
-        if  ((null != plist) && plist.isNotEmpty()) {
+        if ((null != plist) && plist.isNotEmpty()) {
             plist.popBack();
         } else {
             super.onBackPressed();
@@ -375,15 +368,16 @@ public class PasswordStore extends AppCompatActivity {
                         adapter.remove(position);
                         it.remove();
                         adapter.updateSelectedItems(position, selectedItems);
-
                         setResult(RESULT_CANCELED);
-                        Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
-                        Git git = new Git(repo);
-                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
-                        tasks.execute(
-                                git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
-                                git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")
-                        );
+                        if (settings.getBoolean("git_enabled", true)) {
+                            Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
+                            Git git = new Git(repo);
+                            GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
+                            tasks.execute(
+                                    git.rm().addFilepattern(path.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")),
+                                    git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")
+                            );
+                        }
                         deletePasswords(adapter, selectedItems);
                     }
                 })
@@ -401,7 +395,7 @@ public class PasswordStore extends AppCompatActivity {
      * clears adapter's content and updates it with a fresh list of passwords from the root
      */
     public void updateListAdapter() {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             plist.updateAdapter();
         }
     }
@@ -410,22 +404,22 @@ public class PasswordStore extends AppCompatActivity {
      * Updates the adapter with the current view of passwords
      */
     public void refreshListAdapter() {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             plist.refreshAdapter();
         }
     }
 
     public void filterListAdapter(String filter) {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             plist.filterAdapter(filter);
         }
     }
 
     private File getCurrentDir() {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             return plist.getCurrentDir();
         }
-        return PasswordRepository.getWorkTree();
+        return PasswordRepository.getRepositoryDirectory(getApplicationContext());
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -436,13 +430,15 @@ public class PasswordStore extends AppCompatActivity {
                     // if we get here with a RESULT_OK then it's probably OK :)
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
-                case PgpHandler.REQUEST_CODE_ENCRYPT :
-                    Git git = new Git(PasswordRepository.getRepository(new File("")));
-                    GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
-                    tasks.execute(
-                            git.add().addFilepattern("."),
-                            git.commit().setMessage(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store))
-                    );
+                case PgpHandler.REQUEST_CODE_ENCRYPT:
+                    if (settings.getBoolean("git_enabled", true)) {
+                        Git git = new Git(PasswordRepository.getRepository(new File("")));
+                        GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
+                        tasks.execute(
+                                git.add().addFilepattern("."),
+                                git.commit().setMessage(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store))
+                        );
+                    }
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
