@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="2">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -47,36 +47,37 @@
             android:textAllCaps="true"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/myRectangleView"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
         android:background="@android:color/white">
-        
-        <Button
-            android:layout_width="wrap_content"
+        <Switch
+            android:id="@+id/enable_git_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/borderlessButtonStyle"
-            android:onClick="createNewRepository"
-            android:text="@string/initialize"
-            android:id="@+id/button"
-            android:layout_alignTop="@+id/main_clone_button"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <Button
-            android:id="@+id/main_clone_button"
-            android:layout_width="wrap_content"
+            android:text="@string/enable_git"
+            android:checked="true"/>
+        <Switch
+            android:id="@+id/use_internal_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/borderlessButtonStyle"
-            android:textColor="@color/teal_A700"
-            android:onClick="cloneExistingRepository"
-            android:text="@string/clone"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:text="@string/create_in_internal"
+            android:checked="true"/>
+        <Switch
+            android:id="@+id/clone_remote_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/clone_from_remote"
+            android:checked="true"/>
 
-    </RelativeLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/initialize"/>
+    </LinearLayout>
 
 </LinearLayout>
