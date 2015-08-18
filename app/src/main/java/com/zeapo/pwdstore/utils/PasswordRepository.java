@@ -1,9 +1,12 @@
 package com.zeapo.pwdstore.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.zeapo.pwdstore.UserPreference;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -28,6 +31,7 @@ public class PasswordRepository {
 
     private static Repository repository;
     private static boolean initialized = false;
+    private static File localDir;
 
     protected PasswordRepository(){    }
 
@@ -114,20 +118,29 @@ public class PasswordRepository {
         repository = null;
     }
 
+    /**
+     * Returns the password store repository directory
+     * @param context
+     * @return
+     */
     public static File getRepositoryDirectory(Context context) {
-        File dir = null;
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        if (localDir == null) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
-        if (settings.getBoolean("git_external", false)) {
-            String external_repo  = settings.getString("git_external_repo", null);
-            if (external_repo != null) {
-                dir = new File(external_repo);
+            if (settings.getBoolean("git_external", false)) {
+                String external_repo = settings.getString("git_external_repo", null);
+                if (external_repo != null) {
+                    localDir = new File(external_repo);
+                } else {
+                    Intent intent = new Intent(context, UserPreference.class);
+                    intent.putExtra("operation", "git_external");
+                    context.startActivity(intent);
+                }
+            } else {
+                localDir = new File(context.getFilesDir() + "/store");
             }
-        } else {
-            dir = new File(context.getFilesDir() + "/store");
         }
-
-        return dir;
+        return localDir;
     }
 
     public static Repository initialize(Context context) {
