@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Switch;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
@@ -192,14 +193,6 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
-    public void cloneExistingRepository(View view) {
-        initRepository(CLONE_REPO_BUTTON);
-    }
-
-    public void createNewRepository(View view) {
-        initRepository(NEW_REPO_BUTTON);
-    }
-
     private void createRepository() {
         if (!PasswordRepository.isInitialized()) {
             PasswordRepository.initialize(this);
@@ -218,41 +211,6 @@ public class PasswordStore extends AppCompatActivity {
             return;
         }
         checkLocalRepository();
-    }
-
-    public void initializeRepositoryInfo() {
-        if (settings.getBoolean("git_external", false) && settings.getString("git_external_repo", null) != null) {
-            File dir = new File(settings.getString("git_external_repo", null));
-
-            if (dir.exists() && dir.isDirectory() && !FileUtils.listFiles(dir, null, true).isEmpty() &&
-                    !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
-                PasswordRepository.closeRepository();
-                checkLocalRepository();
-                return; // if not empty, just show me the passwords!
-            }
-        }
-
-        final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<String>());
-
-        if (keyIds.isEmpty())
-            new AlertDialog.Builder(this)
-                    .setMessage(this.getResources().getString(R.string.key_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, GitActivity.REQUEST_INIT);
-                        }
-                    })
-                    .setNegativeButton(this.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // do nothing :(
-                        }
-                    })
-                    .show();
-
-        createRepository();
     }
 
     private void checkLocalRepository() {
@@ -477,54 +435,64 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
-    protected void initRepository(final int operation) {
-        PasswordRepository.closeRepository();
+    /**
+     * The main entry point for creating a repository from scratch or from remote
+     */
+    public void initRepository(View view) {
+        if (settings.getBoolean("git_enabled", true)) {
+            // ensure that the repo is closed
+            PasswordRepository.closeRepository();
+        }
 
-        new AlertDialog.Builder(this)
-                .setTitle("Repositiory location")
-                .setMessage("Select where to create or clone your password repository.")
-                .setPositiveButton("External", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", true).apply();
+        boolean use_git = ((Switch) findViewById(R.id.enable_git_switch)).isChecked();
+        boolean use_internal = ((Switch) findViewById(R.id.use_internal_switch)).isChecked();
+        boolean use_remote = ((Switch) findViewById(R.id.clone_remote_switch)).isChecked();
 
-                        if (settings.getString("git_external_repo", null) == null) {
+        settings.edit().putBoolean("git_enabled", use_git).apply();
+        settings.edit().putBoolean("git_external", !use_internal).apply();
+
+        if (use_git && use_remote) {
+            PasswordRepository.initialize(getApplicationContext());
+
+            Intent intent = new Intent(activity, GitActivity.class);
+            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+        } else {
+            initializeRepositoryInfo();
+        }
+    }
+
+    public void initializeRepositoryInfo() {
+        if (settings.getBoolean("git_external", false)) {
+            File dir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
+            if (dir.exists() && dir.isDirectory() && !FileUtils.listFiles(dir, null, true).isEmpty() &&
+                    !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
+                PasswordRepository.closeRepository();
+                checkLocalRepository();
+                return; // if not empty, just show me the passwords!
+            }
+        }
+
+        final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<String>());
+
+        if (keyIds.isEmpty())
+            new AlertDialog.Builder(this)
+                    .setMessage(this.getResources().getString(R.string.key_dialog_text))
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
                             Intent intent = new Intent(activity, UserPreference.class);
-                            intent.putExtra("operation", "git_external");
-                            startActivityForResult(intent, operation);
-                        } else {
-                            switch (operation) {
-                                case NEW_REPO_BUTTON:
-                                    initializeRepositoryInfo();
-                                    break;
-                                case CLONE_REPO_BUTTON:
-                                    PasswordRepository.initialize(PasswordStore.this);
-
-                                    Intent intent = new Intent(activity, GitActivity.class);
-                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                    break;
-                            }
+                            startActivityForResult(intent, GitActivity.REQUEST_INIT);
                         }
-                    }
-                })
-                .setNegativeButton("Internal", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", false).apply();
-
-                        switch (operation) {
-                            case NEW_REPO_BUTTON:
-                                initializeRepositoryInfo();
-                                break;
-                            case CLONE_REPO_BUTTON:
-                                PasswordRepository.initialize(PasswordStore.this);
-
-                                Intent intent = new Intent(activity, GitActivity.class);
-                                intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                break;
+                    })
+                    .setNegativeButton(this.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // do nothing :(
                         }
-                    }
-                })
-                .show();
+                    })
+                    .show();
+
+        createRepository();
     }
 }
