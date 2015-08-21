@@ -26,6 +26,8 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
+import net.rdrei.android.dirchooser.DirectoryChooserActivity;
+
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
@@ -38,15 +40,18 @@ import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
-    private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
     private PasswordFragment plist;
     private AlertDialog selectDestinationDialog;
 
+    // FIXME change this into an enum
     private final static int CLONE_REPO_BUTTON = 401;
     private final static int NEW_REPO_BUTTON = 402;
     private final static int HOME = 403;
+    private final static int INIT_REPO_INFO = 404;
+    private final static int CREATE_PWD = 405;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class PasswordStore extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        checkLocalRepository();
+        showPasswords();
     }
 
     @Override
@@ -193,12 +198,15 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates an empty repository
+     */
     private void createRepository() {
         if (!PasswordRepository.isInitialized()) {
             PasswordRepository.initialize(this);
         }
 
-        File localDir = PasswordRepository.getWorkTree();
+        File localDir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
 
         localDir.mkdir();
         try {
@@ -210,15 +218,23 @@ public class PasswordStore extends AppCompatActivity {
             localDir.delete();
             return;
         }
-        checkLocalRepository();
+        showPasswords();
     }
 
-    private void checkLocalRepository() {
+    /**
+     * Shows the passwords on the root of the store
+     */
+    private void showPasswords() {
         PasswordRepository.initialize(this);
-        checkLocalRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
+        showPasswords(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
     }
 
-    private void checkLocalRepository(File localDir) {
+    /**
+     * Shows the passwords given a directory
+     * @param localDir the directory for which to show the passwords
+     * @FIXME this method is only used on the root dir
+     */
+    private void showPasswords(File localDir) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
@@ -239,7 +255,7 @@ public class PasswordStore extends AppCompatActivity {
 
                 plist = new PasswordFragment();
                 Bundle args = new Bundle();
-                args.putString("Path", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
+                args.putString("Path", localDir.getAbsolutePath());
 
                 plist.setArguments(args);
 
@@ -278,6 +294,10 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
+    /**
+     * Decrypt the selected password
+     * @param item the password to decrypt
+     */
     public void decryptPassword(PasswordItem item) {
         Intent intent = new Intent(this, PgpHandler.class);
         intent.putExtra("NAME", item.toString());
@@ -286,23 +306,21 @@ public class PasswordStore extends AppCompatActivity {
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
+    /**
+     * Creates a new password on the given directory
+     */
     public void createPassword() {
-        if (!PasswordRepository.isInitialized()) {
-            new AlertDialog.Builder(this)
-                    .setMessage(this.getResources().getString(R.string.creation_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    }).show();
+        File currentDir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
+        if (currentDir == null) {
+            Intent intent = new Intent(this, DirectoryChooserActivity.class);
+            intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "passwordstore");
+
+            startActivityForResult(intent, CREATE_PWD);
             return;
         }
 
-        this.currentDir = getCurrentDir();
-        Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
-
         Intent intent = new Intent(this, PgpHandler.class);
-        intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
+        intent.putExtra("FILE_PATH", currentDir.getAbsolutePath());
         intent.putExtra("Operation", "ENCRYPT");
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
     }
@@ -373,13 +391,6 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
-    private File getCurrentDir() {
-        if ((null != plist)) {
-            return plist.getCurrentDir();
-        }
-        return PasswordRepository.getRepositoryDirectory(getApplicationContext());
-    }
-
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
@@ -406,10 +417,7 @@ public class PasswordStore extends AppCompatActivity {
                     updateListAdapter();
                     break;
                 case HOME:
-                    checkLocalRepository();
-                    break;
-                case NEW_REPO_BUTTON:
-                    initializeRepositoryInfo();
+                    showPasswords();
                     break;
                 case CLONE_REPO_BUTTON:
                     // duplicate code
@@ -423,13 +431,20 @@ public class PasswordStore extends AppCompatActivity {
                                 !FileUtils.listFiles(dir, null, true).isEmpty() &&
                                 !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
                             PasswordRepository.closeRepository();
-                            checkLocalRepository();
+                            showPasswords();
                             return; // if not empty, just show me the passwords!
                         }
                     }
                     Intent intent = new Intent(activity, GitActivity.class);
                     intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
                     startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                    break;
+                case NEW_REPO_BUTTON:
+                case INIT_REPO_INFO:
+                    initializeRepositoryInfo();
+                    break;
+                case CREATE_PWD:
+                    createPassword();
                     break;
             }
         }
@@ -465,17 +480,29 @@ public class PasswordStore extends AppCompatActivity {
     public void initializeRepositoryInfo() {
         if (settings.getBoolean("git_external", false)) {
             File dir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
+            if (dir == null) {
+                Intent intent = new Intent(this, DirectoryChooserActivity.class);
+                intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
+                        "passwordstore");
+
+                startActivityForResult(intent, INIT_REPO_INFO);
+                return;
+            }
             if (dir.exists() && dir.isDirectory() && !FileUtils.listFiles(dir, null, true).isEmpty() &&
                     !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
                 PasswordRepository.closeRepository();
-                checkLocalRepository();
+                showPasswords();
                 return; // if not empty, just show me the passwords!
             }
         }
 
+
+        Intent intent = new Intent(activity, UserPreference.class);
+        startActivityForResult(intent, GitActivity.REQUEST_INIT);
+
         final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<String>());
 
-        if (keyIds.isEmpty())
+        if (keyIds.isEmpty()) {
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
@@ -492,6 +519,7 @@ public class PasswordStore extends AppCompatActivity {
                         }
                     })
                     .show();
+        }
 
         createRepository();
     }

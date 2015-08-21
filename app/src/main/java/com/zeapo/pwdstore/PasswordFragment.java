@@ -97,10 +97,12 @@ public class PasswordFragment extends Fragment{
             mListener = new OnFragmentInteractionListener() {
                 public void onFragmentInteraction(PasswordItem item) {
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                        File repoDir = PasswordRepository.getRepositoryDirectory(activity.getApplicationContext());
+
                         // push the current password list (non filtered plz!)
                         passListStack.push(pathStack.isEmpty() ?
-                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(activity)) :
-                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(activity)));
+                                                PasswordRepository.getPasswords(repoDir) :
+                                                PasswordRepository.getPasswords(pathStack.peek(), repoDir));
 
                         //push the category were we're going
                         pathStack.push(item.getFile());
@@ -108,7 +110,7 @@ public class PasswordFragment extends Fragment{
 
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(activity)));
+                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), repoDir));
 
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     } else {
@@ -151,9 +153,10 @@ public class PasswordFragment extends Fragment{
      */
     public void refreshAdapter() {
         recyclerAdapter.clear();
+        File repoDir = PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
         recyclerAdapter.addAll(pathStack.isEmpty() ?
-                                        PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())) :
-                                        PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity())));
+                                        PasswordRepository.getPasswords(repoDir) :
+                                        PasswordRepository.getPasswords(pathStack.peek(), repoDir));
     }
 
     /**
@@ -176,10 +179,11 @@ public class PasswordFragment extends Fragment{
      * @param dir the directory to filter
      */
     private void recursiveFilter(String filter, File dir) {
+        File repoDir = PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
         // on the root the pathStack is empty
         ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(getActivity()));
+                PasswordRepository.getPasswords(repoDir) :
+                PasswordRepository.getPasswords(dir, repoDir);
 
         boolean rec = settings.getBoolean("filter_recursively", true);
         for (PasswordItem item : passwordItems) {
@@ -207,17 +211,6 @@ public class PasswordFragment extends Fragment{
         recyclerAdapter.clear();
         recyclerAdapter.addAll(passListStack.pop());
         pathStack.pop();
-    }
-
-    /**
-     * gets the current directory
-     * @return the current directory
-     */
-    public File getCurrentDir() {
-        if (pathStack.isEmpty())
-            return PasswordRepository.getWorkTree();
-        else
-            return pathStack.peek();
     }
 
     public boolean isNotEmpty() {
