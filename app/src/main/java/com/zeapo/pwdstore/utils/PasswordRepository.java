@@ -1,12 +1,9 @@
 package com.zeapo.pwdstore.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.zeapo.pwdstore.UserPreference;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -124,22 +121,19 @@ public class PasswordRepository {
      * @return
      */
     public static File getRepositoryDirectory(Context context) {
-        if (localDir == null) {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
-            if (settings.getBoolean("git_external", false)) {
-                String external_repo = settings.getString("git_external_repo", null);
-                if (external_repo != null) {
-                    localDir = new File(external_repo);
-                } else {
-                    Intent intent = new Intent(context, UserPreference.class);
-                    intent.putExtra("operation", "git_external");
-                    context.startActivity(intent);
-                }
+        if (settings.getBoolean("git_external", false)) {
+            String external_repo = settings.getString("git_external_repo", null);
+            if (external_repo != null) {
+                localDir = new File(external_repo);
             } else {
-                localDir = new File(context.getFilesDir() + "/store");
+                return null; // do not forget to check!
             }
+        } else {
+            localDir = new File(context.getFilesDir() + "/store");
         }
+
         return localDir;
     }
 
