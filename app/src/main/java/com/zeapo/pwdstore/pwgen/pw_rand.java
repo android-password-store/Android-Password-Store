@@ -19,7 +19,7 @@ public class pw_rand {
      * @return the generated password
      */
     public static String rand(int size, int pwFlags) {
-        String password = "";
+        String password;
         char cha;
         int i, featureFlags, num;
         String val;
@@ -36,6 +36,7 @@ public class pw_rand {
             bank += pwgen.SYMBOLS_STR;
         }
         do {
+            password = "";
             featureFlags = pwFlags;
             i = 0;
             while (i < size) {

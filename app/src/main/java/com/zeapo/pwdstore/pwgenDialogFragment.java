@@ -61,13 +61,13 @@ public class pwgenDialogFragment extends DialogFragment {
         TextView textView = (TextView) view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
-        ((EditText) view.findViewById(R.id.passwordText)).setTypeface(monoTypeface);
+        ((TextView) view.findViewById(R.id.passwordText)).setTypeface(monoTypeface);
 
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditText edit = (EditText) callingActivity.findViewById(R.id.crypto_password_edit);
-                EditText generate = (EditText) view.findViewById(R.id.passwordText);
+                TextView generate = (TextView) view.findViewById(R.id.passwordText);
                 edit.append(generate.getText());
             }
         });
@@ -86,16 +86,16 @@ public class pwgenDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 setPreferences();
-                EditText editText = (EditText) view.findViewById(R.id.passwordText);
-                editText.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+                TextView textView = (TextView) view.findViewById(R.id.passwordText);
+                textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setPreferences();
-                        EditText editText = (EditText) view.findViewById(R.id.passwordText);
-                        editText.setText(pwgen.generate(callingActivity.getApplicationContext()).get(0));
+                        TextView textView = (TextView) view.findViewById(R.id.passwordText);
+                        textView.setText(pwgen.generate(callingActivity.getApplicationContext()).get(0));
                     }
                 });
             }

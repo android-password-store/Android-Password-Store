@@ -14,14 +14,13 @@
                   android:paddingTop="@dimen/activity_vertical_margin"
                   tools:context=".MainActivityFragment">
 
-        <EditText
+        <TextView
             android:id="@+id/passwordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginBottom="8dp"
-            android:editable="false"
-            android:textIsSelectable="true"
-            android:inputType="textVisiblePassword"/>
+            android:textIsSelectable="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
