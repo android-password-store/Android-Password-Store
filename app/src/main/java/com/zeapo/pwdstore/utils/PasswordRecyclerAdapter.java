@@ -56,7 +56,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     // Create new views (invoked by the layout manager)
     @Override
     public PasswordRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                                 int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.password_row_layout, parent, false);
@@ -82,7 +82,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             @Override
             public void onClick(View v) {
                 if (mActionMode != null) {
-                    toggleSelection(holder.getAdapterPosition(), holder.view);
+                    toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
                     if (selectedItems.isEmpty()) {
                         mActionMode.finish();
                     }
@@ -98,7 +98,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 if (mActionMode != null) {
                     return false;
                 }
-                toggleSelection(holder.getAdapterPosition(), holder.view);
+                toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
                 // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
                 return true;
@@ -185,12 +185,18 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         updateSelectedItems(position, selectedItems);
     }
 
-    public void toggleSelection(int position, View view) {
+    public void toggleSelection(int position, CardView card, char type) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
-            view.setSelected(true);
+            if (type == PasswordItem.TYPE_CATEGORY)
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_200));
+            else
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.light_blue_200));
         } else {
-            view.setSelected(false);
+            if (type == PasswordItem.TYPE_CATEGORY)
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
+            else
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.light_blue_600));
         }
     }
 
