@@ -117,8 +117,16 @@
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
+    <string name="pref_autofill_enable_title">Enable autofill</string>
+    <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
+    <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
+    <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>
+    <string name="pref_autofill_apps_title">Per-app settings</string>
+    <string name="pref_autofill_apps_hint">Customize autofill settings for specific apps.</string>
+    <string name="pref_autofill_default_title">Automatically match by default</string>
+    <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
+    <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
     <string name="pref_clear_clipboard_hint">Store nonsense in the clipboard 20 times instead of just once. Useful on Samsung phones that feature clipboard history.</string>
-    <string name="pref_clear_clipboard">Clear clipboard 20 times</string>
 
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Generate</string>
@@ -154,4 +162,11 @@
     <string name="pwd_generate_button">Generate</string>
     <string name="category_string">"Category: "</string>
 
+    <!-- Autofill -->
+    <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
+    <string name="autofill_fill">Fill</string>
+    <string name="autofill_apps_default">Use default setting</string>
+    <string name="autofill_apps_first">Automatically match</string>
+    <string name="autofill_apps_match_ellipsis">Match with…</string>
+    <string name="autofill_apps_never">Never match</string>
 </resources>

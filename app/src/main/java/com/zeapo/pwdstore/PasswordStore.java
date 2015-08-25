@@ -289,6 +289,12 @@ public class PasswordStore extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
 
+                // if the activity was started from the autofill settings, the
+                // intent is to match a clicked pwd with app. pass this to fragment
+                if (getIntent().getBooleanExtra("matchWith", false)) {
+                    args.putBoolean("matchWith", true);
+                }
+
                 plist.setArguments(args);
 
                 fragmentTransaction.addToBackStack("passlist");
@@ -530,5 +536,14 @@ public class PasswordStore extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    public void matchPasswordWithApp(PasswordItem item) {
+        String path = item.getFile().getAbsolutePath();
+        path = path.replace(PasswordRepository.getWorkTree() + "/", "").replace(".gpg", "");
+        Intent data = new Intent();
+        data.putExtra("path", path);
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

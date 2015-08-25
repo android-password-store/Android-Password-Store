@@ -70,11 +70,30 @@
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Autofill">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="autofill_enable"
+            android:title="@string/pref_autofill_enable_title"/>
+        <Preference
+            android:dependency="autofill_enable"
+            android:key="autofill_apps"
+            android:summary="@string/pref_autofill_apps_hint"
+            android:title="@string/pref_autofill_apps_title"/>
+        <CheckBoxPreference
+            android:dependency="autofill_enable"
+            android:defaultValue="true"
+            android:key="autofill_default"
+            android:summary="@string/pref_autofill_default_hint"
+            android:title="@string/pref_autofill_default_title"/>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Misc">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="clear_clipboard_20x"
             android:summary="@string/pref_clear_clipboard_hint"
-            android:title="@string/pref_clear_clipboard" />
+            android:title="@string/pref_clear_clipboard_title" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 	<application android:allowBackup="true" android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name" android:theme="@style/AppTheme">
 		<activity android:name=".PasswordStore" android:label="@string/app_name"
@@ -36,6 +39,31 @@
 		</activity>
 
 		<activity android:name=".SshKeyGen"
+			android:parentActivityName=".PasswordStore">
+
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.zeapo.pwdstore.PasswordStore" />
+		</activity>
+
+		<service android:name=".autofill.AutofillService"
+				 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+			<intent-filter>
+				<action android:name="android.accessibilityservice.AccessibilityService" />
+			</intent-filter>
+			<meta-data android:name="android.accessibilityservice"
+					   android:resource="@xml/autofill_config" />
+		</service>
+
+		<activity android:name=".autofill.AutofillActivity"
+			android:parentActivityName=".PasswordStore"
+			android:documentLaunchMode="intoExisting"
+			android:excludeFromRecents="true">
+
+			<meta-data android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.zeapo.pwdstore.PasswordStore" />
+		</activity>
+
+		<activity android:name=".autofill.AutofillPreferenceActivity"
 			android:parentActivityName=".PasswordStore">
 
 			<meta-data android:name="android.support.PARENT_ACTIVITY"

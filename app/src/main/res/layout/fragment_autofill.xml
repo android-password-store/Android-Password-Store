@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingLeft="24dp"
+              android:paddingRight="24dp"
+              android:paddingTop="20dp"
+              android:paddingBottom="20dp">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/autofill_radiogroup"
+        >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/autofill_apps_default"
+            android:id="@+id/use_default"
+            android:layout_gravity="center_vertical"
+            android:checked="false"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/autofill_apps_first"
+            android:id="@+id/first"
+            android:layout_gravity="center_vertical"
+            android:checked="false"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/autofill_apps_match_ellipsis"
+            android:id="@+id/match"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/matched"
+            android:layout_gravity="center_horizontal"
+            android:editable="false"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/autofill_apps_never"
+            android:id="@+id/never"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            />
+
+    </RadioGroup>
+
+</LinearLayout>
