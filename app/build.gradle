@@ -3,12 +3,12 @@ apply from: 'copyLibs.gradle'    // enable 'copyLibs.gradle' script plugin
 apply plugin: 'eclipse'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 50
         versionName "1.2.0.30"
     }
@@ -29,10 +29,10 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:cardview-v7:23.0.0'
+    compile 'com.android.support:design:23.0.0'
     compile 'org.sufficientlysecure:openpgp-api:7.0'
     compile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
     compile 'com.jcraft:jsch:0.1.53'
