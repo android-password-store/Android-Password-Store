@@ -146,7 +146,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     public void editPassword() {
 
-        if (findViewById(R.id.crypto_container).getVisibility() != View.VISIBLE)
+        // if in encrypt or (in decrypt and password is invisible), do nothing
+        if (findViewById(R.id.crypto_password_show) == null
+                || findViewById(R.id.crypto_container).getVisibility() != View.VISIBLE)
             return;
 
         CharSequence category = ((TextView) findViewById(R.id.crypto_password_category)).getText();
