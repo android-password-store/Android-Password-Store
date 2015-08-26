@@ -1,64 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="@dimen/activity_horizontal_margin"
-                  android:paddingRight="@dimen/activity_horizontal_margin"
-                  android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
             android:id="@+id/label_length"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:gravity="center_vertical"
-            android:text="@string/ssh_keygen_length"/>
+            android:text="@string/ssh_keygen_length" />
 
         <Spinner
             android:id="@+id/length"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"/>
+            android:spinnerMode="dropdown" />
 
-        <android.support.design.widget.TextInputLayout
+        <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:hintTextAppearance="@style/TextAppearance.AppCompat"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat">
 
             <EditText
                 android:id="@+id/passphrase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/ssh_keygen_passphrase"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <CheckBox
+            android:id="@+id/show_passphrase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ssh_keygen_show_passphrase"
-            android:id="@+id/show_passphrase"
+            android:layout_marginTop="8dp"
             android:checked="false"
-            android:layout_marginTop="8dp"/>
+            android:text="@string/ssh_keygen_show_passphrase" />
 
-        <android.support.design.widget.TextInputLayout
+        <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:hintTextAppearance="@style/TextAppearance.AppCompat"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat">
+
             <EditText
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/ssh_keygen_comment"
-                android:inputType="textShortMessage"/>
+                android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
@@ -67,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:onClick="generate"
-            android:text="@string/ssh_keygen_generate"/>
+            android:text="@string/ssh_keygen_generate" />
 
     </LinearLayout>
 </ScrollView>

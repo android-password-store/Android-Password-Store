@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:paddingBottom="20dp"
-                  android:paddingLeft="24dp"
-                  android:paddingRight="24dp"
-                  android:paddingTop="20dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="20dp">
 
         <TextView
             android:id="@+id/public_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textIsSelectable="true"/>
+            android:textIsSelectable="true" />
 
         <TextView
             android:id="@+id/public_key_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ssh_keygen_tip"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
 </ScrollView>

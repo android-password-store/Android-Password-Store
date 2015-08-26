@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<LinearLayout android:orientation="vertical"
-              android:layout_height="fill_parent"
-              android:layout_width="fill_parent"
-              android:paddingLeft="24dp"
-              android:paddingRight="24dp"
-              android:paddingTop="20dp"
-              android:paddingBottom="20dp">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/abc_text_size_menu_material"
-        android:text="@string/pref_autofill_enable_msg"
-        android:id="@+id/textView"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pref_autofill_enable_msg"
+            android:textSize="16sp" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:id="@+id/imageView"
-        android:src="@drawable/autofill_ins_1"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/autofill_ins_1" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:id="@+id/imageView2"
-        android:src="@drawable/autofill_ins_2"
-        android:layout_marginBottom="8dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"/>
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/autofill_ins_2" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/abc_text_size_menu_material"
-        android:text="@string/pref_autofill_enable_msg2"
-        android:id="@+id/textView3"/>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pref_autofill_enable_msg2"
+            android:textSize="16sp" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="114dp"
-        android:id="@+id/imageView3"
-        android:src="@drawable/autofill_ins_3"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="114dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/autofill_ins_3" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/abc_text_size_menu_material"
-        android:text="@string/pref_autofill_enable_msg3"
-        android:id="@+id/textView4"/>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pref_autofill_enable_msg3"
+            android:textSize="16sp" />
 
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

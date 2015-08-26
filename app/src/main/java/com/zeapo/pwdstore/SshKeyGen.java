@@ -145,8 +145,6 @@ public class SshKeyGen extends AppCompatActivity {
 
         setTitle("Generate SSH Key");
 
-        setContentView(R.layout.activity_ssh_keygen);
-
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .replace(android.R.id.content, new SshKeyGenFragment()).commit();
