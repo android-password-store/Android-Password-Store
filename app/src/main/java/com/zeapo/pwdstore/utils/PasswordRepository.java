@@ -28,6 +28,7 @@ public class PasswordRepository {
 
     private static Repository repository;
     private static boolean initialized = false;
+    private static File localDir;
 
     protected PasswordRepository(){    }
 
@@ -114,20 +115,26 @@ public class PasswordRepository {
         repository = null;
     }
 
+    /**
+     * Returns the password store repository directory
+     * @param context
+     * @return
+     */
     public static File getRepositoryDirectory(Context context) {
-        File dir = null;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
         if (settings.getBoolean("git_external", false)) {
-            String external_repo  = settings.getString("git_external_repo", null);
+            String external_repo = settings.getString("git_external_repo", null);
             if (external_repo != null) {
-                dir = new File(external_repo);
+                localDir = new File(external_repo);
+            } else {
+                return null; // do not forget to check!
             }
         } else {
-            dir = new File(context.getFilesDir() + "/store");
+            localDir = new File(context.getFilesDir() + "/store");
         }
 
-        return dir;
+        return localDir;
     }
 
     public static Repository initialize(Context context) {

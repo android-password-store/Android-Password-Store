@@ -58,7 +58,7 @@
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
     <string name="clone">Clone existing</string>
-    <string name="initialize">Create new</string>
+    <string name="initialize">Create</string>
 
     <string name="server_name">Server</string>
     <string name="server_protocol">Protocol</string>
@@ -161,6 +161,9 @@
     <string name="toast_password_copied">Password copied into the clipboard</string>
     <string name="pwd_generate_button">Generate</string>
     <string name="category_string">"Category: "</string>
+    <string name="enable_git">Enable git</string>
+    <string name="create_in_internal">Create the store in Internal Storage</string>
+    <string name="clone_from_remote">Clone from a Git server</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>

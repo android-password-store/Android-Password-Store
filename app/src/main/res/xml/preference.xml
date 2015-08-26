@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/pref_git_title">
+        <CheckBoxPreference
+            android:key="git_enabled"
+            android:summary="Enable Git"
+            android:title="@string/enable_git" />
         <Preference
             android:key="git_server_info"
             android:title="@string/pref_edit_server_info" />
@@ -25,11 +29,6 @@
             android:dependency="git_external"
             android:key="pref_select_external"
             android:title="Select external repository" />
-        <CheckBoxPreference
-            android:enabled="false"
-            android:key="git_enabled"
-            android:summary="Enable Git"
-            android:title="Enable git" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_crypto_title">
