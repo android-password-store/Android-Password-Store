@@ -56,7 +56,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     SharedPreferences settings;
     private Activity activity;
     ClipboardManager clipboard;
-    AsyncTask delayShowTask;
 
     private boolean registered;
 
@@ -141,10 +140,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 break;
             case R.id.edit_password:
                 editPassword();
-                if (delayShowTask != null) {
-                    delayShowTask.cancel(true);
-                    delayShowTask = null;
-                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -285,9 +280,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 if (showPassword) {
                     publishProgress(current);
                 }
-                if (isCancelled()) {
-                    return false;
-                }
             }
             return true;
         }
@@ -302,8 +294,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     clipboard.setPrimaryClip(clip);
                 }
             }
-            if (showPassword) {
+            if (showPassword && findViewById(R.id.crypto_password_show) != null) {
                 //clear password
+                // if decrypt layout changed to encrypt layout via edit button, no need for this
                 ((TextView) findViewById(R.id.crypto_password_show)).setText("");
                 ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
                 findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
@@ -312,7 +305,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 activity.finish();
             }
         }
-
 
         @Override
         protected void onProgressUpdate(Integer... values) {
@@ -401,7 +393,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                     copyToClipBoard();
                                 }
 
-                                delayShowTask = new DelayShow().execute();
+                                new DelayShow().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                 if (!showPassword) {
                                     activity.setResult(RESULT_CANCELED);
                                     activity.finish();
