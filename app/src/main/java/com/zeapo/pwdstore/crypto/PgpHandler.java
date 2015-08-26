@@ -160,9 +160,12 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         ((EditText) findViewById(R.id.crypto_extra_edit)).setTypeface(monoTypeface);
 
         ((TextView) findViewById(R.id.crypto_password_category)).setText(category);
-        ((TextView) findViewById(R.id.crypto_password_file_edit)).setText(file);
+        ((EditText) findViewById(R.id.crypto_password_file_edit)).setText(file);
         ((EditText) findViewById(R.id.crypto_password_edit)).setText(password);
         ((EditText) findViewById(R.id.crypto_extra_edit)).setText(extra);
+
+        // strictly editing only i.e. can't save this password's info to another file by changing name
+        findViewById(R.id.crypto_password_file_edit).setEnabled(false);
 
         // the original intent was to decrypt so FILE_PATH will have the file, not enclosing dir
         // PgpCallback expects the dir when encrypting
@@ -170,6 +173,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         String directoryPath = filePath.substring(0, filePath.lastIndexOf(File.separator));
         Intent intent = new Intent(this, PgpHandler.class);
         intent.putExtra("FILE_PATH", directoryPath);
+        intent.putExtra("Operation", "ENCRYPT");
         setIntent(intent);
     }
 
