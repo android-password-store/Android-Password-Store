@@ -7,4 +7,9 @@
         pwstore:showAsAction="ifRoom"
         android:id="@+id/copy_password"
         />
+    <item android:title="Edit password"
+        android:icon="@drawable/ic_action_edit"
+        pwstore:showAsAction="ifRoom"
+        android:id="@+id/edit_password"
+        />
 </menu>

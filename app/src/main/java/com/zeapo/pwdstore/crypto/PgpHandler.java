@@ -56,6 +56,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     SharedPreferences settings;
     private Activity activity;
     ClipboardManager clipboard;
+    AsyncTask delayShowTask;
 
     private boolean registered;
 
@@ -137,8 +138,44 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 return true;
             case R.id.copy_password:
                 copyToClipBoard();
+                break;
+            case R.id.edit_password:
+                editPassword();
+                if (delayShowTask != null) {
+                    delayShowTask.cancel(true);
+                    delayShowTask = null;
+                }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void editPassword() {
+
+        if (findViewById(R.id.crypto_container).getVisibility() != View.VISIBLE)
+            return;
+
+        CharSequence category = ((TextView) findViewById(R.id.crypto_password_category)).getText();
+        CharSequence file = ((TextView) findViewById(R.id.crypto_password_file)).getText();
+        CharSequence password = ((TextView) findViewById(R.id.crypto_password_show)).getText();
+        CharSequence extra = ((TextView) findViewById(R.id.crypto_extra_show)).getText();
+
+        setContentView(R.layout.encrypt_layout);
+        Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
+        ((EditText) findViewById(R.id.crypto_password_edit)).setTypeface(monoTypeface);
+        ((EditText) findViewById(R.id.crypto_extra_edit)).setTypeface(monoTypeface);
+
+        ((TextView) findViewById(R.id.crypto_password_category)).setText(category);
+        ((TextView) findViewById(R.id.crypto_password_file_edit)).setText(file);
+        ((EditText) findViewById(R.id.crypto_password_edit)).setText(password);
+        ((EditText) findViewById(R.id.crypto_extra_edit)).setText(extra);
+
+        // the original intent was to decrypt so FILE_PATH will have the file, not enclosing dir
+        // PgpCallback expects the dir when encrypting
+        String filePath = getIntent().getExtras().getString("FILE_PATH");
+        String directoryPath = filePath.substring(0, filePath.lastIndexOf(File.separator));
+        Intent intent = new Intent(this, PgpHandler.class);
+        intent.putExtra("FILE_PATH", directoryPath);
+        setIntent(intent);
     }
 
     public void copyToClipBoard() {
@@ -247,6 +284,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 current++;
                 if (showPassword) {
                     publishProgress(current);
+                }
+                if (isCancelled()) {
+                    return false;
                 }
             }
             return true;
@@ -361,7 +401,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                     copyToClipBoard();
                                 }
 
-                                new DelayShow().execute();
+                                delayShowTask = new DelayShow().execute();
                                 if (!showPassword) {
                                     activity.setResult(RESULT_CANCELED);
                                     activity.finish();
