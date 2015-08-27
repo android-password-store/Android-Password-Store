@@ -341,6 +341,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     break;
                 }
                 case REQUEST_CODE_DECRYPT_AND_VERIFY: {
+                    findViewById(R.id.progress_bar_label).setVisibility(View.GONE);
                     decryptAndVerify(data);
                     break;
                 }
@@ -374,6 +375,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
                             if (returnToCiphertextField) {
+                                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                                findViewById(R.id.progress_bar_label).setVisibility(View.GONE);
+
                                 boolean showPassword = settings.getBoolean("show_password", true);
 
                                 if (showPassword) {
@@ -447,6 +451,8 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
                     Log.i("PgpHandler", "RESULT_CODE_USER_INTERACTION_REQUIRED");
 
+                    findViewById(R.id.progress_bar_label).setVisibility(View.VISIBLE);
+
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                     try {
                         PgpHandler.this.startIntentSenderForResult(pi.getIntentSender(),
@@ -482,6 +488,8 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     public void decryptAndVerify(Intent data) {
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
+
+        findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
 
         try {
             InputStream is = FileUtils.openInputStream(new File(getIntent().getExtras().getString("FILE_PATH")));
