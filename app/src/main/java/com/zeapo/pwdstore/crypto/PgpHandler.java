@@ -451,7 +451,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
                     Log.i("PgpHandler", "RESULT_CODE_USER_INTERACTION_REQUIRED");
 
-                    findViewById(R.id.progress_bar_label).setVisibility(View.VISIBLE);
+                    View progress_bar_label = findViewById(R.id.progress_bar_label);
+                    if (progress_bar_label != null) {
+                        progress_bar_label.setVisibility(View.VISIBLE);
+                    }
 
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                     try {
