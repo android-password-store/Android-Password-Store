@@ -34,7 +34,7 @@ public class AutofillActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         finish();   // go back to the password field app
         if (resultCode == RESULT_OK) {
-            AutofillService.setUnlockOK();    // report the result to service
+            AutofillService.setResultData(data);    // report the result to service
         }
     }
 }

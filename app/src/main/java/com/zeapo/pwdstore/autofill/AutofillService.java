@@ -44,7 +44,7 @@ public class AutofillService extends AccessibilityService {
     private ArrayList<PasswordItem> items; // password choices
     private AlertDialog dialog;
     private AccessibilityWindowInfo window;
-    private static boolean unlockOK = false; // if openkeychain user interaction was successful
+    private static Intent resultData = null; // need the intent which contains results from user interaction
     private CharSequence packageName;
     private boolean ignoreActionFocus = false;
 
@@ -52,7 +52,7 @@ public class AutofillService extends AccessibilityService {
         public static final String TAG = "Keychain";
     }
 
-    public static void setUnlockOK() { unlockOK = true; }
+    public static void setResultData(Intent data) { resultData = data; }
 
     @Override
     protected void onServiceConnected() {
@@ -66,7 +66,7 @@ public class AutofillService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                && event.getPackageName().equals(packageName) && unlockOK) {
+                && event.getPackageName().equals(packageName) && resultData != null) {
             decryptAndVerify();
         }
 
@@ -203,10 +203,15 @@ public class AutofillService extends AccessibilityService {
     }
 
     public void decryptAndVerify() {
-        unlockOK = false;
         packageName = info.getPackageName();
-        Intent data = new Intent();
-        data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
+        Intent data;
+        if (resultData == null) {
+            data = new Intent();
+            data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
+        } else {
+            data = resultData;
+            resultData = null;
+        }
         InputStream is = null;
         try {
             is = FileUtils.openInputStream(items.get(0).getFile());
