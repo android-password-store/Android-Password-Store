@@ -26,6 +26,33 @@ android {
     packagingOptions {
         exclude '.readme'
     }
+
+    //
+    // To sign release builds, create the file `gradle.properties` in
+    // $HOME/.gradle or in your project directory with this content:
+    //
+    // mStoreFile=/path/to/key.store
+    // mStorePassword=xxx
+    // mKeyAlias=alias
+    // mKeyPassword=xxx
+    //
+    if (project.hasProperty('mStoreFile') &&
+            project.hasProperty('mStorePassword') &&
+            project.hasProperty('mKeyAlias') &&
+            project.hasProperty('mKeyPassword')) {
+        signingConfigs {
+            release {
+                storeFile file(mStoreFile)
+                    storePassword mStorePassword
+                    keyAlias mKeyAlias
+                    keyPassword mKeyPassword
+            }
+        }
+        buildTypes.release.signingConfig = signingConfigs.release
+    } else {
+        buildTypes.release.signingConfig = null
+    }
+
 }
 
 dependencies {
