@@ -176,6 +176,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         Intent intent = new Intent(this, PgpHandler.class);
         intent.putExtra("FILE_PATH", directoryPath);
         intent.putExtra("Operation", "ENCRYPT");
+        intent.putExtra("fromDecrypt", true);
         setIntent(intent);
     }
 
@@ -427,6 +428,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                             Intent data = new Intent();
                             data.putExtra("CREATED_FILE", path);
                             data.putExtra("NAME", ((EditText) findViewById(R.id.crypto_password_file_edit)).getText().toString());
+                            // if coming from decrypt screen->edit button
+                            if (getIntent().getBooleanExtra("fromDecrypt", false)) {
+                                data.putExtra("needCommit", true);
+                            }
                             setResult(RESULT_OK, data);
                             finish();
                         } catch (Exception e) {

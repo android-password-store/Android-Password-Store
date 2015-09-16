@@ -442,10 +442,11 @@ public class PasswordStore extends AppCompatActivity {
                     // if we get here with a RESULT_OK then it's probably OK :)
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
-                case PgpHandler.REQUEST_CODE_ENCRYPT:
                 case PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY:
-                    // RESULT_OK and REQUEST_CODE_DECRYPT_AND_VERIFY only when a file has been edited
-                    // since normally REQUEST_CODE_DECRYPT_AND_VERIFY returns RESULT_CANCELLED
+                    if (!data.getBooleanExtra("needCommit", false)) {
+                        break;
+                    }
+                case PgpHandler.REQUEST_CODE_ENCRYPT:
                     Git git = new Git(PasswordRepository.getRepository(new File("")));
                     GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
                     tasks.execute(
