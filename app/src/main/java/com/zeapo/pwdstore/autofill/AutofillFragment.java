@@ -98,11 +98,11 @@ public class AutofillFragment extends DialogFragment {
                         editor.putString(packageName, path);
                 }
                 editor.apply();
-                int position = getArguments().getInt("position");
-                callingActivity.recyclerAdapter.notifyItemChanged(position);
 
-                if (getArguments().getBoolean("finish")) {
-                    callingActivity.finish();
+                // if recyclerAdapter has not loaded yet, there is no need to notifyItemChanged
+                if (callingActivity.recyclerAdapter != null) {
+                    int position = callingActivity.recyclerAdapter.getPosition(packageName);
+                    callingActivity.recyclerAdapter.notifyItemChanged(position);
                 }
             }
         });

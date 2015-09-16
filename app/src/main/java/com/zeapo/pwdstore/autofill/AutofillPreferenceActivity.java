@@ -32,7 +32,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
     private PackageManager pm;
 
-    private boolean recreate;
+    private boolean recreate; // flag for action on up press; origin autofill dialog? different act
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,14 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         pm = getPackageManager();
 
         new populateTask().execute();
+
+        recreate = false;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            recreate = true;
+
+            showDialog(extras.getString("packageName"), extras.getString("appName"));
+        }
 
         setTitle("Autofill Apps");
     }
@@ -79,13 +87,9 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
             findViewById(R.id.progress_bar).setVisibility(View.GONE);
 
             recyclerView.setAdapter(recyclerAdapter);
-
-            recreate = false;
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                recreate = true;
                 recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("packageName")));
-                showDialog(extras.getString("packageName"), extras.getString("appName"));
             }
         }
     }
@@ -139,7 +143,6 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putString("packageName", packageName);
         args.putString("appName", appName);
-        args.putInt("position", recyclerAdapter.getPosition(packageName));
         df.setArguments(args);
         df.show(getFragmentManager(), "autofill_dialog");
     }
