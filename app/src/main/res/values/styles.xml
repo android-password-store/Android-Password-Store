@@ -2,15 +2,15 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/indigo_A400</item>
-        <item name="colorPrimaryDark">@color/indigo_A700</item>
-        <item name="android:windowBackground">@color/indigo_50</item>
-        <item name="android:textColorPrimary">@color/blue_500</item>
+        <item name="colorPrimary">@color/blue_grey_500</item>
+        <item name="colorPrimaryDark">@color/blue_grey_700</item>
+        <item name="android:windowBackground">@color/blue_grey_50</item>
+        <item name="android:textColorPrimary">@color/teal_900</item>
         <item name="android:textColor">@color/text_color</item>
         <item name="actionModeStyle">@style/ActionMode</item>
     </style>
 
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
-        <item name="background">@color/indigo_A700</item>
+        <item name="background">@color/blue_grey_700</item>
     </style>
 </resources>

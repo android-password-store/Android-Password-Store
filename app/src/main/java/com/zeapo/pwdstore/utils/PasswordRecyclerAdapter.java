@@ -75,7 +75,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
         } else {
             holder.type.setText(pass.getFullPathName());
-            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.light_blue_600));
+            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_400));
         }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -188,15 +188,19 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void toggleSelection(int position, CardView card, char type) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
-            if (type == PasswordItem.TYPE_CATEGORY)
+            if (type == PasswordItem.TYPE_CATEGORY) {
                 card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_200));
-            else
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.light_blue_200));
+            }
+            else {
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
+            }
         } else {
-            if (type == PasswordItem.TYPE_CATEGORY)
+            if (type == PasswordItem.TYPE_CATEGORY) {
                 card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
-            else
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.light_blue_600));
+            }
+            else {
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_400));
+            }
         }
     }
 
