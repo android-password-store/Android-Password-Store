@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -13,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
@@ -64,6 +66,12 @@ public class AutofillService extends AccessibilityService {
     // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW)
+                == PackageManager.PERMISSION_DENIED) {
+            // may need a way to request the permission but only activities can, so by notification?
+            return;
+        }
+
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && resultData != null) {
@@ -202,7 +210,7 @@ public class AutofillService extends AccessibilityService {
 
     }
 
-    public void decryptAndVerify() {
+    private void decryptAndVerify() {
         packageName = info.getPackageName();
         Intent data;
         if (resultData == null) {
