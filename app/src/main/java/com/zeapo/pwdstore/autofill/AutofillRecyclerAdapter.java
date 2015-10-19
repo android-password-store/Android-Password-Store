@@ -101,8 +101,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         switch (preference) {
             case "":
                 holder.secondary.setVisibility(View.GONE);
-                // "android:windowBackground"
-                holder.view.setBackgroundResource(R.color.indigo_50);
+                holder.view.setBackgroundResource(0);
                 break;
             case "/first":
                 holder.secondary.setText(R.string.autofill_apps_first);
