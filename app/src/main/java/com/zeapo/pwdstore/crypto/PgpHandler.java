@@ -272,10 +272,15 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 TextView extraText = (TextView) findViewById(R.id.crypto_extra_show);
 
                 if (extraText.getText().length() != 0)
-                    ((LinearLayout) findViewById(R.id.crypto_extra_show_layout)).setVisibility(View.VISIBLE);
+                    findViewById(R.id.crypto_extra_show_layout).setVisibility(View.VISIBLE);
 
-                this.pb = (ProgressBar) findViewById(R.id.pbLoading);
-                this.pb.setMax(SHOW_TIME);
+                if (SHOW_TIME == 0) {
+                    // treat 0 as forever, and the user must exit and/or clear clipboard on their own
+                    cancel(true);
+                } else {
+                    this.pb = (ProgressBar) findViewById(R.id.pbLoading);
+                    this.pb.setMax(SHOW_TIME);
+                }
             }
         }
 
@@ -302,8 +307,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 }
             }
             if (showPassword && findViewById(R.id.crypto_password_show) != null) {
-                //clear password
-                // if decrypt layout changed to encrypt layout via edit button, no need for this
+                // clear password; if decrypt changed to encrypt layout via edit button, no need
                 ((TextView) findViewById(R.id.crypto_password_show)).setText("");
                 ((TextView) findViewById(R.id.crypto_extra_show)).setText("");
                 findViewById(R.id.crypto_extra_show_layout).setVisibility(View.INVISIBLE);
@@ -406,6 +410,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
                                 new DelayShow().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                 if (!showPassword) {
+                                    // stop here, but still need DelayShow to clear clipboard
                                     activity.setResult(RESULT_CANCELED);
                                     activity.finish();
                                 }
