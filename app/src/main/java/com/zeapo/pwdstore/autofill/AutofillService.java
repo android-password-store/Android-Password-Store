@@ -28,6 +28,7 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
+import org.openintents.openpgp.IOpenPgpService;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -59,7 +60,8 @@ public class AutofillService extends AccessibilityService {
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-        serviceConnection = new OpenPgpServiceConnection(AutofillService.this, "org.sufficientlysecure.keychain");
+        serviceConnection = new OpenPgpServiceConnection(AutofillService.this
+                , "org.sufficientlysecure.keychain");
         serviceConnection.bindToService();
         settings = PreferenceManager.getDefaultSharedPreferences(this);
     }
@@ -75,7 +77,7 @@ public class AutofillService extends AccessibilityService {
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && resultData != null) {
-            decryptAndVerify();
+            bindDecryptAndVerify();
         }
 
         // nothing to do if not password field focus, android version, or field is keychain app
@@ -164,7 +166,7 @@ public class AutofillService extends AccessibilityService {
             builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    decryptAndVerify();
+                    bindDecryptAndVerify();
                 }
             });
             builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
@@ -210,6 +212,29 @@ public class AutofillService extends AccessibilityService {
 
     }
 
+    private class onBoundListener implements OpenPgpServiceConnection.OnBound {
+        @Override
+        public void onBound(IOpenPgpService service) {
+            decryptAndVerify();
+        }
+        @Override
+        public void onError(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void bindDecryptAndVerify() {
+        if (serviceConnection.getService() == null) {
+            // the service was disconnected, need to bind again
+            // give it a listener and in the callback we will decryptAndVerify
+            serviceConnection = new OpenPgpServiceConnection(AutofillService.this
+                    , "org.sufficientlysecure.keychain", new onBoundListener());
+            serviceConnection.bindToService();
+        } else {
+            decryptAndVerify();
+        }
+    }
+
     private void decryptAndVerify() {
         packageName = info.getPackageName();
         Intent data;
@@ -228,10 +253,6 @@ public class AutofillService extends AccessibilityService {
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-        // the service was disconnected, need to bind again
-        if (serviceConnection.getService() == null) {
-            serviceConnection.bindToService();
-        }
         OpenPgpApi api = new OpenPgpApi(AutofillService.this, serviceConnection.getService());
         Intent result = api.executeApi(data, is, os);
         switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
