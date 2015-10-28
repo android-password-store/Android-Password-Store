@@ -228,6 +228,10 @@ public class AutofillService extends AccessibilityService {
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
+        // the service was disconnected, need to bind again
+        if (serviceConnection.getService() == null) {
+            serviceConnection.bindToService();
+        }
         OpenPgpApi api = new OpenPgpApi(AutofillService.this, serviceConnection.getService());
         Intent result = api.executeApi(data, is, os);
         switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
