@@ -33,7 +33,7 @@ import com.zeapo.pwdstore.pwgenDialogFragment;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
-import org.openintents.openpgp.IOpenPgpService;
+import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -561,7 +561,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     }
 
     @Override
-    public void onBound(IOpenPgpService service) {
+    public void onBound(IOpenPgpService2 service) {
         Log.i("PGP", "ISBOUND!!");
 
         Bundle extra = getIntent().getExtras();
