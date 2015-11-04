@@ -65,6 +65,7 @@ public class AutofillService extends AccessibilityService {
         serviceConnection.bindToService();
         settings = PreferenceManager.getDefaultSharedPreferences(this);
     }
+
     // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -84,30 +85,17 @@ public class AutofillService extends AccessibilityService {
         if (!event.isPassword()
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
-            // the default keyboard showing/hiding is a window state changed event
-            // on Android 5+ we can use getWindows() to determine when the original window is not visible
-            // on Android 4.3 we have to use window state changed events and filter out the keyboard ones
-            // there may be other exceptions...
-            boolean dismiss;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                dismiss = !getWindows().contains(window);
-            } else {
-                dismiss = !(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                        && event.getPackageName().toString().contains("inputmethod"));
-            }
-            if (dismiss && dialog != null && dialog.isShowing()) {
-                dialog.dismiss();
-            }
+            dismissDialog(event);
             return;
         }
 
         if (dialog != null && dialog.isShowing()) {
-            // if the view was clicked, the click event follows the focus event
-            // since the focus event was already handled, ignore click event
+            // the current dialog must belong to this window; ignore clicks on this password field
+            // why handle clicks at all then? some cases e.g. Paypal there is no initial focus event
             if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
                 return;
             }
-            // if past this point, a new dialog will be created, so dismiss the existing
+            // if it was not a click, the field was refocused or another field was focused; recreate
             dialog.dismiss();
         }
 
@@ -119,7 +107,7 @@ public class AutofillService extends AccessibilityService {
 
         info = event.getSource();
 
-        // save the dialog's corresponding window so we can use getWindows() above to check whether dismiss
+        // save the dialog's corresponding window so we can use getWindows() in dismissDialog
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window = info.getWindow();
         }
@@ -134,10 +122,37 @@ public class AutofillService extends AccessibilityService {
         }
         final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
+        getMatchingPassword(appName, info.getPackageName().toString());
+        if (items.isEmpty()) {
+            return;
+        }
+
+        showDialog(appName);
+    }
+
+    // dismiss the dialog if the window has changed
+    private void dismissDialog(AccessibilityEvent event) {
+        // the default keyboard showing/hiding is a window state changed event
+        // on Android 5+ we can use getWindows() to determine when the original window is not visible
+        // on Android 4.3 we have to use window state changed events and filter out the keyboard ones
+        // there may be other exceptions...
+        boolean dismiss;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dismiss = !getWindows().contains(window);
+        } else {
+            dismiss = !(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                    && event.getPackageName().toString().contains("inputmethod"));
+        }
+        if (dismiss && dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+    private void getMatchingPassword(String appName, String packageName) {
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
         SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(event.getPackageName().toString(), defValue);
+        String preference = prefs.getString(packageName, defValue);
         switch (preference) {
             case "/first":
                 if (!PasswordRepository.isInitialized()) {
@@ -146,6 +161,7 @@ public class AutofillService extends AccessibilityService {
                 items = recursiveFilter(appName, null);
                 break;
             case "/never":
+                items.clear();
                 return;
             default:
                 if (!PasswordRepository.isInitialized()) {
@@ -156,10 +172,25 @@ public class AutofillService extends AccessibilityService {
                 items = new ArrayList<>();
                 items.add(PasswordItem.newPassword(file.getName(), file, PasswordRepository.getRepositoryDirectory(this)));
         }
-        if (items.isEmpty()) {
-            return;
-        }
+    }
 
+    private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
+        ArrayList<PasswordItem> items = new ArrayList<>();
+        ArrayList<PasswordItem> passwordItems = dir == null ?
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
+                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
+        for (PasswordItem item : passwordItems) {
+            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                items.addAll(recursiveFilter(filter, item.getFile()));
+            }
+            if (item.toString().toLowerCase().contains(filter.toLowerCase())) {
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    private void showDialog(final String appName) {
         if (dialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
             builder.setNegativeButton(R.string.dialog_cancel, null);
@@ -189,22 +220,6 @@ public class AutofillService extends AccessibilityService {
         }
         dialog.setTitle(items.get(0).toString());
         dialog.show();
-    }
-
-    private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
-        ArrayList<PasswordItem> items = new ArrayList<>();
-        ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
-        for (PasswordItem item : passwordItems) {
-            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                items.addAll(recursiveFilter(filter, item.getFile()));
-            }
-            if (item.toString().toLowerCase().contains(filter.toLowerCase())) {
-                items.add(item);
-            }
-        }
-        return items;
     }
 
     @Override
