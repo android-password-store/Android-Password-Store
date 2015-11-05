@@ -136,7 +136,7 @@ public class AutofillService extends AccessibilityService {
         }
         final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
-        setMatchingPasswords(appName, info.getPackageName().toString());
+        getMatchingPassword(appName, info.getPackageName().toString());
         if (items.isEmpty()) {
             return;
         }
@@ -144,22 +144,26 @@ public class AutofillService extends AccessibilityService {
         showDialog(appName);
     }
 
-    private boolean searchWebView(AccessibilityNodeInfo source) {
-        for (int i = 0; i < source.getChildCount(); i++) {
-            AccessibilityNodeInfo u = source.getChild(i);
-            if (u == null) {
-                continue;
-            }
-            // this is not likely to always work
+    private void searchWebView(AccessibilityNodeInfo source) {
+        ArrayDeque<AccessibilityNodeInfo> q = new ArrayDeque<>();
+        q.add(source);
+        while (!q.isEmpty()) {
+            AccessibilityNodeInfo u = q.remove();
             if (u.getContentDescription() != null && u.getContentDescription().equals("Web View")) {
-                return true;
+                if (!u.equals(source)) {
+                    u.recycle();
+                }
+                return;
             }
-            if (searchWebView(u)) {
-                return true;
+            for (int i = 0; i < u.getChildCount(); i++) {
+                if (u.getChild(i) != null) {
+                    q.add(u.getChild(i));
+                }
             }
-            u.recycle();
+            if (!u.equals(source)) {
+                u.recycle();
+            }
         }
-        return false;
     }
 
     // dismiss the dialog if the window has changed
@@ -180,7 +184,7 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    private void setMatchingPasswords(String appName, String packageName) {
+    private void getMatchingPassword(String appName, String packageName) {
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
         SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
@@ -190,10 +194,7 @@ public class AutofillService extends AccessibilityService {
                 if (!PasswordRepository.isInitialized()) {
                     PasswordRepository.initialize(this);
                 }
-                items = new ArrayList<>();
-                for (File file : searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName)) {
-                    items.add(PasswordItem.newPassword(file.getName(), file, PasswordRepository.getRepositoryDirectory(this)));
-                }
+                items = recursiveFilter(appName, null);
                 break;
             case "/never":
                 items.clear();
@@ -209,24 +210,17 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    private ArrayList<File> searchPasswords(File path, String appName) {
-        ArrayList<File> passList
-                = PasswordRepository.getFilesList(path);
-
-        if (passList.size() == 0) return new ArrayList<>();
-
-        ArrayList<File> items = new ArrayList<>();
-
-        for (File file : passList) {
-            if (file.isFile()) {
-                if (file.toString().toLowerCase().contains(appName.toLowerCase())) {
-                    items.add(file);
-                }
-            } else {
-                // ignore .git directory
-                if (file.getName().equals(".git"))
-                    continue;
-                items.addAll(searchPasswords(file, appName));
+    private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
+        ArrayList<PasswordItem> items = new ArrayList<>();
+        ArrayList<PasswordItem> passwordItems = dir == null ?
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
+                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
+        for (PasswordItem item : passwordItems) {
+            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                items.addAll(recursiveFilter(filter, item.getFile()));
+            }
+            if (item.toString().toLowerCase().contains(filter.toLowerCase())) {
+                items.add(item);
             }
         }
         return items;
