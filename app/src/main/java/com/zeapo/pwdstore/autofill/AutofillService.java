@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -10,11 +11,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class AutofillService extends AccessibilityService {
@@ -69,17 +70,32 @@ public class AutofillService extends AccessibilityService {
     // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW)
+                == PackageManager.PERMISSION_DENIED) {
+            // may need a way to request the permission but only activities can, so by notification?
+            return;
+        }
+
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && resultData != null) {
             bindDecryptAndVerify();
         }
 
+        // need to see if window has a WebView every time, so future events are sent?
+        AccessibilityNodeInfo source = event.getSource();
+        if (source == null) {
+            return;
+        }
+        searchWebView(source);
+
         // nothing to do if not password field focus, android version, or field is keychain app
         if (!event.isPassword()
+                || event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
             dismissDialog(event);
+            source.recycle();   // is this necessary???
             return;
         }
 
@@ -87,6 +103,7 @@ public class AutofillService extends AccessibilityService {
             // the current dialog must belong to this window; ignore clicks on this password field
             // why handle clicks at all then? some cases e.g. Paypal there is no initial focus event
             if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+                source.recycle();
                 return;
             }
             // if it was not a click, the field was refocused or another field was focused; recreate
@@ -96,20 +113,13 @@ public class AutofillService extends AccessibilityService {
         // ignore the ACTION_FOCUS from decryptAndVerify otherwise dialog will appear after Fill
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
+            source.recycle();
             return;
         }
 
-        // need to request permission before attempting to draw dialog
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(this)) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getApplicationContext().getPackageName()));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            return;
-        }
-
-        info = event.getSource();
+        // we are now going to attempt to fill, save AccessibilityNodeInfo for later in decryptAndVerify
+        // (there should be a proper way to do this, although this seems to work 90% of the time)
+        info = source;
 
         // save the dialog's corresponding window so we can use getWindows() in dismissDialog
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -126,12 +136,30 @@ public class AutofillService extends AccessibilityService {
         }
         final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
-        getMatchingPassword(appName, info.getPackageName().toString());
+        setMatchingPasswords(appName, info.getPackageName().toString());
         if (items.isEmpty()) {
             return;
         }
 
         showDialog(appName);
+    }
+
+    private boolean searchWebView(AccessibilityNodeInfo source) {
+        for (int i = 0; i < source.getChildCount(); i++) {
+            AccessibilityNodeInfo u = source.getChild(i);
+            if (u == null) {
+                continue;
+            }
+            // this is not likely to always work
+            if (u.getContentDescription() != null && u.getContentDescription().equals("Web View")) {
+                return true;
+            }
+            if (searchWebView(u)) {
+                return true;
+            }
+            u.recycle();
+        }
+        return false;
     }
 
     // dismiss the dialog if the window has changed
@@ -152,7 +180,7 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    private void getMatchingPassword(String appName, String packageName) {
+    private void setMatchingPasswords(String appName, String packageName) {
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
         SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
@@ -162,7 +190,10 @@ public class AutofillService extends AccessibilityService {
                 if (!PasswordRepository.isInitialized()) {
                     PasswordRepository.initialize(this);
                 }
-                items = recursiveFilter(appName, null);
+                items = new ArrayList<>();
+                for (File file : searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName)) {
+                    items.add(PasswordItem.newPassword(file.getName(), file, PasswordRepository.getRepositoryDirectory(this)));
+                }
                 break;
             case "/never":
                 items.clear();
@@ -178,17 +209,24 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
-        ArrayList<PasswordItem> items = new ArrayList<>();
-        ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
-        for (PasswordItem item : passwordItems) {
-            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                items.addAll(recursiveFilter(filter, item.getFile()));
-            }
-            if (item.toString().toLowerCase().contains(filter.toLowerCase())) {
-                items.add(item);
+    private ArrayList<File> searchPasswords(File path, String appName) {
+        ArrayList<File> passList
+                = PasswordRepository.getFilesList(path);
+
+        if (passList.size() == 0) return new ArrayList<>();
+
+        ArrayList<File> items = new ArrayList<>();
+
+        for (File file : passList) {
+            if (file.isFile()) {
+                if (file.toString().toLowerCase().contains(appName.toLowerCase())) {
+                    items.add(file);
+                }
+            } else {
+                // ignore .git directory
+                if (file.getName().equals(".git"))
+                    continue;
+                items.addAll(searchPasswords(file, appName));
             }
         }
         return items;
@@ -281,6 +319,7 @@ public class AutofillService extends AccessibilityService {
 
                     // if the user focused on something else, take focus back
                     // but this will open another dialog...hack to ignore this
+                    // & need to ensure performAction correct (i.e. what is info now?)
                     ignoreActionFocus = info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Bundle args = new Bundle();
@@ -302,6 +341,7 @@ public class AutofillService extends AccessibilityService {
                             }
                         }
                     }
+                    info.recycle();
                 } catch (UnsupportedEncodingException e) {
                     Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                 }
