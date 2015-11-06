@@ -106,6 +106,7 @@ public class AutofillService extends AccessibilityService {
             }
             // if it was not a click, the field was refocused or another field was focused; recreate
             dialog.dismiss();
+            dialog = null;
         }
 
         // ignore the ACTION_FOCUS from decryptAndVerify otherwise dialog will appear after Fill
@@ -175,6 +176,7 @@ public class AutofillService extends AccessibilityService {
         }
         if (dismiss && dialog != null && dialog.isShowing()) {
             dialog.dismiss();
+            dialog = null;
         }
     }
 
