@@ -151,7 +151,8 @@ public class AutofillService extends AccessibilityService {
                 continue;
             }
             // this is not likely to always work
-            if (u.getContentDescription() != null && u.getContentDescription().equals("Web View")) {
+            if (u.getContentDescription() != null && u.getContentDescription().equals("Web View")
+                    || u.getClassName() != null && u.getClassName().equals("android.webkit.WebView")) {
                 return true;
             }
             if (searchWebView(u)) {
