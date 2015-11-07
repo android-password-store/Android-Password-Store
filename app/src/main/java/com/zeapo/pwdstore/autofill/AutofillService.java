@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -66,7 +67,6 @@ public class AutofillService extends AccessibilityService {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
-    // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW)
@@ -285,9 +285,13 @@ public class AutofillService extends AccessibilityService {
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        // TODO size dialog
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT
-                , WindowManager.LayoutParams.WRAP_CONTENT);
+        // arbitrary non-annoying size
+        int height = 160;
+        if (items.size() > 1) {
+            height += 48;
+        }
+        dialog.getWindow().setLayout((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics())
+                , (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics()));
         dialog.show();
     }
 
