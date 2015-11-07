@@ -110,7 +110,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
                 holder.secondary.setText(R.string.autofill_apps_never);
                 break;
             default:
-                holder.secondary.setText("Match with " + preference);
+                holder.secondary.setText("Match with " + preference.split("\n")[0]);
                 break;
         }
     }

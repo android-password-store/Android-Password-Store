@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,15 +13,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
 public class AutofillFragment extends DialogFragment {
     private static final int MATCH_WITH = 777;
+    ArrayAdapter<String> adapter;
 
     public AutofillFragment() {
     }
@@ -47,6 +53,27 @@ public class AutofillFragment extends DialogFragment {
             e.printStackTrace();
         }
 
+        // set up the listview now for items added by button/from preferences
+        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext()
+                , android.R.layout.simple_list_item_1, android.R.id.text1) {
+            // set text color to black because default is white...
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.grey_black_1000));
+                return textView;
+            }
+        };
+        ((ListView) view.findViewById(R.id.matched)).setAdapter(adapter);
+        // delete items by clicking them
+        ((ListView) view.findViewById(R.id.matched)).setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        adapter.remove(adapter.getItem(position));
+                    }
+                });
+
         SharedPreferences prefs
                 = getActivity().getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
         String preference = prefs.getString(packageName, "");
@@ -62,9 +89,11 @@ public class AutofillFragment extends DialogFragment {
                 break;
             default:
                 ((RadioButton) view.findViewById(R.id.match)).toggle();
-                ((EditText) view.findViewById(R.id.matched)).setText(preference);
+                // trim to remove the last blank element
+                adapter.addAll(preference.trim().split("\n"));
         }
 
+        // add items with the + button
         View.OnClickListener matchPassword = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +103,7 @@ public class AutofillFragment extends DialogFragment {
                 startActivityForResult(intent, MATCH_WITH);
             }
         };
-        view.findViewById(R.id.match).setOnClickListener(matchPassword);
-        view.findViewById(R.id.matched).setOnClickListener(matchPassword);
+        view.findViewById(R.id.matchButton).setOnClickListener(matchPassword);
 
         final SharedPreferences.Editor editor = prefs.edit();
         builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
@@ -93,9 +121,14 @@ public class AutofillFragment extends DialogFragment {
                         editor.putString(packageName, "/never");
                         break;
                     default:
-                        EditText matched = (EditText) view.findViewById(R.id.matched);
-                        String path = matched.getText().toString();
-                        editor.putString(packageName, path);
+                        StringBuilder paths = new StringBuilder();
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            paths.append(adapter.getItem(i));
+                            if (i != adapter.getCount()) {
+                                paths.append("\n");
+                            }
+                        }
+                        editor.putString(packageName, paths.toString());
                 }
                 editor.apply();
 
@@ -113,9 +146,7 @@ public class AutofillFragment extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            ((EditText) getDialog().findViewById(R.id.matched)).setText(data.getStringExtra("path"));
-        } else {
-            ((RadioButton) getDialog().findViewById(R.id.use_default)).toggle();
+            adapter.add(data.getStringExtra("path"));
         }
     }
 }

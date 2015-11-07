@@ -44,6 +44,7 @@ public class AutofillService extends AccessibilityService {
     private SharedPreferences settings;
     private AccessibilityNodeInfo info; // the original source of the event (the edittext field)
     private ArrayList<File> items; // password choices
+    private int lastWhichItem;
     private AlertDialog dialog;
     private AccessibilityWindowInfo window;
     private static Intent resultData = null; // need the intent which contains results from user interaction
@@ -199,9 +200,14 @@ public class AutofillService extends AccessibilityService {
                 if (!PasswordRepository.isInitialized()) {
                     PasswordRepository.initialize(this);
                 }
-                String path = PasswordRepository.getWorkTree() + "/" + preference + ".gpg";
+                String preferred[] = preference.split("\n");
                 items = new ArrayList<>();
-                items.add(new File(path));
+                for (String prefer : preferred) {
+                    String path = PasswordRepository.getWorkTree() + "/" + prefer + ".gpg";
+                    if (new File(path).exists()) {
+                        items.add(new File(path));
+                    }
+                }
         }
     }
 
@@ -237,12 +243,12 @@ public class AutofillService extends AccessibilityService {
                 dialog = null;
             }
         });
-        builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                bindDecryptAndVerify();
-            }
-        });
+//        builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                bindDecryptAndVerify();
+//            }
+//        });
         builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
@@ -254,13 +260,34 @@ public class AutofillService extends AccessibilityService {
                 startActivity(intent);
             }
         });
+        CharSequence itemNames[] = new CharSequence[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            itemNames[i] = items.get(i).getName().replace(".gpg", "");
+        }
+
+        builder.setItems(itemNames, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == items.size()) {
+                    // the user will have to return to the app themselves.
+                    Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("packageName", info.getPackageName());
+                    intent.putExtra("appName", appName);
+                    startActivity(intent);
+                } else {
+                    lastWhichItem = which;
+                    bindDecryptAndVerify();
+                }
+            }
+        });
         dialog = builder.create();
-        dialog.setIcon(R.drawable.ic_launcher);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.setTitle(items.get(0).getName().replace(".gpg", ""));
+        // TODO size dialog
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT
+                , WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.show();
     }
 
@@ -304,7 +331,7 @@ public class AutofillService extends AccessibilityService {
         }
         InputStream is = null;
         try {
-            is = FileUtils.openInputStream(items.get(0));
+            is = FileUtils.openInputStream(items.get(lastWhichItem));
         } catch (IOException e) {
             e.printStackTrace();
         }
