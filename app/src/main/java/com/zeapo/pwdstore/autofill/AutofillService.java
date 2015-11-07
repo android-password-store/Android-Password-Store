@@ -230,7 +230,13 @@ public class AutofillService extends AccessibilityService {
 
     private void showDialog(final String appName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-        builder.setNegativeButton(R.string.dialog_cancel, null);
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface d, int which) {
+                dialog.dismiss();
+                dialog = null;
+            }
+        });
         builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
