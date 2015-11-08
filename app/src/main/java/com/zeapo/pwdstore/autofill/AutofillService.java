@@ -1,6 +1,5 @@
 package com.zeapo.pwdstore.autofill;
 
-import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -11,10 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
@@ -69,12 +69,6 @@ public class AutofillService extends AccessibilityService {
     // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW)
-                == PackageManager.PERMISSION_DENIED) {
-            // may need a way to request the permission but only activities can, so by notification?
-            return;
-        }
-
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && resultData != null) {
@@ -102,6 +96,16 @@ public class AutofillService extends AccessibilityService {
         // ignore the ACTION_FOCUS from decryptAndVerify otherwise dialog will appear after Fill
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
+            return;
+        }
+
+        // need to request permission before attempting to draw dialog
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getApplicationContext().getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return;
         }
 
