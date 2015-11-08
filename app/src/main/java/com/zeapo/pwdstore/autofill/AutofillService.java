@@ -248,12 +248,6 @@ public class AutofillService extends AccessibilityService {
                 dialog = null;
             }
         });
-//        builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                bindDecryptAndVerify();
-//            }
-//        });
         builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
@@ -273,17 +267,8 @@ public class AutofillService extends AccessibilityService {
         builder.setItems(itemNames, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (which == items.size()) {
-                    // the user will have to return to the app themselves.
-                    Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("packageName", info.getPackageName());
-                    intent.putExtra("appName", appName);
-                    startActivity(intent);
-                } else {
-                    lastWhichItem = which;
-                    bindDecryptAndVerify();
-                }
+                lastWhichItem = which;
+                bindDecryptAndVerify();
             }
         });
         dialog = builder.create();
@@ -347,6 +332,7 @@ public class AutofillService extends AccessibilityService {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
         OpenPgpApi api = new OpenPgpApi(AutofillService.this, serviceConnection.getService());
+        // TODO we are dropping frames, (did we before??) find out why and maybe make this async
         Intent result = api.executeApi(data, is, os);
         switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
             case OpenPgpApi.RESULT_CODE_SUCCESS: {
