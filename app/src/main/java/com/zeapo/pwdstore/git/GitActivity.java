@@ -481,7 +481,7 @@ public class GitActivity extends AppCompatActivity {
         if (localDir.exists() && localDir.listFiles().length != 0) {
             new AlertDialog.Builder(this).
                     setTitle(R.string.dialog_delete_title).
-                    setMessage(R.string.dialog_delete_msg).
+                    setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString()).
                     setCancelable(false).
                     setPositiveButton(R.string.dialog_delete,
                             new DialogInterface.OnClickListener() {

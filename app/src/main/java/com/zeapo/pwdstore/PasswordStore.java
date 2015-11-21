@@ -495,7 +495,7 @@ public class PasswordStore extends AppCompatActivity {
         PasswordRepository.closeRepository();
 
         new AlertDialog.Builder(this)
-                .setTitle("Repositiory location")
+                .setTitle("Repository location")
                 .setMessage("Select where to create or clone your password repository.")
                 .setPositiveButton("External", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

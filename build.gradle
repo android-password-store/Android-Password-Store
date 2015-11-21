@@ -17,6 +17,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'http://guardian.github.com/maven/repo-releases' }
     }
 }
 

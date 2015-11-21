@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -29,6 +30,7 @@ import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
+import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -124,7 +126,8 @@ public class UserPreference extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     new AlertDialog.Builder(callingActivity).
                             setTitle(R.string.pref_dialog_delete_title).
-                            setMessage(R.string.pref_dialog_delete_msg).
+                            setMessage(getResources().getString(R.string.dialog_delete_msg)
+                                    + " " + PasswordRepository.getWorkTree().toString()).
                             setCancelable(false).
                             setPositiveButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
                                 @Override
@@ -265,8 +268,16 @@ public class UserPreference extends AppCompatActivity {
 
     public void selectExternalGitRepository() {
         Intent intent = new Intent(this, DirectoryChooserActivity.class);
-        intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
-                "passwordstore");
+        File dir = new File(Environment.getExternalStorageDirectory() + "/PasswordStore");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        DirectoryChooserConfig config = DirectoryChooserConfig.builder()
+                .newDirectoryName("PasswordStore")
+                .allowNewDirectoryNameModification(true)
+                .initialDirectory(Environment.getExternalStorageDirectory() + "/PasswordStore")
+                .build();
+        intent.putExtra(DirectoryChooserActivity.EXTRA_CONFIG, config);
 
         startActivityForResult(intent, SELECT_GIT_DIRECTORY);
     }
