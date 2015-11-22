@@ -497,31 +497,7 @@ public class PasswordStore extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Repository location")
                 .setMessage("Select where to create or clone your password repository.")
-                .setPositiveButton("External", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", true).apply();
-
-                        if (settings.getString("git_external_repo", null) == null) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            intent.putExtra("operation", "git_external");
-                            startActivityForResult(intent, operation);
-                        } else {
-                            switch (operation) {
-                                case NEW_REPO_BUTTON:
-                                    initializeRepositoryInfo();
-                                    break;
-                                case CLONE_REPO_BUTTON:
-                                    PasswordRepository.initialize(PasswordStore.this);
-
-                                    Intent intent = new Intent(activity, GitActivity.class);
-                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                    break;
-                            }
-                        }
-                    }
-                })
-                .setNegativeButton("Internal", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Hidden (preferred)", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         settings.edit().putBoolean("git_external", false).apply();
 
@@ -536,6 +512,46 @@ public class PasswordStore extends AppCompatActivity {
                                 intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
                                 startActivityForResult(intent, GitActivity.REQUEST_CLONE);
                                 break;
+                        }
+                    }
+                })
+                .setNegativeButton("SD-Card", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        settings.edit().putBoolean("git_external", true).apply();
+
+                        if (settings.getString("git_external_repo", null) == null) {
+                            Intent intent = new Intent(activity, UserPreference.class);
+                            intent.putExtra("operation", "git_external");
+                            startActivityForResult(intent, operation);
+                        } else {
+                            new AlertDialog.Builder(activity).
+                                    setTitle("Directory already selected").
+                                    setMessage("Do you want to use \"" + settings.getString("git_external_repo", null) + "\"?").
+                                    setPositiveButton("Use", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (operation) {
+                                                case NEW_REPO_BUTTON:
+                                                    initializeRepositoryInfo();
+                                                    break;
+                                                case CLONE_REPO_BUTTON:
+                                                    PasswordRepository.initialize(PasswordStore.this);
+
+                                                    Intent intent = new Intent(activity, GitActivity.class);
+                                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                                                    break;
+                                            }
+                                        }
+                                    }).
+                                    setNegativeButton("Change", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(activity, UserPreference.class);
+                                            intent.putExtra("operation", "git_external");
+                                            startActivityForResult(intent, operation);
+                                        }
+                                    }).show();
                         }
                     }
                 })
