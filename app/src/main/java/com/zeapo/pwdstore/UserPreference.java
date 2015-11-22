@@ -401,7 +401,23 @@ public class UserPreference extends AppCompatActivity {
                         new AlertDialog.Builder(this).
                                 setTitle("SD-Card root selected").
                                 setMessage("You have selected the root of your sdcard for the store. " +
-                                        "This is extremly dangerous and you will lose your data " +
+                                        "This is extremely dangerous and you will lose your data " +
+                                        "as its content will be deleted").
+                                setPositiveButton("Remove everything", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                                .edit()
+                                                .putString("git_external_repo", uri.getPath())
+                                                .apply();
+                                    }
+                                }).
+                                setNegativeButton(R.string.dialog_cancel, null).show();
+                    } else if (new File(uri.getPath()).listFiles().length != 0) {
+                        new AlertDialog.Builder(this).
+                                setTitle("Directory not empty").
+                                setMessage("You have selected a non-empty directory for the store. " +
+                                        "This is extremely dangerous and you will lose your data " +
                                         "as its content will be deleted").
                                 setPositiveButton("Remove everything", new DialogInterface.OnClickListener() {
                                     @Override
