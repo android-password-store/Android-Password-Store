@@ -45,7 +45,6 @@ public class GitActivity extends AppCompatActivity {
 
     private File localDir;
     private String hostname;
-    private String username;
     private String port;
 
     private SharedPreferences settings;
@@ -402,6 +401,45 @@ public class GitActivity extends AppCompatActivity {
     }
 
     /**
+     * Prepends the proper protocol to the hostname expected by jGit addRemote().
+     */
+    private void prependProtocol() {
+        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
+        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
+        // don't ask the user, take off the protocol that he puts in
+        hostname = hostname.replaceFirst("^.+://", "");
+        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
+
+        // now cheat a little and prepend the real protocol
+        // jGit does not accept a ssh:// but requires https://
+        if (!protocol.equals("ssh://")) {
+            hostname = protocol + hostname;
+        } else {
+            // if the port is explicitly given, jgit requires the ssh://
+            if (!port.isEmpty())
+                hostname = protocol + hostname;
+        }
+    }
+
+    private boolean forgotUsername() {
+        if (protocol.equals("ssh://")) {
+            // did he forget the username?
+            if (!hostname.matches("^.+@.+")) {
+                new AlertDialog.Builder(this).
+                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
+                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).
+                        show();
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
      * Saves the configuration found in the form
      */
     private void saveConfiguration() {
@@ -416,8 +454,14 @@ public class GitActivity extends AppCompatActivity {
         editor.putString("git_remote_port", ((EditText) findViewById(R.id.server_port)).getText().toString());
         editor.putString("git_remote_uri", ((EditText) findViewById(R.id.clone_uri)).getText().toString());
 
+        // update hostname variable for use by addRemote() either here or later
+        // in syncRepository()
+        prependProtocol();
         if (PasswordRepository.isInitialized()) {
-            PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
+            // don't just use the clone_uri text, need to use hostname which has
+            // had the proper protocol prepended
+            Log.d("hostname", hostname);
+            PasswordRepository.addRemote("origin", hostname, true);
         }
 
         editor.apply();
@@ -429,6 +473,8 @@ public class GitActivity extends AppCompatActivity {
      * @param view
      */
     public void saveConfiguration(View view) {
+        if (forgotUsername()) return;
+
         saveConfiguration();
         finish();
     }
@@ -443,38 +489,8 @@ public class GitActivity extends AppCompatActivity {
             PasswordRepository.initialize(this);
         }
         localDir = PasswordRepository.getWorkTree();
-        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
-        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
-        // don't ask the user, take off the protocol that he puts in
-        hostname = hostname.replaceFirst("^.+://", "");
-        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
 
-        // now cheat a little and prepend the real protocol
-        // jGit does not accept a ssh:// but requires https://
-        if (!protocol.equals("ssh://")) {
-            hostname = protocol + hostname;
-        } else {
-
-            // if the port is explicitly given, jgit requires the ssh://
-            if (!port.isEmpty())
-                hostname = protocol + hostname;
-
-            // did he forget the username?
-            if (!hostname.matches("^.+@.+")) {
-                new AlertDialog.Builder(this).
-                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
-                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).
-                        show();
-                return;
-            }
-
-            username = hostname.split("@")[0];
-        }
+        if (forgotUsername()) return;
 
         saveConfiguration();
 
