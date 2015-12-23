@@ -560,6 +560,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     }
 
+    // TODO (low priority but still...) android M potential permissions crashes
     @Override
     public void onBound(IOpenPgpService2 service) {
         Log.i("PGP", "ISBOUND!!");

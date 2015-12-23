@@ -460,7 +460,6 @@ public class GitActivity extends AppCompatActivity {
         if (PasswordRepository.isInitialized()) {
             // don't just use the clone_uri text, need to use hostname which has
             // had the proper protocol prepended
-            Log.d("hostname", hostname);
             PasswordRepository.addRemote("origin", hostname, true);
         }
 

@@ -1,13 +1,19 @@
 package com.zeapo.pwdstore;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
@@ -47,19 +54,76 @@ public class PasswordStore extends AppCompatActivity {
     private final static int NEW_REPO_BUTTON = 402;
     private final static int HOME = 403;
 
+    private final static int REQUEST_EXTERNAL_STORAGE = 50;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pwdstore);
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         activity = this;
         PRNGFixes.apply();
+
+        // If user opens app with permission granted then revokes and returns,
+        // prevent attempt to create password list fragment
+        if (savedInstanceState != null && (!settings.getBoolean("git_external", false)
+                || ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+            savedInstanceState = null;
+        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pwdstore);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        checkLocalRepository();
+        // do not attempt to checkLocalRepository() if no storage permission: immediate crash
+        if (settings.getBoolean("git_external", false)) {
+            if (ContextCompat.checkSelfPermission(activity,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Snackbar snack = Snackbar.make(findViewById(R.id.main_layout), "The store is on the sdcard but the app does not have permission to access it. Please give permission.",
+                            Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.dialog_ok, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    ActivityCompat.requestPermissions(activity,
+                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            REQUEST_EXTERNAL_STORAGE);
+                                }
+                            });
+                    snack.show();
+                    View view = snack.getView();
+                    TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                    tv.setTextColor(Color.WHITE);
+                    tv.setMaxLines(10);
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQUEST_EXTERNAL_STORAGE);
+                }
+            } else {
+                checkLocalRepository();
+            }
+
+        } else {
+            checkLocalRepository();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkLocalRepository();
+                }
+            }
+        }
     }
 
     @Override

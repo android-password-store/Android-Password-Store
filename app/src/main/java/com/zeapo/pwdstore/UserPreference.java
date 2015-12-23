@@ -231,6 +231,7 @@ public class UserPreference extends AppCompatActivity {
         public void onStart() {
             super.onStart();
             final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+            findPreference("pref_select_external").setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
             findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
 
             // see if the autofill service is enabled and check the preference accordingly
