@@ -401,48 +401,9 @@ public class GitActivity extends AppCompatActivity {
     }
 
     /**
-     * Prepends the proper protocol to the hostname expected by jGit addRemote().
-     */
-    private void prependProtocol() {
-        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
-        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
-        // don't ask the user, take off the protocol that he puts in
-        hostname = hostname.replaceFirst("^.+://", "");
-        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
-
-        // now cheat a little and prepend the real protocol
-        // jGit does not accept a ssh:// but requires https://
-        if (!protocol.equals("ssh://")) {
-            hostname = protocol + hostname;
-        } else {
-            // if the port is explicitly given, jgit requires the ssh://
-            if (!port.isEmpty())
-                hostname = protocol + hostname;
-        }
-    }
-
-    private boolean forgotUsername() {
-        if (protocol.equals("ssh://")) {
-            // did he forget the username?
-            if (!hostname.matches("^.+@.+")) {
-                new AlertDialog.Builder(this).
-                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
-                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).
-                        show();
-                return true;
-            }
-        }
-        return false;
-    }
-    /**
      * Saves the configuration found in the form
      */
-    private void saveConfiguration() {
+    private boolean saveConfiguration() {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
@@ -454,9 +415,31 @@ public class GitActivity extends AppCompatActivity {
         editor.putString("git_remote_port", ((EditText) findViewById(R.id.server_port)).getText().toString());
         editor.putString("git_remote_uri", ((EditText) findViewById(R.id.clone_uri)).getText().toString());
 
-        // update hostname variable for use by addRemote() either here or later
+        // 'save' hostname variable for use by addRemote() either here or later
         // in syncRepository()
-        prependProtocol();
+        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
+        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
+        // don't ask the user, take off the protocol that he puts in
+        hostname = hostname.replaceFirst("^.+://", "");
+        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
+
+        if (!protocol.equals("ssh://")) {
+            hostname = protocol + hostname;
+        } else {
+
+            // if the port is explicitly given, jgit requires the ssh://
+            if (!port.isEmpty())
+                hostname = protocol + hostname;
+
+            // did he forget the username?
+            if (!hostname.matches("^.+@.+")) {
+                new AlertDialog.Builder(this).
+                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
+                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null).
+                        show();
+                return false;
+            }
+        }
         if (PasswordRepository.isInitialized()) {
             // don't just use the clone_uri text, need to use hostname which has
             // had the proper protocol prepended
@@ -464,6 +447,7 @@ public class GitActivity extends AppCompatActivity {
         }
 
         editor.apply();
+        return true;
     }
 
     /**
@@ -472,9 +456,8 @@ public class GitActivity extends AppCompatActivity {
      * @param view
      */
     public void saveConfiguration(View view) {
-        if (forgotUsername()) return;
-
-        saveConfiguration();
+        if (!saveConfiguration())
+            return;
         finish();
     }
 
@@ -489,9 +472,8 @@ public class GitActivity extends AppCompatActivity {
         }
         localDir = PasswordRepository.getWorkTree();
 
-        if (forgotUsername()) return;
-
-        saveConfiguration();
+        if (!saveConfiguration())
+            return;
 
         if (localDir.exists() && localDir.listFiles().length != 0) {
             new AlertDialog.Builder(this).
