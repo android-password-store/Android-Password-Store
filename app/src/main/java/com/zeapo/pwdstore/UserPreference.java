@@ -367,6 +367,11 @@ public class UserPreference extends AppCompatActivity {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean("use_generated_key", false);
                         editor.apply();
+
+                        //delete the public key from generation
+                        File file = new File(getFilesDir() + "/.ssh_key.pub");
+                        file.delete();
+
                         setResult(RESULT_OK);
                         finish();
                     } catch (IOException e) {
