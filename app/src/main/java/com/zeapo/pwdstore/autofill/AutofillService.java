@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class AutofillService extends AccessibilityService {
     private OpenPgpServiceConnection serviceConnection;
@@ -51,6 +52,7 @@ public class AutofillService extends AccessibilityService {
     private static Intent resultData = null; // need the intent which contains results from user interaction
     private CharSequence packageName;
     private boolean ignoreActionFocus = false;
+    private String webViewTitle = null;
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -75,12 +77,14 @@ public class AutofillService extends AccessibilityService {
             bindDecryptAndVerify();
         }
 
-        // need to see if window has a WebView every time, so future events are sent?
-        AccessibilityNodeInfo source = event.getSource();
-        if (source == null) {
-            return;
+        // look for webView and trigger accessibility events if window changes
+        // or if page changes in chrome
+        if ((event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+                    && event.getSource().getPackageName().equals("com.android.chrome")))
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            webViewTitle = searchWebView(getRootInActiveWindow());
         }
-        searchWebView(source);
 
         // nothing to do if not password field focus, android version, or field is keychain app
         if (!event.isPassword()
@@ -88,7 +92,6 @@ public class AutofillService extends AccessibilityService {
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
             dismissDialog(event);
-            source.recycle();   // is this necessary???
             return;
         }
 
@@ -96,7 +99,6 @@ public class AutofillService extends AccessibilityService {
             // the current dialog must belong to this window; ignore clicks on this password field
             // why handle clicks at all then? some cases e.g. Paypal there is no initial focus event
             if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
-                source.recycle();
                 return;
             }
             // if it was not a click, the field was refocused or another field was focused; recreate
@@ -107,7 +109,6 @@ public class AutofillService extends AccessibilityService {
         // ignore the ACTION_FOCUS from decryptAndVerify otherwise dialog will appear after Fill
         if (ignoreActionFocus) {
             ignoreActionFocus = false;
-            source.recycle();
             return;
         }
 
@@ -123,48 +124,58 @@ public class AutofillService extends AccessibilityService {
 
         // we are now going to attempt to fill, save AccessibilityNodeInfo for later in decryptAndVerify
         // (there should be a proper way to do this, although this seems to work 90% of the time)
-        info = source;
+        info = event.getSource();
 
         // save the dialog's corresponding window so we can use getWindows() in dismissDialog
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window = info.getWindow();
         }
 
-        // get the app name and find a corresponding password
-        PackageManager packageManager = getPackageManager();
-        ApplicationInfo applicationInfo;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(event.getPackageName().toString(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            applicationInfo = null;
-        }
-        final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
+        String appName;
+        if (webViewTitle == null) {
+            // get the app name and find a corresponding password
+            PackageManager packageManager = getPackageManager();
+            ApplicationInfo applicationInfo;
+            try {
+                applicationInfo = packageManager.getApplicationInfo(event.getPackageName().toString(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                applicationInfo = null;
+            }
+            appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
-        setMatchingPasswords(appName, info.getPackageName().toString());
-        if (items.isEmpty()) {
+            setMatchingPasswords(appName, info.getPackageName().toString());
+
+        } else {
+            appName = webViewTitle;
+
+            setMatchingPasswordsWeb(webViewTitle);
+        }
+
+        if (items.isEmpty()) {  // show anyway preference?
             return;
         }
-
         showDialog(appName);
+
     }
 
-    private boolean searchWebView(AccessibilityNodeInfo source) {
+    private String searchWebView(AccessibilityNodeInfo source) {
         for (int i = 0; i < source.getChildCount(); i++) {
             AccessibilityNodeInfo u = source.getChild(i);
             if (u == null) {
                 continue;
             }
             // this is not likely to always work
-            if (u.getContentDescription() != null && u.getContentDescription().equals("Web View")
-                    || u.getClassName() != null && u.getClassName().equals("android.webkit.WebView")) {
-                return true;
+            if (u.getClassName() != null && u.getClassName().equals("android.webkit.WebView")) {
+                if (u.getContentDescription() != null)
+                    return u.getContentDescription().toString();
+                return "";
             }
-            if (searchWebView(u)) {
-                return true;
+            if (searchWebView(u) != null) {
+                return searchWebView(u);
             }
             u.recycle();
         }
-        return false;
+        return null;
     }
 
     // dismiss the dialog if the window has changed
@@ -202,19 +213,46 @@ public class AutofillService extends AccessibilityService {
                 items.clear();
                 return;
             default:
-                if (!PasswordRepository.isInitialized()) {
-                    PasswordRepository.initialize(this);
-                }
-                String preferred[] = preference.split("\n");
-                items = new ArrayList<>();
-                for (String prefer : preferred) {
-                    String path = PasswordRepository.getWorkTree() + "/" + prefer + ".gpg";
-                    if (new File(path).exists()) {
-                        items.add(new File(path));
-                    }
-                }
+                getPreferredPasswords(preference);
         }
     }
+
+    private void setMatchingPasswordsWeb(String webViewTitle) {
+        SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+        Map<String, ?> prefsMap = prefs.getAll();
+        for (String key : prefsMap.keySet()) {
+            if (webViewTitle.toLowerCase().contains(key.toLowerCase())) {
+                getPreferredPasswords(prefs.getString(key, ""));
+                return;
+            }
+        }
+        // possible user-defined match not found, try default setting
+        if (settings.getBoolean("autofill_default", true)) {
+            if (!PasswordRepository.isInitialized()) {
+                PasswordRepository.initialize(this);
+            }
+            items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle);
+        } else {
+            items.clear();
+        }
+    }
+
+    // Put the newline separated list of passwords from the SharedPreferences
+    // file into the items list.
+    private void getPreferredPasswords(String preference) {
+        if (!PasswordRepository.isInitialized()) {
+            PasswordRepository.initialize(this);
+        }
+        String preferredPasswords[] = preference.split("\n");
+        items = new ArrayList<>();
+        for (String password : preferredPasswords) {
+            String path = PasswordRepository.getWorkTree() + "/" + password + ".gpg";
+            if (new File(path).exists()) {
+                items.add(new File(path));
+            }
+        }
+    }
+
 
     private ArrayList<File> searchPasswords(File path, String appName) {
         ArrayList<File> passList
@@ -226,7 +264,7 @@ public class AutofillService extends AccessibilityService {
 
         for (File file : passList) {
             if (file.isFile()) {
-                if (file.toString().toLowerCase().contains(appName.toLowerCase())) {
+                if (appName.toLowerCase().contains(file.getName().toLowerCase().replace(".gpg", ""))) {
                     items.add(file);
                 }
             } else {
