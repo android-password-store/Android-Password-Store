@@ -3,12 +3,10 @@ package com.zeapo.pwdstore.autofill;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +16,12 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
-    private SortedList<ResolveInfo> apps;
-    private ArrayList<ResolveInfo> allApps;
-    private HashMap<String, Pair<Drawable, String>> iconMap;
+
+    private SortedList<AppInfo> apps;
+    private ArrayList<AppInfo> allApps;
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
 
@@ -51,28 +48,39 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     }
 
-    public AutofillRecyclerAdapter(List<ResolveInfo> allApps, HashMap<String, Pair<Drawable, String>> iconMap
-            , final PackageManager pm, AutofillPreferenceActivity activity) {
-         SortedList.Callback<ResolveInfo> callback = new SortedListAdapterCallback<ResolveInfo>(this) {
-            @Override
-            public int compare(ResolveInfo o1, ResolveInfo o2) {
-                return o1.loadLabel(pm).toString().toLowerCase().compareTo(o2.loadLabel(pm).toString().toLowerCase());
-            }
+    public static class AppInfo {
+        public String label;
+        public String packageName;
+        public Drawable icon;
 
-            @Override
-            public boolean areContentsTheSame(ResolveInfo oldItem, ResolveInfo newItem) {
-                return oldItem.loadLabel(pm).toString().equals(newItem.loadLabel(pm).toString());
-            }
+        public AppInfo(String label, String packageName, Drawable icon) {
+            this.label = label;
+            this.packageName = packageName;
+            this.icon = icon;
+        }
+    }
 
-            @Override
-            public boolean areItemsTheSame(ResolveInfo item1, ResolveInfo item2) {
-                return item1.loadLabel(pm).toString().equals(item2.loadLabel(pm).toString());
-            }
+    public AutofillRecyclerAdapter(List<AppInfo> allApps, final PackageManager pm
+            , AutofillPreferenceActivity activity) {
+         SortedList.Callback<AppInfo> callback = new SortedListAdapterCallback<AppInfo>(this) {
+             @Override
+             public int compare(AppInfo o1, AppInfo o2) {
+                 return o1.label.toLowerCase().compareTo(o2.label.toLowerCase());
+             }
+
+             @Override
+             public boolean areContentsTheSame(AppInfo oldItem, AppInfo newItem) {
+                 return oldItem.label.equals(newItem.label);
+             }
+
+             @Override
+             public boolean areItemsTheSame(AppInfo item1, AppInfo item2) {
+                 return item1.packageName.equals(item2.packageName);
+             }
         };
-        this.apps = new SortedList<>(ResolveInfo.class, callback);
+        this.apps = new SortedList<>(AppInfo.class, callback);
         this.apps.addAll(allApps);
         this.allApps = new ArrayList<>(allApps);
-        this.iconMap = new HashMap<>(iconMap);
         this.pm = pm;
         this.activity = activity;
     }
@@ -86,11 +94,11 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     @Override
     public void onBindViewHolder(AutofillRecyclerAdapter.ViewHolder holder, int position) {
-        ResolveInfo app = apps.get(position);
-        holder.packageName = app.activityInfo.packageName;
+        AppInfo app = apps.get(position);
+        holder.packageName = app.packageName;
 
-        holder.icon.setImageDrawable(iconMap.get(holder.packageName).first);
-        holder.name.setText(iconMap.get(holder.packageName).second);
+        holder.icon.setImageDrawable(app.icon);
+        holder.name.setText(app.label);
 
         holder.secondary.setVisibility(View.VISIBLE);
         holder.view.setBackgroundResource(R.color.grey_white_1000);
@@ -126,7 +134,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     public int getPosition(String packageName) {
         for (int i = 0; i < apps.size(); i++) {
-            if (apps.get(i).activityInfo.packageName.equals(packageName)) {
+            if (apps.get(i).packageName.equals(packageName)) {
                 return i;
             }
         }
@@ -139,8 +147,8 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
             return;
         }
         apps.beginBatchedUpdates();
-        for (ResolveInfo app : allApps) {
-            if (app.loadLabel(pm).toString().toLowerCase().contains(s.toLowerCase())) {
+        for (AppInfo app : allApps) {
+            if (app.label.toLowerCase().contains(s.toLowerCase())) {
                 apps.add(app);
             } else {
                 apps.remove(app);

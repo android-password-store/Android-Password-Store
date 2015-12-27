@@ -38,6 +38,8 @@ public class AutofillFragment extends DialogFragment {
         // need to interact with the recyclerAdapter which is a member of activity
         final AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
+
+        // if... hide textview
         final View view = inflater.inflate(R.layout.fragment_autofill, null);
 
         builder.setView(view);
@@ -74,6 +76,7 @@ public class AutofillFragment extends DialogFragment {
                     }
                 });
 
+        // if... autofill_web
         SharedPreferences prefs
                 = getActivity().getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
         String preference = prefs.getString(packageName, "");
