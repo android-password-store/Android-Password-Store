@@ -40,8 +40,7 @@ public class AutofillFragment extends DialogFragment {
         final AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
 
-        final View view = View.inflate(callingActivity.getApplicationContext()
-                , R.layout.fragment_autofill, null);
+        final View view = inflater.inflate(R.layout.fragment_autofill, null);
 
         builder.setView(view);
 

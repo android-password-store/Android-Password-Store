@@ -149,7 +149,9 @@ public class AutofillService extends AccessibilityService {
             appName = setMatchingPasswordsWeb(webViewTitle);
         }
 
-        if (items.isEmpty()) {  // show anyway preference?
+        // if autofill_always checked, show dialog even if no matches (automatic
+        // or otherwise)
+        if (items.isEmpty() && !settings.getBoolean("autofill_always", false)) {
             return;
         }
         showDialog(appName);
@@ -210,7 +212,7 @@ public class AutofillService extends AccessibilityService {
                 items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName);
                 break;
             case "/never":
-                items.clear();
+                items = new ArrayList<>();
                 return;
             default:
                 getPreferredPasswords(preference);
@@ -234,7 +236,7 @@ public class AutofillService extends AccessibilityService {
             }
             items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle);
         } else {
-            items.clear();
+            items = new ArrayList<>();
         }
         return webViewTitle;
     }
@@ -254,7 +256,6 @@ public class AutofillService extends AccessibilityService {
             }
         }
     }
-
 
     private ArrayList<File> searchPasswords(File path, String appName) {
         ArrayList<File> passList
@@ -322,12 +323,15 @@ public class AutofillService extends AccessibilityService {
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         // arbitrary non-annoying size
-        int height = 144;
-        if (items.size() > 1) {
-            height += 48;
+        int height = 88;
+        if (items.size() > 0) {
+            height += 66;
         }
-        dialog.getWindow().setLayout((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics())
-                , (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, getResources().getDisplayMetrics()));
+        if (items.size() > 1) {
+            height += 33;
+        }
+        dialog.getWindow().setLayout((int) (240 * getApplicationContext().getResources().getDisplayMetrics().density)
+                , (int) (height * getApplicationContext().getResources().getDisplayMetrics().density));
         dialog.show();
     }
 
