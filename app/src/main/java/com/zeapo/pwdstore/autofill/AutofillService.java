@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -38,7 +37,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class AutofillService extends AccessibilityService {
@@ -53,6 +55,7 @@ public class AutofillService extends AccessibilityService {
     private CharSequence packageName;
     private boolean ignoreActionFocus = false;
     private String webViewTitle = null;
+    private String webViewURL = null;
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -84,6 +87,28 @@ public class AutofillService extends AccessibilityService {
                     && event.getSource().getPackageName().equals("com.android.chrome")))
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             webViewTitle = searchWebView(getRootInActiveWindow());
+            webViewURL = null;
+            if (webViewTitle != null) {
+                List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
+                        .findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+                for (AccessibilityNodeInfo node : nodes)
+                    if (node.getText() != null) {
+                        try {
+                            webViewURL = new URL(node.getText().toString()).getHost();
+                        } catch (MalformedURLException e) {
+                            if (e.toString().contains("Protocol not found")) {
+                                try {
+                                    webViewURL = new URL("http://" + node.getText().toString()).getHost();
+                                } catch (MalformedURLException ignored) {
+                                }
+                            }
+                        }
+                    }
+            }
+            if (webViewTitle != null)
+                Log.d("Title", webViewTitle);
+            if (webViewURL != null)
+                Log.d("URL", webViewURL);
         }
 
         // nothing to do if not password field focus, android version, or field is keychain app
@@ -166,10 +191,10 @@ public class AutofillService extends AccessibilityService {
             if (u == null) {
                 continue;
             }
-            // this is not likely to always work
             if (u.getClassName() != null && u.getClassName().equals("android.webkit.WebView")) {
-                if (u.getContentDescription() != null)
+                if (u.getContentDescription() != null) {
                     return u.getContentDescription().toString();
+                }
                 return "";
             }
             if (searchWebView(u) != null) {
