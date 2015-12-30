@@ -9,6 +9,19 @@
                   android:paddingRight="24dp"
                   android:paddingTop="20dp">
 
+        <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextAppearance.AppCompat">
+
+            <EditText
+                android:id="@+id/webName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/autofill_webname_hint"
+                android:inputType="textPersonName"/>
+        </android.support.design.widget.TextInputLayout>
+
         <RadioGroup
             android:id="@+id/autofill_radiogroup"
             android:layout_width="match_parent"

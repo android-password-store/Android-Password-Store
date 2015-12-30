@@ -167,6 +167,7 @@
     <string name="autofill_fill">Fill</string>
     <string name="autofill_apps_default">Use default setting</string>
     <string name="autofill_apps_first">Automatically match</string>
-    <string name="autofill_apps_match_ellipsis">Match with…</string>
+    <string name="autofill_apps_match">Match with</string>
     <string name="autofill_apps_never">Never match</string>
+    <string name="autofill_webname_hint">Name</string>
 </resources>

@@ -65,6 +65,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showDialog("", "");
             }
         });
     }
@@ -83,17 +84,17 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
             List<AutofillRecyclerAdapter.AppInfo> allApps = new ArrayList<>();
 
             for (ResolveInfo app : allAppsResolveInfo) {
-                allApps.add(new AutofillRecyclerAdapter.AppInfo(app.loadLabel(pm).toString()
-                        , app.activityInfo.packageName, app.loadIcon(pm)));
+                allApps.add(new AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName
+                        , app.loadLabel(pm).toString(), app.loadIcon(pm)));
             }
 
             SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
             Map<String, ?> prefsMap = prefs.getAll();
             for (String key : prefsMap.keySet()) {
                 try {
-                    allApps.add(new AutofillRecyclerAdapter.AppInfo(null, key, pm.getApplicationIcon("com.android.browser")));
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, pm.getApplicationIcon("com.android.browser")));
                 } catch (PackageManager.NameNotFoundException e) {
-                    allApps.add(new AutofillRecyclerAdapter.AppInfo(null, key, null));
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, null));
                 }
             }
 
@@ -108,7 +109,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
             recyclerView.setAdapter(recyclerAdapter);
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("packageName")));
+                recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
             }
         }
     }

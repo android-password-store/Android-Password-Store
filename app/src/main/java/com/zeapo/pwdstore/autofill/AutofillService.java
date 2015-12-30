@@ -146,16 +146,13 @@ public class AutofillService extends AccessibilityService {
             setMatchingPasswords(appName, info.getPackageName().toString());
 
         } else {
-            appName = webViewTitle;
-
-            setMatchingPasswordsWeb(webViewTitle);
+            appName = setMatchingPasswordsWeb(webViewTitle);
         }
 
         if (items.isEmpty()) {  // show anyway preference?
             return;
         }
         showDialog(appName);
-
     }
 
     private String searchWebView(AccessibilityNodeInfo source) {
@@ -220,13 +217,14 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    private void setMatchingPasswordsWeb(String webViewTitle) {
+    // return key for opening its Settings. Otherwise just use the title
+    private String setMatchingPasswordsWeb(String webViewTitle) {
         SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
         Map<String, ?> prefsMap = prefs.getAll();
         for (String key : prefsMap.keySet()) {
             if (webViewTitle.toLowerCase().contains(key.toLowerCase())) {
                 getPreferredPasswords(prefs.getString(key, ""));
-                return;
+                return key;
             }
         }
         // possible user-defined match not found, try default setting
@@ -238,6 +236,7 @@ public class AutofillService extends AccessibilityService {
         } else {
             items.clear();
         }
+        return webViewTitle;
     }
 
     // Put the newline separated list of passwords from the SharedPreferences
@@ -295,11 +294,16 @@ public class AutofillService extends AccessibilityService {
                 // the user will have to return to the app themselves.
                 Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("packageName", info.getPackageName());
+                if (webViewTitle == null) {
+                    intent.putExtra("packageName", info.getPackageName());
+                } else {
+                    intent.putExtra("packageName", appName);
+                }
                 intent.putExtra("appName", appName);
                 startActivity(intent);
             }
         });
+
         CharSequence itemNames[] = new CharSequence[items.size()];
         for (int i = 0; i < items.size(); i++) {
             itemNames[i] = items.get(i).getName().replace(".gpg", "");
@@ -312,12 +316,13 @@ public class AutofillService extends AccessibilityService {
                 bindDecryptAndVerify();
             }
         });
+
         dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         // arbitrary non-annoying size
-        int height = 160;
+        int height = 144;
         if (items.size() > 1) {
             height += 48;
         }

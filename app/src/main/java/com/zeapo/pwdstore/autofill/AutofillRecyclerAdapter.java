@@ -21,7 +21,7 @@ import java.util.List;
 public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
 
     private SortedList<AppInfo> apps;
-    private ArrayList<AppInfo> allApps;
+    private ArrayList<AppInfo> allApps; // for filtering, maintain a list of all
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
 
@@ -31,6 +31,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         public TextView secondary;
         public ImageView icon;
         public String packageName;
+        public String appName;
 
         public ViewHolder(View view) {
             super(view);
@@ -43,40 +44,47 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
         @Override
         public void onClick(View v) {
-            activity.showDialog(packageName, name.getText().toString());
+            activity.showDialog(packageName, appName);
         }
 
     }
 
     public static class AppInfo {
-        public String label;
         public String packageName;
+        public String appName;
         public Drawable icon;
 
-        public AppInfo(String label, String packageName, Drawable icon) {
-            this.label = label;
+        public AppInfo(String packageName, String appName, Drawable icon) {
             this.packageName = packageName;
+            this.appName = appName;
             this.icon = icon;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o != null && o instanceof AppInfo && this.appName.equals(((AppInfo) o).appName);
         }
     }
 
     public AutofillRecyclerAdapter(List<AppInfo> allApps, final PackageManager pm
             , AutofillPreferenceActivity activity) {
-         SortedList.Callback<AppInfo> callback = new SortedListAdapterCallback<AppInfo>(this) {
-             @Override
-             public int compare(AppInfo o1, AppInfo o2) {
-                 return o1.label.toLowerCase().compareTo(o2.label.toLowerCase());
-             }
+        SortedList.Callback<AppInfo> callback = new SortedListAdapterCallback<AppInfo>(this) {
+            // don't take into account secondary text. This is good enough
+            // for the limited add/remove usage for websites
+            @Override
+            public int compare(AppInfo o1, AppInfo o2) {
+             return o1.appName.toLowerCase().compareTo(o2.appName.toLowerCase());
+            }
 
-             @Override
-             public boolean areContentsTheSame(AppInfo oldItem, AppInfo newItem) {
-                 return oldItem.label.equals(newItem.label);
-             }
+            @Override
+            public boolean areContentsTheSame(AppInfo oldItem, AppInfo newItem) {
+             return oldItem.appName.equals(newItem.appName);
+            }
 
-             @Override
-             public boolean areItemsTheSame(AppInfo item1, AppInfo item2) {
-                 return item1.packageName.equals(item2.packageName);
-             }
+            @Override
+            public boolean areItemsTheSame(AppInfo item1, AppInfo item2) {
+             return item1.appName.equals(item2.appName);
+            }
         };
         this.apps = new SortedList<>(AppInfo.class, callback);
         this.apps.addAll(allApps);
@@ -96,15 +104,20 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     public void onBindViewHolder(AutofillRecyclerAdapter.ViewHolder holder, int position) {
         AppInfo app = apps.get(position);
         holder.packageName = app.packageName;
+        holder.appName = app.appName;
 
         holder.icon.setImageDrawable(app.icon);
-        holder.name.setText(app.label);
+        holder.name.setText(app.appName);
 
         holder.secondary.setVisibility(View.VISIBLE);
         holder.view.setBackgroundResource(R.color.grey_white_1000);
 
-        SharedPreferences prefs
-                = activity.getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        SharedPreferences prefs;
+        if (!app.appName.equals(app.packageName)) {
+            prefs = activity.getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        } else {
+            prefs = activity.getApplicationContext().getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+        }
         String preference = prefs.getString(holder.packageName, "");
         switch (preference) {
             case "":
@@ -118,7 +131,8 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
                 holder.secondary.setText(R.string.autofill_apps_never);
                 break;
             default:
-                holder.secondary.setText("Match with " + preference.split("\n")[0]);
+                holder.secondary.setText(R.string.autofill_apps_match);
+                holder.secondary.append(" " + preference.split("\n")[0]);
                 if ((preference.trim().split("\n").length - 1) > 0) {
                     holder.secondary.append(" and "
                             + (preference.trim().split("\n").length - 1) + " more");
@@ -132,13 +146,24 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         return apps.size();
     }
 
-    public int getPosition(String packageName) {
-        for (int i = 0; i < apps.size(); i++) {
-            if (apps.get(i).packageName.equals(packageName)) {
-                return i;
-            }
+    public int getPosition(String appName) {
+        return apps.indexOf(new AppInfo(null, appName, null));
+    }
+
+    public void addWebsite(String appName) {
+        Drawable icon = null;
+        try {
+            icon = activity.getPackageManager().getApplicationIcon("com.android.browser");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
-        return -1;
+        apps.add(new AppInfo(appName, appName, icon));
+        allApps.add(new AppInfo(appName, appName, icon));
+    }
+
+    public void removeWebsite(String appName) {
+        apps.remove(new AppInfo(null, appName, null));
+        allApps.remove(new AppInfo(null, appName, null)); // compare with equals
     }
 
     public void filter(String s) {
@@ -148,7 +173,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         }
         apps.beginBatchedUpdates();
         for (AppInfo app : allApps) {
-            if (app.label.toLowerCase().contains(s.toLowerCase())) {
+            if (app.appName.toLowerCase().contains(s.toLowerCase())) {
                 apps.add(app);
             } else {
                 apps.remove(app);

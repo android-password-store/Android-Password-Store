@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,18 +40,28 @@ public class AutofillFragment extends DialogFragment {
         final AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
 
-        // if... hide textview
         final View view = inflater.inflate(R.layout.fragment_autofill, null);
 
         builder.setView(view);
 
-        final String packageName = getArguments().getString("packageName");
-        String appName = getArguments().getString("appName");
+        String packageName = getArguments().getString("packageName", "");
+        String appName = getArguments().getString("appName", "");
 
-        builder.setTitle(appName);
+        final boolean isWebsite = appName.equals(packageName);
+
+        // set the dialog icon and title or webName editText
+        String iconPackageName;
+        if (!isWebsite) {
+            iconPackageName = packageName;
+            builder.setTitle(appName);
+            view.findViewById(R.id.webName).setVisibility(View.GONE);
+        } else {
+            iconPackageName = "com.android.browser";
+            builder.setTitle("Website");
+            ((EditText) view.findViewById(R.id.webName)).setText(packageName);
+        }
         try {
-            // since we can't (easily?) pass the drawable as an argument
-            builder.setIcon(callingActivity.getPackageManager().getApplicationIcon(packageName));
+            builder.setIcon(callingActivity.getPackageManager().getApplicationIcon(iconPackageName));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -76,10 +87,15 @@ public class AutofillFragment extends DialogFragment {
                     }
                 });
 
-        // if... autofill_web
-        SharedPreferences prefs
-                = getActivity().getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(packageName, "");
+        // set the existing preference, if any
+        SharedPreferences prefs;
+        String preference;
+        if (!isWebsite) {
+            prefs = getActivity().getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        } else {
+            prefs = getActivity().getApplicationContext().getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+        }
+        preference = prefs.getString(packageName, "");
         switch (preference) {
             case "":
                 ((RadioButton) view.findViewById(R.id.use_default)).toggle();
@@ -108,20 +124,43 @@ public class AutofillFragment extends DialogFragment {
         };
         view.findViewById(R.id.matchButton).setOnClickListener(matchPassword);
 
+        // write to preferences when OK clicked
         final SharedPreferences.Editor editor = prefs.edit();
         builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String key;
+                String packageName = getArguments().getString("packageName", "");
+
+                if (!isWebsite) {
+                    key = packageName;
+                } else {
+                    key = ((EditText) view.findViewById(R.id.webName)).getText().toString();
+                    // if key.equals("") show error
+
+                    // if new packageName/appName/website name/website title/key
+                    // is different than old, remove the old one. Basically,
+                    // "edit" the old one.
+                    if (!key.equals(packageName) && !packageName.equals("")) {
+                        editor.remove(packageName);
+                        if (callingActivity.recyclerAdapter != null) {
+                            if (callingActivity.recyclerAdapter.getPosition(packageName) != -1) {
+                                callingActivity.recyclerAdapter.removeWebsite(packageName);
+                            }
+                        }
+                    }
+                }
+
                 RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.autofill_radiogroup);
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.use_default:
-                        editor.remove(packageName);
+                        editor.remove(key);
                         break;
                     case R.id.first:
-                        editor.putString(packageName, "/first");
+                        editor.putString(key, "/first");
                         break;
                     case R.id.never:
-                        editor.putString(packageName, "/never");
+                        editor.putString(key, "/never");
                         break;
                     default:
                         StringBuilder paths = new StringBuilder();
@@ -131,14 +170,36 @@ public class AutofillFragment extends DialogFragment {
                                 paths.append("\n");
                             }
                         }
-                        editor.putString(packageName, paths.toString());
+                        editor.putString(key, paths.toString());
                 }
                 editor.apply();
 
-                // if recyclerAdapter has not loaded yet, there is no need to notifyItemChanged
+                // if recyclerAdapter has not loaded yet, there is no need to notify
                 if (callingActivity.recyclerAdapter != null) {
-                    int position = callingActivity.recyclerAdapter.getPosition(packageName);
-                    callingActivity.recyclerAdapter.notifyItemChanged(position);
+                    int position;
+                    if (!isWebsite) {
+                        String appName = getArguments().getString("appName", "");
+                        position = callingActivity.recyclerAdapter.getPosition(appName);
+                        callingActivity.recyclerAdapter.notifyItemChanged(position);
+                    } else {
+                        String appName = ((EditText) view.findViewById(R.id.webName)).getText().toString();
+                        position = callingActivity.recyclerAdapter.getPosition(appName);
+                        switch (radioGroup.getCheckedRadioButtonId()) {
+                            // remove if existed, else do nothing
+                            case R.id.use_default:
+                                if (position != -1) {
+                                    callingActivity.recyclerAdapter.removeWebsite(appName);
+                                }
+                                break;
+                            // change if existed, else add
+                            default:
+                                if (position != -1) {
+                                    callingActivity.recyclerAdapter.notifyItemChanged(position);
+                                } else {
+                                    callingActivity.recyclerAdapter.addWebsite(appName);
+                                }
+                        }
+                    }
                 }
             }
         });
