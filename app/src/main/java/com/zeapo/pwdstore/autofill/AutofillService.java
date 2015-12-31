@@ -90,6 +90,11 @@ public class AutofillService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        // TODO there should be a better way of disabling service
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return;
+        }
+
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && resultData != null) {
@@ -98,15 +103,20 @@ public class AutofillService extends AccessibilityService {
 
         // look for webView and trigger accessibility events if window changes
         // or if page changes in chrome
-        if ((event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                    && event.getSource().getPackageName().equals("com.android.chrome")))
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    && (event.getSource().getPackageName().equals("com.android.chrome")
+                        || event.getSource().getPackageName().equals("com.android.browser")))) {
             webViewTitle = searchWebView(getRootInActiveWindow());
+
             webViewURL = null;
-            if (webViewTitle != null && getRootInActiveWindow() != null) {
-                List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
-                        .findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+            if (webViewTitle != null) {
+                List<AccessibilityNodeInfo> nodes = new ArrayList<>();
+                if (event.getSource().getPackageName().equals("com.android.chrome")) {
+                    nodes = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+                } else if (event.getSource().getPackageName().equals("com.android.browser")) {
+                    nodes = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
+                }
                 for (AccessibilityNodeInfo node : nodes)
                     if (node.getText() != null) {
                         try {
@@ -123,10 +133,9 @@ public class AutofillService extends AccessibilityService {
             }
         }
 
-        // nothing to do if not password field focus, android version, or field is keychain app
+        // nothing to do if not password field focus, field is keychain app
         if (!event.isPassword()
                 || event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
             dismissDialog(event);
             return;
