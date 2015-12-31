@@ -109,6 +109,8 @@ public class AutofillService extends AccessibilityService {
                         || event.getSource().getPackageName().equals("com.android.browser")))) {
             webViewTitle = searchWebView(getRootInActiveWindow());
 
+            // non-null webViewTitle means there is a webView. But still somehow
+            // getRootInActiveWindow() can be null, when switching windows
             webViewURL = null;
             if (webViewTitle != null && getRootInActiveWindow() != null) {
                 List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
@@ -263,17 +265,15 @@ public class AutofillService extends AccessibilityService {
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
         SharedPreferences prefs;
         String preference;
+
+        // for websites unlike apps there can be blank preference of "" which
+        // means use default, so ignore it.
         if (!isWeb) {
             prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
             preference = prefs.getString(packageName, defValue);
         } else {
             prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
             preference = defValue;
-        }
-
-        // for websites unlike apps there can be blank preference of "" which
-        // means use default, so ignore it.
-        if (isWeb) {
             Map<String, ?> prefsMap = prefs.getAll();
             for (String key : prefsMap.keySet()) {
                 if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
@@ -362,6 +362,8 @@ public class AutofillService extends AccessibilityService {
             }
         });
 
+        // populate the dialog items, always with pick + pick and match. Could
+        // make it optional (or make height a setting for the same effect)
         CharSequence itemNames[] = new CharSequence[items.size() + 2];
         for (int i = 0; i < items.size(); i++) {
             itemNames[i] = items.get(i).getName().replace(".gpg", "");
@@ -380,7 +382,7 @@ public class AutofillService extends AccessibilityService {
                     intent.putExtra("pick", true);
                     startActivity(intent);
                 } else {
-                    lastWhichItem--;
+                    lastWhichItem--;    // will add one element to items, so lastWhichItem=items.size()+1
                     Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("pickMatchWith", true);

@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class AutofillPreferenceActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
     private RecyclerView.LayoutManager layoutManager;
 
@@ -51,6 +51,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         new populateTask().execute();
 
+        // if the preference activity was started from the autofill dialog
         recreate = false;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

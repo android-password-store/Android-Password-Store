@@ -50,7 +50,7 @@ public class AutofillFragment extends DialogFragment {
         final String appName = getArguments().getString("appName");
         isWeb = getArguments().getBoolean("isWeb");
 
-        // set the dialog icon and title or webName editText
+        // set the dialog icon and title or webURL editText
         String iconPackageName;
         if (!isWeb) {
             iconPackageName = packageName;
@@ -174,7 +174,7 @@ public class AutofillFragment extends DialogFragment {
                     if (isWeb) {
                         packageName = ((EditText) dialog.findViewById(R.id.webURL)).getText().toString();
 
-                        // handle some errors
+                        // handle some errors and don't dismiss the dialog
                         EditText webURL = (EditText) dialog.findViewById(R.id.webURL);
                         if (packageName.equals("")) {
                             webURL.setError("URL cannot be blank");
@@ -186,6 +186,8 @@ public class AutofillFragment extends DialogFragment {
                             return;
                         }
                     }
+
+                    // write to preferences accordingly
                     RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.autofill_radiogroup);
                     switch (radioGroup.getCheckedRadioButtonId()) {
                         case R.id.use_default:
@@ -213,7 +215,7 @@ public class AutofillFragment extends DialogFragment {
                     }
                     editor.apply();
 
-                    // if recyclerAdapter has not loaded yet, there is no need to notify
+                    // notify the recycler adapter if it is loaded
                     if (callingActivity.recyclerAdapter != null) {
                         int position;
                         if (!isWeb) {

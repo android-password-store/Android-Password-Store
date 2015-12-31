@@ -66,6 +66,8 @@ public class AutofillActivity extends AppCompatActivity {
                 break;
             case REQUEST_CODE_PICK_MATCH_WITH:
                 if (resultCode == RESULT_OK) {
+                    // need to not only decrypt the picked password, but also
+                    // update the "match with" preference
                     Bundle extras = getIntent().getExtras();
                     String packageName = extras.getString("packageName");
                     boolean isWeb = extras.getBoolean("isWeb");
