@@ -111,10 +111,9 @@ public class AutofillService extends AccessibilityService {
 
             webViewURL = null;
             if (webViewTitle != null) {
-                List<AccessibilityNodeInfo> nodes = new ArrayList<>();
-                if (event.getSource().getPackageName().equals("com.android.chrome")) {
-                    nodes = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
-                } else if (event.getSource().getPackageName().equals("com.android.browser")) {
+                List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
+                        .findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+                if (nodes.size() == 0) {
                     nodes = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
                 }
                 for (AccessibilityNodeInfo node : nodes)

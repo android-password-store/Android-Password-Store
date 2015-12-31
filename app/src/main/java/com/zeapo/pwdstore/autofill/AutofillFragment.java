@@ -137,7 +137,8 @@ public class AutofillFragment extends DialogFragment {
             builder.setNeutralButton(R.string.autofill_apps_delete, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (packageName != null && !packageName.equals("")) {
+                    if (((AutofillPreferenceActivity) getActivity()).recyclerAdapter != null
+                            && packageName != null && !packageName.equals("")) {
                         editor.remove(packageName);
                         ((AutofillPreferenceActivity) getActivity()).recyclerAdapter.removeWebsite(packageName);
                         editor.apply();
