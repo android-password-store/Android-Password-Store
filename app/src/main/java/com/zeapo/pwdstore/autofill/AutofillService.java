@@ -110,11 +110,12 @@ public class AutofillService extends AccessibilityService {
             webViewTitle = searchWebView(getRootInActiveWindow());
 
             webViewURL = null;
-            if (webViewTitle != null) {
+            if (webViewTitle != null && getRootInActiveWindow() != null) {
                 List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
                         .findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
-                if (nodes.size() == 0) {
-                    nodes = getRootInActiveWindow().findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
+                if (nodes.isEmpty()) {
+                    nodes = getRootInActiveWindow()
+                            .findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
                 }
                 for (AccessibilityNodeInfo node : nodes)
                     if (node.getText() != null) {
@@ -178,7 +179,11 @@ public class AutofillService extends AccessibilityService {
 
         String packageName;
         String appName;
-        if (webViewTitle == null) {
+        boolean isWeb;
+
+        // Match with the app if a webview was not found or one was found but
+        // there's no title or url to go by
+        if (webViewTitle == null || (webViewTitle.equals("") && webViewURL == null)) {
             packageName = info.getPackageName().toString();
 
             // get the app name and find a corresponding password
@@ -191,11 +196,13 @@ public class AutofillService extends AccessibilityService {
             }
             appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
-            setMatchingPasswords(appName, info.getPackageName().toString());
-        } else {
-            packageName = setMatchingPasswordsWeb(webViewTitle, webViewURL);
+            isWeb = false;
 
+            setMatchingPasswords(appName, packageName, false);
+        } else {
+            packageName = setMatchingPasswords(webViewTitle, webViewURL, true);
             appName = packageName;
+            isWeb = true;
         }
 
         // if autofill_always checked, show dialog even if no matches (automatic
@@ -203,7 +210,7 @@ public class AutofillService extends AccessibilityService {
         if (items.isEmpty() && !settings.getBoolean("autofill_always", false)) {
             return;
         }
-        showDialog(packageName, appName);
+        showDialog(packageName, appName, isWeb);
     }
 
     private String searchWebView(AccessibilityNodeInfo source) {
@@ -248,11 +255,35 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    private void setMatchingPasswords(String appName, String packageName) {
+    private String setMatchingPasswords(String appName, String packageName, boolean isWeb) {
+        // Return the URL needed to open the corresponding Settings.
+        String settingsURL = packageName;
+
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
-        SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(packageName, defValue);
+        SharedPreferences prefs;
+        String preference;
+        if (!isWeb) {
+            prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
+            preference = prefs.getString(packageName, defValue);
+        } else {
+            prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+            preference = defValue;
+        }
+
+        // for websites unlike apps there can be blank preference of "" which
+        // means use default, so ignore it.
+        if (isWeb) {
+            Map<String, ?> prefsMap = prefs.getAll();
+            for (String key : prefsMap.keySet()) {
+                if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
+                        && !prefs.getString(key, null).equals("")) {
+                    preference = prefs.getString(key, null);
+                    settingsURL = key;
+                }
+            }
+        }
+
         switch (preference) {
             case "/first":
                 if (!PasswordRepository.isInitialized()) {
@@ -262,34 +293,12 @@ public class AutofillService extends AccessibilityService {
                 break;
             case "/never":
                 items = new ArrayList<>();
-                return;
+                break;
             default:
                 getPreferredPasswords(preference);
         }
-    }
 
-    // Return the the matched preference's key, which isn't necessarily equal to
-    // the URL, if a preference is matched so it can be accessed with Settings.
-    private String setMatchingPasswordsWeb(String webViewTitle, String webViewURL) {
-        SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
-        Map<String, ?> prefsMap = prefs.getAll();
-        for (String key : prefsMap.keySet()) {
-            if (webViewURL.toLowerCase().contains(key.toLowerCase())) {
-                getPreferredPasswords(prefs.getString(key, ""));
-                return key;
-            }
-        }
-
-        // no user-defined match found, maybe auto match using title, not URL
-        if (settings.getBoolean("autofill_default", true)) {
-            if (!PasswordRepository.isInitialized()) {
-                PasswordRepository.initialize(this);
-            }
-            items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle);
-        } else {
-            items = new ArrayList<>();
-        }
-        return webViewURL;
+        return settingsURL;
     }
 
     // Put the newline separated list of passwords from the SharedPreferences
@@ -331,7 +340,7 @@ public class AutofillService extends AccessibilityService {
         return items;
     }
 
-    private void showDialog(final String packageName, final String appName) {
+    private void showDialog(final String packageName, final String appName, final boolean isWeb) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -348,46 +357,48 @@ public class AutofillService extends AccessibilityService {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("packageName", packageName);
                 intent.putExtra("appName", appName);
-                if (webViewTitle != null) {
-                    intent.putExtra("isWeb", true);
-                }
+                intent.putExtra("isWeb", isWeb);
                 startActivity(intent);
             }
         });
 
-        if (!items.isEmpty()) {
-            CharSequence itemNames[] = new CharSequence[items.size()];
-            for (int i = 0; i < items.size(); i++) {
-                itemNames[i] = items.get(i).getName().replace(".gpg", "");
-            }
-            builder.setItems(itemNames, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    lastWhichItem = which;
+        CharSequence itemNames[] = new CharSequence[items.size() + 2];
+        for (int i = 0; i < items.size(); i++) {
+            itemNames[i] = items.get(i).getName().replace(".gpg", "");
+        }
+        itemNames[items.size()] = "Pick...";
+        itemNames[items.size() + 1] = "Pick and match...";
+        builder.setItems(itemNames, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                lastWhichItem = which;
+                if (which < items.size()) {
                     bindDecryptAndVerify();
-                }
-            });
-        } else {
-            builder.setItems(new CharSequence[]{"Pick a password..."}, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    lastWhichItem = which; // always 0
-                    // TODO option to remember a pick for the future when possible? or option to have this always visible?
+                } else if (which == items.size()){
                     Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("matchWith", true);
+                    intent.putExtra("pick", true);
+                    startActivity(intent);
+                } else {
+                    lastWhichItem--;
+                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("pickMatchWith", true);
+                    intent.putExtra("packageName", packageName);
+                    intent.putExtra("isWeb", isWeb);
                     startActivity(intent);
                 }
-            });
-        }
+            }
+        });
+
         dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         // arbitrary non-annoying size
         int height = 154;
-        if (items.size() > 1) {
-            height += 33;
+        if (itemNames.length > 1) {
+            height += 46;
         }
         dialog.getWindow().setLayout((int) (240 * getApplicationContext().getResources().getDisplayMetrics().density)
                 , (int) (height * getApplicationContext().getResources().getDisplayMetrics().density));

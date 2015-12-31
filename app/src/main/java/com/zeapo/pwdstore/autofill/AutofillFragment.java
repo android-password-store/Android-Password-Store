@@ -39,7 +39,7 @@ public class AutofillFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // this fragment is only created from the settings page (AutofillPreferenceActivity)
         // need to interact with the recyclerAdapter which is a member of activity
-        AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
+        final AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
 
         final View view = inflater.inflate(R.layout.fragment_autofill, null);
@@ -137,10 +137,10 @@ public class AutofillFragment extends DialogFragment {
             builder.setNeutralButton(R.string.autofill_apps_delete, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (((AutofillPreferenceActivity) getActivity()).recyclerAdapter != null
+                    if (callingActivity.recyclerAdapter != null
                             && packageName != null && !packageName.equals("")) {
                         editor.remove(packageName);
-                        ((AutofillPreferenceActivity) getActivity()).recyclerAdapter.removeWebsite(packageName);
+                        callingActivity.recyclerAdapter.removeWebsite(packageName);
                         editor.apply();
                     }
                 }
@@ -181,8 +181,7 @@ public class AutofillFragment extends DialogFragment {
                             return;
                         }
                         String oldPackageName = getArguments().getString("packageName", "");
-                        int position = callingActivity.recyclerAdapter.getPosition(packageName);
-                        if (!oldPackageName.equals(packageName) && position != -1) {
+                        if (!oldPackageName.equals(packageName) && prefs.getAll().containsKey(packageName)) {
                             webURL.setError("URL already exists");
                             return;
                         }
