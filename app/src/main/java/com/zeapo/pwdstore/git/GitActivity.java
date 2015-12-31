@@ -45,7 +45,6 @@ public class GitActivity extends AppCompatActivity {
 
     private File localDir;
     private String hostname;
-    private String username;
     private String port;
 
     private SharedPreferences settings;
@@ -404,7 +403,7 @@ public class GitActivity extends AppCompatActivity {
     /**
      * Saves the configuration found in the form
      */
-    private void saveConfiguration() {
+    private boolean saveConfiguration() {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
@@ -416,11 +415,39 @@ public class GitActivity extends AppCompatActivity {
         editor.putString("git_remote_port", ((EditText) findViewById(R.id.server_port)).getText().toString());
         editor.putString("git_remote_uri", ((EditText) findViewById(R.id.clone_uri)).getText().toString());
 
+        // 'save' hostname variable for use by addRemote() either here or later
+        // in syncRepository()
+        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
+        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
+        // don't ask the user, take off the protocol that he puts in
+        hostname = hostname.replaceFirst("^.+://", "");
+        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
+
+        if (!protocol.equals("ssh://")) {
+            hostname = protocol + hostname;
+        } else {
+
+            // if the port is explicitly given, jgit requires the ssh://
+            if (!port.isEmpty())
+                hostname = protocol + hostname;
+
+            // did he forget the username?
+            if (!hostname.matches("^.+@.+")) {
+                new AlertDialog.Builder(this).
+                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
+                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null).
+                        show();
+                return false;
+            }
+        }
         if (PasswordRepository.isInitialized()) {
-            PasswordRepository.addRemote("origin", ((EditText) findViewById(R.id.clone_uri)).getText().toString(), true);
+            // don't just use the clone_uri text, need to use hostname which has
+            // had the proper protocol prepended
+            PasswordRepository.addRemote("origin", hostname, true);
         }
 
         editor.apply();
+        return true;
     }
 
     /**
@@ -429,7 +456,8 @@ public class GitActivity extends AppCompatActivity {
      * @param view
      */
     public void saveConfiguration(View view) {
-        saveConfiguration();
+        if (!saveConfiguration())
+            return;
         finish();
     }
 
@@ -443,45 +471,14 @@ public class GitActivity extends AppCompatActivity {
             PasswordRepository.initialize(this);
         }
         localDir = PasswordRepository.getWorkTree();
-        hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
-        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
-        // don't ask the user, take off the protocol that he puts in
-        hostname = hostname.replaceFirst("^.+://", "");
-        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
 
-        // now cheat a little and prepend the real protocol
-        // jGit does not accept a ssh:// but requires https://
-        if (!protocol.equals("ssh://")) {
-            hostname = protocol + hostname;
-        } else {
-
-            // if the port is explicitly given, jgit requires the ssh://
-            if (!port.isEmpty())
-                hostname = protocol + hostname;
-
-            // did he forget the username?
-            if (!hostname.matches("^.+@.+")) {
-                new AlertDialog.Builder(this).
-                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
-                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).
-                        show();
-                return;
-            }
-
-            username = hostname.split("@")[0];
-        }
-
-        saveConfiguration();
+        if (!saveConfiguration())
+            return;
 
         if (localDir.exists() && localDir.listFiles().length != 0) {
             new AlertDialog.Builder(this).
                     setTitle(R.string.dialog_delete_title).
-                    setMessage(R.string.dialog_delete_msg).
+                    setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString()).
                     setCancelable(false).
                     setPositiveButton(R.string.dialog_delete,
                             new DialogInterface.OnClickListener() {

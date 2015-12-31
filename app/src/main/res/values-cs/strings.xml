@@ -9,7 +9,7 @@
     <string name="action_settings">Nastavení</string>
     <string name="hello_world">Hello world!</string>
     <string name="dialog_delete_title">Adresář již existuje</string>
-    <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adresář úložiště hesel?</string>
+    <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adresář úložiště hesel:</string>
     <string name="dialog_delete">Smazat adresář</string>
     <string name="dialog_do_not_delete">Zrušit</string>
     <string name="title_activity_git_clone">Informace repozitáře</string>

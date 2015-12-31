@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -15,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableStringBuilder;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
@@ -23,12 +24,11 @@ import android.widget.Toast;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
+import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
-import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -124,7 +124,8 @@ public class UserPreference extends AppCompatActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     new AlertDialog.Builder(callingActivity).
                             setTitle(R.string.pref_dialog_delete_title).
-                            setMessage(R.string.pref_dialog_delete_msg).
+                            setMessage(getResources().getString(R.string.dialog_delete_msg)
+                                    + " \n" + PasswordRepository.getWorkTree().toString()).
                             setCancelable(false).
                             setPositiveButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
                                 @Override
@@ -230,6 +231,7 @@ public class UserPreference extends AppCompatActivity {
         public void onStart() {
             super.onStart();
             final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+            findPreference("pref_select_external").setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
             findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
 
             // see if the autofill service is enabled and check the preference accordingly
@@ -264,11 +266,32 @@ public class UserPreference extends AppCompatActivity {
     }
 
     public void selectExternalGitRepository() {
-        Intent intent = new Intent(this, DirectoryChooserActivity.class);
-        intent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME,
-                "passwordstore");
+        final Activity activity = this;
+        new AlertDialog.Builder(this).
+                setTitle("Choose where to store the passwords").
+                setMessage("You must select a directory where to store your passwords. If you want " +
+                        "to store your passwords within the hidden storage of the application, " +
+                        "cancel this dialog and disable the \"External Repository\" option.").
+                setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    // This always works
+                    Intent i = new Intent(activity.getApplicationContext(), FilePickerActivity.class);
+                    // This works if you defined the intent filter
+                    // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 
-        startActivityForResult(intent, SELECT_GIT_DIRECTORY);
+                    // Set these depending on your use case. These are the defaults.
+                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
+                    i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+
+                    i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+                    startActivityForResult(i, SELECT_GIT_DIRECTORY);
+                    }
+                }).
+                setNegativeButton(R.string.dialog_cancel, null).show();
+
     }
 
     @Override
@@ -344,6 +367,11 @@ public class UserPreference extends AppCompatActivity {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean("use_generated_key", false);
                         editor.apply();
+
+                        //delete the public key from generation
+                        File file = new File(getFilesDir() + "/.ssh_key.pub");
+                        file.delete();
+
                         setResult(RESULT_OK);
                         finish();
                     } catch (IOException e) {
@@ -371,17 +399,53 @@ public class UserPreference extends AppCompatActivity {
                     }
                 }
                 break;
+                case SELECT_GIT_DIRECTORY: {
+                    final Uri uri = data.getData();
+
+                    if (uri.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
+                        // the user wants to use the root of the sdcard as a store...
+                        new AlertDialog.Builder(this).
+                                setTitle("SD-Card root selected").
+                                setMessage("You have selected the root of your sdcard for the store. " +
+                                        "This is extremely dangerous and you will lose your data " +
+                                        "as its content will be deleted").
+                                setPositiveButton("Remove everything", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                                .edit()
+                                                .putString("git_external_repo", uri.getPath())
+                                                .apply();
+                                    }
+                                }).
+                                setNegativeButton(R.string.dialog_cancel, null).show();
+                    } else if (new File(uri.getPath()).listFiles().length != 0) {
+                        new AlertDialog.Builder(this).
+                                setTitle("Directory not empty").
+                                setMessage("You have selected a non-empty directory for the store. " +
+                                        "This is extremely dangerous and you will lose your data " +
+                                        "as its content will be deleted").
+                                setPositiveButton("Remove everything", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                                .edit()
+                                                .putString("git_external_repo", uri.getPath())
+                                                .apply();
+                                    }
+                                }).
+                                setNegativeButton(R.string.dialog_cancel, null).show();
+                    } else {
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                                .edit()
+                                .putString("git_external_repo", uri.getPath())
+                                .apply();
+                    }
+                }
+                break;
                 default:
                     break;
             }
-        }
-
-        // why do they have to use a different resultCode than OK :/
-        if (requestCode == SELECT_GIT_DIRECTORY && resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED) {
-            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                    .edit()
-                    .putString("git_external_repo", data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR))
-                    .apply();
         }
     }
 }
