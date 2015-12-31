@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:paddingBottom="20dp"
-                  android:paddingLeft="24dp"
-                  android:paddingRight="24dp"
-                  android:paddingTop="20dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="20dp"
+              android:paddingLeft="24dp"
+              android:paddingRight="24dp"
+              android:paddingTop="20dp">
 
-        <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:hintTextAppearance="@style/TextAppearance.AppCompat">
+    <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   app:hintTextAppearance="@style/TextAppearance.AppCompat">
 
-            <EditText
-                android:id="@+id/webName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/autofill_webname_hint"
-                android:inputType="textPersonName"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <RadioGroup
-            android:id="@+id/autofill_radiogroup"
+        <EditText
+            android:id="@+id/webURL"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:hint="@string/autofill_webURL_hint"
+            android:inputType="textUri"/>
+    </android.support.design.widget.TextInputLayout>
 
-            <RadioButton
-                android:id="@+id/use_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:checked="false"
-                android:text="@string/autofill_apps_default" />
+    <RadioGroup
+        android:id="@+id/autofill_radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:checked="false"
-                android:text="@string/autofill_apps_first" />
+        <RadioButton
+            android:id="@+id/use_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            android:text="@string/autofill_apps_default" />
 
-            <RadioButton
-                android:id="@+id/match"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:checked="false"
-                android:text="@string/autofill_apps_match_ellipsis" />
+        <RadioButton
+            android:id="@+id/first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            android:text="@string/autofill_apps_first" />
 
-            <ListView
-                android:id="@+id/matched"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"/>
+        <RadioButton
+            android:id="@+id/match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            android:text="@string/autofill_apps_match_ellipsis" />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+"
-                android:id="@+id/matchButton"
-                android:layout_gravity="center_horizontal"/>
+        <ListView
+            android:id="@+id/matched"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"/>
 
-            <RadioButton
-                android:id="@+id/never"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:checked="false"
-                android:text="@string/autofill_apps_never"/>
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:id="@+id/matchButton"
+            android:layout_gravity="center_horizontal"/>
 
-        </RadioGroup>
+        <RadioButton
+            android:id="@+id/never"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            android:text="@string/autofill_apps_never"/>
 
-    </LinearLayout>
+    </RadioGroup>
+
+</LinearLayout>

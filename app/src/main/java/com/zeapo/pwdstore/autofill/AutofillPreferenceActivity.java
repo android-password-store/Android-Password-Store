@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class AutofillPreferenceActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
     private RecyclerView.LayoutManager layoutManager;
 
@@ -56,7 +56,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         if (extras != null) {
             recreate = true;
 
-            showDialog(extras.getString("packageName"), extras.getString("appName"));
+            showDialog(extras.getString("packageName"), extras.getString("appName"), extras.getBoolean("isWeb"));
         }
 
         setTitle("Autofill Apps");
@@ -65,7 +65,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog("", "");
+                showDialog("", "", true);
             }
         });
     }
@@ -85,16 +85,16 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
             for (ResolveInfo app : allAppsResolveInfo) {
                 allApps.add(new AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName
-                        , app.loadLabel(pm).toString(), app.loadIcon(pm)));
+                        , app.loadLabel(pm).toString(), false, app.loadIcon(pm)));
             }
 
             SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
             Map<String, ?> prefsMap = prefs.getAll();
             for (String key : prefsMap.keySet()) {
                 try {
-                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, pm.getApplicationIcon("com.android.browser")));
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, pm.getApplicationIcon("com.android.browser")));
                 } catch (PackageManager.NameNotFoundException e) {
-                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, null));
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, null));
                 }
             }
 
@@ -158,11 +158,12 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showDialog(String packageName, String appName) {
+    public void showDialog(String packageName, String appName, boolean isWeb) {
         DialogFragment df = new AutofillFragment();
         Bundle args = new Bundle();
         args.putString("packageName", packageName);
         args.putString("appName", appName);
+        args.putBoolean("isWeb", isWeb);
         df.setArguments(args);
         df.show(getFragmentManager(), "autofill_dialog");
     }

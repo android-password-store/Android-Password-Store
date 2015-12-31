@@ -156,8 +156,11 @@ public class AutofillService extends AccessibilityService {
             window = info.getWindow();
         }
 
+        String packageName;
         String appName;
         if (webViewTitle == null) {
+            packageName = info.getPackageName().toString();
+
             // get the app name and find a corresponding password
             PackageManager packageManager = getPackageManager();
             ApplicationInfo applicationInfo;
@@ -169,9 +172,10 @@ public class AutofillService extends AccessibilityService {
             appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
 
             setMatchingPasswords(appName, info.getPackageName().toString());
-
         } else {
-            appName = setMatchingPasswordsWeb(webViewTitle);
+            packageName = setMatchingPasswordsWeb(webViewTitle, webViewURL);
+
+            appName = packageName;
         }
 
         // if autofill_always checked, show dialog even if no matches (automatic
@@ -179,7 +183,7 @@ public class AutofillService extends AccessibilityService {
         if (items.isEmpty() && !settings.getBoolean("autofill_always", false)) {
             return;
         }
-        showDialog(appName);
+        showDialog(packageName, appName);
     }
 
     private String searchWebView(AccessibilityNodeInfo source) {
@@ -244,17 +248,19 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    // return key for opening its Settings. Otherwise just use the title
-    private String setMatchingPasswordsWeb(String webViewTitle) {
+    // Return the the matched preference's key, which isn't necessarily equal to
+    // the URL, if a preference is matched so it can be accessed with Settings.
+    private String setMatchingPasswordsWeb(String webViewTitle, String webViewURL) {
         SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
         Map<String, ?> prefsMap = prefs.getAll();
         for (String key : prefsMap.keySet()) {
-            if (webViewTitle.toLowerCase().contains(key.toLowerCase())) {
+            if (webViewURL.toLowerCase().contains(key.toLowerCase())) {
                 getPreferredPasswords(prefs.getString(key, ""));
                 return key;
             }
         }
-        // possible user-defined match not found, try default setting
+
+        // no user-defined match found, maybe auto match using title, not URL
         if (settings.getBoolean("autofill_default", true)) {
             if (!PasswordRepository.isInitialized()) {
                 PasswordRepository.initialize(this);
@@ -263,7 +269,7 @@ public class AutofillService extends AccessibilityService {
         } else {
             items = new ArrayList<>();
         }
-        return webViewTitle;
+        return webViewURL;
     }
 
     // Put the newline separated list of passwords from the SharedPreferences
@@ -305,7 +311,7 @@ public class AutofillService extends AccessibilityService {
         return items;
     }
 
-    private void showDialog(final String appName) {
+    private void showDialog(final String packageName, final String appName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -320,12 +326,11 @@ public class AutofillService extends AccessibilityService {
                 // the user will have to return to the app themselves.
                 Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                if (webViewTitle == null) {
-                    intent.putExtra("packageName", info.getPackageName());
-                } else {
-                    intent.putExtra("packageName", appName);
-                }
+                intent.putExtra("packageName", packageName);
                 intent.putExtra("appName", appName);
+                if (webViewTitle != null) {
+                    intent.putExtra("isWeb", true);
+                }
                 startActivity(intent);
             }
         });

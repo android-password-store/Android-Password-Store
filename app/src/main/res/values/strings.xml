@@ -171,5 +171,5 @@
     <string name="autofill_apps_match_ellipsis">Match with…</string>
     <string name="autofill_apps_match">Match with</string>
     <string name="autofill_apps_never">Never match</string>
-    <string name="autofill_webname_hint">Name</string>
+    <string name="autofill_webURL_hint">URL</string>
 </resources>

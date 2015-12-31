@@ -24,6 +24,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     private ArrayList<AppInfo> allApps; // for filtering, maintain a list of all
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
+    Drawable browserIcon = null;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public View view;
@@ -32,6 +33,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         public ImageView icon;
         public String packageName;
         public String appName;
+        public Boolean isWeb;
 
         public ViewHolder(View view) {
             super(view);
@@ -44,7 +46,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
         @Override
         public void onClick(View v) {
-            activity.showDialog(packageName, appName);
+            activity.showDialog(packageName, appName, isWeb);
         }
 
     }
@@ -52,11 +54,13 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     public static class AppInfo {
         public String packageName;
         public String appName;
+        public boolean isWeb;
         public Drawable icon;
 
-        public AppInfo(String packageName, String appName, Drawable icon) {
+        public AppInfo(String packageName, String appName, boolean isWeb, Drawable icon) {
             this.packageName = packageName;
             this.appName = appName;
+            this.isWeb = isWeb;
             this.icon = icon;
         }
 
@@ -91,6 +95,11 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         this.allApps = new ArrayList<>(allApps);
         this.pm = pm;
         this.activity = activity;
+        try {
+            browserIcon = activity.getPackageManager().getApplicationIcon("com.android.browser");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -105,6 +114,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         AppInfo app = apps.get(position);
         holder.packageName = app.packageName;
         holder.appName = app.appName;
+        holder.isWeb = app.isWeb;
 
         holder.icon.setImageDrawable(app.icon);
         holder.name.setText(app.appName);
@@ -147,23 +157,24 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
     }
 
     public int getPosition(String appName) {
-        return apps.indexOf(new AppInfo(null, appName, null));
+        return apps.indexOf(new AppInfo(null, appName, false, null));
     }
 
-    public void addWebsite(String appName) {
-        Drawable icon = null;
-        try {
-            icon = activity.getPackageManager().getApplicationIcon("com.android.browser");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        apps.add(new AppInfo(appName, appName, icon));
-        allApps.add(new AppInfo(appName, appName, icon));
+    // for websites, URL = packageName == appName
+    public void addWebsite(String packageName) {
+        apps.add(new AppInfo(packageName, packageName, true, browserIcon));
+        allApps.add(new AppInfo(packageName, packageName, true, browserIcon));
     }
 
-    public void removeWebsite(String appName) {
-        apps.remove(new AppInfo(null, appName, null));
-        allApps.remove(new AppInfo(null, appName, null)); // compare with equals
+    public void removeWebsite(String packageName) {
+        apps.remove(new AppInfo(null, packageName, false, null));
+        allApps.remove(new AppInfo(null, packageName, false, null)); // compare with equals
+    }
+
+    public void updateWebsite(String oldPackageName, String packageName) {
+        apps.updateItemAt(getPosition(oldPackageName), new AppInfo (packageName, packageName, true, browserIcon));
+        allApps.remove(new AppInfo(null, oldPackageName, false, null)); // compare with equals
+        allApps.add(new AppInfo(null, packageName, false, null));
     }
 
     public void filter(String s) {
