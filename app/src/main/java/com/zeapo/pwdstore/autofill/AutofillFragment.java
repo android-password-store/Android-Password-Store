@@ -46,8 +46,8 @@ public class AutofillFragment extends DialogFragment {
 
         builder.setView(view);
 
-        String packageName = getArguments().getString("packageName");
-        String appName = getArguments().getString("appName");
+        final String packageName = getArguments().getString("packageName");
+        final String appName = getArguments().getString("appName");
         isWeb = getArguments().getBoolean("isWeb");
 
         // set the dialog icon and title or webName editText
@@ -132,6 +132,19 @@ public class AutofillFragment extends DialogFragment {
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, null);
+        final SharedPreferences.Editor editor = prefs.edit();
+        if (isWeb) {
+            builder.setNeutralButton(R.string.autofill_apps_delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (packageName != null && !packageName.equals("")) {
+                        editor.remove(packageName);
+                        ((AutofillPreferenceActivity) getActivity()).recyclerAdapter.removeWebsite(packageName);
+                        editor.apply();
+                    }
+                }
+            });
+        }
         return builder.create();
     }
 

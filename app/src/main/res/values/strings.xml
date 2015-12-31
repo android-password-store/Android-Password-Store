@@ -171,5 +171,5 @@
     <string name="autofill_apps_match_ellipsis">Match with…</string>
     <string name="autofill_apps_match">Match with</string>
     <string name="autofill_apps_never">Never match</string>
-    <string name="autofill_webURL_hint">URL</string>
+    <string name="autofill_apps_delete">Delete</string>
 </resources>
