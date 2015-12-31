@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AutofillService extends AccessibilityService {
+    private static AutofillService instance;
     private OpenPgpServiceConnection serviceConnection;
     private SharedPreferences settings;
     private AccessibilityNodeInfo info; // the original source of the event (the edittext field)
@@ -51,7 +52,7 @@ public class AutofillService extends AccessibilityService {
     private int lastWhichItem;
     private AlertDialog dialog;
     private AccessibilityWindowInfo window;
-    private static Intent resultData = null; // need the intent which contains results from user interaction
+    private Intent resultData = null; // need the intent which contains results from user interaction
     private CharSequence packageName;
     private boolean ignoreActionFocus = false;
     private String webViewTitle = null;
@@ -61,7 +62,22 @@ public class AutofillService extends AccessibilityService {
         public static final String TAG = "Keychain";
     }
 
-    public static void setResultData(Intent data) { resultData = data; }
+    public static AutofillService getInstance() {
+        return instance;
+    }
+
+    public void setResultData(Intent data) { resultData = data; }
+
+    public void setPickedPassword(String path) {
+        items.add(new File(PasswordRepository.getWorkTree() + "/" + path + ".gpg"));
+        bindDecryptAndVerify();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+    }
 
     @Override
     protected void onServiceConnected() {
@@ -88,7 +104,7 @@ public class AutofillService extends AccessibilityService {
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             webViewTitle = searchWebView(getRootInActiveWindow());
             webViewURL = null;
-            if (webViewTitle != null) {
+            if (webViewTitle != null && getRootInActiveWindow() != null) {
                 List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
                         .findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
                 for (AccessibilityNodeInfo node : nodes)
@@ -105,10 +121,6 @@ public class AutofillService extends AccessibilityService {
                         }
                     }
             }
-            if (webViewTitle != null)
-                Log.d("Title", webViewTitle);
-            if (webViewURL != null)
-                Log.d("URL", webViewURL);
         }
 
         // nothing to do if not password field focus, android version, or field is keychain app
@@ -335,28 +347,37 @@ public class AutofillService extends AccessibilityService {
             }
         });
 
-        CharSequence itemNames[] = new CharSequence[items.size()];
-        for (int i = 0; i < items.size(); i++) {
-            itemNames[i] = items.get(i).getName().replace(".gpg", "");
-        }
-
-        builder.setItems(itemNames, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                lastWhichItem = which;
-                bindDecryptAndVerify();
+        if (!items.isEmpty()) {
+            CharSequence itemNames[] = new CharSequence[items.size()];
+            for (int i = 0; i < items.size(); i++) {
+                itemNames[i] = items.get(i).getName().replace(".gpg", "");
             }
-        });
-
+            builder.setItems(itemNames, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    lastWhichItem = which;
+                    bindDecryptAndVerify();
+                }
+            });
+        } else {
+            builder.setItems(new CharSequence[]{"Pick a password..."}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    lastWhichItem = which; // always 0
+                    // TODO option to remember a pick for the future when possible? or option to have this always visible?
+                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("matchWith", true);
+                    startActivity(intent);
+                }
+            });
+        }
         dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         // arbitrary non-annoying size
-        int height = 88;
-        if (items.size() > 0) {
-            height += 66;
-        }
+        int height = 154;
         if (items.size() > 1) {
             height += 33;
         }
