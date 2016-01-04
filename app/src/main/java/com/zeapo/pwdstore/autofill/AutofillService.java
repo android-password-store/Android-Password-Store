@@ -105,6 +105,7 @@ public class AutofillService extends AccessibilityService {
         // or if page changes in chrome
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+                    && event.getSource() != null
                     && (event.getSource().getPackageName().equals("com.android.chrome")
                         || event.getSource().getPackageName().equals("com.android.browser")))) {
             webViewTitle = searchWebView(getRootInActiveWindow());
@@ -164,7 +165,7 @@ public class AutofillService extends AccessibilityService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getApplicationContext().getPackageName()));
+                    Uri.parse("package:" + getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             return;
