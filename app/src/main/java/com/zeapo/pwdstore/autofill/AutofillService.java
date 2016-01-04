@@ -108,17 +108,14 @@ public class AutofillService extends AccessibilityService {
                     && event.getSource() != null
                     && (event.getSource().getPackageName().equals("com.android.chrome")
                         || event.getSource().getPackageName().equals("com.android.browser")))) {
-            webViewTitle = searchWebView(getRootInActiveWindow());
-
-            // non-null webViewTitle means there is a webView. But still somehow
-            // getRootInActiveWindow() can be null, when switching windows
+            // there is a chance for getRootInActiveWindow() to return null at any time. save it.
+            AccessibilityNodeInfo root = getRootInActiveWindow();
+            webViewTitle = searchWebView(root);
             webViewURL = null;
-            if (webViewTitle != null && getRootInActiveWindow() != null) {
-                List<AccessibilityNodeInfo> nodes = getRootInActiveWindow()
-                        .findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+            if (webViewTitle != null) {
+                List<AccessibilityNodeInfo> nodes = root.findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
                 if (nodes.isEmpty()) {
-                    nodes = getRootInActiveWindow()
-                            .findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
+                    nodes = root.findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
                 }
                 for (AccessibilityNodeInfo node : nodes)
                     if (node.getText() != null) {
