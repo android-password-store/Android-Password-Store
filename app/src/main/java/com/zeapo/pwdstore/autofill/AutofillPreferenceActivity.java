@@ -1,12 +1,14 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.MenuItemCompat;
@@ -14,15 +16,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.zeapo.pwdstore.R;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AutofillPreferenceActivity extends AppCompatActivity {
 
@@ -49,15 +51,24 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         new populateTask().execute();
 
+        // if the preference activity was started from the autofill dialog
         recreate = false;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             recreate = true;
 
-            showDialog(extras.getString("packageName"), extras.getString("appName"));
+            showDialog(extras.getString("packageName"), extras.getString("appName"), extras.getBoolean("isWeb"));
         }
 
         setTitle("Autofill Apps");
+
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog("", "", true);
+            }
+        });
     }
 
     private class populateTask extends AsyncTask<Void, Void, Void> {
@@ -70,15 +81,25 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> allApps = pm.queryIntentActivities(intent, 0);
+            List<ResolveInfo> allAppsResolveInfo = pm.queryIntentActivities(intent, 0);
+            List<AutofillRecyclerAdapter.AppInfo> allApps = new ArrayList<>();
 
-            HashMap<String, Pair<Drawable, String>> iconMap = new HashMap<>(allApps.size());
-            for (ResolveInfo app : allApps) {
-                iconMap.put(app.activityInfo.packageName
-                        , Pair.create(app.loadIcon(pm), app.loadLabel(pm).toString()));
+            for (ResolveInfo app : allAppsResolveInfo) {
+                allApps.add(new AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName
+                        , app.loadLabel(pm).toString(), false, app.loadIcon(pm)));
             }
 
-            recyclerAdapter = new AutofillRecyclerAdapter(allApps, iconMap, pm, AutofillPreferenceActivity.this);
+            SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+            Map<String, ?> prefsMap = prefs.getAll();
+            for (String key : prefsMap.keySet()) {
+                try {
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, pm.getApplicationIcon("com.android.browser")));
+                } catch (PackageManager.NameNotFoundException e) {
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, null));
+                }
+            }
+
+            recyclerAdapter = new AutofillRecyclerAdapter(allApps, pm, AutofillPreferenceActivity.this);
             return null;
         }
 
@@ -89,7 +110,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
             recyclerView.setAdapter(recyclerAdapter);
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("packageName")));
+                recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
             }
         }
     }
@@ -138,11 +159,12 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showDialog(String packageName, String appName) {
+    public void showDialog(String packageName, String appName, boolean isWeb) {
         DialogFragment df = new AutofillFragment();
         Bundle args = new Bundle();
         args.putString("packageName", packageName);
         args.putString("appName", appName);
+        args.putBoolean("isWeb", isWeb);
         df.setArguments(args);
         df.show(getFragmentManager(), "autofill_dialog");
     }

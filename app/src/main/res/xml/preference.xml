@@ -79,7 +79,6 @@
         <Preference
             android:dependency="autofill_enable"
             android:key="autofill_apps"
-            android:summary="@string/pref_autofill_apps_hint"
             android:title="@string/pref_autofill_apps_title"/>
         <CheckBoxPreference
             android:dependency="autofill_enable"
@@ -87,6 +86,11 @@
             android:key="autofill_default"
             android:summary="@string/pref_autofill_default_hint"
             android:title="@string/pref_autofill_default_title"/>
+        <CheckBoxPreference
+            android:dependency="autofill_enable"
+            android:defaultValue="false"
+            android:key="autofill_always"
+            android:title="@string/pref_autofill_always_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Misc">

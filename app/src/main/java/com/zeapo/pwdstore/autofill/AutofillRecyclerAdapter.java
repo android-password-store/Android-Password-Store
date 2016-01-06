@@ -3,12 +3,10 @@ package com.zeapo.pwdstore.autofill;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +16,15 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
-    private SortedList<ResolveInfo> apps;
-    private ArrayList<ResolveInfo> allApps;
-    private HashMap<String, Pair<Drawable, String>> iconMap;
+
+    private SortedList<AppInfo> apps;
+    private ArrayList<AppInfo> allApps; // for filtering, maintain a list of all
     private PackageManager pm;
     private AutofillPreferenceActivity activity;
+    Drawable browserIcon = null;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public View view;
@@ -34,6 +32,8 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         public TextView secondary;
         public ImageView icon;
         public String packageName;
+        public String appName;
+        public Boolean isWeb;
 
         public ViewHolder(View view) {
             super(view);
@@ -46,35 +46,60 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
         @Override
         public void onClick(View v) {
-            activity.showDialog(packageName, name.getText().toString());
+            activity.showDialog(packageName, appName, isWeb);
         }
 
     }
 
-    public AutofillRecyclerAdapter(List<ResolveInfo> allApps, HashMap<String, Pair<Drawable, String>> iconMap
-            , final PackageManager pm, AutofillPreferenceActivity activity) {
-         SortedList.Callback<ResolveInfo> callback = new SortedListAdapterCallback<ResolveInfo>(this) {
+    public static class AppInfo {
+        public String packageName;
+        public String appName;
+        public boolean isWeb;
+        public Drawable icon;
+
+        public AppInfo(String packageName, String appName, boolean isWeb, Drawable icon) {
+            this.packageName = packageName;
+            this.appName = appName;
+            this.isWeb = isWeb;
+            this.icon = icon;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o != null && o instanceof AppInfo && this.appName.equals(((AppInfo) o).appName);
+        }
+    }
+
+    public AutofillRecyclerAdapter(List<AppInfo> allApps, final PackageManager pm
+            , AutofillPreferenceActivity activity) {
+        SortedList.Callback<AppInfo> callback = new SortedListAdapterCallback<AppInfo>(this) {
+            // don't take into account secondary text. This is good enough
+            // for the limited add/remove usage for websites
             @Override
-            public int compare(ResolveInfo o1, ResolveInfo o2) {
-                return o1.loadLabel(pm).toString().toLowerCase().compareTo(o2.loadLabel(pm).toString().toLowerCase());
+            public int compare(AppInfo o1, AppInfo o2) {
+             return o1.appName.toLowerCase().compareTo(o2.appName.toLowerCase());
             }
 
             @Override
-            public boolean areContentsTheSame(ResolveInfo oldItem, ResolveInfo newItem) {
-                return oldItem.loadLabel(pm).toString().equals(newItem.loadLabel(pm).toString());
+            public boolean areContentsTheSame(AppInfo oldItem, AppInfo newItem) {
+             return oldItem.appName.equals(newItem.appName);
             }
 
             @Override
-            public boolean areItemsTheSame(ResolveInfo item1, ResolveInfo item2) {
-                return item1.loadLabel(pm).toString().equals(item2.loadLabel(pm).toString());
+            public boolean areItemsTheSame(AppInfo item1, AppInfo item2) {
+             return item1.appName.equals(item2.appName);
             }
         };
-        this.apps = new SortedList<>(ResolveInfo.class, callback);
+        this.apps = new SortedList<>(AppInfo.class, callback);
         this.apps.addAll(allApps);
         this.allApps = new ArrayList<>(allApps);
-        this.iconMap = new HashMap<>(iconMap);
         this.pm = pm;
         this.activity = activity;
+        try {
+            browserIcon = activity.getPackageManager().getApplicationIcon("com.android.browser");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -86,17 +111,23 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     @Override
     public void onBindViewHolder(AutofillRecyclerAdapter.ViewHolder holder, int position) {
-        ResolveInfo app = apps.get(position);
-        holder.packageName = app.activityInfo.packageName;
+        AppInfo app = apps.get(position);
+        holder.packageName = app.packageName;
+        holder.appName = app.appName;
+        holder.isWeb = app.isWeb;
 
-        holder.icon.setImageDrawable(iconMap.get(holder.packageName).first);
-        holder.name.setText(iconMap.get(holder.packageName).second);
+        holder.icon.setImageDrawable(app.icon);
+        holder.name.setText(app.appName);
 
         holder.secondary.setVisibility(View.VISIBLE);
         holder.view.setBackgroundResource(R.color.grey_white_1000);
 
-        SharedPreferences prefs
-                = activity.getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        SharedPreferences prefs;
+        if (!app.appName.equals(app.packageName)) {
+            prefs = activity.getApplicationContext().getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        } else {
+            prefs = activity.getApplicationContext().getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+        }
         String preference = prefs.getString(holder.packageName, "");
         switch (preference) {
             case "":
@@ -110,7 +141,12 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
                 holder.secondary.setText(R.string.autofill_apps_never);
                 break;
             default:
-                holder.secondary.setText("Match with " + preference);
+                holder.secondary.setText(R.string.autofill_apps_match);
+                holder.secondary.append(" " + preference.split("\n")[0]);
+                if ((preference.trim().split("\n").length - 1) > 0) {
+                    holder.secondary.append(" and "
+                            + (preference.trim().split("\n").length - 1) + " more");
+                }
                 break;
         }
     }
@@ -120,13 +156,25 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         return apps.size();
     }
 
-    public int getPosition(String packageName) {
-        for (int i = 0; i < apps.size(); i++) {
-            if (apps.get(i).activityInfo.packageName.equals(packageName)) {
-                return i;
-            }
-        }
-        return -1;
+    public int getPosition(String appName) {
+        return apps.indexOf(new AppInfo(null, appName, false, null));
+    }
+
+    // for websites, URL = packageName == appName
+    public void addWebsite(String packageName) {
+        apps.add(new AppInfo(packageName, packageName, true, browserIcon));
+        allApps.add(new AppInfo(packageName, packageName, true, browserIcon));
+    }
+
+    public void removeWebsite(String packageName) {
+        apps.remove(new AppInfo(null, packageName, false, null));
+        allApps.remove(new AppInfo(null, packageName, false, null)); // compare with equals
+    }
+
+    public void updateWebsite(String oldPackageName, String packageName) {
+        apps.updateItemAt(getPosition(oldPackageName), new AppInfo (packageName, packageName, true, browserIcon));
+        allApps.remove(new AppInfo(null, oldPackageName, false, null)); // compare with equals
+        allApps.add(new AppInfo(null, packageName, false, null));
     }
 
     public void filter(String s) {
@@ -135,8 +183,8 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
             return;
         }
         apps.beginBatchedUpdates();
-        for (ResolveInfo app : allApps) {
-            if (app.loadLabel(pm).toString().toLowerCase().contains(s.toLowerCase())) {
+        for (AppInfo app : allApps) {
+            if (app.appName.toLowerCase().contains(s.toLowerCase())) {
                 apps.add(app);
             } else {
                 apps.remove(app);

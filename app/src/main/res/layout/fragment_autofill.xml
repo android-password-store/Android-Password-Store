@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="20dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingTop="20dp">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="20dp"
+              android:paddingLeft="24dp"
+              android:paddingRight="24dp"
+              android:paddingTop="20dp">
+
+    <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   app:hintTextAppearance="@style/TextAppearance.AppCompat">
+
+        <EditText
+            android:id="@+id/webURL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL"
+            android:inputType="textUri"/>
+    </android.support.design.widget.TextInputLayout>
 
     <RadioGroup
         android:id="@+id/autofill_radiogroup"
@@ -37,12 +51,20 @@
             android:checked="false"
             android:text="@string/autofill_apps_match_ellipsis" />
 
-        <EditText
+        <ListView
             android:id="@+id/matched"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:editable="false" />
+            android:layout_weight="1"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:id="@+id/matchButton"
+            android:layout_gravity="center_horizontal"/>
 
         <RadioButton
             android:id="@+id/never"
@@ -50,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:checked="false"
-            android:text="@string/autofill_apps_never" />
+            android:text="@string/autofill_apps_never"/>
 
     </RadioGroup>
 

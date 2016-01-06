@@ -24,7 +24,6 @@ import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
 
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
@@ -38,24 +37,47 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AutofillService extends AccessibilityService {
+    private static AutofillService instance;
     private OpenPgpServiceConnection serviceConnection;
     private SharedPreferences settings;
     private AccessibilityNodeInfo info; // the original source of the event (the edittext field)
-    private ArrayList<PasswordItem> items; // password choices
+    private ArrayList<File> items; // password choices
+    private int lastWhichItem;
     private AlertDialog dialog;
     private AccessibilityWindowInfo window;
-    private static Intent resultData = null; // need the intent which contains results from user interaction
+    private Intent resultData = null; // need the intent which contains results from user interaction
     private CharSequence packageName;
     private boolean ignoreActionFocus = false;
+    private String webViewTitle = null;
+    private String webViewURL = null;
 
     public final class Constants {
         public static final String TAG = "Keychain";
     }
 
-    public static void setResultData(Intent data) { resultData = data; }
+    public static AutofillService getInstance() {
+        return instance;
+    }
+
+    public void setResultData(Intent data) { resultData = data; }
+
+    public void setPickedPassword(String path) {
+        items.add(new File(PasswordRepository.getWorkTree() + "/" + path + ".gpg"));
+        bindDecryptAndVerify();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+    }
 
     @Override
     protected void onServiceConnected() {
@@ -66,18 +88,54 @@ public class AutofillService extends AccessibilityService {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
-    // TODO change search/search results (just use first result)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        // TODO there should be a better way of disabling service
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return;
+        }
+
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName().equals(packageName) && resultData != null) {
             bindDecryptAndVerify();
         }
 
-        // nothing to do if not password field focus, android version, or field is keychain app
+        // look for webView and trigger accessibility events if window changes
+        // or if page changes in chrome
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+                || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+                    && event.getSource() != null
+                    && (event.getSource().getPackageName().equals("com.android.chrome")
+                        || event.getSource().getPackageName().equals("com.android.browser")))) {
+            // there is a chance for getRootInActiveWindow() to return null at any time. save it.
+            AccessibilityNodeInfo root = getRootInActiveWindow();
+            webViewTitle = searchWebView(root);
+            webViewURL = null;
+            if (webViewTitle != null) {
+                List<AccessibilityNodeInfo> nodes = root.findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+                if (nodes.isEmpty()) {
+                    nodes = root.findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
+                }
+                for (AccessibilityNodeInfo node : nodes)
+                    if (node.getText() != null) {
+                        try {
+                            webViewURL = new URL(node.getText().toString()).getHost();
+                        } catch (MalformedURLException e) {
+                            if (e.toString().contains("Protocol not found")) {
+                                try {
+                                    webViewURL = new URL("http://" + node.getText().toString()).getHost();
+                                } catch (MalformedURLException ignored) {
+                                }
+                            }
+                        }
+                    }
+            }
+        }
+
+        // nothing to do if not password field focus, field is keychain app
         if (!event.isPassword()
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
+                || event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
                 || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
             dismissDialog(event);
             return;
@@ -91,6 +149,7 @@ public class AutofillService extends AccessibilityService {
             }
             // if it was not a click, the field was refocused or another field was focused; recreate
             dialog.dismiss();
+            dialog = null;
         }
 
         // ignore the ACTION_FOCUS from decryptAndVerify otherwise dialog will appear after Fill
@@ -103,12 +162,14 @@ public class AutofillService extends AccessibilityService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && !Settings.canDrawOverlays(this)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getApplicationContext().getPackageName()));
+                    Uri.parse("package:" + getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             return;
         }
 
+        // we are now going to attempt to fill, save AccessibilityNodeInfo for later in decryptAndVerify
+        // (there should be a proper way to do this, although this seems to work 90% of the time)
         info = event.getSource();
 
         // save the dialog's corresponding window so we can use getWindows() in dismissDialog
@@ -116,22 +177,63 @@ public class AutofillService extends AccessibilityService {
             window = info.getWindow();
         }
 
-        // get the app name and find a corresponding password
-        PackageManager packageManager = getPackageManager();
-        ApplicationInfo applicationInfo;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(event.getPackageName().toString(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            applicationInfo = null;
-        }
-        final String appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
+        String packageName;
+        String appName;
+        boolean isWeb;
 
-        getMatchingPassword(appName, info.getPackageName().toString());
-        if (items.isEmpty()) {
+        // Match with the app if a webview was not found or one was found but
+        // there's no title or url to go by
+        if (webViewTitle == null || (webViewTitle.equals("") && webViewURL == null)) {
+            packageName = info.getPackageName().toString();
+
+            // get the app name and find a corresponding password
+            PackageManager packageManager = getPackageManager();
+            ApplicationInfo applicationInfo;
+            try {
+                applicationInfo = packageManager.getApplicationInfo(event.getPackageName().toString(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                applicationInfo = null;
+            }
+            appName = (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "").toString();
+
+            isWeb = false;
+
+            setMatchingPasswords(appName, packageName, false);
+        } else {
+            packageName = setMatchingPasswords(webViewTitle, webViewURL, true);
+            appName = packageName;
+            isWeb = true;
+        }
+
+        // if autofill_always checked, show dialog even if no matches (automatic
+        // or otherwise)
+        if (items.isEmpty() && !settings.getBoolean("autofill_always", false)) {
             return;
         }
+        showDialog(packageName, appName, isWeb);
+    }
 
-        showDialog(appName);
+    private String searchWebView(AccessibilityNodeInfo source) {
+        if (source == null) {
+            return null;
+        }
+        for (int i = 0; i < source.getChildCount(); i++) {
+            AccessibilityNodeInfo u = source.getChild(i);
+            if (u == null) {
+                continue;
+            }
+            if (u.getClassName() != null && u.getClassName().equals("android.webkit.WebView")) {
+                if (u.getContentDescription() != null) {
+                    return u.getContentDescription().toString();
+                }
+                return "";
+            }
+            if (searchWebView(u) != null) {
+                return searchWebView(u);
+            }
+            u.recycle();
+        }
+        return null;
     }
 
     // dismiss the dialog if the window has changed
@@ -149,80 +251,157 @@ public class AutofillService extends AccessibilityService {
         }
         if (dismiss && dialog != null && dialog.isShowing()) {
             dialog.dismiss();
+            dialog = null;
         }
     }
 
-    private void getMatchingPassword(String appName, String packageName) {
+    private String setMatchingPasswords(String appName, String packageName, boolean isWeb) {
+        // Return the URL needed to open the corresponding Settings.
+        String settingsURL = packageName;
+
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
-        SharedPreferences prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
-        String preference = prefs.getString(packageName, defValue);
+        SharedPreferences prefs;
+        String preference;
+
+        // for websites unlike apps there can be blank preference of "" which
+        // means use default, so ignore it.
+        if (!isWeb) {
+            prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
+            preference = prefs.getString(packageName, defValue);
+        } else {
+            prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+            preference = defValue;
+            Map<String, ?> prefsMap = prefs.getAll();
+            for (String key : prefsMap.keySet()) {
+                if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
+                        && !prefs.getString(key, null).equals("")) {
+                    preference = prefs.getString(key, null);
+                    settingsURL = key;
+                }
+            }
+        }
+
         switch (preference) {
             case "/first":
                 if (!PasswordRepository.isInitialized()) {
                     PasswordRepository.initialize(this);
                 }
-                items = recursiveFilter(appName, null);
+                items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName);
                 break;
             case "/never":
-                items.clear();
-                return;
-            default:
-                if (!PasswordRepository.isInitialized()) {
-                    PasswordRepository.initialize(this);
-                }
-                String path = PasswordRepository.getWorkTree() + "/" + preference + ".gpg";
-                File file = new File(path);
                 items = new ArrayList<>();
-                items.add(PasswordItem.newPassword(file.getName(), file, PasswordRepository.getRepositoryDirectory(this)));
+                break;
+            default:
+                getPreferredPasswords(preference);
+        }
+
+        return settingsURL;
+    }
+
+    // Put the newline separated list of passwords from the SharedPreferences
+    // file into the items list.
+    private void getPreferredPasswords(String preference) {
+        if (!PasswordRepository.isInitialized()) {
+            PasswordRepository.initialize(this);
+        }
+        String preferredPasswords[] = preference.split("\n");
+        items = new ArrayList<>();
+        for (String password : preferredPasswords) {
+            String path = PasswordRepository.getWorkTree() + "/" + password + ".gpg";
+            if (new File(path).exists()) {
+                items.add(new File(path));
+            }
         }
     }
 
-    private ArrayList<PasswordItem> recursiveFilter(String filter, File dir) {
-        ArrayList<PasswordItem> items = new ArrayList<>();
-        ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this));
-        for (PasswordItem item : passwordItems) {
-            if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                items.addAll(recursiveFilter(filter, item.getFile()));
-            }
-            if (item.toString().toLowerCase().contains(filter.toLowerCase())) {
-                items.add(item);
+    private ArrayList<File> searchPasswords(File path, String appName) {
+        ArrayList<File> passList
+                = PasswordRepository.getFilesList(path);
+
+        if (passList.size() == 0) return new ArrayList<>();
+
+        ArrayList<File> items = new ArrayList<>();
+
+        for (File file : passList) {
+            if (file.isFile()) {
+                if (appName.toLowerCase().contains(file.getName().toLowerCase().replace(".gpg", ""))) {
+                    items.add(file);
+                }
+            } else {
+                // ignore .git directory
+                if (file.getName().equals(".git"))
+                    continue;
+                items.addAll(searchPasswords(file, appName));
             }
         }
         return items;
     }
 
-    private void showDialog(final String appName) {
-        if (dialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-            builder.setNegativeButton(R.string.dialog_cancel, null);
-            builder.setPositiveButton(R.string.autofill_fill, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+    private void showDialog(final String packageName, final String appName, final boolean isWeb) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface d, int which) {
+                dialog.dismiss();
+                dialog = null;
+            }
+        });
+        builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
+                // the user will have to return to the app themselves.
+                Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("packageName", packageName);
+                intent.putExtra("appName", appName);
+                intent.putExtra("isWeb", isWeb);
+                startActivity(intent);
+            }
+        });
+
+        // populate the dialog items, always with pick + pick and match. Could
+        // make it optional (or make height a setting for the same effect)
+        CharSequence itemNames[] = new CharSequence[items.size() + 2];
+        for (int i = 0; i < items.size(); i++) {
+            itemNames[i] = items.get(i).getName().replace(".gpg", "");
+        }
+        itemNames[items.size()] = "Pick...";
+        itemNames[items.size() + 1] = "Pick and match...";
+        builder.setItems(itemNames, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                lastWhichItem = which;
+                if (which < items.size()) {
                     bindDecryptAndVerify();
-                }
-            });
-            builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
-                    // the user will have to return to the app themselves.
-                    Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
+                } else if (which == items.size()){
+                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("packageName", info.getPackageName());
-                    intent.putExtra("appName", appName);
+                    intent.putExtra("pick", true);
+                    startActivity(intent);
+                } else {
+                    lastWhichItem--;    // will add one element to items, so lastWhichItem=items.size()+1
+                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("pickMatchWith", true);
+                    intent.putExtra("packageName", packageName);
+                    intent.putExtra("isWeb", isWeb);
                     startActivity(intent);
                 }
-            });
-            dialog = builder.create();
-            dialog.setIcon(R.drawable.ic_launcher);
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            dialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            }
+        });
+
+        dialog = builder.create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        // arbitrary non-annoying size
+        int height = 154;
+        if (itemNames.length > 1) {
+            height += 46;
         }
-        dialog.setTitle(items.get(0).toString());
+        dialog.getWindow().setLayout((int) (240 * getApplicationContext().getResources().getDisplayMetrics().density)
+                , (int) (height * getApplicationContext().getResources().getDisplayMetrics().density));
         dialog.show();
     }
 
@@ -266,13 +445,14 @@ public class AutofillService extends AccessibilityService {
         }
         InputStream is = null;
         try {
-            is = FileUtils.openInputStream(items.get(0).getFile());
+            is = FileUtils.openInputStream(items.get(lastWhichItem));
         } catch (IOException e) {
             e.printStackTrace();
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
         OpenPgpApi api = new OpenPgpApi(AutofillService.this, serviceConnection.getService());
+        // TODO we are dropping frames, (did we before??) find out why and maybe make this async
         Intent result = api.executeApi(data, is, os);
         switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
             case OpenPgpApi.RESULT_CODE_SUCCESS: {
@@ -281,6 +461,7 @@ public class AutofillService extends AccessibilityService {
 
                     // if the user focused on something else, take focus back
                     // but this will open another dialog...hack to ignore this
+                    // & need to ensure performAction correct (i.e. what is info now?)
                     ignoreActionFocus = info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Bundle args = new Bundle();
@@ -302,6 +483,7 @@ public class AutofillService extends AccessibilityService {
                             }
                         }
                     }
+                    info.recycle();
                 } catch (UnsupportedEncodingException e) {
                     Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                 }

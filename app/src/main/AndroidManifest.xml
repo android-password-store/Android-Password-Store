@@ -46,7 +46,7 @@
 		</activity>
 
 		<service android:name=".autofill.AutofillService"
-				 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+			android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 			<intent-filter>
 				<action android:name="android.accessibilityservice.AccessibilityService" />
 			</intent-filter>
