@@ -14,7 +14,6 @@ You can install the application from:
 
 - [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore) (the prefered way)
 - [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore) (always lags behind)
-- Using the apk file found at `app/app-release.apk` or build everything from source (always updated before Play Store, but usually after F-Droid)
 
 **DEBUG**: If you want to help us debug the application, please use the [apk](https://github.com/zeapo/Android-Password-Store/blob/fabric/app/app-release.apk) that integrates crashlytics so that we can get more details on the crashes and improve the application.
 
