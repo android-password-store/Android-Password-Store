@@ -198,10 +198,11 @@ public class AutofillService extends AccessibilityService {
 
             isWeb = false;
 
-            setMatchingPasswords(appName, packageName, false);
+            setAppMatchingPasswords(appName, packageName);
         } else {
             // now we may have found a title but webViewURL could be null
-            packageName = setMatchingPasswords(webViewTitle, webViewURL, true);
+            // we set packagename so that we can find the website setting entry
+            packageName = setWebMatchingPasswords(webViewTitle, webViewURL);
             appName = packageName;
             isWeb = true;
         }
@@ -256,35 +257,55 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    // TODO split this into 2 functions for isWeb and !isWeb
-    private String setMatchingPasswords(String appName, String packageName, boolean isWeb) {
+    private String setWebMatchingPasswords(String webViewTitle, String webViewURL) {
         // Return the URL needed to open the corresponding Settings.
-        String settingsURL = packageName;
+        String settingsURL = webViewURL;
 
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
         String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
         SharedPreferences prefs;
         String preference;
 
-        // for websites unlike apps there can be blank preference of "" which
-        // means use default, so ignore it.
-        if (!isWeb) {
-            prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
-            preference = prefs.getString(packageName, defValue);
-        } else {
-            prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
-            preference = defValue;
-            if (webViewURL != null) {
-                Map<String, ?> prefsMap = prefs.getAll();
-                for (String key : prefsMap.keySet()) {
-                    if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
-                            && !prefs.getString(key, null).equals("")) {
-                        preference = prefs.getString(key, null);
-                        settingsURL = key;
-                    }
+        prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+        preference = defValue;
+        if (webViewURL != null) {
+            Map<String, ?> prefsMap = prefs.getAll();
+            for (String key : prefsMap.keySet()) {
+                // for websites unlike apps there can be blank preference of "" which
+                // means use default, so ignore it.
+                if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
+                        && !prefs.getString(key, null).equals("")) {
+                    preference = prefs.getString(key, null);
+                    settingsURL = key;
                 }
             }
         }
+
+        switch (preference) {
+            case "/first":
+                if (!PasswordRepository.isInitialized()) {
+                    PasswordRepository.initialize(this);
+                }
+                items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle);
+                break;
+            case "/never":
+                items = new ArrayList<>();
+                break;
+            default:
+                getPreferredPasswords(preference);
+        }
+
+        return settingsURL;
+    }
+
+    private void setAppMatchingPasswords(String appName, String packageName) {
+        // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
+        String defValue = settings.getBoolean("autofill_default", true) ? "/first" : "/never";
+        SharedPreferences prefs;
+        String preference;
+
+        prefs = getSharedPreferences("autofill", Context.MODE_PRIVATE);
+        preference = prefs.getString(packageName, defValue);
 
         switch (preference) {
             case "/first":
@@ -299,8 +320,6 @@ public class AutofillService extends AccessibilityService {
             default:
                 getPreferredPasswords(preference);
         }
-
-        return settingsURL;
     }
 
     // Put the newline separated list of passwords from the SharedPreferences
