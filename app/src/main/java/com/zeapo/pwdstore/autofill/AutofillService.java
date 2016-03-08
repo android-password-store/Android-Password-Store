@@ -105,7 +105,7 @@ public class AutofillService extends AccessibilityService {
         // or if page changes in chrome
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                    && event.getSource() != null
+                    && event.getSource() != null && event.getSource().getPackageName() != null
                     && (event.getSource().getPackageName().equals("com.android.chrome")
                         || event.getSource().getPackageName().equals("com.android.browser")))) {
             // there is a chance for getRootInActiveWindow() to return null at any time. save it.
