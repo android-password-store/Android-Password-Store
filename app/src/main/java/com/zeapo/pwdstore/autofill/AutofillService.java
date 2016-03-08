@@ -200,6 +200,7 @@ public class AutofillService extends AccessibilityService {
 
             setMatchingPasswords(appName, packageName, false);
         } else {
+            // now we may have found a title but webViewURL could be null
             packageName = setMatchingPasswords(webViewTitle, webViewURL, true);
             appName = packageName;
             isWeb = true;
@@ -255,6 +256,7 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
+    // TODO split this into 2 functions for isWeb and !isWeb
     private String setMatchingPasswords(String appName, String packageName, boolean isWeb) {
         // Return the URL needed to open the corresponding Settings.
         String settingsURL = packageName;
@@ -272,12 +274,14 @@ public class AutofillService extends AccessibilityService {
         } else {
             prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
             preference = defValue;
-            Map<String, ?> prefsMap = prefs.getAll();
-            for (String key : prefsMap.keySet()) {
-                if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
-                        && !prefs.getString(key, null).equals("")) {
-                    preference = prefs.getString(key, null);
-                    settingsURL = key;
+            if (webViewURL != null) {
+                Map<String, ?> prefsMap = prefs.getAll();
+                for (String key : prefsMap.keySet()) {
+                    if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
+                            && !prefs.getString(key, null).equals("")) {
+                        preference = prefs.getString(key, null);
+                        settingsURL = key;
+                    }
                 }
             }
         }
