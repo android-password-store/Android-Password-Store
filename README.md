@@ -53,7 +53,7 @@ How-To
 ======
 *Note:* This section is work in progress
 
-See the wiki https://github.com/zeapo/Android-Password-Store/wiki for a newer written version of the following gif walkthrough
+See the wiki https://github.com/zeapo/Android-Password-Store/wiki/First-time-setup for a newer written version of the following gif walkthrough
 
 Generate a ssh key for your git repo
 --------------------------------------------
