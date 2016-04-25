@@ -64,7 +64,8 @@
             android:id="@+id/button"
             android:layout_alignTop="@+id/main_clone_button"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:textSize="11sp" />
         <Button
             android:id="@+id/main_clone_button"
             android:layout_width="wrap_content"
@@ -75,7 +76,8 @@
             android:text="@string/clone"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textSize="11sp" />
 
     </RelativeLayout>
 

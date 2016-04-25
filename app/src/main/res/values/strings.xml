@@ -57,8 +57,8 @@
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
-    <string name="clone">Clone existing</string>
-    <string name="initialize">Create new</string>
+    <string name="clone">Clone from server</string>
+    <string name="initialize">Use local directory</string>
 
     <string name="server_name">Server</string>
     <string name="server_protocol">Protocol</string>
