@@ -17,14 +17,9 @@ You can install the application from:
 
 Pull requests are more than welcome (see [TODO](#todo)).
 
-Community
-=========
-
-A few ways to get in touch:
-
-- [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how somehting works or feature request
-- [reddit](https://www.reddit.com/r/androidpwd), want to discuss something and it's midnight, no one on irc and you really want to write more than a couple of lines? reddit is your way!
-
+How-To
+======
+See the wiki https://github.com/zeapo/Android-Password-Store/wiki/First-time-setup for a newer written version of the following gif walkthrough
 
 FAQ
 ====
@@ -38,6 +33,15 @@ FAQ
 - **Q** I get the error *No encrypted data with known secret key found in stream*
 - **A** In OpenKeyChain **(under the left drawer) Apps > Password Store > Accounts > (select the account) > Account key** select the key used to encrypt your passwords.
 
+Community
+=========
+
+A few ways to get in touch:
+
+- [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how somehting works or feature request
+- [reddit](https://www.reddit.com/r/androidpwd), want to discuss something and it's midnight, no one on irc and you really want to write more than a couple of lines? reddit is your way!
+
+
 TODO
 =====
 - ~~Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))~~ (Autofill does the job)
@@ -45,11 +49,6 @@ TODO
 - Multiple password stores (multiple git repositories).
 - Solve issues labeld as *enhancement* (see [enhancement issues](https://github.com/zeapo/Android-Password-Store/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement))
 
-How-To
-======
-*Note:* This section is work in progress
-
-See the wiki https://github.com/zeapo/Android-Password-Store/wiki/First-time-setup for a newer written version of the following gif walkthrough
 
 Generate a ssh key for your git repo
 --------------------------------------------
