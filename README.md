@@ -15,8 +15,6 @@ You can install the application from:
 - [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore) (the prefered way)
 - [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore) (always lags behind)
 
-**DEBUG**: If you want to help us debug the application, please use the [apk](https://github.com/zeapo/Android-Password-Store/blob/fabric/app/app-release.apk) that integrates crashlytics so that we can get more details on the crashes and improve the application.
-
 Pull requests are more than welcome (see [TODO](#todo)).
 
 Community
@@ -26,8 +24,6 @@ A few ways to get in touch:
 
 - [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how somehting works or feature request
 - [reddit](https://www.reddit.com/r/androidpwd), want to discuss something and it's midnight, no one on irc and you really want to write more than a couple of lines? reddit is your way!
-
-
 
 
 FAQ
@@ -44,7 +40,7 @@ FAQ
 
 TODO
 =====
-- Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))
+- ~~Implement a keyboard to replace the copy/paste and avoid clipboard hijicking (see [#50](https://github.com/zeapo/Android-Password-Store/issues/50))~~ (Autofill does the job)
 - Create a new category
 - Multiple password stores (multiple git repositories).
 - Solve issues labeld as *enhancement* (see [enhancement issues](https://github.com/zeapo/Android-Password-Store/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement))
