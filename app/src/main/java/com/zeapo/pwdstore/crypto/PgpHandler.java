@@ -65,6 +65,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
     public static final int REQUEST_CODE_GET_KEY = 9914;
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
+    public static final int REQUEST_CODE_EDIT = 9916;
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -146,7 +147,8 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     public void editPassword() {
 
-        // if in encrypt or (in decrypt and password is invisible), do nothing
+        // if in encrypt or in decrypt and password is invisible
+        // (because !showPassword, so this will instantly close), do nothing
         if (findViewById(R.id.crypto_password_show) == null
                 || findViewById(R.id.crypto_container).getVisibility() != View.VISIBLE)
             return;
@@ -353,6 +355,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 case REQUEST_CODE_GET_KEY_IDS:
                     getKeyIds(data);
                     break;
+                case REQUEST_CODE_EDIT: {
+                    edit(data);
+                    break;
+                }
             }
         } else if (resultCode == RESULT_CANCELED) {
             setResult(RESULT_CANCELED, data);
@@ -455,6 +461,39 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                         showToast("PGP key selected");
                         setResult(RESULT_OK);
                         finish();
+                    }
+
+                    // edit
+                    if (requestCode == REQUEST_CODE_EDIT && os != null) {
+                        try {
+                            if (returnToCiphertextField) {
+                                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                                findViewById(R.id.progress_bar_label).setVisibility(View.GONE);
+
+                                findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
+
+                                Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
+                                String[] passContent = os.toString("UTF-8").split("\n");
+                                ((TextView) findViewById(R.id.crypto_password_show))
+                                        .setTypeface(monoTypeface);
+                                ((TextView) findViewById(R.id.crypto_password_show))
+                                        .setText(passContent[0]);
+
+                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
+                                if (extraContent.length() != 0) {
+                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                            .setTypeface(monoTypeface);
+                                    ((TextView) findViewById(R.id.crypto_extra_show))
+                                            .setText(extraContent);
+                                }
+
+                                editPassword();
+                            } else {
+                                Log.d("PGPHANDLER", "Error message after decrypt : " + os.toString());
+                            }
+                        } catch (UnsupportedEncodingException e) {
+                            Log.e(Constants.TAG, "UnsupportedEncodingException", e);
+                        }
                     }
                     break;
                 }
@@ -560,6 +599,24 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     }
 
+    public void edit(Intent data) {
+        // exactly same as decrypt, only we want a different callback
+        data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
+
+        findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+
+        try {
+            InputStream is = FileUtils.openInputStream(new File(getIntent().getExtras().getString("FILE_PATH")));
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            OpenPgpApi api = new OpenPgpApi(this, mServiceConnection.getService());
+            api.executeApiAsync(data, is, os, new PgpCallback(true, os, REQUEST_CODE_EDIT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // TODO (low priority but still...) android M potential permissions crashes
     @Override
     public void onBound(IOpenPgpService2 service) {
@@ -591,6 +648,14 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 //                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
 //                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
 //            }
+        } else if (extra.getString("Operation").equals("EDIT")) {
+            setContentView(R.layout.decrypt_layout);
+            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
+                    .getParentFile().getName();
+
+            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
+            edit(new Intent());
         }
     }
 

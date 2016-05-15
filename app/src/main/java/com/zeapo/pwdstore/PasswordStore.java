@@ -405,6 +405,14 @@ public class PasswordStore extends AppCompatActivity {
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
+    public void editPassword(PasswordItem item) {
+        Intent intent = new Intent(this, PgpHandler.class);
+        intent.putExtra("NAME", item.toString());
+        intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
+        intent.putExtra("Operation", "EDIT");
+        startActivityForResult(intent, PgpHandler.REQUEST_CODE_EDIT);
+    }
+
     public void createPassword() {
         if (!PasswordRepository.isInitialized()) {
             new AlertDialog.Builder(this)

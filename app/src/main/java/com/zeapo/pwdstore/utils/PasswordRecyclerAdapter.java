@@ -25,6 +25,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     private final PasswordFragment.OnFragmentInteractionListener listener;
     private final Set<Integer> selectedItems;
     private ActionMode mActionMode;
+    private Boolean canEdit;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -85,6 +86,14 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                     toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
                     if (selectedItems.isEmpty()) {
                         mActionMode.finish();
+                    } else if (selectedItems.size() == 1 && !canEdit) {
+                        if (values.get(selectedItems.iterator().next()).getType() == PasswordItem.TYPE_PASSWORD) {
+                            canEdit = true;
+                            mActionMode.invalidate();
+                        }
+                    } else if (selectedItems.size() >= 1 && canEdit) {
+                        canEdit = false;
+                        mActionMode.invalidate();
                     }
                 } else {
                     listener.onFragmentInteraction(pass);
@@ -99,8 +108,10 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                     return false;
                 }
                 toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
+                canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
                 // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
+                mActionMode.invalidate();
                 return true;
             }
         });
@@ -123,7 +134,12 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         // may be called multiple times if the mode is invalidated.
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
+            if (canEdit) {
+                menu.findItem(R.id.menu_edit_password).setVisible(true);
+            } else {
+                menu.findItem(R.id.menu_edit_password).setVisible(false);
+            }
+            return true; // Return false if nothing is done
         }
 
         // Called when the user selects a contextual menu item
@@ -133,6 +149,10 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 case R.id.menu_delete_password:
                     activity.deletePasswords(PasswordRecyclerAdapter.this, new TreeSet<>(selectedItems));
                     mode.finish(); // Action picked, so close the CAB
+                    return true;
+                case R.id.menu_edit_password:
+                    activity.editPassword(values.get(selectedItems.iterator().next()));
+                    mode.finish();
                     return true;
                 default:
                     return false;
