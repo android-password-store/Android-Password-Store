@@ -74,8 +74,11 @@ public class PasswordFragment extends Fragment{
 
         recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
-//
-//        // Set the adapter
+
+        // use divider
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
+
+        // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
 
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
