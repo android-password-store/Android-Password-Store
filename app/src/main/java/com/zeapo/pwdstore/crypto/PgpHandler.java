@@ -81,6 +81,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         this.activity = this;
         this.clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
+        if (getIntent().getStringExtra("Operation").equals("ENCRYPT")) {
+            setTitle("New password");
+        }
+
         // some persistance
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         String providerPackageName = settings.getString("openpgp_provider_list", "");
@@ -121,7 +125,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.pgp_handler, menu);
+        if (getIntent().getStringExtra("Operation").equals("ENCRYPT")) {
+            getMenuInflater().inflate(R.menu.pgp_handler_new_password, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.pgp_handler, menu);
+        }
         return true;
     }
 
@@ -141,6 +149,13 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 break;
             case R.id.edit_password:
                 editPassword();
+            case R.id.crypto_confirm_add:
+                encrypt(new Intent());
+                break;
+            case R.id.crypto_cancel_add:
+                setResult(RESULT_CANCELED);
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -204,12 +219,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         switch (view.getId()) {
             case R.id.crypto_show_button:
                 decryptAndVerify(new Intent());
-                break;
-            case R.id.crypto_confirm_add:
-                encrypt(new Intent());
-                break;
-            case R.id.crypto_cancel_add:
-                finish();
                 break;
             case R.id.crypto_delete_button:
 //                deletePassword();

@@ -5,24 +5,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.zeapo.pwdstore.crypto.PgpHandler"
-    android:background="#eee">
+    android:background="#eee"
+    android:padding="@dimen/activity_horizontal_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/crypto_password_category"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="CATEGORY/"/>
+            android:textColor="@color/grey_500"
+            android:text="CATEGORY HERE"
+            android:id="@+id/crypto_password_category"
+            android:layout_gravity="center_vertical"
+            android:textSize="18dp"
+            android:textIsSelectable="false"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
         <EditText
             android:layout_gravity="center_vertical"
@@ -30,10 +30,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/crypto_password_file_edit"
             android:hint="@string/crypto_name_hint"
-            android:textColor="@android:color/holo_orange_dark"/>
-
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textSize="24dp"
+            android:textColor="@color/accent" />
     </LinearLayout>
-
 
     <ScrollView android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -45,11 +45,9 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -57,20 +55,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="@string/crypto_pass_label"/>
-                <EditText
-                    android:id="@+id/crypto_password_edit"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:typeface="monospace"
-                    android:layout_weight="1"/>
-                <Button
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/generate_password"
-                    android:text="@string/pwd_generate_button"
-                    android:onClick="handleClick"/>
-            </LinearLayout>
+                    android:text="@string/crypto_pass_label"
+                    android:id="@+id/textView2"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/crypto_password_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:typeface="monospace"
+                android:layout_weight="1"
+                android:layout_toRightOf="@+id/textView2"
+                android:layout_toEndOf="@+id/textView2" />
+
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/generate_password"
+                android:text="@string/pwd_generate_button"
+                android:onClick="handleClick"
+                android:layout_gravity="right" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -89,38 +96,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:background="@android:color/darker_gray"
-        android:layout_weight="0">
-        <ImageButton
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_action_save"
-            android:background="@drawable/blue_rectangle"
-            android:id="@+id/crypto_confirm_add"
-            android:onClick="handleClick"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <ImageButton
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_action_cancel"
-            android:background="@drawable/red_rectangle"
-            android:id="@+id/crypto_cancel_add"
-            android:onClick="handleClick"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
-
 
 </LinearLayout>
