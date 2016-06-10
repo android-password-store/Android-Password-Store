@@ -1,8 +1,8 @@
 package com.zeapo.pwdstore.utils;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -91,7 +91,8 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             @Override
             public void onClick(View v) {
                 if (mActionMode != null) {
-                    toggleSelection(holder, holder.getAdapterPosition(), null, pass.getType());
+                    toggleSelection(holder.getAdapterPosition());
+                    mActionMode.setTitle("" + selectedItems.size());
                     if (selectedItems.isEmpty()) {
                         mActionMode.finish();
                     } else if (selectedItems.size() == 1 && !canEdit) {
@@ -106,6 +107,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 } else {
                     listener.onFragmentInteraction(pass);
                 }
+                notifyItemChanged(holder.getAdapterPosition());
             }
         });
 
@@ -115,17 +117,27 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 if (mActionMode != null) {
                     return false;
                 }
-                toggleSelection(holder, holder.getAdapterPosition(), null, pass.getType());
+                toggleSelection(holder.getAdapterPosition());
                 canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
                 // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
+                mActionMode.setTitle("" + selectedItems.size());
                 mActionMode.invalidate();
+                notifyItemChanged(holder.getAdapterPosition());
                 return true;
             }
         });
 
         // after removal, everything is rebound for some reason; views are shuffled?
-        holder.view.setSelected(selectedItems.contains(position));
+        boolean selected = selectedItems.contains(position);
+        holder.view.setSelected(selected);
+        if (selected) {
+            holder.itemView.setBackgroundResource(R.color.orange_200);
+            holder.type.setTextColor(Color.BLACK);
+        } else {
+            holder.itemView.setBackgroundResource(Color.alpha(1));
+            holder.type.setTextColor(activity.getColor(R.color.grey_500));
+        }
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -213,20 +225,9 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         updateSelectedItems(position, selectedItems);
     }
 
-    public void toggleSelection(ViewHolder holder, int position, CardView card, char type) {
+    public void toggleSelection(int position) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
-            if (type == PasswordItem.TYPE_CATEGORY) {
-//                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_100));
-            } else {
-//                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_100));
-            }
-        } else {
-            if (type == PasswordItem.TYPE_CATEGORY) {
-//                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
-            } else {
-//                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_50));
-            }
         }
     }
 
