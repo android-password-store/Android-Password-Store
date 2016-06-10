@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.utils;
 
+import android.os.Build;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.PasswordFragment;
@@ -35,12 +37,14 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         public View view;
         public TextView name;
         public TextView type;
+        public ImageView typeImage;
 
         public ViewHolder(View v) {
             super(v);
             view = v;
             name = (TextView) view.findViewById(R.id.label);
             type = (TextView) view.findViewById(R.id.type);
+            typeImage = (ImageView) view.findViewById(R.id.type_image);
         }
     }
 
@@ -67,7 +71,14 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final PasswordItem pass = values.get(position);
         holder.name.setText(pass.toString());
-        int sdk = android.os.Build.VERSION.SDK_INT;
+        if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
+            holder.typeImage.setImageResource(R.drawable.ic_folder_grey600_24dp);
+            holder.name.setText(pass.toString() + "/");
+        } else {
+            holder.typeImage.setImageResource(R.drawable.ic_action_secure);
+            holder.name.setText(pass.toString());
+        }
+        int sdk = Build.VERSION.SDK_INT;
 
         holder.type.setText(pass.getFullPathName());
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
