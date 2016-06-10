@@ -171,7 +171,7 @@ public class UserPreference extends AppCompatActivity {
             });
 
             final Preference externalRepo = findPreference("pref_select_external");
-            externalRepo.setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
+            externalRepo.setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", callingActivity.getString(R.string.no_repo_selected)));
             externalRepo.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -232,7 +232,7 @@ public class UserPreference extends AppCompatActivity {
         public void onStart() {
             super.onStart();
             final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
-            findPreference("pref_select_external").setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
+            findPreference("pref_select_external").setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", getString(R.string.no_repo_selected)));
             findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
             findPreference("git_delete_repo").setEnabled(!sharedPreferences.getBoolean("git_external", false));
 

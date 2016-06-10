@@ -20,12 +20,12 @@
         android:title="@string/git_push"/>
 
     <item android:id="@+id/refresh"
-        android:title="Refresh list"
+        android:title="@string/refresh_list"
         pwstore:showAsAction="never"
         android:icon="@drawable/ic_action_refresh"/>
 
     <item android:id="@+id/user_pref"
-        android:title="Settings"
+        android:title="@string/action_settings"
         android:orderInCategory="100"/>
 </menu>
 
