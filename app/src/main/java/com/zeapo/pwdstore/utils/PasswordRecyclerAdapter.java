@@ -71,19 +71,18 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         holder.name.setText(pass.toString());
         int sdk = android.os.Build.VERSION.SDK_INT;
 
+        holder.type.setText(pass.getFullPathName());
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
-            holder.type.setText(pass.getFullPathName());
-            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
+            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
         } else {
-            holder.type.setText(pass.getFullPathName());
-            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_400));
+            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_50));
         }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mActionMode != null) {
-                    toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
+                    toggleSelection(holder, holder.getAdapterPosition(), holder.card, pass.getType());
                     if (selectedItems.isEmpty()) {
                         mActionMode.finish();
                     } else if (selectedItems.size() == 1 && !canEdit) {
@@ -107,7 +106,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 if (mActionMode != null) {
                     return false;
                 }
-                toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
+                toggleSelection(holder, holder.getAdapterPosition(), holder.card, pass.getType());
                 canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
                 // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
@@ -205,21 +204,19 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         updateSelectedItems(position, selectedItems);
     }
 
-    public void toggleSelection(int position, CardView card, char type) {
+    public void toggleSelection(ViewHolder holder, int position, CardView card, char type) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
             if (type == PasswordItem.TYPE_CATEGORY) {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_200));
-            }
-            else {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_100));
+            } else {
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_100));
             }
         } else {
             if (type == PasswordItem.TYPE_CATEGORY) {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
-            }
-            else {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_400));
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
+            } else {
+                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_50));
             }
         }
     }
