@@ -58,22 +58,7 @@ public class UserPreference extends AppCompatActivity {
 
             addPreferencesFromResource(R.xml.preference);
 
-            Preference keyPref = findPreference("openpgp_key_id_pref");
-            Set<String> selectedKeys = sharedPreferences.getStringSet("openpgp_key_ids_set", new HashSet<String>());
-            if (selectedKeys.isEmpty()) {
-                keyPref.setSummary("No key selected");
-            } else {
-                keyPref.setSummary(
-                        Joiner.on(',')
-                                .join(Iterables.transform(selectedKeys, new Function<String, Object>() {
-                                    @Override
-                                    public Object apply(String input) {
-                                        return OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input));
-                                    }
-                                }))
-                );
-            }
-            keyPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("openpgp_key_id_pref").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(callingActivity, PgpHandler.class);
@@ -235,6 +220,21 @@ public class UserPreference extends AppCompatActivity {
             findPreference("pref_select_external").setSummary(getPreferenceManager().getSharedPreferences().getString("git_external_repo", "No external repository selected"));
             findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
             findPreference("git_delete_repo").setEnabled(!sharedPreferences.getBoolean("git_external", false));
+            Preference keyPref = findPreference("openpgp_key_id_pref");
+            Set<String> selectedKeys = sharedPreferences.getStringSet("openpgp_key_ids_set", new HashSet<String>());
+            if (selectedKeys.isEmpty()) {
+                keyPref.setSummary("No key selected");
+            } else {
+                keyPref.setSummary(
+                        Joiner.on(',')
+                                .join(Iterables.transform(selectedKeys, new Function<String, Object>() {
+                                    @Override
+                                    public Object apply(String input) {
+                                        return OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input));
+                                    }
+                                }))
+                );
+            }
 
             // see if the autofill service is enabled and check the preference accordingly
             ((CheckBoxPreference) findPreference("autofill_enable"))
