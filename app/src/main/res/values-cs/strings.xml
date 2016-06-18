@@ -112,7 +112,7 @@
     <string name="pref_password_dialog_title">Nastavení času po který bude heslo uloženo ve schránce</string>
     <string name="pref_copy_title">Automaticky kopírovat heslo</string>
     <string name="pref_copy_dialog_title">Automatické kopírování hesla do schránky po úspěšném dešifrování.</string>
-    <string name="ssh_key_success_dialog_title">SSH-key imported</string>
+    <string name="ssh_key_success_dialog_title">SSH-key importován</string>
     <string name="ssh_key_error_dialog_title">Chyba při importu SSH klíče</string>
     <string name="ssh_key_error_dialog_text">Zpráva : \n</string>
     <string name="pref_recursive_filter">Rekurzivní filtrování</string>
@@ -170,6 +170,6 @@
     <string name="autofill_apps_match_ellipsis">Spárovat s…</string>
     <string name="autofill_apps_match">Spárovat s</string>
     <string name="autofill_apps_never">Nikdy nepárovat</string>
-    <string name="autofill_apps_delete">Delete</string>
-    <string name="pref_autofill_always_title">Always show dialog</string>
+    <string name="autofill_apps_delete">Smazat</string>
+    <string name="pref_autofill_always_title">Vždy zobrazit dialog</string>
 </resources>
