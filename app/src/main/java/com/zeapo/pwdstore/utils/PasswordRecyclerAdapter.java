@@ -1,13 +1,15 @@
 package com.zeapo.pwdstore.utils;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.PasswordFragment;
@@ -33,16 +35,16 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public View view;
-        public CardView card;
         public TextView name;
         public TextView type;
+        public ImageView typeImage;
 
         public ViewHolder(View v) {
             super(v);
             view = v;
-            card = (CardView) view.findViewById(R.id.password_card);
             name = (TextView) view.findViewById(R.id.label);
             type = (TextView) view.findViewById(R.id.type);
+            typeImage = (ImageView) view.findViewById(R.id.type_image);
         }
     }
 
@@ -69,21 +71,28 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final PasswordItem pass = values.get(position);
         holder.name.setText(pass.toString());
-        int sdk = android.os.Build.VERSION.SDK_INT;
-
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
-            holder.type.setText(pass.getFullPathName());
-            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
+            holder.typeImage.setImageResource(R.drawable.ic_folder_grey600_24dp);
+            holder.name.setText(pass.toString() + "/");
         } else {
-            holder.type.setText(pass.getFullPathName());
-            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_400));
+            holder.typeImage.setImageResource(R.drawable.ic_action_secure);
+            holder.name.setText(pass.toString());
+        }
+        int sdk = Build.VERSION.SDK_INT;
+
+        holder.type.setText(pass.getFullPathName());
+        if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
+//            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
+        } else {
+//            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_50));
         }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mActionMode != null) {
-                    toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
+                    toggleSelection(holder.getAdapterPosition());
+                    mActionMode.setTitle("" + selectedItems.size());
                     if (selectedItems.isEmpty()) {
                         mActionMode.finish();
                     } else if (selectedItems.size() == 1 && !canEdit) {
@@ -98,6 +107,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 } else {
                     listener.onFragmentInteraction(pass);
                 }
+                notifyItemChanged(holder.getAdapterPosition());
             }
         });
 
@@ -107,17 +117,27 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                 if (mActionMode != null) {
                     return false;
                 }
-                toggleSelection(holder.getAdapterPosition(), holder.card, pass.getType());
+                toggleSelection(holder.getAdapterPosition());
                 canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
                 // Start the CAB using the ActionMode.Callback
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
+                mActionMode.setTitle("" + selectedItems.size());
                 mActionMode.invalidate();
+                notifyItemChanged(holder.getAdapterPosition());
                 return true;
             }
         });
 
         // after removal, everything is rebound for some reason; views are shuffled?
-        holder.view.setSelected(selectedItems.contains(position));
+        boolean selected = selectedItems.contains(position);
+        holder.view.setSelected(selected);
+        if (selected) {
+            holder.itemView.setBackgroundResource(R.color.deep_orange_200);
+            holder.type.setTextColor(Color.BLACK);
+        } else {
+            holder.itemView.setBackgroundResource(Color.alpha(1));
+            holder.type.setTextColor(activity.getColor(R.color.grey_500));
+        }
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -205,22 +225,9 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         updateSelectedItems(position, selectedItems);
     }
 
-    public void toggleSelection(int position, CardView card, char type) {
+    public void toggleSelection(int position) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
-            if (type == PasswordItem.TYPE_CATEGORY) {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_200));
-            }
-            else {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
-            }
-        } else {
-            if (type == PasswordItem.TYPE_CATEGORY) {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.deep_orange_400));
-            }
-            else {
-                card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_400));
-            }
         }
     }
 

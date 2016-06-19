@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+    <string name="activity_clone_name">Klone ein Git Repo</string>
+
+    <string name="clone_settings">Klonen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="hello_world">Hallo Welt!</string>
+    <string name="dialog_delete_title">Ordner existiert bereits</string>
+    <string name="dialog_delete_msg">Zielordner existiert bereits. Aktuelle Version unterstützt nur eine einzige Datenquelle. Möchtest du die aktuelle Datenquelle löschen:</string>
+    <string name="dialog_delete">Ordner löschen</string>
+    <string name="dialog_do_not_delete">Abbruch</string>
+    <string name="title_activity_git_clone">Repository Informationen</string>
+    
+    <!-- Password Store -->
+    <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
+	<string name="store_git">/store/.git</string>
+    <string name="key_dialog_text">Du musst deine PGP-Key ID auwählen, bevor das Repository intialisiert wird.</string>
+    <string name="connection_dialog_text">Welche Verbindung bevorzugst du?</string>
+    <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest \"</string>
+
+    <!-- git commits -->
+    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
+    <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
+    <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
+    <string name="from_store">&#160; from store.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
+    <string name="okc_progress_text">Warte auf OpenKeychain...</string>
+    <string name="clipboard_beginning_toast_text">Passwort ist in der Zwischen ablage, du hast </string>
+    <string name="clipboard_ending_toast_text"> Sekunden, um es einzufügen.</string>
+    <string name="name_settings_toast_text">Bitte setze deinen Accountnamen in den Einstellungen.</string>
+    <string name="account_settings_dialog_text">Bitte setze deinen OpenKeychain Account (E-Mail) in den Einstellungen</string>
+    <string name="account_settings_dialog_title">Accountname ist leer!</string>
+    <string name="file_toast_text">Bitte setze einen Pfad</string>
+    <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Befehl läuft...</string>
+    <string name="jgit_error_dialog_title">Internal Exception occurred</string>
+    <string name="jgit_error_dialog_text">Message from jgit: \n</string>
+
+    <!-- Git Handler -->
+    <string name="read_only_dialog_text">Du kannst nicht auf ein schreibgeschütztes (read-only) Repository pushen.</string>
+    <string name="forget_username_dialog_text">Hast du vergessen einen Nutzernamen zu vergeben?</string>
+    <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
+    <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
+    <string name="ssh_preferences_dialog_title">Kein SSH-Key angegeben</string>
+    <string name="ssh_preferences_dialog_import">Import</string>
+    <string name="ssh_preferences_dialog_generate">Generieren</string>
+    <string name="passphrase_dialog_title">Authentifizieren</string>
+    <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>
+    <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
+    
+    <!-- Clone fragment -->
+    <string name="clone_fragment_text">Willkommen zu Password Store\n\n In dieser Ansicht kannst du entweder ein neues Repository anlegen oder ein bestehendes auf dieses Gerät klonen.</string>
+    <string name="clone">Klone von Server</string>
+    <string name="initialize">Nutze lokalen Ordner</string>
+
+    <string name="server_name">Server</string>
+    <string name="server_protocol">Protokoll</string>
+    <string name="server_url">Server URL</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">Repo-Pfad</string>
+    <string name="server_path_hint">path/to/pass</string>
+    <string name="server_user">Nutzername</string>
+    <string name="server_user_hint">Git-Nutzername</string>
+
+    <string name="server_resulting_url">Erzeugte URL</string>
+    <string name="connection_mode">Authentifizierungsmethode</string>
+
+    <string name="warn_malformed_url_port">Wenn du einen anderen Port nutzt, setze den absoluten Pfad (startet mit "/")</string>
+
+    <!-- PGP Handler -->
+    <string name="title_activity_pgp_handler">PGP-Handler</string>
+    <string name="crypto_name_hint">Name</string>
+    <string name="crypto_pass_label">Passwort</string>
+    <string name="crypto_extra_label">Extra</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="crypto_category">Kategorie</string>
+    <string name="action_search">Suche</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_server_title">Server</string>
+    <string name="pref_server_hint">server.com</string>
+    <string name="pref_remote_title">Entfernter Ort</string>
+    <string name="pref_remote_hint">path/to/repository</string>
+    <string name="pref_git_username_title">Nutzername</string>
+    <string name="pref_git_username_hint">Nutzername</string>
+    <string name="pref_edit_server_info">Git-Server Einstellungen</string>
+    <string name="pref_ssh_title">Importiere SSH-Key</string>
+    <string name="pref_ssh_keygen_title">Erstelle SSH-Schlüsselpaar</string>
+    <string name="pref_ssh_see_key_title">Zeige erstellten öffentlichen SSH-Key</string>
+    <string name="pref_git_delete_repo">Repository löschen</string>
+    <string name="pref_dialog_delete_title">Repository löschen</string>
+    <string name="pref_dialog_delete_msg">Möchtest du dan aktuellen Passwortordner löschen? Deine Einstellungen werden beibehalten.</string>
+    <string name="pref_crypto_title">Kryptografie</string>
+    <string name="pref_provider_title">Wähle OpenPGP-Provider</string>
+    <string name="pref_provider_account_title">Wähle deinen OpenPGP-Account</string>
+    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
+    <string name="pref_key_title">Wähle OpenPGP-Key ID</string>
+    <string name="pref_general_title">Allgemein</string>
+    <string name="pref_password_title">Ablaufzeit des Passworts</string>
+    <string name="pref_password_dialog_title">Nach dieser Anzahl der Sekunden wird das Passwort aus der Zwischenablage gelöscht.</string>
+    <string name="pref_copy_title">Kopiere Passwort automatisch</string>
+    <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
+    <string name="ssh_key_success_dialog_title">SSH-Key importiert</string>
+    <string name="ssh_key_error_dialog_title">Fehler während des Imports des SSH-Keys</string>
+    <string name="ssh_key_error_dialog_text">Nachricht : \n</string>
+    <string name="pref_recursive_filter">Suche in Unterordnern</string>
+    <string name="pref_recursive_filter_hint">Findet Passwörter auch in Unterordnern.</string>
+    <string name="pref_autofill_enable_title">Autofill aktivieren</string>
+    <string name="pref_autofill_enable_msg">Wähle OK, um zu den Bedienungshilfen-Einstellungen zu gelangen. Dort aktiviere oder deaktiviere den Password Store unter Dienste.</string>
+    <string name="pref_autofill_enable_msg2">Wenn der Hintergrunddienst aktiviert ist, erscheint immer dann ein Dialog, wenn du auf ein Passwortfeld in einer App klickst und ein dazu passender Eintrag existiert.</string>
+    <string name="pref_autofill_enable_msg3">Password Store versucht das Passwort zu der App automatisch herauszufinden. Du kannst diese Standard-Einstellung ändern und den Abgleich per App anpassen.</string>
+    <string name="pref_autofill_apps_title">App und Websiten Einstellungen</string>
+    <string name="pref_autofill_apps_hint">Ändere die Autofill Einstellungen für spezielle Apps.</string>
+    <string name="pref_autofill_default_title">Standardmäßig automatisch abgleichen</string>
+    <string name="pref_autofill_default_hint">Standard auf \'Automatisch abgleichen\' für Apps ohne eine Standardeinstellung, andernfalls \'Niemals abgleichen.\'</string>
+    <string name="pref_autofill_always_title">Zeige den Autofill-Dialog immer</string>
+    <string name="pref_clear_clipboard_title">Lösche die Zwischenablage 20-mal</string>
+    <string name="pref_clear_clipboard_hint">Speichert Nonsense 20-mal anstatt 1-mal in der Zwischenablage. Nützlich bspw. auf Samsung-Geräten, die den Verlauf der Zwischenablage speichern.</string>
+    <string name="pref_git_delete_repo_summary">Lösche das lokale (versteckte) Repository</string>
+    <string name="pref_external_repository">Externes Repository</string>
+    <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
+    <string name="pref_select_external_repository">Wähle ein externes Repository</string>
+
+    <!-- pwgen fragment -->
+    <string name="pwgen_generate">Generieren</string>
+    <string name="pwgen_include">Include</string>
+    <string name="pwgen_numerals">Nummern</string>
+    <string name="pwgen_symbols">Symbole</string>
+    <string name="pwgen_uppercase">Großbuchstaben</string>
+    <string name="pwgen_ambiguous">Zweideutig</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">Länge</string>
+    <string name="ssh_keygen_passphrase">Passwort</string>
+    <string name="ssh_keygen_comment">Kommentar</string>
+    <string name="ssh_keygen_generate">Generieren</string>
+    <string name="ssh_keygen_copy">Kopieren</string>
+    <string name="ssh_keygen_tip">Füge den Public-Key zu deinem Git-Server hinzu.</string>
+    <string name="ssh_keygen_show_passphrase">Zeige Passwort</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Ja</string>
+    <string name="dialog_no">Nein</string>
+    <string name="dialog_positive">Auf dem Weg...</string>
+    <string name="dialog_negative">Nah... später</string>
+    <string name="dialog_oops">Oops...</string>
+    <string name="dialog_cancel">Abbruch</string>
+    <string name="git_sync">Synchronisiere Repository</string>
+    <string name="git_pull">Git Pull</string>
+    <string name="git_push">Git Push</string>
+    <string name="refresh_list">Aktualisieren</string>
+    <string name="show_password_pref_title">Zeige das Password</string>
+    <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
+    <string name="toast_password_copied">Passwort befindet sich zum Einfügen in der Zwischenablage</string>
+    <string name="pwd_generate_button">Generieren</string>
+    <string name="category_string">"Kategorie: "</string>
+
+    <!-- Autofill -->
+    <string name="autofill_description">Füge das Passwort automatisch in Apps ein (Autofill). Funktioniert nur unter Android 4.3 und höher. Dies basiert nicht auf der Zwischenablage für Android 5.0 oder höher.</string>
+    <string name="autofill_fill">Einfügen</string>
+    <string name="autofill_apps_default">Nutze Standardeinstellung</string>
+    <string name="autofill_apps_first">Automatisch abgleichen</string>
+    <string name="autofill_apps_match_ellipsis">Abgleichen mit…</string>
+    <string name="autofill_apps_match">Abgleichen mit</string>
+    <string name="autofill_apps_never">Niemals abgleichen</string>
+    <string name="autofill_apps_delete">Löschen</string>
+    <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
+</resources>

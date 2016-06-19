@@ -15,16 +15,16 @@
             android:title="@string/pref_ssh_see_key_title" />
         <Preference
             android:key="git_delete_repo"
-            android:summary="Deletes local (hidden) repository"
+            android:summary="@string/pref_git_delete_repo_summary"
             android:title="@string/pref_git_delete_repo" />
         <CheckBoxPreference
             android:key="git_external"
-            android:summary="Use an external password repository"
-            android:title="External repository" />
+            android:summary="@string/pref_external_repository_summary"
+            android:title="@string/pref_external_repository" />
         <Preference
             android:dependency="git_external"
             android:key="pref_select_external"
-            android:title="Select external repository" />
+            android:title="@string/pref_select_external_repository" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_crypto_title">
