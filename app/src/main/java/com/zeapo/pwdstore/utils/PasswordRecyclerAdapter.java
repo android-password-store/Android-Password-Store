@@ -132,7 +132,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
         boolean selected = selectedItems.contains(position);
         holder.view.setSelected(selected);
         if (selected) {
-            holder.itemView.setBackgroundResource(R.color.orange_200);
+            holder.itemView.setBackgroundResource(R.color.deep_orange_200);
             holder.type.setTextColor(Color.BLACK);
         } else {
             holder.itemView.setBackgroundResource(Color.alpha(1));
