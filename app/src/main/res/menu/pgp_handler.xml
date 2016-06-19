@@ -3,12 +3,12 @@
     xmlns:pwstore="http://schemas.android.com/apk/res-auto"
     tools:context="com.zeapo.pwdstore.crypto.PgpHandler" >
     <item android:title="Copy password"
-        android:icon="@drawable/ic_action_copy"
+        android:icon="@drawable/ic_content_copy_white_24dp"
         pwstore:showAsAction="ifRoom"
         android:id="@+id/copy_password"
         />
     <item android:title="Edit password"
-        android:icon="@drawable/ic_action_edit"
+        android:icon="@drawable/ic_edit_white_24dp"
         pwstore:showAsAction="ifRoom"
         android:id="@+id/edit_password"
         />
