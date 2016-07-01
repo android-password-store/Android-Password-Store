@@ -136,7 +136,8 @@ public class AutofillService extends AccessibilityService {
         // nothing to do if not password field focus, field is keychain app
         if (!event.isPassword()
                 || event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                || event.getPackageName().equals("org.sufficientlysecure.keychain")) {
+                || event.getPackageName().equals("org.sufficientlysecure.keychain")
+                || event.getPackageName().equals("com.android.systemui")) {
             dismissDialog(event);
             return;
         }
