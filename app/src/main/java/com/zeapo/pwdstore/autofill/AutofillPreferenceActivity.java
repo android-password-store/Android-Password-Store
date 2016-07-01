@@ -74,7 +74,11 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
     private class populateTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+                }
+            });
         }
 
         @Override
@@ -105,13 +109,16 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            findViewById(R.id.progress_bar).setVisibility(View.GONE);
-
-            recyclerView.setAdapter(recyclerAdapter);
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
-            }
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    Bundle extras = getIntent().getExtras();
+                    if (extras != null) {
+                        recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
+                    }
+                }
+            });
         }
     }
 
