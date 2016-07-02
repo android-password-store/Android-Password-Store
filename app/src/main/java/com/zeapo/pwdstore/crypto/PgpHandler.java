@@ -149,6 +149,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 break;
             case R.id.edit_password:
                 editPassword();
+                break;
             case R.id.crypto_confirm_add:
                 encrypt(new Intent());
                 break;
@@ -161,7 +162,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     }
 
     public void editPassword() {
-
         // if in encrypt or in decrypt and password is invisible
         // (because !showPassword, so this will instantly close), do nothing
         if (findViewById(R.id.crypto_password_show) == null
@@ -195,6 +195,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         intent.putExtra("Operation", "ENCRYPT");
         intent.putExtra("fromDecrypt", true);
         setIntent(intent);
+
+        // recreate the options menu to be the encrypt one
+        invalidateOptionsMenu();
     }
 
     public void copyToClipBoard() {

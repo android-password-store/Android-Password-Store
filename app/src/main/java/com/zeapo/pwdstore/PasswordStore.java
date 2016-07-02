@@ -506,6 +506,15 @@ public class PasswordStore extends AppCompatActivity {
         return PasswordRepository.getWorkTree();
     }
 
+    private void commit(String message) {
+        Git git = new Git(PasswordRepository.getRepository(new File("")));
+        GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
+        tasks.execute(
+                git.add().addFilepattern("."),
+                git.commit().setMessage(message)
+        );
+    }
+
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         if (resultCode == RESULT_OK) {
@@ -515,16 +524,18 @@ public class PasswordStore extends AppCompatActivity {
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
                 case PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY:
-                    if (!data.getBooleanExtra("needCommit", false)) {
-                        break;
+                    // if went from decrypt->edit and user saved changes, we need to commit
+                    if (data.getBooleanExtra("needCommit", false)) {
+                        commit(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                        refreshListAdapter();
                     }
+                    break;
                 case PgpHandler.REQUEST_CODE_ENCRYPT:
-                    Git git = new Git(PasswordRepository.getRepository(new File("")));
-                    GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
-                    tasks.execute(
-                            git.add().addFilepattern("."),
-                            git.commit().setMessage(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store))
-                    );
+                    commit(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
+                    refreshListAdapter();
+                    break;
+                case PgpHandler.REQUEST_CODE_EDIT:
+                    commit(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
