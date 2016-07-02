@@ -312,12 +312,15 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
         @Override
         protected void onPostExecute(Boolean b) {
-            ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
-            clipboard.setPrimaryClip(clip);
-            if (settings.getBoolean("clear_clipboard_20x", false)) {
-                for (int i = 0; i < 19; i++) {
-                    clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
-                    clipboard.setPrimaryClip(clip);
+            // only clear the clipboard if we automatically copied the password to it
+            if (settings.getBoolean("copy_on_decrypt", true)) {
+                ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
+                clipboard.setPrimaryClip(clip);
+                if (settings.getBoolean("clear_clipboard_20x", false)) {
+                    for (int i = 0; i < 19; i++) {
+                        clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
+                        clipboard.setPrimaryClip(clip);
+                    }
                 }
             }
             if (showPassword && findViewById(R.id.crypto_password_show) != null) {
