@@ -2,6 +2,7 @@ package com.zeapo.pwdstore.utils;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -136,7 +137,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             holder.type.setTextColor(Color.BLACK);
         } else {
             holder.itemView.setBackgroundResource(Color.alpha(1));
-            holder.type.setTextColor(activity.getColor(R.color.grey_500));
+            holder.type.setTextColor(ContextCompat.getColor(activity, R.color.grey_500));
         }
     }
 
