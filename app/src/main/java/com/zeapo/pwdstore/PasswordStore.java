@@ -339,16 +339,6 @@ public class PasswordStore extends AppCompatActivity {
             if (fragmentManager.findFragmentByTag("PasswordsList") == null || settings.getBoolean("repo_changed", false)) {
                 settings.edit().putBoolean("repo_changed", false).apply();
 
-                // todo move this as it is duplicated upthere!
-                if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-
-                // clean things up
-                if (fragmentManager.findFragmentByTag("ToCloneOrNot") != null) {
-                    fragmentManager.popBackStack();
-                }
-
                 plist = new PasswordFragment();
                 Bundle args = new Bundle();
                 args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
@@ -361,20 +351,18 @@ public class PasswordStore extends AppCompatActivity {
 
                 plist.setArguments(args);
 
-                fragmentTransaction.addToBackStack("passlist");
-
                 getSupportActionBar().show();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 fragmentTransaction.replace(R.id.main_layout, plist, "PasswordsList");
                 fragmentTransaction.commit();
             }
         } else {
-            // if we still have the pass list (after deleting the repository for instance) remove it
-            if (fragmentManager.findFragmentByTag("PasswordsList") != null) {
-                fragmentManager.popBackStack();
-            }
-
             getSupportActionBar().hide();
+
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             ToCloneOrNot cloneFrag = new ToCloneOrNot();
             fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot");
