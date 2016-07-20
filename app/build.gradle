@@ -9,8 +9,8 @@ android {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 68
-        versionName "1.2.0.48"
+        versionCode 69
+        versionName "1.2.0.49"
     }
 
     compileOptions {
