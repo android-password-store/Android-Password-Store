@@ -1,7 +1,7 @@
 package com.zeapo.pwdstore;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -94,23 +94,23 @@ public class PasswordFragment extends Fragment{
     }
 
     @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
         try {
             mListener = new OnFragmentInteractionListener() {
                 public void onFragmentInteraction(PasswordItem item) {
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
                         // push the current password list (non filtered plz!)
                         passListStack.push(pathStack.isEmpty() ?
-                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context)) :
-                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context)));
+                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(activity)) :
+                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(activity)));
                         //push the category were we're going
                         pathStack.push(item.getFile());
                         scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
 
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context)));
+                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(activity)));
 
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     } else {
@@ -127,7 +127,7 @@ public class PasswordFragment extends Fragment{
                 }
             };
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
+            throw new ClassCastException(activity.toString()
                 + " must implement OnFragmentInteractionListener");
         }
     }
