@@ -2,8 +2,8 @@ package com.zeapo.pwdstore;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -331,7 +331,7 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     private void checkLocalRepository(File localDir) {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
             Log.d("PASS", "Check, dir: " + localDir.getAbsolutePath());
