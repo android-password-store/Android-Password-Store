@@ -475,7 +475,9 @@ public class GitActivity extends AppCompatActivity {
         if (!saveConfiguration())
             return;
 
-        if (localDir.exists() && localDir.listFiles().length != 0) {
+        // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
+        if (localDir.exists() && localDir.listFiles().length != 0
+                && !(localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git"))) {
             new AlertDialog.Builder(this).
                     setTitle(R.string.dialog_delete_title).
                     setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString()).
@@ -493,13 +495,16 @@ public class GitActivity extends AppCompatActivity {
                                             //This is what happens when jgit fails :(
                                             //TODO Handle the diffent cases of exceptions
                                             e.printStackTrace();
+                                            new AlertDialog.Builder(GitActivity.this).
+                                                    setMessage(e.getMessage()).
+                                                    show();
                                         }
                                     } catch (IOException e) {
                                         //TODO Handle the exception correctly if we are unable to delete the directory...
                                         e.printStackTrace();
-                                    } catch (Exception e) {
-                                        //This is what happens when jgit fails :(
-                                        //TODO Handle the diffent cases of exceptions
+                                        new AlertDialog.Builder(GitActivity.this).
+                                                setMessage(e.getMessage()).
+                                                show();
                                     }
 
                                     dialog.cancel();
@@ -516,6 +521,10 @@ public class GitActivity extends AppCompatActivity {
                     show();
         } else {
             try {
+                // Silently delete & replace the lone .git folder if it exists
+                if (localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git")) {
+                    FileUtils.deleteDirectory(localDir);
+                }
                 new CloneOperation(localDir, activity)
                         .setCommand(hostname)
                         .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
@@ -523,6 +532,9 @@ public class GitActivity extends AppCompatActivity {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
                 e.printStackTrace();
+                new AlertDialog.Builder(this).
+                        setMessage(e.getMessage()).
+                        show();
             }
         }
     }
