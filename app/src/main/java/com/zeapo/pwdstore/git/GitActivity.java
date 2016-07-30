@@ -495,16 +495,12 @@ public class GitActivity extends AppCompatActivity {
                                             //This is what happens when jgit fails :(
                                             //TODO Handle the diffent cases of exceptions
                                             e.printStackTrace();
-                                            new AlertDialog.Builder(GitActivity.this).
-                                                    setMessage(e.getMessage()).
-                                                    show();
+                                            new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
                                         }
                                     } catch (IOException e) {
                                         //TODO Handle the exception correctly if we are unable to delete the directory...
                                         e.printStackTrace();
-                                        new AlertDialog.Builder(GitActivity.this).
-                                                setMessage(e.getMessage()).
-                                                show();
+                                        new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
                                     }
 
                                     dialog.cancel();
@@ -523,7 +519,12 @@ public class GitActivity extends AppCompatActivity {
             try {
                 // Silently delete & replace the lone .git folder if it exists
                 if (localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git")) {
-                    FileUtils.deleteDirectory(localDir);
+                    try {
+                        FileUtils.deleteDirectory(localDir);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
+                    }
                 }
                 new CloneOperation(localDir, activity)
                         .setCommand(hostname)
@@ -532,9 +533,7 @@ public class GitActivity extends AppCompatActivity {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
                 e.printStackTrace();
-                new AlertDialog.Builder(this).
-                        setMessage(e.getMessage()).
-                        show();
+                new AlertDialog.Builder(this).setMessage(e.getMessage()).show();
             }
         }
     }
