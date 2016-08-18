@@ -2,8 +2,6 @@ package com.zeapo.pwdstore;
 
 import android.Manifest;
 import android.app.Activity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,11 +11,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -463,6 +465,17 @@ public class PasswordStore extends AppCompatActivity {
                 .show();
     }
 
+    public void movePasswords(ArrayList<PasswordItem> values) {
+        Intent intent = new Intent(this, PgpHandler.class);
+        ArrayList<String> fileLocations = new ArrayList<>();
+        for (PasswordItem passwordItem : values){
+            fileLocations.add(passwordItem.getFile().getAbsolutePath());
+        }
+        intent.putExtra("Files",fileLocations);
+        intent.putExtra("Operation", "SELECTFOLDER");
+        startActivityForResult(intent, PgpHandler.REQUEST_CODE_SELECT_FOLDER);
+    }
+
     /**
      * clears adapter's content and updates it with a fresh list of passwords from the root
      */
@@ -557,6 +570,29 @@ public class PasswordStore extends AppCompatActivity {
                     Intent intent = new Intent(activity, GitActivity.class);
                     intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
                     startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                    break;
+                case PgpHandler.REQUEST_CODE_SELECT_FOLDER:
+                    Log.d("Moving","Moving passwords to "+data.getStringExtra("SELECTED_FOLDER_PATH"));
+                    Log.d("Moving", TextUtils.join(", ", data.getStringArrayListExtra("Files")));
+                    File target = new File(data.getStringExtra("SELECTED_FOLDER_PATH"));
+                    if (!target.isDirectory()){
+                        Log.e("Moving","Tried moving passwords to a non-existing folder.");
+                        break;
+                    }
+
+                    final ArrayList<String> files = data.getStringArrayListExtra("Files");
+                    for (String string : files){
+                        File source = new File(string);
+                        if (!source.exists()){
+                            Log.e("Moving","Tried moving something that appears non-existent.");
+                            continue;
+                        }
+                        if (!source.renameTo(new File(target.getAbsolutePath()+"/"+source.getName()))){
+                            Log.e("Moving","Something went wrong while moving.");
+                        }
+                    }
+                    commit("[ANDROID PwdStore] Moved "+getResources().getQuantityString(R.plurals.password,files.size(),files.size())+" to "+target.getAbsolutePath().replace(PasswordRepository.getWorkTree() + "/","")+".");
+                    updateListAdapter();
                     break;
             }
         }

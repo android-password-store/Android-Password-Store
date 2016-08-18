@@ -13,6 +13,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.primitives.Longs;
+import com.zeapo.pwdstore.BuildConfig;
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.SelectFolderFragment;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.pwgenDialogFragment;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -57,6 +61,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     private Activity activity;
     ClipboardManager clipboard;
 
+    SelectFolderFragment passwordList;
+    private Intent selectFolderData;
+
     private boolean registered;
 
     public static final int REQUEST_CODE_SIGN = 9910;
@@ -66,6 +73,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     public static final int REQUEST_CODE_GET_KEY = 9914;
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_EDIT = 9916;
+    public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -125,10 +133,15 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (getIntent().getStringExtra("Operation").equals("ENCRYPT")) {
-            getMenuInflater().inflate(R.menu.pgp_handler_new_password, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.pgp_handler, menu);
+        switch (getIntent().getStringExtra("Operation")){
+            case "ENCRYPT":
+                getMenuInflater().inflate(R.menu.pgp_handler_new_password, menu);
+                break;
+            case "SELECTFOLDER":
+                getMenuInflater().inflate(R.menu.pgp_handler_select_folder, menu);
+                break;
+            default:
+                getMenuInflater().inflate(R.menu.pgp_handler, menu);
         }
         return true;
     }
@@ -157,8 +170,20 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 setResult(RESULT_CANCELED);
                 finish();
                 return true;
+            case R.id.crypto_select:
+                selectFolder();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void selectFolder() {
+        if (selectFolderData == null || passwordList == null){
+            Log.wtf(Constants.TAG,"Folder selected while the app didn't ask for one to be selected?");
+        }
+        selectFolderData.putExtra("SELECTED_FOLDER_PATH",passwordList.getCurrentDir().getAbsolutePath());
+        setResult(RESULT_OK,selectFolderData);
+        finish();
     }
 
     public void editPassword() {
@@ -233,6 +258,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 DialogFragment df = new pwgenDialogFragment();
                 df.show(getFragmentManager(), "generator");
             default:
+                Log.wtf(Constants.TAG,"This should not happen.... PgpHandler.java#handleClick(View) default reached.");
                 // should not happen
 
         }
@@ -379,6 +405,39 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             setResult(RESULT_CANCELED, data);
             finish();
         }
+    }
+
+    private void selectFolder(Intent data) {
+
+        if (data.getStringExtra("Operation") == null || !data.getStringExtra("Operation").equals("SELECTFOLDER")){
+            Log.e(Constants.TAG,"PgpHandler#selectFolder(Intent) triggered with incorrect intent.");
+            if (BuildConfig.DEBUG){
+                throw new UnsupportedOperationException("Triggered with incorrect intent.");
+            }
+            return;
+        }
+
+        Log.d(Constants.TAG,"PgpHandler#selectFolder(Intent).");
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        passwordList = new SelectFolderFragment();
+        Bundle args = new Bundle();
+        args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
+
+        passwordList.setArguments(args);
+
+        getSupportActionBar().show();
+
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        fragmentTransaction.replace(R.id.pgp_handler_linearlayout, passwordList, "PasswordsList");
+        fragmentTransaction.commit();
+
+        this.selectFolderData = data;
     }
 
     public class PgpCallback implements OpenPgpApi.IOpenPgpCallback {
@@ -638,7 +697,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         Log.i("PGP", "ISBOUND!!");
 
         Bundle extra = getIntent().getExtras();
-        if (extra.getString("Operation").equals("DECRYPT")) {
+        final String operation = extra.getString("Operation");
+        if (operation == null){
+            return;
+        }
+        if (operation.equals("DECRYPT")) {
             setContentView(R.layout.decrypt_layout);
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
             String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
@@ -646,7 +709,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
             decryptAndVerify(new Intent());
-        } else if (extra.getString("Operation").equals("ENCRYPT")) {
+        } else if (operation.equals("ENCRYPT")) {
             setContentView(R.layout.encrypt_layout);
             Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
             ((EditText) findViewById(R.id.crypto_password_edit)).setTypeface(monoTypeface);
@@ -655,7 +718,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
             cat = cat + "/";
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
-        } else if (extra.getString("Operation").equals("GET_KEY_ID")) {
+        } else if (operation.equals("GET_KEY_ID")) {
             getKeyIds(new Intent());
 
 //            setContentView(R.layout.key_id);
@@ -663,7 +726,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 //                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
 //                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
 //            }
-        } else if (extra.getString("Operation").equals("EDIT")) {
+        } else if (operation.equals("EDIT")) {
             setContentView(R.layout.decrypt_layout);
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
             String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
@@ -671,6 +734,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
             edit(new Intent());
+        } else if (operation.equals("SELECTFOLDER")){
+            setContentView(R.layout.select_folder_layout);
+            selectFolder(getIntent());
         }
     }
 
