@@ -6,26 +6,23 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.zeapo.pwdstore.PasswordFragment;
-import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.SelectFolderFragment;
+import com.zeapo.pwdstore.crypto.PgpHandler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecyclerAdapter.ViewHolder> {
-    private final PasswordStore activity;
+public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAdapter.ViewHolder> {
+    private final PgpHandler activity;
     private final ArrayList<PasswordItem> values;
-    private final PasswordFragment.OnFragmentInteractionListener listener;
+    private final SelectFolderFragment.OnFragmentInteractionListener listener;
     private final Set<Integer> selectedItems;
     private ActionMode mActionMode;
     private Boolean canEdit;
@@ -50,7 +47,7 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PasswordRecyclerAdapter(PasswordStore activity, PasswordFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
+    public FolderRecyclerAdapter(PgpHandler activity, SelectFolderFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
         this.values = values;
         this.activity = activity;
         this.listener = listener;
@@ -59,8 +56,8 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
 
     // Create new views (invoked by the layout manager)
     @Override
-    public PasswordRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                 int viewType) {
+    public FolderRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                               int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.password_row_layout, parent, false);
@@ -112,23 +109,6 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             }
         });
 
-        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mActionMode != null) {
-                    return false;
-                }
-                toggleSelection(holder.getAdapterPosition());
-                canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
-                // Start the CAB using the ActionMode.Callback
-                mActionMode = activity.startSupportActionMode(mActionModeCallback);
-                mActionMode.setTitle("" + selectedItems.size());
-                mActionMode.invalidate();
-                notifyItemChanged(holder.getAdapterPosition());
-                return true;
-            }
-        });
-
         // after removal, everything is rebound for some reason; views are shuffled?
         boolean selected = selectedItems.contains(position);
         holder.view.setSelected(selected);
@@ -140,63 +120,6 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
             holder.type.setTextColor(ContextCompat.getColor(activity, R.color.grey_500));
         }
     }
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            mode.getMenuInflater().inflate(R.menu.context_pass, menu);
-            return true;
-        }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            if (canEdit) {
-                menu.findItem(R.id.menu_edit_password).setVisible(true);
-            } else {
-                menu.findItem(R.id.menu_edit_password).setVisible(false);
-            }
-            return true; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.menu_delete_password:
-                    activity.deletePasswords(PasswordRecyclerAdapter.this, new TreeSet<>(selectedItems));
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                case R.id.menu_edit_password:
-                    activity.editPassword(values.get(selectedItems.iterator().next()));
-                    mode.finish();
-                    return true;
-                case R.id.menu_move_password:
-                    ArrayList selectedPasswords = new ArrayList();
-                    for (Integer id : selectedItems){
-                        selectedPasswords.add(values.get(id));
-                    }
-                    activity.movePasswords(selectedPasswords);
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            for (Iterator it = selectedItems.iterator(); it.hasNext();) {
-                // need the setSelected line in onBind
-                notifyItemChanged((Integer) it.next());
-                it.remove();
-            }
-            mActionMode = null;
-        }
-    };
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

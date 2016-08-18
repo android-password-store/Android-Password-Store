@@ -3,10 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".pwdstore">
 
+    <item android:id="@+id/menu_move_password"
+        android:icon="@drawable/ic_folder_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Move"/>
+
     <item android:id="@+id/menu_edit_password"
-          android:icon="@drawable/ic_edit_white_24dp"
-          app:showAsAction="ifRoom"
-          android:title="Edit"/>
+        android:icon="@drawable/ic_edit_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Edit"/>
 
     <item android:id="@+id/menu_delete_password"
         android:icon="@drawable/ic_delete_white_24dp"
