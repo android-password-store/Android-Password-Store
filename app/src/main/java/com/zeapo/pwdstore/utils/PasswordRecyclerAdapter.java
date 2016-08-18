@@ -175,12 +175,6 @@ public class PasswordRecyclerAdapter extends RecyclerView.Adapter<PasswordRecycl
                     activity.editPassword(values.get(selectedItems.iterator().next()));
                     mode.finish();
                     return true;
-                case R.id.menu_move_password:
-                    ArrayList selectedPasswords = new ArrayList();
-                    for (Integer id : selectedItems){
-                        selectedPasswords.add(values.get(id));
-                    }
-                    activity.movePasswords(selectedPasswords);
                 default:
                     return false;
             }
