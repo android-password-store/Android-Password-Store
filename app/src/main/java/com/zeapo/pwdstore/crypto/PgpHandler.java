@@ -147,6 +147,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             case R.id.copy_password:
                 copyToClipBoard();
                 break;
+            case R.id.share_password_as_plaintext:
+                shareAsPlaintext();
+                break;
             case R.id.edit_password:
                 editPassword();
                 break;
@@ -200,12 +203,35 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         invalidateOptionsMenu();
     }
 
+    public void shareAsPlaintext() {
+
+        if (findViewById(R.id.share_password_as_plaintext) == null)
+            return;
+
+        final TextView cryptoPasswordShow = (TextView) findViewById(R.id.crypto_password_show);
+        if (cryptoPasswordShow == null) {
+            return;
+        }
+        final CharSequence text = cryptoPasswordShow.getText();
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_plaintext_password_to)));//Always show a picker to give the user a chance to cancel
+    }
+
     public void copyToClipBoard() {
 
         if (findViewById(R.id.crypto_password_show) == null)
             return;
 
-        ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", ((TextView) findViewById(R.id.crypto_password_show)).getText());
+        final TextView cryptoPasswordShow = (TextView) findViewById(R.id.crypto_password_show);
+        if (cryptoPasswordShow == null) {
+            return;
+        }
+
+        ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", cryptoPasswordShow.getText());
         clipboard.setPrimaryClip(clip);
         try {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
