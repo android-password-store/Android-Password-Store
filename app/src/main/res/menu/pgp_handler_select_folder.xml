@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:pwstore="http://schemas.android.com/apk/res-auto"
+    tools:context="com.zeapo.pwdstore.crypto.PgpHandler" >
+    <item android:title="Select"
+        android:icon="@drawable/ic_done_white_24dp"
+        pwstore:showAsAction="ifRoom"
+        android:id="@+id/crypto_select"
+        />
+</menu>
