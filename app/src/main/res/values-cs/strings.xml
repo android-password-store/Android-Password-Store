@@ -25,6 +25,7 @@
     <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
     <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
     <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
+    <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
     <string name="from_store">&#160; from store.</string>
 
     <!-- PGPHandler -->
@@ -57,8 +58,8 @@
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Vítejte v aplikaci Password Store\n\n Na této obrazovce můžete buď  vytvořit nový repozitář nebo klonovat dostupný repozitář na svůj přístroj.</string>
-    <string name="clone">Klonovat existující</string>
-    <string name="initialize">Vytvořit nový</string>
+    <string name="clone">Klonovat ze serveru</string>
+    <string name="initialize">Použít místní adresář</string>
 
     <string name="server_name">Server</string>
     <string name="server_protocol">Protokol</string>
@@ -121,12 +122,17 @@
     <string name="pref_autofill_enable_msg">Ťukni na OK pro zobrazení nastavení přístupnosti. Tam poté ťuknout mezi službami na Password Store a přepínačem lze zapnout nebo vypnout.</string>
     <string name="pref_autofill_enable_msg2">Jakmile bude služba zapnuta, po kliknutí na pole hesla bude zobrazeno dialogové okno pokud je pro používanou aplikaci heslo dostupné.</string>
     <string name="pref_autofill_enable_msg3">Password Store se automaticky pokouší najít odpovídající heslo k aplikacím. Toto výchozí nastavení spolu s nastavením pro jednotlivé aplikace lze změnit.</string>
-    <string name="pref_autofill_apps_title">Nastavení jednotlivých aplikací</string>
+    <string name="pref_autofill_apps_title">Nastavení aplikace a webové stránky</string>
     <string name="pref_autofill_apps_hint">Upravit automatické vyplňování u vybraných aplikací.</string>
     <string name="pref_autofill_default_title">Automaticky párovat ve výchozím nastavení</string>
     <string name="pref_autofill_default_hint">Ve výchozím nastavení \'Automaticky párovat\' u aplikací bez vybraného nastavení. Jinak, \'Nikdy nepárovat.\'</string>
+    <string name="pref_autofill_always_title">Vždy zobrazit dialog</string>
     <string name="pref_clear_clipboard_title">Zaplnit schránku 20krát</string>
     <string name="pref_clear_clipboard_hint">Uložit dvacet náhodných textů do schránky namísto pouze jednoho. Užitečné pro telefony Samsung, které nabízejí funkci historie schránky.</string>
+    <string name="pref_git_delete_repo_summary">Smaže místní (skrytý) repozitář</string>
+    <string name="pref_external_repository">Externí repozitář</string>
+    <string name="pref_external_repository_summary">Použít externí repozitář hesel</string>
+    <string name="pref_select_external_repository">Vybrat externí repozitář</string>
 
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Generovat</string>
@@ -171,5 +177,9 @@
     <string name="autofill_apps_match">Spárovat s</string>
     <string name="autofill_apps_never">Nikdy nepárovat</string>
     <string name="autofill_apps_delete">Smazat</string>
-    <string name="pref_autofill_always_title">Vždy zobrazit dialog</string>
+    <string name="refresh_list">Obnovit seznam</string>
+    <string name="settings">Nastavení</string>
+    <string name="no_repo_selected">Nebyl vybrát externí repozitář</string>
+    <string name="no_repo_selected2">Nebyl vybrát externí repozitář</string>
+    <string name="send_plaintext_password_to">Odeslat heslo jako plaintext za použití…</string>
 </resources>
