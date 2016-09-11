@@ -66,6 +66,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     public static final int REQUEST_CODE_GET_KEY = 9914;
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_EDIT = 9916;
+    private String decodedPassword = "";
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -208,15 +209,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         if (findViewById(R.id.share_password_as_plaintext) == null)
             return;
 
-        final TextView cryptoPasswordShow = (TextView) findViewById(R.id.crypto_password_show);
-        if (cryptoPasswordShow == null) {
-            return;
-        }
-        final CharSequence text = cryptoPasswordShow.getText();
-
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, decodedPassword);
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_plaintext_password_to)));//Always show a picker to give the user a chance to cancel
     }
@@ -226,12 +221,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         if (findViewById(R.id.crypto_password_show) == null)
             return;
 
-        final TextView cryptoPasswordShow = (TextView) findViewById(R.id.crypto_password_show);
-        if (cryptoPasswordShow == null) {
+        if (decodedPassword.isEmpty()) {
             return;
         }
 
-        ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", cryptoPasswordShow.getText());
+        ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", decodedPassword);
         clipboard.setPrimaryClip(clip);
         try {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
@@ -343,6 +337,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     }
                 }
             }
+            decodedPassword = "";
             if (findViewById(R.id.crypto_password_show) != null) {
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
                 ((TextView) findViewById(R.id.crypto_password_show)).setText("");
@@ -431,6 +426,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                         .setTypeface(monoTypeface);
                                 ((TextView) findViewById(R.id.crypto_password_show))
                                         .setText(showPassword?passContent[0]:"********");
+                                decodedPassword = passContent[0];
 
                                 String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {
@@ -508,6 +504,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                         .setTypeface(monoTypeface);
                                 ((TextView) findViewById(R.id.crypto_password_show))
                                         .setText(passContent[0]);
+                                decodedPassword = passContent[0];
 
                                 String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {
