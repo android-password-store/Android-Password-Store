@@ -315,9 +315,19 @@ public class UserPreference extends AppCompatActivity {
      * Opens a file explorer to import the private key
      */
     public void getSshKey() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
-        startActivityForResult(intent, IMPORT_SSH_KEY);
+        // This always works
+        Intent i = new Intent(getApplicationContext(), FilePickerActivity.class);
+        // This works if you defined the intent filter
+        // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+
+        // Set these depending on your use case. These are the defaults.
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+        startActivityForResult(i, IMPORT_SSH_KEY);
     }
 
     /**
@@ -360,10 +370,12 @@ public class UserPreference extends AppCompatActivity {
             switch (requestCode) {
                 case IMPORT_SSH_KEY: {
                     try {
-                        if (data.getData() == null) {
+                        final Uri uri = data.getData();
+
+                        if (uri == null) {
                             throw new IOException("Unable to open file");
                         }
-                        copySshKey(data.getData());
+                        copySshKey(uri);
                         Toast.makeText(this, this.getResources().getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show();
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = prefs.edit();
