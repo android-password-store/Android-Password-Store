@@ -9,6 +9,15 @@ android:
         - extra-google-m2repository
         - extra-android-m2repository
 
+licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+cache:
+  directories:
+    - $HOME/.gradle
+
  # ok no tests for now
  # - sys-img-x86-android-22
 
