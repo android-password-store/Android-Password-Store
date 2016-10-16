@@ -17,11 +17,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -471,6 +474,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
                     // encrypt/decrypt/sign/verify
+                    final TextView textViewPassword = (TextView) findViewById(R.id.crypto_password_show);
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
                             if (returnToCiphertextField) {
@@ -481,11 +485,21 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-                                String[] passContent = os.toString("UTF-8").split("\n");
-                                ((TextView) findViewById(R.id.crypto_password_show))
+                                final String[] passContent = os.toString("UTF-8").split("\n");
+                                textViewPassword
                                         .setTypeface(monoTypeface);
-                                ((TextView) findViewById(R.id.crypto_password_show))
-                                        .setText(showPassword?passContent[0]:"********");
+                                textViewPassword
+                                        .setText(passContent[0]);
+
+                                Button toggleVisibilityButton = (Button) findViewById(R.id.crypto_password_toggle_show);
+                                toggleVisibilityButton.setVisibility(showPassword?View.GONE:View.VISIBLE);
+                                textViewPassword.setTransformationMethod(showPassword?null:new HoldToShowPasswordTransformation(toggleVisibilityButton, new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textViewPassword
+                                                .setText(passContent[0]);
+                                    }
+                                }));
                                 decodedPassword = passContent[0];
 
                                 String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
@@ -560,9 +574,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
                                 String[] passContent = os.toString("UTF-8").split("\n");
-                                ((TextView) findViewById(R.id.crypto_password_show))
+                                textViewPassword
                                         .setTypeface(monoTypeface);
-                                ((TextView) findViewById(R.id.crypto_password_show))
+                                textViewPassword
                                         .setText(passContent[0]);
                                 decodedPassword = passContent[0];
 
@@ -758,4 +772,33 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     }
 
+    private class HoldToShowPasswordTransformation extends PasswordTransformationMethod implements View.OnTouchListener {
+        private final Runnable onToggle;
+        private boolean shown = false;
+
+        private HoldToShowPasswordTransformation(Button button, Runnable onToggle) {
+            this.onToggle = onToggle;
+            button.setOnTouchListener(this);
+        }
+
+        @Override
+        public CharSequence getTransformation(CharSequence charSequence, View view) {
+            return shown?charSequence:super.getTransformation("12345", view);
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            switch ( motionEvent.getAction() ) {
+                case MotionEvent.ACTION_DOWN:
+                    shown = true;
+                    onToggle.run();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    shown = false;
+                    onToggle.run();
+                    break;
+            }
+            return false;
+        }
+    }
 }

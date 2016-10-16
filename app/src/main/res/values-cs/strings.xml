@@ -182,4 +182,5 @@
     <string name="no_repo_selected">Nebyl vybrát externí repozitář</string>
     <string name="no_repo_selected2">Nebyl vybrát externí repozitář</string>
     <string name="send_plaintext_password_to">Odeslat heslo jako plaintext za použití…</string>
+    <string name="show_password">Pokaż hasło</string>
 </resources>
