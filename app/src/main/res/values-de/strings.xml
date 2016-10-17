@@ -178,4 +178,9 @@
     <string name="autofill_apps_never">Niemals abgleichen</string>
     <string name="autofill_apps_delete">Löschen</string>
     <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
+    <string name="no_repo_selected2">Kein externes Repository ausgewählt</string>
+    <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
+    <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
+    <string name="settings">Einstellungen</string>
+    <string name="show_password">Password wiedergeben</string>
 </resources>
