@@ -53,8 +53,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConnection.OnBound {
-
-
+    private static DelayShow delayTask;
     private OpenPgpServiceConnection mServiceConnection;
     private Set<String> keyIDs = new HashSet<>();
     SharedPreferences settings;
@@ -313,14 +312,15 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     public class DelayShow extends AsyncTask<Void, Integer, Boolean> {
         ProgressBar pb;
-        int current, SHOW_TIME;
+        boolean clearClipboard = true;
+        int current, showTime;
 
         @Override
         protected void onPreExecute() {
             try {
-                SHOW_TIME = Integer.parseInt(settings.getString("general_show_time", "45"));
+                showTime = Integer.parseInt(settings.getString("general_show_time", "45"));
             } catch (NumberFormatException e) {
-                SHOW_TIME = 45;
+                showTime = 45;
             }
             current = 0;
 
@@ -332,18 +332,18 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             if (extraText.getText().length() != 0)
                 findViewById(R.id.crypto_extra_show_layout).setVisibility(View.VISIBLE);
 
-            if (SHOW_TIME == 0) {
+            if (showTime == 0) {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own
                 cancel(true);
             } else {
                 this.pb = (ProgressBar) findViewById(R.id.pbLoading);
-                this.pb.setMax(SHOW_TIME);
+                this.pb.setMax(showTime);
             }
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            while (current < SHOW_TIME) {
+            while (current < showTime) {
                 SystemClock.sleep(1000);
                 current++;
                 publishProgress(current);
@@ -354,7 +354,8 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         @Override
         protected void onPostExecute(Boolean b) {
             // only clear the clipboard if we automatically copied the password to it
-            if (settings.getBoolean("copy_on_decrypt", true)) {
+            if (settings.getBoolean("copy_on_decrypt", true) && clearClipboard) {
+                Log.d("DELAY_SHOW", "Clearing the clipboard");
                 ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
                 clipboard.setPrimaryClip(clip);
                 if (settings.getBoolean("clear_clipboard_20x", false)) {
@@ -381,6 +382,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             this.pb.setProgress(values[0]);
         }
 
+        public void setClearClipboard(boolean value) {
+            clearClipboard = value;
+        }
     }
 
 
@@ -496,16 +500,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                             .setText(extraContent);
                                 }
 
+                                setTimer();
+
                                 if (settings.getBoolean("copy_on_decrypt", true)) {
                                     copyToClipBoard();
                                 }
-
-                                new DelayShow().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                /*if (!showPassword) {
-                                    // stop here, but still need DelayShow to clear clipboard
-                                    activity.setResult(RESULT_CANCELED);
-                                    activity.finish();
-                                }*/
                             } else {
                                 Log.d("PGPHANDLER", "Error message after decrypt : " + os.toString());
                             }
@@ -758,4 +757,13 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     }
 
+    private void setTimer() {
+        // If a task already exist, let it finish without clearing the clipboard
+        if (delayTask != null) {
+            delayTask.setClearClipboard(false);
+        }
+
+        delayTask = new DelayShow();
+        delayTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 }
