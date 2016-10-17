@@ -542,6 +542,7 @@ public class PasswordStore extends AppCompatActivity {
                 case GitActivity.REQUEST_INIT:
                     initializeRepositoryInfo();
                     break;
+                case GitActivity.REQUEST_SYNC:
                 case GitActivity.REQUEST_PULL:
                     updateListAdapter();
                     break;

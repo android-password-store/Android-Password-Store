@@ -3,14 +3,14 @@ apply from: 'copyLibs.gradle'    // enable 'copyLibs.gradle' script plugin
 apply plugin: 'eclipse'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 24
+    buildToolsVersion '24.0.2'
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 72
-        versionName "1.2.0.52"
+        targetSdkVersion 24
+        versionCode 73
+        versionName "1.2.0.53"
     }
 
     compileOptions {
@@ -58,19 +58,19 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
     compile 'org.sufficientlysecure:openpgp-api:11.0'
     compile 'com.nononsenseapps:filepicker:2.4.2'
-    compile ('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r') {
+    compile('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     compile 'com.jcraft:jsch:0.1.53'
     compile 'org.apache.commons:commons-io:1.3.2'
     compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
-    compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile 'com.google.guava:guava:18.0'
 }
 tasks.findAll {    // make all tasks whose name starts with 'assemble'...
     it.name.startsWith 'assemble'
