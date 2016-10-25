@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -7,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,10 +18,15 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.base.Function;
@@ -48,6 +56,8 @@ public class UserPreference extends AppCompatActivity {
     private final static int EDIT_GIT_INFO = 3;
     private OpenPgpKeyPreference mKey;
     private final static int SELECT_GIT_DIRECTORY = 4;
+    private final static int REQUEST_EXTERNAL_STORAGE = 50;
+    private PrefsFragment prefsFragment;
 
     public static class PrefsFragment extends PreferenceFragment {
         @Override
@@ -71,7 +81,7 @@ public class UserPreference extends AppCompatActivity {
             findPreference("ssh_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    callingActivity.getSshKey();
+                    callingActivity.getSshKeyWithPermissions();
                     return true;
                 }
             });
@@ -249,7 +259,7 @@ public class UserPreference extends AppCompatActivity {
             if (getIntent().getStringExtra("operation") != null) {
                 switch (getIntent().getStringExtra("operation")) {
                     case "get_ssh_key":
-                        getSshKey();
+                        getSshKeyWithPermissions();
                         break;
                     case "make_ssh_key":
                         makeSshKey(false);
@@ -260,9 +270,9 @@ public class UserPreference extends AppCompatActivity {
                 }
             }
         }
+        prefsFragment = new PrefsFragment();
 
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new PrefsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, prefsFragment).commit();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -277,19 +287,19 @@ public class UserPreference extends AppCompatActivity {
                 setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                    // This always works
-                    Intent i = new Intent(activity.getApplicationContext(), FilePickerActivity.class);
-                    // This works if you defined the intent filter
-                    // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                        // This always works
+                        Intent i = new Intent(activity.getApplicationContext(), FilePickerActivity.class);
+                        // This works if you defined the intent filter
+                        // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 
-                    // Set these depending on your use case. These are the defaults.
-                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
-                    i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+                        // Set these depending on your use case. These are the defaults.
+                        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+                        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
+                        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
 
-                    i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+                        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
 
-                    startActivityForResult(i, SELECT_GIT_DIRECTORY);
+                        startActivityForResult(i, SELECT_GIT_DIRECTORY);
                     }
                 }).
                 setNegativeButton(R.string.dialog_cancel, null).show();
@@ -309,6 +319,36 @@ public class UserPreference extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Opens a file explorer to import the private key
+     */
+    public void getSshKeyWithPermissions() {
+        final Activity activity = this;
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Snackbar snack = Snackbar.make(prefsFragment.getView(),
+                        "We need access to the sd-card to import the ssh-key",
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.dialog_ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
+                            }
+                        });
+                snack.show();
+                View view = snack.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(Color.WHITE);
+                tv.setMaxLines(10);
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
+            }
+        } else {
+            getSshKey();
+        }
     }
 
     /**
@@ -443,6 +483,18 @@ public class UserPreference extends AppCompatActivity {
                 break;
                 default:
                     break;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getSshKey();
+                }
             }
         }
     }
