@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
+import com.zeapo.pwdstore.git.GitTaskHandler;
 import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
@@ -44,7 +45,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class PasswordStore extends AppCompatActivity {
+public class PasswordStore extends AppCompatActivity implements GitTaskHandler {
     private static final String TAG = "PwdStrAct";
     private File currentDir;
     private SharedPreferences settings;
@@ -447,7 +448,7 @@ public class PasswordStore extends AppCompatActivity {
                         setResult(RESULT_CANCELED);
                         Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
                         Git git = new Git(repo);
-                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
+                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class, (PasswordStore) activity);
                         tasks.execute(
                                 git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
                                 git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")
@@ -509,7 +510,7 @@ public class PasswordStore extends AppCompatActivity {
 
     private void commit(String message) {
         Git git = new Git(PasswordRepository.getRepository(new File("")));
-        GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
+        GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class, this);
         tasks.execute(
                 git.add().addFilepattern("."),
                 git.commit().setMessage(message)
@@ -583,7 +584,7 @@ public class PasswordStore extends AppCompatActivity {
 
                     Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
                     Git git = new Git(repo);
-                    GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
+                    GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class, this);
 
                     for (String string : data.getStringArrayListExtra("Files")){
                         File source = new File(string);
@@ -680,5 +681,10 @@ public class PasswordStore extends AppCompatActivity {
         data.putExtra("path", path);
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    @Override
+    public void onTaskEnded(String result) {
+
     }
 }

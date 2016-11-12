@@ -17,6 +17,8 @@ import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -25,7 +27,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 
-public abstract class GitOperation {
+public abstract class GitOperation implements GitTaskHandler {
     private static final String TAG = "GitOpt";
     public static final int GET_SSH_KEY_FROM_CLONE = 201;
 
@@ -208,5 +210,29 @@ public abstract class GitOperation {
                 }
             }).show();
         }
+    }
+
+    //TODO remove this once implemented in subclasses
+    @Override
+    public void onTaskEnded(String result) {
+        new AlertDialog.Builder(callingActivity).
+                setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
+                setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + result).
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (this.getClass().equals(CloneCommand.class)) {
+                            // if we were unable to finish the job
+                            try {
+                                FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            callingActivity.setResult(Activity.RESULT_CANCELED);
+                            callingActivity.finish();
+                        }
+                    }
+                }).show();
     }
 }

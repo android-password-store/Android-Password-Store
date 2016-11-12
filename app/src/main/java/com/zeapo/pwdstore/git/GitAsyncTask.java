@@ -2,16 +2,11 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.GitCommand;
 
 
@@ -21,12 +16,14 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
     private Class operation;
+    private GitTaskHandler handler;
 
-    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, Class operation) {
+    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, Class operation, GitTaskHandler handler) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
+        this.handler = handler;
 
         dialog = new ProgressDialog(this.activity);
     }
@@ -63,26 +60,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
             result = "Unexpected error";
 
         if (!result.isEmpty()) {
-            new AlertDialog.Builder(activity).
-                    setTitle(activity.getResources().getString(R.string.jgit_error_dialog_title)).
-                    setMessage(activity.getResources().getString(R.string.jgit_error_dialog_text) + result).
-                    setPositiveButton(activity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (operation.equals(CloneCommand.class)) {
-                                // if we were unable to finish the job
-                                try {
-                                    FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                activity.setResult(Activity.RESULT_CANCELED);
-                                activity.finish();
-                            }
-                        }
-                    }).show();
-
+            this.handler.onTaskEnded(result);
         } else {
             if (finishOnEnd) {
                 this.activity.setResult(Activity.RESULT_OK);
