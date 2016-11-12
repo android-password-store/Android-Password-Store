@@ -68,7 +68,7 @@ public class CloneOperation extends GitOperation implements GitTaskHandler {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         if (this.provider != null) {
             ((CloneCommand) this.command).setCredentialsProvider(this.provider);
         }

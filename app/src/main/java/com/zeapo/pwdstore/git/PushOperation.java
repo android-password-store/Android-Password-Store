@@ -32,7 +32,7 @@ public class PushOperation extends GitOperation implements GitTaskHandler {
     }
 
     @Override
-    public void execute() throws Exception  {
+    public void execute() {
         if (this.provider != null) {
             ((PushCommand) this.command).setCredentialsProvider(this.provider);
         }

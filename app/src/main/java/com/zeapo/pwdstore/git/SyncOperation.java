@@ -39,8 +39,7 @@ public class SyncOperation extends GitOperation implements GitTaskHandler {
     }
 
     @Override
-    public void execute() throws Exception  {
-
+    public void execute() {
         if (this.provider != null) {
             this.pullCommand.setCredentialsProvider(this.provider);
             this.pushCommand.setCredentialsProvider(this.provider);

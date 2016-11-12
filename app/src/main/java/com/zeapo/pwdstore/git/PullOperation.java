@@ -32,7 +32,7 @@ public class PullOperation extends GitOperation implements GitTaskHandler {
     }
 
     @Override
-    public void execute() throws Exception  {
+    public void execute() {
         if (this.provider != null) {
             ((PullCommand) this.command).setCredentialsProvider(this.provider);
         }
