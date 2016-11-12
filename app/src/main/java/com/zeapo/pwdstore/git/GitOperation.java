@@ -88,7 +88,20 @@ public abstract class GitOperation {
      * @param sshKey         the ssh-key file
      * @throws Exception
      */
-    public void executeAfterAuthentication(String connectionMode, final String username, @Nullable final File sshKey) throws Exception {
+    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey) throws Exception {
+        executeAfterAuthentication(connectionMode, username, sshKey, false);
+    }
+
+    /**
+     * Executes the GitCommand in an async task after creating the authentication
+     *
+     * @param connectionMode the server-connection mode
+     * @param username       the username
+     * @param sshKey         the ssh-key file
+     * @param showError      show the passphrase edit text in red
+     * @throws Exception
+     */
+    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError) throws Exception {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
                 new AlertDialog.Builder(callingActivity)
@@ -135,8 +148,11 @@ public abstract class GitOperation {
                 passphrase.setHint("Passphrase");
                 passphrase.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
                 passphrase.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                if (showError) {
+                    passphrase.setError("Wrong passphrase");
+                }
                 JSch jsch = new JSch();
-                KeyPair keyPair = KeyPair.load(jsch, callingActivity.getFilesDir() + "/.ssh_key");
+                final KeyPair keyPair = KeyPair.load(jsch, callingActivity.getFilesDir() + "/.ssh_key");
                 if (keyPair.isEncrypted()) {
                     new AlertDialog.Builder(callingActivity)
                             .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
@@ -145,8 +161,13 @@ public abstract class GitOperation {
                             .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     try {
-                                        // Authenticate using the ssh-key and then execute the command
-                                        setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
+                                        if (keyPair.decrypt(passphrase.getText().toString())) {
+                                            // Authenticate using the ssh-key and then execute the command
+                                            setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
+                                        } else {
+                                            // call back the method
+                                            executeAfterAuthentication(connectionMode, username, sshKey, true);
+                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
