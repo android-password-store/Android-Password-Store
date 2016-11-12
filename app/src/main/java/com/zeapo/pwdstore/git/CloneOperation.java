@@ -13,7 +13,7 @@ import org.eclipse.jgit.api.Git;
 
 import java.io.File;
 
-public class CloneOperation extends GitOperation implements GitTaskHandler {
+public class CloneOperation extends GitOperation {
     private static final String TAG = "CLONEOPT";
 
     /**
@@ -72,7 +72,7 @@ public class CloneOperation extends GitOperation implements GitTaskHandler {
         if (this.provider != null) {
             ((CloneCommand) this.command).setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, CloneCommand.class, this).execute(this.command);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.command);
     }
 
     @Override

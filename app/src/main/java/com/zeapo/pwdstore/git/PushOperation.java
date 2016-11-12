@@ -7,7 +7,7 @@ import org.eclipse.jgit.api.PushCommand;
 
 import java.io.File;
 
-public class PushOperation extends GitOperation implements GitTaskHandler {
+public class PushOperation extends GitOperation {
 
     /**
      * Creates a new git operation
@@ -36,6 +36,6 @@ public class PushOperation extends GitOperation implements GitTaskHandler {
         if (this.provider != null) {
             ((PushCommand) this.command).setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, PushCommand.class, this).execute(this.command);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.command);
     }
 }

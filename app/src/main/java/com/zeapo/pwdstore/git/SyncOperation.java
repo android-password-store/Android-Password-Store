@@ -8,7 +8,7 @@ import org.eclipse.jgit.api.PushCommand;
 
 import java.io.File;
 
-public class SyncOperation extends GitOperation implements GitTaskHandler {
+public class SyncOperation extends GitOperation {
     protected PullCommand pullCommand;
     protected PushCommand pushCommand;
 
@@ -44,6 +44,6 @@ public class SyncOperation extends GitOperation implements GitTaskHandler {
             this.pullCommand.setCredentialsProvider(this.provider);
             this.pushCommand.setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, PullCommand.class, this).execute(this.pullCommand, this.pushCommand);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.pullCommand, this.pushCommand);
     }
 }

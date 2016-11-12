@@ -15,15 +15,13 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
-    private Class operation;
-    private GitTaskHandler handler;
+    private GitOperation operation;
 
-    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, Class operation, GitTaskHandler handler) {
+    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
-        this.handler = handler;
 
         dialog = new ProgressDialog(this.activity);
     }
@@ -60,7 +58,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
             result = "Unexpected error";
 
         if (!result.isEmpty()) {
-            this.handler.onTaskEnded(result);
+            this.operation.onTaskEnded(result);
         } else {
             if (finishOnEnd) {
                 this.activity.setResult(Activity.RESULT_OK);

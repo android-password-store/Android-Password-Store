@@ -35,7 +35,6 @@ import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 
@@ -505,7 +504,7 @@ public class PasswordStore extends AppCompatActivity {
             @Override
             public void execute() {
                 Git git = new Git(this.repository);
-                GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class, this);
+                GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
                         git.add().addFilepattern("."),
                         git.commit().setMessage(message)

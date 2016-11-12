@@ -26,7 +26,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import java.io.File;
 
-public abstract class GitOperation implements GitTaskHandler {
+public abstract class GitOperation {
     private static final String TAG = "GitOpt";
     public static final int GET_SSH_KEY_FROM_CLONE = 201;
 
@@ -211,7 +211,6 @@ public abstract class GitOperation implements GitTaskHandler {
         }
     }
 
-    @Override
     public void onTaskEnded(String result) {
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).

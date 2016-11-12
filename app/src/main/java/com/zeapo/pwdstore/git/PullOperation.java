@@ -7,7 +7,7 @@ import org.eclipse.jgit.api.PullCommand;
 
 import java.io.File;
 
-public class PullOperation extends GitOperation implements GitTaskHandler {
+public class PullOperation extends GitOperation {
 
     /**
      * Creates a new git operation
@@ -36,6 +36,6 @@ public class PullOperation extends GitOperation implements GitTaskHandler {
         if (this.provider != null) {
             ((PullCommand) this.command).setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, PullCommand.class, this).execute(this.command);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.command);
     }
 }
