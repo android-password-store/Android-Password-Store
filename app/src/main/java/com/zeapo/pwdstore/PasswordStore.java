@@ -415,6 +415,20 @@ public class PasswordStore extends AppCompatActivity {
             return;
         }
 
+        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<String>()).isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("OpenPGP key not selected")
+                    .setMessage("We will redirect you to settings. Please select your OpenPGP Key.")
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(activity, UserPreference.class);
+                            startActivity(intent);
+                        }
+                    }).show();
+            return;
+        }
+
         this.currentDir = getCurrentDir();
         Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
 

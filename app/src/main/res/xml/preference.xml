@@ -31,10 +31,6 @@
         <org.openintents.openpgp.util.OpenPgpAppPreference
             android:key="openpgp_provider_list"
             android:title="@string/pref_provider_title" />
-        <org.openintents.openpgp.util.OpenPgpKeyPreference
-            android:enabled="false"
-            android:key="openpgp_key"
-            android:title="Select key" />
         <Preference
             android:key="openpgp_key_id_pref"
             android:title="@string/pref_key_title" />
