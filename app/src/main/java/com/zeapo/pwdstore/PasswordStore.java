@@ -28,13 +28,13 @@ import android.widget.TextView;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
+import com.zeapo.pwdstore.git.GitOperation;
 import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 
@@ -57,6 +57,7 @@ public class PasswordStore extends AppCompatActivity {
     private final static int HOME = 403;
 
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
@@ -74,7 +75,7 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         // do not attempt to checkLocalRepository() if no storage permission: immediate crash
         if (settings.getBoolean("git_external", false)) {
@@ -373,10 +374,9 @@ public class PasswordStore extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onBackPressed() {
-        if  ((null != plist) && plist.isNotEmpty()) {
+        if ((null != plist) && plist.isNotEmpty()) {
             plist.popBack();
         } else {
             super.onBackPressed();
@@ -438,20 +438,12 @@ public class PasswordStore extends AppCompatActivity {
                 .setPositiveButton(this.getResources().getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String path = item.getFile().getAbsolutePath();
                         item.getFile().delete();
                         adapter.remove(position);
                         it.remove();
                         adapter.updateSelectedItems(position, selectedItems);
 
-                        setResult(RESULT_CANCELED);
-                        Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
-                        Git git = new Git(repo);
-                        GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
-                        tasks.execute(
-                                git.rm().addFilepattern(path.replace(PasswordRepository.getWorkTree() + "/", "")),
-                                git.commit().setMessage("[ANDROID PwdStore] Remove " + item + " from store.")
-                        );
+                        commit("[ANDROID PwdStore] Remove " + item + " from store.");
                         deletePasswords(adapter, selectedItems);
                     }
                 })
@@ -468,10 +460,10 @@ public class PasswordStore extends AppCompatActivity {
     public void movePasswords(ArrayList<PasswordItem> values) {
         Intent intent = new Intent(this, PgpHandler.class);
         ArrayList<String> fileLocations = new ArrayList<>();
-        for (PasswordItem passwordItem : values){
+        for (PasswordItem passwordItem : values) {
             fileLocations.add(passwordItem.getFile().getAbsolutePath());
         }
-        intent.putExtra("Files",fileLocations);
+        intent.putExtra("Files", fileLocations);
         intent.putExtra("Operation", "SELECTFOLDER");
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_SELECT_FOLDER);
     }
@@ -480,7 +472,7 @@ public class PasswordStore extends AppCompatActivity {
      * clears adapter's content and updates it with a fresh list of passwords from the root
      */
     public void updateListAdapter() {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             plist.updateAdapter();
         }
     }
@@ -489,31 +481,36 @@ public class PasswordStore extends AppCompatActivity {
      * Updates the adapter with the current view of passwords
      */
     public void refreshListAdapter() {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             plist.refreshAdapter();
         }
     }
 
     public void filterListAdapter(String filter) {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             plist.filterAdapter(filter);
         }
     }
 
     private File getCurrentDir() {
-        if  ((null != plist)) {
+        if ((null != plist)) {
             return plist.getCurrentDir();
         }
         return PasswordRepository.getWorkTree();
     }
 
-    private void commit(String message) {
-        Git git = new Git(PasswordRepository.getRepository(new File("")));
-        GitAsyncTask tasks = new GitAsyncTask(this, false, false, CommitCommand.class);
-        tasks.execute(
-                git.add().addFilepattern("."),
-                git.commit().setMessage(message)
-        );
+    private void commit(final String message) {
+        new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
+            @Override
+            public void execute() {
+                Git git = new Git(this.repository);
+                GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
+                tasks.execute(
+                        git.add().addFilepattern("."),
+                        git.commit().setMessage(message)
+                );
+            }
+        };
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -573,31 +570,29 @@ public class PasswordStore extends AppCompatActivity {
                     startActivityForResult(intent, GitActivity.REQUEST_CLONE);
                     break;
                 case PgpHandler.REQUEST_CODE_SELECT_FOLDER:
-                    Log.d("Moving","Moving passwords to "+data.getStringExtra("SELECTED_FOLDER_PATH"));
+                    Log.d("Moving", "Moving passwords to " + data.getStringExtra("SELECTED_FOLDER_PATH"));
                     Log.d("Moving", TextUtils.join(", ", data.getStringArrayListExtra("Files")));
                     File target = new File(data.getStringExtra("SELECTED_FOLDER_PATH"));
-                    if (!target.isDirectory()){
-                        Log.e("Moving","Tried moving passwords to a non-existing folder.");
+                    if (!target.isDirectory()) {
+                        Log.e("Moving", "Tried moving passwords to a non-existing folder.");
                         break;
                     }
 
-                    Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity));
-                    Git git = new Git(repo);
-                    GitAsyncTask tasks = new GitAsyncTask(activity, false, true, CommitCommand.class);
-
-                    for (String string : data.getStringArrayListExtra("Files")){
+                    for (String string : data.getStringArrayListExtra("Files")) {
                         File source = new File(string);
-                        if (!source.exists()){
-                            Log.e("Moving","Tried moving something that appears non-existent.");
+                        if (!source.exists()) {
+                            Log.e("Moving", "Tried moving something that appears non-existent.");
                             continue;
                         }
-                        if (!source.renameTo(new File(target.getAbsolutePath()+"/"+source.getName()))){
-                            Log.e("Moving","Something went wrong while moving.");
-                        }else{
-                            tasks.execute(
-                                    git.add().addFilepattern(source.getAbsolutePath().replace(PasswordRepository.getWorkTree() + "/", "")),
-                                    git.commit().setMessage("[ANDROID PwdStore] Moved "+string.replace(PasswordRepository.getWorkTree() + "/", "")+" to "+target.getAbsolutePath().replace(PasswordRepository.getWorkTree() + "/","")+target.getAbsolutePath()+"/"+source.getName()+".")
-                            );
+                        if (!source.renameTo(new File(target.getAbsolutePath() + "/" + source.getName()))) {
+                            // TODO this should show a warning to the user
+                            Log.e("Moving", "Something went wrong while moving.");
+                        } else {
+                            commit("[ANDROID PwdStore] Moved "
+                                    + string.replace(PasswordRepository.getWorkTree() + "/", "")
+                                    + " to "
+                                    + target.getAbsolutePath().replace(PasswordRepository.getWorkTree() + "/", "")
+                                    + target.getAbsolutePath() + "/" + source.getName() + ".");
                         }
                     }
                     updateListAdapter();

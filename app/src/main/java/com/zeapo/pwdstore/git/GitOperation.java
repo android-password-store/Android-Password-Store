@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
@@ -75,10 +76,8 @@ public abstract class GitOperation {
 
     /**
      * Executes the GitCommand in an async task
-     *
-     * @throws Exception
      */
-    public abstract void execute() throws Exception;
+    public abstract void execute();
 
     /**
      * Executes the GitCommand in an async task after creating the authentication
@@ -86,9 +85,8 @@ public abstract class GitOperation {
      * @param connectionMode the server-connection mode
      * @param username       the username
      * @param sshKey         the ssh-key file
-     * @throws Exception
      */
-    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey) throws Exception {
+    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey) {
         executeAfterAuthentication(connectionMode, username, sshKey, false);
     }
 
@@ -99,9 +97,8 @@ public abstract class GitOperation {
      * @param username       the username
      * @param sshKey         the ssh-key file
      * @param showError      show the passphrase edit text in red
-     * @throws Exception
      */
-    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError) throws Exception {
+    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError) {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
                 new AlertDialog.Builder(callingActivity)
@@ -152,15 +149,16 @@ public abstract class GitOperation {
                     passphrase.setError("Wrong passphrase");
                 }
                 JSch jsch = new JSch();
-                final KeyPair keyPair = KeyPair.load(jsch, callingActivity.getFilesDir() + "/.ssh_key");
-                if (keyPair.isEncrypted()) {
-                    new AlertDialog.Builder(callingActivity)
-                            .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
-                            .setMessage(callingActivity.getResources().getString(R.string.passphrase_dialog_text))
-                            .setView(passphrase)
-                            .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    try {
+                try {
+                    final KeyPair keyPair = KeyPair.load(jsch, callingActivity.getFilesDir() + "/.ssh_key");
+
+                    if (keyPair.isEncrypted()) {
+                        new AlertDialog.Builder(callingActivity)
+                                .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
+                                .setMessage(callingActivity.getResources().getString(R.string.passphrase_dialog_text))
+                                .setView(passphrase)
+                                .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
                                         if (keyPair.decrypt(passphrase.getText().toString())) {
                                             // Authenticate using the ssh-key and then execute the command
                                             setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
@@ -168,18 +166,25 @@ public abstract class GitOperation {
                                             // call back the method
                                             executeAfterAuthentication(connectionMode, username, sshKey, true);
                                         }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
                                     }
+                                }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Do nothing.
+                            }
+                        }).show();
+                    } else {
+                        setAuthentication(sshKey, username, "").execute();
+                    }
+                } catch (JSchException e) {
+                    new AlertDialog.Builder(callingActivity)
+                            .setTitle("Unable to open the ssh-key")
+                            .setMessage("Please check that it was imported.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
                                 }
-                            }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // Do nothing.
-                        }
-                    }).show();
-                } else {
-                    setAuthentication(sshKey, username, "").execute();
+                            }).show();
                 }
             }
         } else {
@@ -195,11 +200,7 @@ public abstract class GitOperation {
                     .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             // authenticate using the user/pwd and then execute the command
-                            try {
-                                setAuthentication(username, password.getText().toString()).execute();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            setAuthentication(username, password.getText().toString()).execute();
 
                         }
                     }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
@@ -208,5 +209,21 @@ public abstract class GitOperation {
                 }
             }).show();
         }
+    }
+
+    public void onTaskEnded(String result) {
+        new AlertDialog.Builder(callingActivity).
+                setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
+                setMessage("Error occurred during a Git operation, "
+                        + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
+                        + result
+                        + "\nPlease check the FAQ for possible reasons why this error might occur.").
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        callingActivity.setResult(Activity.RESULT_CANCELED);
+                        callingActivity.finish();
+                    }
+                }).show();
     }
 }
