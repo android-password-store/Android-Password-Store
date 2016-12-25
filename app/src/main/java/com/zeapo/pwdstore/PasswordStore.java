@@ -517,6 +517,7 @@ public class PasswordStore extends AppCompatActivity {
         new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
             @Override
             public void execute() {
+                Log.d(TAG, "Commiting with message " + message);
                 Git git = new Git(this.repository);
                 GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
@@ -524,7 +525,7 @@ public class PasswordStore extends AppCompatActivity {
                         git.commit().setMessage(message)
                 );
             }
-        };
+        }.execute();
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
