@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -362,9 +363,15 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
                 clipboard.setPrimaryClip(clip);
                 if (settings.getBoolean("clear_clipboard_20x", false)) {
+                    Handler handler = new Handler();
                     for (int i = 0; i < 19; i++) {
-                        clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
-                        clipboard.setPrimaryClip(clip);
+                        final String count = String.valueOf(i);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                clipboard.setPrimaryClip(ClipData.newPlainText(count, count));
+                            }
+                        }, i*500);
                     }
                 }
             }
