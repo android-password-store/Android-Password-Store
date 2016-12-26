@@ -97,7 +97,8 @@ public class AutofillService extends AccessibilityService {
 
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                && event.getPackageName().equals(packageName) && resultData != null) {
+                && event.getPackageName() != null && event.getPackageName().equals(packageName)
+                && resultData != null) {
             bindDecryptAndVerify();
         }
 
@@ -105,9 +106,9 @@ public class AutofillService extends AccessibilityService {
         // or if page changes in chrome
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                    && event.getSource() != null && event.getSource().getPackageName() != null
-                    && (event.getSource().getPackageName().equals("com.android.chrome")
-                        || event.getSource().getPackageName().equals("com.android.browser")))) {
+                    && event.getPackageName() != null
+                    && (event.getPackageName().equals("com.android.chrome")
+                        || event.getPackageName().equals("com.android.browser")))) {
             // there is a chance for getRootInActiveWindow() to return null at any time. save it.
             AccessibilityNodeInfo root = getRootInActiveWindow();
             webViewTitle = searchWebView(root);
@@ -136,8 +137,8 @@ public class AutofillService extends AccessibilityService {
         // nothing to do if not password field focus, field is keychain app
         if (!event.isPassword()
                 || event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                || event.getPackageName().equals("org.sufficientlysecure.keychain")
-                || event.getPackageName().equals("com.android.systemui")) {
+                || event.getPackageName() != null && event.getPackageName().equals("org.sufficientlysecure.keychain")
+                || event.getPackageName() != null && event.getPackageName().equals("com.android.systemui")) {
             dismissDialog(event);
             return;
         }
