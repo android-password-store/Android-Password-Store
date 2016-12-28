@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+    <string name="activity_clone_name">Clone un dépôt Git</string>
+
+    <string name="clone_settings">Clone</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="hello_world">Bonjour Monde!</string>
+    <string name="dialog_delete_title">Répertoire déjà existant</string>
+    <string name="dialog_delete_msg">Répertoire cible déjà existant. La version actuelle ne supporte qu\'un seul gestionnaire. Voulez vous supprimer le répertoire actual du gestionnaire de mots de passe:</string>
+    <string name="dialog_delete">Suprimer le répertoire</string>
+    <string name="dialog_do_not_delete">Annuler</string>
+    <string name="title_activity_git_clone">Information sur le dépôt Git</string>
+    
+    <!-- Password Store -->
+    <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de pass ou d\'effectuer une opération de synchornisation.</string>
+	<string name="store_git">/store/.git</string>
+    <string name="key_dialog_text">Vous devez sélectionner votre "PGP-Key ID" avant d\'initialiser le dépôt</string>
+    <string name="connection_dialog_text">Quelle connexion préférez vous?</string>
+    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe /"</string>
+
+    <!-- git commits -->
+    <string name="initialization_commit_text">[ANDROID PwdStore] Initialisation du gestionnaire avec le keyID: </string>
+    <string name="add_commit_text">[ANDROID PwdStore] Ajouter &#160;</string>
+    <string name="remove_commit_text">[ANDROID PwdStore] Supprimer &#160;</string>
+    <string name="edit_commit_text">[ANDROID PwdStore] Editer &#160;</string>
+    <string name="from_store">&#160; depuis le dépôt.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">Aucun prestataire OpenPGP sélectionné!</string>
+    <string name="okc_progress_text">Attente de OpenKeychain...</string>
+    <string name="clipboard_beginning_toast_text">Mot de passe copié dans le presse papier, vous avez </string>
+    <string name="clipboard_ending_toast_text"> secondes pour coller celui-ci.</string>
+    <string name="name_settings_toast_text">Renseignez le nom de votre compte dans les paramètres dès que vous pouvez</string>
+    <string name="account_settings_dialog_text">Renseignez votre compte OpenKeychain (email) dans les préférences</string>
+    <string name="account_settings_dialog_title">Nom du compte absent!</string>
+    <string name="file_toast_text">Renseignez un nom de fichier</string>
+    <string name="empty_toast_text">Vous ne pouvez pas utiliser un mot de passe vide ou des données supplémentaires vide</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Commande en cours...</string>
+    <string name="jgit_error_dialog_title">Une erreur c\'est produite lors d\'une opération Git</string>
+    <string name="jgit_error_dialog_text">Message de jgit: \n</string>
+
+    <!-- Git Handler -->
+    <string name="read_only_dialog_text">Vous êtes sur le point d\'utiliserun dépôt en lecture-seule, il ne sera pas possible d\'effectuer de poussez les données vers celui-ci</string>
+    <string name="forget_username_dialog_text">Avez-vous oublié to renseigner votre nom d\'utilisateur?</string>
+    <string name="set_information_dialog_text">Vous devez renseignez les informations à propos du serveur avant d\'effectuer une synchronisation avec celui-ci</string>
+    <string name="ssh_preferences_dialog_text">Vous devez importer ou générer votre fichier de clef SSH dans les préférences</string>
+    <string name="ssh_preferences_dialog_title">Absence de cled SSH</string>
+    <string name="ssh_preferences_dialog_import">Importer</string>
+    <string name="ssh_preferences_dialog_generate">Générer</string>
+    <string name="passphrase_dialog_title">Authentification</string>
+    <string name="passphrase_dialog_text">Renseignez le mot de passe pour votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
+    <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
+    
+    <!-- Clone fragment -->
+    <string name="clone_fragment_text">Bienvenue sur Password Store\n\n Dans cet écran vous pouvez soit créer un nouveau dépôt ou cloner votre dépôt Git sur cet appareil.</string>
+    <string name="clone">Cloner depuis le serveur</string>
+    <string name="initialize">Utiliser un répertoire local</string>
+
+    <string name="server_name">Serveur</string>
+    <string name="server_protocol">Protocole</string>
+    <string name="server_url">URL du serveur</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">Chemin du dépôt</string>
+    <string name="server_path_hint">path/to/pass</string>
+    <string name="server_user">Nom d\'utilisateur</string>
+    <string name="server_user_hint">git_username</string>
+
+    <string name="server_resulting_url">URL finale</string>
+    <string name="connection_mode">Mode d\'authentification</string>
+
+    <string name="warn_malformed_url_port">Lors de l\'utilisation d\'un numéro de port personnalisé, fournissez un chemin absolu  (commençant par "/")</string>
+
+    <!-- PGP Handler -->
+    <string name="title_activity_pgp_handler">PgpHandler</string>
+    <string name="crypto_name_hint">nom</string>
+    <string name="crypto_pass_label">Mot de passe</string>
+    <string name="crypto_extra_label">Extra</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="crypto_category">Catégorie</string>
+    <string name="action_search">Chercher</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_server_title">Serveur</string>
+    <string name="pref_server_hint">server.com</string>
+    <string name="pref_remote_title">Remote location</string>
+    <string name="pref_remote_hint">chemin/du/repertoire</string>
+    <string name="pref_git_username_title">Nom d\'utilisateur</string>
+    <string name="pref_git_username_hint">nom-d-utilisateur</string>
+    <string name="pref_edit_server_info">Editer les paramètres du serveyr Git</string>
+    <string name="pref_ssh_title">Importer une clef SSH</string>
+    <string name="pref_ssh_keygen_title">Générer une paire de clefs SSH</string>
+    <string name="pref_ssh_see_key_title">Voir la clef publique SSH générée</string>
+    <string name="pref_git_delete_repo">Supprimer le dépôt</string>
+    <string name="pref_dialog_delete_title">Effacer le dépôt</string>
+    <string name="pref_dialog_delete_msg">Voulez-vous efface le répertoire du gesionnaire de mot de passe actuel? Ceci n\'effacera pas votre configuration.</string>
+    <string name="pref_crypto_title">Crypto</string>
+    <string name="pref_provider_title">Choisissez le prestataire OpenPGP</string>
+    <string name="pref_provider_account_title">Renseignez votre compte OpenPGP</string>
+    <string name="pref_provider_account_hint">mail@quelque-part.tld</string>
+    <string name="pref_key_title">Choisissez votre identifiant OpenPGP</string>
+    <string name="pref_general_title">Général</string>
+    <string name="pref_password_title">Durée du mot de passe</string>
+    <string name="pref_password_dialog_title">Renseignez la durée pendant laquelle le mot de passe sera disponnible dans le presse-papier</string>
+    <string name="pref_copy_title">Copie automatique du mot de passe</string>
+    <string name="pref_copy_dialog_title">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
+    <string name="ssh_key_success_dialog_title">Clef SSH importée</string>
+    <string name="ssh_key_error_dialog_title">Erreur lors de l\'importation du la clef ssh</string>
+    <string name="ssh_key_error_dialog_text">Message : \n</string>
+    <string name="pref_recursive_filter">Filtre récursif</string>
+    <string name="pref_recursive_filter_hint">Cherche le mot de passe dans tous les sous-répertoire du répertoire actuel.</string>
+    <string name="pref_autofill_enable_title">Remplissage automatique</string>
+    <string name="pref_autofill_enable_msg">Tappez OK pour aller dans les paramètres d\'Accessibilité. Puis, choisissez Password Store dans Services, ensuite utilisez le boutton dans le coin en haut à droite pour pour activer/désactiver le remplissage automatique.</string>
+    <string name="pref_autofill_enable_msg2">Lorsque le service est activé une fenêtre de dialogue apparaitra lorsque vous cliquez sur un champ de type mot de passe.</string>
+    <string name="pref_autofill_enable_msg3">Password Store proposera le mot de passe. Vous pouvez changer ce réglage par défaut et également réaliser une correspondance spéfique par application.</string>
+    <string name="pref_autofill_apps_title">Paramètres Application et site web</string>
+    <string name="pref_autofill_apps_hint">Personnalisation du remplissage automatique spécifique par application.</string>
+    <string name="pref_autofill_default_title">Correspondance automatique par défaut</string>
+    <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
+    <string name="pref_autofill_always_title">Toujours montrer la fenêtre de dialogue</string>
+    <string name="pref_clear_clipboard_title">Effacer le presse-papier 20 fois</string>
+    <string name="pref_clear_clipboard_hint">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
+    <string name="pref_git_delete_repo_summary">Supprime le dépot local (caché)</string>
+    <string name="pref_external_repository">Dépôt externe</string>
+    <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
+    <string name="pref_select_external_repository">Choisissez un dépôt externe</string>
+
+    <!-- pwgen fragment -->
+    <string name="pwgen_generate">Générer</string>
+    <string name="pwgen_include">Inclure</string>
+    <string name="pwgen_numerals">Numériques</string>
+    <string name="pwgen_symbols">Symboles</string>
+    <string name="pwgen_uppercase">Majuscule</string>
+    <string name="pwgen_ambiguous">Ambigus</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">Taille</string>
+    <string name="ssh_keygen_passphrase">Mot de passe</string>
+    <string name="ssh_keygen_comment">Commentaire</string>
+    <string name="ssh_keygen_generate">Générer</string>
+    <string name="ssh_keygen_copy">Copier</string>
+    <string name="ssh_keygen_tip">Enregistrez cette clef public sur votre serveur Git.</string>
+    <string name="ssh_keygen_show_passphrase">Montrer le mot de passe</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Oui</string>
+    <string name="dialog_no">Non</string>
+    <string name="dialog_positive">En chemin...</string>
+    <string name="dialog_negative">Non... plus tard</string>
+    <string name="dialog_oops">Oups...</string>
+    <string name="dialog_cancel">Annulerl</string>
+    <string name="git_sync">Synchronisation du dépôt</string>
+    <string name="git_pull">Importer du serveur</string>
+    <string name="git_push">Pousser sur le serveur</string>
+    <string name="show_password_pref_title">Montrer le mot de passe</string>
+    <string name="show_password_pref_summary">Contrôle la visibilité des mots de passe une fois déchifrées, ceci n\'empêche pas de copier le mot de passe</string>
+    <string name="toast_password_copied">Mot de passe copié dans le presse-papier</string>
+    <string name="pwd_generate_button">Générer</string>
+    <string name="category_string">"Catégorie: "</string>
+
+    <!-- Autofill -->
+    <string name="autofill_description">Remplissage automatique des champs de type mot de passe dans les applications. Ne fonctionne que sur les version d\'Android 4.3 et supérieure. Ne dépend pas du presse-papier pour les version d\'Android 5.0 et supérieure.</string>
+    <string name="autofill_fill">Remplissage</string>
+    <string name="autofill_apps_default">Utiliser les paramètres par défaut</string>
+    <string name="autofill_apps_first">Correspondance automatique</string>
+    <string name="autofill_apps_match_ellipsis">Correspondance avec…</string>
+    <string name="autofill_apps_match">Correspondance avec</string>
+    <string name="autofill_apps_never">Aucun correspondance</string>
+    <string name="autofill_apps_delete">Supprimer</string>
+    <string name="refresh_list">Raffraichir la liste</string>
+    <string name="settings">Paramètres</string>
+    <string name="no_repo_selected">Pas de dépôt externe séléctionné</string>
+    <string name="no_repo_selected2">Pas de dépôt externe séléctionné</string>
+    <string name="send_plaintext_password_to">Envoyer le mot de passe en clair via…</string>
+    <string name="show_password">Montrer le mot de passe</string>
+</resources>
