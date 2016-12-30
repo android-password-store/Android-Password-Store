@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 
 import com.zeapo.pwdstore.R;
 
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PushCommand;
@@ -13,6 +15,8 @@ import org.eclipse.jgit.api.PushCommand;
 import java.io.File;
 
 public class SyncOperation extends GitOperation {
+    protected AddCommand addCommand;
+    protected CommitCommand commitCommand;
     protected PullCommand pullCommand;
     protected PushCommand pushCommand;
 
@@ -31,14 +35,11 @@ public class SyncOperation extends GitOperation {
      * @return the current object
      */
     public SyncOperation setCommands() {
-        this.pullCommand = new Git(repository)
-                .pull()
-                .setRebase(true)
-                .setRemote("origin");
-        this.pushCommand = new Git(repository)
-                .push()
-                .setPushAll()
-                .setRemote("origin");
+        Git git = new Git(repository);
+        this.addCommand = git.add().addFilepattern(".");
+        this.commitCommand = git.commit().setMessage("[Android Password Store] Sync");
+        this.pullCommand = git.pull().setRebase(true).setRemote("origin");
+        this.pushCommand = git.push().setPushAll().setRemote("origin");
         return this;
     }
 
@@ -48,7 +49,7 @@ public class SyncOperation extends GitOperation {
             this.pullCommand.setCredentialsProvider(this.provider);
             this.pushCommand.setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, this).execute(this.pullCommand, this.pushCommand);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.addCommand, this.commitCommand, this.pullCommand, this.pushCommand);
     }
 
     @Override
