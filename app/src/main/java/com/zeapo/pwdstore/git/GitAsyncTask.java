@@ -39,7 +39,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                 aCmd.call();
             } catch (Exception e) {
                 e.printStackTrace();
-                return e.getMessage();
+                return e.getMessage() + "\nCaused by:\n" + e.getCause();
             }
         }
         return "";
