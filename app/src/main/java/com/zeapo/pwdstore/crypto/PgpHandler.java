@@ -363,7 +363,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             // only clear the clipboard if we automatically copied the password to it
             if (settings.getBoolean("copy_on_decrypt", true) && clearClipboard) {
                 Log.d("DELAY_SHOW", "Clearing the clipboard");
-                ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "MyPasswordIsDaBest!");
+                ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", "");
                 clipboard.setPrimaryClip(clip);
                 if (settings.getBoolean("clear_clipboard_20x", false)) {
                     Handler handler = new Handler();

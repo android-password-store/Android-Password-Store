@@ -499,7 +499,7 @@ public class AutofillService extends AccessibilityService {
                         clipboard.setPrimaryClip(clip);
                         info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
 
-                        clip = ClipData.newPlainText("autofill_pm", "MyPasswordIsDaBest!");
+                        clip = ClipData.newPlainText("autofill_pm", "");
                         clipboard.setPrimaryClip(clip);
                         if (settings.getBoolean("clear_clipboard_20x", false)) {
                             for (int i = 0; i < 19; i++) {
