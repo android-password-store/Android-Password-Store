@@ -254,8 +254,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             return;
         }
 
+        setTimer();
+
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", decodedPassword);
         clipboard.setPrimaryClip(clip);
+
         try {
             showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
                     + " " + Integer.parseInt(settings.getString("general_show_time", "45")) + " "
@@ -520,8 +523,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                     ((TextView) findViewById(R.id.crypto_extra_show))
                                             .setText(extraContent);
                                 }
-
-                                setTimer();
 
                                 if (settings.getBoolean("copy_on_decrypt", true)) {
                                     copyToClipBoard();
