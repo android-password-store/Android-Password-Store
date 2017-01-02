@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Length"
+                    android:text="@string/pwgen_length"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <EditText
@@ -95,7 +95,7 @@
                     android:id="@+id/pronounceable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pronounceable" />
+                    android:text="@string/pwgen_pronounceable" />
 
             </LinearLayout>
 
