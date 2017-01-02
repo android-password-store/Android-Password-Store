@@ -84,7 +84,7 @@
             android:title="@string/pref_autofill_always_title"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_autofill_misc">
+    <PreferenceCategory android:title="@string/pref_misc_title">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="clear_clipboard_20x"
