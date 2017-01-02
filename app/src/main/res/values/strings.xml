@@ -137,10 +137,12 @@
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Generate</string>
     <string name="pwgen_include">Include</string>
+    <string name="pwgen_length">Length</string>
     <string name="pwgen_numerals">Numerals</string>
     <string name="pwgen_symbols">Symbols</string>
     <string name="pwgen_uppercase">Uppercase</string>
     <string name="pwgen_ambiguous">Ambiguous</string>
+    <string name="pwgen_pronounceable">Pronounceable</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Length</string>
