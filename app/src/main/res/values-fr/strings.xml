@@ -118,6 +118,7 @@
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Filtre récursif</string>
     <string name="pref_recursive_filter_hint">Cherche le mot de passe dans tous les sous-répertoires du répertoire actuel.</string>
+    <string name="pref_autofill_title">Saisie automatique</string>
     <string name="pref_autofill_enable_title">Saisie automatique</string>
     <string name="pref_autofill_enable_msg">Tapez OK pour aller dans les paramètres d\'Accessibilité. Puis, choisissez \"Password Store\" dans \"Services\", ensuite utilisez le boutton dans le coin supérieur droit pour activer/désactiver la saisie automatique.</string>
     <string name="pref_autofill_enable_msg2">Lorsque le service est activé une fenêtre de dialogue apparaitra lorsque vous cliquez sur un champ de type mot de passe.</string>
@@ -127,6 +128,7 @@
     <string name="pref_autofill_default_title">Correspondance automatique par défaut</string>
     <string name="pref_autofill_default_hint">Default to \"Automatically match\" for apps without custom settings. Otherwise, \"Never match.\"</string>
     <string name="pref_autofill_always_title">Toujours montrer la fenêtre de dialogue</string>
+    <string name="pref_misc_title">Divers</string>
     <string name="pref_clear_clipboard_title">Effacer le presse-papier 20 fois</string>
     <string name="pref_clear_clipboard_hint">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
     <string name="pref_git_delete_repo_summary">Supprime le dépot local (caché)</string>
