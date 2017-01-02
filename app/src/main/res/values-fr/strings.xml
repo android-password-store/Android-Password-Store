@@ -53,7 +53,7 @@
     <string name="ssh_preferences_dialog_import">Importer</string>
     <string name="ssh_preferences_dialog_generate">Générer</string>
     <string name="passphrase_dialog_title">Authentification</string>
-    <string name="passphrase_dialog_text">Renseignez le mot de passe pour votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
+    <string name="passphrase_dialog_text">Saisissez le mot de passe associé à pour votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
     <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
     
     <!-- Clone fragment -->
@@ -74,7 +74,7 @@
     <string name="server_user_hint">git_username</string>
 
     <string name="server_resulting_url">URL finale</string>
-    <string name="connection_mode">Mode d\'authentification</string>
+    <string name="connection_mode">Méthode d\'authentification</string>
 
     <string name="warn_malformed_url_port">Lors de l\'utilisation d\'un numéro de port personnalisé, fournissez un chemin absolu  (commençant par "/")</string>
 
@@ -96,36 +96,36 @@
     <string name="pref_remote_hint">chemin/du/repertoire</string>
     <string name="pref_git_username_title">Nom d\'utilisateur</string>
     <string name="pref_git_username_hint">nom-d-utilisateur</string>
-    <string name="pref_edit_server_info">Editer les paramètres du serveyr Git</string>
+    <string name="pref_edit_server_info">Editer les paramètres du serveur Git</string>
     <string name="pref_ssh_title">Importer une clef SSH</string>
     <string name="pref_ssh_keygen_title">Générer une paire de clefs SSH</string>
     <string name="pref_ssh_see_key_title">Voir la clef publique SSH générée</string>
     <string name="pref_git_delete_repo">Supprimer le dépôt</string>
     <string name="pref_dialog_delete_title">Effacer le dépôt</string>
     <string name="pref_dialog_delete_msg">Voulez-vous efface le répertoire du gesionnaire de mot de passe actuel? Ceci n\'effacera pas votre configuration.</string>
-    <string name="pref_crypto_title">Crypto</string>
-    <string name="pref_provider_title">Choisissez le prestataire OpenPGP</string>
+    <string name="pref_crypto_title">Chiffrement</string>
+    <string name="pref_provider_title">Sélection du prestataire OpenPGP</string>
     <string name="pref_provider_account_title">Renseignez votre compte OpenPGP</string>
     <string name="pref_provider_account_hint">mail@quelque-part.tld</string>
-    <string name="pref_key_title">Choisissez votre identifiant OpenPGP</string>
+    <string name="pref_key_title">Sélection de votre identifiant OpenPGP</string>
     <string name="pref_general_title">Général</string>
-    <string name="pref_password_title">Durée du mot de passe</string>
-    <string name="pref_password_dialog_title">Renseignez la durée pendant laquelle le mot de passe sera disponnible dans le presse-papier</string>
+    <string name="pref_password_title">Durée de disponibilité du mot de passe</string>
+    <string name="pref_password_dialog_title">Choisissez la durée pendant laquelle le mot de passe sera disponnible dans le presse-papier</string>
     <string name="pref_copy_title">Copie automatique du mot de passe</string>
     <string name="pref_copy_dialog_title">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
     <string name="ssh_key_success_dialog_title">Clef SSH importée</string>
     <string name="ssh_key_error_dialog_title">Erreur lors de l\'importation du la clef ssh</string>
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Filtre récursif</string>
-    <string name="pref_recursive_filter_hint">Cherche le mot de passe dans tous les sous-répertoire du répertoire actuel.</string>
-    <string name="pref_autofill_enable_title">Remplissage automatique</string>
-    <string name="pref_autofill_enable_msg">Tappez OK pour aller dans les paramètres d\'Accessibilité. Puis, choisissez Password Store dans Services, ensuite utilisez le boutton dans le coin en haut à droite pour pour activer/désactiver le remplissage automatique.</string>
+    <string name="pref_recursive_filter_hint">Cherche le mot de passe dans tous les sous-répertoires du répertoire actuel.</string>
+    <string name="pref_autofill_enable_title">Saisie automatique</string>
+    <string name="pref_autofill_enable_msg">Tapez OK pour aller dans les paramètres d\'Accessibilité. Puis, choisissez \"Password Store\" dans \"Services\", ensuite utilisez le boutton dans le coin supérieur droit pour activer/désactiver la saisie automatique.</string>
     <string name="pref_autofill_enable_msg2">Lorsque le service est activé une fenêtre de dialogue apparaitra lorsque vous cliquez sur un champ de type mot de passe.</string>
-    <string name="pref_autofill_enable_msg3">Password Store proposera le mot de passe. Vous pouvez changer ce réglage par défaut et également réaliser une correspondance spéfique par application.</string>
+    <string name="pref_autofill_enable_msg3">Password Store proposera alors le mot de passe. Vous pouvez changer ce réglage ou effectuer une correspondance spéfique par application.</string>
     <string name="pref_autofill_apps_title">Paramètres Application et site web</string>
     <string name="pref_autofill_apps_hint">Personnalisation du remplissage automatique spécifique par application.</string>
     <string name="pref_autofill_default_title">Correspondance automatique par défaut</string>
-    <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
+    <string name="pref_autofill_default_hint">Default to \"Automatically match\" for apps without custom settings. Otherwise, \"Never match.\"</string>
     <string name="pref_autofill_always_title">Toujours montrer la fenêtre de dialogue</string>
     <string name="pref_clear_clipboard_title">Effacer le presse-papier 20 fois</string>
     <string name="pref_clear_clipboard_hint">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
@@ -137,10 +137,12 @@
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Générer</string>
     <string name="pwgen_include">Inclure</string>
-    <string name="pwgen_numerals">Numériques</string>
+    <string name="pwgen_length">Longueur</string>
+    <string name="pwgen_numerals">Chiffres</string>
     <string name="pwgen_symbols">Symboles</string>
-    <string name="pwgen_uppercase">Majuscule</string>
+    <string name="pwgen_uppercase">Majuscules</string>
     <string name="pwgen_ambiguous">Ambigus</string>
+    <string name="pwgen_pronounceable">Prononçable</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Taille</string>
@@ -148,8 +150,8 @@
     <string name="ssh_keygen_comment">Commentaire</string>
     <string name="ssh_keygen_generate">Générer</string>
     <string name="ssh_keygen_copy">Copier</string>
-    <string name="ssh_keygen_tip">Enregistrez cette clef public sur votre serveur Git.</string>
-    <string name="ssh_keygen_show_passphrase">Montrer le mot de passe</string>
+    <string name="ssh_keygen_tip">Enregistrez cette clef publique sur votre serveur Git.</string>
+    <string name="ssh_keygen_show_passphrase">Afficher le mot de passe</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
@@ -158,7 +160,7 @@
     <string name="dialog_positive">En chemin...</string>
     <string name="dialog_negative">Non... plus tard</string>
     <string name="dialog_oops">Oups...</string>
-    <string name="dialog_cancel">Annulerl</string>
+    <string name="dialog_cancel">Annuler</string>
     <string name="git_sync">Synchronisation du dépôt</string>
     <string name="git_pull">Importer du serveur</string>
     <string name="git_push">Pousser sur le serveur</string>
@@ -177,7 +179,7 @@
     <string name="autofill_apps_match">Correspondance avec</string>
     <string name="autofill_apps_never">Aucun correspondance</string>
     <string name="autofill_apps_delete">Supprimer</string>
-    <string name="refresh_list">Raffraichir la liste</string>
+    <string name="refresh_list">Rafraichir la liste</string>
     <string name="settings">Paramètres</string>
     <string name="no_repo_selected">Pas de dépôt externe séléctionné</string>
     <string name="no_repo_selected2">Pas de dépôt externe séléctionné</string>
