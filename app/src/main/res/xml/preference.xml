@@ -62,7 +62,7 @@
             android:title="@string/pref_recursive_filter" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Autofill">
+    <PreferenceCategory android:title="@string/pref_autofill_title">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="autofill_enable"
@@ -84,7 +84,7 @@
             android:title="@string/pref_autofill_always_title"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Misc">
+    <PreferenceCategory android:title="@string/pref_misc_title">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="clear_clipboard_20x"
