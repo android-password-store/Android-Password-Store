@@ -738,8 +738,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         if (operation.equals("DECRYPT")) {
             setContentView(R.layout.decrypt_layout);
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
-                    .getParentFile().getName();
+            String path = extra
+                    .getString("FILE_PATH")
+                    .replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
+            String cat = new File(path).getParentFile().getName();
 
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
             decryptAndVerify(new Intent());
