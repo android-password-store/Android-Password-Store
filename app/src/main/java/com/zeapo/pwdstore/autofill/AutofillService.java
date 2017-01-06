@@ -250,8 +250,9 @@ public class AutofillService extends AccessibilityService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             dismiss = !getWindows().contains(window);
         } else {
-            dismiss = !(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                    && event.getPackageName().toString().contains("inputmethod"));
+            dismiss = !(event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+                    event.getPackageName() != null &&
+                    event.getPackageName().toString().contains("inputmethod"));
         }
         if (dismiss && dialog != null && dialog.isShowing()) {
             dialog.dismiss();

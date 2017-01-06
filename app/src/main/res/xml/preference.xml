@@ -57,6 +57,11 @@
             android:title="@string/pref_copy_title" />
         <CheckBoxPreference
             android:defaultValue="true"
+            android:key="clear_after_copy"
+            android:summary="After an automatic copy or a manual copy of the password, the clipboard will be automatically cleared."
+            android:title="Automatically clear the clipboard after copy" />
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="filter_recursively"
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
