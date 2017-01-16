@@ -118,13 +118,13 @@ public class UserPreference extends AppCompatActivity {
                     new AlertDialog.Builder(callingActivity).
                             setTitle(R.string.pref_dialog_delete_title).
                             setMessage(getResources().getString(R.string.dialog_delete_msg)
-                                    + " \n" + PasswordRepository.getWorkTree().toString()).
+                                    + " \n" + PasswordRepository.getRepositoryDirectory(callingActivity.getApplicationContext()).toString()).
                             setCancelable(false).
                             setPositiveButton(R.string.dialog_delete, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     try {
-                                        FileUtils.cleanDirectory(PasswordRepository.getWorkTree());
+                                        FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.getApplicationContext()));
                                         PasswordRepository.closeRepository();
                                     } catch (Exception e) {
                                         //TODO Handle the diffent cases of exceptions

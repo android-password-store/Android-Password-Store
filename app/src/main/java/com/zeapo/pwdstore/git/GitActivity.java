@@ -470,7 +470,7 @@ public class GitActivity extends AppCompatActivity {
         if (PasswordRepository.getRepository(null) == null) {
             PasswordRepository.initialize(this);
         }
-        localDir = PasswordRepository.getWorkTree();
+        localDir = PasswordRepository.getRepositoryDirectory(context);
 
         if (!saveConfiguration())
             return;

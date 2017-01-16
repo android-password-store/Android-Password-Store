@@ -159,10 +159,6 @@ public class PasswordRepository {
         return getPasswords(rootDir, rootDir);
     }
 
-    public static File getWorkTree() {
-        return repository.getWorkTree();
-    }
-
     /**
      * Gets the .gpg files in a directory
      * @param path the directory path

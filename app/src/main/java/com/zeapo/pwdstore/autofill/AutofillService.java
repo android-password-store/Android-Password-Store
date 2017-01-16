@@ -69,7 +69,7 @@ public class AutofillService extends AccessibilityService {
     public void setResultData(Intent data) { resultData = data; }
 
     public void setPickedPassword(String path) {
-        items.add(new File(PasswordRepository.getWorkTree() + "/" + path + ".gpg"));
+        items.add(new File(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/" + path + ".gpg"));
         bindDecryptAndVerify();
     }
 
@@ -334,7 +334,7 @@ public class AutofillService extends AccessibilityService {
         String preferredPasswords[] = preference.split("\n");
         items = new ArrayList<>();
         for (String password : preferredPasswords) {
-            String path = PasswordRepository.getWorkTree() + "/" + password + ".gpg";
+            String path = PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/" + password + ".gpg";
             if (new File(path).exists()) {
                 items.add(new File(path));
             }

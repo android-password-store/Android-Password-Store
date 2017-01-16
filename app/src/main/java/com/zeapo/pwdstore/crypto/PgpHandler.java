@@ -457,7 +457,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
         passwordList = new SelectFolderFragment();
         Bundle args = new Bundle();
-        args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
+        args.putString("Path", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
 
         passwordList.setArguments(args);
 
@@ -751,7 +751,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             ((EditText) findViewById(R.id.crypto_password_edit)).setTypeface(monoTypeface);
             ((EditText) findViewById(R.id.crypto_extra_edit)).setTypeface(monoTypeface);
             String cat = extra.getString("FILE_PATH");
-            cat = cat.replace(PasswordRepository.getWorkTree().getAbsolutePath(), "");
+            cat = cat.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
             cat = cat + "/";
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
         } else if (operation.equals("GET_KEY_ID")) {
@@ -765,7 +765,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         } else if (operation.equals("EDIT")) {
             setContentView(R.layout.decrypt_layout);
             ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getWorkTree().getAbsolutePath(), ""))
+            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), ""))
                     .getParentFile().getName();
 
             ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");

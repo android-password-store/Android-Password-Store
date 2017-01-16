@@ -221,7 +221,7 @@ public class PasswordFragment extends Fragment{
      */
     public File getCurrentDir() {
         if (pathStack.isEmpty())
-            return PasswordRepository.getWorkTree();
+            return PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
         else
             return pathStack.peek();
     }

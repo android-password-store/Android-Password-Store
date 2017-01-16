@@ -5,9 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 
@@ -86,12 +84,6 @@ public class CloneOperation extends GitOperation {
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // if we were unable to finish the job
-                        try {
-                            FileUtils.deleteDirectory(PasswordRepository.getWorkTree());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                     }
                 }).show();
     }

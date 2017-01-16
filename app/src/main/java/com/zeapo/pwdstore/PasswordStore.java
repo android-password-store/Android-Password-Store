@@ -272,7 +272,7 @@ public class PasswordStore extends AppCompatActivity {
             PasswordRepository.initialize(this);
         }
 
-        File localDir = PasswordRepository.getWorkTree();
+        File localDir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
 
         localDir.mkdir();
         try {
@@ -329,7 +329,7 @@ public class PasswordStore extends AppCompatActivity {
             intent.putExtra("operation", "git_external");
             startActivityForResult(intent, HOME);
         } else {
-            checkLocalRepository(PasswordRepository.getWorkTree());
+            checkLocalRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
         }
     }
 
@@ -344,7 +344,7 @@ public class PasswordStore extends AppCompatActivity {
 
                 plist = new PasswordFragment();
                 Bundle args = new Bundle();
-                args.putString("Path", PasswordRepository.getWorkTree().getAbsolutePath());
+                args.putString("Path", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
 
                 // if the activity was started from the autofill settings, the
                 // intent is to match a clicked pwd with app. pass this to fragment
@@ -510,7 +510,7 @@ public class PasswordStore extends AppCompatActivity {
         if ((null != plist)) {
             return plist.getCurrentDir();
         }
-        return PasswordRepository.getWorkTree();
+        return PasswordRepository.getRepositoryDirectory(getApplicationContext());
     }
 
     private void commit(final String message) {
@@ -604,9 +604,9 @@ public class PasswordStore extends AppCompatActivity {
                             Log.e("Moving", "Something went wrong while moving.");
                         } else {
                             commit("[ANDROID PwdStore] Moved "
-                                    + string.replace(PasswordRepository.getWorkTree() + "/", "")
+                                    + string.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
                                     + " to "
-                                    + target.getAbsolutePath().replace(PasswordRepository.getWorkTree() + "/", "")
+                                    + target.getAbsolutePath().replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
                                     + target.getAbsolutePath() + "/" + source.getName() + ".");
                         }
                     }
@@ -685,7 +685,7 @@ public class PasswordStore extends AppCompatActivity {
 
     public void matchPasswordWithApp(PasswordItem item) {
         String path = item.getFile().getAbsolutePath();
-        path = path.replace(PasswordRepository.getWorkTree() + "/", "").replace(".gpg", "");
+        path = path.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "").replace(".gpg", "");
         Intent data = new Intent();
         data.putExtra("path", path);
         setResult(RESULT_OK, data);
