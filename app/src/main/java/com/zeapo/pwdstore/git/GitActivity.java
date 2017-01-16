@@ -426,9 +426,8 @@ public class GitActivity extends AppCompatActivity {
         if (!protocol.equals("ssh://")) {
             hostname = protocol + hostname;
         } else {
-
             // if the port is explicitly given, jgit requires the ssh://
-            if (!port.isEmpty())
+            if (!port.isEmpty() && !port.equals("22"))
                 hostname = protocol + hostname;
 
             // did he forget the username?
