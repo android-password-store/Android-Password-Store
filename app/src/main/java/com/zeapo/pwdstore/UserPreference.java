@@ -23,6 +23,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
@@ -45,8 +46,11 @@ import org.openintents.openpgp.util.OpenPgpUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class UserPreference extends AppCompatActivity {
@@ -54,6 +58,7 @@ public class UserPreference extends AppCompatActivity {
     private final static int IMPORT_PGP_KEY = 2;
     private final static int EDIT_GIT_INFO = 3;
     private final static int SELECT_GIT_DIRECTORY = 4;
+    private final static int EXPORT_PASSWORDS = 5;
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
     private PrefsFragment prefsFragment;
 
@@ -202,6 +207,14 @@ public class UserPreference extends AppCompatActivity {
                                             .setChecked(((UserPreference) getActivity()).isServiceEnabled());
                                 }
                             }).show();
+                    return true;
+                }
+            });
+
+            findPreference("export_passwords").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    callingActivity.exportPasswordsWithPermissions();
                     return true;
                 }
             });
@@ -354,6 +367,42 @@ public class UserPreference extends AppCompatActivity {
         startActivityForResult(i, IMPORT_SSH_KEY);
     }
 
+    public void exportPasswordsWithPermissions() {
+        final Activity activity = this;
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Snackbar snack = Snackbar.make(prefsFragment.getView(),
+                        "We need access to the sd-card to export the passwords",
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.dialog_ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
+                            }
+                        });
+                snack.show();
+                View view = snack.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(Color.WHITE);
+                tv.setMaxLines(10);
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
+            }
+        } else {
+            Intent i = new Intent(getApplicationContext(), FilePickerActivity.class);
+
+            // Set these depending on your use case. These are the defaults.
+            i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+            i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
+            i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+
+            i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+            startActivityForResult(i, EXPORT_PASSWORDS);
+        }
+    }
+
     /**
      * Opens a key generator to generate a public/private key pair
      */
@@ -454,6 +503,22 @@ public class UserPreference extends AppCompatActivity {
                                 .edit()
                                 .putString("git_external_repo", uri.getPath())
                                 .apply();
+                    }
+                }
+                break;
+                case EXPORT_PASSWORDS: {
+                    final Uri uri = data.getData();
+                    final File repositoryDirectory = PasswordRepository.getRepositoryDirectory(getApplicationContext());
+                    SimpleDateFormat fmtOut = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
+                    Date date = new Date();
+                    String password_now = "/password_store_" + fmtOut.format(date);
+                    final File targetDirectory = new File(uri.getPath() + password_now);
+                    if (repositoryDirectory != null) {
+                        try {
+                            FileUtils.copyDirectory(repositoryDirectory, targetDirectory, true);
+                        } catch (IOException e) {
+                            Log.d("PWD_EXPORT", "Exception happened : " + e.getMessage());
+                        }
                     }
                 }
                 break;

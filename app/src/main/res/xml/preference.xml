@@ -90,6 +90,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_misc_title">
+        <Preference
+            android:key="export_passwords"
+            android:title="Export Passwords"
+            android:summary="Exports the encrypted passwords to an external directory"/>
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="clear_clipboard_20x"
