@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+    <string name="activity_clone_name">Git リポジトリをクローン</string>
+
+    <string name="clone_settings">クローン</string>
+    <string name="action_settings">設定</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="dialog_delete_title">ディレクトリーはすでに存在します</string>
+    <string name="dialog_delete_msg">対象のディレクトリーはすでに存在します。 現在のバージョンは1つのストアのみをサポートしています。 現在のパスワードストアのディレクトリーを削除しますか:</string>
+    <string name="dialog_delete">ディレクトリーを削除</string>
+    <string name="dialog_do_not_delete">キャンセル</string>
+    <string name="title_activity_git_clone">リポジトリ情報</string>
+    
+    <!-- Password Store -->
+    <string name="creation_dialog_text">パスワードや同期操作を追加する前に、以下の新しいリポジトリをクローンまたは作成してください。</string>
+	<string name="store_git">/store/.git</string>
+    <string name="key_dialog_text">リポジトリを初期化する前に "PGP 鍵 ID"を選択する必要があります</string>
+    <string name="connection_dialog_text">どの接続方法がお好みですか?</string>
+    <string name="delete_dialog_text">パスワードを削除してもよろしいですか /"</string>
+
+    <!-- git commits -->
+    <string name="initialization_commit_text">[ANDROID PwdStore] 次の鍵 ID で初期化しました: </string>
+    <string name="add_commit_text">[ANDROID PwdStore] 追加 &#160;</string>
+    <string name="remove_commit_text">[ANDROID PwdStore] 削除 &#160;</string>
+    <string name="edit_commit_text">[ANDROID PwdStore] 編集 &#160;</string>
+    <string name="from_store">&#160; ストアから。</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>
+    <string name="okc_progress_text">OpenKeychain の待機中...</string>
+    <string name="clipboard_beginning_toast_text">パスワードをクリップボードにコピーしました </string>
+    <string name="clipboard_ending_toast_text"> 秒以内に張り付けしてください。</string>
+    <string name="name_settings_toast_text">できるだけ設定に毎回アカウント名を設定してください</string>
+    <string name="account_settings_dialog_text">プリファレンスに OpenKeychain アカウント (メールアドレス) を設定してください</string>
+    <string name="account_settings_dialog_title">アカウント名が空です!</string>
+    <string name="file_toast_text">ファイル名を入力してください</string>
+    <string name="empty_toast_text">空のパスワードを使用したり、追加のコンテンツを空にすることはできません</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">コマンドの実行中...</string>
+    <string name="jgit_error_dialog_title">Git 操作中にエラーが発生しました</string>
+    <string name="jgit_error_dialog_text">jgit からのメッセージ: \n</string>
+
+    <!-- Git Handler -->
+    <string name="read_only_dialog_text">読み取り専用のリポジトリを使用しようとしています。そのリポジトリにプッシュすることはできません</string>
+    <string name="forget_username_dialog_text">ユーザー名の指定を忘れましたか?</string>
+    <string name="set_information_dialog_text">サーバーと同期する前に、サーバーに関する情報を設定する必要があります</string>
+    <string name="ssh_preferences_dialog_text">プリファレンスで SSH 鍵ファイルをインポートまたは生成してください</string>
+    <string name="ssh_preferences_dialog_title">SSH 鍵がありませんkey</string>
+    <string name="ssh_preferences_dialog_import">インポート</string>
+    <string name="ssh_preferences_dialog_generate">生成</string>
+    <string name="passphrase_dialog_title">認証</string>
+    <string name="passphrase_dialog_text">SSH 鍵のパスフレーズを入力してください。 パスフレーズがない場合は空のままにします。</string>
+    <string name="password_dialog_text">このリポジトリのパスワードを入力してください</string>
+    
+    <!-- Clone fragment -->
+    <string name="clone_fragment_text">Password Store へようこそ\n\n この画面で、新しいリポジトリを作成するか、お使いのデバイスに git リポジトリをクローンすることができます。</string>
+    <string name="clone">サーバーからクローン</string>
+    <string name="initialize">ローカルディレクトリーを使用する</string>
+
+    <string name="server_name">サーバー</string>
+    <string name="server_protocol">プロトコル</string>
+    <string name="server_url">サーバー URL</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">リポジトリのパス</string>
+    <string name="server_path_hint">path/to/pass</string>
+    <string name="server_user">ユーザー名</string>
+    <string name="server_user_hint">git_username</string>
+
+    <string name="server_resulting_url">結果 URL</string>
+    <string name="connection_mode">認証モード</string>
+
+    <string name="warn_malformed_url_port">カスタムポートを使用する場合は、絶対パスを入力 ("/" で始まる)</string>
+
+    <!-- PGP Handler -->
+    <string name="title_activity_pgp_handler">PgpHandler</string>
+    <string name="crypto_name_hint">名前</string>
+    <string name="crypto_pass_label">パスワード</string>
+    <string name="crypto_extra_label">追加</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="crypto_category">カテゴリー</string>
+    <string name="action_search">検索</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_server_title">サーバー</string>
+    <string name="pref_server_hint">server.com</string>
+    <string name="pref_remote_title">リモートの場所</string>
+    <string name="pref_remote_hint">path/to/repository</string>
+    <string name="pref_git_username_title">ユーザー名</string>
+    <string name="pref_git_username_hint">ユーザー名</string>
+    <string name="pref_edit_server_info">git サーバー設定を編集</string>
+    <string name="pref_ssh_title">SSH 鍵のインポート</string>
+    <string name="pref_ssh_keygen_title">SSH 鍵ペアを生成</string>
+    <string name="pref_ssh_see_key_title">生成した公開 SSH 鍵を表示</string>
+    <string name="pref_git_delete_repo">リポジトリを削除</string>
+    <string name="pref_dialog_delete_title">リポジトリをクリア</string>
+    <string name="pref_dialog_delete_msg">現在のパスワードストアディレクトリーを削除しますか? これで設定がクリアされることはありません。</string>
+    <string name="pref_crypto_title">暗号化</string>
+    <string name="pref_provider_title">OpenPGP プロバイダーを選択</string>
+    <string name="pref_provider_account_title">OpenPGP アカウントを設定</string>
+    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
+    <string name="pref_key_title">OpenPGP 鍵 ID を選択</string>
+    <string name="pref_general_title">全般</string>
+    <string name="pref_password_title">パスワード表示時間</string>
+    <string name="pref_password_dialog_title">パスワードをクリップボードに入れておく時間を設定</string>
+    <string name="pref_copy_title">自動的にパスワードをコピー</string>
+    <string name="pref_copy_dialog_title">復号化が成功した後、自動的にパスワードをクリップボードにコピーします。</string>
+    <string name="ssh_key_success_dialog_title">SSH 鍵をインポートしました</string>
+    <string name="ssh_key_error_dialog_title">ssh 鍵のインポート時にエラー</string>
+    <string name="ssh_key_error_dialog_text">メッセージ : \n</string>
+    <string name="pref_recursive_filter">再帰的フィルタリング</string>
+    <string name="pref_recursive_filter_hint">現在のディレクトリーのパスワードを再帰的に検索します。</string>
+    <string name="pref_autofill_title">自動入力</string>
+    <string name="pref_autofill_enable_title">自動入力を有効にする</string>
+    <string name="pref_autofill_enable_msg">OK をタップするとアクセシビリティ設定に移動します。 ここで、サービスの下の Password Store をタップし、右上のスイッチをタップしてオンまたはオフにします。</string>
+    <string name="pref_autofill_enable_msg2">サービスがオンになると、アプリのパスワードフィールドをクリックすとダイアログが表示され、一致するアプリのパスワードが存在すると表示されます。</string>
+    <string name="pref_autofill_enable_msg3">Password Store は、自動的にアプリをパスワードと照合します。 このデフォルト設定を変更することも、アプリごとに設定を変更することもできます。</string>
+    <string name="pref_autofill_apps_title">アプリとウェブサイトの設定</string>
+    <string name="pref_autofill_apps_hint">特定のアプリの自動入力設定をカスタマイズします。</string>
+    <string name="pref_autofill_default_title">デフォルトで自動的に一致</string>
+    <string name="pref_autofill_default_hint">カスタム設定のないアプリは、デフォルトは \'自動的に一致\' になります。 それ以外の場合は、\'一致しない\'。</string>
+    <string name="pref_autofill_always_title">常にダイアログを表示</string>
+    <string name="pref_misc_title">その他</string>
+    <string name="pref_clear_clipboard_title">クリップボードを 20 回クリア</string>
+    <string name="pref_clear_clipboard_hint">一度ではなく、無意味な言葉をクリップボードに 20 回保存します。 クリップボードの履歴を表示する Samsung の携帯電話で役に立ちます。</string>
+    <string name="pref_git_delete_repo_summary">ローカルの (非表示) リポジトリを削除</string>
+    <string name="pref_external_repository">外部リポジトリ</string>
+    <string name="pref_external_repository_summary">外部パスワードリポジトリを使用する</string>
+    <string name="pref_select_external_repository">外部リポジトリを選択</string>
+
+    <!-- pwgen fragment -->
+    <string name="pwgen_generate">生成</string>
+    <string name="pwgen_include">含める</string>
+    <string name="pwgen_length">長さ</string>
+    <string name="pwgen_numerals">数字</string>
+    <string name="pwgen_symbols">記号</string>
+    <string name="pwgen_uppercase">大文字</string>
+    <string name="pwgen_ambiguous">あいまい</string>
+    <string name="pwgen_pronounceable">発音可能</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">長さ</string>
+    <string name="ssh_keygen_passphrase">パスフレーズ</string>
+    <string name="ssh_keygen_comment">コメント</string>
+    <string name="ssh_keygen_generate">生成</string>
+    <string name="ssh_keygen_copy">コピー</string>
+    <string name="ssh_keygen_tip">この公開鍵を Git サーバーに提供してください。</string>
+    <string name="ssh_keygen_show_passphrase">パスフレーズを表示</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">はい</string>
+    <string name="dialog_no">いいえ</string>
+    <string name="dialog_positive">途中...</string>
+    <string name="dialog_negative">いや... later</string>
+    <string name="dialog_oops">おっと...</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <string name="git_sync">リポジトリを同期</string>
+    <string name="git_pull">リモートからプル</string>
+    <string name="git_push">リモートにプッシュ</string>
+    <string name="show_password_pref_title">パスワードを表示</string>
+    <string name="show_password_pref_summary">一度復号化されたパスワードの可視性を制御します。これはパスワードのコピーを無効にしません</string>
+    <string name="toast_password_copied">パスワードをクリップボードにコピーしました</string>
+    <string name="pwd_generate_button">生成</string>
+    <string name="category_string">"カテゴリー: "</string>
+
+    <!-- Autofill -->
+    <string name="autofill_description">アプリのパスワードフィールドを自動入力します。 Android バージョン 4.3 以降でのみ動作します。 Android 5.0 以降のクリップボードには依存しません。</string>
+    <string name="autofill_fill">入力</string>
+    <string name="autofill_apps_default">デフォルト設定を使用する</string>
+    <string name="autofill_apps_first">自動的に一致</string>
+    <string name="autofill_apps_match_ellipsis">一致…</string>
+    <string name="autofill_apps_match">一致</string>
+    <string name="autofill_apps_never">一致しない</string>
+    <string name="autofill_apps_delete">削除</string>
+    <string name="refresh_list">リストを更新</string>
+    <string name="settings">設定</string>
+    <string name="no_repo_selected">外部リポジトリが選択されていません</string>
+    <string name="no_repo_selected2">外部リポジトリが選択されていません</string>
+    <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
+    <string name="show_password">パスワードを表示</string>
+</resources>
