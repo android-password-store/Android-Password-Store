@@ -3,12 +3,12 @@ apply from: 'copyLibs.gradle'    // enable 'copyLibs.gradle' script plugin
 apply plugin: 'eclipse'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 77
         versionName "1.2.0.57"
     }

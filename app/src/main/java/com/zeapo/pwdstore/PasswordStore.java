@@ -6,7 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -40,6 +44,7 @@ import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -51,6 +56,7 @@ public class PasswordStore extends AppCompatActivity {
     private Activity activity;
     private PasswordFragment plist;
     private AlertDialog selectDestinationDialog;
+    private ShortcutManager shortcutManager;
 
     private final static int CLONE_REPO_BUTTON = 401;
     private final static int NEW_REPO_BUTTON = 402;
@@ -61,6 +67,8 @@ public class PasswordStore extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+            shortcutManager = getSystemService(ShortcutManager.class);
         activity = this;
         PRNGFixes.apply();
 
@@ -392,6 +400,17 @@ public class PasswordStore extends AppCompatActivity {
         intent.putExtra("NAME", item.toString());
         intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
         intent.putExtra("Operation", "DECRYPT");
+
+        // Adds shortcut
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, item.getFullPathName())
+                    .setShortLabel(item.toString())
+                    .setLongLabel(item.getFullPathName() + item.toString())
+                    .setIcon(Icon.createWithResource(this, R.drawable.ic_launcher))
+                    .setIntent(intent.setAction("DECRYPT_PASS")) // Needs action
+                    .build();
+            shortcutManager.addDynamicShortcuts(Arrays.asList(shortcut));
+        }
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
