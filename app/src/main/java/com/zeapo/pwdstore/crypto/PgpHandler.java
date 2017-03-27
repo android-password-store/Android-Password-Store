@@ -250,10 +250,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         if (findViewById(R.id.crypto_password_show) == null)
             return;
 
-        if (decodedPassword.isEmpty()) {
-            return;
-        }
-
         setTimer();
 
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", decodedPassword);
