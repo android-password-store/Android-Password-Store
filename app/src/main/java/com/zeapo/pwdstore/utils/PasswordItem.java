@@ -11,7 +11,7 @@ public class PasswordItem implements Comparable{
     private String name;
     private PasswordItem parent;
     private File file;
-    private String fullPathName;
+    private String fullPathToParent;
     public boolean selected = false;
 
     /** Create a password item
@@ -26,7 +26,7 @@ public class PasswordItem implements Comparable{
         this.parent = parent;
         this.type = type;
         this.file = file;
-        this.fullPathName = file.getAbsolutePath().replace(rootDir.getAbsolutePath(), "").replace(file.getName(), "");
+        this.fullPathToParent = file.getAbsolutePath().replace(rootDir.getAbsolutePath(), "").replace(file.getName(), "");
     }
 
     /** Create a new Category item
@@ -83,8 +83,8 @@ public class PasswordItem implements Comparable{
         return this.file;
     }
 
-    public String getFullPathName() {
-        return this.fullPathName;
+    public String getFullPathToParent() {
+        return this.fullPathToParent;
     }
 
     @Override

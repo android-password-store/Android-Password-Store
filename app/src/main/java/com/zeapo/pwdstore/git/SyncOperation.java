@@ -11,11 +11,13 @@ import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.StatusCommand;
 
 import java.io.File;
 
 public class SyncOperation extends GitOperation {
     protected AddCommand addCommand;
+    protected StatusCommand statusCommand;
     protected CommitCommand commitCommand;
     protected PullCommand pullCommand;
     protected PushCommand pushCommand;
@@ -32,11 +34,13 @@ public class SyncOperation extends GitOperation {
 
     /**
      * Sets the command
+     *
      * @return the current object
      */
     public SyncOperation setCommands() {
         Git git = new Git(repository);
-        this.addCommand = git.add().addFilepattern(".");
+        this.addCommand = git.add().setUpdate(true).addFilepattern(".");
+        this.statusCommand = git.status();
         this.commitCommand = git.commit().setMessage("[Android Password Store] Sync");
         this.pullCommand = git.pull().setRebase(true).setRemote("origin");
         this.pushCommand = git.push().setPushAll().setRemote("origin");
@@ -49,7 +53,7 @@ public class SyncOperation extends GitOperation {
             this.pullCommand.setCredentialsProvider(this.provider);
             this.pushCommand.setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, this).execute(this.addCommand, this.commitCommand, this.pullCommand, this.pushCommand);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand);
     }
 
     @Override

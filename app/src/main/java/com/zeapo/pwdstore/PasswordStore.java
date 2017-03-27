@@ -403,9 +403,9 @@ public class PasswordStore extends AppCompatActivity {
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, item.getFullPathName())
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, item.getFullPathToParent())
                     .setShortLabel(item.toString())
-                    .setLongLabel(item.getFullPathName() + item.toString())
+                    .setLongLabel(item.getFullPathToParent() + item.toString())
                     .setIcon(Icon.createWithResource(this, R.drawable.ic_launcher))
                     .setIntent(intent.setAction("DECRYPT_PASS")) // Needs action
                     .build();
@@ -476,7 +476,7 @@ public class PasswordStore extends AppCompatActivity {
                         it.remove();
                         adapter.updateSelectedItems(position, selectedItems);
 
-                        commit("[ANDROID PwdStore] Remove " + item + " from store.");
+                        commitAdd("[ANDROID PwdStore] Remove " + item + " from store.");
                         deletePasswords(adapter, selectedItems);
                     }
                 })
@@ -532,7 +532,7 @@ public class PasswordStore extends AppCompatActivity {
         return PasswordRepository.getRepositoryDirectory(getApplicationContext());
     }
 
-    private void commit(final String message) {
+    private void commitAdd(final String message) {
         new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
             @Override
             public void execute() {
@@ -540,7 +540,7 @@ public class PasswordStore extends AppCompatActivity {
                 Git git = new Git(this.repository);
                 GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
-                        git.add().addFilepattern("."),
+                        git.add().setUpdate(true).addFilepattern("."),
                         git.commit().setMessage(message)
                 );
             }
@@ -556,18 +556,18 @@ public class PasswordStore extends AppCompatActivity {
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
                 case PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY:
-                    // if went from decrypt->edit and user saved changes, we need to commit
+                    // if went from decrypt->edit and user saved changes, we need to commitAdd
                     if (data.getBooleanExtra("needCommit", false)) {
-                        commit(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                        commitAdd(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                         refreshListAdapter();
                     }
                     break;
                 case PgpHandler.REQUEST_CODE_ENCRYPT:
-                    commit(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
+                    commitAdd(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
                     refreshListAdapter();
                     break;
                 case PgpHandler.REQUEST_CODE_EDIT:
-                    commit(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                    commitAdd(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
@@ -622,7 +622,7 @@ public class PasswordStore extends AppCompatActivity {
                             // TODO this should show a warning to the user
                             Log.e("Moving", "Something went wrong while moving.");
                         } else {
-                            commit("[ANDROID PwdStore] Moved "
+                            commitAdd("[ANDROID PwdStore] Moved "
                                     + string.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
                                     + " to "
                                     + target.getAbsolutePath().replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")

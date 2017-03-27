@@ -7,7 +7,9 @@ import android.os.AsyncTask;
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
+import org.eclipse.jgit.api.StatusCommand;
 
 
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
@@ -33,10 +35,21 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     }
 
     @Override
-    protected String doInBackground(GitCommand... cmd) {
-        for (GitCommand aCmd : cmd) {
+    protected String doInBackground(GitCommand... commands) {
+        Integer nbChanges = null;
+        for (GitCommand command : commands) {
             try {
-                aCmd.call();
+                if (command instanceof StatusCommand) {
+                    // in case we have changes, we want to keep track of it
+                    nbChanges = ((StatusCommand) command).call().getChanged().size();
+                } else if (command instanceof CommitCommand) {
+                    // the previous status will eventually be used to avoid a commit
+                    if (nbChanges == null || nbChanges > 0)
+                        command.call();
+                } else {
+                    command.call();
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.getMessage() + "\nCaused by:\n" + e.getCause();
@@ -49,8 +62,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
         if (this.dialog != null)
             try {
                 this.dialog.dismiss();
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 // ignore
             }
 
