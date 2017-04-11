@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/git_user_email_hint"
                 android:id="@+id/git_user_email"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="35dp"
                 android:layout_toEndOf="@+id/label_git_user_email"
                 android:layout_toRightOf="@+id/label_git_user_email"
                 android:layout_alignParentRight="true"
