@@ -56,6 +56,7 @@ public class GitActivity extends AppCompatActivity {
     public static final int EDIT_SERVER = 105;
     public static final int REQUEST_SYNC = 106;
     public static final int REQUEST_CREATE = 107;
+    public static final int EDIT_GIT_CONFIG = 108;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -254,6 +255,18 @@ public class GitActivity extends AppCompatActivity {
                 }
 
                 updateURI();
+
+                break;
+            case EDIT_GIT_CONFIG:
+                setContentView(R.layout.activity_git_config);
+                setTitle(R.string.title_activity_git_config);
+
+                // init the server information
+                final EditText git_user_name = ((EditText) findViewById(R.id.git_user_name));
+                final EditText git_user_email = ((EditText) findViewById(R.id.git_user_email));
+
+                git_user_name.setText(settings.getString("git_config_user_name", ""));
+                git_user_email.setText(settings.getString("git_config_user_email", ""));
 
                 break;
             case REQUEST_PULL:
@@ -457,6 +470,25 @@ public class GitActivity extends AppCompatActivity {
     public void saveConfiguration(View view) {
         if (!saveConfiguration())
             return;
+        finish();
+    }
+
+    private boolean saveGitConfigs() {
+        // remember the settings
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString("git_config_user_name", ((EditText) findViewById(R.id.git_user_name)).getText().toString());
+        editor.putString("git_config_user_email", ((EditText) findViewById(R.id.git_user_email)).getText().toString());
+
+        //TODO validate email
+        editor.apply();
+        return true;
+    }
+
+    public void applyGitConfigs(View view) {
+        if(!saveGitConfigs())
+            return;
+        //TODO get repository and apply configs here
         finish();
     }
 

@@ -59,6 +59,7 @@ public class UserPreference extends AppCompatActivity {
     private final static int EDIT_GIT_INFO = 3;
     private final static int SELECT_GIT_DIRECTORY = 4;
     private final static int EXPORT_PASSWORDS = 5;
+    private final static int EDIT_GIT_CONFIG = 6;
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
     private PrefsFragment prefsFragment;
 
@@ -117,7 +118,17 @@ public class UserPreference extends AppCompatActivity {
                 }
             });
 
-            findPreference("git_delete_repo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("git_config").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(callingActivity, GitActivity.class);
+                    intent.putExtra("Operation", GitActivity.EDIT_GIT_CONFIG);
+                    startActivityForResult(intent, EDIT_GIT_CONFIG);
+                    return true;
+                }
+            });
+
+           findPreference("git_delete_repo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     new AlertDialog.Builder(callingActivity).
