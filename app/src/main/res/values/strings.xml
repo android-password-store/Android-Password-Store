@@ -85,6 +85,7 @@
     <string name="git_user_name_hint">User name</string>
     <string name="git_user_email">Email</string>
     <string name="git_user_email_hint">email</string>
+    <string name="invalid_email_dialog_text">Please enter a valid email address</string>
 
     <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PgpHandler</string>

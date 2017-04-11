@@ -36,6 +36,8 @@ import java.util.regex.Pattern;
 
 public class GitActivity extends AppCompatActivity {
     private static final String TAG = "GitAct";
+    // copied from http://stackoverflow.com/a/16058059/4247851
+    private static final String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 
     private Activity activity;
     private Context context;
@@ -477,10 +479,18 @@ public class GitActivity extends AppCompatActivity {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
+        String email = ((EditText) findViewById(R.id.git_user_email)).getText().toString();
+        editor.putString("git_config_user_email", email);
         editor.putString("git_config_user_name", ((EditText) findViewById(R.id.git_user_name)).getText().toString());
-        editor.putString("git_config_user_email", ((EditText) findViewById(R.id.git_user_email)).getText().toString());
 
-        //TODO validate email
+        if (!email.matches(emailPattern)) {
+            new AlertDialog.Builder(this).
+                setMessage(activity.getResources().getString(R.string.invalid_email_dialog_text)).
+                setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null).
+                show();
+            return false;
+        }
+
         editor.apply();
         return true;
     }
