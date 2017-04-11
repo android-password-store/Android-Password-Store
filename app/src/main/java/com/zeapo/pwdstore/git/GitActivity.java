@@ -488,7 +488,13 @@ public class GitActivity extends AppCompatActivity {
     public void applyGitConfigs(View view) {
         if(!saveGitConfigs())
             return;
-        //TODO get repository and apply configs here
+
+        String git_user_name = settings.getString("git_config_user_name", "");
+        String git_user_email = settings.getString("git_config_user_email", "");
+
+        PasswordRepository.setUserName(git_user_name);
+        PasswordRepository.setUserEmail(git_user_email);
+
         finish();
     }
 

@@ -200,4 +200,39 @@ public class PasswordRepository {
         sort(passwordList);
         return passwordList;
     }
+
+    /**
+     * Sets the git user name
+     * @param String username username
+     */
+    public static void setUserName(String username) {
+        setStringConfig("user", null, "name", username);
+    }
+
+    /**
+     * Sets the git user email
+     * @param String email email
+     */
+    public static void setUserEmail(String email) {
+        setStringConfig("user", null, "email", email);
+    }
+
+    /**
+     * Sets a git config value
+     * @param String section config section name
+     * @param String subsection config subsection name
+     * @param String name config name
+     * @param String value the value to be set
+     */
+    private static void setStringConfig(String section, String subsection, String name, String value) {
+        if (isInitialized()) {
+            StoredConfig config = repository.getConfig();
+            config.setString(section, subsection, name, value);
+            try {
+                config.save();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
