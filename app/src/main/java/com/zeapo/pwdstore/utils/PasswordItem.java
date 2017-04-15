@@ -104,6 +104,6 @@ public class PasswordItem implements Comparable{
         PasswordItem other = (PasswordItem) o;
         // Appending the type will make the sort type dependent
         return (this.getType() + this.getName())
-                .compareTo(other.getType() + other.getName());
+                .compareToIgnoreCase(other.getType() + other.getName());
     }
 }
