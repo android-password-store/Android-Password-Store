@@ -13,7 +13,8 @@
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
     <string name="title_activity_git_clone">Repository information</string>
-    
+    <string name="title_activity_git_config">Git Configurations</string>
+
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
 	<string name="store_git">/store/.git</string>
@@ -55,7 +56,7 @@
     <string name="passphrase_dialog_title">Authenticate</string>
     <string name="passphrase_dialog_text">Please provide the passphrase for your SSH key. Leave it empty if there is no passphrase.</string>
     <string name="password_dialog_text">Please provide the password for this repository</string>
-    
+
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
     <string name="clone">Clone from server</string>
@@ -78,6 +79,14 @@
 
     <string name="warn_malformed_url_port">When using custom ports, provide an absolute path (starts with "/")</string>
 
+    <!-- Git Config fragment -->
+    <string name="git_config">Git config</string>
+    <string name="git_user_name">Username</string>
+    <string name="git_user_name_hint">User name</string>
+    <string name="git_user_email">Email</string>
+    <string name="git_user_email_hint">email</string>
+    <string name="invalid_email_dialog_text">Please enter a valid email address</string>
+
     <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="crypto_name_hint">name</string>
@@ -97,6 +106,7 @@
     <string name="pref_git_username_title">Username</string>
     <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Edit git server settings</string>
+    <string name="pref_edit_git_config">Edit git config</string>
     <string name="pref_ssh_title">Import SSH key</string>
     <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>

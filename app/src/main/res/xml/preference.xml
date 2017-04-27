@@ -5,6 +5,9 @@
             android:key="git_server_info"
             android:title="@string/pref_edit_server_info" />
         <Preference
+            android:key="git_config"
+            android:title="@string/pref_edit_git_config" />
+        <Preference
             android:key="ssh_key"
             android:title="@string/pref_ssh_title" />
         <Preference
