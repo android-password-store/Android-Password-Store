@@ -3,6 +3,7 @@ package com.zeapo.pwdstore.git;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
@@ -38,6 +39,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     protected String doInBackground(GitCommand... commands) {
         Integer nbChanges = null;
         for (GitCommand command : commands) {
+            Log.d("doInBackground", "Executing the command <" + command.toString() + ">");
             try {
                 if (command instanceof StatusCommand) {
                     // in case we have changes, we want to keep track of it

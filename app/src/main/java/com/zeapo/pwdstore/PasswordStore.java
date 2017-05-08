@@ -476,7 +476,7 @@ public class PasswordStore extends AppCompatActivity {
                         it.remove();
                         adapter.updateSelectedItems(position, selectedItems);
 
-                        commitAdd("[ANDROID PwdStore] Remove " + item + " from store.");
+                        commitChange("[ANDROID PwdStore] Remove " + item + " from store.");
                         deletePasswords(adapter, selectedItems);
                     }
                 })
@@ -532,7 +532,7 @@ public class PasswordStore extends AppCompatActivity {
         return PasswordRepository.getRepositoryDirectory(getApplicationContext());
     }
 
-    private void commitAdd(final String message) {
+    private void commitChange(final String message) {
         new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
             @Override
             public void execute() {
@@ -556,18 +556,18 @@ public class PasswordStore extends AppCompatActivity {
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
                 case PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY:
-                    // if went from decrypt->edit and user saved changes, we need to commitAdd
+                    // if went from decrypt->edit and user saved changes, we need to commitChange
                     if (data.getBooleanExtra("needCommit", false)) {
-                        commitAdd(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                        commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                         refreshListAdapter();
                     }
                     break;
                 case PgpHandler.REQUEST_CODE_ENCRYPT:
-                    commitAdd(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
+                    commitChange(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
                     refreshListAdapter();
                     break;
                 case PgpHandler.REQUEST_CODE_EDIT:
-                    commitAdd(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                    commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
@@ -622,7 +622,7 @@ public class PasswordStore extends AppCompatActivity {
                             // TODO this should show a warning to the user
                             Log.e("Moving", "Something went wrong while moving.");
                         } else {
-                            commitAdd("[ANDROID PwdStore] Moved "
+                            commitChange("[ANDROID PwdStore] Moved "
                                     + string.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
                                     + " to "
                                     + target.getAbsolutePath().replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")

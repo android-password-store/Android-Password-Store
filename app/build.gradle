@@ -9,8 +9,8 @@ android {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 77
-        versionName "1.2.0.57"
+        versionCode 78
+        versionName "1.2.0.58"
     }
 
     compileOptions {
@@ -58,10 +58,10 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:cardview-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'org.sufficientlysecure:openpgp-api:11.0'
     compile 'com.nononsenseapps:filepicker:2.4.2'
     compile('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r') {
