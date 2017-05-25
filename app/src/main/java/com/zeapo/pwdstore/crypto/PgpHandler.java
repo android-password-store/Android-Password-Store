@@ -566,9 +566,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     if (requestCode == REQUEST_CODE_EDIT && os != null) {
                         try {
                             if (returnToCiphertextField) {
-                                findViewById(R.id.progress_bar).setVisibility(View.GONE);
-                                findViewById(R.id.progress_bar_label).setVisibility(View.GONE);
-
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
@@ -599,11 +596,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 }
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
                     Log.i("PgpHandler", "RESULT_CODE_USER_INTERACTION_REQUIRED");
-
-                    View progress_bar_label = findViewById(R.id.progress_bar_label);
-                    if (progress_bar_label != null) {
-                        progress_bar_label.setVisibility(View.VISIBLE);
-                    }
 
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
                     try {
@@ -700,8 +692,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     public void edit(Intent data) {
         // exactly same as decrypt, only we want a different callback
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
-
-        findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
 
         try {
             InputStream is = FileUtils.openInputStream(new File(getIntent().getExtras().getString("FILE_PATH")));
