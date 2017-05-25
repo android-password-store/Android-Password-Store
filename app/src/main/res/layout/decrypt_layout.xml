@@ -48,23 +48,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp" />
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:id="@+id/progress_bar"
-            android:layout_gravity="center_horizontal"
-            android:indeterminate="true"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/progress_bar_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Authentication Required"
-            android:visibility="gone"/>
-
         <LinearLayout
             android:id="@+id/crypto_container"
             android:orientation="vertical"
