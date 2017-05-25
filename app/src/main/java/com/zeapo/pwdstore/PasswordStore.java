@@ -44,9 +44,10 @@ import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
@@ -409,7 +410,16 @@ public class PasswordStore extends AppCompatActivity {
                     .setIcon(Icon.createWithResource(this, R.drawable.ic_launcher))
                     .setIntent(intent.setAction("DECRYPT_PASS")) // Needs action
                     .build();
-            shortcutManager.addDynamicShortcuts(Arrays.asList(shortcut));
+            List<ShortcutInfo> shortcuts = shortcutManager.getDynamicShortcuts();
+
+            if (shortcuts.size() >= shortcutManager.getMaxShortcutCountPerActivity() &&
+                    shortcuts.size() > 0) {
+                shortcuts.remove(shortcuts.size() - 1);
+                shortcuts.add(0, shortcut);
+                shortcutManager.setDynamicShortcuts(shortcuts);
+            } else {
+                shortcutManager.addDynamicShortcuts(Collections.singletonList(shortcut));
+            }
         }
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
