@@ -36,8 +36,7 @@ import java.util.regex.Pattern;
 
 public class GitActivity extends AppCompatActivity {
     private static final String TAG = "GitAct";
-    // copied from http://stackoverflow.com/a/16058059/4247851
-    private static final String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    private static final String emailPattern = "^[^@]+@[^@]+$";
 
     private Activity activity;
     private Context context;
