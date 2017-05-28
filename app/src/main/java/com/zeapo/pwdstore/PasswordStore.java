@@ -550,7 +550,7 @@ public class PasswordStore extends AppCompatActivity {
                 Git git = new Git(this.repository);
                 GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
-                        git.add().setUpdate(true).addFilepattern("."),
+                        git.add().addFilepattern("."),
                         git.commit().setMessage(message)
                 );
             }
