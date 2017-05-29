@@ -110,27 +110,32 @@ public class AutofillService extends AccessibilityService {
                     && (event.getPackageName().equals("com.android.chrome")
                         || event.getPackageName().equals("com.android.browser")))) {
             // there is a chance for getRootInActiveWindow() to return null at any time. save it.
-            AccessibilityNodeInfo root = getRootInActiveWindow();
-            webViewTitle = searchWebView(root);
-            webViewURL = null;
-            if (webViewTitle != null) {
-                List<AccessibilityNodeInfo> nodes = root.findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
-                if (nodes.isEmpty()) {
-                    nodes = root.findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
-                }
-                for (AccessibilityNodeInfo node : nodes)
-                    if (node.getText() != null) {
-                        try {
-                            webViewURL = new URL(node.getText().toString()).getHost();
-                        } catch (MalformedURLException e) {
-                            if (e.toString().contains("Protocol not found")) {
-                                try {
-                                    webViewURL = new URL("http://" + node.getText().toString()).getHost();
-                                } catch (MalformedURLException ignored) {
+            try {
+                AccessibilityNodeInfo root = getRootInActiveWindow();
+                webViewTitle = searchWebView(root);
+                webViewURL = null;
+                if (webViewTitle != null) {
+                    List<AccessibilityNodeInfo> nodes = root.findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar");
+                    if (nodes.isEmpty()) {
+                        nodes = root.findAccessibilityNodeInfosByViewId("com.android.browser:id/url");
+                    }
+                    for (AccessibilityNodeInfo node : nodes)
+                        if (node.getText() != null) {
+                            try {
+                                webViewURL = new URL(node.getText().toString()).getHost();
+                            } catch (MalformedURLException e) {
+                                if (e.toString().contains("Protocol not found")) {
+                                    try {
+                                        webViewURL = new URL("http://" + node.getText().toString()).getHost();
+                                    } catch (MalformedURLException ignored) {
+                                    }
                                 }
                             }
                         }
-                    }
+                }
+            } catch (Exception e) {
+                // sadly we were unable to access the data we wanted
+                return;
             }
         }
 
