@@ -536,7 +536,7 @@ public class GitActivity extends AppCompatActivity {
                                         try {
                                             new CloneOperation(localDir, activity)
                                                     .setCommand(hostname)
-                                                    .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                                                    .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"), true);
                                         } catch (Exception e) {
                                             //This is what happens when jgit fails :(
                                             //TODO Handle the diffent cases of exceptions
@@ -574,7 +574,7 @@ public class GitActivity extends AppCompatActivity {
                 }
                 new CloneOperation(localDir, activity)
                         .setCommand(hostname)
-                        .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                        .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"), true);
             } catch (Exception e) {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
@@ -632,7 +632,7 @@ public class GitActivity extends AppCompatActivity {
             }
 
             try {
-                op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"), true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -674,7 +674,7 @@ public class GitActivity extends AppCompatActivity {
             }
 
             try {
-                op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"), true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

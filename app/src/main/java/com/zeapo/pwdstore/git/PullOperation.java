@@ -36,7 +36,7 @@ public class PullOperation extends GitOperation {
     }
 
     @Override
-    public void execute() {
+    public void execute(boolean finishOnEnd) {
         if (this.provider != null) {
             ((PullCommand) this.command).setCredentialsProvider(this.provider);
         }

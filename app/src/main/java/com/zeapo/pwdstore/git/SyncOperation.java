@@ -48,12 +48,12 @@ public class SyncOperation extends GitOperation {
     }
 
     @Override
-    public void execute() {
+    public void execute(boolean finishOnEnd) {
         if (this.provider != null) {
             this.pullCommand.setCredentialsProvider(this.provider);
             this.pushCommand.setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, this).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand);
+        new GitAsyncTask(callingActivity, finishOnEnd, false, this).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand);
     }
 
     @Override

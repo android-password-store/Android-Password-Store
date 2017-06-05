@@ -3,7 +3,10 @@ package com.zeapo.pwdstore.git;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.text.Html;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
@@ -13,26 +16,35 @@ import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.StatusCommand;
 
 
-public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
+public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
     private Activity activity;
     private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
     private GitOperation operation;
+    private Snackbar snack;
 
     public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
-
-        dialog = new ProgressDialog(this.activity);
     }
 
     protected void onPreExecute() {
-        this.dialog.setMessage(activity.getResources().getString(R.string.running_dialog_text));
-        this.dialog.setCancelable(false);
-        this.dialog.show();
+//        Toast.makeText(activity.getApplicationContext(), String.format("Running %s", operation.toString()), Toast.LENGTH_LONG).show();
+        snack = Snackbar.make(activity.findViewById(R.id.main_layout),
+                Html.fromHtml(String.format("<font color=\"#ffffff\">Running the Git operation %s</font>", operation.toString())),
+                Snackbar.LENGTH_INDEFINITE);
+        snack.show();
+    }
+
+    protected void onProgressUpdate(String... progress) {
+        if (this.snack != null) snack.dismiss();
+        snack = Snackbar.make(activity.findViewById(R.id.main_layout),
+                Html.fromHtml(String.format("<font color=\"#ffffff\">Running: <strong>%s</strong></font>", progress[0])),
+                Snackbar.LENGTH_INDEFINITE);
+        snack.show();
     }
 
     @Override
@@ -51,7 +63,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                 } else {
                     command.call();
                 }
-
+                publishProgress(command.getClass().getName());
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.getMessage() + "\nCaused by:\n" + e.getCause();
@@ -61,9 +73,9 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     }
 
     protected void onPostExecute(String result) {
-        if (this.dialog != null)
+        if (this.snack != null)
             try {
-                this.dialog.dismiss();
+                this.snack.dismiss();
             } catch (Exception e) {
                 // ignore
             }

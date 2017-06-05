@@ -76,29 +76,30 @@ public abstract class GitOperation {
 
     /**
      * Executes the GitCommand in an async task
+     * @param finishOnEnd
      */
-    public abstract void execute();
+    public abstract void execute(boolean finishOnEnd);
 
     /**
      * Executes the GitCommand in an async task after creating the authentication
-     *
-     * @param connectionMode the server-connection mode
+     *  @param connectionMode the server-connection mode
      * @param username       the username
      * @param sshKey         the ssh-key file
+     * @param finishOnEnd
      */
-    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey) {
-        executeAfterAuthentication(connectionMode, username, sshKey, false);
+    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, boolean finishOnEnd) {
+        executeAfterAuthentication(connectionMode, username, sshKey, false, finishOnEnd);
     }
 
     /**
      * Executes the GitCommand in an async task after creating the authentication
-     *
-     * @param connectionMode the server-connection mode
+     *  @param connectionMode the server-connection mode
      * @param username       the username
      * @param sshKey         the ssh-key file
      * @param showError      show the passphrase edit text in red
+     * @param finishOnEnd
      */
-    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError) {
+    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError, final boolean finishOnEnd) {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
                 new AlertDialog.Builder(callingActivity)
@@ -161,10 +162,10 @@ public abstract class GitOperation {
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         if (keyPair.decrypt(passphrase.getText().toString())) {
                                             // Authenticate using the ssh-key and then execute the command
-                                            setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
+                                            setAuthentication(sshKey, username, passphrase.getText().toString()).execute(finishOnEnd);
                                         } else {
                                             // call back the method
-                                            executeAfterAuthentication(connectionMode, username, sshKey, true);
+                                            executeAfterAuthentication(connectionMode, username, sshKey, true, finishOnEnd);
                                         }
                                     }
                                 }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
@@ -173,7 +174,7 @@ public abstract class GitOperation {
                             }
                         }).show();
                     } else {
-                        setAuthentication(sshKey, username, "").execute();
+                        setAuthentication(sshKey, username, "").execute(finishOnEnd);
                     }
                 } catch (JSchException e) {
                     new AlertDialog.Builder(callingActivity)
@@ -200,7 +201,7 @@ public abstract class GitOperation {
                     .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             // authenticate using the user/pwd and then execute the command
-                            setAuthentication(username, password.getText().toString()).execute();
+                            setAuthentication(username, password.getText().toString()).execute(finishOnEnd);
 
                         }
                     }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
