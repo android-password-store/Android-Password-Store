@@ -32,19 +32,15 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
     }
 
     protected void onPreExecute() {
-//        Toast.makeText(activity.getApplicationContext(), String.format("Running %s", operation.toString()), Toast.LENGTH_LONG).show();
-        snack = Snackbar.make(activity.findViewById(R.id.main_layout),
-                Html.fromHtml(String.format("<font color=\"#ffffff\">Running the Git operation %s</font>", operation.toString())),
-                Snackbar.LENGTH_INDEFINITE);
-        snack.show();
+        Toast.makeText(activity.getApplicationContext(),
+                Html.fromHtml(String.format("<font color=\"#ffffff\">Running %s</font>", operation.getClass().getSimpleName())),
+                Toast.LENGTH_LONG).show();
     }
 
     protected void onProgressUpdate(String... progress) {
-        if (this.snack != null) snack.dismiss();
-        snack = Snackbar.make(activity.findViewById(R.id.main_layout),
-                Html.fromHtml(String.format("<font color=\"#ffffff\">Running: <strong>%s</strong></font>", progress[0])),
-                Snackbar.LENGTH_INDEFINITE);
-        snack.show();
+        Toast.makeText(activity.getApplicationContext(),
+                Html.fromHtml(String.format("<font color=\"#ffffff\">Running jgit command: <strong>%s</strong></font>", progress[0])),
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -63,7 +59,8 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
                 } else {
                     command.call();
                 }
-                publishProgress(command.getClass().getName());
+                String opName = command.getClass().getSimpleName();
+                publishProgress(opName);
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.getMessage() + "\nCaused by:\n" + e.getCause();
@@ -73,13 +70,6 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
     }
 
     protected void onPostExecute(String result) {
-        if (this.snack != null)
-            try {
-                this.snack.dismiss();
-            } catch (Exception e) {
-                // ignore
-            }
-
         if (result == null)
             result = "Unexpected error";
 
