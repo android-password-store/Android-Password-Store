@@ -99,7 +99,12 @@ public abstract class GitOperation {
      * @param showError      show the passphrase edit text in red
      * @param finishOnEnd
      */
-    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError, final boolean finishOnEnd) {
+    private void executeAfterAuthentication(
+            final String connectionMode,
+            final String username,
+            @Nullable final File sshKey,
+            final boolean showError,
+            final boolean finishOnEnd) {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
                 new AlertDialog.Builder(callingActivity)
