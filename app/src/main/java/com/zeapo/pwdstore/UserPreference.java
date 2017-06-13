@@ -72,6 +72,8 @@ public class UserPreference extends AppCompatActivity {
 
             addPreferencesFromResource(R.xml.preference);
 
+            findPreference("app_version").setSummary(String.format("Version: %s", BuildConfig.VERSION_NAME));
+
             findPreference("openpgp_key_id_pref").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

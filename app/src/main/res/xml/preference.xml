@@ -108,4 +108,8 @@
             android:summary="@string/pref_clear_clipboard_hint"
             android:title="@string/pref_clear_clipboard_title" />
     </PreferenceCategory>
+
+    <Preference
+        android:key="app_version"
+        android:title="Version" />
 </PreferenceScreen>
