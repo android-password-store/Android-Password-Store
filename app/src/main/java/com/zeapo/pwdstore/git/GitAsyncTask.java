@@ -35,22 +35,23 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
     }
 
     protected void onPreExecute() {
-        final Spanned message = Html.fromHtml(String.format("<font color=\"#ffffff\">Running %s</font>", operation.getClass().getSimpleName()));
-
         if (lockAndFinishActivity) {
+            final Spanned message = Html.fromHtml(String.format("Running %s", operation.getClass().getSimpleName()));
             this.dialog.setMessage(message);
             this.dialog.setCancelable(false);
             this.dialog.show();
         } else {
+            final Spanned message = Html.fromHtml(String.format("<font color=\"#ffffff\">Running %s</font>", operation.getClass().getSimpleName()));
             Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
     }
 
     protected void onProgressUpdate(String... progress) {
-        final Spanned message = Html.fromHtml(String.format("<font color=\"#ffffff\">Running jgit command: <strong>%s</strong></font>", progress[0]));
         if (lockAndFinishActivity) {
+            final Spanned message = Html.fromHtml(String.format("Running jgit command: <strong>%s</strong>", progress[0]));
             this.dialog.setMessage(message);
         } else {
+            final Spanned message = Html.fromHtml(String.format("<font color=\"#ffffff\">Running jgit command: <strong>%s</strong></font>", progress[0]));
             Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
     }
