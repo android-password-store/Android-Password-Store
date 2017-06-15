@@ -41,7 +41,7 @@ public class SyncOperation extends GitOperation {
         Git git = new Git(repository);
         this.addCommand = git.add().addFilepattern(".");
         this.statusCommand = git.status();
-        this.commitCommand = git.commit().setMessage("[Android Password Store] Sync");
+        this.commitCommand = git.commit().setAll(true).setMessage("[Android Password Store] Sync");
         this.pullCommand = git.pull().setRebase(true).setRemote("origin");
         this.pushCommand = git.push().setPushAll().setRemote("origin");
         return this;

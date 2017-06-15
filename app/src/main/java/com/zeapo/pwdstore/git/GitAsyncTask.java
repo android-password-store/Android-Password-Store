@@ -64,7 +64,8 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
             try {
                 if (command instanceof StatusCommand) {
                     // in case we have changes, we want to keep track of it
-                    nbChanges = ((StatusCommand) command).call().getChanged().size();
+                    org.eclipse.jgit.api.Status status = ((StatusCommand) command).call();
+                    nbChanges = status.getChanged().size() + status.getMissing().size();
                 } else if (command instanceof CommitCommand) {
                     // the previous status will eventually be used to avoid a commit
                     if (nbChanges == null || nbChanges > 0)

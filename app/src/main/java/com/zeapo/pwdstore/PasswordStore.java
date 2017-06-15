@@ -573,13 +573,13 @@ public class PasswordStore extends AppCompatActivity {
             public void execute(boolean finishOnEnd) {
                 Log.d(TAG, "Commiting with message " + message);
                 Git git = new Git(this.repository);
-                GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
+                GitAsyncTask tasks = new GitAsyncTask(activity, finishOnEnd, true, this);
                 tasks.execute(
                         git.add().addFilepattern("."),
-                        git.commit().setMessage(message)
+                        git.commit().setAll(true).setMessage(message)
                 );
             }
-        }.execute(true);
+        }.execute(false);
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
