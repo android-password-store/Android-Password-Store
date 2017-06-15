@@ -40,7 +40,7 @@ public class PullOperation extends GitOperation {
         if (this.provider != null) {
             ((PullCommand) this.command).setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, true, false, this).execute(this.command);
+        new GitAsyncTask(callingActivity, finishOnEnd, false, this).execute(this.command);
     }
 
     @Override

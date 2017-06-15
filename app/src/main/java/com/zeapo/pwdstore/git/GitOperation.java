@@ -76,13 +76,15 @@ public abstract class GitOperation {
 
     /**
      * Executes the GitCommand in an async task
+     *
      * @param finishOnEnd
      */
     public abstract void execute(boolean finishOnEnd);
 
     /**
      * Executes the GitCommand in an async task after creating the authentication
-     *  @param connectionMode the server-connection mode
+     *
+     * @param connectionMode the server-connection mode
      * @param username       the username
      * @param sshKey         the ssh-key file
      * @param finishOnEnd
@@ -93,7 +95,8 @@ public abstract class GitOperation {
 
     /**
      * Executes the GitCommand in an async task after creating the authentication
-     *  @param connectionMode the server-connection mode
+     *
+     * @param connectionMode the server-connection mode
      * @param username       the username
      * @param sshKey         the ssh-key file
      * @param showError      show the passphrase edit text in red
@@ -168,6 +171,7 @@ public abstract class GitOperation {
                                         if (keyPair.decrypt(passphrase.getText().toString())) {
                                             // Authenticate using the ssh-key and then execute the command
                                             setAuthentication(sshKey, username, passphrase.getText().toString()).execute(finishOnEnd);
+                                            callingActivity.finish();
                                         } else {
                                             // call back the method
                                             executeAfterAuthentication(connectionMode, username, sshKey, true, finishOnEnd);
@@ -175,11 +179,12 @@ public abstract class GitOperation {
                                     }
                                 }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                // Do nothing.
+                                callingActivity.finish();
                             }
                         }).show();
                     } else {
                         setAuthentication(sshKey, username, "").execute(finishOnEnd);
+                        callingActivity.finish();
                     }
                 } catch (JSchException e) {
                     new AlertDialog.Builder(callingActivity)

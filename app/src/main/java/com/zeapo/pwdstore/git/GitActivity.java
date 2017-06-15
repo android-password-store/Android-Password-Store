@@ -634,8 +634,7 @@ public class GitActivity extends AppCompatActivity {
             try {
                 op.executeAfterAuthentication(connectionMode,
                         settings.getString("git_remote_username", "git"),
-                        new File(getFilesDir() + "/.ssh_key"), true);
-                activity.finish();
+                        new File(getFilesDir() + "/.ssh_key"), false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
