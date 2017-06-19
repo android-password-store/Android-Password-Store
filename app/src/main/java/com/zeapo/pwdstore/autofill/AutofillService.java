@@ -221,8 +221,11 @@ public class AutofillService extends AccessibilityService {
         }
         showDialog(packageName, appName, isWeb);
     }
-
     private String searchWebView(AccessibilityNodeInfo source) {
+        return searchWebView(source, 10);
+    }
+
+    private String searchWebView(AccessibilityNodeInfo source, int depth) {
         if (source == null) {
             return null;
         }
@@ -237,8 +240,9 @@ public class AutofillService extends AccessibilityService {
                 }
                 return "";
             }
-            if (searchWebView(u) != null) {
-                return searchWebView(u);
+            String webView = searchWebView(u, depth - 1);
+            if (webView != null) {
+                return webView;
             }
             u.recycle();
         }
