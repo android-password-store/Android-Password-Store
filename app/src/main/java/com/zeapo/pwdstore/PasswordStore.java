@@ -354,14 +354,11 @@ public class PasswordStore extends AppCompatActivity {
             int currentTime = (int) Calendar.getInstance().getTimeInMillis() / 1000;
             if (settings.getBoolean("git_auto_sync", false) && currentTime > lastSync + 3600) {
                 Toast.makeText(getApplicationContext(), "Running git auto sync", Toast.LENGTH_LONG).show();
-                SyncOperation op = new SyncOperation(localDir.getAbsoluteFile(), activity).setCommands();
 
-                try {
-                    String connectionMode = settings.getString("git_remote_auth", "ssh-key");
-                    op.executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"), false);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Intent intent;
+                intent = new Intent(this, GitActivity.class);
+                intent.putExtra("Operation", GitActivity.REQUEST_SYNC);
+                startActivityForResult(intent, GitActivity.REQUEST_SYNC);
                 settings.edit().putInt("last_sync", currentTime).apply();
             }
         }
