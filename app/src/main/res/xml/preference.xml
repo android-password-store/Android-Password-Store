@@ -16,10 +16,6 @@
         <Preference
             android:key="ssh_see_key"
             android:title="@string/pref_ssh_see_key_title" />
-        <CheckBoxPreference
-            android:key="git_auto_sync"
-            android:summary="@string/git_auto_sync_summary"
-            android:title="@string/git_auto_sync_title" />
         <Preference
             android:key="git_delete_repo"
             android:summary="@string/pref_git_delete_repo_summary"

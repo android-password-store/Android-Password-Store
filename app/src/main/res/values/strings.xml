@@ -197,6 +197,4 @@
     <string name="no_repo_selected2">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="show_password">Show password</string>
-    <string name="git_auto_sync_title">Auto Sync on start</string>
-    <string name="git_auto_sync_summary">Synchronize the repository when starting the application or when resuming.</string>
 </resources>

@@ -23,19 +23,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
 import com.zeapo.pwdstore.git.GitOperation;
-import com.zeapo.pwdstore.git.SyncOperation;
 import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
@@ -46,13 +43,8 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -347,20 +339,6 @@ public class PasswordStore extends AppCompatActivity {
             startActivityForResult(intent, HOME);
         } else {
             checkLocalRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
-            File localDir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
-            checkLocalRepository(localDir);
-
-            int lastSync = settings.getInt("last_sync", -1);
-            int currentTime = (int) Calendar.getInstance().getTimeInMillis() / 1000;
-            if (settings.getBoolean("git_auto_sync", false) && currentTime > lastSync + 3600) {
-                Toast.makeText(getApplicationContext(), "Running git auto sync", Toast.LENGTH_LONG).show();
-
-                Intent intent;
-                intent = new Intent(this, GitActivity.class);
-                intent.putExtra("Operation", GitActivity.REQUEST_SYNC);
-                startActivityForResult(intent, GitActivity.REQUEST_SYNC);
-                settings.edit().putInt("last_sync", currentTime).apply();
-            }
         }
     }
 
@@ -567,7 +545,7 @@ public class PasswordStore extends AppCompatActivity {
     private void commitChange(final String message) {
         new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
             @Override
-            public void execute(boolean finishOnEnd) {
+            public void execute() {
                 Log.d(TAG, "Commiting with message " + message);
                 Git git = new Git(this.repository);
                 GitAsyncTask tasks = new GitAsyncTask(activity, finishOnEnd, true, this);
@@ -576,7 +554,7 @@ public class PasswordStore extends AppCompatActivity {
                         git.commit().setAll(true).setMessage(message)
                 );
             }
-        }.execute(false);
+        }.execute();
     }
 
     protected void onActivityResult(int requestCode, int resultCode,

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".pwdstore"
-    android:orientation="vertical"
-    android:id="@+id/main_activity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/main_layout"

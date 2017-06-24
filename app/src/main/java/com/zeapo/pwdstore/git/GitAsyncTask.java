@@ -3,11 +3,7 @@ package com.zeapo.pwdstore.git;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
@@ -17,43 +13,26 @@ import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.StatusCommand;
 
 
-public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
+public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private Activity activity;
-    private boolean lockAndFinishActivity;
+    private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
     private GitOperation operation;
-    private Snackbar snack;
 
-    public GitAsyncTask(Activity activity, boolean lockAndFinishActivity, boolean refreshListOnEnd, GitOperation operation) {
+    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
         this.activity = activity;
-        this.lockAndFinishActivity = lockAndFinishActivity;
+        this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
 
-        this.dialog = new ProgressDialog(this.activity);
+        dialog = new ProgressDialog(this.activity);
     }
 
     protected void onPreExecute() {
-        if (lockAndFinishActivity) {
-            final Spanned message = Html.fromHtml(String.format("Running %s", operation.getClass().getSimpleName()));
-            this.dialog.setMessage(message);
-            this.dialog.setCancelable(false);
-            this.dialog.show();
-        } else {
-            final Spanned message = Html.fromHtml(String.format("<font color=\"#ffffff\">Running %s</font>", operation.getClass().getSimpleName()));
-            Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    protected void onProgressUpdate(String... progress) {
-        if (lockAndFinishActivity) {
-            final Spanned message = Html.fromHtml(String.format("Running jgit command: <strong>%s</strong>", progress[0]));
-            this.dialog.setMessage(message);
-        } else {
-            final Spanned message = Html.fromHtml(String.format("<font color=\"#ffffff\">Running jgit command: <strong>%s</strong></font>", progress[0]));
-            Toast.makeText(activity.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
+        this.dialog.setMessage(activity.getResources().getString(R.string.running_dialog_text));
+        this.dialog.setCancelable(false);
+        this.dialog.show();
     }
 
     @Override
@@ -73,8 +52,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
                 } else {
                     command.call();
                 }
-                String opName = command.getClass().getSimpleName();
-                publishProgress(opName);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.getMessage() + "\nCaused by:\n" + e.getCause();
@@ -97,7 +75,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, String, String> {
         if (!result.isEmpty()) {
             this.operation.onTaskEnded(result);
         } else {
-            if (lockAndFinishActivity) {
+            if (finishOnEnd) {
                 this.activity.setResult(Activity.RESULT_OK);
                 this.activity.finish();
             }

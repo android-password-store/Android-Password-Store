@@ -66,11 +66,11 @@ public class CloneOperation extends GitOperation {
     }
 
     @Override
-    public void execute(boolean finishOnEnd) {
+    public void execute() {
         if (this.provider != null) {
             ((CloneCommand) this.command).setCredentialsProvider(this.provider);
         }
-        new GitAsyncTask(callingActivity, finishOnEnd, false, this).execute(this.command);
+        new GitAsyncTask(callingActivity, true, false, this).execute(this.command);
     }
 
     @Override
