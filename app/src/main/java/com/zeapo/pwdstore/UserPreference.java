@@ -87,7 +87,7 @@ public class UserPreference extends AppCompatActivity {
             findPreference("ssh_key").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    callingActivity.getSshKeyWithPermissions();
+                    callingActivity.getSshKeyWithPermissions(sharedPreferences.getBoolean("use_android_file_picker", false));
                     return true;
                 }
             });
@@ -264,12 +264,13 @@ public class UserPreference extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
             if (getIntent().getStringExtra("operation") != null) {
                 switch (getIntent().getStringExtra("operation")) {
                     case "get_ssh_key":
-                        getSshKeyWithPermissions();
+                        getSshKeyWithPermissions(sharedPreferences.getBoolean("use_android_file_picker", false));
                         break;
                     case "make_ssh_key":
                         makeSshKey(false);
@@ -334,7 +335,7 @@ public class UserPreference extends AppCompatActivity {
     /**
      * Opens a file explorer to import the private key
      */
-    public void getSshKeyWithPermissions() {
+    public void getSshKeyWithPermissions(boolean useDefaultPicker) {
         final Activity activity = this;
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -357,27 +358,31 @@ public class UserPreference extends AppCompatActivity {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
             }
         } else {
-            getSshKey();
+            getSshKey(useDefaultPicker);
         }
     }
 
     /**
      * Opens a file explorer to import the private key
      */
-    public void getSshKey() {
-        // This always works
-        Intent i = new Intent(getApplicationContext(), FilePickerActivity.class);
-        // This works if you defined the intent filter
-        // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+    public void getSshKey(boolean useDefaultPicker) {
+        if (useDefaultPicker) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(intent, IMPORT_SSH_KEY);
+        } else {
+            // This always works
+            Intent i = new Intent(getApplicationContext(), FilePickerActivity.class);
+            // This works if you defined the intent filter
+            // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 
-        // Set these depending on your use case. These are the defaults.
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
+            // Set these depending on your use case. These are the defaults.
+            i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+            i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+            i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
 
-        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
-
-        startActivityForResult(i, IMPORT_SSH_KEY);
+            i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+        }
     }
 
     public void exportPasswordsWithPermissions() {
@@ -543,11 +548,12 @@ public class UserPreference extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         switch (requestCode) {
             case REQUEST_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getSshKey();
+                    getSshKey(sharedPreferences.getBoolean("use_android_file_picker", false));
                 }
             }
         }
