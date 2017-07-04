@@ -6,7 +6,7 @@ PwdStore
 [![Build Status](https://travis-ci.org/zeapo/Android-Password-Store.svg?branch=travis)](https://travis-ci.org/zeapo/Android-Password-Store)
 
 **Donations**: 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zeapo&url=https://github.com/zeapo/Android-Password-Store&title=Android-Password-Store&language=en&tags=github&category=software) or bitcoin `1HnBdmZGnYnfbNVG4iiUWN4KmoGdw6fi8i`
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zeapo&url=https://github.com/zeapo/Android-Password-Store&title=Android-Password-Store&language=en&tags=github&category=software) or bitcoin `1NBJWW6E7CKq5oBiB9kqALq4mGR22E4mwN`
 
 This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
 
