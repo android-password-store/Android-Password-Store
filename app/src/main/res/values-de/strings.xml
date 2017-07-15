@@ -29,7 +29,7 @@
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
-    <string name="okc_progress_text">Warte auf OpenKeychain...</string>
+    <string name="okc_progress_text">Warte auf OpenKeychain…</string>
     <string name="clipboard_beginning_toast_text">Passwort ist in der Zwischen ablage, du hast </string>
     <string name="clipboard_ending_toast_text"> Sekunden, um es einzufügen.</string>
     <string name="name_settings_toast_text">Bitte setze deinen Accountnamen in den Einstellungen.</string>
@@ -39,7 +39,7 @@
     <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Befehl läuft...</string>
+    <string name="running_dialog_text">Befehl läuft…</string>
     <string name="jgit_error_dialog_title">Internal Exception occurred</string>
     <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
@@ -76,6 +76,7 @@
     <string name="connection_mode">Authentifizierungsmethode</string>
 
     <string name="warn_malformed_url_port">Wenn du einen anderen Port nutzt, setze den absoluten Pfad (startet mit "/")</string>
+    <string name="invalid_email_dialog_text">Bitte valide Email eingeben</string>
 
     <!-- PGP Handler -->
     <string name="title_activity_pgp_handler">PGP-Handler</string>
@@ -96,6 +97,7 @@
     <string name="pref_git_username_title">Nutzername</string>
     <string name="pref_git_username_hint">Nutzername</string>
     <string name="pref_edit_server_info">Git-Server Einstellungen</string>
+    <string name="pref_edit_git_config">Git Konfiguration bearbeiten</string>
     <string name="pref_ssh_title">Importiere SSH-Key</string>
     <string name="pref_ssh_keygen_title">Erstelle SSH-Schlüsselpaar</string>
     <string name="pref_ssh_see_key_title">Zeige erstellten öffentlichen SSH-Key</string>
@@ -117,6 +119,7 @@
     <string name="ssh_key_error_dialog_text">Nachricht : \n</string>
     <string name="pref_recursive_filter">Suche in Unterordnern</string>
     <string name="pref_recursive_filter_hint">Findet Passwörter auch in Unterordnern.</string>
+    <string name="pref_autofill_title">Autofill</string>
     <string name="pref_autofill_enable_title">Autofill aktivieren</string>
     <string name="pref_autofill_enable_msg">Wähle OK, um zu den Bedienungshilfen-Einstellungen zu gelangen. Dort aktiviere oder deaktiviere den Password Store unter Dienste.</string>
     <string name="pref_autofill_enable_msg2">Wenn der Hintergrunddienst aktiviert ist, erscheint immer dann ein Dialog, wenn du auf ein Passwortfeld in einer App klickst und ein dazu passender Eintrag existiert.</string>
@@ -126,6 +129,7 @@
     <string name="pref_autofill_default_title">Standardmäßig automatisch abgleichen</string>
     <string name="pref_autofill_default_hint">Standard auf \'Automatisch abgleichen\' für Apps ohne eine Standardeinstellung, andernfalls \'Niemals abgleichen.\'</string>
     <string name="pref_autofill_always_title">Zeige den Autofill-Dialog immer</string>
+    <string name="pref_misc_title">Verschiedenes</string>
     <string name="pref_clear_clipboard_title">Lösche die Zwischenablage 20-mal</string>
     <string name="pref_clear_clipboard_hint">Speichert Nonsense 20-mal anstatt 1-mal in der Zwischenablage. Nützlich bspw. auf Samsung-Geräten, die den Verlauf der Zwischenablage speichern.</string>
     <string name="pref_git_delete_repo_summary">Lösche das lokale (versteckte) Repository</string>
@@ -140,6 +144,8 @@
     <string name="pwgen_symbols">Symbole</string>
     <string name="pwgen_uppercase">Großbuchstaben</string>
     <string name="pwgen_ambiguous">Zweideutig</string>
+    <string name="pwgen_length">Länge</string>
+    <string name="pwgen_pronounceable">Aussprechbar</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Länge</string>
@@ -154,9 +160,9 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nein</string>
-    <string name="dialog_positive">Auf dem Weg...</string>
-    <string name="dialog_negative">Nah... später</string>
-    <string name="dialog_oops">Oops...</string>
+    <string name="dialog_positive">Auf dem Weg…</string>
+    <string name="dialog_negative">Nah… später</string>
+    <string name="dialog_oops">Oops…</string>
     <string name="dialog_cancel">Abbruch</string>
     <string name="git_sync">Synchronisiere Repository</string>
     <string name="git_pull">Git Pull</string>
