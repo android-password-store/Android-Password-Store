@@ -364,8 +364,8 @@ public class AutofillService extends AccessibilityService {
                     items.add(file);
                 }
             } else {
-                // ignore .git directory
-                if (file.getName().equals(".git"))
+                // ignore .git and .extensions directory
+                if (file.getName().equals(".git") || file.getName().equals(".extensions"))
                     continue;
                 items.addAll(searchPasswords(file, appName));
             }
