@@ -191,8 +191,8 @@ public class PasswordRepository {
             if (file.isFile()) {
                 passwordList.add(PasswordItem.newPassword(file.getName(), file, rootDir));
             } else {
-                // ignore .git directory
-                if (file.getName().equals(".git"))
+                // ignore .git and .extensions directory
+                if (file.getName().equals(".git") || file.getName().equals(".extensions"))
                     continue;
                 passwordList.add(PasswordItem.newCategory(file.getName(), file, rootDir));
             }
