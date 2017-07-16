@@ -487,15 +487,18 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY && os != null) {
                         try {
                             if (returnToCiphertextField) {
-                                boolean showPassword = settings.getBoolean("show_password", true);
+                                final boolean showPassword = settings.getBoolean("show_password", true);
+                                final boolean showExtraContent = settings.getBoolean("show_extra_content", true);
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-                                final String[] passContent = os.toString("UTF-8").split("\n");
+                                final String[] passContent = os.toString("UTF-8").split("\n", 2);
+                                final String decodedPassword = passContent[0];
+                                final String extraContent = passContent.length > 1 ? passContent[1] : "";
                                 textViewPassword
                                         .setTypeface(monoTypeface);
                                 textViewPassword
-                                        .setText(passContent[0]);
+                                        .setText(decodedPassword);
 
                                 Button toggleVisibilityButton = (Button) findViewById(R.id.crypto_password_toggle_show);
                                 toggleVisibilityButton.setVisibility(showPassword?View.GONE:View.VISIBLE);
@@ -503,13 +506,12 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                     @Override
                                     public void run() {
                                         textViewPassword
-                                                .setText(passContent[0]);
+                                                .setText(decodedPassword);
                                     }
                                 }));
-                                decodedPassword = passContent[0];
 
-                                String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {
+                                    findViewById(R.id.crypto_extra_show_layout).setVisibility(showExtraContent ? View.VISIBLE : View.GONE);
                                     ((TextView) findViewById(R.id.crypto_extra_show))
                                             .setTypeface(monoTypeface);
                                     ((TextView) findViewById(R.id.crypto_extra_show))

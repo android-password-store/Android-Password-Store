@@ -170,6 +170,8 @@
     <string name="refresh_list">Aktualisieren</string>
     <string name="show_password_pref_title">Zeige das Password</string>
     <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
+    <string name="show_extra_content_pref_title">Zeige weiteren Inhalt</string>
+    <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
     <string name="toast_password_copied">Passwort befindet sich zum Einfügen in der Zwischenablage</string>
     <string name="pwd_generate_button">Generieren</string>
     <string name="category_string">"Kategorie: "</string>
