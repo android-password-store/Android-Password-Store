@@ -30,8 +30,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
     <string name="okc_progress_text">Warte auf OpenKeychain…</string>
-    <string name="clipboard_beginning_toast_text">Passwort ist in der Zwischen ablage, du hast </string>
-    <string name="clipboard_ending_toast_text"> Sekunden, um es einzufügen.</string>
+    <string name="clipboard_toast_text">Passwort ist in der Zwischen ablage, du hast %d Sekunden, um es einzufügen.</string>
     <string name="name_settings_toast_text">Bitte setze deinen Accountnamen in den Einstellungen.</string>
     <string name="account_settings_dialog_text">Bitte setze deinen OpenKeychain Account (E-Mail) in den Einstellungen</string>
     <string name="account_settings_dialog_title">Accountname ist leer!</string>
@@ -87,6 +86,8 @@
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Kategorie</string>
     <string name="action_search">Suche</string>
+    <string name="password">Passwort:</string>
+    <string name="extra_content">Weiterer Inhalt:</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
@@ -183,6 +184,8 @@
     <string name="autofill_apps_match">Abgleichen mit</string>
     <string name="autofill_apps_never">Niemals abgleichen</string>
     <string name="autofill_apps_delete">Löschen</string>
+    <string name="autofill_pick">Auswählen…</string>
+    <string name="autofill_pick_and_match">Auswählen und merken…</string>
     <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
     <string name="no_repo_selected2">Kein externes Repository ausgewählt</string>
     <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>

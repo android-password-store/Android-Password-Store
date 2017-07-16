@@ -401,8 +401,8 @@ public class AutofillService extends AccessibilityService {
         for (int i = 0; i < items.size(); i++) {
             itemNames[i] = items.get(i).getName().replace(".gpg", "");
         }
-        itemNames[items.size()] = "Pick...";
-        itemNames[items.size() + 1] = "Pick and match...";
+        itemNames[items.size()] = getString(R.string.autofill_pick);
+        itemNames[items.size() + 1] = getString(R.string.autofill_pick_and_match);
         builder.setItems(itemNames, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

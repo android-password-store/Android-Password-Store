@@ -30,9 +30,8 @@
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>
-    <string name="okc_progress_text">OpenKeychain の待機中...</string>
-    <string name="clipboard_beginning_toast_text">パスワードをクリップボードにコピーしました </string>
-    <string name="clipboard_ending_toast_text"> 秒以内に張り付けしてください。</string>
+    <string name="okc_progress_text">OpenKeychain の待機中…</string>
+    <string name="clipboard_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に張り付けしてください。</string>
     <string name="name_settings_toast_text">できるだけ設定に毎回アカウント名を設定してください</string>
     <string name="account_settings_dialog_text">プリファレンスに OpenKeychain アカウント (メールアドレス) を設定してください</string>
     <string name="account_settings_dialog_title">アカウント名が空です!</string>
@@ -40,7 +39,7 @@
     <string name="empty_toast_text">空のパスワードを使用したり、追加のコンテンツを空にすることはできません</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">コマンドの実行中...</string>
+    <string name="running_dialog_text">コマンドの実行中…</string>
     <string name="jgit_error_dialog_title">Git 操作中にエラーが発生しました</string>
     <string name="jgit_error_dialog_text">jgit からのメッセージ: \n</string>
 
@@ -159,9 +158,9 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
-    <string name="dialog_positive">途中...</string>
-    <string name="dialog_negative">いや... later</string>
-    <string name="dialog_oops">おっと...</string>
+    <string name="dialog_positive">途中…</string>
+    <string name="dialog_negative">いや… later</string>
+    <string name="dialog_oops">おっと…</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="git_sync">リポジトリを同期</string>
     <string name="git_pull">リモートからプル</string>

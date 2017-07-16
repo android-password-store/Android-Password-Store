@@ -31,9 +31,8 @@
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
-    <string name="okc_progress_text">Waiting for OpenKeychain...</string>
-    <string name="clipboard_beginning_toast_text">Password copied to clipboard, you have </string>
-    <string name="clipboard_ending_toast_text"> seconds to paste it somewhere.</string>
+    <string name="okc_progress_text">Waiting for OpenKeychain…</string>
+    <string name="clipboard_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="name_settings_toast_text">Please set your account name in settings whenever you can</string>
     <string name="account_settings_dialog_text">Please set your OpenKeychain account (email) in the preferences</string>
     <string name="account_settings_dialog_title">Account name empty!</string>
@@ -41,7 +40,7 @@
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Running command...</string>
+    <string name="running_dialog_text">Running command…</string>
     <string name="jgit_error_dialog_title">An error occurred during a Git operation</string>
     <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
@@ -96,6 +95,8 @@
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Category</string>
     <string name="action_search">Search</string>
+    <string name="password">Password:</string>
+    <string name="extra_content">Extra content:</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
@@ -169,9 +170,9 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_positive">On my way...</string>
-    <string name="dialog_negative">Nah... later</string>
-    <string name="dialog_oops">Oops...</string>
+    <string name="dialog_positive">On my way…</string>
+    <string name="dialog_negative">Nah… later</string>
+    <string name="dialog_oops">Oops…</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
@@ -191,6 +192,8 @@
     <string name="autofill_apps_match">Match with</string>
     <string name="autofill_apps_never">Never match</string>
     <string name="autofill_apps_delete">Delete</string>
+    <string name="autofill_pick">Pick…</string>
+    <string name="autofill_pick_and_match">Pick and match…</string>
     <string name="refresh_list">Refresh list</string>
     <string name="settings">Settings</string>
     <string name="no_repo_selected">No external repository selected</string>

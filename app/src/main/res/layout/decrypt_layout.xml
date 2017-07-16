@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
-                    android:text="Password: "
+                    android:text="@string/password"
                     android:layout_row="0"
                     android:layout_column="0"/>
                 <TextView
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
-                    android:text="Extra content: "/>
+                    android:text="@string/extra_content"/>
                 <TextView
                     android:id="@+id/crypto_extra_show"
                     android:textIsSelectable="true"
