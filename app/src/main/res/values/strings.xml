@@ -179,6 +179,8 @@
     <string name="git_push">Push to remote</string>
     <string name="show_password_pref_title">Show the password</string>
     <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
+    <string name="show_extra_content_pref_title">Show extra content</string>
+    <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted</string>
     <string name="toast_password_copied">Password copied into the clipboard</string>
     <string name="pwd_generate_button">Generate</string>
     <string name="category_string">"Category: "</string>
