@@ -30,9 +30,8 @@
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Не выбран поставщик OpenPGP!</string>
-    <string name="okc_progress_text">Ожидание OpenKeychain...</string>
-    <string name="clipboard_beginning_toast_text">Пароль скопирован в буфер обмена, у вас есть </string>
-    <string name="clipboard_ending_toast_text"> секунд чтобы вставить его.</string>
+    <string name="okc_progress_text">Ожидание OpenKeychain…</string>
+    <string name="clipboard_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
     <string name="name_settings_toast_text">Пожалуйста, задайте имя пользователя в настройках</string>
     <string name="account_settings_dialog_text">Пожалуйста, задайте почту для OpenKeychain в настройках</string>
     <string name="account_settings_dialog_title">Пустое имя пользователя!</string>
@@ -40,7 +39,7 @@
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Выполняется команда...</string>
+    <string name="running_dialog_text">Выполняется команда…</string>
     <string name="jgit_error_dialog_title">Произошла ошибка</string>
     <string name="jgit_error_dialog_text">Сообщение от jgit: \n</string>
 
@@ -155,9 +154,9 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Да</string>
     <string name="dialog_no">Нет</string>
-    <string name="dialog_positive">On my way...</string>
-    <string name="dialog_negative">Не ... позже</string>
-    <string name="dialog_oops">Упс...</string>
+    <string name="dialog_positive">On my way…</string>
+    <string name="dialog_negative">Не … позже</string>
+    <string name="dialog_oops">Упс…</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="git_sync">Синхронизировать репозиторий</string>
     <string name="git_pull">Пулл с удаленного сервера</string>
@@ -173,7 +172,7 @@
     <string name="autofill_fill">Заполнить</string>
     <string name="autofill_apps_default">Использовать настройки по умолчанию</string>
     <string name="autofill_apps_first">Автоматически сопоставлять</string>
-    <string name="autofill_apps_match_ellipsis">Сопоставить с ... </string>
+    <string name="autofill_apps_match_ellipsis">Сопоставить с … </string>
     <string name="autofill_apps_match">Сопоставить с</string>
     <string name="autofill_apps_never">Никогда не сопоставлять</string>
     <string name="autofill_apps_delete">Удалить</string>
@@ -181,6 +180,6 @@
     <string name="settings">Настройки</string>
     <string name="no_repo_selected">Не выбран внешний репозиторий</string>
     <string name="no_repo_selected2">Не выбрын внешний репозиторий</string>
-    <string name="send_plaintext_password_to">Отправить пароль в открытом виде с помощью ...</string>
+    <string name="send_plaintext_password_to">Отправить пароль в открытом виде с помощью …</string>
     <string name="show_password">Показать пароль</string>
 </resources>

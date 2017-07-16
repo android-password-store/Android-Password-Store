@@ -15,8 +15,7 @@
     <string name="autofill_description">在app中自動填入密碼. 此功能只能在 Andorid 4.3 及以上版本中使用. 在 Andorid 5.0 及以上版本中不需要剪貼簿</string>
     <string name="autofill_fill">輸入</string>
     <string name="category_string">“分類:\"</string>
-    <string name="clipboard_beginning_toast_text">密碼已複製到剪貼簿, 你有</string>
-    <string name="clipboard_ending_toast_text">秒的時間將其貼上到其他地方.</string>
+    <string name="clipboard_toast_text">密碼已複製到剪貼簿, 你有 %d 秒的時間將其貼上到其他地方.</string>
     <string name="clone">從伺服器 Clone</string>
     <string name="clone_fragment_text">歡迎使用 Password Store 你可以選擇建立新的 Repo 或將你已有的 git repo clone 到你的裝置上</string>
     <string name="clone_settings">Clone</string>
@@ -35,10 +34,10 @@
     <string name="dialog_delete_msg">目標目錄已存在. 目前版本僅支援單一儲存區. 真的要刪除現有的 Password Store 目錄嗎:</string>
     <string name="dialog_delete_title">目錄已存在</string>
     <string name="dialog_do_not_delete">取消</string>
-    <string name="dialog_negative">呃... 算了吧</string>
+    <string name="dialog_negative">呃… 算了吧</string>
     <string name="dialog_no">否</string>
     <string name="dialog_ok">確定</string>
-    <string name="dialog_oops">糟糕...</string>
+    <string name="dialog_oops">糟糕…</string>
     <string name="dialog_yes">確定</string>
     <string name="edit_commit_text">[ANDROID PwdStore] Modify &#160;</string>
     <string name="empty_toast_text">不能使用空白密碼或者空白的備註</string>
@@ -57,7 +56,7 @@
     <string name="name_settings_toast_text">请盡快在選項中設定你的使用者名稱</string>
     <string name="no_repo_selected">未選擇外部 Repo</string>
     <string name="no_repo_selected2">未選擇外部 Repo</string>
-    <string name="okc_progress_text">正在等待 OpenKeyChain...</string>
+    <string name="okc_progress_text">正在等待 OpenKeyChain…</string>
     <string name="passphrase_dialog_text">請為你的 SSH 金鑰設定密碼. 若密碼為空請留空</string>
     <string name="passphrase_dialog_title">認證</string>
     <string name="password_dialog_text">請提供目前 Repo 的密碼</string>
@@ -112,8 +111,8 @@
     <string name="read_only_dialog_text">你使用了一個唯讀的 Repo, 你無法 commit</string>
     <string name="refresh_list">重新整理</string>
     <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
-    <string name="running_dialog_text">執行中...</string>
-    <string name="send_plaintext_password_to">將密碼以純文字傳送...</string>
+    <string name="running_dialog_text">執行中…</string>
+    <string name="send_plaintext_password_to">將密碼以純文字傳送…</string>
     <string name="server_name">伺服器</string>
     <string name="server_path">Repo 路徑</string>
     <string name="server_path_hint">path/to/pass</string>
@@ -149,6 +148,6 @@
     <string name="warn_malformed_url_port">如果使用自定 port, 請使用绝對路徑 (從根目錄開始)</string>
     <string name="dialog_positive">確定</string>
     <string name="server_resulting_url">生成的 URL</string>
-    <string name="autofill_apps_match_ellipsis">匹配...</string>
+    <string name="autofill_apps_match_ellipsis">匹配…</string>
     <string name="pref_crypto_title">加密</string>
 </resources>

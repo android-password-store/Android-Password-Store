@@ -255,15 +255,13 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", decodedPassword);
         clipboard.setPrimaryClip(clip);
 
+        int clearAfter = 45;
         try {
-            showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
-                    + " " + Integer.parseInt(settings.getString("general_show_time", "45")) + " "
-                    + this.getResources().getString(R.string.clipboard_ending_toast_text));
+            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45"));
         } catch (NumberFormatException e) {
-            showToast(this.getResources().getString(R.string.clipboard_beginning_toast_text)
-                    + " 45 "
-                    + this.getResources().getString(R.string.clipboard_ending_toast_text));
+            // ignore and keep default
         }
+        showToast(this.getResources().getString(R.string.clipboard_toast_text, clearAfter));
     }
 
     public void handleClick(View view) {
