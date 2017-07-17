@@ -2,17 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:pwstore="http://schemas.android.com/apk/res-auto"
     tools:context="com.zeapo.pwdstore.crypto.PgpHandler" >
-    <item android:title="Share as plaintext"
+    <item android:title="@string/share_as_plaintext"
         android:icon="@drawable/ic_share_white_24dp"
         pwstore:showAsAction="ifRoom"
         android:id="@+id/share_password_as_plaintext"
         />
-    <item android:title="Copy password"
+    <item android:title="@string/copy_password"
         android:icon="@drawable/ic_content_copy_white_24dp"
         pwstore:showAsAction="ifRoom"
         android:id="@+id/copy_password"
         />
-    <item android:title="Edit password"
+    <item android:title="@string/edit_password"
         android:icon="@drawable/ic_edit_white_24dp"
         pwstore:showAsAction="ifRoom"
         android:id="@+id/edit_password"

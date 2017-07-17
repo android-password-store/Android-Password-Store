@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.zeapo.pwdstore.crypto.PgpHandler"
     android:orientation="vertical"
-    android:background="#eee">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -99,28 +99,73 @@
                     android:layout_columnSpan="3"/>
             </GridLayout>
 
-            <LinearLayout
+
+            <RelativeLayout
                 android:id="@+id/crypto_extra_show_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:visibility="invisible">
 
-                <TextView
+                <ImageButton
+                    android:id="@+id/crypto_copy_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/black"
-                    android:text="@string/extra_content"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/copy_username"
+                    android:background="@color/background"
+                    android:src="@drawable/ic_content_copy"/>
+
                 <TextView
-                    android:id="@+id/crypto_extra_show"
-                    android:textIsSelectable="true"
+                    android:id="@+id/crypto_username_show_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/crypto_copy_username"
+                    android:layout_toEndOf="@id/crypto_copy_username"
+                    android:text="@string/username"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/crypto_username_show"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/crypto_username_show_label"
+                    android:layout_toLeftOf="@id/crypto_copy_username"
+                    android:layout_toEndOf="@id/crypto_copy_username"
                     android:textColor="@android:color/black"
-                    android:typeface="monospace"/>
+                    android:textIsSelectable="true"
+                    android:typeface="monospace" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/crypto_extra_show_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/crypto_username_show"
+                    android:text="@string/extra_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/crypto_extra_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/crypto_extra_show_label"
+                    android:textColor="@android:color/black"
+                    android:textIsSelectable="true"
+                    android:typeface="monospace" />
+
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>

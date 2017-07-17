@@ -15,7 +15,7 @@
     <string name="autofill_description">在app中自動填入密碼. 此功能只能在 Andorid 4.3 及以上版本中使用. 在 Andorid 5.0 及以上版本中不需要剪貼簿</string>
     <string name="autofill_fill">輸入</string>
     <string name="category_string">“分類:\"</string>
-    <string name="clipboard_toast_text">密碼已複製到剪貼簿, 你有 %d 秒的時間將其貼上到其他地方.</string>
+    <string name="clipboard_password_toast_text">密碼已複製到剪貼簿, 你有 %d 秒的時間將其貼上到其他地方.</string>
     <string name="clone">從伺服器 Clone</string>
     <string name="clone_fragment_text">歡迎使用 Password Store 你可以選擇建立新的 Repo 或將你已有的 git repo clone 到你的裝置上</string>
     <string name="clone_settings">Clone</string>

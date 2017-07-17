@@ -23,6 +23,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
 
+import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
@@ -492,7 +493,7 @@ public class AutofillService extends AccessibilityService {
         switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
             case OpenPgpApi.RESULT_CODE_SUCCESS: {
                 try {
-                    String[] passContent = os.toString("UTF-8").split("\n");
+                    final PasswordEntry entry = new PasswordEntry(os);
 
                     // if the user focused on something else, take focus back
                     // but this will open another dialog...hack to ignore this
@@ -501,11 +502,11 @@ public class AutofillService extends AccessibilityService {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Bundle args = new Bundle();
                         args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
-                                passContent[0]);
+                                entry.getPassword());
                         info.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args);
                     } else {
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("autofill_pm", passContent[0]);
+                        ClipData clip = ClipData.newPlainText("autofill_pm", entry.getPassword());
                         clipboard.setPrimaryClip(clip);
                         info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
 

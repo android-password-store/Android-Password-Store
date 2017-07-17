@@ -31,7 +31,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>
     <string name="okc_progress_text">OpenKeychain の待機中…</string>
-    <string name="clipboard_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に張り付けしてください。</string>
+    <string name="clipboard_password_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に張り付けしてください。</string>
     <string name="name_settings_toast_text">できるだけ設定に毎回アカウント名を設定してください</string>
     <string name="account_settings_dialog_text">プリファレンスに OpenKeychain アカウント (メールアドレス) を設定してください</string>
     <string name="account_settings_dialog_title">アカウント名が空です!</string>
