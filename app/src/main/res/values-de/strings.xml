@@ -20,6 +20,11 @@
     <string name="key_dialog_text">Du musst deine PGP-Key ID auwählen, bevor das Repository intialisiert wird.</string>
     <string name="connection_dialog_text">Welche Verbindung bevorzugst du?</string>
     <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest \"</string>
+    <string name="key_id">PGP-Key Id:</string>
+    <string name="no_key_selected">Kein PGP-Key ausgewählt</string>
+    <string name="move">Verschieben</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="delete">Löschen</string>
 
     <!-- git commits -->
     <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
@@ -54,6 +59,7 @@
     <string name="passphrase_dialog_title">Authentifizieren</string>
     <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>
     <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
+    <string name="clone_button">Klone!</string>
     
     <!-- Clone fragment -->
     <string name="clone_fragment_text">Willkommen zu Password Store\n\n In dieser Ansicht kannst du entweder ein neues Repository anlegen oder ein bestehendes auf dieses Gerät klonen.</string>
@@ -79,10 +85,12 @@
     <string name="invalid_email_dialog_text">Bitte valide Email eingeben</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">PGP-Handler</string>
     <string name="crypto_name_hint">Name</string>
     <string name="crypto_pass_label">Passwort</string>
     <string name="crypto_extra_label">Extra</string>
+    <string name="crypto_select">Auswählen</string>
+    <string name="crypto_cancel">Abbrechen</string>
+    <string name="crypto_save">Speichern</string>
 
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Kategorie</string>
@@ -143,6 +151,12 @@
     <string name="pref_external_repository">Externes Repository</string>
     <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
     <string name="pref_select_external_repository">Wähle ein externes Repository</string>
+    <string name="prefs_use_default_file_picker">Benutze Standardauswahl für Dateien</string>
+    <string name="prefs_clear_after_copy_title">Zwischenablage automatisch leeren</string>
+    <string name="prefs_clear_after_copy_summary">Nach automatischen oder manuellen Kopieren des Passwords wird die Zwischenablage automatisch geleert</string>
+    <string name="prefs_export_passwords_title">Passwörter exportieren</string>
+    <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
+    <string name="prefs_version">Version</string>
 
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Generieren</string>

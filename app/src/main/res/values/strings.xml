@@ -21,6 +21,11 @@
     <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
     <string name="connection_dialog_text">Which connection method do you prefer?</string>
     <string name="delete_dialog_text">Are you sure you want to delete the password /"</string>
+    <string name="key_id">Key-id:</string>
+    <string name="no_key_selected">No key selected</string>
+    <string name="move">Move</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
     <!-- git commits -->
     <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
@@ -86,12 +91,15 @@
     <string name="git_user_email" translatable="false">Email</string>
     <string name="git_user_email_hint" translatable="false">email</string>
     <string name="invalid_email_dialog_text">Please enter a valid email address</string>
+    <string name="clone_button">Clone!</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="crypto_name_hint">name</string>
     <string name="crypto_pass_label">Password</string>
     <string name="crypto_extra_label">Extra</string>
+    <string name="crypto_select">Select</string>
+    <string name="crypto_cancel">Cancel</string>
+    <string name="crypto_save">Save</string>
 
     <!-- DECRYPT Layout -->
     <string name="crypto_category">Category</string>
@@ -152,6 +160,12 @@
     <string name="pref_external_repository">External repository</string>
     <string name="pref_external_repository_summary">Use an external password repository</string>
     <string name="pref_select_external_repository">Select external repository</string>
+    <string name="prefs_use_default_file_picker">Use default file picker</string>
+    <string name="prefs_clear_after_copy_title">Automatically clear the clipboard after copy</string>
+    <string name="prefs_clear_after_copy_summary">After an automatic copy or a manual copy of the password, the clipboard will be automatically cleared.</string>
+    <string name="prefs_export_passwords_title">Export Passwords</string>
+    <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
+    <string name="prefs_version">Version</string>
 
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Generate</string>
@@ -208,4 +222,5 @@
     <string name="no_repo_selected2">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="show_password">Show password</string>
+    <string name="repository_uri">Repository URI</string>
 </resources>

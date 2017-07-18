@@ -33,7 +33,7 @@ import java.util.Stack;
 public class SelectFolderFragment extends Fragment{
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(PasswordItem item);
+        void onFragmentInteraction(PasswordItem item);
     }
 
     // store the pass files list in a stack
@@ -42,7 +42,6 @@ public class SelectFolderFragment extends Fragment{
     private Stack<Integer> scrollPosition;
     private FolderRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
     private SharedPreferences settings;
 
@@ -58,9 +57,9 @@ public class SelectFolderFragment extends Fragment{
         String path = getArguments().getString("Path");
 
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        passListStack = new Stack<ArrayList<PasswordItem>>();
-        scrollPosition = new Stack<Integer>();
-        pathStack = new Stack<File>();
+        passListStack = new Stack<>();
+        scrollPosition = new Stack<>();
+        pathStack = new Stack<>();
         recyclerAdapter = new FolderRecyclerAdapter((PgpHandler) getActivity(), mListener,
                                                       PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
     }
@@ -71,10 +70,8 @@ public class SelectFolderFragment extends Fragment{
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-
         recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
-        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // use divider
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));

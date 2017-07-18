@@ -32,8 +32,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// TODO move the messages to strings.xml
-
 public class GitActivity extends AppCompatActivity {
     private static final String TAG = "GitAct";
     private static final String emailPattern = "^[^@]+@[^@]+$";
@@ -46,7 +44,6 @@ public class GitActivity extends AppCompatActivity {
 
     private File localDir;
     private String hostname;
-    private String port;
 
     private SharedPreferences settings;
 
@@ -157,13 +154,6 @@ public class GitActivity extends AppCompatActivity {
                 final EditText server_path = ((EditText) findViewById(R.id.server_path));
                 final EditText server_user = ((EditText) findViewById(R.id.server_user));
                 final EditText server_uri = ((EditText) findViewById(R.id.clone_uri));
-
-                View.OnFocusChangeListener updateListener = new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean b) {
-                        updateURI();
-                    }
-                };
 
                 server_url.setText(settings.getString("git_remote_server", ""));
                 server_port.setText(settings.getString("git_remote_port", ""));
@@ -307,7 +297,7 @@ public class GitActivity extends AppCompatActivity {
                     if (server_port.getText().toString().equals("22")) {
                         hostname += server_path.getText().toString();
 
-                        ((TextView) findViewById(R.id.warn_url)).setVisibility(View.GONE);
+                        findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
                         TextView warn_url = (TextView) findViewById(R.id.warn_url);
                         if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
@@ -329,7 +319,7 @@ public class GitActivity extends AppCompatActivity {
                     if (server_port.getText().toString().equals("443")) {
                         hostname.append(server_path.getText().toString());
 
-                        ((TextView) findViewById(R.id.warn_url)).setVisibility(View.GONE);
+                        findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
                         hostname.append("/");
                         hostname.append(server_port.getText().toString())
@@ -417,6 +407,7 @@ public class GitActivity extends AppCompatActivity {
     /**
      * Saves the configuration found in the form
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean saveConfiguration() {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
@@ -432,7 +423,7 @@ public class GitActivity extends AppCompatActivity {
         // 'save' hostname variable for use by addRemote() either here or later
         // in syncRepository()
         hostname = ((EditText) findViewById(R.id.clone_uri)).getText().toString();
-        port = ((EditText) findViewById(R.id.server_port)).getText().toString();
+        String port = ((EditText) findViewById(R.id.server_port)).getText().toString();
         // don't ask the user, take off the protocol that he puts in
         hostname = hostname.replaceFirst("^.+://", "");
         ((TextView) findViewById(R.id.clone_uri)).setText(hostname);

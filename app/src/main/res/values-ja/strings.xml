@@ -78,7 +78,6 @@
     <string name="warn_malformed_url_port">カスタムポートを使用する場合は、絶対パスを入力 ("/" で始まる)</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="crypto_name_hint">名前</string>
     <string name="crypto_pass_label">パスワード</string>
     <string name="crypto_extra_label">追加</string>

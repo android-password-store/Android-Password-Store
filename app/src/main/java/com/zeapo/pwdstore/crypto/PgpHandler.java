@@ -132,7 +132,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
             try {
                 this.mServiceConnection.unbindFromService();
             } catch (Exception e) {
-
+                // ignore any errors, we'll stop anyway.
             }
     }
 
@@ -571,7 +571,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     // get key ids
                     if (result.hasExtra(OpenPgpApi.RESULT_KEY_IDS)) {
                         long[] ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS);
-                        Set<String> keys = new HashSet<String>();
+                        Set<String> keys = new HashSet<>();
 
                         for (long id : ids) keys.add(String.valueOf(id)); // use Long
                         settings.edit().putStringSet("openpgp_key_ids_set", keys).apply();
@@ -734,44 +734,53 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         if (operation == null){
             return;
         }
-        if (operation.equals("DECRYPT")) {
-            setContentView(R.layout.decrypt_layout);
-            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-            String path = extra
-                    .getString("FILE_PATH")
-                    .replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
-            String cat = new File(path).getParentFile().getName();
+        switch (operation) {
+            case "DECRYPT": {
+                setContentView(R.layout.decrypt_layout);
+                ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+                String path = extra
+                        .getString("FILE_PATH")
+                        .replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
+                String cat = new File(path).getParentFile().getName();
 
-            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
-            decryptAndVerify(new Intent());
-        } else if (operation.equals("ENCRYPT")) {
-            setContentView(R.layout.encrypt_layout);
-            Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-            ((EditText) findViewById(R.id.crypto_password_edit)).setTypeface(monoTypeface);
-            ((EditText) findViewById(R.id.crypto_extra_edit)).setTypeface(monoTypeface);
-            String cat = extra.getString("FILE_PATH");
-            cat = cat.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
-            cat = cat + "/";
-            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
-        } else if (operation.equals("GET_KEY_ID")) {
-            getKeyIds(new Intent());
+                ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
+                decryptAndVerify(new Intent());
+                break;
+            }
+            case "ENCRYPT": {
+                setContentView(R.layout.encrypt_layout);
+                Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
+                ((EditText) findViewById(R.id.crypto_password_edit)).setTypeface(monoTypeface);
+                ((EditText) findViewById(R.id.crypto_extra_edit)).setTypeface(monoTypeface);
+                String cat = extra.getString("FILE_PATH");
+                cat = cat.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
+                cat = cat + "/";
+                ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
+                break;
+            }
+            case "GET_KEY_ID":
+                getKeyIds(new Intent());
 
-//            setContentView(R.layout.key_id);
-//            if (!keyIDs.isEmpty()) {
-//                String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
-//                ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
-//            }
-        } else if (operation.equals("EDIT")) {
-            setContentView(R.layout.decrypt_layout);
-            ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
-            String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), ""))
-                    .getParentFile().getName();
+//              setContentView(R.layout.key_id);
+//              if (!keyIDs.isEmpty()) {
+//                  String keys = keyIDs.split(",").length > 1 ? keyIDs : keyIDs.split(",")[0];
+//                  ((TextView) findViewById(R.id.crypto_key_ids)).setText(keys);
+//              }
+                break;
+            case "EDIT": {
+                setContentView(R.layout.decrypt_layout);
+                ((TextView) findViewById(R.id.crypto_password_file)).setText(extra.getString("NAME"));
+                String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), ""))
+                        .getParentFile().getName();
 
-            ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
-            edit(new Intent());
-        } else if (operation.equals("SELECTFOLDER")){
-            setContentView(R.layout.select_folder_layout);
-            selectFolder(getIntent());
+                ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
+                edit(new Intent());
+                break;
+            }
+            case "SELECTFOLDER":
+                setContentView(R.layout.select_folder_layout);
+                selectFolder(getIntent());
+                break;
         }
     }
 

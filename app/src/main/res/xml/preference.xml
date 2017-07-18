@@ -66,8 +66,8 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="clear_after_copy"
-            android:summary="After an automatic copy or a manual copy of the password, the clipboard will be automatically cleared."
-            android:title="Automatically clear the clipboard after copy" />
+            android:summary="@string/prefs_clear_after_copy_summary"
+            android:title="@string/prefs_clear_after_copy_title" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="filter_recursively"
@@ -100,8 +100,8 @@
     <PreferenceCategory android:title="@string/pref_misc_title">
         <Preference
             android:key="export_passwords"
-            android:title="Export Passwords"
-            android:summary="Exports the encrypted passwords to an external directory"/>
+            android:title="@string/prefs_export_passwords_title"
+            android:summary="@string/prefs_export_passwords_summary"/>
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -112,10 +112,10 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="use_android_file_picker"
-            android:title="Use default file picker" />
+            android:title="@string/prefs_use_default_file_picker" />
     </PreferenceCategory>
 
     <Preference
         android:key="app_version"
-        android:title="Version" />
+        android:title="@string/prefs_version" />
 </PreferenceScreen>

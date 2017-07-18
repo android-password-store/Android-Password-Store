@@ -1,22 +1,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".pwdstore">
 
-    <item android:id="@+id/menu_move_password"
+    <item
+        android:id="@+id/menu_move_password"
         android:icon="@drawable/ic_folder_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="Move"/>
+        android:title="@string/move"
+        app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/menu_edit_password"
+    <item
+        android:id="@+id/menu_edit_password"
         android:icon="@drawable/ic_edit_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="Edit"/>
+        android:title="@string/edit"
+        app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/menu_delete_password"
+    <item
+        android:id="@+id/menu_delete_password"
         android:icon="@drawable/ic_delete_white_24dp"
-        app:showAsAction="ifRoom"
-        android:title="Delete"/>
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
 
 </menu>
 

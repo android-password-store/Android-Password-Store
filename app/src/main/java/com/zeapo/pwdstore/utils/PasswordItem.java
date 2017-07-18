@@ -1,5 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
+import android.support.annotation.NonNull;
+
 import java.io.File;
 
 public class PasswordItem implements Comparable{
@@ -12,7 +14,6 @@ public class PasswordItem implements Comparable{
     private PasswordItem parent;
     private File file;
     private String fullPathToParent;
-    public boolean selected = false;
 
     /** Create a password item
      *
@@ -93,14 +94,15 @@ public class PasswordItem implements Comparable{
     }
 
     @Override
-    public boolean equals(Object o){
-        PasswordItem other = (PasswordItem) o;
+    public boolean equals(Object o) {
         // Makes it possible to have a category and a password with the same name
-        return (other.getFile().equals(this.getFile()));
-}
+        return o != null
+                && o.getClass() == PasswordItem.class
+                && ((PasswordItem) o).getFile().equals(this.getFile());
+    }
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(@NonNull Object o) {
         PasswordItem other = (PasswordItem) o;
         // Appending the type will make the sort type dependent
         return (this.getType() + this.getName())

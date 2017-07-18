@@ -78,7 +78,6 @@
     <string name="warn_malformed_url_port">Při použití vlastního portu, zadejte absolutní cestu (začíná "/")</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="crypto_name_hint">jméno</string>
     <string name="crypto_pass_label">Heslo</string>
     <string name="crypto_extra_label">Extra</string>

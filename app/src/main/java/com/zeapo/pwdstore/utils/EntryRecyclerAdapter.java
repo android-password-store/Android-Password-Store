@@ -106,11 +106,11 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         }
 
         holder.type.setText(pass.getFullPathToParent());
-        if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
+//        if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
 //            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
-        } else {
+//        } else {
 //            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_50));
-        }
+//        }
 
         holder.view.setOnClickListener(getOnClickListener(holder, pass));
 

@@ -1,11 +1,11 @@
 package com.zeapo.pwdstore;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +32,7 @@ import java.util.Stack;
 public class PasswordFragment extends Fragment{
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(PasswordItem item);
+        void onFragmentInteraction(PasswordItem item);
     }
 
     // store the pass files list in a stack
@@ -41,7 +41,6 @@ public class PasswordFragment extends Fragment{
     private Stack<Integer> scrollPosition;
     private PasswordRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private OnFragmentInteractionListener mListener;
     private SharedPreferences settings;
 
@@ -57,9 +56,9 @@ public class PasswordFragment extends Fragment{
         String path = getArguments().getString("Path");
 
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        passListStack = new Stack<ArrayList<PasswordItem>>();
-        scrollPosition = new Stack<Integer>();
-        pathStack = new Stack<File>();
+        passListStack = new Stack<>();
+        scrollPosition = new Stack<>();
+        pathStack = new Stack<>();
         recyclerAdapter = new PasswordRecyclerAdapter((PasswordStore) getActivity(), mListener,
                                                       PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
     }
@@ -70,7 +69,7 @@ public class PasswordFragment extends Fragment{
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(mLayoutManager);

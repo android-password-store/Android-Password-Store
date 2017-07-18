@@ -78,7 +78,6 @@
     <string name="warn_malformed_url_port">При использовании нестандартных портов, предоставьте полный путь (начинается с "/")</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">Обработчик PGP</string>
     <string name="crypto_name_hint">имя</string>
     <string name="crypto_pass_label">Пароль</string>
     <string name="crypto_extra_label">Дополнительно</string>

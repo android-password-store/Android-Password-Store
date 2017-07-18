@@ -103,7 +103,7 @@ public class pwgenDialogFragment extends DialogFragment {
         return ad;
     }
 
-    private boolean setPreferences () {
+    private void setPreferences () {
         ArrayList<String> preferences = new ArrayList<>();
         if (!((CheckBox) getDialog().findViewById(R.id.numerals)).isChecked()) {
             preferences.add("0");
@@ -123,9 +123,9 @@ public class pwgenDialogFragment extends DialogFragment {
         EditText editText = (EditText) getDialog().findViewById(R.id.lengthNumber);
         try {
             int length = Integer.valueOf(editText.getText().toString());
-            return pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
+            pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
         } catch(NumberFormatException e) {
-            return pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
+            pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }
 }

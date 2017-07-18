@@ -12,8 +12,6 @@ import org.eclipse.jgit.api.Git;
 import java.io.File;
 
 public class CloneOperation extends GitOperation {
-    private static final String TAG = "CLONEOPT";
-
     /**
      * Creates a new clone operation
      *

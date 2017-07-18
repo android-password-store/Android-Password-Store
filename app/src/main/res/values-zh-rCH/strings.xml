@@ -143,7 +143,6 @@
     <string name="ssh_preferences_dialog_title">无SSH密钥</string>
     <string name="store_git">/store/.git</string>
     <string name="title_activity_git_clone">Repo 信息</string>
-    <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="toast_password_copied">密码已复制到剪贴板</string>
     <string name="warn_malformed_url_port">如果使用自定义端口, 请提供绝对路径 (从根目录开始)</string>
     <string name="dialog_positive">现在就去</string>

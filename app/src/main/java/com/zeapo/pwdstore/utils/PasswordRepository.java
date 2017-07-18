@@ -165,13 +165,13 @@ public class PasswordRepository {
      * @return the list of gpg files in that directory
      */
     public static ArrayList<File> getFilesList(File path){
-        if (!path.exists()) return new ArrayList<File>();
+        if (!path.exists()) return new ArrayList<>();
 
         Log.d("REPO", "current path: " + path.getPath());
-        ArrayList<File> files = new ArrayList<File>(Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter())));
-        files.addAll( new ArrayList<File>((List<File>)FileUtils.listFiles(path, new String[] {"gpg"}, false)));
+        ArrayList<File> files = new ArrayList<>(Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter())));
+        files.addAll(new ArrayList<>((List<File>) FileUtils.listFiles(path, new String[]{"gpg"}, false)));
 
-        return new ArrayList<File>(files);
+        return new ArrayList<>(files);
     }
 
     /**
@@ -183,9 +183,9 @@ public class PasswordRepository {
         //We need to recover the passwords then parse the files
         ArrayList<File> passList = getFilesList(path);
 
-        if (passList.size() == 0) return new ArrayList<PasswordItem>();
+        if (passList.size() == 0) return new ArrayList<>();
 
-        ArrayList<PasswordItem> passwordList = new ArrayList<PasswordItem>();
+        ArrayList<PasswordItem> passwordList = new ArrayList<>();
 
         for (File file : passList) {
             if (file.isFile()) {
@@ -203,7 +203,7 @@ public class PasswordRepository {
 
     /**
      * Sets the git user name
-     * @param String username username
+     * @param username username
      */
     public static void setUserName(String username) {
         setStringConfig("user", null, "name", username);
@@ -211,7 +211,7 @@ public class PasswordRepository {
 
     /**
      * Sets the git user email
-     * @param String email email
+     * @param email email
      */
     public static void setUserEmail(String email) {
         setStringConfig("user", null, "email", email);
@@ -219,10 +219,10 @@ public class PasswordRepository {
 
     /**
      * Sets a git config value
-     * @param String section config section name
-     * @param String subsection config subsection name
-     * @param String name config name
-     * @param String value the value to be set
+     * @param section config section name
+     * @param subsection config subsection name
+     * @param name config name
+     * @param value the value to be set
      */
     private static void setStringConfig(String section, String subsection, String name, String value) {
         if (isInitialized()) {

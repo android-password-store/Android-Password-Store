@@ -1,16 +1,17 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +72,9 @@ public class AutofillFragment extends DialogFragment {
         adapter = new ArrayAdapter<String>(getActivity().getApplicationContext()
                 , android.R.layout.simple_list_item_1, android.R.id.text1) {
             // set text color to black because default is white...
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 textView.setTextColor(ContextCompat.getColor(getContext(), R.color.grey_black_1000));
                 return textView;

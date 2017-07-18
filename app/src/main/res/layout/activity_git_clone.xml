@@ -106,14 +106,16 @@
                 android:inputType="textWebEmailAddress" />
 
             <TextView
+                android:id="@+id/label_server_port"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=":"
-                android:paddingBottom="8dp"
-                android:id="@+id/label_server_port"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/server_port"
-                android:layout_toStartOf="@+id/server_port" />
+                android:layout_toStartOf="@+id/server_port"
+                android:paddingBottom="8dp"
+                android:text=":"
+                tools:ignore="HardcodedText" />
+
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -166,11 +168,11 @@
             android:background="@drawable/bottom_line"/>
 
         <EditText
-            android:hint="Repository URI"
             android:id="@+id/clone_uri"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textWebEmailAddress"/>
+            android:hint="@string/repository_uri"
+            android:inputType="textWebEmailAddress" />
 
         <TextView
             android:layout_width="match_parent"
@@ -206,13 +208,13 @@
 
         <Button
             android:id="@+id/clone_button"
-            android:text="Clone!"
+            android:text="@string/clone_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="cloneRepository"/>
         <Button
             android:id="@+id/save_button"
-            android:text="Save"
+            android:text="@string/crypto_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="saveConfiguration"/>

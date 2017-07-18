@@ -78,7 +78,6 @@
     <string name="warn_malformed_url_port">Lors de l\'utilisation d\'un numéro de port personnalisé, fournissez un chemin absolu  (commençant par "/")</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="crypto_name_hint">nom</string>
     <string name="crypto_pass_label">Mot de passe</string>
     <string name="crypto_extra_label">Extra</string>

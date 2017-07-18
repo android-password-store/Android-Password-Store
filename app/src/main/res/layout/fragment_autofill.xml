@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingBottom="20dp"
-              android:paddingLeft="24dp"
-              android:paddingRight="24dp"
-              android:paddingTop="20dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="20dp">
 
-    <android.support.design.widget.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="wrap_content"
-                                                   app:hintTextAppearance="@style/TextAppearance.AppCompat">
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat">
 
         <EditText
             android:id="@+id/webURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="URL"
-            android:inputType="textUri"/>
+            android:inputType="textUri"
+            tools:ignore="HardcodedText" />
     </android.support.design.widget.TextInputLayout>
 
     <RadioGroup

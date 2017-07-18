@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -16,14 +17,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Key-id: "
+            android:text="@string/key_id"
             android:layout_column="0"
             android:layout_gravity="center_vertical"/>
         <TextView
             android:id="@+id/crypto_key_ids"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No key selected"
+            android:text="@string/no_key_selected"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:textStyle="bold"
             android:textColor="@android:color/holo_purple"
