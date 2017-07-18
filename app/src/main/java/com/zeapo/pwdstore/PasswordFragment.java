@@ -120,22 +120,11 @@ public class PasswordFragment extends Fragment{
                         }
                     }
                 }
-
-                public void savePosition(Integer position) {
-
-                }
             };
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                 + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        mListener.savePosition(mListView.getFirstVisiblePosition());
-//        mListView.closeOpenedItems();
     }
 
     /**

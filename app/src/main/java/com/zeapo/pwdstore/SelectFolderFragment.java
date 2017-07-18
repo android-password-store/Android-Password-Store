@@ -1,15 +1,12 @@
 package com.zeapo.pwdstore;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +40,6 @@ public class SelectFolderFragment extends Fragment{
     private FolderRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
-    private SharedPreferences settings;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,7 +52,6 @@ public class SelectFolderFragment extends Fragment{
         super.onCreate(savedInstanceState);
         String path = getArguments().getString("Path");
 
-        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         passListStack = new Stack<>();
         scrollPosition = new Stack<>();
         pathStack = new Stack<>();
@@ -113,98 +108,11 @@ public class SelectFolderFragment extends Fragment{
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     }
                 }
-
-                public void savePosition(Integer position) {
-
-                }
             };
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                 + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        mListener.savePosition(mListView.getFirstVisiblePosition());
-//        mListView.closeOpenedItems();
-    }
-
-    /**
-     * clears the adapter content and sets it back to the root view
-     */
-    public void updateAdapter() {
-        passListStack.clear();
-        pathStack.clear();
-        scrollPosition.clear();
-        recyclerAdapter.clear();
-        recyclerAdapter.addAll(PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())));
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-    }
-
-    /**
-     * refreshes the adapter with the latest opened category
-     */
-    public void refreshAdapter() {
-        recyclerAdapter.clear();
-        recyclerAdapter.addAll(pathStack.isEmpty() ?
-                                        PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())) :
-                                        PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity())));
-    }
-
-    /**
-     * filters the list adapter
-     * @param filter the filter to apply
-     */
-    public void filterAdapter(String filter) {
-        Log.d("FRAG", "filter: " + filter);
-
-        if (filter.isEmpty()) {
-            refreshAdapter();
-        } else {
-            recursiveFilter(filter, pathStack.isEmpty() ? null : pathStack.peek());
-        }
-    }
-
-    /**
-     * recursively filters a directory and extract all the matching items
-     * @param filter the filter to apply
-     * @param dir the directory to filter
-     */
-    private void recursiveFilter(String filter, File dir) {
-        // on the root the pathStack is empty
-        ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(getActivity()));
-
-        boolean rec = settings.getBoolean("filter_recursively", true);
-        for (PasswordItem item : passwordItems) {
-            if (item.getType() == PasswordItem.TYPE_CATEGORY && rec) {
-                recursiveFilter(filter, item.getFile());
-            }
-            boolean matches = item.toString().toLowerCase().contains(filter.toLowerCase());
-            boolean inAdapter = recyclerAdapter.getValues().contains(item);
-            if (matches && !inAdapter) {
-                recyclerAdapter.add(item);
-            } else if (!matches && inAdapter) {
-                recyclerAdapter.remove(recyclerAdapter.getValues().indexOf(item));
-            }
-        }
-    }
-
-    /**
-     * Goes back one level back in the path
-     */
-    public void popBack() {
-        if (passListStack.isEmpty())
-            return;
-
-        recyclerView.scrollToPosition(scrollPosition.pop());
-        recyclerAdapter.clear();
-        recyclerAdapter.addAll(passListStack.pop());
-        pathStack.pop();
     }
 
     /**
@@ -216,9 +124,5 @@ public class SelectFolderFragment extends Fragment{
             return PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
         else
             return pathStack.peek();
-    }
-
-    public boolean isNotEmpty() {
-        return !passListStack.isEmpty();
     }
 }
