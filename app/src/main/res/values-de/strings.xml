@@ -30,7 +30,8 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
     <string name="okc_progress_text">Warte auf OpenKeychain…</string>
-    <string name="clipboard_toast_text">Passwort ist in der Zwischen ablage, du hast %d Sekunden, um es einzufügen.</string>
+    <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
+    <string name="clipboard_username_toast_text">Benutzername ist in der Zwischenablage</string>
     <string name="name_settings_toast_text">Bitte setze deinen Accountnamen in den Einstellungen.</string>
     <string name="account_settings_dialog_text">Bitte setze deinen OpenKeychain Account (E-Mail) in den Einstellungen</string>
     <string name="account_settings_dialog_title">Accountname ist leer!</string>
@@ -88,6 +89,11 @@
     <string name="action_search">Suche</string>
     <string name="password">Passwort:</string>
     <string name="extra_content">Weiterer Inhalt:</string>
+    <string name="username">Benutzername:</string>
+    <string name="edit_password">Passwort bearbeiten</string>
+    <string name="copy_password">Passwort kopieren</string>
+    <string name="copy_username">Benutzername kopieren</string>
+    <string name="share_as_plaintext">Als Klartext teilen</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>

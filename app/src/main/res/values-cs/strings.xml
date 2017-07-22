@@ -31,7 +31,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>
     <string name="okc_progress_text">Čekání na OpenKeychain…</string>
-    <string name="clipboard_toast_text">Heslo zkopírováno do schránky, máte %d sekund na jeho zkopírování.</string>
+    <string name="clipboard_password_toast_text">Heslo zkopírováno do schránky, máte %d sekund na jeho zkopírování.</string>
     <string name="name_settings_toast_text">Až to bude možné, tak si zadejte jméno účtu v nastavení</string>
     <string name="account_settings_dialog_text">Zadejte si v nastavení svůj OpenKeychain účet (email)</string>
     <string name="account_settings_dialog_title">Jméno účtu je prázdné!</string>

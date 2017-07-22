@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.google.common.primitives.Longs;
 import com.zeapo.pwdstore.BuildConfig;
+import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.SelectFolderFragment;
 import com.zeapo.pwdstore.UserPreference;
@@ -163,7 +164,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 finish();
                 return true;
             case R.id.copy_password:
-                copyToClipBoard();
+                copyPasswordToClipBoard();
                 break;
             case R.id.share_password_as_plaintext:
                 shareAsPlaintext();
@@ -245,7 +246,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_plaintext_password_to)));//Always show a picker to give the user a chance to cancel
     }
 
-    public void copyToClipBoard() {
+    public void copyPasswordToClipBoard() {
 
         if (findViewById(R.id.crypto_password_show) == null)
             return;
@@ -261,7 +262,13 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         } catch (NumberFormatException e) {
             // ignore and keep default
         }
-        showToast(this.getResources().getString(R.string.clipboard_toast_text, clearAfter));
+        showToast(this.getResources().getString(R.string.clipboard_password_toast_text, clearAfter));
+    }
+
+    public void copyUsernameToClipBoard(final String username) {
+        ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", username);
+        clipboard.setPrimaryClip(clip);
+        showToast(this.getResources().getString(R.string.clipboard_username_toast_text));
     }
 
     public void handleClick(View view) {
@@ -490,34 +497,46 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-                                final String[] passContent = os.toString("UTF-8").split("\n", 2);
-                                final String decodedPassword = passContent[0];
-                                final String extraContent = passContent.length > 1 ? passContent[1] : "";
-                                textViewPassword
-                                        .setTypeface(monoTypeface);
-                                textViewPassword
-                                        .setText(decodedPassword);
+                                final PasswordEntry entry = new PasswordEntry(os);
+                                textViewPassword.setTypeface(monoTypeface);
+                                textViewPassword.setText(entry.getPassword());
 
                                 Button toggleVisibilityButton = (Button) findViewById(R.id.crypto_password_toggle_show);
                                 toggleVisibilityButton.setVisibility(showPassword?View.GONE:View.VISIBLE);
                                 textViewPassword.setTransformationMethod(showPassword?null:new HoldToShowPasswordTransformation(toggleVisibilityButton, new Runnable() {
                                     @Override
                                     public void run() {
-                                        textViewPassword
-                                                .setText(decodedPassword);
+                                        textViewPassword.setText(entry.getPassword());
                                     }
                                 }));
 
-                                if (extraContent.length() != 0) {
+                                if (entry.hasExtraContent()) {
                                     findViewById(R.id.crypto_extra_show_layout).setVisibility(showExtraContent ? View.VISIBLE : View.GONE);
-                                    ((TextView) findViewById(R.id.crypto_extra_show))
-                                            .setTypeface(monoTypeface);
-                                    ((TextView) findViewById(R.id.crypto_extra_show))
-                                            .setText(extraContent);
+                                    final TextView extraView = (TextView) findViewById(R.id.crypto_extra_show);
+                                    extraView.setTypeface(monoTypeface);
+                                    extraView.setText(entry.getExtraContent());
+                                    if (entry.hasUsername()) {
+                                        findViewById(R.id.crypto_username_show).setVisibility(View.VISIBLE);
+                                        findViewById(R.id.crypto_username_show_label).setVisibility(View.VISIBLE);
+                                        findViewById(R.id.crypto_copy_username).setVisibility(View.VISIBLE);
+                                        findViewById(R.id.crypto_copy_username).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                copyUsernameToClipBoard(entry.getUsername());
+                                            }
+                                        });
+                                        final TextView usernameView = (TextView) findViewById(R.id.crypto_username_show);
+                                        usernameView.setTypeface(monoTypeface);
+                                        usernameView.setText(entry.getUsername());
+                                    } else {
+                                        findViewById(R.id.crypto_username_show).setVisibility(View.GONE);
+                                        findViewById(R.id.crypto_username_show_label).setVisibility(View.GONE);
+                                        findViewById(R.id.crypto_copy_username).setVisibility(View.GONE);
+                                    }
                                 }
 
                                 if (settings.getBoolean("copy_on_decrypt", true)) {
-                                    copyToClipBoard();
+                                    copyPasswordToClipBoard();
                                 }
                             } else {
                                 Log.d("PGPHANDLER", "Error message after decrypt : " + os.toString());
@@ -569,12 +588,12 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                                 findViewById(R.id.crypto_container).setVisibility(View.VISIBLE);
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
-                                String[] passContent = os.toString("UTF-8").split("\n");
+                                final PasswordEntry entry = new PasswordEntry(os);
+                                decodedPassword = entry.getPassword();
                                 textViewPassword
                                         .setTypeface(monoTypeface);
                                 textViewPassword
-                                        .setText(passContent[0]);
-                                decodedPassword = passContent[0];
+                                        .setText(decodedPassword);
 
                                 String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {

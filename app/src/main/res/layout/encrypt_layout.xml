@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.zeapo.pwdstore.crypto.PgpHandler"
-    android:background="#eee"
+    android:background="@color/background"
     android:padding="@dimen/activity_horizontal_margin">
 
     <LinearLayout

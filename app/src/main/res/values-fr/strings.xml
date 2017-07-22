@@ -31,7 +31,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Aucun prestataire OpenPGP sélectionné!</string>
     <string name="okc_progress_text">Attente de OpenKeychain…</string>
-    <string name="clipboard_toast_text">Mot de passe copié dans le presse papier, vous avez %d secondes pour coller celui-ci.</string>
+    <string name="clipboard_password_toast_text">Mot de passe copié dans le presse papier, vous avez %d secondes pour coller celui-ci.</string>
     <string name="name_settings_toast_text">Renseignez le nom de votre compte dans les paramètres dès que vous pouvez</string>
     <string name="account_settings_dialog_text">Renseignez votre compte OpenKeychain (email) dans les préférences</string>
     <string name="account_settings_dialog_title">Nom du compte absent!</string>

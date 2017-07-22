@@ -31,7 +31,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Не выбран поставщик OpenPGP!</string>
     <string name="okc_progress_text">Ожидание OpenKeychain…</string>
-    <string name="clipboard_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
+    <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
     <string name="name_settings_toast_text">Пожалуйста, задайте имя пользователя в настройках</string>
     <string name="account_settings_dialog_text">Пожалуйста, задайте почту для OpenKeychain в настройках</string>
     <string name="account_settings_dialog_title">Пустое имя пользователя!</string>
