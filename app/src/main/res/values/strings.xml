@@ -3,11 +3,8 @@
 
     <!-- Activity names -->
     <string name="app_name">Password Store</string>
-    <string name="activity_clone_name">Clone a Git repo</string>
 
-    <string name="clone_settings">Clone</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="dialog_delete_title">Directory already exist</string>
     <string name="dialog_delete_msg">Target directory already exist. Current version support only a single store. Do you want to delete the current password store directory:</string>
     <string name="dialog_delete">Delete directory</string>
@@ -19,29 +16,20 @@
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
 	<string name="store_git">/store/.git</string>
     <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
-    <string name="connection_dialog_text">Which connection method do you prefer?</string>
     <string name="delete_dialog_text">Are you sure you want to delete the password /"</string>
-    <string name="key_id">Key-id:</string>
-    <string name="no_key_selected">No key selected</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
 
     <!-- git commits -->
-    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
     <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
-    <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
     <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
     <string name="from_store">&#160; from store.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
-    <string name="okc_progress_text">Waiting for OpenKeychain…</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
-    <string name="name_settings_toast_text">Please set your account name in settings whenever you can</string>
-    <string name="account_settings_dialog_text">Please set your OpenKeychain account (email) in the preferences</string>
-    <string name="account_settings_dialog_title">Account name empty!</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
@@ -51,7 +39,6 @@
     <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="read_only_dialog_text">You are about to use a read-only repository, you will not be able to push to it</string>
     <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
     <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
@@ -63,7 +50,6 @@
     <string name="password_dialog_text">Please provide the password for this repository</string>
 
     <!-- Clone fragment -->
-    <string name="clone_fragment_text">Welcome to Password Store\n\n In this screen you can either create a new repository or clone your git repository onto your device.</string>
     <string name="clone">Clone from server</string>
     <string name="initialize">Use local directory</string>
 
@@ -102,7 +88,6 @@
     <string name="crypto_save">Save</string>
 
     <!-- DECRYPT Layout -->
-    <string name="crypto_category">Category</string>
     <string name="action_search">Search</string>
     <string name="password">Password:</string>
     <string name="extra_content">Extra content:</string>
@@ -114,12 +99,6 @@
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
-    <string name="pref_server_title">Server</string>
-    <string name="pref_server_hint">server.com</string>
-    <string name="pref_remote_title">Remote location</string>
-    <string name="pref_remote_hint">path/to/repository</string>
-    <string name="pref_git_username_title">Username</string>
-    <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Edit git server settings</string>
     <string name="pref_edit_git_config">Edit git config</string>
     <string name="pref_ssh_title">Import SSH key</string>
@@ -127,11 +106,8 @@
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>
     <string name="pref_git_delete_repo">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
-    <string name="pref_dialog_delete_msg">Do you want to delete the current password store directory? This will not clear your configuration.</string>
     <string name="pref_crypto_title">Crypto</string>
     <string name="pref_provider_title">Select OpenPGP Provider</string>
-    <string name="pref_provider_account_title">Set your OpenPGP account</string>
-    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
     <string name="pref_key_title">Select OpenPGP Key id</string>
     <string name="pref_general_title">General</string>
     <string name="pref_password_title">Password Show Time</string>
@@ -149,7 +125,6 @@
     <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
     <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>
     <string name="pref_autofill_apps_title">App and website settings</string>
-    <string name="pref_autofill_apps_hint">Customize autofill settings for specific apps.</string>
     <string name="pref_autofill_default_title">Automatically match by default</string>
     <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
     <string name="pref_autofill_always_title">Always show dialog</string>
@@ -201,13 +176,10 @@
     <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
     <string name="show_extra_content_pref_title">Show extra content</string>
     <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted</string>
-    <string name="toast_password_copied">Password copied into the clipboard</string>
     <string name="pwd_generate_button">Generate</string>
-    <string name="category_string">"Category: "</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
-    <string name="autofill_fill">Fill</string>
     <string name="autofill_apps_default">Use default setting</string>
     <string name="autofill_apps_first">Automatically match</string>
     <string name="autofill_apps_match_ellipsis">Match with…</string>
@@ -217,9 +189,7 @@
     <string name="autofill_pick">Pick…</string>
     <string name="autofill_pick_and_match">Pick and match…</string>
     <string name="refresh_list">Refresh list</string>
-    <string name="settings">Settings</string>
     <string name="no_repo_selected">No external repository selected</string>
-    <string name="no_repo_selected2">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="show_password">Show password</string>
     <string name="repository_uri">Repository URI</string>

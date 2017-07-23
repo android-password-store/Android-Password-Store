@@ -6,7 +6,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="20dp"
         android:paddingLeft="24dp"
@@ -26,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:weightSum="2"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,8 +99,6 @@
                     android:text="@string/pwgen_pronounceable" />
 
             </LinearLayout>
-
-
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

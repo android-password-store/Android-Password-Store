@@ -3,11 +3,8 @@
 
     <!-- Activity names -->
     <string name="app_name">Password Store</string>
-    <string name="activity_clone_name">Клонировать Git репозиторий</string>
 
-    <string name="clone_settings">Клонировать</string>
     <string name="action_settings">Настройки</string>
-    <string name="hello_world">Привет, мир!</string>
     <string name="dialog_delete_title">Директория уже существует</string>
     <string name="dialog_delete_msg">Директория уже существует. Текущая версия поддерживает только одно хранилище. Хотите удалить существующее хранилище?</string>
     <string name="dialog_delete">Удалить директорию</string>
@@ -18,23 +15,16 @@
     <string name="creation_dialog_text">Пожалуйста, клонируйте или добавьте новый репозиторий перед тем, как добавлять пароль или выполнять операцию синхронизации.</string>
     <string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Вы должны выбрать ваш "PGP-Key ID" перед инициализацией хранилища</string>
-    <string name="connection_dialog_text">Выберите предпочтительный метод соединения</string>
     <string name="delete_dialog_text">Вы уверены что хотите удалить пароль /"</string>
 
     <!-- git commits -->
-    <string name="initialization_commit_text">[ANDROID PwdStore] инициализировал хранилище с ключом keyID: </string>
     <string name="add_commit_text">[ANDROID PwdStore] Добавил &#160;</string>
-    <string name="remove_commit_text">[ANDROID PwdStore] Удалил &#160;</string>
     <string name="edit_commit_text">[ANDROID PwdStore] Редактировал &#160;</string>
     <string name="from_store">&#160; из хранилища.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Не выбран поставщик OpenPGP!</string>
-    <string name="okc_progress_text">Ожидание OpenKeychain…</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
-    <string name="name_settings_toast_text">Пожалуйста, задайте имя пользователя в настройках</string>
-    <string name="account_settings_dialog_text">Пожалуйста, задайте почту для OpenKeychain в настройках</string>
-    <string name="account_settings_dialog_title">Пустое имя пользователя!</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
 
@@ -44,7 +34,6 @@
     <string name="jgit_error_dialog_text">Сообщение от jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="read_only_dialog_text">Вы собираетесь использовать репозиторий только для чтения и не сможете вносить изменения</string>
     <string name="forget_username_dialog_text">Вы забыли указать имя пользователя?</string>
     <string name="set_information_dialog_text">Вы должны указать информацию о сервере до выполнения синхронизации</string>
     <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте SSH ключ в настройках</string>
@@ -56,7 +45,6 @@
     <string name="password_dialog_text">Пожалуйста, предоставьте пароль для репозитория</string>
 
     <!-- Clone fragment -->
-    <string name="clone_fragment_text">Начните работу с Password Store\n\n Здесь вы можете создать новый репозиторий либо клонировать его на ваше устройство.</string>
     <string name="clone">Клонировать с сервера</string>
     <string name="initialize">Использовать локальную директорию</string>
 
@@ -83,28 +71,18 @@
     <string name="crypto_extra_label">Дополнительно</string>
 
     <!-- DECRYPT Layout -->
-    <string name="crypto_category">Категория</string>
     <string name="action_search">Поиск</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
-    <string name="pref_server_title">Сервер</string>
-    <string name="pref_server_hint">server.com</string>
-    <string name="pref_remote_title">Удаленное расположение</string>
-    <string name="pref_remote_hint">path/to/repository</string>
-    <string name="pref_git_username_title">Имя пользователя</string>
-    <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Отредактирова настройки сервера git</string>
     <string name="pref_ssh_title">Импортировать SSH ключ</string>
     <string name="pref_ssh_keygen_title">Сгенерировать пару SSH ключей</string>
     <string name="pref_ssh_see_key_title">Просмотреть сгенерированный публичный SSH ключ</string>
     <string name="pref_git_delete_repo">Удалить репозиторий</string>
     <string name="pref_dialog_delete_title">Очистить репозиторий</string>
-    <string name="pref_dialog_delete_msg">Вы хотите удалить текущее хранилище паролей? Это не сбросит ваши настройки</string>
     <string name="pref_crypto_title">Шифрование</string>
     <string name="pref_provider_title">Выберите поставщика OpenPGP</string>
-    <string name="pref_provider_account_title">Настройте OpenPGP аккаунт</string>
-    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
     <string name="pref_key_title">Выберите OpenPGP Key id</string>
     <string name="pref_general_title">Общие</string>
     <string name="pref_password_title">Время в буфере</string>
@@ -121,7 +99,6 @@
     <string name="pref_autofill_enable_msg2">После активации сервиса, при клике на поле ввода пароля в приложении появится диалоговое окно, если подходящий пароль существует</string>
     <string name="pref_autofill_enable_msg3">Password Store пытается сопоставлять пароли с приложениями автоматически. Вы можете изменить это поведение.</string>
     <string name="pref_autofill_apps_title">Настройки приложений и веб сайтов</string>
-    <string name="pref_autofill_apps_hint">Настройки автозаполнения для конкретного приложения.</string>
     <string name="pref_autofill_default_title">Автоматически сопоставлять по умолчанию</string>
     <string name="pref_autofill_default_hint">По умолчанию \'Автоматически сопоставлять\' для приложений без пользовательских настроек. В другом случае, \'Никогда не сопоставлять\'</string>
     <string name="pref_autofill_always_title">Всегда показывать диалоговое окно</string>
@@ -162,13 +139,10 @@
     <string name="git_push">Пуш на удаленный сервер</string>
     <string name="show_password_pref_title">Показать пароль</string>
     <string name="show_password_pref_summary">Видимость расшифрованных паролей, это не влияет на копирование в буфер</string>
-    <string name="toast_password_copied">Пароль скопирован в буфер обмена</string>
     <string name="pwd_generate_button">Сгенерировать</string>
-    <string name="category_string">"Категория: "</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Автозаполнение паролей в приложениях. Работает только в Android 4.3 и выше. Не использует буфер обмена в Android 5.0 и выше.</string>
-    <string name="autofill_fill">Заполнить</string>
     <string name="autofill_apps_default">Использовать настройки по умолчанию</string>
     <string name="autofill_apps_first">Автоматически сопоставлять</string>
     <string name="autofill_apps_match_ellipsis">Сопоставить с … </string>
@@ -176,9 +150,7 @@
     <string name="autofill_apps_never">Никогда не сопоставлять</string>
     <string name="autofill_apps_delete">Удалить</string>
     <string name="refresh_list">Обновить список</string>
-    <string name="settings">Настройки</string>
     <string name="no_repo_selected">Не выбран внешний репозиторий</string>
-    <string name="no_repo_selected2">Не выбрын внешний репозиторий</string>
     <string name="send_plaintext_password_to">Отправить пароль в открытом виде с помощью …</string>
     <string name="show_password">Показать пароль</string>
 </resources>

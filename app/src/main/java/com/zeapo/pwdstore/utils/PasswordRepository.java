@@ -27,7 +27,6 @@ import static java.util.Collections.sort;
 public class PasswordRepository {
 
     private static Repository repository;
-    private static boolean initialized = false;
 
     protected PasswordRepository(){    }
 

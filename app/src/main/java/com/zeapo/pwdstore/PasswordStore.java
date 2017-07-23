@@ -56,7 +56,6 @@ public class PasswordStore extends AppCompatActivity {
     private SharedPreferences settings;
     private Activity activity;
     private PasswordFragment plist;
-    private AlertDialog selectDestinationDialog;
     private ShortcutManager shortcutManager;
 
     private final static int CLONE_REPO_BUTTON = 401;
