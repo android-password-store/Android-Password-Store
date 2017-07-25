@@ -198,6 +198,7 @@
     <string name="autofill_paste">Paste</string>
     <string name="autofill_paste_username">Paste username?\n\n%s</string>
     <string name="autofill_toast_username">Select an editable field to past the username.\nUsername is available for %d seconds.</string>
+    <string name="ssh_key_does_not_exist">Unable to open the ssh private key, please check that the file exists</string>
     <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
     <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
     <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>

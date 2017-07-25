@@ -339,7 +339,7 @@ class UserPreference : AppCompatActivity() {
             FileUtils.writeByteArrayToFile(File(filesDir.toString() + "/.ssh_key"), privateKey)
             sshKey.close()
         } else {
-            Toast.makeText(this, "Unable to open the ssh private key, please check that the file exists", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.ssh_key_does_not_exist), Toast.LENGTH_LONG).show()
         }
     }
 
