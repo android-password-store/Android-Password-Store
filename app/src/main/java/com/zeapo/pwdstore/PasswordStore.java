@@ -13,6 +13,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -52,11 +53,9 @@ import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
-    private File currentDir;
     private SharedPreferences settings;
     private Activity activity;
     private PasswordFragment plist;
-    private AlertDialog selectDestinationDialog;
     private ShortcutManager shortcutManager;
 
     private final static int CLONE_REPO_BUTTON = 401;
@@ -125,8 +124,7 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
@@ -458,8 +456,8 @@ public class PasswordStore extends AppCompatActivity {
             return;
         }
 
-        this.currentDir = getCurrentDir();
-        Log.i("PWDSTR", "Adding file to : " + this.currentDir.getAbsolutePath());
+        File currentDir = getCurrentDir();
+        Log.i("PWDSTR", "Adding file to : " + currentDir.getAbsolutePath());
 
         Intent intent = new Intent(this, PgpHandler.class);
         intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());

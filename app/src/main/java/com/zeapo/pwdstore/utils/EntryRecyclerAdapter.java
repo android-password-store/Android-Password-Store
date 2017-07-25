@@ -19,10 +19,10 @@ import java.util.TreeSet;
 
 public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder> {
     private final Activity activity;
-    protected final ArrayList<PasswordItem> values;
-    protected final Set<Integer> selectedItems = new TreeSet<>();
+    private final ArrayList<PasswordItem> values;
+    final Set<Integer> selectedItems = new TreeSet<>();
 
-    public EntryRecyclerAdapter(Activity activity, ArrayList<PasswordItem> values) {
+    EntryRecyclerAdapter(Activity activity, ArrayList<PasswordItem> values) {
         this.activity = activity;
         this.values = values;
     }
@@ -52,7 +52,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         this.notifyItemInserted(getItemCount());
     }
 
-    public void toggleSelection(int position) {
+    void toggleSelection(int position) {
         if (!selectedItems.remove(position)) {
             selectedItems.add(position);
         }
@@ -106,11 +106,6 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         }
 
         holder.type.setText(pass.getFullPathToParent());
-        if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
-//            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_200));
-        } else {
-//            holder.card.setCardBackgroundColor(activity.getResources().getColor(R.color.blue_grey_50));
-        }
 
         holder.view.setOnClickListener(getOnClickListener(holder, pass));
 
@@ -134,14 +129,14 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public View view;
-        public TextView name;
-        public TextView type;
-        public ImageView typeImage;
+        public final View view;
+        public final TextView name;
+        final TextView type;
+        final ImageView typeImage;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             view = v;
             name = (TextView) view.findViewById(R.id.label);

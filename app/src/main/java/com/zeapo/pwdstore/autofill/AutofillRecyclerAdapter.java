@@ -22,7 +22,6 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     private SortedList<AppInfo> apps;
     private ArrayList<AppInfo> allApps; // for filtering, maintain a list of all
-    private PackageManager pm;
     private AutofillPreferenceActivity activity;
     Drawable browserIcon = null;
 
@@ -93,7 +92,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         this.apps = new SortedList<>(AppInfo.class, callback);
         this.apps.addAll(allApps);
         this.allApps = new ArrayList<>(allApps);
-        this.pm = pm;
+        PackageManager pm1 = pm;
         this.activity = activity;
         try {
             browserIcon = activity.getPackageManager().getApplicationIcon("com.android.browser");

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Password Store</string>
-    <string name="account_settings_dialog_text">請設定 OpenKeyChain 帳號 (email)</string>
-    <string name="account_settings_dialog_title">使用者名稱為空!</string>
     <string name="action_search">搜尋</string>
     <string name="action_settings">設定</string>
-    <string name="activity_clone_name">Clone Git repo</string>
     <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
     <string name="autofill_apps_default">使用預設值</string>
     <string name="autofill_apps_delete">刪除</string>
@@ -13,16 +10,10 @@
     <string name="autofill_apps_match">自動填入</string>
     <string name="autofill_apps_never">手動</string>
     <string name="autofill_description">在app中自動填入密碼. 此功能只能在 Andorid 4.3 及以上版本中使用. 在 Andorid 5.0 及以上版本中不需要剪貼簿</string>
-    <string name="autofill_fill">輸入</string>
-    <string name="category_string">“分類:\"</string>
     <string name="clipboard_password_toast_text">密碼已複製到剪貼簿, 你有 %d 秒的時間將其貼上到其他地方.</string>
     <string name="clone">從伺服器 Clone</string>
-    <string name="clone_fragment_text">歡迎使用 Password Store 你可以選擇建立新的 Repo 或將你已有的 git repo clone 到你的裝置上</string>
-    <string name="clone_settings">Clone</string>
-    <string name="connection_dialog_text">你偏好哪種連線方式？</string>
     <string name="connection_mode">認證模式</string>
     <string name="creation_dialog_text">在嘗試新增密碼或任何同步操作之前請在下方 clone 或新增一個新的 Repo</string>
-    <string name="crypto_category">類別</string>
     <string name="default_https_port">443</string>
     <string name="default_ssh_port">22</string>
     <string name="crypto_pass_label">密碼</string>
@@ -47,21 +38,15 @@
     <string name="git_pull">Git Pull</string>
     <string name="git_push">Git Push</string>
     <string name="git_sync">同步 Repo</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID:</string>
     <string name="initialize">使用本機目錄</string>
     <string name="jgit_error_dialog_text">Message from jgit:</string>
     <string name="jgit_error_dialog_title">内部錯誤</string>
     <string name="key_dialog_text">在初始化 Repo 之前你必須選擇你的\"PGP-Key ID\"</string>
-    <string name="name_settings_toast_text">请盡快在選項中設定你的使用者名稱</string>
     <string name="no_repo_selected">未選擇外部 Repo</string>
-    <string name="no_repo_selected2">未選擇外部 Repo</string>
-    <string name="okc_progress_text">正在等待 OpenKeyChain…</string>
     <string name="passphrase_dialog_text">請為你的 SSH 金鑰設定密碼. 若密碼為空請留空</string>
     <string name="passphrase_dialog_title">認證</string>
     <string name="password_dialog_text">請提供目前 Repo 的密碼</string>
     <string name="pref_autofill_always_title">總是顯示對話框</string>
-    <string name="pref_autofill_apps_hint">為特定的 app 自定義自動填入設定</string>
     <string name="pref_autofill_apps_title">app 及網站設定</string>
     <string name="pref_autofill_default_hint">無自定設定的 app 將預設使用 \'自動選取\' . 否則將使用\'手動\'</string>
     <string name="pref_autofill_default_title">使用自動選取</string>
@@ -73,7 +58,6 @@
     <string name="pref_clear_clipboard_title">清空剪貼簿 20 次</string>
     <string name="pref_copy_dialog_title">解密成功後自動將密碼複製到剪貼簿</string>
     <string name="pref_copy_title">自動複製密碼</string>
-    <string name="pref_dialog_delete_msg">你確定要刪除目前的 Password Store 目錄嗎？ 這將會重置你所有的設定</string>
     <string name="pref_dialog_delete_title">清空 Repo</string>
     <string name="pref_edit_server_info">修改 Git 伺服器設定</string>
     <string name="pref_external_repository">外部 Repo</string>
@@ -82,21 +66,13 @@
     <string name="pref_git_delete_repo">刪除 Repo</string>
     <string name="pref_git_delete_repo_summary">刪除本機的 (隱藏) Repo</string>
     <string name="pref_git_title">Git</string>
-    <string name="pref_git_username_hint">username</string>
-    <string name="pref_git_username_title">使用者名稱</string>
     <string name="pref_key_title">選擇 OpenPGP Key Id</string>
     <string name="pref_password_dialog_title">選擇密碼在剪貼簿中保存的時間限制</string>
     <string name="pref_password_title">密碼保存時限</string>
-    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
-    <string name="pref_provider_account_title">選擇你的 OpenPGP 帳號</string>
     <string name="pref_provider_title">選擇 OpenPGP app</string>
     <string name="pref_recursive_filter">搜尋子資料夾</string>
     <string name="pref_recursive_filter_hint">在目前目錄的子目錄中查詢密碼</string>
-    <string name="pref_remote_hint">path/to/repository</string>
-    <string name="pref_remote_title">遠端位置</string>
     <string name="pref_select_external_repository">選擇外部 Repo</string>
-    <string name="pref_server_hint">server.com</string>
-    <string name="pref_server_title">Server</string>
     <string name="pref_ssh_keygen_title">生成 SSH 金鑰</string>
     <string name="pref_ssh_see_key_title">顯示生成的 SSH 公鑰</string>
     <string name="pref_ssh_title">匯入 SSH 私鑰</string>
@@ -108,9 +84,7 @@
     <string name="pwgen_numerals">數字</string>
     <string name="pwgen_symbols">特殊符號</string>
     <string name="pwgen_uppercase">大寫</string>
-    <string name="read_only_dialog_text">你使用了一個唯讀的 Repo, 你無法 commit</string>
     <string name="refresh_list">重新整理</string>
-    <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
     <string name="running_dialog_text">執行中…</string>
     <string name="send_plaintext_password_to">將密碼以純文字傳送…</string>
     <string name="server_name">伺服器</string>
@@ -123,7 +97,6 @@
     <string name="server_user">使用者名稱</string>
     <string name="server_user_hint">git_username</string>
     <string name="set_information_dialog_text">你必須在與伺服器同步前設定伺服器資訊</string>
-    <string name="settings">設定</string>
     <string name="show_password">顯示密碼</string>
     <string name="show_password_pref_summary">控制密碼被解密後是否顯示密碼, 這不影響密碼的複製</string>
     <string name="show_password_pref_title">顯示密碼</string>
@@ -143,8 +116,6 @@
     <string name="ssh_preferences_dialog_title">無 SSH 金鑰</string>
     <string name="store_git">/store/.git</string>
     <string name="title_activity_git_clone">Repo 訊息</string>
-    <string name="title_activity_pgp_handler">PgpHandler</string>
-    <string name="toast_password_copied">密碼已複製到剪貼簿</string>
     <string name="warn_malformed_url_port">如果使用自定 port, 請使用绝對路徑 (從根目錄開始)</string>
     <string name="dialog_positive">確定</string>
     <string name="server_resulting_url">生成的 URL</string>

@@ -27,7 +27,6 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import java.io.File;
 
 public abstract class GitOperation {
-    private static final String TAG = "GitOpt";
     public static final int GET_SSH_KEY_FROM_CLONE = 201;
 
     protected final Repository repository;

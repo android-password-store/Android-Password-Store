@@ -13,6 +13,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -30,7 +31,6 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
-    private RecyclerView.LayoutManager layoutManager;
 
     private PackageManager pm;
 
@@ -43,9 +43,9 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         setContentView(R.layout.autofill_recycler_view);
         recyclerView = (RecyclerView) findViewById(R.id.autofill_recycler);
 
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         pm = getPackageManager();
 

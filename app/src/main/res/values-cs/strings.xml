@@ -3,11 +3,8 @@
 
     <!-- Activity names -->
     <string name="app_name">Password Store</string>
-    <string name="activity_clone_name">Klonovat Git repozitář</string>
 
-    <string name="clone_settings">Klonování</string>
     <string name="action_settings">Nastavení</string>
-    <string name="hello_world">Hello world!</string>
     <string name="dialog_delete_title">Adresář již existuje</string>
     <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adresář úložiště hesel:</string>
     <string name="dialog_delete">Smazat adresář</string>
@@ -18,23 +15,16 @@
     <string name="creation_dialog_text">Naklonujte nebo vytvořte nový repozitář před pokusem přidat heslo nebo spustit synchronizaci.</string>
 	<string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Před inicializací repozitáře je třeba vybrat "ID PGP klíče"</string>
-    <string name="connection_dialog_text">Jakou metodu připojení upřednostňujete?</string>
     <string name="delete_dialog_text">Opravdu chcete smazat heslo /"</string>
 
     <!-- git commits -->
-    <string name="initialization_commit_text">[ANDROID PwdStore] Initialized store with keyID: </string>
     <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
-    <string name="remove_commit_text">[ANDROID PwdStore] Remove &#160;</string>
     <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
     <string name="from_store">&#160; from store.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>
-    <string name="okc_progress_text">Čekání na OpenKeychain…</string>
     <string name="clipboard_password_toast_text">Heslo zkopírováno do schránky, máte %d sekund na jeho zkopírování.</string>
-    <string name="name_settings_toast_text">Až to bude možné, tak si zadejte jméno účtu v nastavení</string>
-    <string name="account_settings_dialog_text">Zadejte si v nastavení svůj OpenKeychain účet (email)</string>
-    <string name="account_settings_dialog_title">Jméno účtu je prázdné!</string>
     <string name="file_toast_text">Zadejte prosím jméno souboru</string>
     <string name="empty_toast_text">Nelze zadat prázdné heslo nebo další obsah</string>
 
@@ -44,7 +34,6 @@
     <string name="jgit_error_dialog_text">Zpráva od jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="read_only_dialog_text">Chystáte se použít repozitář bez práva zápisu, nebudete schopni do něj ukládat</string>
     <string name="forget_username_dialog_text">Zapomněli jste uvést přihlašovací jméno?</string>
     <string name="set_information_dialog_text">Je třeba zadat informaci o serveru před vlastní synchronizací</string>
     <string name="ssh_preferences_dialog_text">Importujte nebo si prosím vygenerujte svůj SSH klíč v nastavení aplikace</string>
@@ -56,7 +45,6 @@
     <string name="password_dialog_text">Zadejte prosím heslo k tomuto repozitáři</string>
     
     <!-- Clone fragment -->
-    <string name="clone_fragment_text">Vítejte v aplikaci Password Store\n\n Na této obrazovce můžete buď  vytvořit nový repozitář nebo klonovat dostupný repozitář na svůj přístroj.</string>
     <string name="clone">Klonovat ze serveru</string>
     <string name="initialize">Použít místní adresář</string>
 
@@ -78,34 +66,23 @@
     <string name="warn_malformed_url_port">Při použití vlastního portu, zadejte absolutní cestu (začíná "/")</string>
 
     <!-- PGP Handler -->
-    <string name="title_activity_pgp_handler">PgpHandler</string>
     <string name="crypto_name_hint">jméno</string>
     <string name="crypto_pass_label">Heslo</string>
     <string name="crypto_extra_label">Extra</string>
 
     <!-- DECRYPT Layout -->
-    <string name="crypto_category">Kategorie</string>
     <string name="action_search">Hledat</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
-    <string name="pref_server_title">Server</string>
-    <string name="pref_server_hint">server.com</string>
-    <string name="pref_remote_title">Vzdálené umístění</string>
-    <string name="pref_remote_hint">cesta/k/repozitáři</string>
-    <string name="pref_git_username_title">Jméno</string>
-    <string name="pref_git_username_hint">username</string>
     <string name="pref_edit_server_info">Upravit nastavení git serveru</string>
     <string name="pref_ssh_title">Importovat SSH klíč</string>
     <string name="pref_ssh_keygen_title">Generovat SSH klíč</string>
     <string name="pref_ssh_see_key_title">Zobrazit vygenerovaný veřejný SSH klíč</string>
     <string name="pref_git_delete_repo">Smazat repozitář</string>
     <string name="pref_dialog_delete_title">Vyčistit repozitář</string>
-    <string name="pref_dialog_delete_msg">Opravdu smazat aktuální adresář úložiště hesel? Toto neodstraní vaše nastavení.</string>
     <string name="pref_crypto_title">Šifrování</string>
     <string name="pref_provider_title">Vybrat poskytovatele OpenPGP</string>
-    <string name="pref_provider_account_title">Nastavit OpenPGP účet</string>
-    <string name="pref_provider_account_hint">mail@somewhere.tld</string>
     <string name="pref_key_title">Vybrat ID OpenPGP klíče</string>
     <string name="pref_general_title">Všeobecné</string>
     <string name="pref_password_title">Čas zobrazení hesla</string>
@@ -122,7 +99,6 @@
     <string name="pref_autofill_enable_msg2">Jakmile bude služba zapnuta, po kliknutí na pole hesla bude zobrazeno dialogové okno pokud je pro používanou aplikaci heslo dostupné.</string>
     <string name="pref_autofill_enable_msg3">Password Store se automaticky pokouší najít odpovídající heslo k aplikacím. Toto výchozí nastavení spolu s nastavením pro jednotlivé aplikace lze změnit.</string>
     <string name="pref_autofill_apps_title">Nastavení aplikace a webové stránky</string>
-    <string name="pref_autofill_apps_hint">Upravit automatické vyplňování u vybraných aplikací.</string>
     <string name="pref_autofill_default_title">Automaticky párovat ve výchozím nastavení</string>
     <string name="pref_autofill_default_hint">Ve výchozím nastavení \'Automaticky párovat\' u aplikací bez vybraného nastavení. Jinak, \'Nikdy nepárovat.\'</string>
     <string name="pref_autofill_always_title">Vždy zobrazit dialog</string>
@@ -163,13 +139,10 @@
     <string name="git_push">Uložit na server</string>
     <string name="show_password_pref_title">Zobrazit heslo</string>
     <string name="show_password_pref_summary">Hlídat viditelnost hesel po dešifrování, toto nevypíná možnost kopírovat heslo</string>
-    <string name="toast_password_copied">Heslo zkopírováno do schránky</string>
     <string name="pwd_generate_button">Generovat</string>
-    <string name="category_string">"Kategorie: "</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Automaticky vyplňuje pole hesel v aplikacích. Funguje pouze pro verzi Androidu 4.3 a vyšší. Není závislé na schránce pro Android verze 5.0 a vyšší.</string>
-    <string name="autofill_fill">Vyplnit</string>
     <string name="autofill_apps_default">Použít výchozí nastavení</string>
     <string name="autofill_apps_first">Automaticky spárovat</string>
     <string name="autofill_apps_match_ellipsis">Spárovat s…</string>
@@ -177,9 +150,7 @@
     <string name="autofill_apps_never">Nikdy nepárovat</string>
     <string name="autofill_apps_delete">Smazat</string>
     <string name="refresh_list">Obnovit seznam</string>
-    <string name="settings">Nastavení</string>
     <string name="no_repo_selected">Nebyl vybrát externí repozitář</string>
-    <string name="no_repo_selected2">Nebyl vybrát externí repozitář</string>
     <string name="send_plaintext_password_to">Odeslat heslo jako plaintext za použití…</string>
     <string name="show_password">Pokaż hasło</string>
 </resources>

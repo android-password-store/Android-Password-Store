@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.robotium.solo.Solo;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
@@ -20,7 +17,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 
 public class GitActivityClone extends ActivityInstrumentationTestCase2<GitActivity> {
-    private static final String TAG = "GitActTest";
     private Activity gitActivity;
     private Instrumentation mInstrumentation;
     private SharedPreferences settings;
@@ -71,7 +67,7 @@ public class GitActivityClone extends ActivityInstrumentationTestCase2<GitActivi
     }
 
     public void testCloneSshUser() throws Exception {
-        final Solo solo = new Solo(getInstrumentation(), getActivity());
+        // final Solo solo = new Solo(getInstrumentation(), getActivity());
         FileUtils.deleteDirectory(new File(gitActivity.getFilesDir() +  gitActivity.getResources().getString(R.string.store_git)));
         // create the repository static variable in PasswordRepository
         PasswordRepository.getRepository(new File(gitActivity.getFilesDir() + gitActivity.getResources().getString(R.string.store_git)));

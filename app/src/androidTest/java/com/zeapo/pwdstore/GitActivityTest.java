@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityTestCase;
-import android.test.InstrumentationTestCase;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Spinner;
 

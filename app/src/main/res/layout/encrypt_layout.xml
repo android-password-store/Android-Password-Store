@@ -14,29 +14,31 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/crypto_password_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/grey_500"
-            android:text="CATEGORY HERE"
-            android:id="@+id/crypto_password_category"
             android:layout_gravity="center_vertical"
-            android:textSize="18dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="CATEGORY HERE"
+            android:textColor="@color/grey_500"
             android:textIsSelectable="false"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            android:textSize="18dp"
+            tools:ignore="HardcodedText" />
 
         <EditText
-            android:layout_gravity="center_vertical"
+            android:id="@+id/crypto_password_file_edit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/crypto_password_file_edit"
+            android:layout_gravity="center_vertical"
             android:hint="@string/crypto_name_hint"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@color/accent"
             android:textSize="24dp"
-            android:textColor="@color/accent" />
+            tools:ignore="TextFields" />
     </LinearLayout>
 
     <ScrollView android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_weight="1">
@@ -65,11 +67,9 @@
             <EditText
                 android:id="@+id/crypto_password_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:typeface="monospace"
-                android:layout_weight="1"
-                android:layout_toRightOf="@+id/textView2"
-                android:layout_toEndOf="@+id/textView2" />
+                android:layout_weight="1" />
 
             <Button
                 android:layout_height="wrap_content"

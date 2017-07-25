@@ -19,26 +19,28 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/crypto_password_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey_500"
-                android:text="CATEGORY HERE"
-                android:id="@+id/crypto_password_category"
                 android:layout_gravity="center_vertical"
-                android:textSize="18dp"
+                android:layout_marginLeft="16dp"
+                android:text="CATEGORY HERE"
+                android:textColor="@color/grey_500"
                 android:textIsSelectable="false"
-                android:layout_marginLeft="16dp" />
+                android:textSize="18dp"
+                tools:ignore="HardcodedText" />
 
             <TextView
+                android:id="@+id/crypto_password_file"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/accent"
-                android:textStyle="bold"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:text="PASSWORD FILE NAME HERE"
-                android:id="@+id/crypto_password_file"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:textSize="24dp" />
+                android:text="PASSWORD FILE NAME HERE"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:textColor="@color/accent"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <ImageView
@@ -169,6 +171,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </ScrollView>
