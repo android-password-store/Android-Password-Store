@@ -394,6 +394,10 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(Constants.TAG, "onActivityResult resultCode: " + resultCode);
+        if (data == null) {
+            setResult(RESULT_CANCELED, null);
+            finish();
+        }
 
         // try again after user interaction
         if (resultCode == RESULT_OK) {
