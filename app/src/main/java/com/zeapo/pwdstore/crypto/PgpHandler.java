@@ -394,9 +394,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(Constants.TAG, "onActivityResult resultCode: " + resultCode);
+
         if (data == null) {
             setResult(RESULT_CANCELED, null);
             finish();
+            return;
         }
 
         // try again after user interaction
@@ -408,14 +410,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
              * interaction, for example selected key ids.
              */
             switch (requestCode) {
-                case REQUEST_CODE_ENCRYPT: {
-                    encrypt(data);
-                    break;
-                }
-                case REQUEST_CODE_DECRYPT_AND_VERIFY: {
-                    decryptAndVerify(data);
-                    break;
-                }
                 case REQUEST_CODE_GET_KEY_IDS:
                     getKeyIds(data);
                     break;
@@ -423,6 +417,9 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     edit(data);
                     break;
                 }
+                default:
+                    setResult(RESULT_OK);
+                    finish();
             }
         } else if (resultCode == RESULT_CANCELED) {
             setResult(RESULT_CANCELED, data);
