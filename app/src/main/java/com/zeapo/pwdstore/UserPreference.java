@@ -31,9 +31,6 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity;
 import com.zeapo.pwdstore.crypto.PgpHandler;
@@ -48,11 +45,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class UserPreference extends AppCompatActivity {
     private final static int IMPORT_SSH_KEY = 1;
@@ -131,7 +128,7 @@ public class UserPreference extends AppCompatActivity {
                 }
             });
 
-           findPreference("git_delete_repo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("git_delete_repo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     new AlertDialog.Builder(callingActivity).
@@ -242,19 +239,18 @@ public class UserPreference extends AppCompatActivity {
             findPreference("ssh_see_key").setEnabled(sharedPreferences.getBoolean("use_generated_key", false));
             findPreference("git_delete_repo").setEnabled(!sharedPreferences.getBoolean("git_external", false));
             Preference keyPref = findPreference("openpgp_key_id_pref");
-            Set<String> selectedKeys = sharedPreferences.getStringSet("openpgp_key_ids_set", new HashSet<String>());
+            ArrayList<String> selectedKeys = new ArrayList<>(sharedPreferences.getStringSet("openpgp_key_ids_set", new HashSet<String>()));
             if (selectedKeys.isEmpty()) {
                 keyPref.setSummary("No key selected");
             } else {
-                keyPref.setSummary(
-                        Joiner.on(',')
-                                .join(Iterables.transform(selectedKeys, new Function<String, Object>() {
-                                    @Override
-                                    public Object apply(String input) {
-                                        return OpenPgpUtils.convertKeyIdToHex(Long.valueOf(input));
-                                    }
-                                }))
-                );
+                StringBuilder summaryBuilder = new StringBuilder();
+                for (int i = 0; i < selectedKeys.size(); ++i) {
+                    String s = selectedKeys.get(i);
+                    summaryBuilder.append(OpenPgpUtils.convertKeyIdToHex(Long.valueOf(s)));
+                    if (i < selectedKeys.size() - 1)
+                        summaryBuilder.append("; ");
+                }
+                keyPref.setSummary(summaryBuilder.toString());
             }
 
             // see if the autofill service is enabled and check the preference accordingly
