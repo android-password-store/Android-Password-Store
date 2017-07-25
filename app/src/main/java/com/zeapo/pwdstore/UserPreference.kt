@@ -334,9 +334,13 @@ class UserPreference : AppCompatActivity() {
     @Throws(IOException::class)
     private fun copySshKey(uri: Uri) {
         val sshKey = this.contentResolver.openInputStream(uri)
-        val privateKey = IOUtils.toByteArray(sshKey!!)
-        FileUtils.writeByteArrayToFile(File(filesDir.toString() + "/.ssh_key"), privateKey)
-        sshKey.close()
+        if (sshKey != null) {
+            val privateKey = IOUtils.toByteArray(sshKey)
+            FileUtils.writeByteArrayToFile(File(filesDir.toString() + "/.ssh_key"), privateKey)
+            sshKey.close()
+        } else {
+            Toast.makeText(this, "Unable to open the ssh private key, please check that the file exists", Toast.LENGTH_LONG).show()
+        }
     }
 
     // Returns whether the autofill service is enabled
