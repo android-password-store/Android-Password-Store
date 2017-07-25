@@ -185,4 +185,5 @@
     <string name="show_extra_content_pref_summary">Controller la visibilité du contenu supplémentaire une fois déchiffré</string>
     <string name="show_extra_content_pref_title">Afficher le contenu supplémentaire</string>
     <string name="username">Nom d\'utilisateur</string>
+    <string name="ssh_key_does_not_exist">Impossible d\'ouvrir la clef ssh, merci de vérifier que le ficher existe</string>
 </resources>
