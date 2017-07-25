@@ -169,6 +169,11 @@
     <string name="show_extra_content_pref_title">Zeige weiteren Inhalt</string>
     <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
     <string name="pwd_generate_button">Generieren</string>
+    <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
+    <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
+    <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
+    <string name="show_password">Password wiedergeben</string>
+    <string name="repository_uri">Repository URI</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Füge das Passwort automatisch in Apps ein (Autofill). Funktioniert nur unter Android 4.3 und höher. Dies basiert nicht auf der Zwischenablage für Android 5.0 oder höher.</string>
@@ -180,8 +185,6 @@
     <string name="autofill_apps_delete">Löschen</string>
     <string name="autofill_pick">Auswählen…</string>
     <string name="autofill_pick_and_match">Auswählen und merken…</string>
-    <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
-    <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
-    <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
-    <string name="show_password">Password wiedergeben</string>
+    <string name="autofill_paste">Einfügen</string>
+    <string name="autofill_paste_username">Benutzername einfügen?\n\n%s</string>
 </resources>

@@ -177,6 +177,11 @@
     <string name="show_extra_content_pref_title">Show extra content</string>
     <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted</string>
     <string name="pwd_generate_button">Generate</string>
+    <string name="refresh_list">Refresh list</string>
+    <string name="no_repo_selected">No external repository selected</string>
+    <string name="send_plaintext_password_to">Send password as plaintext using…</string>
+    <string name="show_password">Show password</string>
+    <string name="repository_uri">Repository URI</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
@@ -188,9 +193,6 @@
     <string name="autofill_apps_delete">Delete</string>
     <string name="autofill_pick">Pick…</string>
     <string name="autofill_pick_and_match">Pick and match…</string>
-    <string name="refresh_list">Refresh list</string>
-    <string name="no_repo_selected">No external repository selected</string>
-    <string name="send_plaintext_password_to">Send password as plaintext using…</string>
-    <string name="show_password">Show password</string>
-    <string name="repository_uri">Repository URI</string>
+    <string name="autofill_paste">Paste</string>
+    <string name="autofill_paste_username">Paste username?\n\n%s</string>
 </resources>
