@@ -19,18 +19,3 @@ allprojects {
         mavenCentral()
     }
 }
-
-ext {
-    compileSdkVersion = 25
-    buildToolsVersion = "25.0.2"
-}
-subprojects { subproject ->
-    afterEvaluate{
-        if((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
-            android {
-                compileSdkVersion rootProject.ext.compileSdkVersion
-                buildToolsVersion rootProject.ext.buildToolsVersion
-            }
-        }
-    }
-}
