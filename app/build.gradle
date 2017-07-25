@@ -6,7 +6,7 @@ android {
     buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 84
         versionName "1.2.0.64"
