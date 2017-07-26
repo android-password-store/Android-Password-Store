@@ -565,7 +565,7 @@ public class PasswordStore extends AppCompatActivity {
                     break;
                 case PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY:
                     // if went from decrypt->edit and user saved changes, we need to commitChange
-                    if (data.getBooleanExtra("needCommit", false)) {
+                    if (data != null && data.getBooleanExtra("needCommit", false)) {
                         commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                         refreshListAdapter();
                     }
