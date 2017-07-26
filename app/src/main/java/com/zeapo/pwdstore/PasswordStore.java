@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
@@ -395,10 +396,11 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     public void decryptPassword(PasswordItem item) {
-        Intent intent = new Intent(this, PgpHandler.class);
+        Intent intent = new Intent(this, PgpActivity.class);
         intent.putExtra("NAME", item.toString());
         intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
-        intent.putExtra("Operation", "DECRYPT");
+        intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
+        intent.putExtra("OPERATION", "DECRYPT");
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -459,9 +461,10 @@ public class PasswordStore extends AppCompatActivity {
         File currentDir = getCurrentDir();
         Log.i("PWDSTR", "Adding file to : " + currentDir.getAbsolutePath());
 
-        Intent intent = new Intent(this, PgpHandler.class);
-        intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
-        intent.putExtra("Operation", "ENCRYPT");
+        Intent intent = new Intent(this, PgpActivity.class);
+        intent.putExtra("PARENT_PATH", getCurrentDir().getAbsolutePath());
+        intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
+        intent.putExtra("OPERATION", "ENCRYPT");
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
     }
 
@@ -620,6 +623,7 @@ public class PasswordStore extends AppCompatActivity {
                         break;
                     }
 
+                    // TODO move this to an async task
                     for (String string : data.getStringArrayListExtra("Files")) {
                         File source = new File(string);
                         if (!source.exists()) {

@@ -84,6 +84,8 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
-	</application>
+        <activity android:name=".crypto.PgpActivity"
+			android:parentActivityName=".PasswordStore"/>
+    </application>
 
 </manifest>

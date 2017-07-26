@@ -19,7 +19,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/crypto_password_category"
+                android:id="@+id/crypto_password_category_decrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -54,7 +54,7 @@
             tools:ignore="ContentDescription" />
 
         <LinearLayout
-            android:id="@+id/crypto_container"
+            android:id="@+id/crypto_container_decrypt"
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
