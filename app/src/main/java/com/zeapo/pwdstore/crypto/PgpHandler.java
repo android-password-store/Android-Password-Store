@@ -201,7 +201,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 || findViewById(R.id.crypto_container).getVisibility() != View.VISIBLE)
             return;
 
-        CharSequence category = ((TextView) findViewById(R.id.crypto_password_category)).getText();
+        CharSequence category = ((TextView) findViewById(R.id.crypto_password_category_decrypt)).getText();
         CharSequence file = ((TextView) findViewById(R.id.crypto_password_file)).getText();
         CharSequence password = ((TextView) findViewById(R.id.crypto_password_show)).getText();
         CharSequence extra = ((TextView) findViewById(R.id.crypto_extra_show)).getText();
@@ -211,7 +211,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         ((EditText) findViewById(R.id.crypto_password_edit)).setTypeface(monoTypeface);
         ((EditText) findViewById(R.id.crypto_extra_edit)).setTypeface(monoTypeface);
 
-        ((TextView) findViewById(R.id.crypto_password_category)).setText(category);
+        ((TextView) findViewById(R.id.crypto_password_category_decrypt)).setText(category);
         ((EditText) findViewById(R.id.crypto_password_file_edit)).setText(file);
         ((EditText) findViewById(R.id.crypto_password_edit)).setText(password);
         ((EditText) findViewById(R.id.crypto_extra_edit)).setText(extra);
@@ -748,7 +748,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                         .replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
                 String cat = new File(path).getParentFile().getName();
 
-                ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
+                ((TextView) findViewById(R.id.crypto_password_category_decrypt)).setText(cat + "/");
                 decryptAndVerify(new Intent());
                 break;
             }
@@ -760,7 +760,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 String cat = extra.getString("FILE_PATH");
                 cat = cat.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), "");
                 cat = cat + "/";
-                ((TextView) findViewById(R.id.crypto_password_category)).setText(cat);
+                ((TextView) findViewById(R.id.crypto_password_category_decrypt)).setText(cat);
                 break;
             }
             case "GET_KEY_ID":
@@ -778,7 +778,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                 String cat = new File(extra.getString("FILE_PATH").replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath(), ""))
                         .getParentFile().getName();
 
-                ((TextView) findViewById(R.id.crypto_password_category)).setText(cat + "/");
+                ((TextView) findViewById(R.id.crypto_password_category_decrypt)).setText(cat + "/");
                 edit(new Intent());
                 break;
             }
