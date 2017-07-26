@@ -187,4 +187,5 @@
     <string name="autofill_pick_and_match">Auswählen und merken…</string>
     <string name="autofill_paste">Einfügen</string>
     <string name="autofill_paste_username">Benutzername einfügen?\n\n%s</string>
+    <string name="autofill_toast_username">Wähle ein editierbares Feld um den Benutzernamen einzufügen.\nDer Benutzername ist für %d Sekunden verfügbar.</string>
 </resources>

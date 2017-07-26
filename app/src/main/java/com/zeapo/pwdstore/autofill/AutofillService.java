@@ -60,11 +60,10 @@ public class AutofillService extends AccessibilityService {
     private String webViewTitle = null;
     private String webViewURL = null;
     private PasswordEntry lastPassword;
-    private long lastPasswordDate;
+    private long lastPasswordMaxDate;
 
     final class Constants {
         static final String TAG = "Keychain";
-        static final long MAX_PASSWORD_ENTRY_LIFETIME = 45 * 1000;
     }
 
     public static AutofillService getInstance() {
@@ -103,7 +102,7 @@ public class AutofillService extends AccessibilityService {
         }
 
         // remove stored password from cache
-        if (lastPassword != null && System.currentTimeMillis() > lastPasswordDate + Constants.MAX_PASSWORD_ENTRY_LIFETIME) {
+        if (lastPassword != null && System.currentTimeMillis() > lastPasswordMaxDate) {
             lastPassword = null;
         }
 
@@ -563,7 +562,9 @@ public class AutofillService extends AccessibilityService {
                     // save password entry for pasting the username as well
                     if (entry.hasUsername()) {
                         lastPassword = entry;
-                        lastPasswordDate = System.currentTimeMillis();
+                        final int ttl = Integer.parseInt(settings.getString("general_show_time", "45"));
+                        Toast.makeText(this, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show();
+                        lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L;
                     }
                 } catch (UnsupportedEncodingException e) {
                     Log.e(Constants.TAG, "UnsupportedEncodingException", e);

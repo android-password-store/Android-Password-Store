@@ -195,4 +195,5 @@
     <string name="autofill_pick_and_match">Pick and match…</string>
     <string name="autofill_paste">Paste</string>
     <string name="autofill_paste_username">Paste username?\n\n%s</string>
+    <string name="autofill_toast_username">Select an editable field to past the username.\nUsername is available for %d seconds.</string>
 </resources>
