@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.accessibilityservice.AccessibilityService;
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -58,16 +59,20 @@ public class AutofillService extends AccessibilityService {
     private boolean ignoreActionFocus = false;
     private String webViewTitle = null;
     private String webViewURL = null;
+    private PasswordEntry lastPassword;
+    private long lastPasswordMaxDate;
 
-    public final class Constants {
-        public static final String TAG = "Keychain";
+    final class Constants {
+        static final String TAG = "Keychain";
     }
 
     public static AutofillService getInstance() {
         return instance;
     }
 
-    public void setResultData(Intent data) { resultData = data; }
+    public void setResultData(Intent data) {
+        resultData = data;
+    }
 
     public void setPickedPassword(String path) {
         items.add(new File(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/" + path + ".gpg"));
@@ -96,6 +101,11 @@ public class AutofillService extends AccessibilityService {
             return;
         }
 
+        // remove stored password from cache
+        if (lastPassword != null && System.currentTimeMillis() > lastPasswordMaxDate) {
+            lastPassword = null;
+        }
+
         // if returning to the source app from a successful AutofillActivity
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName() != null && event.getPackageName().equals(packageName)
@@ -107,9 +117,9 @@ public class AutofillService extends AccessibilityService {
         // or if page changes in chrome
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 || (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                    && event.getPackageName() != null
-                    && (event.getPackageName().equals("com.android.chrome")
-                        || event.getPackageName().equals("com.android.browser")))) {
+                && event.getPackageName() != null
+                && (event.getPackageName().equals("com.android.chrome")
+                || event.getPackageName().equals("com.android.browser")))) {
             // there is a chance for getRootInActiveWindow() to return null at any time. save it.
             try {
                 AccessibilityNodeInfo root = getRootInActiveWindow();
@@ -140,13 +150,23 @@ public class AutofillService extends AccessibilityService {
             }
         }
 
-        // nothing to do if not password field focus, field is keychain app
-        if (!event.isPassword()
-                || event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+        // nothing to do if field is keychain app or system ui
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
                 || event.getPackageName() != null && event.getPackageName().equals("org.sufficientlysecure.keychain")
                 || event.getPackageName() != null && event.getPackageName().equals("com.android.systemui")) {
             dismissDialog(event);
             return;
+        }
+
+        if (!event.isPassword()) {
+            if (lastPassword != null && event.getEventType() == AccessibilityEvent.TYPE_VIEW_FOCUSED && event.getSource().isEditable()) {
+                showPasteUsernameDialog(event.getSource(), lastPassword);
+                return;
+            } else {
+                // nothing to do if not password field focus
+                dismissDialog(event);
+                return;
+            }
         }
 
         if (dialog != null && dialog.isShowing()) {
@@ -220,8 +240,9 @@ public class AutofillService extends AccessibilityService {
         if (items.isEmpty() && !settings.getBoolean("autofill_always", false)) {
             return;
         }
-        showDialog(packageName, appName, isWeb);
+        showSelectPasswordDialog(packageName, appName, isWeb);
     }
+
     private String searchWebView(AccessibilityNodeInfo source) {
         return searchWebView(source, 10);
     }
@@ -282,13 +303,16 @@ public class AutofillService extends AccessibilityService {
         prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
         preference = defValue;
         if (webViewURL != null) {
+            final String webViewUrlLowerCase = webViewURL.toLowerCase();
             Map<String, ?> prefsMap = prefs.getAll();
             for (String key : prefsMap.keySet()) {
                 // for websites unlike apps there can be blank preference of "" which
                 // means use default, so ignore it.
-                if ((webViewURL.toLowerCase().contains(key.toLowerCase()) || key.toLowerCase().contains(webViewURL.toLowerCase()))
-                        && !prefs.getString(key, null).equals("")) {
-                    preference = prefs.getString(key, null);
+                final String value = prefs.getString(key, null);
+                final String keyLowerCase = key.toLowerCase();
+                if (value != null && !value.equals("")
+                        && (webViewUrlLowerCase.contains(keyLowerCase) || keyLowerCase.contains(webViewUrlLowerCase))) {
+                    preference = value;
                     settingsURL = key;
                 }
             }
@@ -374,7 +398,44 @@ public class AutofillService extends AccessibilityService {
         return items;
     }
 
-    private void showDialog(final String packageName, final String appName, final boolean isWeb) {
+    private void showPasteUsernameDialog(final AccessibilityNodeInfo node, final PasswordEntry password) {
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface d, int which) {
+                dialog.dismiss();
+                dialog = null;
+            }
+        });
+        builder.setPositiveButton(R.string.autofill_paste, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface d, int which) {
+                pasteText(node, password.getUsername());
+                dialog.dismiss();
+                dialog = null;
+            }
+        });
+        builder.setMessage(getString(R.string.autofill_paste_username, password.getUsername()));
+
+        dialog = builder.create();
+        //noinspection ConstantConditions
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
+    }
+
+    private void showSelectPasswordDialog(final String packageName, final String appName, final boolean isWeb) {
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -410,7 +471,7 @@ public class AutofillService extends AccessibilityService {
                 lastWhichItem = which;
                 if (which < items.size()) {
                     bindDecryptAndVerify();
-                } else if (which == items.size()){
+                } else if (which == items.size()) {
                     Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("pick", true);
@@ -428,6 +489,7 @@ public class AutofillService extends AccessibilityService {
         });
 
         dialog = builder.create();
+        //noinspection ConstantConditions
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -451,6 +513,7 @@ public class AutofillService extends AccessibilityService {
         public void onBound(IOpenPgpService2 service) {
             decryptAndVerify();
         }
+
         @Override
         public void onError(Exception e) {
             e.printStackTrace();
@@ -494,32 +557,15 @@ public class AutofillService extends AccessibilityService {
             case OpenPgpApi.RESULT_CODE_SUCCESS: {
                 try {
                     final PasswordEntry entry = new PasswordEntry(os);
+                    pasteText(info, entry.getPassword());
 
-                    // if the user focused on something else, take focus back
-                    // but this will open another dialog...hack to ignore this
-                    // & need to ensure performAction correct (i.e. what is info now?)
-                    ignoreActionFocus = info.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Bundle args = new Bundle();
-                        args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
-                                entry.getPassword());
-                        info.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args);
-                    } else {
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("autofill_pm", entry.getPassword());
-                        clipboard.setPrimaryClip(clip);
-                        info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
-
-                        clip = ClipData.newPlainText("autofill_pm", "");
-                        clipboard.setPrimaryClip(clip);
-                        if (settings.getBoolean("clear_clipboard_20x", false)) {
-                            for (int i = 0; i < 19; i++) {
-                                clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
-                                clipboard.setPrimaryClip(clip);
-                            }
-                        }
+                    // save password entry for pasting the username as well
+                    if (entry.hasUsername()) {
+                        lastPassword = entry;
+                        final int ttl = Integer.parseInt(settings.getString("general_show_time", "45"));
+                        Toast.makeText(this, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show();
+                        lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L;
                     }
-                    info.recycle();
                 } catch (UnsupportedEncodingException e) {
                     Log.e(Constants.TAG, "UnsupportedEncodingException", e);
                 }
@@ -545,5 +591,33 @@ public class AutofillService extends AccessibilityService {
                 break;
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void pasteText(final AccessibilityNodeInfo node, final String text) {
+        // if the user focused on something else, take focus back
+        // but this will open another dialog...hack to ignore this
+        // & need to ensure performAction correct (i.e. what is info now?)
+        ignoreActionFocus = node.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Bundle args = new Bundle();
+            args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text);
+            node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args);
+        } else {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("autofill_pm", text);
+            clipboard.setPrimaryClip(clip);
+            node.performAction(AccessibilityNodeInfo.ACTION_PASTE);
+
+            clip = ClipData.newPlainText("autofill_pm", "");
+            clipboard.setPrimaryClip(clip);
+            if (settings.getBoolean("clear_clipboard_20x", false)) {
+                for (int i = 0; i < 19; i++) {
+                    clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
+                    clipboard.setPrimaryClip(clip);
+                }
+            }
+        }
+        node.recycle();
     }
 }
