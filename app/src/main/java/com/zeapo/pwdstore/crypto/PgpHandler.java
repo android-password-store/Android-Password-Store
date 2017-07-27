@@ -410,6 +410,14 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
              * interaction, for example selected key ids.
              */
             switch (requestCode) {
+                case REQUEST_CODE_ENCRYPT: {
+                    encrypt(data);
+                    break;
+                }
+                case REQUEST_CODE_DECRYPT_AND_VERIFY: {
+                    decryptAndVerify(data);
+                    break;
+                }
                 case REQUEST_CODE_GET_KEY_IDS:
                     getKeyIds(data);
                     break;
