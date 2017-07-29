@@ -3,7 +3,6 @@ package com.zeapo.pwdstore
 import android.app.Activity
 import android.app.FragmentManager
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -14,8 +13,8 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 class SelectFolderActivity : AppCompatActivity() {
     internal var passwordList: SelectFolderFragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         setContentView(R.layout.select_folder_layout)
 
