@@ -134,19 +134,52 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }// should not happen
     }
 
-
+    /**
+     * Shows a simple toast message
+     */
     fun showToast(message: String) {
         runOnUiThread({ Toast.makeText(this, message, Toast.LENGTH_SHORT).show() })
     }
 
-    fun handleError(error: OpenPgpError) {
+    /**
+     * Handle the case where OpenKeychain returns that it needs to interact with the user
+     *
+     * @param result The intent returned by OpenKeychain
+     * @param requestCode The code we'd like to use to identify the behaviour
+     */
+    fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
+        Log.i(TAG, "RESULT_CODE_USER_INTERACTION_REQUIRED")
+
+        val pi: PendingIntent = result.getParcelableExtra(RESULT_INTENT)
+        try {
+            this@PgpActivity.startIntentSenderFromChild(
+                    this@PgpActivity, pi.intentSender, requestCode,
+                    null, 0, 0, 0)
+        } catch (e: IntentSender.SendIntentException) {
+            Log.e(TAG, "SendIntentException", e)
+        }
+    }
+
+    /**
+     * Handle the error returned by OpenKeychain
+     *
+     * @param result The intent returned by OpenKeychain
+     */
+    fun handleError(result: Intent) {
+        // TODO show what kind of error it is
+        /* For example:
+         * No suitable key found -> no key in OpenKeyChain
+         *
+         * Check in open-pgp-lib how their definitions and error code
+         */
+        val error: OpenPgpError = result.getParcelableExtra(RESULT_ERROR)
         showToast("Error from OpenKeyChain : " + error.message)
         Log.e(TAG, "onError getErrorId:" + error.errorId)
         Log.e(TAG, "onError getMessage:" + error.message)
     }
 
-    private fun decryptAndVerify(): Unit {
-        val data = Intent()
+    private fun decryptAndVerify(receivedIntent: Intent? = null): Unit {
+        val data = receivedIntent ?: Intent()
         data.action = ACTION_DECRYPT_VERIFY
 
         val iStream = FileUtils.openInputStream(File(path))
@@ -214,28 +247,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         Log.e(TAG, "An Exception occurred", e)
                     }
                 }
-                RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                    Log.i(TAG, "RESULT_CODE_USER_INTERACTION_REQUIRED")
-
-                    val pi: PendingIntent = result.getParcelableExtra(RESULT_INTENT)
-                    try {
-                        this@PgpActivity.startIntentSenderFromChild(
-                                this@PgpActivity, pi.intentSender, REQUEST_DECRYPT,
-                                null, 0, 0, 0)
-                    } catch (e: IntentSender.SendIntentException) {
-                        Log.e(TAG, "SendIntentException", e)
-                    }
-                }
-                RESULT_CODE_ERROR -> {
-                    // TODO show what kind of error it is
-                    /* For example:
-                     * No suitable key found -> no key in OpenKeyChain
-                     *
-                     * Check in open-pgp-lib how their definitions and error code
-                     */
-                    val error: OpenPgpError = result.getParcelableExtra(RESULT_ERROR)
-                    handleError(error)
-                }
+                RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
+                RESULT_CODE_ERROR -> handleError(result)
             }
 
         })
@@ -298,16 +311,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         Log.e(TAG, "An Exception occurred", e)
                     }
                 }
-                OpenPgpApi.RESULT_CODE_ERROR -> {
-                    // TODO show what kind of error it is
-                    /* For example:
-                     * No suitable key found -> no key in OpenKeyChain
-                     *
-                     * Check in open-pgp-lib how their definitions and error code
-                     */
-                    val error: OpenPgpError = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR)
-                    handleError(error)
-                }
+                OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
             }
 
         })
@@ -344,10 +348,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Get the Key ids from OpenKeychain
      */
-    fun getKeyIds() {
-        val data = Intent()
+    fun getKeyIds(receivedIntent: Intent? = null) {
+        val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_GET_KEY_IDS
-        val api = OpenPgpApi(this, mServiceConnection?.getService())
+        val api = OpenPgpApi(this, mServiceConnection?.service)
         api.executeApiAsync(data, null, null, { result: Intent? ->
             when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 OpenPgpApi.RESULT_CODE_SUCCESS -> {
@@ -366,16 +370,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         Log.e(TAG, "An Exception occurred", e)
                     }
                 }
-                OpenPgpApi.RESULT_CODE_ERROR -> {
-                    // TODO show what kind of error it is
-                    /* For example:
-                     * No suitable key found -> no key in OpenKeyChain
-                     *
-                     * Check in open-pgp-lib how their definitions and error code
-                     */
-                    val error: OpenPgpError = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR)
-                    handleError(error)
-                }
+                RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_KEY_ID)
+                OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
             }
         })
     }
@@ -405,7 +401,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         // try again after user interaction
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_DECRYPT -> decryptAndVerify()
+                REQUEST_DECRYPT -> decryptAndVerify(data)
+                REQUEST_KEY_ID -> getKeyIds(data)
                 else -> {
                     setResult(Activity.RESULT_OK)
                     finish()
@@ -568,12 +565,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     companion object {
         val OPEN_PGP_BOUND = 101
-        val REQUEST_EDIT = 201
         val REQUEST_DECRYPT = 202
+        val REQUEST_KEY_ID = 203
 
         val TAG = "PgpActivity"
 
         private var delayTask: DelayShow? = null
+
     }
 }
 
