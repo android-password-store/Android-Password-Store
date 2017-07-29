@@ -27,7 +27,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.nononsenseapps.filepicker.FilePickerActivity
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
-import com.zeapo.pwdstore.crypto.PgpHandler
+import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import org.apache.commons.io.FileUtils
@@ -52,8 +52,8 @@ class UserPreference : AppCompatActivity() {
             findPreference("app_version").summary = "Version: ${BuildConfig.VERSION_NAME}"
 
             findPreference("openpgp_key_id_pref").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val intent = Intent(callingActivity, PgpHandler::class.java)
-                intent.putExtra("Operation", "GET_KEY_ID")
+                val intent = Intent(callingActivity, PgpActivity::class.java)
+                intent.putExtra("OPERATION", "GET_KEY_ID")
                 startActivityForResult(intent, IMPORT_PGP_KEY)
                 true
             }
