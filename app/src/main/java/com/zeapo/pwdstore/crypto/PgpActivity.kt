@@ -339,7 +339,45 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         data.putExtra("fromDecrypt", true)
         intent = data
         invalidateOptionsMenu()
+    }
 
+    /**
+     * Get the Key ids from OpenKeychain
+     */
+    fun getKeyIds() {
+        val data = Intent()
+        data.action = OpenPgpApi.ACTION_GET_KEY_IDS
+        val api = OpenPgpApi(this, mServiceConnection?.getService())
+        api.executeApiAsync(data, null, null, { result: Intent? ->
+            when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+                OpenPgpApi.RESULT_CODE_SUCCESS -> {
+                    try {
+                        val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
+                        val keys = ids.map { it.toString() }.toSet()
+
+                        // use Long
+                        settings.edit().putStringSet("openpgp_key_ids_set", keys).apply()
+
+                        showToast("PGP keys selected")
+
+                        setResult(RESULT_OK)
+                        finish()
+                    } catch (e: Exception) {
+                        Log.e(TAG, "An Exception occurred", e)
+                    }
+                }
+                OpenPgpApi.RESULT_CODE_ERROR -> {
+                    // TODO show what kind of error it is
+                    /* For example:
+                     * No suitable key found -> no key in OpenKeyChain
+                     *
+                     * Check in open-pgp-lib how their definitions and error code
+                     */
+                    val error: OpenPgpError = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR)
+                    handleError(error)
+                }
+            }
+        })
     }
 
     override fun onError(e: Exception?) {}
@@ -348,7 +386,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * The action to take when the PGP service is bound
      */
     override fun onBound(service: IOpenPgpService2?) {
-        if (operation in arrayOf("EDIT", "DECRYPT")) decryptAndVerify()
+        when (operation) {
+            "EDIT", "DECRYPT" -> decryptAndVerify()
+            "GET_KEY_ID" -> getKeyIds()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
