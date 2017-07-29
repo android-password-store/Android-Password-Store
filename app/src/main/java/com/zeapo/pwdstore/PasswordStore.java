@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.crypto.PgpActivity;
-import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
 import com.zeapo.pwdstore.git.GitOperation;
@@ -62,6 +61,15 @@ public class PasswordStore extends AppCompatActivity {
     private final static int CLONE_REPO_BUTTON = 401;
     private final static int NEW_REPO_BUTTON = 402;
     private final static int HOME = 403;
+    public static final int REQUEST_CODE_SIGN = 9910;
+    public static final int REQUEST_CODE_ENCRYPT = 9911;
+    public static final int REQUEST_CODE_SIGN_AND_ENCRYPT = 9912;
+    public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
+    public static final int REQUEST_CODE_GET_KEY = 9914;
+    public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
+    public static final int REQUEST_CODE_EDIT = 9916;
+    public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
+
 
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
 
@@ -421,7 +429,7 @@ public class PasswordStore extends AppCompatActivity {
                 shortcutManager.addDynamicShortcuts(Collections.singletonList(shortcut));
             }
         }
-        startActivityForResult(intent, PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY);
+        startActivityForResult(intent, REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
     public void editPassword(PasswordItem item) {
@@ -431,7 +439,7 @@ public class PasswordStore extends AppCompatActivity {
         intent.putExtra("PARENT_PATH", getCurrentDir().getAbsolutePath());
         intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
         intent.putExtra("OPERATION", "EDIT");
-        startActivityForResult(intent, PgpHandler.REQUEST_CODE_EDIT);
+        startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
     public void createPassword() {
@@ -467,7 +475,7 @@ public class PasswordStore extends AppCompatActivity {
         intent.putExtra("PARENT_PATH", getCurrentDir().getAbsolutePath());
         intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
         intent.putExtra("OPERATION", "ENCRYPT");
-        startActivityForResult(intent, PgpHandler.REQUEST_CODE_ENCRYPT);
+        startActivityForResult(intent, REQUEST_CODE_ENCRYPT);
     }
 
     // deletes passwords in order from top to bottom
@@ -504,14 +512,14 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     public void movePasswords(ArrayList<PasswordItem> values) {
-        Intent intent = new Intent(this, PgpHandler.class);
+        Intent intent = new Intent(this, SelectFolderActivity.class);
         ArrayList<String> fileLocations = new ArrayList<>();
         for (PasswordItem passwordItem : values) {
             fileLocations.add(passwordItem.getFile().getAbsolutePath());
         }
         intent.putExtra("Files", fileLocations);
         intent.putExtra("Operation", "SELECTFOLDER");
-        startActivityForResult(intent, PgpHandler.REQUEST_CODE_SELECT_FOLDER);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER);
     }
 
     /**
@@ -568,18 +576,18 @@ public class PasswordStore extends AppCompatActivity {
                     // if we get here with a RESULT_OK then it's probably OK :)
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
-                case PgpHandler.REQUEST_CODE_DECRYPT_AND_VERIFY:
+                case REQUEST_CODE_DECRYPT_AND_VERIFY:
                     // if went from decrypt->edit and user saved changes, we need to commitChange
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
                         commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                         refreshListAdapter();
                     }
                     break;
-                case PgpHandler.REQUEST_CODE_ENCRYPT:
+                case REQUEST_CODE_ENCRYPT:
                     commitChange(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
                     refreshListAdapter();
                     break;
-                case PgpHandler.REQUEST_CODE_EDIT:
+                case REQUEST_CODE_EDIT:
                     commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
                     refreshListAdapter();
                     break;
@@ -616,7 +624,7 @@ public class PasswordStore extends AppCompatActivity {
                     intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
                     startActivityForResult(intent, GitActivity.REQUEST_CLONE);
                     break;
-                case PgpHandler.REQUEST_CODE_SELECT_FOLDER:
+                case REQUEST_CODE_SELECT_FOLDER:
                     Log.d("Moving", "Moving passwords to " + data.getStringExtra("SELECTED_FOLDER_PATH"));
                     Log.d("Moving", TextUtils.join(", ", data.getStringArrayListExtra("Files")));
                     File target = new File(data.getStringExtra("SELECTED_FOLDER_PATH"));
