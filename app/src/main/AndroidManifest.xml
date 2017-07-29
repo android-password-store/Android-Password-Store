@@ -86,6 +86,7 @@
 		</activity>
         <activity android:name=".crypto.PgpActivity"
 			android:parentActivityName=".PasswordStore"/>
-    </application>
+		<activity android:name=".SelectFolderActivity" />
+	</application>
 
 </manifest>
