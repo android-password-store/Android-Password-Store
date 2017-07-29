@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.zeapo.pwdstore.crypto.PgpHandler;
 import com.zeapo.pwdstore.utils.FolderRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -55,7 +54,7 @@ public class SelectFolderFragment extends Fragment{
         passListStack = new Stack<>();
         scrollPosition = new Stack<>();
         pathStack = new Stack<>();
-        recyclerAdapter = new FolderRecyclerAdapter((PgpHandler) getActivity(), mListener,
+        recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) getActivity(), mListener,
                                                       PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
     }
 
