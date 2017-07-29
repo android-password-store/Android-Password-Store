@@ -76,7 +76,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         when (operation) {
-            "DECRYPT" -> {
+            "DECRYPT", "EDIT" -> {
                 setContentView(R.layout.decrypt_layout)
                 crypto_password_category_decrypt.text = "$cat/"
                 crypto_password_file.text = name
@@ -167,6 +167,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         val entry = PasswordEntry(oStream)
 
                         passwordEntry = entry
+
+                        if (operation == "EDIT") {
+                            editPassword()
+                            return@executeApiAsync
+                        }
 
                         crypto_password_show.typeface = monoTypeface
                         crypto_password_show.text = entry.password
@@ -343,7 +348,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * The action to take when the PGP service is bound
      */
     override fun onBound(service: IOpenPgpService2?) {
-        if (operation == "DECRYPT") decryptAndVerify()
+        if (operation in arrayOf("EDIT", "DECRYPT")) decryptAndVerify()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
