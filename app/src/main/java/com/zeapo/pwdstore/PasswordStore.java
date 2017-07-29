@@ -425,10 +425,12 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     public void editPassword(PasswordItem item) {
-        Intent intent = new Intent(this, PgpHandler.class);
+        Intent intent = new Intent(this, PgpActivity.class);
         intent.putExtra("NAME", item.toString());
         intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
-        intent.putExtra("Operation", "EDIT");
+        intent.putExtra("PARENT_PATH", getCurrentDir().getAbsolutePath());
+        intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
+        intent.putExtra("OPERATION", "EDIT");
         startActivityForResult(intent, PgpHandler.REQUEST_CODE_EDIT);
     }
 
