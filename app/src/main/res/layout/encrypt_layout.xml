@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.zeapo.pwdstore.crypto.PgpHandler"
+    tools:context="com.zeapo.pwdstore.crypto.PgpActivity"
     android:background="@color/background"
     android:padding="@dimen/activity_horizontal_margin">
 
