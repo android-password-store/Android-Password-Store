@@ -77,7 +77,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     public static final int REQUEST_CODE_EDIT = 9916;
     public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
 
-    private String decodedPassword = "";
+    private PasswordEntry passwordEntry = null;
 
     public final class Constants {
         public static final String TAG = "Keychain";
@@ -237,6 +237,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
         if (findViewById(R.id.share_password_as_plaintext) == null)
             return;
 
+        final String decodedPassword = passwordEntry != null ? passwordEntry.getPassword() : "";
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, decodedPassword);
@@ -251,6 +252,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
         setTimer();
 
+        final String decodedPassword = passwordEntry != null ? passwordEntry.getPassword() : "";
         ClipData clip = ClipData.newPlainText("pgp_handler_result_pm", decodedPassword);
         clipboard.setPrimaryClip(clip);
 
@@ -367,7 +369,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
                     }
                 }
             }
-            decodedPassword = "";
+            passwordEntry = null;
             if (findViewById(R.id.crypto_password_show) != null) {
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
                 ((TextView) findViewById(R.id.crypto_password_show)).setText("");
@@ -495,6 +497,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
                                 final PasswordEntry entry = new PasswordEntry(os);
+                                passwordEntry = entry;
                                 textViewPassword.setTypeface(monoTypeface);
                                 textViewPassword.setText(entry.getPassword());
 
@@ -586,11 +589,11 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
                                 Typeface monoTypeface = Typeface.createFromAsset(getAssets(), "fonts/sourcecodepro.ttf");
                                 final PasswordEntry entry = new PasswordEntry(os);
-                                decodedPassword = entry.getPassword();
+                                passwordEntry = entry;
                                 textViewPassword
                                         .setTypeface(monoTypeface);
                                 textViewPassword
-                                        .setText(decodedPassword);
+                                        .setText(entry.getPassword());
 
                                 String extraContent = os.toString("UTF-8").replaceFirst(".*\n", "");
                                 if (extraContent.length() != 0) {
