@@ -12,6 +12,8 @@ android {
         targetSdkVersion 25
         versionCode 88
         versionName "1.2.0.68"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -55,21 +57,35 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
+    compile 'com.android.support:cardview-v7:25.4.0'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:support-annotations:25.4.0'
     compile 'org.sufficientlysecure:openpgp-api:11.0'
     compile 'com.nononsenseapps:filepicker:2.4.2'
     compile('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    compile 'com.jcraft:jsch:0.1.53'
+    compile 'com.jcraft:jsch:0.1.54'
     compile 'org.apache.commons:commons-io:1.3.2'
     compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // Testing-only dependencies
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'org.mockito:mockito-core:2.8.47'
+    androidTestCompile 'com.android.support.test:runner:1.0.0'
+    androidTestCompile 'com.android.support.test:rules:1.0.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.0'
+
+
 }
 repositories {
     mavenCentral()
+
+    // temp. solution until we use use gradle 4.0
+    maven { url 'https://maven.google.com' }
 }

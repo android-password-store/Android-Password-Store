@@ -37,24 +37,17 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
     var passwordEntry: PasswordEntry? = null
+    var api : OpenPgpApi? = null
 
-    val name: String by lazy { intent.getStringExtra("NAME") }
-    val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
-    val path: String by lazy { intent.getStringExtra("FILE_PATH") }
-    val parentPath: String by lazy {
-        // when encrypting we pass "PARENT_PATH" as we do not have a file
-        if (operation == "ENCRYPT") intent.getStringExtra("PARENT_PATH")
-        else File(path).parentFile.absolutePath
-    }
-    val cat: String by lazy { parentPath.replace(repoPath, "") }
     val operation: String by lazy { intent.getStringExtra("OPERATION") }
+    val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
-    val settings: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(this)
-    }
-    val keyIDs: MutableSet<String> by lazy {
-        settings.getStringSet("openpgp_key_ids_set", emptySet())
-    }
+    val path: String by lazy { intent.getStringExtra("FILE_PATH") }
+    val name: String by lazy { getName(path, repoPath) }
+    val relativeParentPath: String by lazy { getParentPath(path, repoPath) }
+
+    val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
     var mServiceConnection: OpenPgpServiceConnection? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,13 +71,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         when (operation) {
             "DECRYPT", "EDIT" -> {
                 setContentView(R.layout.decrypt_layout)
-                crypto_password_category_decrypt.text = "$cat/"
+                crypto_password_category_decrypt.text = relativeParentPath
                 crypto_password_file.text = name
             }
             "ENCRYPT" -> {
                 setContentView(R.layout.encrypt_layout)
                 title = getString(R.string.new_password_title)
-                crypto_password_category.text = "$cat/"
+                crypto_password_category.text = relativeParentPath
             }
         }
     }
@@ -178,6 +171,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         Log.e(TAG, "onError getMessage:" + error.message)
     }
 
+    fun initOpenPgpApi() {
+        api = api ?: OpenPgpApi(this, mServiceConnection?.service)
+    }
+
     private fun decryptAndVerify(receivedIntent: Intent? = null): Unit {
         val data = receivedIntent ?: Intent()
         data.action = ACTION_DECRYPT_VERIFY
@@ -185,64 +182,62 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = FileUtils.openInputStream(File(path))
         val oStream = ByteArrayOutputStream()
 
-        val api = OpenPgpApi(this, mServiceConnection?.service)
-
-        api.executeApiAsync(data, iStream, oStream, { result: Intent? ->
+        api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
             when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
                 RESULT_CODE_SUCCESS -> {
                     try {
-                        val showPassword = settings.getBoolean("show_password", true)
-                        val showExtraContent = settings.getBoolean("show_extra_content", true)
-
-                        crypto_container_decrypt.visibility = View.VISIBLE
-
-                        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
-                        val entry = PasswordEntry(oStream)
-
-                        passwordEntry = entry
-
-                        if (operation == "EDIT") {
-                            editPassword()
-                            return@executeApiAsync
-                        }
-
-                        crypto_password_show.typeface = monoTypeface
-                        crypto_password_show.text = entry.password
-
-                        crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
-                        crypto_password_show.transformationMethod = if (showPassword) {
-                            null
-                        } else {
-                            HoldToShowPasswordTransformation(
-                                    crypto_password_toggle_show,
-                                    Runnable { crypto_password_show.text = entry.password }
-                            )
-                        }
-
-                        if (entry.hasExtraContent()) {
-                            crypto_extra_show_layout.visibility = if (showExtraContent) View.VISIBLE else View.GONE
-
-                            crypto_extra_show.typeface = monoTypeface
-                            crypto_extra_show.text = entry.extraContent
-
-                            if (entry.hasUsername()) {
-                                crypto_username_show.visibility = View.VISIBLE
-                                crypto_username_show_label.visibility = View.VISIBLE
-                                crypto_copy_username.visibility = View.VISIBLE
-
-                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username) }
-                                crypto_username_show.typeface = monoTypeface
-                                crypto_username_show.text = entry.username
-                            } else {
-                                crypto_username_show.visibility = View.GONE
-                                crypto_username_show_label.visibility = View.GONE
-                                crypto_copy_username.visibility = View.GONE
-                            }
-                        }
-
-                        if (settings.getBoolean("copy_on_decrypt", true)) {
-                            copyPasswordToClipBoard()
-                        }
+//                        val showPassword = settings.getBoolean("show_password", true)
+//                        val showExtraContent = settings.getBoolean("show_extra_content", true)
+//
+//                        crypto_container_decrypt.visibility = View.VISIBLE
+//
+//                        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
+//                        val entry = PasswordEntry(oStream)
+//
+//                        passwordEntry = entry
+//
+//                        if (operation == "EDIT") {
+//                            editPassword()
+//                            return@executeApiAsync
+//                        }
+//
+//                        crypto_password_show.typeface = monoTypeface
+//                        crypto_password_show.text = entry.password
+//
+//                        crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
+//                        crypto_password_show.transformationMethod = if (showPassword) {
+//                            null
+//                        } else {
+//                            HoldToShowPasswordTransformation(
+//                                    crypto_password_toggle_show,
+//                                    Runnable { crypto_password_show.text = entry.password }
+//                            )
+//                        }
+//
+//                        if (entry.hasExtraContent()) {
+//                            crypto_extra_show_layout.visibility = if (showExtraContent) View.VISIBLE else View.GONE
+//
+//                            crypto_extra_show.typeface = monoTypeface
+//                            crypto_extra_show.text = entry.extraContent
+//
+//                            if (entry.hasUsername()) {
+//                                crypto_username_show.visibility = View.VISIBLE
+//                                crypto_username_show_label.visibility = View.VISIBLE
+//                                crypto_copy_username.visibility = View.VISIBLE
+//
+//                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username) }
+//                                crypto_username_show.typeface = monoTypeface
+//                                crypto_username_show.text = entry.username
+//                            } else {
+//                                crypto_username_show.visibility = View.GONE
+//                                crypto_username_show_label.visibility = View.GONE
+//                                crypto_copy_username.visibility = View.GONE
+//                            }
+//                        }
+//
+//                        if (settings.getBoolean("copy_on_decrypt", true)) {
+//                            copyPasswordToClipBoard()
+//                        }
                     } catch (e: Exception) {
                         Log.e(TAG, "An Exception occurred", e)
                     }
@@ -284,10 +279,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = ByteArrayInputStream("$pass\n$extra".toByteArray(Charset.forName("UTF-8")))
         val oStream = ByteArrayOutputStream()
 
-        val api = OpenPgpApi(this, mServiceConnection?.service)
-        val path = "$parentPath/$name.gpg"
+        val path = "$repoPath/$relativeParentPath/$name.gpg"
 
-        api.executeApiAsync(data, iStream, oStream, { result: Intent? ->
+        api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
             when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 OpenPgpApi.RESULT_CODE_SUCCESS -> {
                     try {
@@ -332,7 +326,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         crypto_extra_edit.setText(passwordEntry?.extraContent)
         crypto_extra_edit.typeface = monoTypeface
 
-        crypto_password_category.text = "$cat/"
+        crypto_password_category.text = relativeParentPath
         crypto_password_file_edit.setText(name)
         crypto_password_file_edit.isEnabled = false
 
@@ -351,8 +345,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     fun getKeyIds(receivedIntent: Intent? = null) {
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_GET_KEY_IDS
-        val api = OpenPgpApi(this, mServiceConnection?.service)
-        api.executeApiAsync(data, null, null, { result: Intent? ->
+        api?.executeApiAsync(data, null, null, { result: Intent? ->
             when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 OpenPgpApi.RESULT_CODE_SUCCESS -> {
                     try {
@@ -382,6 +375,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * The action to take when the PGP service is bound
      */
     override fun onBound(service: IOpenPgpService2?) {
+        initOpenPgpApi()
         when (operation) {
             "EDIT", "DECRYPT" -> decryptAndVerify()
             "GET_KEY_ID" -> getKeyIds()
@@ -572,6 +566,29 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         private var delayTask: DelayShow? = null
 
+        /**
+         * Gets the relative path to the repository
+         */
+        fun getRelativePath(fullPath: String, repositoryPath: String): String =
+                fullPath.replace(repositoryPath, "").replace("//", "/")
+
+        /**
+         * Gets the Parent path, relative to the repository
+         */
+        fun getParentPath(fullPath: String, repositoryPath: String) : String  {
+            val relativePath = getRelativePath(fullPath, repositoryPath)
+            val index = relativePath.lastIndexOf("/")
+            return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("//", "/")
+        }
+
+        /**
+         * Gets the name of the password (excluding .gpg)
+         */
+        fun getName(fullPath: String, repositoryPath: String) : String  {
+            val relativePath = getRelativePath(fullPath, repositoryPath)
+            val index = relativePath.lastIndexOf("/")
+            return relativePath.substring(index + 1).replace("\\.gpg$".toRegex(), "")
+        }
     }
 }
 
