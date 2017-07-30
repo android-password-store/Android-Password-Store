@@ -15,9 +15,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-    // avoid Travis failures
     lintOptions {
-        abortOnError false
+        disable 'MissingTranslation', 'PluralsCandidate'
     }
     packagingOptions {
         exclude '.readme'
