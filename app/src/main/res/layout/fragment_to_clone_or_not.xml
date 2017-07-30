@@ -17,6 +17,7 @@
             android:id="@+id/imageView"
             android:layout_gravity="center"
             android:src="@drawable/ic_launcher"
+            android:contentDescription="@string/app_icon_hint"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
@@ -44,7 +45,8 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:textAllCaps="true"/>
+            android:textAllCaps="true"
+            tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -77,7 +79,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 

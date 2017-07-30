@@ -18,23 +18,23 @@ import com.zeapo.pwdstore.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
+class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder> {
 
     private SortedList<AppInfo> apps;
     private ArrayList<AppInfo> allApps; // for filtering, maintain a list of all
     private AutofillPreferenceActivity activity;
-    Drawable browserIcon = null;
+    private Drawable browserIcon = null;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public View view;
         public TextView name;
-        public TextView secondary;
+        TextView secondary;
         public ImageView icon;
-        public String packageName;
-        public String appName;
-        public Boolean isWeb;
+        String packageName;
+        String appName;
+        Boolean isWeb;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             this.view = view;
             name = (TextView) view.findViewById(R.id.app_name);
@@ -50,13 +50,13 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
 
     }
 
-    public static class AppInfo {
-        public String packageName;
-        public String appName;
-        public boolean isWeb;
+    static class AppInfo {
+        String packageName;
+        String appName;
+        boolean isWeb;
         public Drawable icon;
 
-        public AppInfo(String packageName, String appName, boolean isWeb, Drawable icon) {
+        AppInfo(String packageName, String appName, boolean isWeb, Drawable icon) {
             this.packageName = packageName;
             this.appName = appName;
             this.isWeb = isWeb;
@@ -69,7 +69,7 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         }
     }
 
-    public AutofillRecyclerAdapter(List<AppInfo> allApps, final PackageManager pm
+    AutofillRecyclerAdapter(List<AppInfo> allApps, final PackageManager pm
             , AutofillPreferenceActivity activity) {
         SortedList.Callback<AppInfo> callback = new SortedListAdapterCallback<AppInfo>(this) {
             // don't take into account secondary text. This is good enough
@@ -92,7 +92,6 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         this.apps = new SortedList<>(AppInfo.class, callback);
         this.apps.addAll(allApps);
         this.allApps = new ArrayList<>(allApps);
-        PackageManager pm1 = pm;
         this.activity = activity;
         try {
             browserIcon = activity.getPackageManager().getApplicationIcon("com.android.browser");
@@ -155,28 +154,28 @@ public class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecycl
         return apps.size();
     }
 
-    public int getPosition(String appName) {
+    int getPosition(String appName) {
         return apps.indexOf(new AppInfo(null, appName, false, null));
     }
 
     // for websites, URL = packageName == appName
-    public void addWebsite(String packageName) {
+    void addWebsite(String packageName) {
         apps.add(new AppInfo(packageName, packageName, true, browserIcon));
         allApps.add(new AppInfo(packageName, packageName, true, browserIcon));
     }
 
-    public void removeWebsite(String packageName) {
+    void removeWebsite(String packageName) {
         apps.remove(new AppInfo(null, packageName, false, null));
         allApps.remove(new AppInfo(null, packageName, false, null)); // compare with equals
     }
 
-    public void updateWebsite(String oldPackageName, String packageName) {
+    void updateWebsite(String oldPackageName, String packageName) {
         apps.updateItemAt(getPosition(oldPackageName), new AppInfo (packageName, packageName, true, browserIcon));
         allApps.remove(new AppInfo(null, oldPackageName, false, null)); // compare with equals
         allApps.add(new AppInfo(null, packageName, false, null));
     }
 
-    public void filter(String s) {
+    void filter(String s) {
         if (s.isEmpty()) {
             apps.addAll(allApps);
             return;

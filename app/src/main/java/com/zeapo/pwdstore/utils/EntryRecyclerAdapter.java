@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -83,7 +84,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
     }
 
     @NonNull
-    protected View.OnLongClickListener getOnLongClickListener(ViewHolder holder, PasswordItem pass) {
+    View.OnLongClickListener getOnLongClickListener(ViewHolder holder, PasswordItem pass) {
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -93,6 +94,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final PasswordItem pass = getValues().get(position);
@@ -118,7 +120,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
             holder.itemView.setBackgroundResource(R.color.deep_orange_200);
             holder.type.setTextColor(Color.BLACK);
         } else {
-            holder.itemView.setBackgroundResource(Color.alpha(1));
+            holder.itemView.setBackgroundColor(Color.alpha(1));
             holder.type.setTextColor(ContextCompat.getColor(activity, R.color.grey_500));
         }
     }

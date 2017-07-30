@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:text="CATEGORY HERE"
                 android:textColor="@color/grey_500"
                 android:textIsSelectable="false"
@@ -35,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:text="PASSWORD FILE NAME HERE"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:textColor="@color/accent"
@@ -48,7 +50,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/divider"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:id="@+id/crypto_container"

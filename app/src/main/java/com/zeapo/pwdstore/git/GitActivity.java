@@ -456,8 +456,6 @@ public class GitActivity extends AppCompatActivity {
 
     /**
      * Save the repository information to the shared preferences settings
-     *
-     * @param view
      */
     public void saveConfiguration(View view) {
         if (!saveConfiguration())
@@ -500,8 +498,6 @@ public class GitActivity extends AppCompatActivity {
 
     /**
      * Clones the repository, the directory exists, deletes it
-     *
-     * @param view
      */
     public void cloneRepository(View view) {
         if (PasswordRepository.getRepository(null) == null) {

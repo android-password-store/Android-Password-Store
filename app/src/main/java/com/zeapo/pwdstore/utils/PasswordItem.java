@@ -18,11 +18,8 @@ public class PasswordItem implements Comparable{
     /** Create a password item
      *
      * Make it protected so that we use a builder
-     * @param name
-     * @param parent
-     * @param type
      */
-    protected PasswordItem(String name, PasswordItem parent, char type, File file, File rootDir) {
+    private PasswordItem(String name, PasswordItem parent, char type, File file, File rootDir) {
         this.name = name;
         this.parent = parent;
         this.type = type;
@@ -31,38 +28,24 @@ public class PasswordItem implements Comparable{
     }
 
     /** Create a new Category item
-     *
-     * @param name
-     * @param parent
-     * @return
      */
     public static PasswordItem newCategory(String name, File file, PasswordItem parent, File rootDir) {
         return new PasswordItem(name, parent, TYPE_CATEGORY, file, rootDir);
     }
 
     /** Create a new parentless category item
-     *
-     * @param name
-     * @return
      */
     public static PasswordItem newCategory(String name, File file, File rootDir) {
         return new PasswordItem(name, null, TYPE_CATEGORY, file, rootDir);
     }
 
     /** Create a new password item
-     *
-     * @param name
-     * @param parent
-     * @return
      */
     public static PasswordItem newPassword(String name, File file,  PasswordItem parent, File rootDir) {
         return new PasswordItem(name, parent, TYPE_PASSWORD, file, rootDir);
     }
 
     /** Create a new parentless password item
-     *
-     * @param name
-     * @return
      */
     public static PasswordItem newPassword(String name, File file, File rootDir) {
         return new PasswordItem(name, null, TYPE_PASSWORD, file, rootDir);
@@ -72,7 +55,7 @@ public class PasswordItem implements Comparable{
         return this.type;
     }
 
-    public String getName(){
+    private String getName(){
         return this.name;
     }
 

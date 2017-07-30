@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -30,6 +31,7 @@ public class pwgenDialogFragment extends DialogFragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

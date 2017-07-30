@@ -30,9 +30,9 @@ public abstract class GitOperation {
     public static final int GET_SSH_KEY_FROM_CLONE = 201;
 
     protected final Repository repository;
-    protected final Activity callingActivity;
-    protected UsernamePasswordCredentialsProvider provider;
-    protected GitCommand command;
+    final Activity callingActivity;
+    UsernamePasswordCredentialsProvider provider;
+    GitCommand command;
 
     /**
      * Creates a new git operation
@@ -52,7 +52,7 @@ public abstract class GitOperation {
      * @param password the password
      * @return the current object
      */
-    public GitOperation setAuthentication(String username, String password) {
+    GitOperation setAuthentication(String username, String password) {
         SshSessionFactory.setInstance(new GitConfigSessionFactory());
         this.provider = new UsernamePasswordCredentialsProvider(username, password);
         return this;
@@ -66,7 +66,7 @@ public abstract class GitOperation {
      * @param passphrase the passphrase
      * @return the current object
      */
-    public GitOperation setAuthentication(File sshKey, String username, String passphrase) {
+    GitOperation setAuthentication(File sshKey, String username, String passphrase) {
         JschConfigSessionFactory sessionFactory = new SshConfigSessionFactory(sshKey.getAbsolutePath(), username, passphrase);
         SshSessionFactory.setInstance(sessionFactory);
         this.provider = null;

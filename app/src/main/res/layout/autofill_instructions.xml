@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="20dp"
         android:paddingLeft="24dp"
@@ -26,7 +26,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/autofill_ins_1" />
+            android:src="@drawable/autofill_ins_1"
+            android:contentDescription="@string/autofill_ins_1_hint" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -34,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/autofill_ins_2" />
+            android:src="@drawable/autofill_ins_2"
+            android:contentDescription="@string/autofill_ins_2_hint" />
 
         <TextView
             android:id="@+id/textView3"
@@ -49,7 +51,8 @@
             android:layout_height="114dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/autofill_ins_3" />
+            android:src="@drawable/autofill_ins_3"
+            android:contentDescription="@string/autofill_ins_3_hint" />
 
         <TextView
             android:id="@+id/textView4"

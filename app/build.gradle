@@ -16,6 +16,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     lintOptions {
+        abortOnError true // make sure build failes with lint errors!
         disable 'MissingTranslation', 'PluralsCandidate'
     }
     packagingOptions {

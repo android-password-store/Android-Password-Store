@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.crypto;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.PendingIntent;
@@ -666,8 +667,6 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
 
     /**
      * Encrypts a password file
-     *
-     * @param data
      */
     public void encrypt(Intent data) {
         data.setAction(OpenPgpApi.ACTION_ENCRYPT);
@@ -730,6 +729,7 @@ public class PgpHandler extends AppCompatActivity implements OpenPgpServiceConne
     }
 
     // TODO (low priority but still...) android M potential permissions crashes
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBound(IOpenPgpService2 service) {
         Log.i("PGP", "ISBOUND!!");

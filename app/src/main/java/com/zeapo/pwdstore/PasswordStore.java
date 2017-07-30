@@ -294,7 +294,7 @@ public class PasswordStore extends AppCompatActivity {
         checkLocalRepository();
     }
 
-    public void initializeRepositoryInfo() {
+    private void initializeRepositoryInfo() {
         if (settings.getBoolean("git_external", false) && settings.getString("git_external_repo", null) != null) {
             File dir = new File(settings.getString("git_external_repo", null));
 
@@ -521,13 +521,13 @@ public class PasswordStore extends AppCompatActivity {
     /**
      * Updates the adapter with the current view of passwords
      */
-    public void refreshListAdapter() {
+    private void refreshListAdapter() {
         if ((null != plist)) {
             plist.refreshAdapter();
         }
     }
 
-    public void filterListAdapter(String filter) {
+    private void filterListAdapter(String filter) {
         if ((null != plist)) {
             plist.filterAdapter(filter);
         }
@@ -643,7 +643,7 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
-    protected void initRepository(final int operation) {
+    private void initRepository(final int operation) {
         PasswordRepository.closeRepository();
 
         new AlertDialog.Builder(this)

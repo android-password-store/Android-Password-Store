@@ -285,7 +285,7 @@ public class UserPreference extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void selectExternalGitRepository() {
+    private void selectExternalGitRepository() {
         final Activity activity = this;
         new AlertDialog.Builder(this).
                 setTitle("Choose where to store the passwords").
@@ -332,7 +332,7 @@ public class UserPreference extends AppCompatActivity {
     /**
      * Opens a file explorer to import the private key
      */
-    public void getSshKeyWithPermissions(boolean useDefaultPicker) {
+    private void getSshKeyWithPermissions(boolean useDefaultPicker) {
         final Activity activity = this;
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -362,7 +362,7 @@ public class UserPreference extends AppCompatActivity {
     /**
      * Opens a file explorer to import the private key
      */
-    public void getSshKey(boolean useDefaultPicker) {
+    private void getSshKey(boolean useDefaultPicker) {
         if (useDefaultPicker) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
@@ -382,7 +382,7 @@ public class UserPreference extends AppCompatActivity {
         }
     }
 
-    public void exportPasswordsWithPermissions() {
+    private void exportPasswordsWithPermissions() {
         final Activity activity = this;
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -421,7 +421,7 @@ public class UserPreference extends AppCompatActivity {
     /**
      * Opens a key generator to generate a public/private key pair
      */
-    public void makeSshKey(boolean fromPreferences) {
+    private void makeSshKey(boolean fromPreferences) {
         Intent intent = new Intent(getApplicationContext(), SshKeyGen.class);
         startActivity(intent);
         if (!fromPreferences) {

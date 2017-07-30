@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.pwgen;
 
-public class pw_phonemes {
+class pw_phonemes {
     private static final int CONSONANT  = 0x0001;
     private static final int VOWEL      = 0x0002;
     private static final int DIPTHONG   = 0x0004;
