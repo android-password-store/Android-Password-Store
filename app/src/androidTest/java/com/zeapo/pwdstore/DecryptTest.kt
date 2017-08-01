@@ -1,7 +1,10 @@
 package com.zeapo.pwdstore
 
+import android.annotation.SuppressLint
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
@@ -74,9 +77,20 @@ class DecryptTest {
         assertEquals(name, nameView.text)
     }
 
+    @SuppressLint("ApplySharedPref") // we need the preferences right away
     @Test
     fun shouldDecrypt() {
         init()
+
+        // Setup the timer to 1 second
+        // first remember the previous timer to set it back later
+        val showTime = try {
+            Integer.parseInt(activity.settings.getString("general_show_time", "45"))
+        } catch (e: NumberFormatException) {
+            45
+        }
+        // second set the new timer
+        activity.settings.edit().putString("general_show_time", "1").commit()
 
         activity.onBound(null)
         val clearPass = IOUtils.toString(
@@ -84,9 +98,24 @@ class DecryptTest {
                 Charsets.UTF_8.name()
         )
         val passEntry = PasswordEntry(clearPass)
+
+        // have we decrypted things correctly?
         assertEquals(passEntry.password, activity.crypto_password_show.text)
         assertEquals(passEntry.username, activity.crypto_username_show.text.toString())
         assertEquals(passEntry.extraContent, activity.crypto_extra_show.text.toString())
+
+        // did we copy the password?
+        val clipboard: ClipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        assertEquals(passEntry.password, clipboard.primaryClip.getItemAt(0).text)
+
+        // wait until the clipboard is cleared
+        SystemClock.sleep(2000)
+
+        // The clipboard should be cleared!!
+        assertEquals("", clipboard.primaryClip.getItemAt(0).text)
+
+        // set back the timer
+        activity.settings.edit().putString("general_show_time", showTime.toString()).commit()
     }
 
     companion object {
