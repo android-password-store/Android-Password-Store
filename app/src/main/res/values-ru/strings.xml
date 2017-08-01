@@ -6,43 +6,47 @@
 
     <string name="action_settings">Настройки</string>
     <string name="dialog_delete_title">Директория уже существует</string>
-    <string name="dialog_delete_msg">Директория уже существует. Текущая версия поддерживает только одно хранилище. Хотите удалить существующее хранилище?</string>
+    <string name="dialog_delete_msg">Директория уже существует. Текущая версия поддерживает только одно хранилище. Хотите удалить существующую директорию:</string>
     <string name="dialog_delete">Удалить директорию</string>
-    <string name="dialog_do_not_delete">Отмена</string>
+    <string name="dialog_do_not_delete">Отменить</string>
     <string name="title_activity_git_clone">Информация о репозитории</string>
 
     <!-- Password Store -->
-    <string name="creation_dialog_text">Пожалуйста, клонируйте или добавьте новый репозиторий перед тем, как добавлять пароль или выполнять операцию синхронизации.</string>
+    <string name="creation_dialog_text">Пожалуйста, клонируйте или создайте новый репозиторий перед тем, как добавлять пароль или выполнять синхронизацию.</string>
     <string name="store_git">/store/.git</string>
-    <string name="key_dialog_text">Вы должны выбрать ваш "PGP-Key ID" перед инициализацией хранилища</string>
+    <string name="key_dialog_text">Вы должны выбрать PGP ключ перед инициализацией хранилища</string>
     <string name="delete_dialog_text">Вы уверены что хотите удалить пароль /"</string>
+    <string name="move">Переместить</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
 
     <!-- git commits -->
-    <string name="add_commit_text">[ANDROID PwdStore] Добавил &#160;</string>
-    <string name="edit_commit_text">[ANDROID PwdStore] Редактировал &#160;</string>
+    <string name="add_commit_text">[ANDROID PwdStore] Добавлен пароль &#160;</string>
+    <string name="edit_commit_text">[ANDROID PwdStore] Отредактирован пароль &#160;</string>
     <string name="from_store">&#160; из хранилища.</string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Не выбран поставщик OpenPGP!</string>
+    <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
+    <string name="clipboard_username_toast_text">Имя пользователя скопировано в буфер обмена</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
 
     <!-- Git Async Task -->
     <string name="running_dialog_text">Выполняется команда…</string>
-    <string name="jgit_error_dialog_title">Произошла ошибка</string>
+    <string name="jgit_error_dialog_title">Произошла ошибка выполнения операции Git</string>
     <string name="jgit_error_dialog_text">Сообщение от jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">Вы забыли указать имя пользователя?</string>
     <string name="set_information_dialog_text">Вы должны указать информацию о сервере до выполнения синхронизации</string>
-    <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте SSH ключ в настройках</string>
-    <string name="ssh_preferences_dialog_import">Import</string>
+    <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте новый SSH ключ в настройках</string>
     <string name="ssh_preferences_dialog_title">Нет SSH ключа</string>
+    <string name="ssh_preferences_dialog_import">Импортировать</string>
     <string name="ssh_preferences_dialog_generate">Сгенерировать</string>
     <string name="passphrase_dialog_title">Авторизоваться</string>
-    <string name="passphrase_dialog_text">Пожалуйста, предоставьте пароль для SSH ключа. Оставьте поле пустым, если ключ отсутствует.</string>
-    <string name="password_dialog_text">Пожалуйста, предоставьте пароль для репозитория</string>
+    <string name="passphrase_dialog_text">Пожалуйста, введите пароль от SSH ключа. Оставьте поле пустым, если пароль отсутствует.</string>
+    <string name="password_dialog_text">Пожалуйста, введите пароль для репозитория</string>
 
     <!-- Clone fragment -->
     <string name="clone">Клонировать с сервера</string>
@@ -56,45 +60,59 @@
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
     <string name="server_path">Путь к репозиторию</string>
-    <string name="server_path_hint">path/to/pass</string>
+    <string name="server_path_hint">путь/до/пароля</string>
     <string name="server_user">Имя пользователя</string>
     <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">Результирующий URL</string>
+    <string name="server_resulting_url">Получившийся URL</string>
     <string name="connection_mode">Тип авторизации</string>
 
-    <string name="warn_malformed_url_port">При использовании нестандартных портов, предоставьте полный путь (начинается с "/")</string>
+    <string name="warn_malformed_url_port">При использовании нестандартных портов, укажите полный путь (начинается с "/")</string>
+
+    <!-- Git Config fragment -->
+    <string name="invalid_email_dialog_text">Введите корректный email</string>
+    <string name="clone_button">Клонировать</string>
 
     <!-- PGP Handler -->
-    <string name="crypto_name_hint">имя</string>
+    <string name="crypto_name_hint">название</string>
     <string name="crypto_pass_label">Пароль</string>
     <string name="crypto_extra_label">Дополнительно</string>
+    <string name="crypto_select">Выбрать</string>
+    <string name="crypto_cancel">Отменить</string>
+    <string name="crypto_save">Сохранить</string>
 
     <!-- DECRYPT Layout -->
     <string name="action_search">Поиск</string>
+    <string name="password">Пароль:</string>
+    <string name="extra_content">Дополнительная информация:</string>
+    <string name="username">Имя пользователя:</string>
+    <string name="edit_password">Редактировать пароль</string>
+    <string name="copy_password">Скопировать пароль</string>
+    <string name="copy_username">Скопировать имя пользователя</string>
+    <string name="share_as_plaintext">Поделиться в открытом виде</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
-    <string name="pref_edit_server_info">Отредактирова настройки сервера git</string>
+    <string name="pref_edit_server_info">Изменить настройки сервера git</string>
     <string name="pref_ssh_title">Импортировать SSH ключ</string>
     <string name="pref_ssh_keygen_title">Сгенерировать пару SSH ключей</string>
-    <string name="pref_ssh_see_key_title">Просмотреть сгенерированный публичный SSH ключ</string>
+    <string name="pref_ssh_see_key_title">Просмотреть публичный SSH ключ</string>
     <string name="pref_git_delete_repo">Удалить репозиторий</string>
     <string name="pref_dialog_delete_title">Очистить репозиторий</string>
     <string name="pref_crypto_title">Шифрование</string>
-    <string name="pref_provider_title">Выберите поставщика OpenPGP</string>
-    <string name="pref_key_title">Выберите OpenPGP Key id</string>
+    <string name="pref_provider_title">Выберите провайдера OpenPGP</string>
+    <string name="pref_key_title">Выберите ключ OpenPGP</string>
     <string name="pref_general_title">Общие</string>
     <string name="pref_password_title">Время в буфере</string>
     <string name="pref_password_dialog_title">Время нахождения пароля в буфере обмена</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
-    <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер омена после успешного расшифрования</string>
+    <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
     <string name="ssh_key_success_dialog_title">SSH ключ импортирован</string>
     <string name="ssh_key_error_dialog_title">Ошибка импорта SSH ключа</string>
     <string name="ssh_key_error_dialog_text">Сообщение: \n</string>
     <string name="pref_recursive_filter">Рекурсивная фильтрация</string>
     <string name="pref_recursive_filter_hint">Рекурсивный поиск паролей в текущей директории</string>
-    <string name="pref_autofill_enable_title">Включить автозаполнение</string>
+    <string name="pref_autofill_enable_title">Автозаполнение</string>
     <string name="pref_autofill_enable_msg">Нажмите ОК чтобы перейти в Специальные Возможности. Выберите Password Store в службах, а потом нажмите на переключатель.</string>
     <string name="pref_autofill_enable_msg2">После активации сервиса, при клике на поле ввода пароля в приложении появится диалоговое окно, если подходящий пароль существует</string>
     <string name="pref_autofill_enable_msg3">Password Store пытается сопоставлять пароли с приложениями автоматически. Вы можете изменить это поведение.</string>
@@ -102,28 +120,37 @@
     <string name="pref_autofill_default_title">Автоматически сопоставлять по умолчанию</string>
     <string name="pref_autofill_default_hint">По умолчанию \'Автоматически сопоставлять\' для приложений без пользовательских настроек. В другом случае, \'Никогда не сопоставлять\'</string>
     <string name="pref_autofill_always_title">Всегда показывать диалоговое окно</string>
+    <string name="pref_misc_title">Другое</string>
     <string name="pref_clear_clipboard_title">Очистить буфер 20 раз</string>
     <string name="pref_clear_clipboard_hint">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
-    <string name="pref_git_delete_repo_summary">Удалить локальный скрытый репозиторий</string>
+    <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
     <string name="pref_external_repository">Внешний репозиторий</string>
     <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
     <string name="pref_select_external_repository">Выбрать внешний репозиторий</string>
+    <string name="prefs_use_default_file_picker">Использовать стандартное окно выбора файлов</string>
+    <string name="prefs_clear_after_copy_title">Автоматически очищать буфер обмена после вставки</string>
+    <string name="prefs_clear_after_copy_summary">После автоматического или ручного копирования, буфер обмена будет автоматически очищен.</string>
+    <string name="prefs_export_passwords_title">Экспортировать пароли</string>
+    <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
+    <string name="prefs_version">Версия</string>
 
     <!-- pwgen fragment -->
     <string name="pwgen_generate">Сгенерировать</string>
     <string name="pwgen_include">Включая</string>
+    <string name="pwgen_length">Длина</string>
     <string name="pwgen_numerals">Цифры</string>
     <string name="pwgen_symbols">Символы</string>
     <string name="pwgen_uppercase">Верхний регистр</string>
     <string name="pwgen_ambiguous">Неоднозначные</string>
+    <string name="pwgen_pronounceable">Произносимые</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Длина</string>
     <string name="ssh_keygen_passphrase">Пароль</string>
-    <string name="ssh_keygen_comment">Коментарий</string>
+    <string name="ssh_keygen_comment">Комментарий</string>
     <string name="ssh_keygen_generate">Сгенерировать</string>
     <string name="ssh_keygen_copy">Скоприровать</string>
-    <string name="ssh_keygen_tip">Скопируйте публичный ключ на сервер Git</string>
+    <string name="ssh_keygen_tip">Поместите публичный ключ на сервер Git</string>
     <string name="ssh_keygen_show_passphrase">Показать пароль</string>
 
     <!-- Misc -->
@@ -139,7 +166,14 @@
     <string name="git_push">Пуш на удаленный сервер</string>
     <string name="show_password_pref_title">Показать пароль</string>
     <string name="show_password_pref_summary">Видимость расшифрованных паролей, это не влияет на копирование в буфер</string>
+    <string name="show_extra_content_pref_title">Показать дополнительную информацию</string>
+    <string name="show_extra_content_pref_summary">Видимость поля дополнительной информации после расшифрования</string>
     <string name="pwd_generate_button">Сгенерировать</string>
+    <string name="refresh_list">Обновить список</string>
+    <string name="no_repo_selected">Внешний репозиторий не выбран</string>
+    <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
+    <string name="show_password">Показать пароль</string>
+    <string name="repository_uri">URI репозитория</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Автозаполнение паролей в приложениях. Работает только в Android 4.3 и выше. Не использует буфер обмена в Android 5.0 и выше.</string>
@@ -149,8 +183,9 @@
     <string name="autofill_apps_match">Сопоставить с</string>
     <string name="autofill_apps_never">Никогда не сопоставлять</string>
     <string name="autofill_apps_delete">Удалить</string>
-    <string name="refresh_list">Обновить список</string>
-    <string name="no_repo_selected">Не выбран внешний репозиторий</string>
-    <string name="send_plaintext_password_to">Отправить пароль в открытом виде с помощью …</string>
-    <string name="show_password">Показать пароль</string>
+    <string name="autofill_pick">Выбрать…</string>
+    <string name="autofill_pick_and_match">Выбрать и сопоставить…</string>
+    <string name="autofill_paste">Вставить</string>
+    <string name="autofill_paste_username">Вставить имя пользователя?\n\n%s</string>
+    <string name="autofill_toast_username">Выберите поле ввода для вставки имени пользователя.\nИмя пользователя можно вставить в течение %d секунд.</string>
 </resources>
