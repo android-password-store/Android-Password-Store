@@ -186,58 +186,58 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
                 RESULT_CODE_SUCCESS -> {
                     try {
-//                        val showPassword = settings.getBoolean("show_password", true)
-//                        val showExtraContent = settings.getBoolean("show_extra_content", true)
-//
-//                        crypto_container_decrypt.visibility = View.VISIBLE
-//
-//                        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
-//                        val entry = PasswordEntry(oStream)
-//
-//                        passwordEntry = entry
-//
-//                        if (operation == "EDIT") {
-//                            editPassword()
-//                            return@executeApiAsync
-//                        }
-//
-//                        crypto_password_show.typeface = monoTypeface
-//                        crypto_password_show.text = entry.password
-//
-//                        crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
-//                        crypto_password_show.transformationMethod = if (showPassword) {
-//                            null
-//                        } else {
-//                            HoldToShowPasswordTransformation(
-//                                    crypto_password_toggle_show,
-//                                    Runnable { crypto_password_show.text = entry.password }
-//                            )
-//                        }
-//
-//                        if (entry.hasExtraContent()) {
-//                            crypto_extra_show_layout.visibility = if (showExtraContent) View.VISIBLE else View.GONE
-//
-//                            crypto_extra_show.typeface = monoTypeface
-//                            crypto_extra_show.text = entry.extraContent
-//
-//                            if (entry.hasUsername()) {
-//                                crypto_username_show.visibility = View.VISIBLE
-//                                crypto_username_show_label.visibility = View.VISIBLE
-//                                crypto_copy_username.visibility = View.VISIBLE
-//
-//                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username) }
-//                                crypto_username_show.typeface = monoTypeface
-//                                crypto_username_show.text = entry.username
-//                            } else {
-//                                crypto_username_show.visibility = View.GONE
-//                                crypto_username_show_label.visibility = View.GONE
-//                                crypto_copy_username.visibility = View.GONE
-//                            }
-//                        }
-//
-//                        if (settings.getBoolean("copy_on_decrypt", true)) {
-//                            copyPasswordToClipBoard()
-//                        }
+                        val showPassword = settings.getBoolean("show_password", true)
+                        val showExtraContent = settings.getBoolean("show_extra_content", true)
+
+                        crypto_container_decrypt.visibility = View.VISIBLE
+
+                        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
+                        val entry = PasswordEntry(oStream)
+
+                        passwordEntry = entry
+
+                        if (operation == "EDIT") {
+                            editPassword()
+                            return@executeApiAsync
+                        }
+
+                        crypto_password_show.typeface = monoTypeface
+                        crypto_password_show.text = entry.password
+
+                        crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
+                        crypto_password_show.transformationMethod = if (showPassword) {
+                            null
+                        } else {
+                            HoldToShowPasswordTransformation(
+                                    crypto_password_toggle_show,
+                                    Runnable { crypto_password_show.text = entry.password }
+                            )
+                        }
+
+                        if (entry.hasExtraContent()) {
+                            crypto_extra_show_layout.visibility = if (showExtraContent) View.VISIBLE else View.GONE
+
+                            crypto_extra_show.typeface = monoTypeface
+                            crypto_extra_show.text = entry.extraContent
+
+                            if (entry.hasUsername()) {
+                                crypto_username_show.visibility = View.VISIBLE
+                                crypto_username_show_label.visibility = View.VISIBLE
+                                crypto_copy_username.visibility = View.VISIBLE
+
+                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username) }
+                                crypto_username_show.typeface = monoTypeface
+                                crypto_username_show.text = entry.username
+                            } else {
+                                crypto_username_show.visibility = View.GONE
+                                crypto_username_show_label.visibility = View.GONE
+                                crypto_copy_username.visibility = View.GONE
+                            }
+                        }
+
+                        if (settings.getBoolean("copy_on_decrypt", true)) {
+                            copyPasswordToClipBoard()
+                        }
                     } catch (e: Exception) {
                         Log.e(TAG, "An Exception occurred", e)
                     }
