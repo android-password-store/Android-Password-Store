@@ -56,12 +56,19 @@ class DecryptTest {
 
     @Test
     fun pathShouldDecompose() {
-        init()
+        val pathOne = "/fake/path/cat1/n1.gpg".replace("//", "/")
+        val pathTwo = "/fake/path/n2.gpg".replace("//", "/")
 
-        assertEquals("/category/sub.gpg", PgpActivity.getRelativePath(path, repoPath))
-        assertEquals("/category/", PgpActivity.getParentPath(path, repoPath))
-        assertEquals("sub", PgpActivity.getName(path, repoPath))
-        assertEquals("sub", PgpActivity.getName(path, "$repoPath/"))
+        assertEquals("/cat1/n1.gpg", PgpActivity.getRelativePath(pathOne, "/fake/path"))
+        assertEquals("/cat1/", PgpActivity.getParentPath(pathOne, "/fake/path"))
+        assertEquals("n1", PgpActivity.getName(pathOne, "/fake/path"))
+        // test that even if we append a `/` it still works
+        assertEquals("n1", PgpActivity.getName(pathOne, "/fake/path/"))
+
+        assertEquals("/n2.gpg", PgpActivity.getRelativePath(pathTwo, "/fake/path"))
+        assertEquals("/", PgpActivity.getParentPath(pathTwo, "/fake/path"))
+        assertEquals("n2", PgpActivity.getName(pathTwo, "/fake/path"))
+        assertEquals("n2", PgpActivity.getName(pathTwo, "/fake/path/"))
     }
 
     @Test
