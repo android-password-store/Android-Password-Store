@@ -570,7 +570,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
          * Gets the relative path to the repository
          */
         fun getRelativePath(fullPath: String, repositoryPath: String): String =
-                fullPath.replace(repositoryPath, "").replace("//", "/")
+                fullPath.replace(repositoryPath, "").replace("/+".toRegex(), "/")
 
         /**
          * Gets the Parent path, relative to the repository
@@ -578,7 +578,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         fun getParentPath(fullPath: String, repositoryPath: String) : String  {
             val relativePath = getRelativePath(fullPath, repositoryPath)
             val index = relativePath.lastIndexOf("/")
-            return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("//", "/")
+            return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("/+".toRegex(), "/")
         }
 
         /**
