@@ -37,7 +37,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
     var passwordEntry: PasswordEntry? = null
-    var api : OpenPgpApi? = null
+    var api: OpenPgpApi? = null
 
     val operation: String by lazy { intent.getStringExtra("OPERATION") }
     val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
@@ -77,7 +77,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             "ENCRYPT" -> {
                 setContentView(R.layout.encrypt_layout)
                 title = getString(R.string.new_password_title)
-                crypto_password_category.text = relativeParentPath
+                crypto_password_category.text = getRelativePath(fullPath, repoPath)
             }
         }
     }
@@ -91,7 +91,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         // Inflate the menu; this adds items to the action bar if it is present.
         // Do not use the value `operation` in this case as it is not valid when editing
         val menuId = when (intent.getStringExtra("OPERATION")) {
-            "ENCRYPT" -> R.menu.pgp_handler_new_password
+            "ENCRYPT", "EDIT" -> R.menu.pgp_handler_new_password
             "DECRYPT" -> R.menu.pgp_handler
             else -> R.menu.pgp_handler
         }
@@ -196,7 +196,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                         passwordEntry = entry
 
-                        if (operation == "EDIT") {
+                        if (intent.getStringExtra("OPERATION") == "EDIT") {
                             editPassword()
                             return@executeApiAsync
                         }
@@ -279,7 +279,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = ByteArrayInputStream("$pass\n$extra".toByteArray(Charset.forName("UTF-8")))
         val oStream = ByteArrayOutputStream()
 
-        val path = "$repoPath/$relativeParentPath/$name.gpg"
+        val path = if (intent.getStringExtra("OPERATION") == "EDIT") fullPath else "$fullPath/$name.gpg"
 
         api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
             when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
@@ -333,7 +333,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         delayTask?.skip = true
 
         val data = Intent(this, PgpActivity::class.java)
-        data.putExtra("OPERATION", "ENCRYPT")
+        data.putExtra("OPERATION", "EDIT")
         data.putExtra("fromDecrypt", true)
         intent = data
         invalidateOptionsMenu()
@@ -575,7 +575,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         /**
          * Gets the Parent path, relative to the repository
          */
-        fun getParentPath(fullPath: String, repositoryPath: String) : String  {
+        fun getParentPath(fullPath: String, repositoryPath: String): String {
             val relativePath = getRelativePath(fullPath, repositoryPath)
             val index = relativePath.lastIndexOf("/")
             return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("/+".toRegex(), "/")
@@ -584,7 +584,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         /**
          * Gets the name of the password (excluding .gpg)
          */
-        fun getName(fullPath: String, repositoryPath: String) : String  {
+        fun getName(fullPath: String, repositoryPath: String): String {
             val relativePath = getRelativePath(fullPath, repositoryPath)
             val index = relativePath.lastIndexOf("/")
             return relativePath.substring(index + 1).replace("\\.gpg$".toRegex(), "")
