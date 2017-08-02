@@ -42,9 +42,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     val operation: String by lazy { intent.getStringExtra("OPERATION") }
     val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
-    val path: String by lazy { intent.getStringExtra("FILE_PATH") }
-    val name: String by lazy { getName(path, repoPath) }
-    val relativeParentPath: String by lazy { getParentPath(path, repoPath) }
+    val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
+    val name: String by lazy { getName(fullPath, repoPath) }
+    val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
@@ -179,7 +179,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val data = receivedIntent ?: Intent()
         data.action = ACTION_DECRYPT_VERIFY
 
-        val iStream = FileUtils.openInputStream(File(path))
+        val iStream = FileUtils.openInputStream(File(fullPath))
         val oStream = ByteArrayOutputStream()
 
         api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
