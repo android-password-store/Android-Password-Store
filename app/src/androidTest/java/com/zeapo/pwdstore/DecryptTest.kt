@@ -56,8 +56,8 @@ class DecryptTest {
 
     @Test
     fun pathShouldDecompose() {
-        val pathOne = "/fake/path/cat1/n1.gpg".replace("//", "/")
-        val pathTwo = "/fake/path/n2.gpg".replace("//", "/")
+        val pathOne = "/fake/path/cat1/n1.gpg"
+        val pathTwo = "/fake/path/n2.gpg"
 
         assertEquals("/cat1/n1.gpg", PgpActivity.getRelativePath(pathOne, "/fake/path"))
         assertEquals("/cat1/", PgpActivity.getParentPath(pathOne, "/fake/path"))
