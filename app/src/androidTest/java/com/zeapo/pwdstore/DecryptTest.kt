@@ -88,6 +88,8 @@ class DecryptTest {
     @Test
     fun shouldDecrypt() {
         init()
+        val clearPass = IOUtils.toString(testContext.assets.open("clear-store/category/sub"))
+        val passEntry = PasswordEntry(clearPass)
 
         // Setup the timer to 1 second
         // first remember the previous timer to set it back later
@@ -97,14 +99,9 @@ class DecryptTest {
             45
         }
         // second set the new timer
-        activity.settings.edit().putString("general_show_time", "1").commit()
+        activity.settings.edit().putString("general_show_time", "3").commit()
 
         activity.onBound(null)
-        val clearPass = IOUtils.toString(
-                IOUtils.toByteArray(testContext.assets.open("clear-store/category/sub")),
-                Charsets.UTF_8.name()
-        )
-        val passEntry = PasswordEntry(clearPass)
 
         // have we decrypted things correctly?
         assertEquals(passEntry.password, activity.crypto_password_show.text)
@@ -116,7 +113,7 @@ class DecryptTest {
         assertEquals(passEntry.password, clipboard.primaryClip.getItemAt(0).text)
 
         // wait until the clipboard is cleared
-        SystemClock.sleep(2000)
+        SystemClock.sleep(4000)
 
         // The clipboard should be cleared!!
         assertEquals("", clipboard.primaryClip.getItemAt(0).text)
