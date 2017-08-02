@@ -67,7 +67,8 @@
             android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/matchButton"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            tools:ignore="HardcodedText" />
 
         <RadioButton
             android:id="@+id/never"

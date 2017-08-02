@@ -1,18 +1,5 @@
 language: android
 jdk: oraclejdk8
-android:
-    components:
-        - platform-tools
-        - tools
-        - build-tools-23.0.3
-        - build-tools-24.0.2
-        - build-tools-25.0.2
-        - build-tools-25.0.3
-        - android-23
-        - android-24
-        - android-25
-        - extra-google-m2repository
-        - extra-android-m2repository
 
 licenses:
     - 'android-sdk-preview-license-.+'
@@ -26,7 +13,15 @@ cache:
  # ok no tests for now
  # - sys-img-x86-android-22
 
-before_script:
+install:
+  - echo y | android update sdk -u -a -t tools
+  - echo y | android update sdk -u -a -t platform-tools
+  - echo y | android update sdk -u -a -t build-tools-25.0.3
+  - echo y | android update sdk -u -a -t android-25
+  - echo y | android update sdk -u -a -t extra-google-m2repository
+  - echo y | android update sdk -u -a -t extra-android-m2repository
+
+env:
     - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
-script: "./gradlew clean build test -Dpre-dex=false"
+script: "./gradlew clean build test lintDebug -Dpre-dex=false"

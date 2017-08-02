@@ -182,6 +182,8 @@
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="show_password">Show password</string>
     <string name="repository_uri">Repository URI</string>
+    <string name="app_icon_hint">App icon</string>
+    <string name="folder_icon_hint">Folder icon</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
@@ -196,4 +198,7 @@
     <string name="autofill_paste">Paste</string>
     <string name="autofill_paste_username">Paste username?\n\n%s</string>
     <string name="autofill_toast_username">Select an editable field to past the username.\nUsername is available for %d seconds.</string>
+    <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
+    <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
+    <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>
 </resources>

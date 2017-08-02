@@ -55,7 +55,6 @@ public class GitActivityTest extends ActivityInstrumentationTestCase2<GitActivit
 
     /**
      * If we change from ssh protocol to https we automatically switch to username/password auth
-     * @throws Exception
      */
     public void testSpinnerChange() throws Exception{
         gitActivity.runOnUiThread(new Runnable() {

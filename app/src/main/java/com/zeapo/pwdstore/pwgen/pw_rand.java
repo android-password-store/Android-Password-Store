@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.pwgen;
 
-public class pw_rand {
+class pw_rand {
 
     /**
      * Generates a completely random password.

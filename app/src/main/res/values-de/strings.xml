@@ -174,6 +174,9 @@
     <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
     <string name="show_password">Password wiedergeben</string>
     <string name="repository_uri">Repository URI</string>
+    <string name="app_icon_hint">App Icon</string>
+    <string name="folder_icon_hint">Verzeichnis Icon</string>
+
 
     <!-- Autofill -->
     <string name="autofill_description">Füge das Passwort automatisch in Apps ein (Autofill). Funktioniert nur unter Android 4.3 und höher. Dies basiert nicht auf der Zwischenablage für Android 5.0 oder höher.</string>
@@ -188,4 +191,7 @@
     <string name="autofill_paste">Einfügen</string>
     <string name="autofill_paste_username">Benutzername einfügen?\n\n%s</string>
     <string name="autofill_toast_username">Wähle ein editierbares Feld um den Benutzernamen einzufügen.\nDer Benutzername ist für %d Sekunden verfügbar.</string>
+    <string name="autofill_ins_1_hint">Bildschirmfoto Accessibility Services</string>
+    <string name="autofill_ins_2_hint">Bildschirmfoto des Schalters in Accessibility Services</string>
+    <string name="autofill_ins_3_hint">Bildschirmfoto von Autofill in Aktion</string>
 </resources>

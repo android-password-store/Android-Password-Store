@@ -16,11 +16,11 @@ import org.eclipse.jgit.api.StatusCommand;
 import java.io.File;
 
 public class SyncOperation extends GitOperation {
-    protected AddCommand addCommand;
-    protected StatusCommand statusCommand;
-    protected CommitCommand commitCommand;
-    protected PullCommand pullCommand;
-    protected PushCommand pushCommand;
+    private AddCommand addCommand;
+    private StatusCommand statusCommand;
+    private CommitCommand commitCommand;
+    private PullCommand pullCommand;
+    private PushCommand pushCommand;
 
     /**
      * Creates a new git operation

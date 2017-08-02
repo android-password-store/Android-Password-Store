@@ -185,16 +185,12 @@ public final class PRNGFixes {
         /**
          * Input stream for reading from Linux PRNG or {@code null} if not yet
          * opened.
-         *
-         * @GuardedBy("sLock")
          */
         private static DataInputStream sUrandomIn;
 
         /**
          * Output stream for writing to Linux PRNG or {@code null} if not yet
          * opened.
-         *
-         * @GuardedBy("sLock")
          */
         private static OutputStream sUrandomOut;
 
@@ -224,6 +220,7 @@ public final class PRNGFixes {
             }
         }
 
+        @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
         @Override
         protected void engineNextBytes(byte[] bytes) {
             if (!mSeeded) {

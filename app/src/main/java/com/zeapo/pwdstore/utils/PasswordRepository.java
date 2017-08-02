@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import static java.util.Collections.sort;
@@ -168,7 +167,7 @@ public class PasswordRepository {
 
         Log.d("REPO", "current path: " + path.getPath());
         ArrayList<File> files = new ArrayList<>(Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter())));
-        files.addAll(new ArrayList<>((List<File>) FileUtils.listFiles(path, new String[]{"gpg"}, false)));
+        files.addAll(new ArrayList<>(FileUtils.listFiles(path, new String[]{"gpg"}, false)));
 
         return new ArrayList<>(files);
     }
