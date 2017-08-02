@@ -472,7 +472,7 @@ public class PasswordStore extends AppCompatActivity {
         Log.i("PWDSTR", "Adding file to : " + currentDir.getAbsolutePath());
 
         Intent intent = new Intent(this, PgpActivity.class);
-        intent.putExtra("PARENT_PATH", getCurrentDir().getAbsolutePath());
+        intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
         intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
         intent.putExtra("OPERATION", "ENCRYPT");
         startActivityForResult(intent, REQUEST_CODE_ENCRYPT);
