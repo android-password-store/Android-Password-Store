@@ -379,6 +379,8 @@ public class UserPreference extends AppCompatActivity {
             i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
 
             i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+            
+            startActivityForResult(i, IMPORT_SSH_KEY);
         }
     }
 
