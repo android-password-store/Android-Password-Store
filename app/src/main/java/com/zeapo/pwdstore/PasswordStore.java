@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,10 +75,12 @@ public class PasswordStore extends AppCompatActivity {
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
 
     @Override
+    @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager = getSystemService(ShortcutManager.class);
+        }
         activity = this;
         PRNGFixes.apply();
 
