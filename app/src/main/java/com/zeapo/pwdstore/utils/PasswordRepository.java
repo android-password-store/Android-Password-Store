@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.Collections.sort;
@@ -27,10 +28,12 @@ public class PasswordRepository {
 
     private static Repository repository;
 
-    protected PasswordRepository(){    }
+    protected PasswordRepository() {
+    }
 
     /**
      * Returns the git repository
+     *
      * @param localDir needed only on the creation
      * @return the git repository
      */
@@ -53,7 +56,7 @@ public class PasswordRepository {
         return repository != null;
     }
 
-    public static void createRepository(File localDir) throws Exception{
+    public static void createRepository(File localDir) throws Exception {
         localDir.delete();
 
         Git.init().setDirectory(localDir).call();
@@ -117,7 +120,7 @@ public class PasswordRepository {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
         if (settings.getBoolean("git_external", false)) {
-            String external_repo  = settings.getString("git_external_repo", null);
+            String external_repo = settings.getString("git_external_repo", null);
             if (external_repo != null) {
                 dir = new File(external_repo);
             }
@@ -151,6 +154,7 @@ public class PasswordRepository {
 
     /**
      * Gets the password items in the root directory
+     *
      * @return a list of passwords in the root direcotyr
      */
     public static ArrayList<PasswordItem> getPasswords(File rootDir) {
@@ -159,21 +163,27 @@ public class PasswordRepository {
 
     /**
      * Gets the .gpg files in a directory
+     *
      * @param path the directory path
      * @return the list of gpg files in that directory
      */
-    public static ArrayList<File> getFilesList(File path){
+    public static ArrayList<File> getFilesList(File path) {
         if (!path.exists()) return new ArrayList<>();
 
         Log.d("REPO", "current path: " + path.getPath());
-        ArrayList<File> files = new ArrayList<>(Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter())));
-        files.addAll(new ArrayList<>(FileUtils.listFiles(path, new String[]{"gpg"}, false)));
+        List<File> directories = Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter()));
+        List<File> files = Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".gpg")));
 
-        return new ArrayList<>(files);
+        ArrayList<File> items = new ArrayList<>();
+        items.addAll(directories);
+        items.addAll(files);
+
+        return items;
     }
 
     /**
      * Gets the passwords (PasswordItem) in a directory
+     *
      * @param path the directory path
      * @return a list of password items
      */
@@ -201,6 +211,7 @@ public class PasswordRepository {
 
     /**
      * Sets the git user name
+     *
      * @param username username
      */
     public static void setUserName(String username) {
@@ -209,6 +220,7 @@ public class PasswordRepository {
 
     /**
      * Sets the git user email
+     *
      * @param email email
      */
     public static void setUserEmail(String email) {
@@ -217,10 +229,11 @@ public class PasswordRepository {
 
     /**
      * Sets a git config value
-     * @param section config section name
+     *
+     * @param section    config section name
      * @param subsection config subsection name
-     * @param name config name
-     * @param value the value to be set
+     * @param name       config name
+     * @param value      the value to be set
      */
     private static void setStringConfig(String section, String subsection, String name, String value) {
         if (isInitialized()) {
@@ -228,7 +241,7 @@ public class PasswordRepository {
             config.setString(section, subsection, name, value);
             try {
                 config.save();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
