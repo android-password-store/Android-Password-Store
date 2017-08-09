@@ -241,23 +241,21 @@ class UserPreference : AppCompatActivity() {
      * Opens a file explorer to import the private key
      */
     fun getSshKey(useDefaultPicker: Boolean) {
-        if (useDefaultPicker) {
+        val intent = if (useDefaultPicker) {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "*/*"
-            startActivityForResult(intent, IMPORT_SSH_KEY)
+            intent.setType("*/*")
         } else {
             // This always works
-            val i = Intent(applicationContext, FilePickerActivity::class.java)
-            // This works if you defined the intent filter
-            // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+            val intent = Intent(applicationContext, FilePickerActivity::class.java)
 
             // Set these depending on your use case. These are the defaults.
-            i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
-            i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false)
-            i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE)
+            intent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
+            intent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false)
+            intent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE)
 
-            i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().path)
+            intent.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().path)
         }
+        startActivityForResult(intent, IMPORT_SSH_KEY)
     }
 
     /**
