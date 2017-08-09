@@ -44,16 +44,15 @@ android {
         signingConfigs {
             release {
                 storeFile file(mStoreFile)
-                    storePassword mStorePassword
-                    keyAlias mKeyAlias
-                    keyPassword mKeyPassword
+                storePassword mStorePassword
+                keyAlias mKeyAlias
+                keyPassword mKeyPassword
             }
         }
         buildTypes.release.signingConfig = signingConfigs.release
     } else {
         buildTypes.release.signingConfig = null
     }
-
 }
 
 dependencies {

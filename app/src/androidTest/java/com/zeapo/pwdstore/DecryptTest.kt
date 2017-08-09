@@ -99,7 +99,7 @@ class DecryptTest {
             45
         }
         // second set the new timer
-        activity.settings.edit().putString("general_show_time", "3").commit()
+        activity.settings.edit().putString("general_show_time", "2").commit()
 
         activity.onBound(null)
 
