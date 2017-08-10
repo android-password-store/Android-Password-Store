@@ -26,6 +26,12 @@ import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.RebaseCommand;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -252,13 +258,7 @@ public class GitActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_git_config);
                 setTitle(R.string.title_activity_git_config);
 
-                // init the server information
-                final EditText git_user_name = ((EditText) findViewById(R.id.git_user_name));
-                final EditText git_user_email = ((EditText) findViewById(R.id.git_user_email));
-
-                git_user_name.setText(settings.getString("git_config_user_name", ""));
-                git_user_email.setText(settings.getString("git_config_user_email", ""));
-
+                showGitConfig();
                 break;
             case REQUEST_PULL:
                 syncRepository(REQUEST_PULL);
@@ -463,6 +463,29 @@ public class GitActivity extends AppCompatActivity {
         finish();
     }
 
+    private void showGitConfig() {
+        // init the server information
+        final EditText git_user_name = ((EditText) findViewById(R.id.git_user_name));
+        final EditText git_user_email = ((EditText) findViewById(R.id.git_user_email));
+
+        git_user_name.setText(settings.getString("git_config_user_name", ""));
+        git_user_email.setText(settings.getString("git_config_user_email", ""));
+
+        // git status
+        Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity.getApplicationContext()));
+        if (repo != null) {
+            final TextView git_commit_hash = (TextView) findViewById(R.id.git_commit_hash);
+            try {
+                ObjectId objectId = repo.resolve(Constants.HEAD);
+                Ref ref = repo.getRef("refs/heads/master");
+                String head = ref.getObjectId().equals(objectId) ? ref.getName() : "DETACHED";
+                git_commit_hash.setText(String.format("%s (%s)", objectId.abbreviate(8).name(), head));
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+    }
+
     private boolean saveGitConfigs() {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
@@ -473,9 +496,9 @@ public class GitActivity extends AppCompatActivity {
 
         if (!email.matches(emailPattern)) {
             new AlertDialog.Builder(this).
-                setMessage(activity.getResources().getString(R.string.invalid_email_dialog_text)).
-                setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null).
-                show();
+                    setMessage(activity.getResources().getString(R.string.invalid_email_dialog_text)).
+                    setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null).
+                    show();
             return false;
         }
 
@@ -484,7 +507,7 @@ public class GitActivity extends AppCompatActivity {
     }
 
     public void applyGitConfigs(View view) {
-        if(!saveGitConfigs())
+        if (!saveGitConfigs())
             return;
 
         String git_user_name = settings.getString("git_config_user_name", "");
@@ -494,6 +517,20 @@ public class GitActivity extends AppCompatActivity {
         PasswordRepository.setUserEmail(git_user_email);
 
         finish();
+    }
+
+    public void abortRebase(View view) {
+        Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
+        if (repo != null) {
+            try {
+                // no network or heavy computation done, it's ok to do it on the ui-thread
+                new Git(repo).rebase().setOperation(RebaseCommand.Operation.ABORT).call();
+            } catch (Exception e) {
+                //ignore
+            } finally {
+                showGitConfig();
+            }
+        }
     }
 
     /**
@@ -573,6 +610,7 @@ public class GitActivity extends AppCompatActivity {
 
     /**
      * Syncs the local repository with the remote one (either pull or push)
+     *
      * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH
      */
     private void syncRepository(int operation) {

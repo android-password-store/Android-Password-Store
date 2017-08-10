@@ -100,7 +100,7 @@
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">Edit git server settings</string>
-    <string name="pref_edit_git_config">Edit git config</string>
+    <string name="pref_edit_git_config">Git utils</string>
     <string name="pref_ssh_title">Import SSH key</string>
     <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>

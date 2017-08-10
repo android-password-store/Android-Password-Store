@@ -8,6 +8,7 @@ import com.zeapo.pwdstore.R;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.merge.MergeStrategy;
 
 import java.io.File;
 
