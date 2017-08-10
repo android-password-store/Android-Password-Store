@@ -14,6 +14,9 @@
             android:key="ssh_keygen"
             android:title="@string/pref_ssh_keygen_title" />
         <Preference
+            android:key="ssh_key_clear_passphrase"
+            android:title="@string/ssh_key_clear_passphrase" />
+        <Preference
             android:key="ssh_see_key"
             android:title="@string/pref_ssh_see_key_title" />
         <Preference

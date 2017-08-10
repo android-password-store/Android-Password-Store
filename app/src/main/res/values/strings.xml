@@ -46,7 +46,7 @@
     <string name="ssh_preferences_dialog_import">Import</string>
     <string name="ssh_preferences_dialog_generate">Generate</string>
     <string name="passphrase_dialog_title">Authenticate</string>
-    <string name="passphrase_dialog_text">Please provide the passphrase for your SSH key. Leave it empty if there is no passphrase.</string>
+    <string name="passphrase_dialog_text">Please provide the passphrase for your SSH key</string>
     <string name="password_dialog_text">Please provide the password for this repository</string>
 
     <!-- Clone fragment -->
@@ -208,4 +208,5 @@
     <string name="git_push_generic_error">Push was rejected by remote, reason:</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
+    <string name="ssh_key_clear_passphrase">Clear ssh-key saved passphrase</string>
 </resources>
