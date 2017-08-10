@@ -10,7 +10,10 @@ import com.zeapo.pwdstore.R;
 
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
+import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.StatusCommand;
+import org.eclipse.jgit.transport.PushResult;
+import org.eclipse.jgit.transport.RemoteRefUpdate;
 
 
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
@@ -49,6 +52,29 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                     // the previous status will eventually be used to avoid a commit
                     if (nbChanges == null || nbChanges > 0)
                         command.call();
+                }else if (command instanceof PushCommand) {
+                    for (final PushResult result : ((PushCommand) command).call()) {
+                        // Code imported (modified) from Gerrit PushOp, license Apache v2
+                        for (final RemoteRefUpdate rru : result.getRemoteUpdates()) {
+                            switch (rru.getStatus()) {
+                                case REJECTED_NONFASTFORWARD:
+                                    return activity.getString(R.string.git_push_nff_error);
+                                case REJECTED_NODELETE:
+                                case REJECTED_REMOTE_CHANGED:
+                                case NON_EXISTING:
+                                case NOT_ATTEMPTED:
+                                    return activity.getString(R.string.git_push_generic_error) + rru.getStatus().name();
+                                case REJECTED_OTHER_REASON:
+                                    if ("non-fast-forward".equals(rru.getMessage())) {
+                                        return activity.getString(R.string.git_push_other_error);
+                                    } else {
+                                        return activity.getString(R.string.git_push_generic_error) + rru.getMessage();
+                                    }
+                                default:
+                                    break;
+                            }
+                        }
+                    }
                 } else {
                     command.call();
                 }

@@ -213,10 +213,7 @@ public abstract class GitOperation {
     public void onTaskEnded(String result) {
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
-                setMessage("Error occurred during a Git operation, "
-                        + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
-                        + result
-                        + "\nPlease check the FAQ for possible reasons why this error might occur.").
+                setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + result).
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

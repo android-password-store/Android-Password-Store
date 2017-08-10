@@ -48,10 +48,7 @@ public class PushOperation extends GitOperation {
         // TODO handle the "Nothing to push" case
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
-                setMessage("Error occured during the push operation, "
-                        + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
-                        + result
-                        + "\nPlease check the FAQ for possible reasons why this error might occur.").
+                setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + result).
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
