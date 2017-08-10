@@ -307,11 +307,11 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     private void initializeRepositoryInfo() {
-        if (settings.getBoolean("git_external", false) && settings.getString("git_external_repo", null) != null) {
-            File dir = new File(settings.getString("git_external_repo", null));
+        final String externalRepoPath = settings.getString("git_external_repo", null);
+        if (settings.getBoolean("git_external", false) && externalRepoPath != null) {
+            File dir = new File(externalRepoPath);
 
-            if (dir.exists() && dir.isDirectory() && !FileUtils.listFiles(dir, null, true).isEmpty() &&
-                    !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
+            if (dir.exists() && dir.isDirectory() && !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
                 PasswordRepository.closeRepository();
                 checkLocalRepository();
                 return; // if not empty, just show me the passwords!
