@@ -520,16 +520,21 @@ public class GitActivity extends AppCompatActivity {
     }
 
     public void abortRebase(View view) {
-        Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
+        final Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
         if (repo != null) {
-            try {
-                // no network or heavy computation done, it's ok to do it on the ui-thread
-                new Git(repo).rebase().setOperation(RebaseCommand.Operation.ABORT).call();
-            } catch (Exception e) {
-                //ignore
-            } finally {
-                showGitConfig();
-            }
+            new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
+                @Override
+                public void execute() {
+                    Log.d(TAG, "Resetting the repository");
+                    assert repository != null;
+                    GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
+                    tasks.execute(new Git(repo).rebase().setOperation(RebaseCommand.Operation.ABORT));
+                }
+                @Override
+                public void onSuccess() {
+                    showGitConfig();
+                }
+            }.execute();
         }
     }
 
