@@ -210,4 +210,7 @@
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="ssh_key_clear_passphrase">Clear ssh-key saved passphrase</string>
     <string name="remember_the_passphase">Remember the passphase</string>
+    <string name="hackish_tools">Hackish tools</string>
+    <string name="abort_rebase">Abort rebase</string>
+    <string name="commit_hash">Commit hash</string>
 </resources>

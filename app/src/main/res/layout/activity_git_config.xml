@@ -99,7 +99,7 @@
         android:background="@drawable/bottom_line"
         android:gravity="start"
         android:paddingBottom="6dp"
-        android:text="Hackish tools"
+        android:text="@string/hackish_tools"
         android:textColor="@color/blue_grey_500"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -115,7 +115,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:onClick="abortRebase"
-        android:text="Abort rebase"
+        android:text="@string/abort_rebase"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,9 +127,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Commit hash"
+        android:text="@string/commit_hash"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/git_commit_hash"
@@ -141,7 +142,9 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView7" />
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        android:layout_marginLeft="16dp"
+        tools:ignore="HardcodedText" />
 
 
 </android.support.constraint.ConstraintLayout>
