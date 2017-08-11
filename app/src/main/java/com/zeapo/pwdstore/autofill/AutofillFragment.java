@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -43,7 +44,7 @@ public class AutofillFragment extends DialogFragment {
         final AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
 
-        final View view = inflater.inflate(R.layout.fragment_autofill, null);
+        @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_autofill, null);
 
         builder.setView(view);
 
@@ -174,10 +175,11 @@ public class AutofillFragment extends DialogFragment {
 
                     String packageName = getArguments().getString("packageName", "");
                     if (isWeb) {
-                        packageName = ((EditText) dialog.findViewById(R.id.webURL)).getText().toString();
-
                         // handle some errors and don't dismiss the dialog
                         EditText webURL = (EditText) dialog.findViewById(R.id.webURL);
+
+                        packageName = webURL.getText().toString();
+
                         if (packageName.equals("")) {
                             webURL.setError("URL cannot be blank");
                             return;

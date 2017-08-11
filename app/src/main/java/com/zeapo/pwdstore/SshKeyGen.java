@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -86,7 +87,7 @@ public class SshKeyGen extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
+            @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
             builder.setView(v);
 
             TextView textView = (TextView) v.findViewById(R.id.public_key);

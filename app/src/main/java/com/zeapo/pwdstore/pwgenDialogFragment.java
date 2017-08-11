@@ -37,7 +37,7 @@ public class pwgenDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Activity callingActivity = getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.fragment_pwgen, null);
+        @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);
         Typeface monoTypeface = Typeface.createFromAsset(callingActivity.getAssets(), "fonts/sourcecodepro.ttf");
 
         builder.setView(view);
