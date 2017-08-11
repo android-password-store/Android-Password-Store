@@ -99,8 +99,10 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
             result = "Unexpected error";
 
         if (!result.isEmpty()) {
-            this.operation.onTaskEnded(result);
+            this.operation.onError(result);
         } else {
+            this.operation.onSuccess();
+
             if (finishOnEnd) {
                 this.activity.setResult(Activity.RESULT_OK);
                 this.activity.finish();

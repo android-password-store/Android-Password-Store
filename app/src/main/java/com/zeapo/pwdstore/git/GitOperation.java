@@ -25,7 +25,6 @@ import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.GitCommand;
-import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.SshSessionFactory;
@@ -233,10 +232,13 @@ public abstract class GitOperation {
         }
     }
 
-    public void onTaskEnded(String result) {
+    /**
+     * Action to execute on error
+     */
+    public void onError(String errorMessage) {
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
-                setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + result).
+                setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + errorMessage).
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -244,5 +246,11 @@ public abstract class GitOperation {
                         callingActivity.finish();
                     }
                 }).show();
+    }
+
+    /**
+     * Action to execute on success
+     */
+    public void onSuccess() {
     }
 }

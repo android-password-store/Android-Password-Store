@@ -44,11 +44,11 @@ public class PushOperation extends GitOperation {
     }
 
     @Override
-    public void onTaskEnded(String result) {
+    public void onError(String errorMessage) {
         // TODO handle the "Nothing to push" case
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
-                setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + result).
+                setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage).
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
