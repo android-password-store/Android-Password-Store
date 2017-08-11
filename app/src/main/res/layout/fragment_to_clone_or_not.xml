@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/blue_grey_500"
     android:orientation="vertical"
-    tools:context="com.zeapo.pwdstore.ToCloneOrNot">
+    tools:context="com.zeapo.pwdstore.PasswordStore">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             android:layout_alignTop="@+id/main_clone_button"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:textSize="11sp" />
+            android:textSize="12sp" />
         <Button
             android:id="@+id/main_clone_button"
             android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="11sp"
+            android:textSize="12sp"
             tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>

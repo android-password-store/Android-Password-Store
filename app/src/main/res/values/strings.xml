@@ -213,4 +213,6 @@
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase</string>
     <string name="commit_hash">Commit hash</string>
+    <string name="crypto_password_edit_hint">p@ssw0rd!</string>
+    <string name="crypto_extra_edit_hint">username: something other extra content</string>
 </resources>

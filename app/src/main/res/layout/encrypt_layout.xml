@@ -58,6 +58,7 @@
             <EditText
                 android:id="@+id/crypto_password_edit"
                 android:layout_width="match_parent"
+                android:hint="@string/crypto_password_edit_hint"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:typeface="monospace" />
@@ -81,6 +82,7 @@
                 android:id="@+id/crypto_extra_edit"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
+                android:hint="@string/crypto_extra_edit_hint"
                 android:enabled="true"
                 android:typeface="monospace"
                 android:visibility="visible" />
