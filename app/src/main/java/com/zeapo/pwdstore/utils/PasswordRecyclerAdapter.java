@@ -83,6 +83,8 @@ public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             mode.getMenuInflater().inflate(R.menu.context_pass, menu);
+            // hide the fab
+            activity.findViewById(R.id.fab).setVisibility(View.GONE);
             return true;
         }
 
@@ -130,6 +132,8 @@ public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
                 it.remove();
             }
             mActionMode = null;
+            // show the fab
+            activity.findViewById(R.id.fab).setVisibility(View.VISIBLE);
         }
     };
 }
