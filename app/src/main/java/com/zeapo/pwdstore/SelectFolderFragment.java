@@ -68,6 +68,8 @@ public class SelectFolderFragment extends Fragment{
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        if (fab != null) fab.setVisibility(View.GONE);
 
         registerForContextMenu(recyclerView);
         return view;
