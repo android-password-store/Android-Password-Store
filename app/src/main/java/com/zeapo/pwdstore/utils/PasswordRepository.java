@@ -140,9 +140,9 @@ public class PasswordRepository {
         }
 
         // uninitialize the repo if the dir does not exist or is absolutely empty
-        if (!dir.exists() || !dir.isDirectory()) {
+        if (!dir.exists() || !dir.isDirectory() || dir.listFiles().length == 0) {
             settings.edit().putBoolean("repository_initialized", false).apply();
-        } else if (dir.listFiles().length > 0) {
+        } else {
             settings.edit().putBoolean("repository_initialized", true).apply();
         }
 
