@@ -33,9 +33,7 @@ public class SelectFolderFragment extends Fragment{
     }
 
     // store the pass files list in a stack
-    private Stack<ArrayList<PasswordItem>> passListStack;
     private Stack<File> pathStack;
-    private Stack<Integer> scrollPosition;
     private FolderRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
@@ -51,8 +49,6 @@ public class SelectFolderFragment extends Fragment{
         super.onCreate(savedInstanceState);
         String path = getArguments().getString("Path");
 
-        passListStack = new Stack<>();
-        scrollPosition = new Stack<>();
         pathStack = new Stack<>();
         recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) getActivity(), mListener,
                                                       PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
@@ -73,14 +69,6 @@ public class SelectFolderFragment extends Fragment{
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
 
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((PasswordStore) getActivity()).createPassword();
-            }
-        });
-
         registerForContextMenu(recyclerView);
         return view;
     }
@@ -92,13 +80,8 @@ public class SelectFolderFragment extends Fragment{
             mListener = new OnFragmentInteractionListener() {
                 public void onFragmentInteraction(PasswordItem item) {
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                        // push the current password list (non filtered plz!)
-                        passListStack.push(pathStack.isEmpty() ?
-                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context)) :
-                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context)));
                         //push the category were we're going
                         pathStack.push(item.getFile());
-                        scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
 
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
