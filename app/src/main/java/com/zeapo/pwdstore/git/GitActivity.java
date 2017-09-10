@@ -139,6 +139,8 @@ public class GitActivity extends AppCompatActivity {
                                     connection_mode_spinner.setSelection(1);
                                     connection_mode_spinner.setEnabled(false);
                                 }
+
+                                updateURI();
                             }
 
                             @Override
