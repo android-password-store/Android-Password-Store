@@ -655,6 +655,9 @@ public class PasswordStore extends AppCompatActivity {
                         }
                     }
                     updateListAdapter();
+                    if (plist != null) {
+                        plist.dismissActionMode();
+                    }
                     break;
             }
         }

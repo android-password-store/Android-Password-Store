@@ -217,4 +217,10 @@ public class PasswordFragment extends Fragment{
     public boolean isNotEmpty() {
         return !passListStack.isEmpty();
     }
+
+    public void dismissActionMode() {
+        if (recyclerAdapter != null && recyclerAdapter.mActionMode != null) {
+            recyclerAdapter.mActionMode.finish();
+        }
+    }
 }

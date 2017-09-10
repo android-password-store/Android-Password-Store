@@ -17,7 +17,7 @@ import java.util.TreeSet;
 public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
     private final PasswordStore activity;
     private final PasswordFragment.OnFragmentInteractionListener listener;
-    private ActionMode mActionMode;
+    public ActionMode mActionMode;
     private Boolean canEdit;
 
     // Provide a suitable constructor (depends on the kind of dataset)
