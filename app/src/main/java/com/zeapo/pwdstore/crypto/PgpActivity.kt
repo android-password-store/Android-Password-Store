@@ -253,7 +253,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Encrypts the password and the extra content
      */
     private fun encrypt(): Unit {
-        val name = crypto_password_file_edit.text.toString()
+        val name = crypto_password_file_edit.text.toString().trim()
         val pass = crypto_password_edit.text.toString()
         val extra = crypto_extra_edit.text.toString()
 
