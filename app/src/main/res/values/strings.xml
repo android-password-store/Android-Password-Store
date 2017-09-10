@@ -98,6 +98,7 @@
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
     <string name="share_as_plaintext">Share as plaintext</string>
+    <string name="last_changed">Last changed %s</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>

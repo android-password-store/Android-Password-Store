@@ -43,6 +43,19 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/crypto_password_last_changed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:text="LAST CHANGED HERE"
+                android:textColor="@color/grey_500"
+                android:textIsSelectable="false"
+                android:textSize="18sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <ImageView

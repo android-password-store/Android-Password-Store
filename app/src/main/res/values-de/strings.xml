@@ -194,4 +194,5 @@
     <string name="autofill_ins_1_hint">Bildschirmfoto Accessibility Services</string>
     <string name="autofill_ins_2_hint">Bildschirmfoto des Schalters in Accessibility Services</string>
     <string name="autofill_ins_3_hint">Bildschirmfoto von Autofill in Aktion</string>
+    <string name="last_changed">Zuletzt geändert %s</string>
 </resources>
