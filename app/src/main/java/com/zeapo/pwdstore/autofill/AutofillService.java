@@ -248,7 +248,7 @@ public class AutofillService extends AccessibilityService {
     }
 
     private String searchWebView(AccessibilityNodeInfo source, int depth) {
-        if (source == null) {
+        if (source == null || depth == 0) {
             return null;
         }
         for (int i = 0; i < source.getChildCount(); i++) {
