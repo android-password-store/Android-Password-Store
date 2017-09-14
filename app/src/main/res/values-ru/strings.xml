@@ -188,4 +188,5 @@
     <string name="autofill_paste">Вставить</string>
     <string name="autofill_paste_username">Вставить имя пользователя?\n\n%s</string>
     <string name="autofill_toast_username">Выберите поле ввода для вставки имени пользователя.\nИмя пользователя можно вставить в течение %d секунд.</string>
+    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>

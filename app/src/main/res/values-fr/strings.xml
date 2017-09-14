@@ -186,4 +186,5 @@
     <string name="show_extra_content_pref_title">Afficher le contenu supplémentaire</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="ssh_key_does_not_exist">Impossible d\'ouvrir la clef ssh, merci de vérifier que le ficher existe</string>
+    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>

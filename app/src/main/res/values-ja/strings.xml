@@ -157,4 +157,5 @@
     <string name="no_repo_selected">外部リポジトリが選択されていません</string>
     <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
     <string name="show_password">パスワードを表示</string>
+    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>
