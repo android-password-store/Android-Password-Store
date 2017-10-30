@@ -595,7 +595,7 @@ public class GitActivity extends AppCompatActivity {
         } else {
             try {
                 // Silently delete & replace the lone .git folder if it exists
-                if (localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git")) {
+                if (localDir.exists() && localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git")) {
                     try {
                         FileUtils.deleteDirectory(localDir);
                     } catch (IOException e) {
