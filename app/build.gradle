@@ -10,8 +10,8 @@ android {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 89
-        versionName "1.2.0.69"
+        versionCode 90
+        versionName "1.2.0.70-alpha"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
