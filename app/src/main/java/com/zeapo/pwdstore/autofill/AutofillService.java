@@ -199,6 +199,7 @@ public class AutofillService extends AccessibilityService {
         // we are now going to attempt to fill, save AccessibilityNodeInfo for later in decryptAndVerify
         // (there should be a proper way to do this, although this seems to work 90% of the time)
         info = event.getSource();
+        if (info == null) return;
 
         // save the dialog's corresponding window so we can use getWindows() in dismissDialog
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
