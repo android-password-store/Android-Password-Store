@@ -377,8 +377,7 @@ public class AutofillService extends AccessibilityService {
     }
 
     private ArrayList<File> searchPasswords(File path, String appName) {
-        ArrayList<File> passList
-                = PasswordRepository.getFilesList(path);
+        ArrayList<File> passList = PasswordRepository.getFilesList(path);
 
         if (passList.size() == 0) return new ArrayList<>();
 

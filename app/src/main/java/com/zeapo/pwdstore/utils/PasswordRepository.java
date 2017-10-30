@@ -166,7 +166,7 @@ public class PasswordRepository {
      * @return the list of gpg files in that directory
      */
     public static ArrayList<File> getFilesList(File path) {
-        if (!path.exists()) return new ArrayList<>();
+        if (path == null || !path.exists()) return new ArrayList<>();
 
         Log.d("REPO", "current path: " + path.getPath());
         List<File> directories = Arrays.asList(path.listFiles((FileFilter) FileFilterUtils.directoryFileFilter()));
