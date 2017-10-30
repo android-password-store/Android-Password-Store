@@ -212,6 +212,7 @@ public class AutofillService extends AccessibilityService {
         // Match with the app if a webview was not found or one was found but
         // there's no title or url to go by
         if (webViewTitle == null || (webViewTitle.equals("") && webViewURL == null)) {
+            if (info.getPackageName() == null) return;
             packageName = info.getPackageName().toString();
 
             // get the app name and find a corresponding password
@@ -248,7 +249,7 @@ public class AutofillService extends AccessibilityService {
     }
 
     private String searchWebView(AccessibilityNodeInfo source, int depth) {
-        if (source == null) {
+        if (source == null || depth == 0) {
             return null;
         }
         for (int i = 0; i < source.getChildCount(); i++) {
