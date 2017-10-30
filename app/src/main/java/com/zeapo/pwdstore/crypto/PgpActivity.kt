@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.crypto
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.*
@@ -33,22 +34,22 @@ import java.io.File
 import java.nio.charset.Charset
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
-    val clipboard: ClipboardManager by lazy {
+    private val clipboard: ClipboardManager by lazy {
         getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
-    var passwordEntry: PasswordEntry? = null
-    var api: OpenPgpApi? = null
+    private var passwordEntry: PasswordEntry? = null
+    private var api: OpenPgpApi? = null
 
-    val operation: String by lazy { intent.getStringExtra("OPERATION") }
-    val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
+    private val operation: String by lazy { intent.getStringExtra("OPERATION") }
+    private val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
-    val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
-    val name: String by lazy { getName(fullPath, repoPath) }
-    val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
+    private val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
+    private val name: String by lazy { getName(fullPath, repoPath) }
+    private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
-    val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-    val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
-    var mServiceConnection: OpenPgpServiceConnection? = null
+    private val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    private val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
+    private var mServiceConnection: OpenPgpServiceConnection? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,7 +131,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Shows a simple toast message
      */
-    fun showToast(message: String) {
+    private fun showToast(message: String) {
         runOnUiThread({ Toast.makeText(this, message, Toast.LENGTH_SHORT).show() })
     }
 
@@ -140,7 +141,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * @param result The intent returned by OpenKeychain
      * @param requestCode The code we'd like to use to identify the behaviour
      */
-    fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
+    private fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
         Log.i(TAG, "RESULT_CODE_USER_INTERACTION_REQUIRED")
 
         val pi: PendingIntent = result.getParcelableExtra(RESULT_INTENT)
@@ -158,7 +159,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      *
      * @param result The intent returned by OpenKeychain
      */
-    fun handleError(result: Intent) {
+    private fun handleError(result: Intent) {
         // TODO show what kind of error it is
         /* For example:
          * No suitable key found -> no key in OpenKeyChain
@@ -171,7 +172,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         Log.e(TAG, "onError getMessage:" + error.message)
     }
 
-    fun initOpenPgpApi() {
+    private fun initOpenPgpApi() {
         api = api ?: OpenPgpApi(this, mServiceConnection?.service)
     }
 
@@ -252,7 +253,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt(): Unit {
+    private fun encrypt() {
         val name = crypto_password_file_edit.text.toString().trim()
         val pass = crypto_password_edit.text.toString()
         val extra = crypto_extra_edit.text.toString()
@@ -315,7 +316,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Opens EncryptActivity with the information for this file to be edited
      */
-    fun editPassword() {
+    private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
 
         title = getString(R.string.edit_password_title)
@@ -342,7 +343,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Get the Key ids from OpenKeychain
      */
-    fun getKeyIds(receivedIntent: Intent? = null) {
+    private fun getKeyIds(receivedIntent: Intent? = null) {
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_GET_KEY_IDS
         api?.executeApiAsync(data, null, null, { result: Intent? ->
@@ -420,6 +421,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             return if (shown) charSequence else super.getTransformation("12345", view)
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -435,9 +437,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
-    fun copyPasswordToClipBoard() {
-
-        if (findViewById(R.id.crypto_password_show) == null)
+    private fun copyPasswordToClipBoard() {
+        if (findViewById<TextView>(R.id.crypto_password_show) == null)
             return
 
         setTimer()
@@ -455,15 +456,15 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         showToast(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
     }
 
-    fun copyUsernameToClipBoard(username: String) {
+    private fun copyUsernameToClipBoard(username: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
         clipboard.primaryClip = clip
         showToast(resources.getString(R.string.clipboard_username_toast_text))
     }
 
 
-    fun shareAsPlaintext() {
-        if (findViewById(R.id.share_password_as_plaintext) == null)
+    private fun shareAsPlaintext() {
+        if (findViewById<View>(R.id.share_password_as_plaintext) == null)
             return
 
         val sendIntent = Intent()
@@ -473,7 +474,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_plaintext_password_to)))//Always show a picker to give the user a chance to cancel
     }
 
-    fun setTimer() {
+    private fun setTimer() {
         delayTask?.skip = true
 
         // launch a new one
@@ -481,29 +482,30 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         delayTask?.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
+    @SuppressLint("StaticFieldLeak")
     inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
-        internal val pb: ProgressBar by lazy { pbLoading }
+        private val pb: ProgressBar by lazy { pbLoading }
         internal var skip = false
-        internal var showTime: Int = 0
+        private var showTime: Int = 0
 
         val settings: SharedPreferences by lazy {
             PreferenceManager.getDefaultSharedPreferences(activity)
         }
 
         override fun onPreExecute() {
-            try {
-                showTime = Integer.parseInt(settings.getString("general_show_time", "45"))
+            showTime = try {
+                Integer.parseInt(settings.getString("general_show_time", "45"))
             } catch (e: NumberFormatException) {
-                showTime = 45
+                45
             }
 
-            val container = findViewById(R.id.crypto_container_decrypt) as LinearLayout
+            val container = findViewById<LinearLayout>(R.id.crypto_container_decrypt)
             container.visibility = View.VISIBLE
 
-            val extraText = findViewById(R.id.crypto_extra_show) as TextView
+            val extraText = findViewById<TextView>(R.id.crypto_extra_show)
 
             if (extraText.text.isNotEmpty())
-                findViewById(R.id.crypto_extra_show_layout).visibility = View.VISIBLE
+                findViewById<View>(R.id.crypto_extra_show_layout).visibility = View.VISIBLE
 
             if (showTime == 0) {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own

@@ -272,7 +272,7 @@ class UserPreference : AppCompatActivity() {
      * @param reason The text to be shown to the user to explain why we're requesting this permission
      * @param body The function to run
      */
-    fun runWithPermissions(requestedPermission: String, requestCode: Int, reason: String, body: () -> Unit): Unit {
+    private fun runWithPermissions(requestedPermission: String, requestCode: Int, reason: String, body: () -> Unit): Unit {
         if (ContextCompat.checkSelfPermission(this, requestedPermission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermission)) {
                 val snack = Snackbar.make(prefsFragment.view,
@@ -283,7 +283,7 @@ class UserPreference : AppCompatActivity() {
                         }
                 snack.show()
                 val view = snack.view
-                val tv = view.findViewById(android.support.design.R.id.snackbar_text) as TextView
+                val tv = view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
                 tv.setTextColor(Color.WHITE)
                 tv.maxLines = 10
             } else {
@@ -310,7 +310,7 @@ class UserPreference : AppCompatActivity() {
     /**
      * Exports the passwords
      */
-    fun exportPasswords(): Unit {
+    private fun exportPasswords(): Unit {
         val i = Intent(applicationContext, FilePickerActivity::class.java)
 
         // Set these depending on your use case. These are the defaults.
