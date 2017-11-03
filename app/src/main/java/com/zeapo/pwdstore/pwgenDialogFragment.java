@@ -70,7 +70,7 @@ public class pwgenDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 EditText edit = (EditText) callingActivity.findViewById(R.id.crypto_password_edit);
                 TextView generate = (TextView) view.findViewById(R.id.passwordText);
-                edit.append(generate.getText());
+                edit.setText(generate.getText());
             }
         });
 
