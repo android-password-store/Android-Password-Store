@@ -77,10 +77,16 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             }
             "ENCRYPT" -> {
                 setContentView(R.layout.encrypt_layout)
+
+                generate_password?.setOnClickListener {
+                    pwgenDialogFragment().show(fragmentManager, "generator")
+                }
+
                 title = getString(R.string.new_password_title)
                 crypto_password_category.text = getRelativePath(fullPath, repoPath)
             }
         }
+
     }
 
     override fun onDestroy() {
@@ -115,17 +121,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    fun handleClick(view: View) {
-        when (view.id) {
-            R.id.generate_password -> {
-                val df = pwgenDialogFragment()
-                df.show(fragmentManager, "generator")
-                Log.wtf(TAG, "This should not happen.... PgpHandler.java#handleClick(View) default reached.")
-            }
-            else -> Log.wtf(TAG, "This should not happen.... PgpHandler.java#handleClick(View) default reached.")
-        }// should not happen
     }
 
     /**
@@ -318,6 +313,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      */
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
+        generate_password?.setOnClickListener {
+            pwgenDialogFragment().show(fragmentManager, "generator")
+        }
 
         title = getString(R.string.edit_password_title)
 

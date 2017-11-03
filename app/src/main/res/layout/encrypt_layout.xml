@@ -68,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:onClick="handleClick"
                 android:text="@string/pwd_generate_button" />
 
             <TextView
