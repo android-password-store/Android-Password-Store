@@ -41,4 +41,22 @@ public class PasswordEntryTest extends TestCase {
         assertFalse(new PasswordEntry("\n").hasUsername());
         assertFalse(new PasswordEntry("").hasUsername());
     }
+
+    public void testNoTotpUriPresent() {
+        PasswordEntry entry = new PasswordEntry("secret\nextra\nlogin: username\ncontent");
+        assertFalse(entry.hasTotp());
+        assertNull(entry.getTotpSecret());
+    }
+
+    public void testTotpUriInPassword() {
+        PasswordEntry entry = new PasswordEntry("otpauth://totp/test?secret=JBSWY3DPEHPK3PXP");
+        assertTrue(entry.hasTotp());
+        assertEquals("JBSWY3DPEHPK3PXP", entry.getTotpSecret());
+    }
+
+    public void testTotpUriInContent() {
+        PasswordEntry entry = new PasswordEntry("secret\nusername: test\notpauth://totp/test?secret=JBSWY3DPEHPK3PXP");
+        assertTrue(entry.hasTotp());
+        assertEquals("JBSWY3DPEHPK3PXP", entry.getTotpSecret());
+    }
 }

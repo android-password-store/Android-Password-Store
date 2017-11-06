@@ -20,6 +20,7 @@ import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.pwgenDialogFragment
+import com.zeapo.pwdstore.utils.Totp
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
 import org.apache.commons.io.FileUtils
@@ -32,6 +33,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.Charset
+import java.util.Date
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard: ClipboardManager by lazy {
@@ -229,6 +231,20 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 crypto_username_show_label.visibility = View.GONE
                                 crypto_copy_username.visibility = View.GONE
                             }
+                        }
+
+                        if (entry.hasTotp()) {
+                            crypto_totp_show.visibility = View.VISIBLE
+                            crypto_totp_show_label.visibility = View.VISIBLE
+                            crypto_copy_totp.visibility = View.VISIBLE
+
+                            crypto_copy_totp.setOnClickListener { copyTotpToClipBoard(Totp.calculateCode(entry.totpSecret, Date().time / 1000)) }
+                            crypto_totp_show.typeface = monoTypeface
+                            crypto_totp_show.text = Totp.calculateCode(entry.totpSecret, Date().time / 1000);
+                        } else {
+                            crypto_totp_show.visibility = View.GONE
+                            crypto_totp_show_label.visibility = View.GONE
+                            crypto_copy_totp.visibility = View.GONE
                         }
 
                         if (settings.getBoolean("copy_on_decrypt", true)) {
@@ -458,6 +474,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
         clipboard.primaryClip = clip
         showToast(resources.getString(R.string.clipboard_username_toast_text))
+    }
+
+    private fun copyTotpToClipBoard(code: String) {
+        val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
+        clipboard.primaryClip = clip
+        showToast(resources.getString(R.string.clipboard_totp_toast_text))
     }
 
 

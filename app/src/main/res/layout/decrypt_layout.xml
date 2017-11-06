@@ -148,13 +148,50 @@
                     android:textIsSelectable="true"
                     android:typeface="monospace" />
 
+                <ImageButton
+                    android:id="@+id/crypto_copy_totp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/copy_username"
+                    android:background="@color/background"
+                    android:src="@drawable/ic_content_copy"/>
+
+                <TextView
+                    android:id="@+id/crypto_totp_show_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/crypto_copy_totp"
+                    android:layout_toStartOf="@id/crypto_copy_totp"
+                    android:text="@string/totp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/crypto_totp_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/crypto_totp_show_label"
+                    android:layout_toLeftOf="@id/crypto_copy_totp"
+                    android:layout_toStartOf="@id/crypto_copy_totp"
+                    android:textColor="@android:color/black"
+                    android:textIsSelectable="true"
+                    android:typeface="monospace" />
+
                 <TextView
                     android:id="@+id/crypto_extra_show_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@id/crypto_username_show"
+                    android:layout_below="@id/crypto_totp_show"
                     android:text="@string/extra_content"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
