@@ -30,6 +30,7 @@
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
+    <string name="clipboard_totp_toast_text">TOTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
@@ -92,6 +93,7 @@
     <string name="password">Password:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
+    <string name="totp">TOTP:</string>
     <string name="edit_password">Edit password</string>
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>

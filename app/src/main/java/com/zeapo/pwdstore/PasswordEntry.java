@@ -1,5 +1,7 @@
 package com.zeapo.pwdstore;
 
+import android.net.Uri;
+
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -13,6 +15,7 @@ public class PasswordEntry {
     private final String extraContent;
     private final String password;
     private final String username;
+    private final String totpSecret;
 
     public PasswordEntry(final ByteArrayOutputStream os) throws UnsupportedEncodingException {
         this(os.toString("UTF-8"));
@@ -23,6 +26,7 @@ public class PasswordEntry {
         password = passContent[0];
         extraContent = passContent.length > 1 ? passContent[1] : "";
         username = findUsername();
+        totpSecret = findTotpSecret(decryptedContent);
     }
 
     public String getPassword() {
@@ -37,6 +41,10 @@ public class PasswordEntry {
         return username;
     }
 
+    public String getTotpSecret() {
+        return totpSecret;
+    }
+
     public boolean hasExtraContent() {
         return extraContent.length() != 0;
     }
@@ -45,6 +53,8 @@ public class PasswordEntry {
         return username != null;
     }
 
+    public boolean hasTotp() { return totpSecret != null; }
+
     private String findUsername() {
         final String[] extraLines = extraContent.split("\n");
         for (String line : extraLines) {
@@ -52,6 +62,15 @@ public class PasswordEntry {
                 if (line.toLowerCase().startsWith(field + ":")) {
                     return line.split(": *", 2)[1];
                 }
+            }
+        }
+        return null;
+    }
+
+    private String findTotpSecret(String decryptedContent) {
+        for (String line : decryptedContent.split("\n")) {
+            if (line.startsWith("otpauth://totp/")) {
+                return Uri.parse(line).getQueryParameter("secret");
             }
         }
         return null;
