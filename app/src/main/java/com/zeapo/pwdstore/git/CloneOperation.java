@@ -31,6 +31,7 @@ public class CloneOperation extends GitOperation {
     public CloneOperation setCommand(String uri) {
         this.command = Git.cloneRepository().
                 setCloneAllBranches(true).
+                setCloneSubmodules(true).
                 setDirectory(repository.getWorkTree()).
                 setURI(uri);
         return this;
