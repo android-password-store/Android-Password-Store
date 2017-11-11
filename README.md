@@ -110,5 +110,4 @@ This project uses three libraries:
 - [JGit](http://www.eclipse.org/jgit/) a pretty good git lib
 - [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for files manipulations
 
-
-[![Cookie](https://cdn.changetip.com/img/graphics/Cookie_Graphic.png)](https://www.changetip.com/tipme/zeapo)
+The icon used for this Application was made by [José García](https://www.iconfinder.com/josealonsogarcia) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) licence.
