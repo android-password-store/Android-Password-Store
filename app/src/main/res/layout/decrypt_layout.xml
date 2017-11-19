@@ -67,6 +67,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/crypto_password_show_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"

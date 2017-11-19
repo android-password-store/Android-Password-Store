@@ -199,6 +199,15 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             return@executeApiAsync
                         }
 
+                        if (entry.password.isEmpty()) {
+                            crypto_password_show.visibility = View.GONE
+                            crypto_password_show_label.visibility = View.GONE
+                        } else {
+                            crypto_password_show.visibility = View.VISIBLE
+                            crypto_password_show_label.visibility = View.VISIBLE
+                            crypto_password_show.typeface = monoTypeface
+                            crypto_password_show.text = entry.password
+                        }
                         crypto_password_show.typeface = monoTypeface
                         crypto_password_show.text = entry.password
 
