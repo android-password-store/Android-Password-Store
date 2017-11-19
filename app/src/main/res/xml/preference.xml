@@ -78,27 +78,27 @@
             android:title="@string/pref_recursive_filter" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_autofill_title">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="autofill_enable"
-            android:title="@string/pref_autofill_enable_title"/>
-        <Preference
-            android:dependency="autofill_enable"
-            android:key="autofill_apps"
-            android:title="@string/pref_autofill_apps_title"/>
-        <CheckBoxPreference
-            android:dependency="autofill_enable"
-            android:defaultValue="true"
-            android:key="autofill_default"
-            android:summary="@string/pref_autofill_default_hint"
-            android:title="@string/pref_autofill_default_title"/>
-        <CheckBoxPreference
-            android:dependency="autofill_enable"
-            android:defaultValue="false"
-            android:key="autofill_always"
-            android:title="@string/pref_autofill_always_title"/>
-    </PreferenceCategory>
+    <!--<PreferenceCategory android:title="@string/pref_autofill_title">-->
+        <!--<CheckBoxPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:key="autofill_enable"-->
+            <!--android:title="@string/pref_autofill_enable_title"/>-->
+        <!--<Preference-->
+            <!--android:dependency="autofill_enable"-->
+            <!--android:key="autofill_apps"-->
+            <!--android:title="@string/pref_autofill_apps_title"/>-->
+        <!--<CheckBoxPreference-->
+            <!--android:dependency="autofill_enable"-->
+            <!--android:defaultValue="true"-->
+            <!--android:key="autofill_default"-->
+            <!--android:summary="@string/pref_autofill_default_hint"-->
+            <!--android:title="@string/pref_autofill_default_title"/>-->
+        <!--<CheckBoxPreference-->
+            <!--android:dependency="autofill_enable"-->
+            <!--android:defaultValue="false"-->
+            <!--android:key="autofill_always"-->
+            <!--android:title="@string/pref_autofill_always_title"/>-->
+    <!--</PreferenceCategory>-->
 
     <PreferenceCategory android:title="@string/pref_misc_title">
         <Preference

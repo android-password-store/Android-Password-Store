@@ -1,20 +1,16 @@
 package com.zeapo.pwdstore
 
 import android.Manifest
-import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.preference.CheckBoxPreference
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
-import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -22,11 +18,9 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
-import android.view.accessibility.AccessibilityManager
 import android.widget.TextView
 import android.widget.Toast
 import com.nononsenseapps.filepicker.FilePickerActivity
-import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -134,6 +128,7 @@ class UserPreference : AppCompatActivity() {
             findPreference("pref_select_external").onPreferenceChangeListener = resetRepo
             findPreference("git_external").onPreferenceChangeListener = resetRepo
 
+            /*
             findPreference("autofill_apps").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
@@ -147,6 +142,7 @@ class UserPreference : AppCompatActivity() {
                 }.setNegativeButton(R.string.dialog_cancel, null).setOnDismissListener { (findPreference("autofill_enable") as CheckBoxPreference).isChecked = (activity as UserPreference).isServiceEnabled }.show()
                 true
             }
+            */
 
             findPreference("export_passwords").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 callingActivity.exportPasswordsWithPermissions()
@@ -166,14 +162,15 @@ class UserPreference : AppCompatActivity() {
             if (selectedKeys.isEmpty()) {
                 keyPref.summary = "No key selected"
             } else {
-                keyPref.summary = selectedKeys.joinToString(separator = ";") {
-                    s ->
+                keyPref.summary = selectedKeys.joinToString(separator = ";") { s ->
                     OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
                 }
             }
 
             // see if the autofill service is enabled and check the preference accordingly
+            /*
             (findPreference("autofill_enable") as CheckBoxPreference).isChecked = (activity as UserPreference).isServiceEnabled
+            */
         }
     }
 
@@ -348,6 +345,7 @@ class UserPreference : AppCompatActivity() {
     }
 
     // Returns whether the autofill service is enabled
+    /*
     private val isServiceEnabled: Boolean
         get() {
             val am = this
@@ -356,6 +354,7 @@ class UserPreference : AppCompatActivity() {
                     .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices.any { "com.zeapo.pwdstore/.autofill.AutofillService" == it.id }
         }
+        */
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
