@@ -235,14 +235,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username) }
                                 crypto_username_show.typeface = monoTypeface
                                 crypto_username_show.text = entry.username
-                            } else {
-                                crypto_username_show.visibility = View.GONE
-                                crypto_username_show_label.visibility = View.GONE
-                                crypto_copy_username.visibility = View.GONE
                             }
                         }
 
                         if (entry.hasTotp()) {
+                            crypto_extra_show_layout.visibility = View.VISIBLE
+                            crypto_extra_show.typeface = monoTypeface
+                            crypto_extra_show.text = entry.extraContent
+
                             crypto_totp_show.visibility = View.VISIBLE
                             crypto_totp_show_label.visibility = View.VISIBLE
                             crypto_copy_totp.visibility = View.VISIBLE
