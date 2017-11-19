@@ -495,7 +495,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun setTimer() {
-        delayTask?.skip = true
+        // if the previous task is still running, do not ask it to clear the password
+        if (delayTask?.status == AsyncTask.Status.RUNNING) {
+            delayTask?.skip = true
+        }
 
         // launch a new one
         delayTask = DelayShow(this)
