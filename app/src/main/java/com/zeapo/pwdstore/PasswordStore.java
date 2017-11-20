@@ -418,7 +418,7 @@ public class PasswordStore extends AppCompatActivity {
             ShortcutInfo shortcut = new ShortcutInfo.Builder(this, item.getFullPathToParent())
                     .setShortLabel(item.toString())
                     .setLongLabel(item.getFullPathToParent() + item.toString())
-                    .setIcon(Icon.createWithResource(this, R.drawable.ic_launcher))
+                    .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
                     .setIntent(intent.setAction("DECRYPT_PASS")) // Needs action
                     .build();
             List<ShortcutInfo> shortcuts = shortcutManager.getDynamicShortcuts();

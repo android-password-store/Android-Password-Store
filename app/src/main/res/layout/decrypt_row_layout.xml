@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/decrypt_row_layout"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="vertical"
+    android:minHeight="71dp"
+    android:padding="7dp">
+
+    <TextView
+        android:id="@+id/decrypt_row_item_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Caption"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:textColor="@color/grey_600" />
+
+    <TextView
+        android:id="@+id/decrypt_row_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+</LinearLayout>
