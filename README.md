@@ -52,14 +52,14 @@ TODO
 
 Generate a ssh key for your git repo
 --------------------------------------------
-###From the application###
+### From the application
 - Go to **settings** > **Generate SSH key pair**
 - Select the key size (length)
 - Set the passphrase (optional) and a comment (optional)
 - Press **Generate**
 - Press **Copy** to copy the public key and add it to your ssh server
 
-###From a terminal###
+### From a terminal
 - Generate the private and public key
 ```
 ssh-keygen -C droid_phone -b 2048 -t rsa -f /tmp/id_rsa_droid
