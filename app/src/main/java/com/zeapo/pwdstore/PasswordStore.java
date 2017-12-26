@@ -42,7 +42,9 @@ import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -406,11 +408,40 @@ public class PasswordStore extends AppCompatActivity {
         }
     }
 
+    private String getRelativePath(String fullPath, String repositoryPath) {
+        return fullPath.replace(repositoryPath, "").replaceAll("/+", "/");
+    }
+
+    public int getLastChangedTimestamp(String fullPath) {
+        File repoPath = PasswordRepository.getRepositoryDirectory(this);
+        Repository repository = PasswordRepository.getRepository(repoPath);
+
+        if (repository == null) {
+            return -1;
+        }
+
+        Git git = new Git(repository);
+        String relativePath = getRelativePath(fullPath, repoPath.getAbsolutePath()).substring(1);
+        Iterable<RevCommit> iterable;
+
+        try {
+            iterable = git.log().addPath(relativePath).call();
+        } catch (GitAPIException e) {
+            System.out.println("Exception caught :(");
+            e.printStackTrace();
+            return -1;
+        }
+
+        RevCommit latestCommit = iterable.iterator().next();
+        return latestCommit.getCommitTime();
+    }
+
     public void decryptPassword(PasswordItem item) {
         Intent intent = new Intent(this, PgpActivity.class);
         intent.putExtra("NAME", item.toString());
         intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
         intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
+        intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.getFile().getAbsolutePath()));
         intent.putExtra("OPERATION", "DECRYPT");
 
         // Adds shortcut

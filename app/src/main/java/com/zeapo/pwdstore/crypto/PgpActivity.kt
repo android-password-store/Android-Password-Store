@@ -12,6 +12,7 @@ import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.*
@@ -20,6 +21,7 @@ import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.pwgenDialogFragment
+import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.Totp
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
@@ -47,6 +49,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     private val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
     private val name: String by lazy { getName(fullPath, repoPath) }
+    private val lastChangedString: CharSequence by lazy { getLastChangedString(intent.getIntExtra("LAST_CHANGED_TIMESTAMP", -1)) }
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
     private val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
@@ -76,6 +79,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.decrypt_layout)
                 crypto_password_category_decrypt.text = relativeParentPath
                 crypto_password_file.text = name
+
+                crypto_password_last_changed.text = try {
+                    this.resources.getString(R.string.last_changed, lastChangedString)
+                } catch (e: RuntimeException) {
+                    showToast(getString(R.string.get_last_changed_failed))
+                    ""
+                }
             }
             "ENCRYPT" -> {
                 setContentView(R.layout.encrypt_layout)
@@ -512,6 +522,18 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         // launch a new one
         delayTask = DelayShow(this)
         delayTask?.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
+
+    /**
+     * Gets a relative string describing when this shape was last changed
+     * (e.g. "one hour ago")
+     */
+    private fun getLastChangedString(timeStamp: Int): CharSequence {
+        if (timeStamp < 0) {
+            throw RuntimeException()
+        }
+
+        return DateUtils.getRelativeTimeSpanString(this, timeStamp.toLong() * 1000, true)
     }
 
     @SuppressLint("StaticFieldLeak")

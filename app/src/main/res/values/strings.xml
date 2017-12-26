@@ -98,6 +98,7 @@
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
     <string name="share_as_plaintext">Share as plaintext</string>
+    <string name="last_changed">Last changed %s</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
@@ -217,4 +218,5 @@
     <string name="commit_hash">Commit hash</string>
     <string name="crypto_password_edit_hint">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
+    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>
