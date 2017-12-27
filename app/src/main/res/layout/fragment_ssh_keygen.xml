@@ -35,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/ssh_keygen_passphrase"
+                android:importantForAccessibility="no"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
