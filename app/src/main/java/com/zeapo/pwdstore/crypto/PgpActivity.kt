@@ -246,6 +246,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 crypto_username_show.typeface = monoTypeface
                                 crypto_username_show.text = entry.username
                             }
+                            else {
+                                crypto_username_show.visibility = View.GONE
+                                crypto_username_show_label.visibility = View.GONE
+                                crypto_copy_username.visibility = View.GONE
+                            }
                         }
 
                         if (entry.hasTotp()) {
