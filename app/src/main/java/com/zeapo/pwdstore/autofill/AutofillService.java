@@ -424,12 +424,7 @@ public class AutofillService extends AccessibilityService {
         builder.setMessage(getString(R.string.autofill_paste_username, password.getUsername()));
 
         dialog = builder.create();
-        //noinspection ConstantConditions
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        } else {
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-        }
+        this.setDialogType(dialog);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
@@ -494,8 +489,7 @@ public class AutofillService extends AccessibilityService {
         });
 
         dialog = builder.create();
-        //noinspection ConstantConditions
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        this.setDialogType(dialog);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         // arbitrary non-annoying size
@@ -506,6 +500,15 @@ public class AutofillService extends AccessibilityService {
         dialog.getWindow().setLayout((int) (240 * getApplicationContext().getResources().getDisplayMetrics().density)
                 , (int) (height * getApplicationContext().getResources().getDisplayMetrics().density));
         dialog.show();
+    }
+
+    private void setDialogType(AlertDialog dialog) {
+        //noinspection ConstantConditions
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        } else {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
     }
 
     @Override
