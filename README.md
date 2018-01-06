@@ -83,7 +83,7 @@ gpg --export-secret-key [the_id] > keys.asc
 Clone using SSH-key, then decrypt a password
 --------------------------------------------
 
-<img src="tutorial_clone_ssh_then_decrypt.gif" alt="Clone And Decrypt" style="width:720px">
+<img src="tutorial_clone_ssh_then_decrypt.gif" alt="Clone And Decrypt" width="320">
 
 
 Features
