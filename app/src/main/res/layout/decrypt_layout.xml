@@ -133,6 +133,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:contentDescription="@string/copy_username"
+                    android:visibility="invisible"
                     android:background="@color/background"
                     android:src="@drawable/ic_content_copy"/>
 
