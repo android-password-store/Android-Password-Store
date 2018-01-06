@@ -173,7 +173,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_below="@id/crypto_username_show"
                     android:visibility="invisible"
-                    android:contentDescription="@string/copy_username"
+                    android:contentDescription="@string/copy_totp"
                     android:background="@color/background"
                     android:src="@drawable/ic_content_copy"/>
 
