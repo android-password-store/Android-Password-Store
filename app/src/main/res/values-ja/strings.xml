@@ -135,7 +135,7 @@
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
     <string name="dialog_positive">途中…</string>
-    <string name="dialog_negative">いや… later</string>
+    <string name="dialog_negative">いや…あとで</string>
     <string name="dialog_oops">おっと…</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="git_sync">リポジトリを同期</string>
@@ -157,5 +157,5 @@
     <string name="no_repo_selected">外部リポジトリが選択されていません</string>
     <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
     <string name="show_password">パスワードを表示</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
+    <string name="get_last_changed_failed">最終変更日の取得に失敗しました</string>
 </resources>
