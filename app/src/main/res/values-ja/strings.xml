@@ -24,7 +24,7 @@
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>
-    <string name="clipboard_password_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に張り付けしてください。</string>
+    <string name="clipboard_password_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に貼り付けしてください。</string>
     <string name="file_toast_text">ファイル名を入力してください</string>
     <string name="empty_toast_text">空のパスワードを使用したり、追加のコンテンツを空にすることはできません</string>
 
