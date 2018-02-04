@@ -1,6 +1,9 @@
 language: android
 jdk: oraclejdk8
 
+before_install:
+  - yes | sdkmanager "platforms;android-27"
+
 licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
