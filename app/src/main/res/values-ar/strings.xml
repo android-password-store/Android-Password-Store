@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+
+    <string name="action_settings">الإعدادات</string>
+    <string name="dialog_delete_title">إنّ المجلد موجود</string>
+    <string name="dialog_delete">حذف المجلد</string>
+    <string name="dialog_do_not_delete">إلغاء</string>
+    <string name="title_activity_git_clone">معلومات حول المستودع</string>
+    <string name="store_git">/store/.git</string>
+    <string name="delete_dialog_text">هل تود حقًا حذف كلمة السر "/</string>
+    <string name="move">نقل</string>
+    <string name="edit">تعديل</string>
+    <string name="delete">حذف</string>
+
+    <string name="from_store">&#160; مِن المخزن.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">لم يتم إختيار مزود الأوبن بي جي بي بعد !</string>
+    <string name="clipboard_username_toast_text">تم نسخ إسم المستخدم إلى الحافظة</string>
+    <string name="file_toast_text">الرجاء إدخال إسم ملف</string>
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">جاري تنفيذ الأمر ...</string>
+    <string name="jgit_error_dialog_text">رسالة مِن jgit: \n</string>
+
+    <!-- Git Handler -->
+    <string name="forget_username_dialog_text">هل نسيت إدخال إسم المستخدم ؟</string>
+    <string name="ssh_preferences_dialog_title">خال من مفاتيح الـ SSH</string>
+    <string name="ssh_preferences_dialog_import">إستيراد</string>
+    <string name="ssh_preferences_dialog_generate">توليد</string>
+    <string name="passphrase_dialog_title">المصادقة</string>
+    <!-- Clone fragment -->
+    <string name="clone">أنسخ مِن الخادوم</string>
+    <string name="initialize">إستخدام مجلد محلي</string>
+
+    <string name="server_name">الخادوم</string>
+    <string name="server_protocol">البروتوكول</string>
+    <string name="server_url">عنوان الخادوم</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">مسار المستودع</string>
+    <string name="server_path_hint">path/to/pass</string>
+    <string name="server_user">إسم المستخدم</string>
+    <string name="server_user_hint">git_username</string>
+
+    <string name="server_resulting_url">عنوان الرابط الناتج</string>
+    <string name="connection_mode">نوع المصادقة</string>
+
+    <string name="invalid_email_dialog_text">يرجى إدخال عنوان بريد إلكتروني صالح</string>
+    <string name="clone_button">أنسخ !</string>
+
+    <!-- PGP Handler -->
+    <string name="crypto_name_hint">التسمية</string>
+    <string name="crypto_pass_label">كلمة السر</string>
+    <string name="crypto_select">إختر</string>
+    <string name="crypto_cancel">إلغاء</string>
+    <string name="crypto_save">حفظ</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="action_search">البحث</string>
+    <string name="password">كلمة السر :</string>
+    <string name="extra_content">بيانات إضافية :</string>
+    <string name="username">إسم المستخدم :</string>
+    <string name="totp">TOTP :</string>
+    <string name="edit_password">تعديل كلمة السر</string>
+    <string name="copy_password">نسخ كلمة السر</string>
+    <string name="copy_username">نسخ إسم المستخدم</string>
+    <string name="copy_totp">نسخ رمز الـ OTP</string>
+    <string name="share_as_plaintext">شارك كنص مجرد</string>
+    <string name="last_changed">آخِر تعديل %s</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">جيت</string>
+    <string name="pref_edit_server_info">تعديل إعدادات خادوم جيت</string>
+    <string name="pref_ssh_title">إستيراد مفتاح الـ SSH</string>
+    <string name="pref_ssh_keygen_title">توليد مفتاحَي الـ SSH</string>
+    <string name="pref_ssh_see_key_title">إظهار مفتاح الـ SSH العمومي الذي تم توليده</string>
+    <string name="pref_git_delete_repo">حذف المستودع</string>
+    <string name="pref_dialog_delete_title">تنحية المستودع</string>
+    <string name="pref_crypto_title">التشفير</string>
+    <string name="pref_provider_title">إختيار مزود الأوبن بي جي بي OpenPGP</string>
+    <string name="pref_general_title">الإعدادات العامة</string>
+    <string name="pref_password_title">مدة الإبقاء على كلمة السر ظاهرة</string>
+    <string name="pref_copy_title">نسخ كلمة السر تلقائيًا</string>
+    <string name="ssh_key_success_dialog_title">تم استيراد مفتاح الـ SSH</string>
+    <string name="ssh_key_error_dialog_title">حدث هناك خطأ أثناء عملية إسترجاع مفتاح الـ SSH</string>
+    <string name="ssh_key_error_dialog_text">نص الرسالة : \n</string>
+    <string name="pref_autofill_title">الملئ التلقائي</string>
+    <string name="pref_autofill_enable_title">تشغيل الملئ التلقائي</string>
+    <string name="pref_autofill_apps_title">إعدادات التطبيق و الموقع</string>
+    <string name="pref_autofill_default_title">تطابق تلقائي إفتراضي</string>
+    <string name="pref_autofill_always_title">إظهار مربع الحوار دائما</string>
+    <string name="pref_misc_title">أخرى</string>
+    <string name="pref_clear_clipboard_title">تنظيف الحافظة 20 مرة</string>
+    <string name="pref_external_repository">مستودع تخزين خارجي</string>
+    <string name="pref_external_repository_summary">إستخدم كلمة مرور المستودع الخارجي</string>
+    <string name="pref_select_external_repository">إختيار مستودع التخزين الخارجي</string>
+    <string name="prefs_use_default_file_picker">إستخدم أداة إختيار الملفات الإفتراضي</string>
+    <string name="prefs_clear_after_copy_title">تنظيف الحافظة مباشرةً بعد النسخ</string>
+    <string name="prefs_export_passwords_title">تصدير كلمات السر</string>
+    <string name="prefs_version">النسخة</string>
+
+    <!-- pwgen fragment -->
+    <string name="pwgen_generate">توليد</string>
+    <string name="pwgen_include">تحتوي على</string>
+    <string name="pwgen_length">الطول</string>
+    <string name="pwgen_numerals">أرقام</string>
+    <string name="pwgen_symbols">رموز</string>
+    <string name="pwgen_uppercase">حروف كبيرة</string>
+    <string name="pwgen_ambiguous">مبهمة</string>
+    <string name="pwgen_pronounceable">منطوقة</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">الطول</string>
+    <string name="ssh_keygen_passphrase">العبارة السرية</string>
+    <string name="ssh_keygen_comment">تعليق</string>
+    <string name="ssh_keygen_generate">توليد</string>
+    <string name="ssh_keygen_copy">نسخ</string>
+    <string name="ssh_keygen_show_passphrase">إظهار العبارة السرية</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">حسناً</string>
+    <string name="dialog_yes">نعم</string>
+    <string name="dialog_no">لا</string>
+    <string name="dialog_negative">لا … لاحقاً</string>
+    <string name="dialog_cancel">إلغاء</string>
+    <string name="git_sync">زامن المستودع</string>
+    <string name="show_password_pref_title">إظهار كلمة السر</string>
+    <string name="show_extra_content_pref_title">إظهار المزيد من المحتوى</string>
+    <string name="pwd_generate_button">توليد</string>
+    <string name="refresh_list">تحديث القائمة</string>
+    <string name="show_password">إظهار كلمة السر</string>
+    <string name="repository_uri">عنوان المستودع</string>
+    <string name="app_icon_hint">أيقونة التطبيق</string>
+    <string name="folder_icon_hint">أيقونة المجلد</string>
+
+    <string name="autofill_apps_default">إستخدم الإعداد الإفتراضي</string>
+    <string name="autofill_apps_match_ellipsis">طابق مع ...</string>
+    <string name="autofill_apps_match">طابق مع</string>
+    <string name="autofill_apps_never">لا تطابق أبدا</string>
+    <string name="autofill_apps_delete">حذف</string>
+    <string name="autofill_pick">إختر</string>
+    <string name="autofill_pick_and_match">إختر و طابق مع ...</string>
+    <string name="autofill_paste">إلصاق</string>
+    <string name="new_password_title">كلمة السر الجديدة</string>
+    <string name="crypto_password_edit_hint">p@ssw0rd!</string>
+    </resources>
