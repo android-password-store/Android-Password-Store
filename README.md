@@ -4,6 +4,7 @@ PwdStore
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zeapo/android-password-store?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-blue.svg?style=flat)](https://android-arsenal.com/details/1/1208)
 [![Build Status](https://travis-ci.org/zeapo/Android-Password-Store.svg?branch=travis)](https://travis-ci.org/zeapo/Android-Password-Store)
+[![Backers on Open Collective](https://opencollective.com/Android-Password-Store/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Android-Password-Store/sponsors/badge.svg)](#sponsors) 
 
 **Donations**: 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=zeapo&url=https://github.com/zeapo/Android-Password-Store&title=Android-Password-Store&language=en&tags=github&category=software) or bitcoin at `1H1Z1NPTrR5Cej9bKV3Hu4f5WJZYtkbpox`
@@ -109,3 +110,33 @@ This project uses three libraries:
 
 - [JGit](http://www.eclipse.org/jgit/) a pretty good git lib
 - [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for files manipulations
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/Android-Password-Store/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/Android-Password-Store#backer)]
+
+<a href="https://opencollective.com/Android-Password-Store#backers" target="_blank"><img src="https://opencollective.com/Android-Password-Store/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/Android-Password-Store#sponsor)]
+
+<a href="https://opencollective.com/Android-Password-Store/sponsor/0/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/1/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/2/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/3/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/4/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/5/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/6/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/7/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/8/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/Android-Password-Store/sponsor/9/website" target="_blank"><img src="https://opencollective.com/Android-Password-Store/sponsor/9/avatar.svg"></a>
+
+
