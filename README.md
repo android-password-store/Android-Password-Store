@@ -1,3 +1,6 @@
+# Looking for a maintainer #
+I tried to delay this day as much as possible. However, I no longer have the time to work on this project... If someone is interested ping me!
+
 PwdStore
 ========
 [![IRC](irc_badge.png)](https://webchat.freenode.net/?channels=%23Android-Password-Store&uio=d4)
