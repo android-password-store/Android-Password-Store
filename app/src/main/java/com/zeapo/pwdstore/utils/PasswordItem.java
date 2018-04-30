@@ -55,7 +55,7 @@ public class PasswordItem implements Comparable{
         return this.type;
     }
 
-    private String getName(){
+    String getName(){
         return this.name;
     }
 
