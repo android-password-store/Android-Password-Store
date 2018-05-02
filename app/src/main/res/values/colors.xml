@@ -15,4 +15,5 @@
     <color name="grey_black_1000">#000000</color>
     <color name="teal_900">#004d40</color>
     <color name="teal_A700">#00bfa5</color>
+    <color name="ic_launcher_background">#D4F1EA</color>
 </resources>

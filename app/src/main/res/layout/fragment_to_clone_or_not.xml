@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher"
+            android:src="@mipmap/ic_launcher"
             android:contentDescription="@string/app_icon_hint"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
