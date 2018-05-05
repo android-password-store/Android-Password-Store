@@ -11,7 +11,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 // TODO more work needed, this is just an extraction from PgpHandler
 
 class SelectFolderActivity : AppCompatActivity() {
-    internal var passwordList: SelectFolderFragment? = null
+    private var passwordList: SelectFolderFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

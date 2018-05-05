@@ -2,6 +2,7 @@ package com.zeapo.pwdstore;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.Binds;
+
 /**
  * A fragment representing a list of Items.
  * <p />
@@ -35,7 +40,10 @@ public class SelectFolderFragment extends Fragment{
     // store the pass files list in a stack
     private Stack<File> pathStack;
     private FolderRecyclerAdapter recyclerAdapter;
-    private RecyclerView recyclerView;
+    @BindView(R.id.pass_recycler)
+    RecyclerView recyclerView;
+    @BindView(R.id.fab)
+    FloatingActionButton floatingActionButton;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -55,12 +63,13 @@ public class SelectFolderFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
+        ButterKnife.bind(this, view);
+
         // use a linear layout manager
-        recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // use divider
@@ -68,8 +77,7 @@ public class SelectFolderFragment extends Fragment{
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        if (fab != null) fab.setVisibility(View.GONE);
+        if (floatingActionButton != null) floatingActionButton.setVisibility(View.GONE);
 
         registerForContextMenu(recyclerView);
         return view;

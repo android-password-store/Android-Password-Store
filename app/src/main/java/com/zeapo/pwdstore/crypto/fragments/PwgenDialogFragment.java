@@ -1,17 +1,14 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.crypto.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +16,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.zeapo.pwdstore.pwgen.RandomPasswordGenerator;
-import com.zeapo.pwdstore.pwgen.pwgen;
+import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.crypto.RandomPasswordGenerator;
 
 import java.util.ArrayList;
 
@@ -28,11 +25,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
 import dagger.android.DaggerDialogFragment;
-import dagger.android.HasFragmentInjector;
-import dagger.android.support.AndroidSupportInjection;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.pwgen;
+package com.zeapo.pwdstore.crypto;
 
 import android.content.Context;
 import android.content.SharedPreferences;

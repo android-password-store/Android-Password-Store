@@ -4,9 +4,6 @@ import android.app.Application;
 
 import com.zeapo.pwdstore.PasswordStoreApplication;
 import com.zeapo.pwdstore.di.builder.ActivityBuilder;
-import com.zeapo.pwdstore.di.modules.FragmentModule;
-import com.zeapo.pwdstore.di.modules.RandomModule;
-import com.zeapo.pwdstore.di.modules.RandomPasswordGeneratorModule;
 
 import javax.inject.Singleton;
 

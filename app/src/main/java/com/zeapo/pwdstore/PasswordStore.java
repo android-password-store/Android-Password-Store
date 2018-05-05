@@ -35,7 +35,7 @@ import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
 import com.zeapo.pwdstore.git.GitOperation;
-import com.zeapo.pwdstore.pwgen.PRNGFixes;
+import com.zeapo.pwdstore.crypto.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;

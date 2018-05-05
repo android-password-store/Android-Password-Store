@@ -19,7 +19,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.zeapo.pwdstore.PasswordEntry
-import com.zeapo.pwdstore.PwgenDialogFragment
+import com.zeapo.pwdstore.crypto.fragments.PwgenDialogFragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.utils.Totp
@@ -74,9 +74,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound, HasFr
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         pwgenDialogFragment = PwgenDialogFragment()
-        fragmentManager.beginTransaction()
-                .add(R.id., pwgenDialogFragment)
-                .commit()
 
         // some persistence
         val providerPackageName = settings.getString("openpgp_provider_list", "")
