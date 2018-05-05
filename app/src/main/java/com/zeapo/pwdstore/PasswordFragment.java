@@ -22,6 +22,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A fragment representing a list of Items.
  * <p />
@@ -40,7 +43,8 @@ public class PasswordFragment extends Fragment{
     private Stack<File> pathStack;
     private Stack<Integer> scrollPosition;
     private PasswordRecyclerAdapter recyclerAdapter;
-    private RecyclerView recyclerView;
+    @BindView(R.id.pass_recycler)
+    RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
     private SharedPreferences settings;
 
@@ -67,11 +71,11 @@ public class PasswordFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
+        ButterKnife.bind(this, view);
 
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
 
         // use divider

@@ -38,10 +38,48 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SshKeyGen extends AppCompatActivity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle("Generate SSH Key");
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new SshKeyGenFragment()).commit();
+        }
+    }
+
+    // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
+    // private and public key, then replaces the SshKeyGenFragment with a
+    // ShowSshKeyFragment which displays the public key.
+    public void generate(View view) {
+        String length = Integer.toString((Integer) ((Spinner) findViewById(R.id.length)).getSelectedItem());
+        String passphrase = ((EditText) findViewById(R.id.passphrase)).getText().toString();
+        String comment = ((EditText) findViewById(R.id.comment)).getText().toString();
+        new generateTask().execute(length, passphrase, comment);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     // SSH key generation UI
     public static class SshKeyGenFragment extends Fragment {
+        @BindView(R.id.length)
+        Spinner spinner;
+        @BindView(R.id.show_passphrase)
+        CheckBox checkbox;
+        @BindView(R.id.passphrase)
+        EditText editText;
+
         public SshKeyGenFragment() {
         }
 
@@ -49,21 +87,18 @@ public class SshKeyGen extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View v = inflater.inflate(R.layout.fragment_ssh_keygen, container, false);
+            ButterKnife.bind(this, v);
             Typeface monoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/sourcecodepro.ttf");
 
-            Spinner spinner = (Spinner) v.findViewById(R.id.length);
             Integer[] lengths = new Integer[]{2048, 4096};
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, lengths);
+
             spinner.setAdapter(adapter);
-
-            ((EditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
-
-            CheckBox checkbox = (CheckBox) v.findViewById(R.id.show_passphrase);
+            editText.setTypeface(monoTypeface);
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    EditText editText = (EditText) v.findViewById(R.id.passphrase);
                     int selection = editText.getSelectionEnd();
                     if (isChecked) {
                         editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -80,6 +115,9 @@ public class SshKeyGen extends AppCompatActivity {
 
     // Displays the generated public key .ssh_key.pub
     public static class ShowSshKeyFragment extends DialogFragment {
+        @BindView(R.id.public_key)
+        TextView textView;
+
         public ShowSshKeyFragment() {
         }
 
@@ -90,7 +128,6 @@ public class SshKeyGen extends AppCompatActivity {
             @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
             builder.setView(v);
 
-            TextView textView = (TextView) v.findViewById(R.id.public_key);
             File file = new File(getActivity().getFilesDir() + "/.ssh_key.pub");
             try {
                 textView.setText(FileUtils.readFileToString(file));
@@ -133,22 +170,6 @@ public class SshKeyGen extends AppCompatActivity {
                 }
             });
             return ad;
-        }
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setTitle("Generate SSH Key");
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new SshKeyGenFragment()).commit();
         }
     }
 
@@ -214,18 +235,5 @@ public class SshKeyGen extends AppCompatActivity {
             }
 
         }
-    }
-
-    // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
-    // private and public key, then replaces the SshKeyGenFragment with a
-    // ShowSshKeyFragment which displays the public key.
-    public void generate(View view) {
-        String length = Integer.toString((Integer) ((Spinner) findViewById(R.id.length)).getSelectedItem());
-        String passphrase = ((EditText) findViewById(R.id.passphrase)).getText().toString();
-        String comment = ((EditText) findViewById(R.id.comment)).getText().toString();
-        new generateTask().execute(length, passphrase, comment);
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

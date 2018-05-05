@@ -72,6 +72,8 @@ dependencies {
     compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Testing-only dependencies
     androidTestCompile 'junit:junit:4.12'
