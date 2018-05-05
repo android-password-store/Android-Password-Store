@@ -2,6 +2,7 @@ package com.zeapo.pwdstore.crypto
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Fragment
 import android.app.PendingIntent
 import android.content.*
 import android.graphics.Typeface
@@ -18,11 +19,14 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.zeapo.pwdstore.PasswordEntry
+import com.zeapo.pwdstore.PwgenDialogFragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
-import com.zeapo.pwdstore.pwgenDialogFragment
-import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.Totp
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasFragmentInjector
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
 import org.apache.commons.io.FileUtils
@@ -35,9 +39,14 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.Charset
-import java.util.Date
+import java.util.*
+import javax.inject.Inject
 
-class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
+class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound, HasFragmentInjector {
+    override fun fragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentInjector
+    }
+
     private val clipboard: ClipboardManager by lazy {
         getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
@@ -55,10 +64,19 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
     private var mServiceConnection: OpenPgpServiceConnection? = null
+    private var pwgenDialogFragment: PwgenDialogFragment? = null
+
+    @Inject lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+
+        pwgenDialogFragment = PwgenDialogFragment()
+        fragmentManager.beginTransaction()
+                .add(R.id., pwgenDialogFragment)
+                .commit()
 
         // some persistence
         val providerPackageName = settings.getString("openpgp_provider_list", "")
@@ -91,7 +109,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    pwgenDialogFragment().show(fragmentManager, "generator")
+                    pwgenDialogFragment?.show(fragmentManager, "generator")
                 }
 
                 title = getString(R.string.new_password_title)
@@ -354,7 +372,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            pwgenDialogFragment().show(fragmentManager, "generator")
+            pwgenDialogFragment?.show(fragmentManager, "generator")
         }
 
         title = getString(R.string.edit_password_title)

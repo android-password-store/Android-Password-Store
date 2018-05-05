@@ -126,6 +126,7 @@ public class SshKeyGen extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
+            ButterKnife.bind(this, v);
             builder.setView(v);
 
             File file = new File(getActivity().getFilesDir() + "/.ssh_key.pub");

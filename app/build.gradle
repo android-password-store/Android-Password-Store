@@ -55,7 +55,15 @@ android {
     }
 }
 
+def daggerVersion = '2.16'
+
 dependencies {
+    implementation "com.google.dagger:dagger:${daggerVersion}"
+    implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    testAnnotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:recyclerview-v7:27.1.0'
     compile 'com.android.support:cardview-v7:27.1.0'

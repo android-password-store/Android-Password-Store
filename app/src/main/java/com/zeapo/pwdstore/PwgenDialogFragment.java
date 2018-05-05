@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,18 +19,26 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.zeapo.pwdstore.pwgen.RandomPasswordGenerator;
 import com.zeapo.pwdstore.pwgen.pwgen;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerDialogFragment;
+import dagger.android.HasFragmentInjector;
+import dagger.android.support.AndroidSupportInjection;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class pwgenDialogFragment extends DialogFragment {
+public class PwgenDialogFragment extends DaggerDialogFragment {
 
     @BindView(R.id.numerals)
     CheckBox checkBoxNumerals;
@@ -45,13 +55,13 @@ public class pwgenDialogFragment extends DialogFragment {
     @BindView(R.id.passwordText)
     TextView passwordText;
 
-    public pwgenDialogFragment() {
-    }
-
+    @Inject
+    RandomPasswordGenerator randomPasswordGenerator;
 
     @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        AndroidInjection.inject(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Activity callingActivity = getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
@@ -94,14 +104,14 @@ public class pwgenDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 setPreferences();
-                textViewLength.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+                textViewLength.setText(randomPasswordGenerator.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setPreferences();
-                        textViewLength.setText(pwgen.generate(callingActivity.getApplicationContext()).get(0));
+                        textViewLength.setText(randomPasswordGenerator.generate(callingActivity.getApplicationContext()).get(0));
                     }
                 });
             }
@@ -109,7 +119,7 @@ public class pwgenDialogFragment extends DialogFragment {
         return ad;
     }
 
-    private void setPreferences () {
+    private void setPreferences() {
         ArrayList<String> preferences = new ArrayList<>();
         if (!checkBoxNumerals.isChecked()) {
             preferences.add("0");
@@ -128,9 +138,9 @@ public class pwgenDialogFragment extends DialogFragment {
         }
         try {
             int length = Integer.valueOf(textViewLength.getText().toString());
-            pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
-        } catch(NumberFormatException e) {
-            pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
+            randomPasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences, length);
+        } catch (NumberFormatException e) {
+            randomPasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }
 }
