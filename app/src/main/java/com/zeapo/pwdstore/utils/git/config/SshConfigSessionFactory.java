@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.git.config;
+package com.zeapo.pwdstore.utils.git.config;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;

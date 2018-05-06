@@ -16,8 +16,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
         abortOnError true // make sure build failes with lint errors!
@@ -55,7 +55,20 @@ android {
     }
 }
 
+def daggerVersion = '2.16'
+
 dependencies {
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+// Because RxAndroid releases are few and far between, it is recommended you also
+// explicitly depend on RxJava's latest version for bug fixes and new features.
+// (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
+    implementation "com.google.dagger:dagger:${daggerVersion}"
+    implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    testAnnotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:recyclerview-v7:27.1.0'
     compile 'com.android.support:cardview-v7:27.1.0'
@@ -72,6 +85,8 @@ dependencies {
     compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Testing-only dependencies
     androidTestCompile 'junit:junit:4.12'

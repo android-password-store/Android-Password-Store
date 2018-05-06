@@ -1,9 +1,8 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.crypto.password.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -17,19 +16,40 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.zeapo.pwdstore.pwgen.pwgen;
+import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.crypto.password.RandomPasswordGenerator;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.android.DaggerDialogFragment;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class pwgenDialogFragment extends DialogFragment {
+public class PwgenDialogFragment extends DaggerDialogFragment {
 
-    public pwgenDialogFragment() {
-    }
+    @BindView(R.id.numerals)
+    CheckBox checkBoxNumerals;
+    @BindView(R.id.symbols)
+    CheckBox checkBoxSymbols;
+    @BindView(R.id.uppercase)
+    CheckBox checkBoxUppercase;
+    @BindView(R.id.ambiguous)
+    CheckBox checkBoxAmbiguous;
+    @BindView(R.id.pronounceable)
+    CheckBox checkBoxPronounceable;
+    @BindView(R.id.lengthNumber)
+    TextView textViewLength;
+    @BindView(R.id.passwordText)
+    TextView passwordText;
 
+    @Inject
+    RandomPasswordGenerator randomPasswordGenerator;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -38,6 +58,7 @@ public class pwgenDialogFragment extends DialogFragment {
         final Activity callingActivity = getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
         @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);
+        ButterKnife.bind(this, view);
         Typeface monoTypeface = Typeface.createFromAsset(callingActivity.getAssets(), "fonts/sourcecodepro.ttf");
 
         builder.setView(view);
@@ -45,32 +66,19 @@ public class pwgenDialogFragment extends DialogFragment {
         SharedPreferences prefs
                 = getActivity().getApplicationContext().getSharedPreferences("pwgen", Context.MODE_PRIVATE);
 
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.numerals);
-        checkBox.setChecked(!prefs.getBoolean("0", false));
-
-        checkBox = (CheckBox) view.findViewById(R.id.symbols);
-        checkBox.setChecked(prefs.getBoolean("y", false));
-
-        checkBox = (CheckBox) view.findViewById(R.id.uppercase);
-        checkBox.setChecked(!prefs.getBoolean("A", false));
-
-        checkBox = (CheckBox) view.findViewById(R.id.ambiguous);
-        checkBox.setChecked(!prefs.getBoolean("B", false));
-
-        checkBox = (CheckBox) view.findViewById(R.id.pronounceable);
-        checkBox.setChecked(!prefs.getBoolean("s", true));
-
-        TextView textView = (TextView) view.findViewById(R.id.lengthNumber);
-        textView.setText(Integer.toString(prefs.getInt("length", 20)));
-
-        ((TextView) view.findViewById(R.id.passwordText)).setTypeface(monoTypeface);
+        checkBoxNumerals.setChecked(!prefs.getBoolean("0", false));
+        checkBoxSymbols.setChecked(prefs.getBoolean("y", false));
+        checkBoxUppercase.setChecked(!prefs.getBoolean("A", false));
+        checkBoxAmbiguous.setChecked(!prefs.getBoolean("B", false));
+        checkBoxPronounceable.setChecked(!prefs.getBoolean("s", true));
+        textViewLength.setText(Integer.toString(prefs.getInt("length", 20)));
+        passwordText.setTypeface(monoTypeface);
 
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditText edit = (EditText) callingActivity.findViewById(R.id.crypto_password_edit);
-                TextView generate = (TextView) view.findViewById(R.id.passwordText);
-                edit.setText(generate.getText());
+                edit.setText(textViewLength.getText());
             }
         });
 
@@ -88,16 +96,14 @@ public class pwgenDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 setPreferences();
-                TextView textView = (TextView) view.findViewById(R.id.passwordText);
-                textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+                textViewLength.setText(randomPasswordGenerator.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setPreferences();
-                        TextView textView = (TextView) view.findViewById(R.id.passwordText);
-                        textView.setText(pwgen.generate(callingActivity.getApplicationContext()).get(0));
+                        textViewLength.setText(randomPasswordGenerator.generate(callingActivity.getApplicationContext()).get(0));
                     }
                 });
             }
@@ -105,29 +111,28 @@ public class pwgenDialogFragment extends DialogFragment {
         return ad;
     }
 
-    private void setPreferences () {
+    private void setPreferences() {
         ArrayList<String> preferences = new ArrayList<>();
-        if (!((CheckBox) getDialog().findViewById(R.id.numerals)).isChecked()) {
+        if (!checkBoxNumerals.isChecked()) {
             preferences.add("0");
         }
-        if (((CheckBox) getDialog().findViewById(R.id.symbols)).isChecked()) {
+        if (checkBoxSymbols.isChecked()) {
             preferences.add("y");
         }
-        if (!((CheckBox) getDialog().findViewById(R.id.uppercase)).isChecked()) {
+        if (!checkBoxUppercase.isChecked()) {
             preferences.add("A");
         }
-        if (!((CheckBox) getDialog().findViewById(R.id.ambiguous)).isChecked()) {
+        if (!checkBoxAmbiguous.isChecked()) {
             preferences.add("B");
         }
-        if (!((CheckBox) getDialog().findViewById(R.id.pronounceable)).isChecked()) {
+        if (!checkBoxPronounceable.isChecked()) {
             preferences.add("s");
         }
-        EditText editText = (EditText) getDialog().findViewById(R.id.lengthNumber);
         try {
-            int length = Integer.valueOf(editText.getText().toString());
-            pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
-        } catch(NumberFormatException e) {
-            pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
+            int length = Integer.valueOf(textViewLength.getText().toString());
+            randomPasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences, length);
+        } catch (NumberFormatException e) {
+            randomPasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }
 }

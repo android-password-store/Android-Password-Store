@@ -5,10 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 	<application android:allowBackup="true"
+		android:name=".PasswordStoreApplication"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme"
@@ -21,7 +21,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".git.GitActivity"
+		<activity android:name=".utils.git.GitActivity"
 			android:parentActivityName=".PasswordStore">
 			<meta-data android:name="android.PARENT_ACTIVITY1"
 				android:value="com.zeapo.pwdstore.PasswordStore" />
@@ -34,7 +34,7 @@
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
 
-		<activity android:name=".SshKeyGen"
+		<activity android:name=".crypto.ssh.SshKeyGen"
 			android:parentActivityName=".PasswordStore">
 
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
@@ -78,7 +78,7 @@
 		</activity>
         <activity android:name=".crypto.PgpActivity"
 			android:parentActivityName=".PasswordStore"/>
-		<activity android:name=".SelectFolderActivity" />
+		<activity android:name=".mainscreen.SelectFolderActivity" />
 	</application>
 
 </manifest>

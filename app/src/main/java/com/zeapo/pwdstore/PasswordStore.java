@@ -32,13 +32,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.crypto.PgpActivity;
-import com.zeapo.pwdstore.git.GitActivity;
-import com.zeapo.pwdstore.git.GitAsyncTask;
-import com.zeapo.pwdstore.git.GitOperation;
-import com.zeapo.pwdstore.pwgen.PRNGFixes;
+import com.zeapo.pwdstore.crypto.password.PRNGFixes;
+import com.zeapo.pwdstore.mainscreen.SelectFolderActivity;
+import com.zeapo.pwdstore.mainscreen.recyclerview.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordItem;
-import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+import com.zeapo.pwdstore.utils.git.GitActivity;
+import com.zeapo.pwdstore.utils.git.GitAsyncTask;
+import com.zeapo.pwdstore.utils.git.GitOperation;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
@@ -54,16 +55,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class PasswordStore extends AppCompatActivity {
-    private static final String TAG = "PwdStrAct";
-    private SharedPreferences settings;
-    private Activity activity;
-    private PasswordFragment plist;
-    private ShortcutManager shortcutManager;
+import butterknife.BindView;
 
-    private final static int CLONE_REPO_BUTTON = 401;
-    private final static int NEW_REPO_BUTTON = 402;
-    private final static int HOME = 403;
+public class PasswordStore extends AppCompatActivity {
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
     public static final int REQUEST_CODE_SIGN_AND_ENCRYPT = 9912;
@@ -72,9 +66,19 @@ public class PasswordStore extends AppCompatActivity {
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_EDIT = 9916;
     public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
-
-
+    private static final String TAG = "PwdStrAct";
+    private final static int CLONE_REPO_BUTTON = 401;
+    private final static int NEW_REPO_BUTTON = 402;
+    private final static int HOME = 403;
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
+    @BindView(R.id.main_layout)
+    View mainLayout;
+    @BindView(android.support.design.R.id.snackbar_text)
+    TextView snackbarText;
+    private SharedPreferences settings;
+    private Activity activity;
+    private PasswordFragment plist;
+    private ShortcutManager shortcutManager;
 
     @Override
     @SuppressLint("NewApi")
@@ -107,7 +111,7 @@ public class PasswordStore extends AppCompatActivity {
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    Snackbar snack = Snackbar.make(findViewById(R.id.main_layout), "The store is on the sdcard but the app does not have permission to access it. Please give permission.",
+                    Snackbar snack = Snackbar.make(mainLayout, "The store is on the sdcard but the app does not have permission to access it. Please give permission.",
                             Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.dialog_ok, new View.OnClickListener() {
                                 @Override
@@ -118,10 +122,8 @@ public class PasswordStore extends AppCompatActivity {
                                 }
                             });
                     snack.show();
-                    View view = snack.getView();
-                    TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                    tv.setTextColor(Color.WHITE);
-                    tv.setMaxLines(10);
+                    snackbarText.setTextColor(Color.WHITE);
+                    snackbarText.setMaxLines(10);
                 } else {
                     // No explanation needed, we can request the permission.
                     ActivityCompat.requestPermissions(activity,

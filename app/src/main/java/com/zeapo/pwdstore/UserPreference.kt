@@ -28,7 +28,9 @@ import android.widget.Toast
 import com.nononsenseapps.filepicker.FilePickerActivity
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
-import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.crypto.ssh.SshKeyGen
+import com.zeapo.pwdstore.crypto.ssh.fragments.ShowSshKeyFragment
+import com.zeapo.pwdstore.utils.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -69,7 +71,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             findPreference("ssh_see_key").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val df = SshKeyGen.ShowSshKeyFragment()
+                val df = ShowSshKeyFragment()
                 df.show(fragmentManager, "public_key")
                 true
             }
