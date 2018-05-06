@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.crypto;
+package com.zeapo.pwdstore.crypto.password;
 
 import android.content.Context;
 import android.content.SharedPreferences;

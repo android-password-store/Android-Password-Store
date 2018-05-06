@@ -19,7 +19,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import com.zeapo.pwdstore.PasswordEntry
-import com.zeapo.pwdstore.crypto.fragments.PwgenDialogFragment
+import com.zeapo.pwdstore.crypto.password.fragments.PwgenDialogFragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.utils.Totp

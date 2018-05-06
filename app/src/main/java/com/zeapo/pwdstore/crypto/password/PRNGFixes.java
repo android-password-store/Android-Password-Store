@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.crypto;
+package com.zeapo.pwdstore.crypto.password;
 
 /*
  * This software is provided 'as-is', without any express or implied

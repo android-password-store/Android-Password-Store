@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 	<application android:allowBackup="true"
@@ -35,7 +34,7 @@
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
 
-		<activity android:name=".SshKeyGen"
+		<activity android:name=".crypto.ssh.SshKeyGen"
 			android:parentActivityName=".PasswordStore">
 
 			<meta-data android:name="android.support.PARENT_ACTIVITY"

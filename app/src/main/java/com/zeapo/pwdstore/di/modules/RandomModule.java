@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.di.modules;
 
-import com.zeapo.pwdstore.crypto.PRNGFixes;
+import com.zeapo.pwdstore.crypto.password.PRNGFixes;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

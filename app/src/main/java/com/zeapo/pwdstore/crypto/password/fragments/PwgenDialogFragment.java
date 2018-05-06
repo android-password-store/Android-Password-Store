@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.crypto.fragments;
+package com.zeapo.pwdstore.crypto.password.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.crypto.RandomPasswordGenerator;
+import com.zeapo.pwdstore.crypto.password.RandomPasswordGenerator;
 
 import java.util.ArrayList;
 
@@ -54,7 +54,6 @@ public class PwgenDialogFragment extends DaggerDialogFragment {
     @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        AndroidInjection.inject(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Activity callingActivity = getActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();

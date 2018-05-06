@@ -16,8 +16,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
         abortOnError true // make sure build failes with lint errors!
@@ -58,6 +58,11 @@ android {
 def daggerVersion = '2.16'
 
 dependencies {
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+// Because RxAndroid releases are few and far between, it is recommended you also
+// explicitly depend on RxJava's latest version for bug fixes and new features.
+// (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
     implementation "com.google.dagger:dagger:${daggerVersion}"
     implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"

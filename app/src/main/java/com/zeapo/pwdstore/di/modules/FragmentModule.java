@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.di.modules;
 
-import com.zeapo.pwdstore.crypto.fragments.PwgenDialogFragment;
+import com.zeapo.pwdstore.crypto.password.fragments.PwgenDialogFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
