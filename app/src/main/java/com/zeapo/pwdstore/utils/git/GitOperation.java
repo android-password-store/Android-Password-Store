@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.git;
+package com.zeapo.pwdstore.utils.git;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,8 +20,8 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
-import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
-import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
+import com.zeapo.pwdstore.utils.git.config.GitConfigSessionFactory;
+import com.zeapo.pwdstore.utils.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.eclipse.jgit.api.GitCommand;

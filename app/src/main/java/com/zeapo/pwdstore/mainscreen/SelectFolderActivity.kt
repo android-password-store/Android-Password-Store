@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore
+package com.zeapo.pwdstore.mainscreen
 
 import android.app.Activity
 import android.app.FragmentManager
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.mainscreen.fragments.SelectFolderFragment
 import com.zeapo.pwdstore.utils.PasswordRepository
 
 // TODO more work needed, this is just an extraction from PgpHandler

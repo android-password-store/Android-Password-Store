@@ -21,7 +21,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".git.GitActivity"
+		<activity android:name=".utils.git.GitActivity"
 			android:parentActivityName=".PasswordStore">
 			<meta-data android:name="android.PARENT_ACTIVITY1"
 				android:value="com.zeapo.pwdstore.PasswordStore" />
@@ -78,7 +78,7 @@
 		</activity>
         <activity android:name=".crypto.PgpActivity"
 			android:parentActivityName=".PasswordStore"/>
-		<activity android:name=".SelectFolderActivity" />
+		<activity android:name=".mainscreen.SelectFolderActivity" />
 	</application>
 
 </manifest>

@@ -30,7 +30,7 @@ import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.ssh.SshKeyGen
 import com.zeapo.pwdstore.crypto.ssh.fragments.ShowSshKeyFragment
-import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.utils.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils

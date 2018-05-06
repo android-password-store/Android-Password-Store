@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zeapo.pwdstore.mainscreen.recyclerview.DividerItemDecoration;
 import com.zeapo.pwdstore.utils.PasswordItem;
-import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
+import com.zeapo.pwdstore.mainscreen.recyclerview.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import java.io.File;
@@ -33,6 +35,9 @@ import butterknife.ButterKnife;
  * <p />
  */
 public class PasswordFragment extends Fragment{
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(PasswordItem item);
@@ -68,7 +73,7 @@ public class PasswordFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
         ButterKnife.bind(this, view);
@@ -84,7 +89,6 @@ public class PasswordFragment extends Fragment{
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
 
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

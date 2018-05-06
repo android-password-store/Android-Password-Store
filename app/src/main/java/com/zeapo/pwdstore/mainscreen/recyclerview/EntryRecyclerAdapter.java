@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.utils;
+package com.zeapo.pwdstore.mainscreen.recyclerview;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.utils.PasswordItem;
 
 import java.util.ArrayList;
 import java.util.Set;

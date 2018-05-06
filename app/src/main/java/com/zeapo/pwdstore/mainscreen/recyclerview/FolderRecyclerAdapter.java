@@ -1,10 +1,11 @@
-package com.zeapo.pwdstore.utils;
+package com.zeapo.pwdstore.mainscreen.recyclerview;
 
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.zeapo.pwdstore.SelectFolderActivity;
-import com.zeapo.pwdstore.SelectFolderFragment;
+import com.zeapo.pwdstore.mainscreen.SelectFolderActivity;
+import com.zeapo.pwdstore.mainscreen.fragments.SelectFolderFragment;
+import com.zeapo.pwdstore.utils.PasswordItem;
 
 import java.util.ArrayList;
 

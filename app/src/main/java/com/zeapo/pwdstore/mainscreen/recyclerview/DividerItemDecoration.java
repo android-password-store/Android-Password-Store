@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore;
+package com.zeapo.pwdstore.mainscreen.recyclerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-class DividerItemDecoration extends RecyclerView.ItemDecoration {
+public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
 
@@ -26,7 +26,7 @@ class DividerItemDecoration extends RecyclerView.ItemDecoration {
     /**
      * Custom divider will be used
      */
-    DividerItemDecoration(Context context, int resId) {
+    public DividerItemDecoration(Context context, int resId) {
         mDivider = ContextCompat.getDrawable(context, resId);
     }
 

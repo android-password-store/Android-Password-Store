@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.git;
+package com.zeapo.pwdstore.utils.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,11 +7,11 @@ import android.content.DialogInterface;
 import com.zeapo.pwdstore.R;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.PullCommand;
 
 import java.io.File;
 
-public class PushOperation extends GitOperation {
+public class PullOperation extends GitOperation {
 
     /**
      * Creates a new git operation
@@ -19,7 +19,7 @@ public class PushOperation extends GitOperation {
      * @param fileDir         the git working tree directory
      * @param callingActivity the calling activity
      */
-    public PushOperation(File fileDir, Activity callingActivity) {
+    public PullOperation(File fileDir, Activity callingActivity) {
         super(fileDir, callingActivity);
     }
 
@@ -27,10 +27,10 @@ public class PushOperation extends GitOperation {
      * Sets the command
      * @return the current object
      */
-    public PushOperation setCommand() {
+    public PullOperation setCommand() {
         this.command = new Git(repository)
-                .push()
-                .setPushAll()
+                .pull()
+                .setRebase(true)
                 .setRemote("origin");
         return this;
     }
@@ -38,17 +38,19 @@ public class PushOperation extends GitOperation {
     @Override
     public void execute() {
         if (this.provider != null) {
-            ((PushCommand) this.command).setCredentialsProvider(this.provider);
+            ((PullCommand) this.command).setCredentialsProvider(this.provider);
         }
         new GitAsyncTask(callingActivity, true, false, this).execute(this.command);
     }
 
     @Override
     public void onError(String errorMessage) {
-        // TODO handle the "Nothing to push" case
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
-                setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage).
+                setMessage("Error occured during the pull operation, "
+                        + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
+                        + errorMessage
+                        + "\nPlease check the FAQ for possible reasons why this error might occur.").
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

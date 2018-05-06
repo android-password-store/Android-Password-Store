@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.git;
+package com.zeapo.pwdstore.utils.git;
 
 import android.app.Activity;
 import android.content.Context;

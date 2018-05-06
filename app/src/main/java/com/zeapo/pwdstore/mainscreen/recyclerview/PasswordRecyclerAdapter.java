@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.utils;
+package com.zeapo.pwdstore.mainscreen.recyclerview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
@@ -9,6 +9,7 @@ import android.view.View;
 import com.zeapo.pwdstore.PasswordFragment;
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.utils.PasswordItem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
