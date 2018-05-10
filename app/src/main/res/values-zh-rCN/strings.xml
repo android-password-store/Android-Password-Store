@@ -121,5 +121,5 @@
     <string name="server_resulting_url">生成的 URL</string>
     <string name="autofill_apps_match_ellipsis">匹配…</string>
     <string name="pref_crypto_title">加密</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
+    <string name="get_last_changed_failed">获取上次修改日期失败</string>
 </resources>
