@@ -26,7 +26,7 @@ import android.view.accessibility.AccessibilityManager
 import android.widget.TextView
 import android.widget.Toast
 import com.nononsenseapps.filepicker.FilePickerActivity
-import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
+import com.zeapo.pwdstore.autofill_legacy.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository

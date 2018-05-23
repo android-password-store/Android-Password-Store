@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.autofill;
+package com.zeapo.pwdstore.autofill_legacy;
 
 import android.app.PendingIntent;
 import android.content.Context;

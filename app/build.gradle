@@ -4,20 +4,20 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'eclipse'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion "android-P"
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion 26
+        targetSdkVersion 28
         versionCode 95
         versionName "1.2.0.75"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
         abortOnError true // make sure build failes with lint errors!
@@ -73,6 +73,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
+    compile 'com.google.guava:guava:25.0-android'
     // Testing-only dependencies
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'org.mockito:mockito-core:2.8.47'

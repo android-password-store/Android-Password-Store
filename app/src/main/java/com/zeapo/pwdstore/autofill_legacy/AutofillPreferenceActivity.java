@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.autofill;
+package com.zeapo.pwdstore.autofill_legacy;
 
 import android.app.DialogFragment;
 import android.content.Context;

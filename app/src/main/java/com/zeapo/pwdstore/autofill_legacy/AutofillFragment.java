@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.autofill;
+package com.zeapo.pwdstore.autofill_legacy;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

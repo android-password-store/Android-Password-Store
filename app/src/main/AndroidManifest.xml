@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+	<uses-permission android:name="android.permission.BIND_AUTOFILL_SERVICE" />
 
 	<application android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
@@ -41,16 +42,17 @@
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
 
-		<service android:name=".autofill.AutofillService"
-			android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+
+		<service android:name=".autofill.PasswordStoreAutofillService"
+			android:label="PasswordStore Autofill"
+			android:permission="android.permission.BIND_AUTOFILL_SERVICE"
+			>
 			<intent-filter>
-				<action android:name="android.accessibilityservice.AccessibilityService" />
+				<action android:name="android.service.autofill.AutofillService" />
 			</intent-filter>
-			<meta-data android:name="android.accessibilityservice"
-					   android:resource="@xml/autofill_config" />
 		</service>
 
-		<activity android:name=".autofill.AutofillActivity"
+		<activity android:name=".autofill_legacy.AutofillActivity"
 			android:parentActivityName=".PasswordStore"
 			android:documentLaunchMode="intoExisting"
 			android:excludeFromRecents="true"
@@ -60,7 +62,7 @@
 				android:value="com.zeapo.pwdstore.PasswordStore" />
 		</activity>
 
-		<activity android:name=".autofill.AutofillPreferenceActivity"
+		<activity android:name=".autofill_legacy.AutofillPreferenceActivity"
 			android:parentActivityName=".PasswordStore">
 
 			<meta-data android:name="android.support.PARENT_ACTIVITY"
