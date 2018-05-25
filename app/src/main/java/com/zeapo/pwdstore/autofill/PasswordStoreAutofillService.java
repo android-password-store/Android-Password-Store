@@ -15,10 +15,8 @@
  */
 package com.zeapo.pwdstore.autofill;
 
-import android.app.PendingIntent;
 import android.app.assist.AssistStructure;
 import android.app.assist.AssistStructure.ViewNode;
-import android.content.Intent;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
 import android.service.autofill.Dataset;
@@ -27,7 +25,6 @@ import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
-import android.service.autofill.SaveInfo;
 import android.service.autofill.SaveRequest;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,30 +35,19 @@ import android.util.Pair;
 import android.view.View;
 import android.view.ViewStructure;
 import android.view.autofill.AutofillId;
-import android.view.autofill.AutofillValue;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.zeapo.pwdstore.PasswordEntry;
-import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.autofill_legacy.AutofillActivity;
+import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.apache.commons.io.FileUtils;
-import org.openintents.openpgp.IOpenPgpService2;
-import org.openintents.openpgp.OpenPgpError;
-import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class PasswordStoreAutofillService extends AutofillService {
     private OpenPgpServiceConnection serviceConnection;
@@ -70,44 +56,16 @@ public class PasswordStoreAutofillService extends AutofillService {
             "name", "id", "type"
     ));
 
-    /**
-     * Number of datasets sent on each request - we're simple, that value is hardcoded in our DNA!
-     */
-    private static final int NUMBER_DATASETS = 4;
-
-
-    private class onBoundListener implements OpenPgpServiceConnection.OnBound {
-        @Override
-        public void onBound(IOpenPgpService2 service) {
-
-        }
-
-        @Override
-        public void onError(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void bindDecryptAndVerify() {
-        if (serviceConnection.getService() == null) {
-            // the service was disconnected, need to bind again
-            // give it a listener and in the callback we will decryptAndVerify
-            serviceConnection = new OpenPgpServiceConnection(this
-                    , "org.sufficientlysecure.keychain", new onBoundListener());
-            serviceConnection.bindToService();
-        } else {
-        }
-    }
-
-
     @Override
     public void onFillRequest(FillRequest request, CancellationSignal cancellationSignal,
-                              FillCallback callback) {
+                              final FillCallback callback) {
         Log.d(TAG, "onFillRequest()");
-
         // Find autofillable fields
         AssistStructure structure = getLatestAssistStructure(request);
-        Map<String, AutofillId> fields = getAutofillableFields(structure);
+        Map<String, AutofillInfo> fields = getAutofillableFields(structure);
+
+        final List<AutofillId> autofillIds = new ArrayList<>();
+
         Log.d(TAG, "autofillable fields:" + fields);
 
         if (fields.isEmpty()) {
@@ -117,36 +75,21 @@ public class PasswordStoreAutofillService extends AutofillService {
         }
 
         // Create the base response
-        FillResponse.Builder response = new FillResponse.Builder();
+        final FillResponse.Builder response = new FillResponse.Builder();
 
-        // 1.Add the dynamic datasets
-        String packageName = getApplicationContext().getPackageName();
-        for (int i = 1; i <= NUMBER_DATASETS; i++) {
-            Dataset.Builder dataset = new Dataset.Builder();
-            for (Entry<String, AutofillId> field : fields.entrySet()) {
-                String hint = field.getKey();
-                AutofillId id = field.getValue();
-                String value = hint + i;
-                // We're simple - our dataset values are hardcoded as "hintN" (for example,
-                // "username1", "username2") and they're displayed as such, except if they're a
-                // password
-                String displayValue = hint.contains("password") ? "password for #" + i : value;
-                RemoteViews presentation = newDatasetPresentation(packageName, displayValue);
-                dataset.setValue(id, AutofillValue.forText(value), presentation);
-            }
-            response.addDataset(dataset.build());
-        }
-
-        // 2.Add save info
-        Collection<AutofillId> ids = fields.values();
-        AutofillId[] requiredIds = new AutofillId[ids.size()];
-        ids.toArray(requiredIds);
-        response.setSaveInfo(
-                // We're simple, so we're generic
-                new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_GENERIC, requiredIds).build());
-
-        // 3.Profit!
-        callback.onSuccess(response.build());
+        DatasetCreator datasetCreator = new DatasetCreator(
+                getApplicationContext(),
+                fields,
+                new OnAllDatasetsCreatedListener() {
+                    @Override
+                    public void onAllDatasetsCreated(List<Dataset> datasetList) {
+                        for (Dataset dataset: datasetList) {
+                            response.addDataset(dataset);
+                        }
+                        callback.onSuccess(response.build());
+                    }
+                });
+        datasetCreator.createAllDatasets();
     }
 
     @Override
@@ -164,39 +107,47 @@ public class PasswordStoreAutofillService extends AutofillService {
      * <p>An autofillable field is a {@link ViewNode} whose {@link #getHint(ViewNode)} metho
      */
     @NonNull
-    private Map<String, AutofillId> getAutofillableFields(@NonNull AssistStructure structure) {
-        Map<String, AutofillId> fields = new ArrayMap<>();
+    private Map<String, AutofillInfo> getAutofillableFields(@NonNull AssistStructure structure) {
+        ArrayMap<String, AutofillInfo> fields = new ArrayMap<>();
         int nodes = structure.getWindowNodeCount();
         for (int i = 0; i < nodes; i++) {
             ViewNode node = structure.getWindowNodeAt(i).getRootViewNode();
-            addAutofillableFields(fields, node);
+            addAutofillableFields(fields, node, node.getWebDomain());
         }
         return fields;
     }
 
+
     /**
      * Adds any autofillable view from the {@link ViewNode} and its descendants to the map.
      */
-    private void addAutofillableFields(@NonNull Map<String, AutofillId> fields,
-                                       @NonNull ViewNode node) {
+    private void addAutofillableFields(@NonNull Map<String, AutofillInfo> fields,
+                                       @NonNull ViewNode node,
+                                       String webDomain
+    ) {
+        // with this we carry over possible webdomais from parent, we need it later to find our
+        // password
+        webDomain = node.getWebDomain() != null ? node.getWebDomain() : webDomain;
         int type = node.getAutofillType();
         // We're simple, we just autofill text fields.
         if (type == View.AUTOFILL_TYPE_TEXT) {
+            // first try to get hint from android field hints
+            AutofillId id = node.getAutofillId();
             String hint = getHint(node);
             if (hint != null) {
-                AutofillId id = node.getAutofillId();
-                if (!fields.containsKey(hint)) {
-                    Log.v(TAG, "Setting hint " + hint + " on " + id);
-                    fields.put(hint, id);
-                } else {
-                    Log.v(TAG, "Ignoring hint " + hint + " on " + id
-                            + " because it was already set");
-                }
+                fields.put(hint, new AutofillInfo(id, AutofillTypes.ACTIVITY_AUTOFILL, webDomain));
             }
+
+            // try our luck with html attributes
+            hint = getHintFromHTML(node);
+            if (hint != null) {
+                fields.put(hint, new AutofillInfo(id, AutofillTypes.HTML_AUTOFILL, webDomain));
+            }
+
         }
         int childrenSize = node.getChildCount();
         for (int i = 0; i < childrenSize; i++) {
-            addAutofillableFields(fields, node.getChildAt(i));
+            addAutofillableFields(fields, node.getChildAt(i), webDomain);
         }
     }
 
@@ -243,10 +194,15 @@ public class PasswordStoreAutofillService extends AutofillService {
             Log.v(TAG, "No hint using text: " + text + " and class " + className);
         }
 
+        return null;
+    }
+
+    protected String getHintFromHTML(ViewNode node) {
+        String hint = null;
         // finally for webstuff get creative and read attributes
         ViewStructure.HtmlInfo htmlInfo = node.getHtmlInfo();
         if (htmlInfo != null) {
-            List<Pair<String, String>> htmlAttributes = node.getHtmlInfo().getAttributes();
+            List<Pair<String, String>> htmlAttributes = htmlInfo.getAttributes();
             for (Pair<String, String> attribute : htmlAttributes) {
                 if (htmlAttributesWithHints.contains(attribute.first)) {
                     hint = inferHint(attribute.second);
@@ -271,8 +227,7 @@ public class PasswordStoreAutofillService extends AutofillService {
 
         string = string.toLowerCase();
         if (string.contains("password")) return View.AUTOFILL_HINT_PASSWORD;
-        if (string.contains("username")
-                || (string.contains("login") && string.contains("id")))
+        if (string.contains("username") || string.contains("login"))
             return View.AUTOFILL_HINT_USERNAME;
         if (string.contains("email")) return View.AUTOFILL_HINT_EMAIL_ADDRESS;
         if (string.contains("name")) return View.AUTOFILL_HINT_NAME;
@@ -289,18 +244,10 @@ public class PasswordStoreAutofillService extends AutofillService {
         return fillContexts.get(fillContexts.size() - 1).getStructure();
     }
 
-    /**
-     * Helper method to create a dataset presentation with the given text.
-     */
-    @NonNull
-    private static RemoteViews newDatasetPresentation(@NonNull String packageName,
-                                                      @NonNull CharSequence text) {
-        RemoteViews presentation =
-                new RemoteViews(packageName, R.layout.multidataset_service_list_item);
-        presentation.setTextViewText(R.id.text, text);
-        presentation.setImageViewResource(R.id.icon, R.mipmap.ic_launcher);
-        return presentation;
-    }
+
+
+
+
 
     /**
      * Displays a toast with the given message.
