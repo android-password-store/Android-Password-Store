@@ -25,6 +25,7 @@ import android.service.autofill.FillContext;
 import android.service.autofill.FillRequest;
 import android.service.autofill.FillResponse;
 import android.service.autofill.SaveCallback;
+import android.service.autofill.SaveInfo;
 import android.service.autofill.SaveRequest;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,24 +38,22 @@ import android.view.ViewStructure;
 import android.view.autofill.AutofillId;
 import android.widget.Toast;
 
-import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
-import org.openintents.openpgp.util.OpenPgpServiceConnection;
+import org.eclipse.jgit.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class PasswordStoreAutofillService extends AutofillService {
-    private OpenPgpServiceConnection serviceConnection;
     private static final String TAG = "PasswordStoreAutofillService";
     private static final List<String> htmlAttributesWithHints = new ArrayList<String>(Arrays.asList(
             "name", "id", "type"
     ));
+
 
     @Override
     public void onFillRequest(FillRequest request, CancellationSignal cancellationSignal,
@@ -64,32 +63,60 @@ public class PasswordStoreAutofillService extends AutofillService {
         AssistStructure structure = getLatestAssistStructure(request);
         Map<String, AutofillInfo> fields = getAutofillableFields(structure);
 
-        final List<AutofillId> autofillIds = new ArrayList<>();
-
-        Log.d(TAG, "autofillable fields:" + fields);
-
         if (fields.isEmpty()) {
             toast("No autofill hints found");
             callback.onSuccess(null);
             return;
         }
 
+        Log.d(TAG, "autofillable fields:" + fields);
+
+        String searchTerm = determineSearchTerm(fields);
+        Integer autofillType = determineAutofillType(fields);
+        List<File> matches = new ArrayList<>();
+        List<AutofillId> autofillIds = new ArrayList<>();
+
+        // need a list of the autofillIds
+        for (Map.Entry<String, AutofillInfo> field: fields.entrySet()) {
+            autofillIds.add(field.getValue().autofillId);
+        }
+        AutofillId[] requiredIds = new AutofillId[autofillIds.size()];
+        autofillIds.toArray(requiredIds);
+
+        if (autofillType == AutofillTypes.HTML_AUTOFILL) {
+            // Try to get a match via URL
+            matches = new ArrayList<>(
+                    searchPasswordInRepository(searchTerm)
+            );
+        } else {
+            matches = new ArrayList<>();
+        }
+
+
         // Create the base response
         final FillResponse.Builder response = new FillResponse.Builder();
 
-        DatasetCreator datasetCreator = new DatasetCreator(
-                getApplicationContext(),
+
+        // add save info
+        response.setSaveInfo(
+                // We're simple, so we're generic
+                new SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_GENERIC, requiredIds).build()
+        );
+
+        DatasetCreator datasetCreator = new DatasetCreator(getApplicationContext());
+        datasetCreator.createDatasetBatch(
+                matches,
                 fields,
-                new OnAllDatasetsCreatedListener() {
+                new DatasetCreationListener() {
                     @Override
-                    public void onAllDatasetsCreated(List<Dataset> datasetList) {
-                        for (Dataset dataset: datasetList) {
+                    void onDatasetBatchCreated(List<Dataset> datasetList) {
+                        for (Dataset dataset : datasetList) {
                             response.addDataset(dataset);
                         }
                         callback.onSuccess(response.build());
                     }
-                });
-        datasetCreator.createAllDatasets();
+                }
+        );
     }
 
     @Override
@@ -97,6 +124,57 @@ public class PasswordStoreAutofillService extends AutofillService {
         Log.d(TAG, "onSaveRequest()");
         toast("Save not supported");
         callback.onSuccess();
+    }
+
+    private Integer determineAutofillType(Map<String, AutofillInfo> fields) {
+        // if any of the autofill fields has a webDomain we assume we match against a webpage
+        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
+            if (field.getValue().webDomain != null) {
+                return AutofillTypes.HTML_AUTOFILL;
+            }
+        }
+        return AutofillTypes.ACTIVITY_AUTOFILL;
+    }
+
+    private String determineSearchTerm(Map<String, AutofillInfo> fields) {
+        Integer autoFillType = determineAutofillType(fields);
+        if (autoFillType == AutofillTypes.HTML_AUTOFILL) {
+            for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
+                String webDomain = field.getValue().webDomain;
+                if (webDomain != null) return webDomain;
+            }
+        }
+        return null;
+    }
+
+    private ArrayList<File> searchPasswordInRepository(String name) {
+        if (name == null) return new ArrayList<>();
+        return searchPasswords(PasswordRepository.getRepositoryDirectory(
+                getApplicationContext()),
+                name
+        );
+    }
+
+    private ArrayList<File> searchPasswords(File path, String appName) {
+        ArrayList<File> passList = PasswordRepository.getFilesList(path);
+
+        if (passList.size() == 0) return new ArrayList<>();
+
+        ArrayList<File> items = new ArrayList<>();
+
+        for (File file : passList) {
+            if (file.isFile()) {
+                if (appName.toLowerCase().contains(file.getName().toLowerCase().replace(".gpg", ""))) {
+                    items.add(file);
+                }
+            } else {
+                // ignore .git and .extensions directory
+                if (file.getName().equals(".git") || file.getName().equals(".extensions"))
+                    continue;
+                items.addAll(searchPasswords(file, appName));
+            }
+        }
+        return items;
     }
 
     /**
@@ -222,15 +300,13 @@ public class PasswordStoreAutofillService extends AutofillService {
      * @return standard autofill hint, or {@code null} when it could not be inferred.
      */
     @Nullable
-    protected String inferHint(@Nullable String string) {
-        if (string == null) return null;
+    protected String inferHint(@Nullable String hint) {
+        if (hint == null) return null;
 
-        string = string.toLowerCase();
-        if (string.contains("password")) return View.AUTOFILL_HINT_PASSWORD;
-        if (string.contains("username") || string.contains("login"))
-            return View.AUTOFILL_HINT_USERNAME;
-        if (string.contains("email")) return View.AUTOFILL_HINT_EMAIL_ADDRESS;
-        if (string.contains("name")) return View.AUTOFILL_HINT_NAME;
+        hint = hint.toLowerCase();
+        if (Heuristics.mightBePasswordField(hint)) return View.AUTOFILL_HINT_PASSWORD;
+        if (Heuristics.mightBeLoginField(hint)) return View.AUTOFILL_HINT_USERNAME;
+
         return null;
     }
 

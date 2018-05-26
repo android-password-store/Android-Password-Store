@@ -1,6 +1,9 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -10,7 +13,10 @@ import android.widget.RemoteViews;
 
 import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+
+import org.openintents.openpgp.util.OpenPgpApi;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,148 +24,139 @@ import java.util.List;
 import java.util.Map;
 
 public class DatasetCreator {
-    Map<String, AutofillInfo> fields;
-    OnDatasetCreatedListener onDatasetCreatedListener;
-    OnAllDatasetsCreatedListener onAllDatasetsCreatedListener;
     Context applicationContext;
-    Integer resultCount = 0;
-    List<Dataset> results;
-
 
     public DatasetCreator(
-            Context applicationContext,
-            Map<String, AutofillInfo> fields
+            Context applicationContext
     ) {
         this.applicationContext = applicationContext;
-        this.fields = fields;
-        this.results = new ArrayList<>();
     }
 
-    public DatasetCreator(
-            Context applicationContext,
+    private Dataset assembleDatasetFromEntry(
+            PasswordEntry entry,
             Map<String, AutofillInfo> fields,
-            OnDatasetCreatedListener onDatasetCreatedListener
+            File file
     ) {
-        this(applicationContext, fields);
-        this.onDatasetCreatedListener = onDatasetCreatedListener;
-    }
+        File repositoryPath = PasswordRepository.getRepositoryDirectory(applicationContext);
+        Dataset.Builder datasetBuilder = new Dataset.Builder();
+        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
+            String hint = field.getKey();
+            AutofillId autofillId = field.getValue().autofillId;
 
-    public DatasetCreator(
-            Context applicationContext,
-            Map<String, AutofillInfo> fields,
-            OnAllDatasetsCreatedListener onAllDatasetsCreatedListener
-    ) {
-        this(applicationContext, fields);
-        this.onAllDatasetsCreatedListener = onAllDatasetsCreatedListener;
-    }
+            String value = hint == View.AUTOFILL_HINT_PASSWORD
+                    ? entry.getPassword()
+                    : entry.getUsername();
 
-    public DatasetCreator(
-            Context applicationContext,
-            Map<String, AutofillInfo> fields,
-            OnDatasetCreatedListener onDatasetCreatedListener,
-            OnAllDatasetsCreatedListener onAllDatasetsCreatedListener
-    ) {
-        this(applicationContext, fields, onDatasetCreatedListener);
-        this.onAllDatasetsCreatedListener = onAllDatasetsCreatedListener;
-    }
+            String displayValue = repositoryPath.toURI().relativize(
+                    file.toURI()
+            ).getPath();
 
-    public void onDatasetCreated(Dataset dataset) {
-        resultCount++;
-        if (onDatasetCreatedListener != null) {
-            onDatasetCreatedListener.onDatasetCreated(dataset);
+            RemoteViews presentation = createDatasetPresentation(displayValue);
+            datasetBuilder
+                    .setValue(
+                            autofillId,
+                            AutofillValue.forText(value),
+                            presentation
+                    );
         }
-        if (resultCount == fields.entrySet().size()) {
-            onAllDatasetsCreated();
-        }
+        return datasetBuilder.build();
     }
 
-    public void onAllDatasetsCreated() {
-        if (onAllDatasetsCreatedListener != null) {
-            onAllDatasetsCreatedListener.onAllDatasetsCreated(this.results);
-        }
-    }
-
-    private void createOneDataset(Map.Entry<String, AutofillInfo> field) {
-        final Dataset.Builder dataset = new Dataset.Builder();
-        final String hint = field.getKey();
-        final AutofillId autofillId = field.getValue().autofillId;
-        int autofillType = field.getValue().type;
-
-        List<File> matches = new ArrayList<>();
-
-        if (autofillType == AutofillTypes.HTML_AUTOFILL) {
-            // Try to get a match via URL
-            matches = new ArrayList<>(
-                    searchPasswordInRepository(field.getValue().webDomain)
+    private Dataset assembeAuthPromptDataset(Map<String, AutofillInfo> fields, Intent result) {
+        PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+        String packageName = applicationContext.getPackageName();
+        RemoteViews presentation =
+                new RemoteViews(packageName, R.layout.multidataset_service_list_item);
+        presentation.setTextViewText(R.id.text, "Unlock pass");
+        presentation.setImageViewResource(R.id.icon, R.mipmap.ic_launcher);
+        Dataset.Builder datasetBuilder = new Dataset.Builder();
+        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
+            AutofillId autofillId = field.getValue().autofillId;
+            datasetBuilder.setValue(
+                    autofillId,
+                    AutofillValue.forText(""),
+                    presentation
             );
-        } else {
-            matches = new ArrayList<>();
         }
+        return datasetBuilder.build();
+    }
 
-        if (matches.isEmpty()) {
-            resultCount++;
-            return;
-        }
-        DecryptionBatch decryptionBatch = new DecryptionBatch(
-                applicationContext,
-                matches,
-                new OnBatchDecryptedListener(){
+    public void createOneDataset(
+            final File match,
+            final Map<String, AutofillInfo> fields,
+            final DatasetCreationListener datasetCreationListener
+    ) {
+        Decrypter decrypter = new Decrypter(applicationContext);
+
+        decrypter.bindAndDecrypt(
+                match,
+                new DecryptionListener() {
                     @Override
-                    public void onBatchDecrypted(List<PasswordEntry> passwordEntries) {
-                        Dataset.Builder datasetBuilder = new Dataset.Builder();
-                        for (PasswordEntry entry : passwordEntries) {
-                            String value = hint == View.AUTOFILL_HINT_PASSWORD
-                                    ? entry.getPassword()
-                                    : entry.getUsername();
-                            String displayValue = hint == View.AUTOFILL_HINT_PASSWORD
-                                    ? "Password for " + entry.getUsername()
-                                    : entry.getUsername();
-                            RemoteViews presentation = createDatasetPresentation(displayValue);
-                            datasetBuilder.setValue(
-                                    autofillId,
-                                    AutofillValue.forText(value),
-                                    presentation
+                    void onDecrypted(PasswordEntry entry) {
+                        Dataset dataset = assembleDatasetFromEntry(entry, fields, match);
+                        datasetCreationListener.onDatasetCreated(dataset);
+                    }
+
+                    @Override
+                    void onAuthenticationRequired(List<File> failedItems, Intent result) {
+                        Dataset authPromptDataset = assembeAuthPromptDataset(fields, result);
+                        datasetCreationListener.onDatasetCreated(authPromptDataset);
+                    }
+                }
+        );
+    }
+
+    public void createDatasetBatch(
+            List<File> matches,
+            final Map<String, AutofillInfo> fields,
+            final DatasetCreationListener datasetCreationListener
+    ) {
+        Decrypter decrypter = new Decrypter(applicationContext);
+        decrypter.bindAndDecryptBatch(
+                matches,
+                new DecryptionListener() {
+                    @Override
+                    void onBatchDecrypted(Map<File, PasswordEntry> entries) {
+                        List<Dataset> results = new ArrayList<>();
+                        for (Map.Entry<File, PasswordEntry> entry : entries.entrySet()) {
+                            results.add(
+                                    assembleDatasetFromEntry(
+                                            entry.getValue(), fields, entry.getKey()
+                                    )
                             );
                         }
-                        Dataset dataset = datasetBuilder.build();
-                        results.add(dataset);
-                        onDatasetCreated(dataset);
+                        datasetCreationListener.onDatasetBatchCreated(results);
                     }
-                });
-        decryptionBatch.decryptBatch();
-    }
 
-    public void createAllDatasets() {
-        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
-            createOneDataset(field);
-        }
-    }
+                    @Override
+                    void onAuthenticationRequired(List<File> failedItems, Intent result) {
+                        List<Dataset> results = new ArrayList<>();
+                        PendingIntent pendingIntent = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+                        IntentSender intentSender = pendingIntent.getIntentSender();
 
-    private ArrayList<File> searchPasswordInRepository(String name) {
-        if (name == null) return new ArrayList<>();
-        return searchPasswords(PasswordRepository.getRepositoryDirectory(applicationContext), name);
-    }
+                        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
+                            Dataset.Builder datasetBuilder = new Dataset.Builder();
+                            AutofillId autofillId = field.getValue().autofillId;
 
-    private ArrayList<File> searchPasswords(File path, String appName) {
-        ArrayList<File> passList = PasswordRepository.getFilesList(path);
-
-        if (passList.size() == 0) return new ArrayList<>();
-
-        ArrayList<File> items = new ArrayList<>();
-
-        for (File file : passList) {
-            if (file.isFile()) {
-                if (appName.toLowerCase().contains(file.getName().toLowerCase().replace(".gpg", ""))) {
-                    items.add(file);
+                            String packageName = applicationContext.getPackageName();
+                            RemoteViews presentation =
+                                    new RemoteViews(packageName, R.layout.multidataset_service_list_item);
+                            presentation.setTextViewText(
+                                    R.id.text,
+                                    applicationContext.getString(R.string.autofill_unlock_keychain)
+                            );
+                            datasetBuilder.setAuthentication(intentSender);
+                            datasetBuilder.setValue(
+                                    autofillId,
+                                    AutofillValue.forText(""),
+                                    presentation
+                            );
+                            results.add(datasetBuilder.build());
+                        }
+                        datasetCreationListener.onDatasetBatchCreated(results);
+                    }
                 }
-            } else {
-                // ignore .git and .extensions directory
-                if (file.getName().equals(".git") || file.getName().equals(".extensions"))
-                    continue;
-                items.addAll(searchPasswords(file, appName));
-            }
-        }
-        return items;
+        );
     }
 
     /**
