@@ -64,18 +64,18 @@ public class PasswordStoreAutofillService extends AutofillService {
         // Find autofillable fields
         AssistStructure structure = getLatestAssistStructure(request);
         List<AutofillInfo> fields = getAutofillableFields(structure);
+        List<File> matches;
+        String searchTerm = determineSearchTerm(fields);
+        Integer autofillType = determineAutofillType(fields);
 
         if (fields.isEmpty()) {
-            toast("No autofill hints found");
             callback.onSuccess(null);
             return;
         }
 
         Log.d(TAG, "autofillable fields:" + fields);
 
-        String searchTerm = determineSearchTerm(fields);
-        Integer autofillType = determineAutofillType(fields);
-        List<File> matches = new ArrayList<>();
+
         List<AutofillId> autofillIds = new ArrayList<>();
 
         // need a list of the autofillIds
