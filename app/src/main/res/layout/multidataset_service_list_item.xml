@@ -23,9 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
     <ImageView

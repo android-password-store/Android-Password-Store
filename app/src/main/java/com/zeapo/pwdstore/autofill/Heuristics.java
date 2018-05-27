@@ -1,5 +1,8 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.annotation.TargetApi;
+
+@TargetApi(26)
 public final class Heuristics {
     public static final String[] LOGIN_FIELD_EXAMPLES = {
             "username",

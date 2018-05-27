@@ -15,6 +15,7 @@
  */
 package com.zeapo.pwdstore.autofill;
 
+import android.annotation.TargetApi;
 import android.app.assist.AssistStructure;
 import android.app.assist.AssistStructure.ViewNode;
 import android.os.CancellationSignal;
@@ -48,8 +49,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+@TargetApi(26)
 public class PasswordStoreAutofillService extends AutofillService {
-    private static final String TAG = "PasswordStoreAutofillService";
+    private static final String TAG = "PasswordStoreAutofill";
     private static final List<String> htmlAttributesWithHints = new ArrayList<String>(Arrays.asList(
             "name", "id", "type"
     ));

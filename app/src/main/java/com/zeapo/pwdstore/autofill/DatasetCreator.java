@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@TargetApi(26)
 public class DatasetCreator {
     Context applicationContext;
 

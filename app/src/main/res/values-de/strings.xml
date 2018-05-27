@@ -110,8 +110,8 @@
     <string name="ssh_key_error_dialog_text">Nachricht : \n</string>
     <string name="pref_recursive_filter">Suche in Unterordnern</string>
     <string name="pref_recursive_filter_hint">Findet Passwörter auch in Unterordnern.</string>
-    <string name="pref_autofill_title">Autofill</string>
-    <string name="pref_autofill_enable_title">Autofill aktivieren</string>
+    <string name="pref_autofill_title">Autofill (mit Accessibility Hack)</string>
+    <string name="pref_autofill_enable_title">Accessibility Hack aktivieren</string>
     <string name="pref_autofill_enable_msg">Wähle OK, um zu den Bedienungshilfen-Einstellungen zu gelangen. Dort aktiviere oder deaktiviere den Password Store unter Dienste.</string>
     <string name="pref_autofill_enable_msg2">Wenn der Hintergrunddienst aktiviert ist, erscheint immer dann ein Dialog, wenn du auf ein Passwortfeld in einer App klickst und ein dazu passender Eintrag existiert.</string>
     <string name="pref_autofill_enable_msg3">Password Store versucht das Passwort zu der App automatisch herauszufinden. Du kannst diese Standard-Einstellung ändern und den Abgleich per App anpassen.</string>

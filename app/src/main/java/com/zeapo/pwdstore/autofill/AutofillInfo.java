@@ -1,7 +1,9 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.annotation.TargetApi;
 import android.view.autofill.AutofillId;
 
+@TargetApi(26)
 class AutofillInfo {
     String hint;
     AutofillId autofillId;

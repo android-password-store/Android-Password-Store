@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,10 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@TargetApi(26)
 public class Decrypter {
     Context applicationContext;
 
-    private static final String TAG = "PasswordStoreAutofillRequest";
+    private static final String TAG = "PasswordStoreAutofill";
 
     public Decrypter(
             Context applicationContext
