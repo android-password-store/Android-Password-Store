@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.service.autofill.Dataset;
+import android.service.autofill.FillResponse;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.autofill.AutofillId;
@@ -13,7 +14,6 @@ import android.widget.RemoteViews;
 
 import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -34,14 +34,14 @@ public class DatasetCreator {
 
     private Dataset assembleDatasetFromEntry(
             PasswordEntry entry,
-            Map<String, AutofillInfo> fields,
+            List<AutofillInfo> fields,
             File file
     ) {
         File repositoryPath = PasswordRepository.getRepositoryDirectory(applicationContext);
         Dataset.Builder datasetBuilder = new Dataset.Builder();
-        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
-            String hint = field.getKey();
-            AutofillId autofillId = field.getValue().autofillId;
+        for (AutofillInfo field : fields) {
+            String hint = field.hint;
+            AutofillId autofillId = field.autofillId;
 
             String value = hint == View.AUTOFILL_HINT_PASSWORD
                     ? entry.getPassword()
@@ -62,28 +62,35 @@ public class DatasetCreator {
         return datasetBuilder.build();
     }
 
-    private Dataset assembeAuthPromptDataset(Map<String, AutofillInfo> fields, Intent result) {
-        PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
-        String packageName = applicationContext.getPackageName();
-        RemoteViews presentation =
-                new RemoteViews(packageName, R.layout.multidataset_service_list_item);
-        presentation.setTextViewText(R.id.text, "Unlock pass");
-        presentation.setImageViewResource(R.id.icon, R.mipmap.ic_launcher);
-        Dataset.Builder datasetBuilder = new Dataset.Builder();
-        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
-            AutofillId autofillId = field.getValue().autofillId;
-            datasetBuilder.setValue(
-                    autofillId,
-                    AutofillValue.forText(""),
-                    presentation
-            );
+    private FillResponse assembeAuthPromptResponse(List<AutofillInfo> fields, Intent result) {
+        PendingIntent pendingIntent = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+        IntentSender intentSender = pendingIntent.getIntentSender();
+        List<AutofillId> autofillIds = new ArrayList<>();
+        FillResponse.Builder fillResponseBuilder = new FillResponse.Builder();
+
+
+        for (AutofillInfo field : fields) {
+            autofillIds.add(field.autofillId);
         }
-        return datasetBuilder.build();
+
+        String packageName = applicationContext.getPackageName();
+        RemoteViews authPresentation =
+                new RemoteViews(packageName, R.layout.multidataset_service_list_item);
+        authPresentation.setTextViewText(
+                R.id.text,
+                applicationContext.getString(R.string.autofill_unlock_keychain)
+        );
+        fillResponseBuilder.setAuthentication(
+                autofillIds.toArray(new AutofillId[autofillIds.size()]),
+                intentSender,
+                authPresentation
+        );
+        return fillResponseBuilder.build();
     }
 
     public void createOneDataset(
             final File match,
-            final Map<String, AutofillInfo> fields,
+            final List<AutofillInfo> fields,
             final DatasetCreationListener datasetCreationListener
     ) {
         Decrypter decrypter = new Decrypter(applicationContext);
@@ -99,8 +106,8 @@ public class DatasetCreator {
 
                     @Override
                     void onAuthenticationRequired(List<File> failedItems, Intent result) {
-                        Dataset authPromptDataset = assembeAuthPromptDataset(fields, result);
-                        datasetCreationListener.onDatasetCreated(authPromptDataset);
+                        FillResponse authResponse = assembeAuthPromptResponse(fields, result);
+                        datasetCreationListener.onAuthenticationRequired(authResponse);
                     }
                 }
         );
@@ -108,7 +115,7 @@ public class DatasetCreator {
 
     public void createDatasetBatch(
             List<File> matches,
-            final Map<String, AutofillInfo> fields,
+            final List<AutofillInfo> fields,
             final DatasetCreationListener datasetCreationListener
     ) {
         Decrypter decrypter = new Decrypter(applicationContext);
@@ -130,30 +137,8 @@ public class DatasetCreator {
 
                     @Override
                     void onAuthenticationRequired(List<File> failedItems, Intent result) {
-                        List<Dataset> results = new ArrayList<>();
-                        PendingIntent pendingIntent = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
-                        IntentSender intentSender = pendingIntent.getIntentSender();
-
-                        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
-                            Dataset.Builder datasetBuilder = new Dataset.Builder();
-                            AutofillId autofillId = field.getValue().autofillId;
-
-                            String packageName = applicationContext.getPackageName();
-                            RemoteViews presentation =
-                                    new RemoteViews(packageName, R.layout.multidataset_service_list_item);
-                            presentation.setTextViewText(
-                                    R.id.text,
-                                    applicationContext.getString(R.string.autofill_unlock_keychain)
-                            );
-                            datasetBuilder.setAuthentication(intentSender);
-                            datasetBuilder.setValue(
-                                    autofillId,
-                                    AutofillValue.forText(""),
-                                    presentation
-                            );
-                            results.add(datasetBuilder.build());
-                        }
-                        datasetCreationListener.onDatasetBatchCreated(results);
+                        FillResponse authResponse = assembeAuthPromptResponse(fields, result);
+                        datasetCreationListener.onAuthenticationRequired(authResponse);
                     }
                 }
         );

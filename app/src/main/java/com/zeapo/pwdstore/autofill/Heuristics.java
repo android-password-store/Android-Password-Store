@@ -9,18 +9,19 @@ public final class Heuristics {
             "un",
             "user",
             "email",
-            "id"
+            "konto",
     };
 
     public static final String[] PASSWORD_FIELD_EXAMPLES = {
             "password",
+            "passwort",
             "pw",
             "secret",
     };
 
     private static Boolean compareHintWithExamples(String hint, String[] examples) {
         for (String example : examples) {
-            if (example.contains(hint.toLowerCase())) return true;
+            if (hint.toLowerCase().contains(example)) return true;
         }
         return false;
     }

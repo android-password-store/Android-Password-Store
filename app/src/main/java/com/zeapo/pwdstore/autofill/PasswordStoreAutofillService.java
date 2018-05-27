@@ -61,7 +61,7 @@ public class PasswordStoreAutofillService extends AutofillService {
         Log.d(TAG, "onFillRequest()");
         // Find autofillable fields
         AssistStructure structure = getLatestAssistStructure(request);
-        Map<String, AutofillInfo> fields = getAutofillableFields(structure);
+        List<AutofillInfo> fields = getAutofillableFields(structure);
 
         if (fields.isEmpty()) {
             toast("No autofill hints found");
@@ -77,8 +77,8 @@ public class PasswordStoreAutofillService extends AutofillService {
         List<AutofillId> autofillIds = new ArrayList<>();
 
         // need a list of the autofillIds
-        for (Map.Entry<String, AutofillInfo> field: fields.entrySet()) {
-            autofillIds.add(field.getValue().autofillId);
+        for (AutofillInfo field: fields) {
+            autofillIds.add(field.autofillId);
         }
         AutofillId[] requiredIds = new AutofillId[autofillIds.size()];
         autofillIds.toArray(requiredIds);
@@ -115,6 +115,11 @@ public class PasswordStoreAutofillService extends AutofillService {
                         }
                         callback.onSuccess(response.build());
                     }
+
+                    @Override
+                    void onAuthenticationRequired(FillResponse authResponse) {
+                        callback.onSuccess(authResponse);
+                    }
                 }
         );
     }
@@ -126,21 +131,21 @@ public class PasswordStoreAutofillService extends AutofillService {
         callback.onSuccess();
     }
 
-    private Integer determineAutofillType(Map<String, AutofillInfo> fields) {
+    private Integer determineAutofillType(List<AutofillInfo> fields) {
         // if any of the autofill fields has a webDomain we assume we match against a webpage
-        for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
-            if (field.getValue().webDomain != null) {
+        for (AutofillInfo field : fields) {
+            if (field.webDomain != null) {
                 return AutofillTypes.HTML_AUTOFILL;
             }
         }
         return AutofillTypes.ACTIVITY_AUTOFILL;
     }
 
-    private String determineSearchTerm(Map<String, AutofillInfo> fields) {
+    private String determineSearchTerm(List<AutofillInfo> fields) {
         Integer autoFillType = determineAutofillType(fields);
         if (autoFillType == AutofillTypes.HTML_AUTOFILL) {
-            for (Map.Entry<String, AutofillInfo> field : fields.entrySet()) {
-                String webDomain = field.getValue().webDomain;
+            for (AutofillInfo field : fields) {
+                String webDomain = field.webDomain;
                 if (webDomain != null) return webDomain;
             }
         }
@@ -185,8 +190,8 @@ public class PasswordStoreAutofillService extends AutofillService {
      * <p>An autofillable field is a {@link ViewNode} whose {@link #getHint(ViewNode)} metho
      */
     @NonNull
-    private Map<String, AutofillInfo> getAutofillableFields(@NonNull AssistStructure structure) {
-        ArrayMap<String, AutofillInfo> fields = new ArrayMap<>();
+    private List<AutofillInfo> getAutofillableFields(@NonNull AssistStructure structure) {
+        List<AutofillInfo> fields = new ArrayList<>();
         int nodes = structure.getWindowNodeCount();
         for (int i = 0; i < nodes; i++) {
             ViewNode node = structure.getWindowNodeAt(i).getRootViewNode();
@@ -199,9 +204,10 @@ public class PasswordStoreAutofillService extends AutofillService {
     /**
      * Adds any autofillable view from the {@link ViewNode} and its descendants to the map.
      */
-    private void addAutofillableFields(@NonNull Map<String, AutofillInfo> fields,
-                                       @NonNull ViewNode node,
-                                       String webDomain
+    private void addAutofillableFields(
+            @NonNull List<AutofillInfo> fields,
+            @NonNull ViewNode node,
+            String webDomain
     ) {
         // with this we carry over possible webdomais from parent, we need it later to find our
         // password
@@ -211,15 +217,14 @@ public class PasswordStoreAutofillService extends AutofillService {
         if (type == View.AUTOFILL_TYPE_TEXT) {
             // first try to get hint from android field hints
             AutofillId id = node.getAutofillId();
-            String hint = getHint(node);
-            if (hint != null) {
-                fields.put(hint, new AutofillInfo(id, AutofillTypes.ACTIVITY_AUTOFILL, webDomain));
-            }
 
-            // try our luck with html attributes
-            hint = getHintFromHTML(node);
-            if (hint != null) {
-                fields.put(hint, new AutofillInfo(id, AutofillTypes.HTML_AUTOFILL, webDomain));
+            String htmlHint = getHintFromHTML(node);
+            String activityHint = getHint(node);
+            Log.d(TAG, "autofillable fields:" + fields);
+            if (activityHint != null) {
+                fields.add(new AutofillInfo(activityHint, id, AutofillTypes.ACTIVITY_AUTOFILL, webDomain));
+            } else if (htmlHint != null) {
+                fields.add(new AutofillInfo(htmlHint, id, AutofillTypes.HTML_AUTOFILL, webDomain));
             }
 
         }
