@@ -51,10 +51,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val name: String by lazy { getName(fullPath, repoPath) }
     private val lastChangedString: CharSequence by lazy { getLastChangedString(intent.getIntExtra("LAST_CHANGED_TIMESTAMP", -1)) }
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
-
-    private val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
     private var mServiceConnection: OpenPgpServiceConnection? = null
+
+    public val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

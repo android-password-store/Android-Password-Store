@@ -4,12 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'eclipse'
 
 android {
-    compileSdkVersion "android-P"
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
-        minSdkVersion 26
-        targetSdkVersion 28
+        minSdkVersion 16
+        targetSdkVersion 27
         versionCode 95
         versionName "1.2.0.75"
 
@@ -56,31 +56,30 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:recyclerview-v7:27.1.0'
-    compile 'com.android.support:cardview-v7:27.1.0'
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support:support-annotations:27.1.0'
-    compile 'org.sufficientlysecure:openpgp-api:11.0'
-    compile 'com.nononsenseapps:filepicker:2.4.2'
-    compile('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r') {
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-annotations:27.1.1'
+    implementation 'org.sufficientlysecure:openpgp-api:11.0'
+    implementation 'com.nononsenseapps:filepicker:2.4.2'
+    implementation('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    compile 'com.jcraft:jsch:0.1.54'
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
-    compile 'com.jayway.android.robotium:robotium-solo:5.3.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.jcraft:jsch:0.1.54'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.11'
+    implementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
-    compile 'com.google.guava:guava:25.0-android'
     // Testing-only dependencies
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'org.mockito:mockito-core:2.8.47'
-    androidTestCompile 'com.android.support.test:runner:1.0.1'
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'org.mockito:mockito-core:2.8.47'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
 
 
 }

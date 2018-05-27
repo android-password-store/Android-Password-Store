@@ -123,8 +123,8 @@
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
-    <string name="pref_autofill_title">Autofill</string>
-    <string name="pref_autofill_enable_title">Enable autofill</string>
+    <string name="pref_autofill_title">Autofill (via accessibilty hack)</string>
+    <string name="pref_autofill_enable_title">Enable accessibilty hack</string>
     <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
     <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
     <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>

@@ -113,11 +113,15 @@ public class PasswordStoreAutofillService extends AutofillService {
                         for (Dataset dataset : datasetList) {
                             response.addDataset(dataset);
                         }
+                        Log.d(TAG, "Datasets built: " + datasetList);
+                        Log.d(TAG, "Send autofill response");
                         callback.onSuccess(response.build());
                     }
 
                     @Override
                     void onAuthenticationRequired(FillResponse authResponse) {
+                        Log.d(TAG, "Autofill authentication required");
+                        Log.d(TAG, "Send autofill auth response");
                         callback.onSuccess(authResponse);
                     }
                 }
