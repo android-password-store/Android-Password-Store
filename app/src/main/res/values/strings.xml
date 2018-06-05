@@ -221,4 +221,5 @@
     <string name="crypto_password_edit_hint">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
+    <string name="hotp_pending">Tap copy to calculate HOTP</string>
 </resources>

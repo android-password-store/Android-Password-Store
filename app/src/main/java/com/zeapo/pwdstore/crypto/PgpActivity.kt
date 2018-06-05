@@ -98,9 +98,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     override fun onDestroy() {
-        if (passwordEntry?.hasHotp() == true) {
+        if (passwordEntry?.hasHotp() == true && passwordEntry?.hotpIsIncremented() == true) {
             incrementHotp()
         }
+
         super.onDestroy()
         mServiceConnection?.unbindFromService()
     }
@@ -265,8 +266,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 crypto_copy_otp.setOnClickListener { copyOtpToClipBoard(Otp.calculateCode(entry.totpSecret, Date().time / (1000 * Otp.TIME_WINDOW))) }
                                 crypto_otp_show.text = Otp.calculateCode(entry.totpSecret, Date().time / (1000 * Otp.TIME_WINDOW))
                             } else {
-                                crypto_copy_otp.setOnClickListener { copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter)) }
-                                crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter)
+                                // we only want to calculate and show HOTP if the user requests it
+                                crypto_copy_otp.setOnClickListener {
+                                    copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1))
+                                    crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1)
+                                    entry.incrementHotp()
+                                    crypto_extra_show.text = entry.extraContent
+                                }
+                                crypto_otp_show.setText(R.string.hotp_pending)
                             }
                             crypto_otp_show.typeface = monoTypeface
 
@@ -611,7 +618,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         override fun onPostExecute(b: Boolean?) {
             if (skip) return
-            if (passwordEntry?.hasHotp() == true) {
+            if (passwordEntry?.hasHotp() == true && passwordEntry?.hotpIsIncremented() == true) {
                 incrementHotp()
             }
 
