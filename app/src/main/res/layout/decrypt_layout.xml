@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zeapo.pwdstore.crypto.PgpActivity"
+    android:background="@color/background"
     android:orientation="vertical"
-    android:background="@color/background">
+    tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,17 +61,17 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/divider"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/divider"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:id="@+id/crypto_container_decrypt"
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="vertical"
             android:visibility="invisible">
 
             <GridLayout
@@ -83,39 +83,40 @@
                     android:id="@+id/crypto_password_show_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/black"
-                    android:text="@string/password"
+                    android:layout_column="0"
                     android:layout_row="0"
-                    android:layout_column="0"/>
+                    android:text="@string/password"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/crypto_password_show"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:typeface="monospace"
-                    android:textColor="@android:color/black"
                     android:layout_column="2"
-                    android:layout_row="0"/>
+                    android:layout_row="0"
+                    android:textColor="@android:color/black"
+                    android:typeface="monospace" />
 
                 <ProgressBar
                     android:id="@+id/pbLoading"
+                    style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_row="1"
                     android:layout_column="0"
-                    android:layout_columnSpan="3"/>
+                    android:layout_columnSpan="3"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_row="1" />
 
                 <Button
                     android:id="@+id/crypto_password_toggle_show"
                     android:layout_width="match_parent"
-                    android:text="@string/show_password"
                     android:layout_height="wrap_content"
-                    android:layout_row="2"
                     android:layout_column="0"
-                    android:layout_columnSpan="3"/>
+                    android:layout_columnSpan="3"
+                    android:layout_row="2"
+                    android:text="@string/show_password" />
             </GridLayout>
 
 
@@ -129,13 +130,13 @@
                     android:id="@+id/crypto_copy_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:contentDescription="@string/copy_username"
-                    android:visibility="invisible"
                     android:background="@color/background"
-                    android:src="@drawable/ic_content_copy"/>
+                    android:contentDescription="@string/copy_username"
+                    android:src="@drawable/ic_content_copy"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/crypto_username_show_label"
@@ -146,10 +147,10 @@
                     android:layout_alignParentTop="true"
                     android:layout_toLeftOf="@id/crypto_copy_username"
                     android:layout_toStartOf="@id/crypto_copy_username"
-                    android:visibility="invisible"
                     android:text="@string/username"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/crypto_username_show"
@@ -160,45 +161,45 @@
                     android:layout_below="@id/crypto_username_show_label"
                     android:layout_toLeftOf="@id/crypto_copy_username"
                     android:layout_toStartOf="@id/crypto_copy_username"
-                    android:visibility="invisible"
                     android:textColor="@android:color/black"
                     android:textIsSelectable="true"
-                    android:typeface="monospace" />
+                    android:typeface="monospace"
+                    android:visibility="invisible" />
 
                 <ImageButton
-                    android:id="@+id/crypto_copy_totp"
+                    android:id="@+id/crypto_copy_otp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_below="@id/crypto_username_show"
-                    android:visibility="invisible"
-                    android:contentDescription="@string/copy_totp"
                     android:background="@color/background"
-                    android:src="@drawable/ic_content_copy"/>
+                    android:contentDescription="@string/copy_otp"
+                    android:src="@drawable/ic_content_copy"
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/crypto_totp_show_label"
+                    android:id="@+id/crypto_otp_show_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@id/crypto_copy_totp"
-                    android:layout_toStartOf="@id/crypto_copy_totp"
                     android:layout_below="@id/crypto_username_show"
-                    android:text="@string/totp"
+                    android:layout_toLeftOf="@id/crypto_copy_otp"
+                    android:layout_toStartOf="@id/crypto_copy_otp"
+                    android:text="@string/otp"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/crypto_totp_show"
+                    android:id="@+id/crypto_otp_show"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@id/crypto_totp_show_label"
-                    android:layout_toLeftOf="@id/crypto_copy_totp"
-                    android:layout_toStartOf="@id/crypto_copy_totp"
+                    android:layout_below="@id/crypto_otp_show_label"
+                    android:layout_toLeftOf="@id/crypto_copy_otp"
+                    android:layout_toStartOf="@id/crypto_copy_otp"
                     android:textColor="@android:color/black"
                     android:textIsSelectable="true"
                     android:typeface="monospace" />
@@ -209,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@id/crypto_totp_show"
+                    android:layout_below="@id/crypto_otp_show"
                     android:text="@string/extra_content"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />

@@ -24,13 +24,14 @@
     <!-- git commits -->
     <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
     <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
+    <string name="increment_commit_text">[ANDROID PwdStore] Increment HOTP counter for &#160;</string>
     <string name="from_store">&#160; from store.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
-    <string name="clipboard_totp_toast_text">TOTP code copied to clipboard</string>
+    <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
@@ -93,11 +94,11 @@
     <string name="password">Password:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
-    <string name="totp">TOTP:</string>
+    <string name="otp">OTP:</string>
     <string name="edit_password">Edit password</string>
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
-    <string name="copy_totp">Copy OTP code</string>
+    <string name="copy_otp">Copy OTP code</string>
     <string name="share_as_plaintext">Share as plaintext</string>
     <string name="last_changed">Last changed %s</string>
 

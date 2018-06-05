@@ -59,4 +59,26 @@ public class PasswordEntryTest extends TestCase {
         assertTrue(entry.hasTotp());
         assertEquals("JBSWY3DPEHPK3PXP", entry.getTotpSecret());
     }
+
+    public void testNoHotpUriPresent() {
+        PasswordEntry entry = new PasswordEntry("secret\nextra\nlogin: username\ncontent");
+        assertFalse(entry.hasHotp());
+        assertNull(entry.getHotpSecret());
+        assertNull(entry.getHotpCounter());
+    }
+
+    public void testHotpUriInPassword() {
+        PasswordEntry entry = new PasswordEntry("otpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25");
+        assertTrue(entry.hasHotp());
+        assertEquals("JBSWY3DPEHPK3PXP", entry.getHotpSecret());
+        // Note: we are asserting 26 because the counter is already incremented by the getter
+        assertEquals(new Long(26), entry.getHotpCounter());
+    }
+
+    public void testHotpUriInContent() {
+        PasswordEntry entry = new PasswordEntry("secret\nusername: test\notpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25");
+        assertTrue(entry.hasHotp());
+        assertEquals("JBSWY3DPEHPK3PXP", entry.getHotpSecret());
+        assertEquals(new Long(26), entry.getHotpCounter());
+    }
 }

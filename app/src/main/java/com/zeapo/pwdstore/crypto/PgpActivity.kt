@@ -17,12 +17,8 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.*
 import android.widget.*
-import com.zeapo.pwdstore.PasswordEntry
-import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.UserPreference
-import com.zeapo.pwdstore.pwgenDialogFragment
-import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.Totp
+import com.zeapo.pwdstore.*
+import com.zeapo.pwdstore.utils.Otp
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
 import org.apache.commons.io.FileUtils
@@ -102,6 +98,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     override fun onDestroy() {
+        if (passwordEntry?.hasHotp() == true) {
+            incrementHotp()
+        }
         super.onDestroy()
         mServiceConnection?.unbindFromService()
     }
@@ -253,27 +252,34 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             }
                         }
 
-                        if (entry.hasTotp()) {
+                        if (entry.hasTotp() || entry.hasHotp()) {
                             crypto_extra_show_layout.visibility = View.VISIBLE
                             crypto_extra_show.typeface = monoTypeface
                             crypto_extra_show.text = entry.extraContent
 
-                            crypto_totp_show.visibility = View.VISIBLE
-                            crypto_totp_show_label.visibility = View.VISIBLE
-                            crypto_copy_totp.visibility = View.VISIBLE
+                            crypto_otp_show.visibility = View.VISIBLE
+                            crypto_otp_show_label.visibility = View.VISIBLE
+                            crypto_copy_otp.visibility = View.VISIBLE
 
-                            crypto_copy_totp.setOnClickListener { copyTotpToClipBoard(Totp.calculateCode(entry.totpSecret, Date().time / 1000)) }
-                            crypto_totp_show.typeface = monoTypeface
-                            crypto_totp_show.text = Totp.calculateCode(entry.totpSecret, Date().time / 1000);
+                            if (entry.hasTotp()) {
+                                crypto_copy_otp.setOnClickListener { copyOtpToClipBoard(Otp.calculateCode(entry.totpSecret, Date().time / (1000 * Otp.TIME_WINDOW))) }
+                                crypto_otp_show.text = Otp.calculateCode(entry.totpSecret, Date().time / (1000 * Otp.TIME_WINDOW))
+                            } else {
+                                crypto_copy_otp.setOnClickListener { copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter)) }
+                                crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter)
+                            }
+                            crypto_otp_show.typeface = monoTypeface
+
                         } else {
-                            crypto_totp_show.visibility = View.GONE
-                            crypto_totp_show_label.visibility = View.GONE
-                            crypto_copy_totp.visibility = View.GONE
+                            crypto_otp_show.visibility = View.GONE
+                            crypto_otp_show_label.visibility = View.GONE
+                            crypto_copy_otp.visibility = View.GONE
                         }
 
                         if (settings.getBoolean("copy_on_decrypt", true)) {
                             copyPasswordToClipBoard()
                         }
+
                     } catch (e: Exception) {
                         Log.e(TAG, "An Exception occurred", e)
                     }
@@ -315,7 +321,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = ByteArrayInputStream("$pass\n$extra".toByteArray(Charset.forName("UTF-8")))
         val oStream = ByteArrayOutputStream()
 
-        val path = if (intent.getStringExtra("OPERATION") == "EDIT") fullPath else "$fullPath/$name.gpg"
+        val path = if (intent.getStringExtra("OPERATION") == "EDIT"
+                || intent.getStringExtra("OPERATION") == "INCREMENT") fullPath else "$fullPath/$name.gpg"
 
         api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
             when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
@@ -330,7 +337,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         returnIntent.putExtra("CREATED_FILE", path)
                         returnIntent.putExtra("NAME", name)
 
-                        // if coming from decrypt screen->edit button
+                        // if coming from decrypt screen->edit button or increment HOTP counter
                         if (intent.getBooleanExtra("fromDecrypt", false)) {
                             data.putExtra("needCommit", true)
                         }
@@ -376,6 +383,25 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         data.putExtra("fromDecrypt", true)
         intent = data
         invalidateOptionsMenu()
+    }
+
+    /**
+     * Writes updated HOTP counter to edit fields and encrypts
+     */
+    private fun incrementHotp() {
+        // we do not want to increment the HOTP counter if the user has edited the entry
+        if(intent.getStringExtra("OPERATION") != "EDIT") {
+            setContentView(R.layout.encrypt_layout)
+            crypto_password_file_edit.setText(name)
+            crypto_password_edit.setText(passwordEntry?.password)
+            crypto_extra_edit.setText(passwordEntry?.extraContent)
+
+            val data = Intent(this, PgpActivity::class.java)
+            data.putExtra("OPERATION", "INCREMENT")
+            data.putExtra("fromDecrypt", true)
+            intent = data
+            encrypt()
+        }
     }
 
     /**
@@ -500,12 +526,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         showToast(resources.getString(R.string.clipboard_username_toast_text))
     }
 
-    private fun copyTotpToClipBoard(code: String) {
+    private fun copyOtpToClipBoard(code: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
         clipboard.primaryClip = clip
-        showToast(resources.getString(R.string.clipboard_totp_toast_text))
+        showToast(resources.getString(R.string.clipboard_otp_toast_text))
     }
-
 
     private fun shareAsPlaintext() {
         if (findViewById<View>(R.id.share_password_as_plaintext) == null)
@@ -586,6 +611,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         override fun onPostExecute(b: Boolean?) {
             if (skip) return
+            if (passwordEntry?.hasHotp() == true) {
+                incrementHotp()
+            }
 
             // only clear the clipboard if we automatically copied the password to it
             if (settings.getBoolean("copy_on_decrypt", true)) {
