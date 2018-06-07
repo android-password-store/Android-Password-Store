@@ -40,6 +40,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private var passwordEntry: PasswordEntry? = null
     private var api: OpenPgpApi? = null
 
+    private var editName: String? = null
+    private var editPass: String? = null
+    private var editExtra: String? = null
+
     private val operation: String by lazy { intent.getStringExtra("OPERATION") }
     private val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
@@ -98,10 +102,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     override fun onDestroy() {
-        if (passwordEntry?.hasHotp() == true && passwordEntry?.hotpIsIncremented() == true) {
-            incrementHotp()
-        }
-
+        checkAndIncrementHotp()
         super.onDestroy()
         mServiceConnection?.unbindFromService()
     }
@@ -122,14 +123,21 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             android.R.id.home -> {
-                setResult(RESULT_CANCELED)
+                if(passwordEntry?.hotpIsIncremented() == false) {
+                    setResult(RESULT_CANCELED)
+                }
                 finish()
             }
             R.id.copy_password -> copyPasswordToClipBoard()
             R.id.share_password_as_plaintext -> shareAsPlaintext()
             R.id.edit_password -> editPassword()
             R.id.crypto_confirm_add -> encrypt()
-            R.id.crypto_cancel_add -> setResult(RESULT_CANCELED)
+            R.id.crypto_cancel_add -> {
+                if(passwordEntry?.hotpIsIncremented() == false) {
+                    setResult(RESULT_CANCELED)
+                }
+                finish()
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -272,6 +280,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1)
                                     entry.incrementHotp()
                                     crypto_extra_show.text = entry.extraContent
+
+                                    // we must set the result before encrypt() is called, since in
+                                    // some cases it is called during the finish() sequence
+                                    val returnIntent = Intent()
+                                    returnIntent.putExtra("NAME", name.trim())
+                                    returnIntent.putExtra("OPERATION", "INCREMENT")
+                                    returnIntent.putExtra("needCommit", true)
+                                    setResult(RESULT_OK, returnIntent)
                                 }
                                 crypto_otp_show.setText(R.string.hotp_pending)
                             }
@@ -302,16 +318,19 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Encrypts the password and the extra content
      */
     private fun encrypt() {
-        val name = crypto_password_file_edit.text.toString().trim()
-        val pass = crypto_password_edit.text.toString()
-        val extra = crypto_extra_edit.text.toString()
+        // if the password was edited, we grab the edit fields; otherwise, leave as is for HOTP increment
+        if(intent.getStringExtra("OPERATION") == "EDIT") {
+            editName = crypto_password_file_edit.text.toString().trim()
+            editPass = crypto_password_edit.text.toString()
+            editExtra = crypto_extra_edit.text.toString()
+        }
 
-        if (name.isEmpty()) {
+        if (editName?.isEmpty() == true) {
             showToast(resources.getString(R.string.file_toast_text))
             return
         }
 
-        if (pass.isEmpty() && extra.isEmpty()) {
+        if (editPass?.isEmpty() == true && editExtra?.isEmpty() == true) {
             showToast(resources.getString(R.string.empty_toast_text))
             return
         }
@@ -325,14 +344,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
         // TODO Check if we could use PasswordEntry to generate the file
-        val iStream = ByteArrayInputStream("$pass\n$extra".toByteArray(Charset.forName("UTF-8")))
+        val iStream = ByteArrayInputStream("$editPass\n$editExtra".toByteArray(Charset.forName("UTF-8")))
         val oStream = ByteArrayOutputStream()
 
-        val path = if (intent.getStringExtra("OPERATION") == "EDIT"
-                || intent.getStringExtra("OPERATION") == "INCREMENT") fullPath else "$fullPath/$name.gpg"
+        val path = if (intent.getBooleanExtra("fromDecrypt", false)) fullPath else "$fullPath/$editName.gpg"
 
-        api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
-            when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+        api?.executeApiAsync(data, iStream, oStream, { result: Intent? -> when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 OpenPgpApi.RESULT_CODE_SUCCESS -> {
                     try {
                         // TODO This might fail, we should check that the write is successful
@@ -342,15 +359,16 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                         val returnIntent = Intent()
                         returnIntent.putExtra("CREATED_FILE", path)
-                        returnIntent.putExtra("NAME", name)
+                        returnIntent.putExtra("NAME", editName)
 
-                        // if coming from decrypt screen->edit button or increment HOTP counter
+                        // if coming from decrypt screen->edit button
                         if (intent.getBooleanExtra("fromDecrypt", false)) {
-                            data.putExtra("needCommit", true)
+                            returnIntent.putExtra("OPERATION", "EDIT")
+                            returnIntent.putExtra("needCommit", true)
                         }
-
                         setResult(RESULT_OK, returnIntent)
                         finish()
+
                     } catch (e: Exception) {
                         Log.e(TAG, "An Exception occurred", e)
                     }
@@ -395,13 +413,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Writes updated HOTP counter to edit fields and encrypts
      */
-    private fun incrementHotp() {
-        // we do not want to increment the HOTP counter if the user has edited the entry
-        if(intent.getStringExtra("OPERATION") != "EDIT") {
-            setContentView(R.layout.encrypt_layout)
-            crypto_password_file_edit.setText(name)
-            crypto_password_edit.setText(passwordEntry?.password)
-            crypto_extra_edit.setText(passwordEntry?.extraContent)
+    private fun checkAndIncrementHotp() {
+        // we do not want to increment the HOTP counter if the user has edited the entry or has not
+        // generated an HOTP code
+        if(intent.getStringExtra("OPERATION") != "EDIT" && passwordEntry?.hotpIsIncremented() == true) {
+            editName = name.trim()
+            editPass = passwordEntry?.password
+            editExtra = passwordEntry?.extraContent
 
             val data = Intent(this, PgpActivity::class.java)
             data.putExtra("OPERATION", "INCREMENT")
@@ -618,9 +636,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         override fun onPostExecute(b: Boolean?) {
             if (skip) return
-            if (passwordEntry?.hasHotp() == true && passwordEntry?.hotpIsIncremented() == true) {
-                incrementHotp()
-            }
+            checkAndIncrementHotp()
 
             // only clear the clipboard if we automatically copied the password to it
             if (settings.getBoolean("copy_on_decrypt", true)) {
@@ -637,13 +653,15 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             }
 
             if (crypto_password_show != null) {
-                passwordEntry = null
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
+                if(passwordEntry?.hotpIsIncremented() == false) {
+                    setResult(Activity.RESULT_CANCELED)
+                }
+                passwordEntry = null
                 crypto_password_show.text = ""
                 crypto_extra_show.text = ""
                 crypto_extra_show_layout.visibility = View.INVISIBLE
                 crypto_container_decrypt.visibility = View.INVISIBLE
-                setResult(Activity.RESULT_CANCELED)
                 finish()
             }
         }
