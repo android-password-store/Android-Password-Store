@@ -65,11 +65,11 @@
     <string name="password">كلمة السر :</string>
     <string name="extra_content">بيانات إضافية :</string>
     <string name="username">إسم المستخدم :</string>
-    <string name="totp">TOTP :</string>
+    <string name="otp">OTP :</string>
     <string name="edit_password">تعديل كلمة السر</string>
     <string name="copy_password">نسخ كلمة السر</string>
     <string name="copy_username">نسخ إسم المستخدم</string>
-    <string name="copy_totp">نسخ رمز الـ OTP</string>
+    <string name="copy_otp">نسخ رمز الـ OTP</string>
     <string name="share_as_plaintext">شارك كنص مجرد</string>
     <string name="last_changed">آخِر تعديل %s</string>
 
