@@ -318,8 +318,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Encrypts the password and the extra content
      */
     private fun encrypt() {
-        // if the password was edited, we grab the edit fields; otherwise, leave as is for HOTP increment
-        if(intent.getStringExtra("OPERATION") == "EDIT") {
+        // if HOTP was incremented, we leave fields as is; they have already been set
+        if(intent.getStringExtra("OPERATION") != "INCREMENT") {
             editName = crypto_password_file_edit.text.toString().trim()
             editPass = crypto_password_edit.text.toString()
             editExtra = crypto_extra_edit.text.toString()
