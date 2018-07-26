@@ -1,30 +1,28 @@
 language: android
-jdk: oraclejdk8
 
-before_install:
-  - yes | sdkmanager "platforms;android-27"
+jdk:
+  - openjdk8
 
-licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+android:
+  components:
+    - tools
+    - build-tools-28.0.3
+    - android-28
+    - extra-google-m2repository
+    - extra-android-m2repository
+  licenses:
+    - ".+"
+
+script:
+  - "./gradlew clean build test lintDebug -Dpre-dex=false"
+
+notifications:
+  email: false
+
+sudo: false
 
 cache:
   directories:
-    - $HOME/.gradle
-
- # ok no tests for now
- # - sys-img-x86-android-22
-
-install:
-  - echo y | android update sdk -u -a -t tools
-  - echo y | android update sdk -u -a -t platform-tools
-  - echo y | android update sdk -u -a -t build-tools-27.0.1
-  - echo y | android update sdk -u -a -t android-27
-  - echo y | android update sdk -u -a -t extra-google-m2repository
-  - echo y | android update sdk -u -a -t extra-android-m2repository
-
-env:
-  - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
-
-script: "./gradlew clean build test lintDebug -Dpre-dex=false"
+    - "$HOME/.m2"
+    - "$HOME/.gradle"
+    - "$ANDROID_HOME"
