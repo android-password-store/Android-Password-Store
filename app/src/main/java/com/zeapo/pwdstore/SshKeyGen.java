@@ -37,6 +37,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
 
 public class SshKeyGen extends AppCompatActivity {
 
@@ -51,7 +52,7 @@ public class SshKeyGen extends AppCompatActivity {
             final View v = inflater.inflate(R.layout.fragment_ssh_keygen, container, false);
             Typeface monoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/sourcecodepro.ttf");
 
-            Spinner spinner = (Spinner) v.findViewById(R.id.length);
+            Spinner spinner = v.findViewById(R.id.length);
             Integer[] lengths = new Integer[]{2048, 4096};
             ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_spinner_dropdown_item, lengths);
@@ -59,11 +60,11 @@ public class SshKeyGen extends AppCompatActivity {
 
             ((EditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
 
-            CheckBox checkbox = (CheckBox) v.findViewById(R.id.show_passphrase);
+            CheckBox checkbox = v.findViewById(R.id.show_passphrase);
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    EditText editText = (EditText) v.findViewById(R.id.passphrase);
+                    EditText editText = v.findViewById(R.id.passphrase);
                     int selection = editText.getSelectionEnd();
                     if (isChecked) {
                         editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -90,7 +91,7 @@ public class SshKeyGen extends AppCompatActivity {
             @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
             builder.setView(v);
 
-            TextView textView = (TextView) v.findViewById(R.id.public_key);
+            TextView textView = v.findViewById(R.id.public_key);
             File file = new File(getActivity().getFilesDir() + "/.ssh_key.pub");
             try {
                 textView.setText(FileUtils.readFileToString(file));
@@ -124,7 +125,7 @@ public class SshKeyGen extends AppCompatActivity {
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            TextView textView = (TextView) getDialog().findViewById(R.id.public_key);
+                            TextView textView = getDialog().findViewById(R.id.public_key);
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("public key", textView.getText().toString());
                             clipboard.setPrimaryClip(clip);
@@ -152,13 +153,18 @@ public class SshKeyGen extends AppCompatActivity {
         }
     }
 
-    private class generateTask extends AsyncTask<String, Void, Exception> {
+    private static class KeyGenerateTask extends AsyncTask<String, Void, Exception> {
         private ProgressDialog pd;
+        private WeakReference<SshKeyGen> weakReference;
+
+        private KeyGenerateTask(final SshKeyGen activity) {
+            weakReference = new WeakReference<>(activity);
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = ProgressDialog.show(SshKeyGen.this, "", "Generating keys");
+            pd = ProgressDialog.show(weakReference.get(), "", "Generating keys");
         }
 
         protected Exception doInBackground(String... strings) {
@@ -170,7 +176,7 @@ public class SshKeyGen extends AppCompatActivity {
             try {
                 KeyPair kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, length);
 
-                File file = new File(getFilesDir() + "/.ssh_key");
+                File file = new File(weakReference.get().getFilesDir() + "/.ssh_key");
                 FileOutputStream out = new FileOutputStream(file, false);
                 if (passphrase.length() > 0) {
                     kp.writePrivateKey(out, passphrase.getBytes());
@@ -178,7 +184,7 @@ public class SshKeyGen extends AppCompatActivity {
                     kp.writePrivateKey(out);
                 }
 
-                file = new File(getFilesDir() + "/.ssh_key.pub");
+                file = new File(weakReference.get().getFilesDir() + "/.ssh_key.pub");
                 out = new FileOutputStream(file, false);
                 kp.writePublicKey(out, comment);
                 return null;
@@ -194,18 +200,18 @@ public class SshKeyGen extends AppCompatActivity {
             super.onPostExecute(e);
             pd.dismiss();
             if (e == null) {
-                Toast.makeText(SshKeyGen.this, "SSH-key generated", Toast.LENGTH_LONG).show();
+                Toast.makeText(weakReference.get(), "SSH-key generated", Toast.LENGTH_LONG).show();
                 DialogFragment df = new ShowSshKeyFragment();
-                df.show(getFragmentManager(), "public_key");
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                df.show(weakReference.get().getFragmentManager(), "public_key");
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(weakReference.get());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("use_generated_key", true);
                 editor.apply();
             } else {
-                new AlertDialog.Builder(SshKeyGen.this)
+                new AlertDialog.Builder(weakReference.get())
                         .setTitle("Error while trying to generate the ssh-key")
-                        .setMessage(getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage())
-                        .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+                        .setMessage(weakReference.get().getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage())
+                        .setPositiveButton(weakReference.get().getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // pass
@@ -223,7 +229,7 @@ public class SshKeyGen extends AppCompatActivity {
         String length = Integer.toString((Integer) ((Spinner) findViewById(R.id.length)).getSelectedItem());
         String passphrase = ((EditText) findViewById(R.id.passphrase)).getText().toString();
         String comment = ((EditText) findViewById(R.id.comment)).getText().toString();
-        new generateTask().execute(length, passphrase, comment);
+        new KeyGenerateTask(this).execute(length, passphrase, comment);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
