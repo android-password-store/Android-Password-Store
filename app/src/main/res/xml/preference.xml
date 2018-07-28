@@ -76,6 +76,11 @@
             android:key="filter_recursively"
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="type_dependent_sorting"
+            android:summary="@string/pref_type_dependent_sorting_hint"
+            android:title="@string/pref_type_dependent_sorting" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_autofill_title">

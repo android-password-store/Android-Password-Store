@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -155,8 +156,8 @@ public class PasswordRepository {
      *
      * @return a list of passwords in the root direcotyr
      */
-    public static ArrayList<PasswordItem> getPasswords(File rootDir) {
-        return getPasswords(rootDir, rootDir);
+    public static ArrayList<PasswordItem> getPasswords(File rootDir, Context context) {
+        return getPasswords(rootDir, rootDir, context);
     }
 
     /**
@@ -185,8 +186,9 @@ public class PasswordRepository {
      * @param path the directory path
      * @return a list of password items
      */
-    public static ArrayList<PasswordItem> getPasswords(File path, File rootDir) {
+    public static ArrayList<PasswordItem> getPasswords(File path, File rootDir, Context context) {
         //We need to recover the passwords then parse the files
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         ArrayList<File> passList = getFilesList(path);
 
         if (passList.size() == 0) return new ArrayList<>();
@@ -203,7 +205,16 @@ public class PasswordRepository {
                 passwordList.add(PasswordItem.newCategory(file.getName(), file, rootDir));
             }
         }
-        sort(passwordList);
+        if (settings.getBoolean("type_dependent_sorting", true)) {
+            sort(passwordList);
+        } else {
+            sort(passwordList, new Comparator<PasswordItem>() {
+                @Override
+                public int compare(PasswordItem a, PasswordItem b) {
+                    return a.getName().compareToIgnoreCase(b.getName());
+                }
+            });
+        }
         return passwordList;
     }
 

@@ -51,7 +51,9 @@ public class SelectFolderFragment extends Fragment{
 
         pathStack = new Stack<>();
         recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) getActivity(), mListener,
-                                                      PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
+                                                      PasswordRepository.getPasswords(new File(path),
+                                                              PasswordRepository.getRepositoryDirectory(getActivity()),
+                                                              getActivity()));
     }
 
     @Override
@@ -87,7 +89,9 @@ public class SelectFolderFragment extends Fragment{
 
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context)));
+                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(),
+                                PasswordRepository.getRepositoryDirectory(context),
+                                context));
 
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     }
