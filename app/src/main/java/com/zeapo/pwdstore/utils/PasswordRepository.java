@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
@@ -19,6 +18,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -155,8 +155,8 @@ public class PasswordRepository {
      *
      * @return a list of passwords in the root direcotyr
      */
-    public static ArrayList<PasswordItem> getPasswords(File rootDir) {
-        return getPasswords(rootDir, rootDir);
+    public static ArrayList<PasswordItem> getPasswords(File rootDir, PasswordSortOrder sortOrder) {
+        return getPasswords(rootDir, rootDir, sortOrder);
     }
 
     /**
@@ -185,7 +185,7 @@ public class PasswordRepository {
      * @param path the directory path
      * @return a list of password items
      */
-    public static ArrayList<PasswordItem> getPasswords(File path, File rootDir) {
+    public static ArrayList<PasswordItem> getPasswords(File path, File rootDir, PasswordSortOrder sortOrder) {
         //We need to recover the passwords then parse the files
         ArrayList<File> passList = getFilesList(path);
 
@@ -203,7 +203,7 @@ public class PasswordRepository {
                 passwordList.add(PasswordItem.newCategory(file.getName(), file, rootDir));
             }
         }
-        sort(passwordList);
+        sort(passwordList, sortOrder.comparator);
         return passwordList;
     }
 
@@ -242,6 +242,44 @@ public class PasswordRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public enum PasswordSortOrder {
+
+        FOLDER_FIRST(new Comparator<PasswordItem>() {
+            @Override
+            public int compare(PasswordItem p1, PasswordItem p2) {
+                return (p1.getType() + p1.getName())
+                        .compareToIgnoreCase(p2.getType() + p2.getName());
+            }
+        }),
+
+        INDEPENDENT(new Comparator<PasswordItem>() {
+            @Override
+            public int compare(PasswordItem p1, PasswordItem p2) {
+                return p1.getName().compareToIgnoreCase(p2.getName());
+            }
+        }),
+
+        FILE_FIRST(new Comparator<PasswordItem>() {
+            @Override
+            public int compare(PasswordItem p1, PasswordItem p2) {
+                return (p2.getType() + p1.getName())
+                        .compareToIgnoreCase(p1.getType() + p2.getName());
+            }
+        })
+
+        ;
+
+        private Comparator<PasswordItem> comparator;
+
+        PasswordSortOrder(Comparator<PasswordItem> comparator) {
+            this.comparator = comparator;
+        }
+
+        public static PasswordSortOrder getSortOrder(SharedPreferences settings) {
+            return valueOf(settings.getString("sort_order", null));
         }
     }
 }
