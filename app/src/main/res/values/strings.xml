@@ -123,6 +123,10 @@
     <string name="ssh_key_error_dialog_text">Message : \n</string>
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
+    <string name="pref_sort_order_title">Password sort order</string>
+    <string name="pref_folder_first_sort_order">Folders First</string>
+    <string name="pref_file_first_sort_order">Files First</string>
+    <string name="pref_type_independent_sort_order">Type Independent</string>
     <string name="pref_autofill_title">Autofill</string>
     <string name="pref_autofill_enable_title">Enable autofill</string>
     <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>

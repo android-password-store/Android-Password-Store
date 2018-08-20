@@ -313,7 +313,9 @@ public class PasswordStore extends AppCompatActivity {
         if (settings.getBoolean("git_external", false) && externalRepoPath != null) {
             File dir = new File(externalRepoPath);
 
-            if (dir.exists() && dir.isDirectory() && !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
+            PasswordRepository.PasswordSortOrder sortOrder = PasswordRepository.PasswordSortOrder.valueOf(settings.getString("sort_order", null));
+
+            if (dir.exists() && dir.isDirectory() && !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this), getSortOrder()).isEmpty()) {
                 PasswordRepository.closeRepository();
                 checkLocalRepository();
                 return; // if not empty, just show me the passwords!
@@ -648,7 +650,7 @@ public class PasswordStore extends AppCompatActivity {
                                 dir.exists() &&
                                 dir.isDirectory() &&
                                 !FileUtils.listFiles(dir, null, true).isEmpty() &&
-                                !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)).isEmpty()) {
+                                !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this), getSortOrder()).isEmpty()) {
                             PasswordRepository.closeRepository();
                             checkLocalRepository();
                             return; // if not empty, just show me the passwords!
@@ -768,5 +770,9 @@ public class PasswordStore extends AppCompatActivity {
         data.putExtra("path", path);
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    private PasswordRepository.PasswordSortOrder getSortOrder() {
+        return PasswordRepository.PasswordSortOrder.getSortOrder(settings);
     }
 }

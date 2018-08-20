@@ -76,6 +76,14 @@
             android:key="filter_recursively"
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
+        <ListPreference
+            android:title="@string/pref_sort_order_title"
+            android:defaultValue="FOLDER_FIRST"
+            android:key="sort_order"
+            android:entries="@array/sort_order_entries"
+            android:entryValues="@array/sort_order_values"
+            android:persistent="true"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_autofill_title">

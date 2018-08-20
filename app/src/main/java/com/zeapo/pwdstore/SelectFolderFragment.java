@@ -1,7 +1,9 @@
 package com.zeapo.pwdstore;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +53,7 @@ public class SelectFolderFragment extends Fragment{
 
         pathStack = new Stack<>();
         recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) getActivity(), mListener,
-                                                      PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
+                                                      PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
     }
 
     @Override
@@ -87,7 +89,7 @@ public class SelectFolderFragment extends Fragment{
 
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context)));
+                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
 
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     }
@@ -108,5 +110,9 @@ public class SelectFolderFragment extends Fragment{
             return PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
         else
             return pathStack.peek();
+    }
+
+    private PasswordRepository.PasswordSortOrder getSortOrder() {
+        return PasswordRepository.PasswordSortOrder.getSortOrder(PreferenceManager.getDefaultSharedPreferences(getActivity()));
     }
 }

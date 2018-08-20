@@ -60,7 +60,7 @@ public class PasswordFragment extends Fragment{
         scrollPosition = new Stack<>();
         pathStack = new Stack<>();
         recyclerAdapter = new PasswordRecyclerAdapter((PasswordStore) getActivity(), mListener,
-                                                      PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity())));
+                                                      PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
     }
 
     @Override
@@ -101,15 +101,15 @@ public class PasswordFragment extends Fragment{
                     if (item.getType() == PasswordItem.TYPE_CATEGORY) {
                         // push the current password list (non filtered plz!)
                         passListStack.push(pathStack.isEmpty() ?
-                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context)) :
-                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context)));
+                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context), getSortOrder()) :
+                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
                         //push the category were we're going
                         pathStack.push(item.getFile());
                         scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
 
                         recyclerView.scrollToPosition(0);
                         recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context)));
+                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
 
                         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     } else {
@@ -135,7 +135,7 @@ public class PasswordFragment extends Fragment{
         pathStack.clear();
         scrollPosition.clear();
         recyclerAdapter.clear();
-        recyclerAdapter.addAll(PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())));
+        recyclerAdapter.addAll(PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
@@ -146,8 +146,8 @@ public class PasswordFragment extends Fragment{
     public void refreshAdapter() {
         recyclerAdapter.clear();
         recyclerAdapter.addAll(pathStack.isEmpty() ?
-                                        PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())) :
-                                        PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity())));
+                                        PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()) :
+                                        PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
     }
 
     /**
@@ -172,8 +172,8 @@ public class PasswordFragment extends Fragment{
     private void recursiveFilter(String filter, File dir) {
         // on the root the pathStack is empty
         ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity())) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(getActivity()));
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()) :
+                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder());
 
         boolean rec = settings.getBoolean("filter_recursively", true);
         for (PasswordItem item : passwordItems) {
@@ -222,5 +222,9 @@ public class PasswordFragment extends Fragment{
         if (recyclerAdapter != null && recyclerAdapter.mActionMode != null) {
             recyclerAdapter.mActionMode.finish();
         }
+    }
+
+    private PasswordRepository.PasswordSortOrder getSortOrder() {
+        return PasswordRepository.PasswordSortOrder.getSortOrder(settings);
     }
 }
