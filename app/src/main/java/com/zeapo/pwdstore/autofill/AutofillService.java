@@ -620,7 +620,7 @@ public class AutofillService extends AccessibilityService {
             clip = ClipData.newPlainText("autofill_pm", "");
             clipboard.setPrimaryClip(clip);
             if (settings.getBoolean("clear_clipboard_20x", false)) {
-                for (int i = 0; i < 19; i++) {
+                for (int i = 0; i < 20; i++) {
                     clip = ClipData.newPlainText(String.valueOf(i), String.valueOf(i));
                     clipboard.setPrimaryClip(clip);
                 }
