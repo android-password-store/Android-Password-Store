@@ -386,14 +386,13 @@ public class AutofillService extends AccessibilityService {
 
         for (File file : passList) {
             if (file.isFile()) {
-                if (appName.toLowerCase().contains(file.getName().toLowerCase().replace(".gpg", ""))) {
+                if (!file.isHidden() && appName.toLowerCase().contains(file.getName().toLowerCase().replace(".gpg", ""))) {
                     items.add(file);
                 }
             } else {
-                // ignore .git and .extensions directory
-                if (file.getName().equals(".git") || file.getName().equals(".extensions"))
-                    continue;
-                items.addAll(searchPasswords(file, appName));
+                if (!file.isHidden()) {
+                    items.addAll(searchPasswords(file, appName));
+                }
             }
         }
         return items;
