@@ -195,12 +195,13 @@ public class PasswordRepository {
 
         for (File file : passList) {
             if (file.isFile()) {
-                passwordList.add(PasswordItem.newPassword(file.getName(), file, rootDir));
+                if (!file.isHidden()) {
+                    passwordList.add(PasswordItem.newPassword(file.getName(), file, rootDir));
+                }
             } else {
-                // ignore .git and .extensions directory
-                if (file.getName().equals(".git") || file.getName().equals(".extensions"))
-                    continue;
-                passwordList.add(PasswordItem.newCategory(file.getName(), file, rootDir));
+                if (!file.isHidden()) {
+                    passwordList.add(PasswordItem.newCategory(file.getName(), file, rootDir));
+                }
             }
         }
         sort(passwordList, sortOrder.comparator);
