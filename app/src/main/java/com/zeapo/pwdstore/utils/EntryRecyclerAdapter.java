@@ -101,13 +101,12 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         holder.name.setText(pass.toString());
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
             holder.typeImage.setImageResource(R.drawable.ic_folder_grey600_24dp);
-            holder.name.setText(pass.toString() + "/");
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure);
             holder.name.setText(pass.toString());
         }
 
-        holder.type.setText(pass.getFullPathToParent());
+        holder.type.setText(pass.getFullPathToParent().replaceAll("(^/)|(/$)", ""));
 
         holder.view.setOnClickListener(getOnClickListener(holder, pass));
 
