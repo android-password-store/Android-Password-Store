@@ -2,6 +2,7 @@ package com.zeapo.pwdstore.crypto
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.*
 import android.graphics.Typeface
@@ -198,7 +199,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = FileUtils.openInputStream(File(fullPath))
         val oStream = ByteArrayOutputStream()
 
-        api?.executeApiAsync(data, iStream, oStream, { result: Intent? ->
+        api?.executeApiAsync(data, iStream, oStream) { result: Intent? ->
             when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
                 RESULT_CODE_SUCCESS -> {
                     try {
@@ -276,18 +277,45 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             } else {
                                 // we only want to calculate and show HOTP if the user requests it
                                 crypto_copy_otp.setOnClickListener {
-                                    copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1))
-                                    crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1)
-                                    entry.incrementHotp()
-                                    crypto_extra_show.text = entry.extraContent
-
-                                    // we must set the result before encrypt() is called, since in
-                                    // some cases it is called during the finish() sequence
-                                    val returnIntent = Intent()
-                                    returnIntent.putExtra("NAME", name.trim())
-                                    returnIntent.putExtra("OPERATION", "INCREMENT")
-                                    returnIntent.putExtra("needCommit", true)
-                                    setResult(RESULT_OK, returnIntent)
+                                    if (settings.getBoolean("hotp_remember_check", false)) {
+                                        if (settings.getBoolean("hotp_remember_choice", false)) {
+                                            calculateAndCommitHotp(entry)
+                                        } else {
+                                            calculateHotp(entry)
+                                        }
+                                    } else {
+                                        // show a dialog asking permission to update the HOTP counter in the entry
+                                        val checkInflater = LayoutInflater.from(this)
+                                        val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
+                                        val rememberCheck : CheckBox = checkLayout.findViewById(R.id.hotp_remember_checkbox)
+                                        val dialogBuilder = AlertDialog.Builder(this)
+                                        dialogBuilder.setView(checkLayout)
+                                        dialogBuilder.setMessage(R.string.dialog_update_body)
+                                                .setCancelable(false)
+                                                .setPositiveButton(R.string.dialog_update_positive, DialogInterface.OnClickListener { dialog, id ->
+                                                    run {
+                                                        calculateAndCommitHotp(entry)
+                                                        if (rememberCheck.isChecked()) {
+                                                            val editor = settings.edit()
+                                                            editor.putBoolean("hotp_remember_check", true)
+                                                            editor.putBoolean("hotp_remember_choice", true)
+                                                            editor.commit()
+                                                        }
+                                                    }
+                                                })
+                                                .setNegativeButton(R.string.dialog_update_negative, DialogInterface.OnClickListener { dialog, id ->
+                                                    run {
+                                                        calculateHotp(entry)
+                                                        val editor = settings.edit()
+                                                        editor.putBoolean("hotp_remember_check", true)
+                                                        editor.putBoolean("hotp_remember_choice", false)
+                                                        editor.commit()
+                                                    }
+                                                })
+                                        val updateDialog = dialogBuilder.create()
+                                        updateDialog.setTitle(R.string.dialog_update_title)
+                                        updateDialog.show()
+                                    }
                                 }
                                 crypto_otp_show.setText(R.string.hotp_pending)
                             }
@@ -311,7 +339,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 RESULT_CODE_ERROR -> handleError(result)
             }
 
-        })
+        }
     }
 
     /**
@@ -427,6 +455,24 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             intent = data
             encrypt()
         }
+    }
+
+    private fun calculateHotp(entry : PasswordEntry) {
+        copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1))
+        crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1)
+        crypto_extra_show.text = entry.extraContent
+    }
+
+    private fun calculateAndCommitHotp(entry : PasswordEntry) {
+        calculateHotp(entry)
+        entry.incrementHotp()
+        // we must set the result before encrypt() is called, since in
+        // some cases it is called during the finish() sequence
+        val returnIntent = Intent()
+        returnIntent.putExtra("NAME", name.trim())
+        returnIntent.putExtra("OPERATION", "INCREMENT")
+        returnIntent.putExtra("needCommit", true)
+        setResult(RESULT_OK, returnIntent)
     }
 
     /**

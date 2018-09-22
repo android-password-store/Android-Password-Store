@@ -101,6 +101,11 @@
     <string name="copy_otp">Copy OTP code</string>
     <string name="share_as_plaintext">Share as plaintext</string>
     <string name="last_changed">Last changed %s</string>
+    <string name="dialog_update_title">Attention</string>
+    <string name="dialog_update_positive">Update entry</string>
+    <string name="dialog_update_negative">Leave unchanged</string>
+    <string name="dialog_update_body">The HOTP counter is about to be incremented. This change will be committed. If you press "Leave unchanged", the HOTP code will be shown, but the counter will not be changed.</string>
+    <string name="dialog_update_check">Remember my choice</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
@@ -214,6 +219,7 @@
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="ssh_key_clear_passphrase">Clear ssh-key saved passphrase</string>
+    <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
     <string name="remember_the_passphrase">Remember the passphrase in the app configuration (insecure)</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase</string>
