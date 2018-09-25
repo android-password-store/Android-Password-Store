@@ -17,6 +17,9 @@
             android:key="ssh_key_clear_passphrase"
             android:title="@string/ssh_key_clear_passphrase" />
         <Preference
+            android:key="hotp_remember_clear_choice"
+            android:title="@string/hotp_remember_clear_choice" />
+        <Preference
             android:key="ssh_see_key"
             android:title="@string/pref_ssh_see_key_title" />
         <Preference

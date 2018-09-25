@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
@@ -606,6 +607,7 @@ public class PasswordStore extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
+
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case GitActivity.REQUEST_CLONE:
@@ -613,11 +615,15 @@ public class PasswordStore extends AppCompatActivity {
                     settings.edit().putBoolean("repository_initialized", true).apply();
                     break;
                 case REQUEST_CODE_DECRYPT_AND_VERIFY:
-                    // if went from decrypt->edit and user saved changes, we need to commitChange
+                    // if went from decrypt->edit and user saved changes or HOTP counter was incremented, we need to commitChange
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
-                        commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
-                        refreshListAdapter();
+                        if (data.getStringExtra("OPERATION").equals("EDIT")) {
+                            commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                        } else {
+                            commitChange(this.getResources().getString(R.string.increment_commit_text) + data.getExtras().getString("NAME"));
+                        }
                     }
+                    refreshListAdapter();
                     break;
                 case REQUEST_CODE_ENCRYPT:
                     commitChange(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));

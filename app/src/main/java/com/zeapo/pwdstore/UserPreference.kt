@@ -80,6 +80,12 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
+            findPreference("hotp_remember_clear_choice").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
+                it.isEnabled = false
+                true
+            }
+
             findPreference("git_server_info").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_SERVER)
@@ -161,6 +167,7 @@ class UserPreference : AppCompatActivity() {
             findPreference("ssh_see_key").isEnabled = sharedPreferences.getBoolean("use_generated_key", false)
             findPreference("git_delete_repo").isEnabled = !sharedPreferences.getBoolean("git_external", false)
             findPreference("ssh_key_clear_passphrase").isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty() ?: false
+            findPreference("hotp_remember_clear_choice").isEnabled = sharedPreferences.getBoolean("hotp_remember_check", false)
             val keyPref = findPreference("openpgp_key_id_pref")
             val selectedKeys: Array<String> = ArrayList<String>(sharedPreferences.getStringSet("openpgp_key_ids_set", HashSet<String>())).toTypedArray()
             if (selectedKeys.isEmpty()) {
