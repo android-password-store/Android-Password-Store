@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod

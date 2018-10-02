@@ -3,7 +3,7 @@ package com.zeapo.pwdstore
 import android.app.Activity
 import android.app.FragmentManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.zeapo.pwdstore.utils.PasswordRepository

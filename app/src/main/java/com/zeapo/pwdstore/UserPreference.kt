@@ -15,11 +15,11 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.provider.Settings
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
@@ -282,15 +282,13 @@ class UserPreference : AppCompatActivity() {
     private fun runWithPermissions(requestedPermission: String, requestCode: Int, reason: String, body: () -> Unit): Unit {
         if (ContextCompat.checkSelfPermission(this, requestedPermission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermission)) {
-                val snack = Snackbar.make(prefsFragment.view,
-                        reason,
-                        Snackbar.LENGTH_INDEFINITE)
+                val snack = Snackbar.make(prefsFragment.view, reason, Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.dialog_ok) {
                             ActivityCompat.requestPermissions(this, arrayOf(requestedPermission), requestCode)
                         }
                 snack.show()
                 val view = snack.view
-                val tv = view.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+                val tv = view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
                 tv.setTextColor(Color.WHITE)
                 tv.maxLines = 10
             } else {
