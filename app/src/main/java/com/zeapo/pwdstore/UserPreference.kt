@@ -37,6 +37,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashSet
 
 class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
@@ -253,7 +254,7 @@ class UserPreference : AppCompatActivity() {
     /**
      * Opens a file explorer to import the private key
      */
-    fun getSshKey(useDefaultPicker: Boolean) {
+    private fun getSshKey(useDefaultPicker: Boolean) {
         val intent = if (useDefaultPicker) {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.setType("*/*")
@@ -279,12 +280,10 @@ class UserPreference : AppCompatActivity() {
      * @param reason The text to be shown to the user to explain why we're requesting this permission
      * @param body The function to run
      */
-    private fun runWithPermissions(requestedPermission: String, requestCode: Int, reason: String, body: () -> Unit): Unit {
+    private fun runWithPermissions(requestedPermission: String, requestCode: Int, reason: String, body: () -> Unit) {
         if (ContextCompat.checkSelfPermission(this, requestedPermission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermission)) {
-                val snack = Snackbar.make(prefsFragment.view,
-                        reason,
-                        Snackbar.LENGTH_INDEFINITE)
+                val snack = Snackbar.make(prefsFragment.view!!, reason, Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.dialog_ok) {
                             ActivityCompat.requestPermissions(this, arrayOf(requestedPermission), requestCode)
                         }
@@ -317,7 +316,7 @@ class UserPreference : AppCompatActivity() {
     /**
      * Exports the passwords
      */
-    private fun exportPasswords(): Unit {
+    private fun exportPasswords() {
         val i = Intent(applicationContext, FilePickerActivity::class.java)
 
         // Set these depending on your use case. These are the defaults.
@@ -403,7 +402,7 @@ class UserPreference : AppCompatActivity() {
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
 
-                    if (uri.path == Environment.getExternalStorageDirectory().path) {
+                    if (uri?.path == Environment.getExternalStorageDirectory().path) {
                         // the user wants to use the root of the sdcard as a store...
                         AlertDialog.Builder(this)
                                 .setTitle("SD-Card root selected")
@@ -413,13 +412,13 @@ class UserPreference : AppCompatActivity() {
                                 .setPositiveButton("Remove everything") { _, _ ->
                                     PreferenceManager.getDefaultSharedPreferences(applicationContext)
                                             .edit()
-                                            .putString("git_external_repo", uri.path)
+                                            .putString("git_external_repo", uri?.path)
                                             .apply()
                                 }.setNegativeButton(R.string.dialog_cancel, null).show()
                     } else {
                         PreferenceManager.getDefaultSharedPreferences(applicationContext)
                                 .edit()
-                                .putString("git_external_repo", uri.path)
+                                .putString("git_external_repo", uri?.path)
                                 .apply()
                     }
                 }
@@ -428,8 +427,8 @@ class UserPreference : AppCompatActivity() {
                     val repositoryDirectory = PasswordRepository.getRepositoryDirectory(applicationContext)
                     val fmtOut = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US)
                     val date = Date()
-                    val password_now = "/password_store_" + fmtOut.format(date)
-                    val targetDirectory = File(uri.path + password_now)
+                    val passwordNow = "/password_store_" + fmtOut.format(date)
+                    val targetDirectory = File(uri?.path + passwordNow)
                     if (repositoryDirectory != null) {
                         try {
                             FileUtils.copyDirectory(repositoryDirectory, targetDirectory, true)
@@ -463,13 +462,13 @@ class UserPreference : AppCompatActivity() {
     }
 
     companion object {
-        private val IMPORT_SSH_KEY = 1
-        private val IMPORT_PGP_KEY = 2
-        private val EDIT_GIT_INFO = 3
-        private val SELECT_GIT_DIRECTORY = 4
-        private val EXPORT_PASSWORDS = 5
-        private val EDIT_GIT_CONFIG = 6
-        private val REQUEST_EXTERNAL_STORAGE_SSH_KEY = 50
-        private val REQUEST_EXTERNAL_STORAGE_EXPORT_PWD = 51
+        private const val IMPORT_SSH_KEY = 1
+        private const val IMPORT_PGP_KEY = 2
+        private const val EDIT_GIT_INFO = 3
+        private const val SELECT_GIT_DIRECTORY = 4
+        private const val EXPORT_PASSWORDS = 5
+        private const val EDIT_GIT_CONFIG = 6
+        private const val REQUEST_EXTERNAL_STORAGE_SSH_KEY = 50
+        private const val REQUEST_EXTERNAL_STORAGE_EXPORT_PWD = 51
     }
 }
