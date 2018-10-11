@@ -10,6 +10,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
+import android.os.ConditionVariable
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
@@ -429,7 +430,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         crypto_password_file_edit.setText(name)
         crypto_password_file_edit.isEnabled = false
 
-        delayTask?.skip = true
+        delayTask?.cancelAndSignal(true)
 
         val data = Intent(this, PgpActivity::class.java)
         data.putExtra("OPERATION", "EDIT")
@@ -615,10 +616,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun setTimer() {
+
+        // make sure to cancel any running tasks as soon as possible
         // if the previous task is still running, do not ask it to clear the password
-        if (delayTask?.status == AsyncTask.Status.RUNNING) {
-            delayTask?.skip = true
-        }
+        delayTask?.cancelAndSignal(true)
 
         // launch a new one
         delayTask = DelayShow(this)
@@ -640,8 +641,20 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     @SuppressLint("StaticFieldLeak")
     inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
         private val pb: ProgressBar by lazy { pbLoading }
-        internal var skip = false
+        private var skip = false
+        private var cancelNotify = ConditionVariable()
+
         private var showTime: Int = 0
+
+        // Custom cancellation that can be triggered from another thread.
+        //
+        // This signals the DelayShow task to stop and avoids it having
+        // to poll the AsyncTask.isCancelled() excessively. If skipClearing
+        // is true, the cancelled task won't clear the clipboard.
+        fun cancelAndSignal(skipClearing : Boolean) {
+            skip = skipClearing
+            cancelNotify.open()
+        }
 
         val settings: SharedPreferences by lazy {
             PreferenceManager.getDefaultSharedPreferences(activity)
@@ -673,7 +686,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         override fun doInBackground(vararg params: Void): Boolean? {
             var current = 0
             while (current < showTime) {
-                SystemClock.sleep(1000)
+
+                // Block for 1s or until cancel is signalled
+                if(cancelNotify.block(1000)) {
+                    Log.d("DELAY_SHOW", "Cancelled")
+                    return true
+                }
+
                 current++
                 publishProgress(current)
             }
