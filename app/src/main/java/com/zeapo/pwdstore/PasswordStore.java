@@ -26,12 +26,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
@@ -40,7 +39,6 @@ import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -48,12 +46,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PasswordStore extends AppCompatActivity {
     private static final String TAG = "PwdStrAct";
@@ -61,6 +54,8 @@ public class PasswordStore extends AppCompatActivity {
     private Activity activity;
     private PasswordFragment plist;
     private ShortcutManager shortcutManager;
+    private MenuItem searchItem = null;
+    private SearchView searchView;
 
     private final static int CLONE_REPO_BUTTON = 401;
     private final static int NEW_REPO_BUTTON = 402;
@@ -74,6 +69,34 @@ public class PasswordStore extends AppCompatActivity {
     public static final int REQUEST_CODE_EDIT = 9916;
     public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
 
+    private static boolean isPrintable(char c) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+        return (!Character.isISOControl(c)) &&
+                block != null &&
+                block != Character.UnicodeBlock.SPECIALS;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // open search view on search key, or Ctr+F
+        if ((keyCode == KeyEvent.KEYCODE_SEARCH ||
+                keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed())
+                && !searchItem.isActionViewExpanded()) {
+            searchItem.expandActionView();
+            return true;
+        }
+
+        // open search view on any printable character and query for it
+        char c = (char) event.getUnicodeChar();
+        boolean printable = isPrintable(c);
+        if (printable && !searchItem.isActionViewExpanded()) {
+            searchItem.expandActionView();
+            searchView.setQuery(Character.toString(c), true);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
 
@@ -160,8 +183,8 @@ public class PasswordStore extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
