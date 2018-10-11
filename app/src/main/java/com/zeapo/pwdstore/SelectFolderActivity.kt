@@ -11,7 +11,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 // TODO more work needed, this is just an extraction from PgpHandler
 
 class SelectFolderActivity : AppCompatActivity() {
-    internal var passwordList: SelectFolderFragment? = null
+    private lateinit var passwordList: SelectFolderFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class SelectFolderActivity : AppCompatActivity() {
         val args = Bundle()
         args.putString("Path", PasswordRepository.getRepositoryDirectory(applicationContext).absolutePath)
 
-        passwordList?.arguments = args
+        passwordList.arguments = args
 
         supportActionBar?.show()
 
@@ -55,7 +55,7 @@ class SelectFolderActivity : AppCompatActivity() {
     }
 
     private fun selectFolder() {
-        intent.putExtra("SELECTED_FOLDER_PATH", passwordList?.currentDir?.absolutePath)
+        intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir?.absolutePath)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
