@@ -62,7 +62,7 @@ public class SelectFolderFragment extends Fragment{
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
         // use a linear layout manager
-        recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
+        recyclerView = view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // use divider
@@ -70,8 +70,8 @@ public class SelectFolderFragment extends Fragment{
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        if (fab != null) fab.setVisibility(View.GONE);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        if (fab != null) fab.hide();
 
         registerForContextMenu(recyclerView);
         return view;
