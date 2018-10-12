@@ -61,6 +61,7 @@
                 android:hint="@string/crypto_password_edit_hint"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:inputType="textVisiblePassword"
                 android:typeface="monospace" />
 
             <Button
@@ -83,6 +84,7 @@
                 android:layout_height="fill_parent"
                 android:hint="@string/crypto_extra_edit_hint"
                 android:enabled="true"
+                android:inputType="textVisiblePassword"
                 android:typeface="monospace"
                 android:visibility="visible" />
         </LinearLayout>
