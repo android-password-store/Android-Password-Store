@@ -30,17 +30,22 @@ Features
 
 How-To
 ======
-See the wiki https://github.com/zeapo/Android-Password-Store/wiki/First-time-setup for a newer written version of the following gif walkthrough
+See the [wiki](https://github.com/zeapo/Android-Password-Store/wiki/First-time-setup) for a newer written version of the following gif walkthrough
 
 FAQ
 ====
 
-- **Q:** What kind of repository can I clone from?
-- **A:** Make sure to only clone from bare repositories (see [git-clone(1)](http://git-scm.com/docs/git-clone) for how to create a bare repository from an existing one). Otherwise the clone will fail.
-- **Q:** I get a "Permission Denied" error when trying to import my ssh-key, why?
-- **A:** ssh-key files are usually created with permissions set to `600`, meaning that only the creator of this key has the right to read from it. The application needs a read access, at least temporarily, make the permissions to `644`, import the key, then set them back to `600`.
-- **Q** I get the error *No encrypted data with known secret key found in stream*
-- **A** In OpenKeyChain **(under the left drawer) Apps > Password Store > Accounts > (select the account) > Account key** select the key used to encrypt your passwords.
+**Q:** What kind of repository can I clone from?
+
+**A:** Make sure to only clone from bare repositories (see [git-clone(1)](http://git-scm.com/docs/git-clone) for how to create a bare repository from an existing one). Otherwise the clone will fail.
+
+**Q:** I get a "Permission Denied" error when trying to import my ssh-key, why?
+
+**A:** ssh-key files are usually created with permissions set to `600`, meaning that only the creator of this key has the right to read from it. The application needs a read access, at least temporarily, make the permissions to `644`, import the key, then set them back to `600`.
+
+**Q** I get the error *No encrypted data with known secret key found in stream*
+
+**A** In OpenKeyChain **(under the left drawer) Apps > Password Store > Accounts > (select the account) > Account key** select the key used to encrypt your passwords.
 
 Community
 =========
@@ -60,8 +65,8 @@ Libraries that this project uses:
 
 ## Contributors
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="graphs/contributors"><img src="https://opencollective.com/Android-Password-Store/contributors.svg?width=890&button=false" /></a>
+This project exists thanks to all the people who contribute. Want to contribute? See if you can [find an issue](https://github.com/zeapo/Android-Password-Store/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) you wanna close, then send a PR!
+<a href="https://github.com/zeapo/Android-Password-Store/graphs/contributors"><img src="https://opencollective.com/Android-Password-Store/contributors.svg?width=890&button=false" /></a>
 
 
 ## Backers
