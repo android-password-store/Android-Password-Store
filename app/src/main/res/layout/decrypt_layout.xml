@@ -91,9 +91,11 @@
 
                 <TextView
                     android:id="@+id/crypto_password_show"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_column="2"
+                    android:layout_gravity="fill"
+                    android:gravity="bottom"
                     android:layout_row="0"
                     android:textColor="@android:color/black"
                     android:typeface="monospace" />
