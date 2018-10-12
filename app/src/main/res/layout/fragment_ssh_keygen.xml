@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -37,7 +37,7 @@
                 android:hint="@string/ssh_keygen_passphrase"
                 android:importantForAccessibility="no"
                 android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
             android:id="@+id/show_passphrase"
@@ -47,7 +47,7 @@
             android:checked="false"
             android:text="@string/ssh_keygen_show_passphrase" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/ssh_keygen_comment"
                 android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/generate_ssh_key"

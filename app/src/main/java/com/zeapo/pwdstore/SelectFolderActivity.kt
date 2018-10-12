@@ -2,10 +2,10 @@ package com.zeapo.pwdstore
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.FragmentManager
 import com.zeapo.pwdstore.utils.PasswordRepository
 
 // TODO more work needed, this is just an extraction from PgpHandler

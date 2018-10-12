@@ -5,10 +5,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
-import android.support.test.InstrumentationRegistry
-import android.support.test.filters.LargeTest
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.InstrumentationRegistry
+import androidx.test.filters.LargeTest
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.AndroidJUnit4
 import android.util.Log
 import com.zeapo.pwdstore.crypto.PgpActivity
 import kotlinx.android.synthetic.main.decrypt_layout.*
