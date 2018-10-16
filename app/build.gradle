@@ -9,8 +9,8 @@ android {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 95
-        versionName "1.2.0.75"
+        versionCode 10300
+        versionName "1.3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -19,7 +19,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     lintOptions {
-        abortOnError true // make sure build failes with lint errors!
+        abortOnError true // make sure build fails with lint errors!
         disable 'MissingTranslation', 'PluralsCandidate'
     }
     packagingOptions {
