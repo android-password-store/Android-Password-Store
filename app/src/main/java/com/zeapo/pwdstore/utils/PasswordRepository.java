@@ -280,7 +280,7 @@ public class PasswordRepository {
         }
 
         public static PasswordSortOrder getSortOrder(SharedPreferences settings) {
-            return valueOf(settings.getString("sort_order", null));
+            return valueOf(settings.getString("sort_order", FOLDER_FIRST.name()));
         }
     }
 }
