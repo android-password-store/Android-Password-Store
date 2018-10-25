@@ -84,7 +84,7 @@
                 android:layout_height="fill_parent"
                 android:hint="@string/crypto_extra_edit_hint"
                 android:enabled="true"
-                android:inputType="textVisiblePassword"
+                android:inputType="textMultiLine|textVisiblePassword"
                 android:typeface="monospace"
                 android:visibility="visible" />
         </LinearLayout>
