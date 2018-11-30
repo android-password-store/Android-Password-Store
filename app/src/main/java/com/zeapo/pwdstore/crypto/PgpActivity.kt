@@ -794,10 +794,17 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         /**
          * /path/to/store/social/facebook.gpg -> social/facebook
          */
+        @JvmStatic
         fun getLongName(fullPath: String, repositoryPath: String, basename: String): String {
-            val relativePath = getRelativePath(fullPath, repositoryPath)
-            if (relativePath.isNotEmpty()) {
-                return relativePath.substring(1) + "/" + basename
+            var relativePath = getRelativePath(fullPath, repositoryPath)
+            if (relativePath.isNotEmpty() && relativePath != "/") {
+                // remove preceding '/'
+                relativePath = relativePath.substring(1);
+                if (relativePath.endsWith('/')) {
+                    return relativePath + basename
+                } else {
+                    return relativePath + "/" + basename
+                }
             } else {
                 return basename
             }

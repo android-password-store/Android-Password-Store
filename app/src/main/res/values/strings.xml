@@ -22,10 +22,11 @@
     <string name="delete">Delete</string>
 
     <!-- git commits -->
-    <string name="git_commit_add_text">Add password for\u0020</string>
-    <string name="git_commit_edit_text">"Edit\u0020"</string>
-    <string name="git_increment_commit_text">"Increment HOTP counter for\u0020"</string>
-    <string name="git_commit_using_store_text">\u0020using android password store.</string>
+    <string name="git_commit_add_text">Add password for %1$s using android password store.</string>
+    <string name="git_commit_edit_text">"Edit %1$s using android password store."</string>
+    <string name="git_commit_remove_text">"Remove %1$s from store."</string>
+    <string name="git_commit_move_text">"Rename %1$s to %2$s."</string>
+    <string name="git_increment_commit_text">"Increment HOTP counter for %1$s."</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
