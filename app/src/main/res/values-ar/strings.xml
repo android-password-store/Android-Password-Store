@@ -15,7 +15,7 @@
     <string name="edit">تعديل</string>
     <string name="delete">حذف</string>
 
-    <string name="from_store">&#160; مِن المخزن.</string>
+    <string name="git_commit_using_store_text">&#160; مِن المخزن.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">لم يتم إختيار مزود الأوبن بي جي بي بعد !</string>

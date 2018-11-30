@@ -641,19 +641,19 @@ public class PasswordStore extends AppCompatActivity {
                     // if went from decrypt->edit and user saved changes or HOTP counter was incremented, we need to commitChange
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
                         if (data.getStringExtra("OPERATION").equals("EDIT")) {
-                            commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                            commitChange(this.getResources().getString(R.string.git_commit_edit_text) + data.getExtras().getString("LONG_NAME") + this.getResources().getString(R.string.git_commit_using_store_text));
                         } else {
-                            commitChange(this.getResources().getString(R.string.increment_commit_text) + data.getExtras().getString("NAME"));
+                            commitChange(this.getResources().getString(R.string.git_increment_commit_text) + data.getExtras().getString("LONG_NAME"));
                         }
                     }
                     refreshListAdapter();
                     break;
                 case REQUEST_CODE_ENCRYPT:
-                    commitChange(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
+                    commitChange(this.getResources().getString(R.string.git_commit_add_text) + data.getExtras().getString("LONG_NAME") + this.getResources().getString(R.string.git_commit_using_store_text));
                     refreshListAdapter();
                     break;
                 case REQUEST_CODE_EDIT:
-                    commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                    commitChange(this.getResources().getString(R.string.git_commit_edit_text) + data.getExtras().getString("LONG_NAME") + this.getResources().getString(R.string.git_commit_using_store_text));
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:

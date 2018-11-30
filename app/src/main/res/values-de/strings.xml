@@ -21,8 +21,8 @@
     <string name="delete">Löschen</string>
 
     <!-- git commits -->
-    <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
-    <string name="from_store">&#160; from store.</string>
+    <string name="git_commit_add_text">[ANDROID PwdStore] Add &#160;</string>
+    <string name="git_commit_using_store_text">&#160; from store.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
@@ -170,7 +170,7 @@
     <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
     <string name="pwd_generate_button">Generieren</string>
     <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
-    <string name="edit_commit_text">[ANDROID PwdStore] Edit &#160;</string>
+    <string name="git_commit_edit_text">[ANDROID PwdStore] Edit &#160;</string>
     <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
     <string name="show_password">Password wiedergeben</string>
     <string name="repository_uri">Repository URI</string>

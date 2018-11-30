@@ -21,9 +21,9 @@
     <string name="delete">Удалить</string>
 
     <!-- git commits -->
-    <string name="add_commit_text">[ANDROID PwdStore] Добавлен пароль &#160;</string>
-    <string name="edit_commit_text">[ANDROID PwdStore] Отредактирован пароль &#160;</string>
-    <string name="from_store">&#160; из хранилища.</string>
+    <string name="git_commit_add_text">[ANDROID PwdStore] Добавлен пароль &#160;</string>
+    <string name="git_commit_edit_text">[ANDROID PwdStore] Отредактирован пароль &#160;</string>
+    <string name="git_commit_using_store_text">&#160; из хранилища.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
