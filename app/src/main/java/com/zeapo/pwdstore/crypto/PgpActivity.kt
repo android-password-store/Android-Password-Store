@@ -599,8 +599,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         if (findViewById<TextView>(R.id.crypto_password_show) == null)
             return
 
-        setTimer()
-
         val clip = ClipData.newPlainText("pgp_handler_result_pm", passwordEntry?.password)
         clipboard.primaryClip = clip
 
@@ -611,7 +609,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             // ignore and keep default
         }
 
-        showToast(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
+        if (settings.getBoolean("clear_after_copy", true)) {
+            setTimer()
+            showToast(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
+        }
+        else {
+            showToast(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
+        }
+
     }
 
     private fun copyUsernameToClipBoard(username: String) {
@@ -725,8 +730,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             if (skip) return
             checkAndIncrementHotp()
 
-            // only clear the clipboard if we automatically copied the password to it
-            if (settings.getBoolean("copy_on_decrypt", true)) {
+            // only clear the clipboard if we set auto clear after copy option
+            if (settings.getBoolean("clear_after_copy", true)) {
                 Log.d("DELAY_SHOW", "Clearing the clipboard")
                 val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
                 clipboard.primaryClip = clip

@@ -30,6 +30,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
+    <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
     <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
