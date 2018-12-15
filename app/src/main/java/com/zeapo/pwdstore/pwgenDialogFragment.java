@@ -84,7 +84,7 @@ public class pwgenDialogFragment extends DialogFragment {
 
         builder.setNeutralButton(getResources().getString(R.string.pwgen_generate), null);
 
-        final AlertDialog ad = builder.setTitle("Generate Password").create();
+        final AlertDialog ad = builder.setTitle(this.getResources().getString(R.string.pwgen_title)).create();
         ad.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
