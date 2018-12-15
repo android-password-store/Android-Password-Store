@@ -172,7 +172,7 @@ class UserPreference : AppCompatActivity() {
             val keyPref = findPreference("openpgp_key_id_pref")
             val selectedKeys: Array<String> = ArrayList<String>(sharedPreferences.getStringSet("openpgp_key_ids_set", HashSet<String>())).toTypedArray()
             if (selectedKeys.isEmpty()) {
-                keyPref.summary = "No key selected"
+                keyPref.summary = this.resources.getString(R.string.pref_no_key_selected)
             } else {
                 keyPref.summary = selectedKeys.joinToString(separator = ";") {
                     s ->
@@ -203,10 +203,8 @@ class UserPreference : AppCompatActivity() {
     fun selectExternalGitRepository() {
         val activity = this
         AlertDialog.Builder(this)
-                .setTitle("Choose where to store the passwords")
-                .setMessage("You must select a directory where to store your passwords. If you want " +
-                        "to store your passwords within the hidden storage of the application, " +
-                        "cancel this dialog and disable the \"External Repository\" option.")
+                .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
+                .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
                     // This always works
                     val i = Intent(activity.applicationContext, FilePickerActivity::class.java)

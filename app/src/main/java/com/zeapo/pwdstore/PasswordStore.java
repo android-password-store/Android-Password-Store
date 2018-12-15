@@ -516,8 +516,8 @@ public class PasswordStore extends AppCompatActivity {
 
         if (settings.getStringSet("openpgp_key_ids_set", new HashSet<String>()).isEmpty()) {
             new AlertDialog.Builder(this)
-                    .setTitle("OpenPGP key not selected")
-                    .setMessage("We will redirect you to settings. Please select your OpenPGP Key.")
+                    .setTitle(this.getResources().getString(R.string.no_key_selected_dialog_title))
+                    .setMessage(this.getResources().getString(R.string.no_key_selected_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -729,9 +729,9 @@ public class PasswordStore extends AppCompatActivity {
         PasswordRepository.closeRepository();
 
         new AlertDialog.Builder(this)
-                .setTitle("Repository location")
-                .setMessage("Select where to create or clone your password repository.")
-                .setPositiveButton("Hidden (preferred)", new DialogInterface.OnClickListener() {
+                .setTitle(this.getResources().getString(R.string.location_dialog_title))
+                .setMessage(this.getResources().getString(R.string.location_dialog_text))
+                .setPositiveButton(this.getResources().getString(R.string.location_hidden), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         settings.edit().putBoolean("git_external", false).apply();
 
@@ -749,7 +749,7 @@ public class PasswordStore extends AppCompatActivity {
                         }
                     }
                 })
-                .setNegativeButton("SD-Card", new DialogInterface.OnClickListener() {
+                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         settings.edit().putBoolean("git_external", true).apply();
 

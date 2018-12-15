@@ -20,6 +20,8 @@
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="no_key_selected_dialog_title">OpenPGP key not selected</string>
+    <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
 
     <!-- git commits -->
     <string name="add_commit_text">[ANDROID PwdStore] Add &#160;</string>
@@ -55,6 +57,12 @@
     <!-- Clone fragment -->
     <string name="clone">Clone from server</string>
     <string name="initialize">Use local directory</string>
+    <string name="location_dialog_title">Repository location</string>
+    <string name="location_dialog_text">Select where to create or clone your password repository.</string>
+    <string name="location_sdcard">SD-Card</string>
+    <string name="location_hidden">Hidden (Preferred)</string>
+    <string name="external_repository_dialog_title">Choose where to store the passwords</string>
+    <string name="external_repository_dialog_text">You must select a directory where to store your passwords. If you want to store your passwords within the hidden storage of the application, cancel this dialog and disable the \"External Repository\" option.</string>
 
     <string name="server_name">Server</string>
     <string name="server_protocol">Protocol</string>
@@ -120,6 +128,7 @@
     <string name="pref_crypto_title">Crypto</string>
     <string name="pref_provider_title">Select OpenPGP Provider</string>
     <string name="pref_key_title">Select OpenPGP Key id</string>
+    <string name="pref_no_key_selected">Ninguna llave seleccionada</string>
     <string name="pref_general_title">General</string>
     <string name="pref_password_title">Password Show Time</string>
     <string name="pref_password_dialog_title">Set the time you want the password to be in clipboard</string>
@@ -158,6 +167,7 @@
     <string name="prefs_version">Version</string>
 
     <!-- pwgen fragment -->
+    <string name="pwgen_title">Generate Password</string>
     <string name="pwgen_generate">Generate</string>
     <string name="pwgen_include">Include</string>
     <string name="pwgen_length">Length</string>

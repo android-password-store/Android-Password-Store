@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity names -->
+    <string name="app_name">Password Store</string>
+
+    <string name="action_settings">Ajustes</string>
+    <string name="dialog_delete_title">El directorio ya existe</string>
+    <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?</string>
+    <string name="dialog_delete">Eliminar directorio</string>
+    <string name="dialog_do_not_delete">Cancelar</string>
+    <string name="title_activity_git_clone">Información de repositorio</string>
+
+    <!-- Password Store -->
+    <string name="creation_dialog_text">Por favor clona o crea un nuevo repositorio antes de añadir una contraseña o ejecutar una operación de sincronización.</string>
+    <string name="store_git">/store/.git</string>
+    <string name="key_dialog_text">Tienes que seleccionar una llave PGP antes de inicializar el repositorio</string>
+    <string name="delete_dialog_text">Confirma que deseas eliminar la contraseña /"</string>
+    <string name="move">Mover</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="no_key_selected_dialog_title">No se ha seleccionado una llave OpenPGP</string>
+    <string name="no_key_selected_dialog_text">Serás redirigido a los ajustes. Por favor selecciona tu llave OpenPGP.</string>
+
+    <!-- git commits -->
+    <string name="add_commit_text">[ANDROID PwdStore] Agregada &#160;</string>
+    <string name="edit_commit_text">"[ANDROID PwdStore] Editada "</string>
+    <string name="increment_commit_text">"[ANDROID PwdStore] Increment HOTP counter for "</string>
+    <string name="from_store">&#160; del almacén.</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">¡No se ha seleccionado ningún proveedor OpenGPG!</string>
+    <string name="clipboard_password_toast_text">Contraseña copiada al portapapeles, tienes %d segundos para pegarla.</string>
+    <string name="clipboard_password_no_clear_toast_text">Contraseña copiada al portapapeles</string>
+    <string name="clipboard_username_toast_text">Nombre de usuario copiado al portapapeles</string>
+    <string name="clipboard_otp_toast_text">Código OTP copiado al portapapeles</string>
+    <string name="file_toast_text">Por favor selecciona un nombre de archivo</string>
+    <string name="empty_toast_text">No puedes dejar la contraseña y el contenido extra ambos vacíos</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Ejecutando comando…</string>
+    <string name="jgit_error_dialog_title">Ocurrió un error durante la operación de Git</string>
+    <string name="jgit_error_dialog_text">Mensaje de jgit: \n</string>
+
+    <!-- Git Handler -->
+    <string name="forget_username_dialog_text">Olvidaste especificar un nombre de usuario?</string>
+    <string name="set_information_dialog_text">Necesitas configurar la información del servidor antes de sincronizar</string>
+    <string name="ssh_preferences_dialog_text">Por favor importa o genera tu llave SSH en los ajustes</string>
+    <string name="ssh_preferences_dialog_title">No hay llave SSH</string>
+    <string name="ssh_preferences_dialog_import">Importar</string>
+    <string name="ssh_preferences_dialog_generate">Generar</string>
+    <string name="passphrase_dialog_title">Autenticar</string>
+    <string name="passphrase_dialog_text">Por favor ingresa una contraseña para tu llave SSH</string>
+    <string name="password_dialog_text">Por favor ingresa una contraseña para este repositorio</string>
+
+    <!-- Clone fragment -->
+    <string name="clone">Clonar desde servidor</string>
+    <string name="initialize">Usar directorio local</string>
+    <string name="location_dialog_title">Ubicación del repositorio</string>
+    <string name="location_dialog_text">Selecciona dónde crear o clonar tu repositorio de contraseñas.</string>
+    <string name="location_sdcard">Tarjeta SD</string>
+    <string name="location_hidden">Oculto (Recomendado)</string>
+    <string name="external_repository_dialog_title">Selecciona dónde almacenar tus contraseñas</string>
+    <string name="external_repository_dialog_text">Debes seleccionar un directorio para almacenar tus contraseñas. Si quieres guardarlas dentro del almacenamiento oculto de la aplicación, cancela este diálogo y deshabilita la opción \"Repositorio externo\".</string>
+
+    <string name="server_name">Servidor</string>
+    <string name="server_protocol">Protocolo</string>
+    <string name="server_url">URL de servidor</string>
+    <string name="server_url_hint">server.com</string>
+    <string name="server_port_hint">22</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">Ruta del repositorio</string>
+    <string name="server_path_hint">ruta/a/claves</string>
+    <string name="server_user">Nombre de usuario</string>
+    <string name="server_user_hint">nombre_usuario</string>
+
+    <string name="server_resulting_url">URL resultante</string>
+    <string name="connection_mode">Modo de autenticación</string>
+
+    <string name="warn_malformed_url_port">Al usar puertos personalizados, ingresa una ruta absoluta (empieza con "/")</string>
+
+    <!-- Git Config fragment -->
+    <string name="invalid_email_dialog_text">Por favor ingresa una dirección de correo</string>
+    <string name="clone_button">Clonar!</string>
+
+    <!-- PGP Handler -->
+    <string name="crypto_name_hint">Nombre</string>
+    <string name="crypto_pass_label">Contraseña:</string>
+    <string name="crypto_extra_label">Extra:</string>
+    <string name="crypto_select">Seleccionar</string>
+    <string name="crypto_cancel">Cancelar</string>
+    <string name="crypto_save">Guardar</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="action_search">Buscar</string>
+    <string name="password">Contraseña:</string>
+    <string name="extra_content">Contenido extra:</string>
+    <string name="username">Nombre de usuario:</string>
+    <string name="otp">OTP:</string>
+    <string name="edit_password">Editar contraseña</string>
+    <string name="copy_password">Copiar contraseña</string>
+    <string name="copy_username">Copiar nombre de usuario</string>
+    <string name="copy_otp">Copiar código OTP</string>
+    <string name="share_as_plaintext">Compartir como texto plano</string>
+    <string name="last_changed">Última modificación %s</string>
+    <string name="dialog_update_title">Atención</string>
+    <string name="dialog_update_positive">Actualizar registro</string>
+    <string name="dialog_update_negative">Dejar sin cambios</string>
+    <string name="dialog_update_body">El contador HOTP será incrementado. Este cambio será confirmado. Si presionas "Dejar sin cambios", el código HOTP será mostrado, pero el contador no se cambiará.</string>
+    <string name="dialog_update_check">Recordar elección</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_edit_server_info">Editar ajustes del servidor Git</string>
+    <string name="pref_edit_git_config">Preferencias de Git</string>
+    <string name="pref_ssh_title">Importar llave SSH</string>
+    <string name="pref_ssh_keygen_title">Generar par de llaves SSH</string>
+    <string name="pref_ssh_see_key_title">Ver llave pública SSH generada</string>
+    <string name="pref_git_delete_repo">Eliminar repositorio</string>
+    <string name="pref_dialog_delete_title">Limpiar repositorio</string>
+    <string name="pref_crypto_title">Cifrado</string>
+    <string name="pref_provider_title">Selecciona un proveedor OpenPGP</string>
+    <string name="pref_key_title">Selecciona la llave OpenPGP</string>
+    <string name="pref_no_key_selected">Ninguna llave seleccionada</string>
+    <string name="pref_general_title">General</string>
+    <string name="pref_password_title">Tiempo para mostrar contraseña</string>
+    <string name="pref_password_dialog_title">Establece el tiempo antes de limpiar la contraseña del portapapeles.</string>
+    <string name="pref_copy_title">Copiar contraseña automáticamente</string>
+    <string name="pref_copy_dialog_title">Automáticamente copia la contraseña al portapapeles si el descifrado fue exitoso.</string>
+    <string name="ssh_key_success_dialog_title">Llave SSH importada</string>
+    <string name="ssh_key_error_dialog_title">Error al intentar importar llave SSH</string>
+    <string name="ssh_key_error_dialog_text">Mensaje: \n</string>
+    <string name="pref_recursive_filter">Búsqueda recursiva</string>
+    <string name="pref_recursive_filter_hint">Busca contraseñas recursivamente en el directorio actual.</string>
+    <string name="pref_sort_order_title">Ordenamiento de contraseñas</string>
+    <string name="pref_folder_first_sort_order">Primero directorios</string>
+    <string name="pref_file_first_sort_order">Primero archivos</string>
+    <string name="pref_type_independent_sort_order">Independiente del tipo</string>
+    <string name="pref_autofill_title">Autollenado</string>
+    <string name="pref_autofill_enable_title">Habilitar autollenado</string>
+    <string name="pref_autofill_enable_msg">Pulsa OK para ir a los ajustes de Accesibilidad. Ahí, pulsa Password Store debajo de Servicios, luego pulsa el switch en la esquina superior derecha para (des)activarlo.</string>
+    <string name="pref_autofill_enable_msg2">Una vez que el servicio está activo, un diálogo aparecerá cuando pulses sobre un campo de contraseña en una app si existe un registro ligado.</string>
+    <string name="pref_autofill_enable_msg3">Password Store intenta ligar las contraseñas automáticamente. Puedes cambiar este ajuste predeterminado y cada ajuste por aplicación.</string>
+    <string name="pref_autofill_apps_title">Ajustes de aplicaciones y sitios web</string>
+    <string name="pref_autofill_default_title">Ligar automáticamente por defecto</string>
+    <string name="pref_autofill_default_hint">Por defecto usar \'Ligar automáticamente\' para aplicaciones sin ajustes personalizados. De otra forma, usar \'Nunca ligar.\'</string>
+    <string name="pref_autofill_always_title">Siempre mostrar diálogo</string>
+    <string name="pref_misc_title">Miscelánea</string>
+    <string name="pref_clear_clipboard_title">Limpiar portapapeles 20 veces</string>
+    <string name="pref_clear_clipboard_hint">Almacena números consecutivos en el portapapeles 20 veces. Útil en teléfonos Samsung con historial de portapapeles.</string>
+    <string name="pref_git_delete_repo_summary">Eliminar repositorio local (oculto)</string>
+    <string name="pref_external_repository">Repositorio externo</string>
+    <string name="pref_external_repository_summary">Usar un repositorio externo para contraseñas</string>
+    <string name="pref_select_external_repository">Seleccionar repositorio externo</string>
+    <string name="prefs_use_default_file_picker">Usar seleccionador de archivos por defecto</string>
+    <string name="prefs_clear_after_copy_title">Limpiar automáticamente el portapapeles después de copiar</string>
+    <string name="prefs_clear_after_copy_summary">Después de copiar manual o automáticamente la contraseña, el portapapeles será automáticamente limpiado.</string>
+    <string name="prefs_export_passwords_title">Exportar contraseñas</string>
+    <string name="prefs_export_passwords_summary">Exporta las contraseñas cifradas a un directorio externo.</string>
+    <string name="prefs_version">Versión</string>
+
+    <!-- pwgen fragment -->
+    <string name="pwgen_title">Generar Contraseña</string>
+    <string name="pwgen_generate">Generar</string>
+    <string name="pwgen_include">Incluir:</string>
+    <string name="pwgen_length">Longitud:</string>
+    <string name="pwgen_numerals">Números</string>
+    <string name="pwgen_symbols">Símbolos</string>
+    <string name="pwgen_uppercase">Mayúsculas</string>
+    <string name="pwgen_ambiguous">Caracteres ambiguos</string>
+    <string name="pwgen_pronounceable">Pronunciable</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">Longitud</string>
+    <string name="ssh_keygen_passphrase">Contraseña</string>
+    <string name="ssh_keygen_comment">Comentario</string>
+    <string name="ssh_keygen_generate">Generar</string>
+    <string name="ssh_keygen_copy">Copiar</string>
+    <string name="ssh_keygen_tip">Registra esta llave pública en tu servidor Git.</string>
+    <string name="ssh_keygen_show_passphrase">Mostrar contraseña</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Sí</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_positive">Ok, Vamos…</string>
+    <string name="dialog_negative">Nah… después</string>
+    <string name="dialog_oops">Ups…</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="git_sync">Sincronizar con servidor</string>
+    <string name="git_pull">Descargar desde servidor</string>
+    <string name="git_push">Subir al servidor</string>
+    <string name="show_password_pref_title">Mostrar contraseña</string>
+    <string name="show_password_pref_summary">Controla la visibilidad de las contraseñas una vez descifradas. Esto no deshabilita el copiado de la contraseña.</string>
+    <string name="show_extra_content_pref_title">Mostrar contenido extra</string>
+    <string name="show_extra_content_pref_summary">Controla la visibilidad del contenido extra una vez descifrado.</string>
+    <string name="pwd_generate_button">Generar</string>
+    <string name="refresh_list">Actualizar lista</string>
+    <string name="no_repo_selected">Ningún repositorio externo seleccionado</string>
+    <string name="send_plaintext_password_to">Enviar contraseña en texto plano usando…</string>
+    <string name="show_password">Mostrar contraseña</string>
+    <string name="repository_uri">URI del repositorio</string>
+    <string name="app_icon_hint">Ícono de app</string>
+    <string name="folder_icon_hint">Ícono de directorio</string>
+
+    <!-- Autofill -->
+    <string name="autofill_description">Autollena campos de contraseña en aplicaciones. Solo funciona en Android 4.3 y superiores. No depende del portapapales en Android 5.0 y superiores.</string>
+    <string name="autofill_apps_default">Usar la opción predeterminada</string>
+    <string name="autofill_apps_first">Ligar automáticamente</string>
+    <string name="autofill_apps_match_ellipsis">Ligar a…</string>
+    <string name="autofill_apps_match">Ligar a</string>
+    <string name="autofill_apps_never">Nunca ligar</string>
+    <string name="autofill_apps_delete">Eliminar</string>
+    <string name="autofill_pick">Seleccionar…</string>
+    <string name="autofill_pick_and_match">Seleccionar y ligar…</string>
+    <string name="autofill_paste">Pegar</string>
+    <string name="autofill_paste_username">Pegar nombre de usuario?\n\n%s</string>
+    <string name="autofill_toast_username">Selecciona un campo editable para pegar el nombre de usuario.\nNombre de usuario disponible por %d segundos.</string>
+    <string name="ssh_key_does_not_exist">Imposible abrir la llave privada SSH. Por favor verifica que el archivo exista</string>
+    <string name="new_password_title">Nueva contraseña</string>
+    <string name="edit_password_title">Editando</string>
+    <string name="autofill_ins_1_hint">Pantalla de Servicios de Accesibilidad</string>
+    <string name="autofill_ins_2_hint">Pantalla de activación en Servicios de Accesibilidad</string>
+    <string name="autofill_ins_3_hint">Pantalla de servicio de autollenado en acción</string>
+    <string name="git_push_nff_error">La subida fue rechazada por el servidor, Ejecuta \'Descargar desde servidor\' antes de subir o pulsa \'Sincronizar con servidor\' para realizar ambas acciones.</string>
+    <string name="git_push_generic_error">El envío fue rechazado por el servidor, la razón:</string>
+    <string name="jgit_error_push_dialog_text">Ocurrió un error durante el envío:</string>
+    <string name="ssh_key_clear_passphrase">Limpiar contraseña guardada de llave SSH</string>
+    <string name="hotp_remember_clear_choice">Limpiar preferencia para incremento HOTP</string>
+    <string name="remember_the_passphrase">Recordar contraseñagit  (inseguro)</string>
+    <string name="hackish_tools">Hackish tools</string>
+    <string name="abort_rebase">Abortar rebase</string>
+    <string name="commit_hash">Commit hash</string>
+    <string name="crypto_password_edit_hint">p@ssw0rd!</string>
+    <string name="crypto_extra_edit_hint">Username: Nombre de usuario\n… o algún contenido extra</string>
+    <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
+    <string name="hotp_pending">Presiona copiar para calcular el HOTP</string>
+</resources>
