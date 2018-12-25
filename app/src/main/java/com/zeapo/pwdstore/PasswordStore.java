@@ -716,19 +716,32 @@ public class PasswordStore extends AppCompatActivity {
                             continue;
                         }
 
+                        File destinationFile = new File(target.getAbsolutePath() + "/" + source.getName());
 
-                        if (!source.renameTo(new File(target.getAbsolutePath() + "/" + source.getName()))) {
+                        String basename = FilenameUtils.getBaseName(source.getAbsolutePath());
+
+                        String sourceLongName = PgpActivity.getLongName(source.getParent(),
+                                repositoryPath, basename);
+
+                        String destinationLongName = PgpActivity.getLongName(target.getAbsolutePath(),
+                                repositoryPath, basename);
+
+                        if (destinationFile.exists()) {
+                            Log.e("Moving", "Trying to move a file that already exists.");
+                            // TODO: Add option to cancel overwrite. Will be easier once this is an async task.
+                            // TODO: Replace with resource strings
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Password already exists!")
+                                    .setMessage(String.format("This will overwrite %1$s with %2$s.",
+                                            destinationLongName, sourceLongName))
+                                    .setPositiveButton("Okay", null)
+                                    .show();
+                        }
+
+                        if (!source.renameTo(destinationFile)) {
                             // TODO this should show a warning to the user
                             Log.e("Moving", "Something went wrong while moving.");
                         } else {
-                            String basename = FilenameUtils.getBaseName(source.getAbsolutePath());
-
-                            String sourceLongName = PgpActivity.getLongName(source.getParent(),
-                                    repositoryPath, basename);
-
-                            String destinationLongName = PgpActivity.getLongName(target.getAbsolutePath(),
-                                    repositoryPath, basename);
-
                             commitChange(this.getResources()
                                     .getString(R.string.git_commit_move_text,
                                             sourceLongName,
