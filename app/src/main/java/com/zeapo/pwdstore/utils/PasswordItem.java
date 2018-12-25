@@ -1,19 +1,22 @@
 package com.zeapo.pwdstore.utils;
 
+import com.zeapo.pwdstore.crypto.PgpActivity;
+
 import androidx.annotation.NonNull;
 
 import java.io.File;
 
-public class PasswordItem implements Comparable{
+public class PasswordItem implements Comparable {
 
     public final static char TYPE_CATEGORY = 'c';
     public final static char TYPE_PASSWORD = 'p';
 
-    private char type;
-    private String name;
-    private PasswordItem parent;
-    private File file;
-    private String fullPathToParent;
+    private final char type;
+    private final String name;
+    private final PasswordItem parent;
+    private final File file;
+    private final String fullPathToParent;
+    private final String longName;
 
     /** Create a password item
      *
@@ -24,7 +27,10 @@ public class PasswordItem implements Comparable{
         this.parent = parent;
         this.type = type;
         this.file = file;
-        this.fullPathToParent = file.getAbsolutePath().replace(rootDir.getAbsolutePath(), "").replace(file.getName(), "");
+        fullPathToParent = file.getAbsolutePath()
+                .replace(rootDir.getAbsolutePath(), "")
+                .replace(file.getName(), "");
+        longName = PgpActivity.getLongName(fullPathToParent, rootDir.getAbsolutePath(), toString());
     }
 
     /** Create a new Category item
@@ -69,6 +75,10 @@ public class PasswordItem implements Comparable{
 
     public String getFullPathToParent() {
         return this.fullPathToParent;
+    }
+
+    public String getLongName() {
+        return longName;
     }
 
     @Override
