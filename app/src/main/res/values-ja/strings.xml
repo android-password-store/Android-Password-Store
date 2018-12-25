@@ -18,9 +18,8 @@
     <string name="delete_dialog_text">パスワードを削除してもよろしいですか /"</string>
 
     <!-- git commits -->
-    <string name="git_commit_add_text">[ANDROID PwdStore] 追加 &#160;</string>
-    <string name="git_commit_edit_text">[ANDROID PwdStore] 編集 &#160;</string>
-    <string name="git_commit_using_store_text">&#160; ストアから。</string>
+    <string name="git_commit_add_text">追加 %1$s ストアから。</string>
+    <string name="git_commit_edit_text">編集 %1$s ストアから。</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>

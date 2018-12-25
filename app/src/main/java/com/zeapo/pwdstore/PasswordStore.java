@@ -645,7 +645,7 @@ public class PasswordStore extends AppCompatActivity {
                             commitChange(this.getResources().getString(R.string.git_commit_edit_text,
                                     data.getExtras().getString("LONG_NAME")));
                         } else {
-                            commitChange(this.getResources().getString(R.string.git_increment_commit_text,
+                            commitChange(this.getResources().getString(R.string.git_commit_increment_text,
                                     data.getExtras().getString("LONG_NAME")));
                         }
                     }
