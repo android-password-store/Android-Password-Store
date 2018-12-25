@@ -803,7 +803,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 if (relativePath.endsWith('/')) {
                     return relativePath + basename
                 } else {
-                    return relativePath + "/" + basename
+                    return "$relativePath/$basename"
                 }
             } else {
                 return basename

@@ -40,6 +40,7 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
@@ -703,22 +704,35 @@ public class PasswordStore extends AppCompatActivity {
                         break;
                     }
 
+                    String repositoryPath = PasswordRepository
+                            .getRepositoryDirectory(getApplicationContext())
+                            .getAbsolutePath();
+
                     // TODO move this to an async task
-                    for (String string : data.getStringArrayListExtra("Files")) {
-                        File source = new File(string);
+                    for (String fileString : data.getStringArrayListExtra("Files")) {
+                        File source = new File(fileString);
                         if (!source.exists()) {
                             Log.e("Moving", "Tried moving something that appears non-existent.");
                             continue;
                         }
+
+
                         if (!source.renameTo(new File(target.getAbsolutePath() + "/" + source.getName()))) {
                             // TODO this should show a warning to the user
                             Log.e("Moving", "Something went wrong while moving.");
                         } else {
-                            commitChange("[ANDROID PwdStore] Moved "
-                                    + string.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
-                                    + " to "
-                                    + target.getAbsolutePath().replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
-                                    + target.getAbsolutePath() + "/" + source.getName() + ".");
+                            String basename = FilenameUtils.getBaseName(source.getAbsolutePath());
+
+                            String sourceLongName = PgpActivity.getLongName(source.getParent(),
+                                    repositoryPath, basename);
+
+                            String destinationLongName = PgpActivity.getLongName(target.getAbsolutePath(),
+                                    repositoryPath, basename);
+
+                            commitChange(this.getResources()
+                                    .getString(R.string.git_commit_move_text,
+                                            sourceLongName,
+                                            destinationLongName));
                         }
                     }
                     updateListAdapter();
