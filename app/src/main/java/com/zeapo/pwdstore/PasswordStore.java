@@ -40,6 +40,7 @@ import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
@@ -557,7 +558,8 @@ public class PasswordStore extends AppCompatActivity {
                         it.remove();
                         adapter.updateSelectedItems(position, selectedItems);
 
-                        commitChange("[ANDROID PwdStore] Remove " + item + " from store.");
+                        commitChange(getResources().getString(R.string.git_commit_remove_text,
+                                item.getLongName()));
                         deletePasswords(adapter, selectedItems);
                     }
                 })
@@ -641,19 +643,23 @@ public class PasswordStore extends AppCompatActivity {
                     // if went from decrypt->edit and user saved changes or HOTP counter was incremented, we need to commitChange
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
                         if (data.getStringExtra("OPERATION").equals("EDIT")) {
-                            commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                            commitChange(this.getResources().getString(R.string.git_commit_edit_text,
+                                    data.getExtras().getString("LONG_NAME")));
                         } else {
-                            commitChange(this.getResources().getString(R.string.increment_commit_text) + data.getExtras().getString("NAME"));
+                            commitChange(this.getResources().getString(R.string.git_commit_increment_text,
+                                    data.getExtras().getString("LONG_NAME")));
                         }
                     }
                     refreshListAdapter();
                     break;
                 case REQUEST_CODE_ENCRYPT:
-                    commitChange(this.getResources().getString(R.string.add_commit_text) + data.getExtras().getString("NAME") + this.getResources().getString(R.string.from_store));
+                    commitChange(this.getResources().getString(R.string.git_commit_add_text,
+                            data.getExtras().getString("LONG_NAME")));
                     refreshListAdapter();
                     break;
                 case REQUEST_CODE_EDIT:
-                    commitChange(this.getResources().getString(R.string.edit_commit_text) + data.getExtras().getString("NAME"));
+                    commitChange(this.getResources().getString(R.string.git_commit_edit_text,
+                            data.getExtras().getString("LONG_NAME")));
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
@@ -698,22 +704,48 @@ public class PasswordStore extends AppCompatActivity {
                         break;
                     }
 
+                    String repositoryPath = PasswordRepository
+                            .getRepositoryDirectory(getApplicationContext())
+                            .getAbsolutePath();
+
                     // TODO move this to an async task
-                    for (String string : data.getStringArrayListExtra("Files")) {
-                        File source = new File(string);
+                    for (String fileString : data.getStringArrayListExtra("Files")) {
+                        File source = new File(fileString);
                         if (!source.exists()) {
                             Log.e("Moving", "Tried moving something that appears non-existent.");
                             continue;
                         }
-                        if (!source.renameTo(new File(target.getAbsolutePath() + "/" + source.getName()))) {
+
+                        File destinationFile = new File(target.getAbsolutePath() + "/" + source.getName());
+
+                        String basename = FilenameUtils.getBaseName(source.getAbsolutePath());
+
+                        String sourceLongName = PgpActivity.getLongName(source.getParent(),
+                                repositoryPath, basename);
+
+                        String destinationLongName = PgpActivity.getLongName(target.getAbsolutePath(),
+                                repositoryPath, basename);
+
+                        if (destinationFile.exists()) {
+                            Log.e("Moving", "Trying to move a file that already exists.");
+                            // TODO: Add option to cancel overwrite. Will be easier once this is an async task.
+                            // TODO: Replace with resource strings
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Password already exists!")
+                                    .setMessage(String.format("This will overwrite %1$s with %2$s.",
+                                            destinationLongName, sourceLongName))
+                                    .setPositiveButton("Okay", null)
+                                    .show();
+                        }
+
+                        if (!source.renameTo(destinationFile)) {
                             // TODO this should show a warning to the user
                             Log.e("Moving", "Something went wrong while moving.");
                         } else {
-                            commitChange("[ANDROID PwdStore] Moved "
-                                    + string.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
-                                    + " to "
-                                    + target.getAbsolutePath().replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
-                                    + target.getAbsolutePath() + "/" + source.getName() + ".");
+                            commitChange(this.getResources()
+                                    .getString(R.string.git_commit_move_text,
+                                            sourceLongName,
+                                            destinationLongName));
                         }
                     }
                     updateListAdapter();

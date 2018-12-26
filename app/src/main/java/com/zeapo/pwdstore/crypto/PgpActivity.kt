@@ -41,6 +41,7 @@ import com.zeapo.pwdstore.utils.Otp
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.util.OpenPgpApi
@@ -73,7 +74,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
     private val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
-    private val name: String by lazy { getName(fullPath, repoPath) }
+    private val name: String by lazy { getName(fullPath) }
     private val lastChangedString: CharSequence by lazy { getLastChangedString(intent.getIntExtra("LAST_CHANGED_TIMESTAMP", -1)) }
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
@@ -412,6 +413,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     val returnIntent = Intent()
                     returnIntent.putExtra("CREATED_FILE", path)
                     returnIntent.putExtra("NAME", editName)
+                    returnIntent.putExtra("LONG_NAME", getLongName(fullPath, repoPath, this.editName!!))
 
                     // if coming from decrypt screen->edit button
                     if (intent.getBooleanExtra("fromDecrypt", false)) {
@@ -790,10 +792,27 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         /**
          * Gets the name of the password (excluding .gpg)
          */
-        fun getName(fullPath: String, repositoryPath: String): String {
-            val relativePath = getRelativePath(fullPath, repositoryPath)
-            val index = relativePath.lastIndexOf("/")
-            return relativePath.substring(index + 1).replace("\\.gpg$".toRegex(), "")
+        fun getName(fullPath: String): String {
+            return FilenameUtils.getBaseName(fullPath);
+        }
+
+        /**
+         * /path/to/store/social/facebook.gpg -> social/facebook
+         */
+        @JvmStatic
+        fun getLongName(fullPath: String, repositoryPath: String, basename: String): String {
+            var relativePath = getRelativePath(fullPath, repositoryPath)
+            if (relativePath.isNotEmpty() && relativePath != "/") {
+                // remove preceding '/'
+                relativePath = relativePath.substring(1);
+                if (relativePath.endsWith('/')) {
+                    return relativePath + basename
+                } else {
+                    return "$relativePath/$basename"
+                }
+            } else {
+                return basename
+            }
         }
     }
 }

@@ -18,9 +18,8 @@
     <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe /"</string>
 
     <!-- git commits -->
-    <string name="add_commit_text">[ANDROID PwdStore] Ajouter &#160;</string>
-    <string name="edit_commit_text">[ANDROID PwdStore] Editer &#160;</string>
-    <string name="from_store">&#160; depuis le dépôt.</string>
+    <string name="git_commit_add_text">Ajouter %1$s depuis le dépôt.</string>
+    <string name="git_commit_edit_text">Editer %1$s depuis le dépôt.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Aucun prestataire OpenPGP sélectionné !</string>

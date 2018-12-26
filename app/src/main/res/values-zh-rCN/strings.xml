@@ -3,7 +3,6 @@
     <string name="app_name">Password Store</string>
     <string name="action_search">搜索</string>
     <string name="action_settings">设置</string>
-    <string name="add_commit_text">[ANDROID PwdStore] 添加 &#160;</string>
     <string name="autofill_apps_default">使用默认设置</string>
     <string name="autofill_apps_delete">删除</string>
     <string name="autofill_apps_first">自动匹配</string>
@@ -30,11 +29,11 @@
     <string name="dialog_ok">确定</string>
     <string name="dialog_oops">糟糕…</string>
     <string name="dialog_yes">确定</string>
-    <string name="edit_commit_text">[ANDROID PwdStore] 修改 &#160;</string>
     <string name="empty_toast_text">无法使用空白密码或者空白的额外内容</string>
     <string name="file_toast_text">请提供一个文件名</string>
     <string name="forget_username_dialog_text">你忘了提供用户名了吗？</string>
-    <string name="from_store">&#160; 从商店</string>
+    <string name="git_commit_edit_text">修改 %1$s 从商店</string>
+    <string name="git_commit_add_text">添加 %1$s 从商店</string>
     <string name="git_pull">Git Pull</string>
     <string name="git_push">Git Push</string>
     <string name="git_sync">同步 Repo</string>
