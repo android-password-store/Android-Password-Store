@@ -23,10 +23,11 @@
     <string name="no_key_selected_dialog_text">Serás redirigido a los ajustes. Por favor selecciona tu llave OpenPGP.</string>
 
     <!-- git commits -->
-    <string name="add_commit_text">[ANDROID PwdStore] Agregada &#160;</string>
-    <string name="edit_commit_text">"[ANDROID PwdStore] Editada "</string>
-    <string name="increment_commit_text">"[ANDROID PwdStore] Increment HOTP counter for "</string>
-    <string name="from_store">&#160; del almacén.</string>
+    <string name="git_commit_add_text">"Contraseña para %1$s agregada usando Android Password Store."</string>
+    <string name="git_commit_edit_text">"%1$s editada usando Android Password Store."</string>
+    <string name="git_commit_remove_text">"%1$s eliminada del almacén usando Android Password Store."</string>
+    <string name="git_commit_move_text">"Renombrado %1$s a %2$s usando Android Password Store.."</string>
+    <string name="git_commit_increment_text">"Contador de HOTP incrementado para %1$s."</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">¡No se ha seleccionado ningún proveedor OpenGPG!</string>
@@ -82,7 +83,7 @@
 
     <!-- Git Config fragment -->
     <string name="invalid_email_dialog_text">Por favor ingresa una dirección de correo</string>
-    <string name="clone_button">Clonar!</string>
+    <string name="clone_button">¡Clonar!</string>
 
     <!-- PGP Handler -->
     <string name="crypto_name_hint">Nombre</string>
@@ -189,7 +190,7 @@
     <string name="dialog_oops">Ups…</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="git_sync">Sincronizar con servidor</string>
-    <string name="git_pull">Descargar desde servidor</string>
+    <string name="git_pull">Descargar del servidor</string>
     <string name="git_push">Subir al servidor</string>
     <string name="show_password_pref_title">Mostrar contraseña</string>
     <string name="show_password_pref_summary">Controla la visibilidad de las contraseñas una vez descifradas. Esto no deshabilita el copiado de la contraseña.</string>
@@ -231,7 +232,7 @@
     <string name="remember_the_passphrase">Recordar contraseñagit  (inseguro)</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abortar rebase</string>
-    <string name="commit_hash">Commit hash</string>
+    <string name="commit_hash">Hash del commit</string>
     <string name="crypto_password_edit_hint">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">Username: Nombre de usuario\n… o algún contenido extra</string>
     <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
