@@ -38,25 +38,8 @@ import java.security.Security
  */
 object PRNGFixes {
 
-    private const val VERSION_CODE_JELLY_BEAN = 16
     private const val VERSION_CODE_JELLY_BEAN_MR2 = 18
     private val BUILD_FINGERPRINT_AND_DEVICE_SERIAL = buildFingerprintAndDeviceSerial
-
-    /**
-     * Gets the hardware serial number of this device.
-     *
-     * @return serial number or `null` if not available.
-     */
-    private// We're using the Reflection API because Build.SERIAL is only available
-    // since API Level 9 (Gingerbread, Android 2.3).
-    val deviceSerialNumber: String?
-        get() {
-            return try {
-                Build::class.java.getField("SERIAL").get(null) as String
-            } catch (ignored: Exception) {
-                null
-            }
-        }
 
     private val buildFingerprintAndDeviceSerial: ByteArray
         get() {
@@ -65,7 +48,8 @@ object PRNGFixes {
             if (fingerprint != null) {
                 result.append(fingerprint)
             }
-            val serial = deviceSerialNumber
+            // TODO: Build#SERIAL is deprecated and should be removed or replaced
+            val serial = Build.SERIAL
             if (serial != null) {
                 result.append(serial)
             }
@@ -94,7 +78,7 @@ object PRNGFixes {
      */
     @Throws(SecurityException::class)
     private fun applyOpenSSLFix() {
-        if (Build.VERSION.SDK_INT < VERSION_CODE_JELLY_BEAN || Build.VERSION.SDK_INT > VERSION_CODE_JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT > VERSION_CODE_JELLY_BEAN_MR2) {
             // No need to apply the fix
             return
         }
