@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 
-public class pwgen {
+public class PasswordGenerator {
     static final int DIGITS     = 0x0001;
     static final int UPPERS     = 0x0002;
     static final int SYMBOLS    = 0x0004;
@@ -26,7 +26,7 @@ public class pwgen {
      * Sets password generation preferences.
      *
      * @param ctx     context from which to retrieve SharedPreferences from
-     *                preferences file 'pwgen'
+     *                preferences file 'PasswordGenerator'
      * @param argv    options for password generation
      *                <table summary="options for password generation">
      *                <tr><td>Option</td><td>Description</td></tr>
@@ -46,7 +46,7 @@ public class pwgen {
     public static boolean setPrefs(Context ctx, ArrayList<String> argv
             , int... numArgv) {
         SharedPreferences prefs
-                = ctx.getSharedPreferences("pwgen", Context.MODE_PRIVATE);
+                = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         for (char option : pwOptions.toCharArray()) {
@@ -74,12 +74,12 @@ public class pwgen {
      * {@link #setPrefs(Context, ArrayList, int...)}.
      *
      * @param ctx context from which to retrieve SharedPreferences from
-     *            preferences file 'pwgen'
+     *            preferences file 'PasswordGenerator'
      * @return list of generated passwords
      */
     public static ArrayList<String> generate(Context ctx) {
         SharedPreferences prefs
-                = ctx.getSharedPreferences("pwgen", Context.MODE_PRIVATE);
+                = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
 
         boolean phonemes = true;
         int pwgenFlags = DIGITS | UPPERS;
@@ -126,9 +126,9 @@ public class pwgen {
         int num = prefs.getInt("num", 1);
         for (int i = 0; i < num; i++) {
             if (phonemes) {
-                passwords.add(pw_phonemes.phonemes(length, pwgenFlags));
+                passwords.add(Phonemes.phonemes(length, pwgenFlags));
             } else {
-                passwords.add(pw_rand.rand(length, pwgenFlags));
+                passwords.add(RandomPasswordGenerator.rand(length, pwgenFlags));
             }
         }
         return passwords;

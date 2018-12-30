@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.pwgen;
 
-class pw_phonemes {
+class Phonemes {
     private static final int CONSONANT  = 0x0001;
     private static final int VOWEL      = 0x0002;
     private static final int DIPTHONG   = 0x0004;
@@ -89,10 +89,10 @@ class pw_phonemes {
             prev = 0;
             first = true;
 
-            shouldBe = randnum.number(2) == 1 ? VOWEL : CONSONANT;
+            shouldBe = RandomNumberGenerator.number(2) == 1 ? VOWEL : CONSONANT;
 
             while (curSize < size) {
-                i = randnum.number(NUM_ELEMENTS);
+                i = RandomNumberGenerator.number(NUM_ELEMENTS);
                 str = elements[i].str;
                 length = str.length();
                 flags = elements[i].flags;
@@ -118,19 +118,19 @@ class pw_phonemes {
                 password += str;
 
                 // Handle UPPERS
-                if ((pwFlags & pwgen.UPPERS) > 0) {
+                if ((pwFlags & PasswordGenerator.UPPERS) > 0) {
                     if ((first || (flags & CONSONANT) > 0)
-                            && (randnum.number(10) < 2)) {
+                            && (RandomNumberGenerator.number(10) < 2)) {
                         int index = password.length() - length;
                         password = password.substring(0, index)
                                 + str.toUpperCase();
-                        featureFlags &= ~pwgen.UPPERS;
+                        featureFlags &= ~PasswordGenerator.UPPERS;
                     }
                 }
 
                 // Handle the AMBIGUOUS flag
-                if ((pwFlags & pwgen.AMBIGUOUS) > 0) {
-                    for (char ambiguous : pwgen.AMBIGUOUS_STR.toCharArray()) {
+                if ((pwFlags & PasswordGenerator.AMBIGUOUS) > 0) {
+                    for (char ambiguous : PasswordGenerator.AMBIGUOUS_STR.toCharArray()) {
                         if (password.contains(String.valueOf(ambiguous))) {
                             password = password.substring(0, curSize);
                             break;
@@ -147,41 +147,41 @@ class pw_phonemes {
                     break;
 
                 // Handle DIGITS
-                if ((pwFlags & pwgen.DIGITS) > 0) {
-                    if (!first && (randnum.number(10) < 3)) {
+                if ((pwFlags & PasswordGenerator.DIGITS) > 0) {
+                    if (!first && (RandomNumberGenerator.number(10) < 3)) {
                         String val;
                         do {
-                            cha = Character.forDigit(randnum.number(10), 10);
+                            cha = Character.forDigit(RandomNumberGenerator.number(10), 10);
                             val = String.valueOf(cha);
-                        } while ((pwFlags & pwgen.AMBIGUOUS) > 0
-                                && pwgen.AMBIGUOUS_STR.contains(val));
+                        } while ((pwFlags & PasswordGenerator.AMBIGUOUS) > 0
+                                && PasswordGenerator.AMBIGUOUS_STR.contains(val));
                         password += val;
                         curSize++;
 
-                        featureFlags &= ~pwgen.DIGITS;
+                        featureFlags &= ~PasswordGenerator.DIGITS;
 
                         first = true;
                         prev = 0;
-                        shouldBe = randnum.number(2) == 1 ? VOWEL : CONSONANT;
+                        shouldBe = RandomNumberGenerator.number(2) == 1 ? VOWEL : CONSONANT;
                         continue;
                     }
                 }
 
                 // Handle SYMBOLS
-                if ((pwFlags & pwgen.SYMBOLS) > 0) {
-                    if (!first && (randnum.number(10) < 2)) {
+                if ((pwFlags & PasswordGenerator.SYMBOLS) > 0) {
+                    if (!first && (RandomNumberGenerator.number(10) < 2)) {
                         String val;
                         int num;
                         do {
-                            num = randnum.number(pwgen.SYMBOLS_STR.length());
-                            cha = pwgen.SYMBOLS_STR.toCharArray()[num];
+                            num = RandomNumberGenerator.number(PasswordGenerator.SYMBOLS_STR.length());
+                            cha = PasswordGenerator.SYMBOLS_STR.toCharArray()[num];
                             val = String.valueOf(cha);
-                        } while ((pwFlags & pwgen.AMBIGUOUS) > 0
-                                && pwgen.AMBIGUOUS_STR.contains(val));
+                        } while ((pwFlags & PasswordGenerator.AMBIGUOUS) > 0
+                                && PasswordGenerator.AMBIGUOUS_STR.contains(val));
                         password += val;
                         curSize++;
 
-                        featureFlags &= ~pwgen.SYMBOLS;
+                        featureFlags &= ~PasswordGenerator.SYMBOLS;
                     }
                 }
 
@@ -190,7 +190,7 @@ class pw_phonemes {
                     shouldBe = VOWEL;
                 } else {
                     if ((prev & VOWEL) > 0 || (flags & DIPTHONG) > 0
-                            || (randnum.number(10) > 3)) {
+                            || (RandomNumberGenerator.number(10) > 3)) {
                         shouldBe = CONSONANT;
                     } else {
                         shouldBe = VOWEL;
@@ -199,7 +199,7 @@ class pw_phonemes {
                 prev = flags;
                 first = false;
             }
-        } while ((featureFlags & (pwgen.UPPERS | pwgen.DIGITS | pwgen.SYMBOLS))
+        } while ((featureFlags & (PasswordGenerator.UPPERS | PasswordGenerator.DIGITS | PasswordGenerator.SYMBOLS))
                 > 0);
         return password;
     }

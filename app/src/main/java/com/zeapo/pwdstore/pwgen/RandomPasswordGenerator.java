@@ -1,6 +1,6 @@
 package com.zeapo.pwdstore.pwgen;
 
-class pw_rand {
+class RandomPasswordGenerator {
 
     /**
      * Generates a completely random password.
@@ -25,45 +25,45 @@ class pw_rand {
         String val;
 
         String bank = "";
-        if ((pwFlags & pwgen.DIGITS) > 0) {
-            bank += pwgen.DIGITS_STR;
+        if ((pwFlags & PasswordGenerator.DIGITS) > 0) {
+            bank += PasswordGenerator.DIGITS_STR;
         }
-        if ((pwFlags & pwgen.UPPERS) > 0) {
-            bank += pwgen.UPPERS_STR;
+        if ((pwFlags & PasswordGenerator.UPPERS) > 0) {
+            bank += PasswordGenerator.UPPERS_STR;
         }
-        bank += pwgen.LOWERS_STR;
-        if ((pwFlags & pwgen.SYMBOLS) > 0) {
-            bank += pwgen.SYMBOLS_STR;
+        bank += PasswordGenerator.LOWERS_STR;
+        if ((pwFlags & PasswordGenerator.SYMBOLS) > 0) {
+            bank += PasswordGenerator.SYMBOLS_STR;
         }
         do {
             password = "";
             featureFlags = pwFlags;
             i = 0;
             while (i < size) {
-                num = randnum.number(bank.length());
+                num = RandomNumberGenerator.number(bank.length());
                 cha = bank.toCharArray()[num];
                 val = String.valueOf(cha);
-                if ((pwFlags & pwgen.AMBIGUOUS) > 0
-                        && pwgen.AMBIGUOUS_STR.contains(val)) {
+                if ((pwFlags & PasswordGenerator.AMBIGUOUS) > 0
+                        && PasswordGenerator.AMBIGUOUS_STR.contains(val)) {
                     continue;
                 }
-                if ((pwFlags & pwgen.NO_VOWELS) > 0
-                        && pwgen.VOWELS_STR.contains(val)) {
+                if ((pwFlags & PasswordGenerator.NO_VOWELS) > 0
+                        && PasswordGenerator.VOWELS_STR.contains(val)) {
                     continue;
                 }
                 password += val;
                 i++;
-                if (pwgen.DIGITS_STR.contains(val)) {
-                    featureFlags &= ~pwgen.DIGITS;
+                if (PasswordGenerator.DIGITS_STR.contains(val)) {
+                    featureFlags &= ~PasswordGenerator.DIGITS;
                 }
-                if (pwgen.UPPERS_STR.contains(val)) {
-                    featureFlags &= ~pwgen.UPPERS;
+                if (PasswordGenerator.UPPERS_STR.contains(val)) {
+                    featureFlags &= ~PasswordGenerator.UPPERS;
                 }
-                if (pwgen.SYMBOLS_STR.contains(val)) {
-                    featureFlags &= ~pwgen.SYMBOLS;
+                if (PasswordGenerator.SYMBOLS_STR.contains(val)) {
+                    featureFlags &= ~PasswordGenerator.SYMBOLS;
                 }
             }
-        } while ((featureFlags & (pwgen.UPPERS | pwgen.DIGITS | pwgen.SYMBOLS))
+        } while ((featureFlags & (PasswordGenerator.UPPERS | PasswordGenerator.DIGITS | PasswordGenerator.SYMBOLS))
                 > 0);
         return password;
     }

@@ -110,7 +110,7 @@
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
     <string name="pref_select_external_repository">Choisissez un dépôt externe</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Générer</string>
     <string name="pwgen_include">Inclure</string>
     <string name="pwgen_length">Longueur</string>

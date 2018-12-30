@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import com.zeapo.pwdstore.pwgen.pwgen;
+import com.zeapo.pwdstore.pwgen.PasswordGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,9 +25,9 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class pwgenDialogFragment extends DialogFragment {
+public class PasswordGeneratorDialogFragment extends DialogFragment {
 
-    public pwgenDialogFragment() {
+    public PasswordGeneratorDialogFragment() {
     }
 
 
@@ -44,7 +44,7 @@ public class pwgenDialogFragment extends DialogFragment {
         builder.setView(view);
 
         SharedPreferences prefs
-                = getActivity().getApplicationContext().getSharedPreferences("pwgen", Context.MODE_PRIVATE);
+                = getActivity().getApplicationContext().getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
 
         CheckBox checkBox = view.findViewById(R.id.numerals);
         checkBox.setChecked(!prefs.getBoolean("0", false));
@@ -90,7 +90,7 @@ public class pwgenDialogFragment extends DialogFragment {
             public void onShow(DialogInterface dialog) {
                 setPreferences();
                 TextView textView = view.findViewById(R.id.passwordText);
-                textView.setText(pwgen.generate(getActivity().getApplicationContext()).get(0));
+                textView.setText(PasswordGenerator.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +98,7 @@ public class pwgenDialogFragment extends DialogFragment {
                     public void onClick(View v) {
                         setPreferences();
                         TextView textView = view.findViewById(R.id.passwordText);
-                        textView.setText(pwgen.generate(callingActivity.getApplicationContext()).get(0));
+                        textView.setText(PasswordGenerator.generate(callingActivity.getApplicationContext()).get(0));
                     }
                 });
             }
@@ -126,9 +126,9 @@ public class pwgenDialogFragment extends DialogFragment {
         EditText editText = getDialog().findViewById(R.id.lengthNumber);
         try {
             int length = Integer.valueOf(editText.getText().toString());
-            pwgen.setPrefs(getActivity().getApplicationContext(), preferences, length);
+            PasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences, length);
         } catch(NumberFormatException e) {
-            pwgen.setPrefs(getActivity().getApplicationContext(), preferences);
+            PasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }
 }

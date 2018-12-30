@@ -3,7 +3,7 @@ package com.zeapo.pwdstore.pwgen;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-class randnum {
+class RandomNumberGenerator {
     private static SecureRandom random;
 
     static {

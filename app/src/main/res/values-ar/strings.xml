@@ -104,7 +104,7 @@
     <string name="prefs_export_passwords_title">تصدير كلمات السر</string>
     <string name="prefs_version">النسخة</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">توليد</string>
     <string name="pwgen_include">تحتوي على</string>
     <string name="pwgen_length">الطول</string>

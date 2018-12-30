@@ -36,7 +36,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
-import com.zeapo.pwdstore.pwgenDialogFragment
+import com.zeapo.pwdstore.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.Otp
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
@@ -117,7 +117,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    pwgenDialogFragment().show(supportFragmentManager, "generator")
+                    PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
                 }
 
                 title = getString(R.string.new_password_title)
@@ -439,7 +439,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            pwgenDialogFragment().show(supportFragmentManager, "generator")
+            PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
         }
 
         title = getString(R.string.edit_password_title)

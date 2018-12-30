@@ -157,7 +157,7 @@
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
     <string name="prefs_version">Version</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Generate</string>
     <string name="pwgen_include">Include</string>
     <string name="pwgen_length">Length</string>

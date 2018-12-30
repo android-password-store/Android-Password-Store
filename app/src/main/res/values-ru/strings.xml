@@ -133,7 +133,7 @@
     <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
     <string name="prefs_version">Версия</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Сгенерировать</string>
     <string name="pwgen_include">Включая</string>
     <string name="pwgen_length">Длина</string>
