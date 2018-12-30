@@ -109,7 +109,7 @@ public class PasswordStore extends AppCompatActivity {
             shortcutManager = getSystemService(ShortcutManager.class);
         }
         activity = this;
-        PRNGFixes.apply();
+        PRNGFixes.INSTANCE.apply();
 
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment

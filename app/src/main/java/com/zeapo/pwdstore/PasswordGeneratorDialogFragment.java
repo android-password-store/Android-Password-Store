@@ -90,7 +90,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
             public void onShow(DialogInterface dialog) {
                 setPreferences();
                 TextView textView = view.findViewById(R.id.passwordText);
-                textView.setText(PasswordGenerator.generate(getActivity().getApplicationContext()).get(0));
+                textView.setText(PasswordGenerator.INSTANCE.generate(getActivity().getApplicationContext()).get(0));
 
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +98,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
                     public void onClick(View v) {
                         setPreferences();
                         TextView textView = view.findViewById(R.id.passwordText);
-                        textView.setText(PasswordGenerator.generate(callingActivity.getApplicationContext()).get(0));
+                        textView.setText(PasswordGenerator.INSTANCE.generate(callingActivity.getApplicationContext()).get(0));
                     }
                 });
             }
@@ -126,9 +126,9 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         EditText editText = getDialog().findViewById(R.id.lengthNumber);
         try {
             int length = Integer.valueOf(editText.getText().toString());
-            PasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences, length);
+            PasswordGenerator.INSTANCE.setPrefs(getActivity().getApplicationContext(), preferences, length);
         } catch(NumberFormatException e) {
-            PasswordGenerator.setPrefs(getActivity().getApplicationContext(), preferences);
+            PasswordGenerator.INSTANCE.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }
 }
