@@ -14,14 +14,20 @@
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
-	<string name="store_git">/store/.git</string>
+    <string name="store_git">/store/.git</string>
     <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
     <string name="delete_dialog_text">Are you sure you want to delete the password /"</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="change">Change</string>
+    <string name="use">Use</string>
+    <string name="directory_selected_title">Directory already selected</string>
+    <string name="directory_selected_message">Do you want to use \"%1$s\"?</string>
     <string name="no_key_selected_dialog_title">OpenPGP key not selected</string>
     <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
+    <string name="password_exists_title">Password already exists!</string>
+    <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Add password for %1$s using android password store.</string>
