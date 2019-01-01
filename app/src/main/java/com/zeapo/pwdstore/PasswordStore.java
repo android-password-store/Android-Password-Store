@@ -444,23 +444,32 @@ public class PasswordStore extends AppCompatActivity {
         Repository repository = PasswordRepository.getRepository(repoPath);
 
         if (repository == null) {
+            Log.e(TAG, "getLastChangedTimestamp: No git repository");
             return -1;
         }
 
         Git git = new Git(repository);
-        String relativePath = getRelativePath(fullPath, repoPath.getAbsolutePath()).substring(1);
-        Iterable<RevCommit> iterable;
+        String relativePath = getRelativePath(fullPath, repoPath.getAbsolutePath())
+                .substring(1); // Removes leading '/'
 
+        Iterator<RevCommit> iterator;
         try {
-            iterable = git.log().addPath(relativePath).call();
+            iterator = git
+                    .log()
+                    .addPath(relativePath)
+                    .call()
+                    .iterator();
         } catch (GitAPIException e) {
-            System.out.println("Exception caught :(");
-            e.printStackTrace();
+            Log.e(TAG, "getLastChangedTimestamp: GITAPIException", e);
             return -1;
         }
 
-        RevCommit latestCommit = iterable.iterator().next();
-        return latestCommit.getCommitTime();
+        if (!iterator.hasNext()) {
+            Log.w(TAG, "getLastChangedTimestamp: No commits for file: " + relativePath);
+            return -1;
+        }
+
+        return iterator.next().getCommitTime();
     }
 
     public void decryptPassword(PasswordItem item) {
