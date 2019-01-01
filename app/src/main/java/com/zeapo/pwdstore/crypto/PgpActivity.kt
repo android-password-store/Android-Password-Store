@@ -611,7 +611,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             // ignore and keep default
         }
 
-        if (settings.getBoolean("clear_after_copy", true)) {
+        if (settings.getBoolean("clear_after_copy", true) && clearAfter != 0) {
             setTimer()
             showToast(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
         }
@@ -732,17 +732,15 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             if (skip) return
             checkAndIncrementHotp()
 
-            // only clear the clipboard if we set auto clear after copy option
-            if (settings.getBoolean("clear_after_copy", true)) {
-                Log.d("DELAY_SHOW", "Clearing the clipboard")
-                val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
-                clipboard.primaryClip = clip
-                if (settings.getBoolean("clear_clipboard_20x", false)) {
-                    val handler = Handler()
-                    for (i in 0..18) {
-                        val count = i.toString()
-                        handler.postDelayed({ clipboard.primaryClip = ClipData.newPlainText(count, count) }, (i * 500).toLong())
-                    }
+            // No need to validate clear_after_copy. It was validated in copyPasswordToClipBoard()
+            Log.d("DELAY_SHOW", "Clearing the clipboard")
+            val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
+            clipboard.primaryClip = clip
+            if (settings.getBoolean("clear_clipboard_20x", false)) {
+                val handler = Handler()
+                for (i in 0..18) {
+                    val count = i.toString()
+                    handler.postDelayed({ clipboard.primaryClip = ClipData.newPlainText(count, count) }, (i * 500).toLong())
                 }
             }
 

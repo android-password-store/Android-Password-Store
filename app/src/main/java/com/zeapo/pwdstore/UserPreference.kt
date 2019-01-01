@@ -159,6 +159,15 @@ class UserPreference : AppCompatActivity() {
                 callingActivity.exportPasswordsWithPermissions()
                 true
             }
+
+            findPreference("general_show_time").onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any? ->
+                try{
+                    findPreference("clear_after_copy").isEnabled = newValue.toString().toInt() != 0
+                    true
+                }catch (e: NumberFormatException){
+                    false
+                }
+            }
         }
 
         override fun onStart() {
@@ -169,6 +178,7 @@ class UserPreference : AppCompatActivity() {
             findPreference("git_delete_repo").isEnabled = !sharedPreferences.getBoolean("git_external", false)
             findPreference("ssh_key_clear_passphrase").isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty() ?: false
             findPreference("hotp_remember_clear_choice").isEnabled = sharedPreferences.getBoolean("hotp_remember_check", false)
+            findPreference("clear_after_copy").isEnabled = sharedPreferences.getString("general_show_time", "45").toInt() != 0
             val keyPref = findPreference("openpgp_key_id_pref")
             val selectedKeys: Array<String> = ArrayList<String>(sharedPreferences.getStringSet("openpgp_key_ids_set", HashSet<String>())).toTypedArray()
             if (selectedKeys.isEmpty()) {
