@@ -4,15 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import androidx.recyclerview.widget.SortedList;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
+import androidx.recyclerview.widget.SortedListAdapterCallback;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
@@ -25,50 +24,6 @@ class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapt
     private AutofillPreferenceActivity activity;
     private Drawable browserIcon = null;
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public View view;
-        public TextView name;
-        TextView secondary;
-        public ImageView icon;
-        String packageName;
-        String appName;
-        Boolean isWeb;
-
-        ViewHolder(View view) {
-            super(view);
-            this.view = view;
-            name = (TextView) view.findViewById(R.id.app_name);
-            secondary = (TextView) view.findViewById(R.id.secondary_text);
-            icon = (ImageView) view.findViewById(R.id.app_icon);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            activity.showDialog(packageName, appName, isWeb);
-        }
-
-    }
-
-    static class AppInfo {
-        String packageName;
-        String appName;
-        boolean isWeb;
-        public Drawable icon;
-
-        AppInfo(String packageName, String appName, boolean isWeb, Drawable icon) {
-            this.packageName = packageName;
-            this.appName = appName;
-            this.isWeb = isWeb;
-            this.icon = icon;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return o != null && o instanceof AppInfo && this.appName.equals(((AppInfo) o).appName);
-        }
-    }
-
     AutofillRecyclerAdapter(List<AppInfo> allApps, final PackageManager pm
             , AutofillPreferenceActivity activity) {
         SortedList.Callback<AppInfo> callback = new SortedListAdapterCallback<AppInfo>(this) {
@@ -76,17 +31,17 @@ class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapt
             // for the limited add/remove usage for websites
             @Override
             public int compare(AppInfo o1, AppInfo o2) {
-             return o1.appName.toLowerCase().compareTo(o2.appName.toLowerCase());
+                return o1.appName.toLowerCase().compareTo(o2.appName.toLowerCase());
             }
 
             @Override
             public boolean areContentsTheSame(AppInfo oldItem, AppInfo newItem) {
-             return oldItem.appName.equals(newItem.appName);
+                return oldItem.appName.equals(newItem.appName);
             }
 
             @Override
             public boolean areItemsTheSame(AppInfo item1, AppInfo item2) {
-             return item1.appName.equals(item2.appName);
+                return item1.appName.equals(item2.appName);
             }
         };
         this.apps = new SortedList<>(AppInfo.class, callback);
@@ -170,7 +125,7 @@ class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapt
     }
 
     void updateWebsite(String oldPackageName, String packageName) {
-        apps.updateItemAt(getPosition(oldPackageName), new AppInfo (packageName, packageName, true, browserIcon));
+        apps.updateItemAt(getPosition(oldPackageName), new AppInfo(packageName, packageName, true, browserIcon));
         allApps.remove(new AppInfo(null, oldPackageName, false, null)); // compare with equals
         allApps.add(new AppInfo(null, packageName, false, null));
     }
@@ -189,5 +144,49 @@ class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapt
             }
         }
         apps.endBatchedUpdates();
+    }
+
+    static class AppInfo {
+        public Drawable icon;
+        String packageName;
+        String appName;
+        boolean isWeb;
+
+        AppInfo(String packageName, String appName, boolean isWeb, Drawable icon) {
+            this.packageName = packageName;
+            this.appName = appName;
+            this.isWeb = isWeb;
+            this.icon = icon;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof AppInfo && this.appName.equals(((AppInfo) o).appName);
+        }
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public View view;
+        public TextView name;
+        public ImageView icon;
+        TextView secondary;
+        String packageName;
+        String appName;
+        Boolean isWeb;
+
+        ViewHolder(View view) {
+            super(view);
+            this.view = view;
+            name = view.findViewById(R.id.app_name);
+            secondary = view.findViewById(R.id.secondary_text);
+            icon = view.findViewById(R.id.app_icon);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            activity.showDialog(packageName, appName, isWeb);
+        }
+
     }
 }

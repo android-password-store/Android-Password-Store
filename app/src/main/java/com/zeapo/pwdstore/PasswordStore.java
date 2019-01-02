@@ -3,7 +3,6 @@ package com.zeapo.pwdstore;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,20 +13,6 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,16 +20,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
 import com.zeapo.pwdstore.git.GitOperation;
-import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
@@ -53,21 +45,15 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
 
-    private static final String TAG = PasswordStore.class.getName();
-    private SharedPreferences settings;
-    private Activity activity;
-    private PasswordFragment plist;
-    private ShortcutManager shortcutManager;
-    private MenuItem searchItem = null;
-    private SearchView searchView;
-
-    private final static int CLONE_REPO_BUTTON = 401;
-    private final static int NEW_REPO_BUTTON = 402;
-    private final static int HOME = 403;
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
     public static final int REQUEST_CODE_SIGN_AND_ENCRYPT = 9912;
@@ -76,6 +62,17 @@ public class PasswordStore extends AppCompatActivity {
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_EDIT = 9916;
     public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
+    private static final String TAG = PasswordStore.class.getName();
+    private final static int CLONE_REPO_BUTTON = 401;
+    private final static int NEW_REPO_BUTTON = 402;
+    private final static int HOME = 403;
+    private final static int REQUEST_EXTERNAL_STORAGE = 50;
+    private SharedPreferences settings;
+    private Activity activity;
+    private PasswordFragment plist;
+    private ShortcutManager shortcutManager;
+    private MenuItem searchItem = null;
+    private SearchView searchView;
 
     private static boolean isPrintable(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
@@ -106,8 +103,6 @@ public class PasswordStore extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private final static int REQUEST_EXTERNAL_STORAGE = 50;
-
     @Override
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +111,6 @@ public class PasswordStore extends AppCompatActivity {
             shortcutManager = getSystemService(ShortcutManager.class);
         }
         activity = this;
-        PRNGFixes.INSTANCE.apply();
 
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
@@ -142,17 +136,12 @@ public class PasswordStore extends AppCompatActivity {
                     // TODO: strings.xml
                     Snackbar snack = Snackbar.make(findViewById(R.id.main_layout), "The store is on the sdcard but the app does not have permission to access it. Please give permission.",
                             Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.dialog_ok, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    ActivityCompat.requestPermissions(activity,
-                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                            REQUEST_EXTERNAL_STORAGE);
-                                }
-                            });
+                            .setAction(R.string.dialog_ok, view -> ActivityCompat.requestPermissions(activity,
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    REQUEST_EXTERNAL_STORAGE));
                     snack.show();
                     View view = snack.getView();
-                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    TextView tv = view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.WHITE);
                     tv.setMaxLines(10);
                 } else {
@@ -357,12 +346,9 @@ public class PasswordStore extends AppCompatActivity {
         if (keyIds.isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, GitActivity.REQUEST_INIT);
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivityForResult(intent, GitActivity.REQUEST_INIT);
                     })
                     .setNegativeButton(this.getResources().getString(R.string.dialog_negative), null)
                     .show();
@@ -516,24 +502,18 @@ public class PasswordStore extends AppCompatActivity {
         if (!PasswordRepository.isInitialized()) {
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.creation_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                     }).show();
             return;
         }
 
-        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<String>()).isEmpty()) {
+        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<>()).isEmpty()) {
             new AlertDialog.Builder(this)
                     .setTitle(this.getResources().getString(R.string.no_key_selected_dialog_title))
                     .setMessage(this.getResources().getString(R.string.no_key_selected_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivity(intent);
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivity(intent);
                     }).show();
             return;
         }
@@ -559,25 +539,19 @@ public class PasswordStore extends AppCompatActivity {
         new AlertDialog.Builder(this).
                 setMessage(this.getResources().getString(R.string.delete_dialog_text) +
                         item + "\"")
-                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        item.getFile().delete();
-                        adapter.remove(position);
-                        it.remove();
-                        adapter.updateSelectedItems(position, selectedItems);
+                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), (dialogInterface, i) -> {
+                    item.getFile().delete();
+                    adapter.remove(position);
+                    it.remove();
+                    adapter.updateSelectedItems(position, selectedItems);
 
-                        commitChange(getResources().getString(R.string.git_commit_remove_text,
-                                item.getLongName()));
-                        deletePasswords(adapter, selectedItems);
-                    }
+                    commitChange(getResources().getString(R.string.git_commit_remove_text,
+                            item.getLongName()));
+                    deletePasswords(adapter, selectedItems);
                 })
-                .setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        it.remove();
-                        deletePasswords(adapter, selectedItems);
-                    }
+                .setNegativeButton(this.getResources().getString(R.string.dialog_no), (dialogInterface, i) -> {
+                    it.remove();
+                    deletePasswords(adapter, selectedItems);
                 })
                 .show();
     }
@@ -771,64 +745,54 @@ public class PasswordStore extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(this.getResources().getString(R.string.location_dialog_title))
                 .setMessage(this.getResources().getString(R.string.location_dialog_text))
-                .setPositiveButton(this.getResources().getString(R.string.location_hidden), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", false).apply();
+                .setPositiveButton(this.getResources().getString(R.string.location_hidden), (dialog, whichButton) -> {
+                    settings.edit().putBoolean("git_external", false).apply();
 
-                        switch (operation) {
-                            case NEW_REPO_BUTTON:
-                                initializeRepositoryInfo();
-                                break;
-                            case CLONE_REPO_BUTTON:
-                                PasswordRepository.initialize(PasswordStore.this);
+                    switch (operation) {
+                        case NEW_REPO_BUTTON:
+                            initializeRepositoryInfo();
+                            break;
+                        case CLONE_REPO_BUTTON:
+                            PasswordRepository.initialize(PasswordStore.this);
 
-                                Intent intent = new Intent(activity, GitActivity.class);
-                                intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                break;
-                        }
+                            Intent intent = new Intent(activity, GitActivity.class);
+                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                            break;
                     }
                 })
-                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", true).apply();
+                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), (dialog, whichButton) -> {
+                    settings.edit().putBoolean("git_external", true).apply();
 
-                        String externalRepo = settings.getString("git_external_repo", null);
+                    String externalRepo = settings.getString("git_external_repo", null);
 
-                        if (externalRepo == null) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            intent.putExtra("operation", "git_external");
-                            startActivityForResult(intent, operation);
-                        } else {
-                            new AlertDialog.Builder(activity)
-                                    .setTitle(getResources().getString(R.string.directory_selected_title))
-                                    .setMessage(getResources().getString(R.string.directory_selected_message, externalRepo))
-                                    .setPositiveButton(getResources().getString(R.string.use), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            switch (operation) {
-                                                case NEW_REPO_BUTTON:
-                                                    initializeRepositoryInfo();
-                                                    break;
-                                                case CLONE_REPO_BUTTON:
-                                                    PasswordRepository.initialize(PasswordStore.this);
+                    if (externalRepo == null) {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        intent.putExtra("operation", "git_external");
+                        startActivityForResult(intent, operation);
+                    } else {
+                        new AlertDialog.Builder(activity)
+                                .setTitle(getResources().getString(R.string.directory_selected_title))
+                                .setMessage(getResources().getString(R.string.directory_selected_message, externalRepo))
+                                .setPositiveButton(getResources().getString(R.string.use), (dialog1, which) -> {
+                                    switch (operation) {
+                                        case NEW_REPO_BUTTON:
+                                            initializeRepositoryInfo();
+                                            break;
+                                        case CLONE_REPO_BUTTON:
+                                            PasswordRepository.initialize(PasswordStore.this);
 
-                                                    Intent intent = new Intent(activity, GitActivity.class);
-                                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                                    break;
-                                            }
-                                        }
-                                    })
-                                    .setNegativeButton(getResources().getString(R.string.change), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(activity, UserPreference.class);
-                                            intent.putExtra("operation", "git_external");
-                                            startActivityForResult(intent, operation);
-                                        }
-                                    }).show();
-                        }
+                                            Intent intent = new Intent(activity, GitActivity.class);
+                                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                                            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                                            break;
+                                    }
+                                })
+                                .setNegativeButton(getResources().getString(R.string.change), (dialog12, which) -> {
+                                    Intent intent = new Intent(activity, UserPreference.class);
+                                    intent.putExtra("operation", "git_external");
+                                    startActivityForResult(intent, operation);
+                                }).show();
                     }
                 })
                 .show();

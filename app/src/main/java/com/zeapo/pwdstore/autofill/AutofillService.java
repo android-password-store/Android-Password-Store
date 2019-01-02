@@ -1,12 +1,10 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.accessibilityservice.AccessibilityService;
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -16,18 +14,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AlertDialog;
 import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
@@ -62,10 +58,6 @@ public class AutofillService extends AccessibilityService {
     private PasswordEntry lastPassword;
     private long lastPasswordMaxDate;
 
-    final class Constants {
-        static final String TAG = "Keychain";
-    }
-
     public static AutofillService getInstance() {
         return instance;
     }
@@ -96,11 +88,6 @@ public class AutofillService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // TODO there should be a better way of disabling service
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return;
-        }
-
         // remove stored password from cache
         if (lastPassword != null && System.currentTimeMillis() > lastPasswordMaxDate) {
             lastPassword = null;
@@ -405,20 +392,14 @@ public class AutofillService extends AccessibilityService {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                dialog.dismiss();
-                dialog = null;
-            }
+        builder.setNegativeButton(R.string.dialog_cancel, (d, which) -> {
+            dialog.dismiss();
+            dialog = null;
         });
-        builder.setPositiveButton(R.string.autofill_paste, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                pasteText(node, password.getUsername());
-                dialog.dismiss();
-                dialog = null;
-            }
+        builder.setPositiveButton(R.string.autofill_paste, (d, which) -> {
+            pasteText(node, password.getUsername());
+            dialog.dismiss();
+            dialog = null;
         });
         builder.setMessage(getString(R.string.autofill_paste_username, password.getUsername()));
 
@@ -436,24 +417,19 @@ public class AutofillService extends AccessibilityService {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                dialog.dismiss();
-                dialog = null;
-            }
+        builder.setNegativeButton(R.string.dialog_cancel, (d, which) -> {
+            dialog.dismiss();
+            dialog = null;
         });
-        builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
-                // the user will have to return to the app themselves.
-                Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("packageName", packageName);
-                intent.putExtra("appName", appName);
-                intent.putExtra("isWeb", isWeb);
-                startActivity(intent);
-            }
+        builder.setNeutralButton("Settings", (dialog, which) -> {
+            //TODO make icon? gear?
+            // the user will have to return to the app themselves.
+            Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("packageName", packageName);
+            intent.putExtra("appName", appName);
+            intent.putExtra("isWeb", isWeb);
+            startActivity(intent);
         });
 
         // populate the dialog items, always with pick + pick and match. Could
@@ -464,26 +440,23 @@ public class AutofillService extends AccessibilityService {
         }
         itemNames[items.size()] = getString(R.string.autofill_pick);
         itemNames[items.size() + 1] = getString(R.string.autofill_pick_and_match);
-        builder.setItems(itemNames, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                lastWhichItem = which;
-                if (which < items.size()) {
-                    bindDecryptAndVerify();
-                } else if (which == items.size()) {
-                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("pick", true);
-                    startActivity(intent);
-                } else {
-                    lastWhichItem--;    // will add one element to items, so lastWhichItem=items.size()+1
-                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("pickMatchWith", true);
-                    intent.putExtra("packageName", packageName);
-                    intent.putExtra("isWeb", isWeb);
-                    startActivity(intent);
-                }
+        builder.setItems(itemNames, (dialog, which) -> {
+            lastWhichItem = which;
+            if (which < items.size()) {
+                bindDecryptAndVerify();
+            } else if (which == items.size()) {
+                Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("pick", true);
+                startActivity(intent);
+            } else {
+                lastWhichItem--;    // will add one element to items, so lastWhichItem=items.size()+1
+                Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("pickMatchWith", true);
+                intent.putExtra("packageName", packageName);
+                intent.putExtra("isWeb", isWeb);
+                startActivity(intent);
             }
         });
 
@@ -513,18 +486,6 @@ public class AutofillService extends AccessibilityService {
     @Override
     public void onInterrupt() {
 
-    }
-
-    private class onBoundListener implements OpenPgpServiceConnection.OnBound {
-        @Override
-        public void onBound(IOpenPgpService2 service) {
-            decryptAndVerify();
-        }
-
-        @Override
-        public void onError(Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void bindDecryptAndVerify() {
@@ -600,7 +561,6 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void pasteText(final AccessibilityNodeInfo node, final String text) {
         // if the user focused on something else, take focus back
         // but this will open another dialog...hack to ignore this
@@ -626,5 +586,21 @@ public class AutofillService extends AccessibilityService {
             }
         }
         node.recycle();
+    }
+
+    final class Constants {
+        static final String TAG = "Keychain";
+    }
+
+    private class onBoundListener implements OpenPgpServiceConnection.OnBound {
+        @Override
+        public void onBound(IOpenPgpService2 service) {
+            decryptAndVerify();
+        }
+
+        @Override
+        public void onError(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

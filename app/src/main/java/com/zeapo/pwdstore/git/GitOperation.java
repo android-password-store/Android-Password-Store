@@ -2,19 +2,17 @@ package com.zeapo.pwdstore.git;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
@@ -23,7 +21,6 @@ import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -109,46 +106,37 @@ public abstract class GitOperation {
                 new AlertDialog.Builder(callingActivity)
                         .setMessage(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_text))
                         .setTitle(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_title))
-                        .setPositiveButton(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_import), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                try {
-                                    // Ask the UserPreference to provide us with the ssh-key
-                                    // onResult has to be handled by the callingActivity
-                                    Intent intent = new Intent(callingActivity.getApplicationContext(), UserPreference.class);
-                                    intent.putExtra("operation", "get_ssh_key");
-                                    callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
-                                } catch (Exception e) {
-                                    System.out.println("Exception caught :(");
-                                    e.printStackTrace();
-                                }
+                        .setPositiveButton(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_import), (dialog, id) -> {
+                            try {
+                                // Ask the UserPreference to provide us with the ssh-key
+                                // onResult has to be handled by the callingActivity
+                                Intent intent = new Intent(callingActivity.getApplicationContext(), UserPreference.class);
+                                intent.putExtra("operation", "get_ssh_key");
+                                callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
+                            } catch (Exception e) {
+                                System.out.println("Exception caught :(");
+                                e.printStackTrace();
                             }
                         })
-                        .setNegativeButton(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_generate), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    // Duplicated code
-                                    Intent intent = new Intent(callingActivity.getApplicationContext(), UserPreference.class);
-                                    intent.putExtra("operation", "make_ssh_key");
-                                    callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
-                                } catch (Exception e) {
-                                    System.out.println("Exception caught :(");
-                                    e.printStackTrace();
-                                }
+                        .setNegativeButton(callingActivity.getResources().getString(R.string.ssh_preferences_dialog_generate), (dialog, which) -> {
+                            try {
+                                // Duplicated code
+                                Intent intent = new Intent(callingActivity.getApplicationContext(), UserPreference.class);
+                                intent.putExtra("operation", "make_ssh_key");
+                                callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE);
+                            } catch (Exception e) {
+                                System.out.println("Exception caught :(");
+                                e.printStackTrace();
                             }
                         })
-                        .setNeutralButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                // Finish the blank GitActivity so user doesn't have to press back
-                                callingActivity.finish();
-                            }
+                        .setNeutralButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, id) -> {
+                            // Finish the blank GitActivity so user doesn't have to press back
+                            callingActivity.finish();
                         }).show();
             } else {
                 LayoutInflater layoutInflater = LayoutInflater.from(callingActivity.getApplicationContext());
                 @SuppressLint("InflateParams") final View dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null);
-                final EditText passphrase = (EditText) dialogView.findViewById(R.id.sshkey_passphrase);
+                final EditText passphrase = dialogView.findViewById(R.id.sshkey_passphrase);
                 final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
                 final String sshKeyPassphrase = settings.getString("ssh_key_passphrase", null);
                 if (showError) {
@@ -172,25 +160,21 @@ public abstract class GitOperation {
                                     .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
                                     .setMessage(callingActivity.getResources().getString(R.string.passphrase_dialog_text))
                                     .setView(dialogView)
-                                    .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            if (keyPair.decrypt(passphrase.getText().toString())) {
-                                                boolean rememberPassphrase = ((CheckBox) dialogView.findViewById(R.id.sshkey_remember_passphrase)).isChecked();
-                                                if (rememberPassphrase) {
-                                                    settings.edit().putString("ssh_key_passphrase", passphrase.getText().toString()).apply();
-                                                }
-                                                // Authenticate using the ssh-key and then execute the command
-                                                setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
-                                            } else {
-                                                settings.edit().putString("ssh_key_passphrase", null).apply();
-                                                // call back the method
-                                                executeAfterAuthentication(connectionMode, username, sshKey, true);
+                                    .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialog, whichButton) -> {
+                                        if (keyPair.decrypt(passphrase.getText().toString())) {
+                                            boolean rememberPassphrase = ((CheckBox) dialogView.findViewById(R.id.sshkey_remember_passphrase)).isChecked();
+                                            if (rememberPassphrase) {
+                                                settings.edit().putString("ssh_key_passphrase", passphrase.getText().toString()).apply();
                                             }
+                                            // Authenticate using the ssh-key and then execute the command
+                                            setAuthentication(sshKey, username, passphrase.getText().toString()).execute();
+                                        } else {
+                                            settings.edit().putString("ssh_key_passphrase", null).apply();
+                                            // call back the method
+                                            executeAfterAuthentication(connectionMode, username, sshKey, true);
                                         }
-                                    }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Do nothing.
-                                }
+                                    }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> {
+                                // Do nothing.
                             }).show();
                         }
                     } else {
@@ -200,11 +184,8 @@ public abstract class GitOperation {
                     new AlertDialog.Builder(callingActivity)
                             .setTitle("Unable to open the ssh-key")
                             .setMessage("Please check that it was imported.")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
 
-                                }
                             }).show();
                 }
             }
@@ -218,16 +199,12 @@ public abstract class GitOperation {
                     .setTitle(callingActivity.getResources().getString(R.string.passphrase_dialog_title))
                     .setMessage(callingActivity.getResources().getString(R.string.password_dialog_text))
                     .setView(password)
-                    .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // authenticate using the user/pwd and then execute the command
-                            setAuthentication(username, password.getText().toString()).execute();
+                    .setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialog, whichButton) -> {
+                        // authenticate using the user/pwd and then execute the command
+                        setAuthentication(username, password.getText().toString()).execute();
 
-                        }
-                    }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Do nothing.
-                }
+                    }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> {
+                // Do nothing.
             }).show();
         }
     }
@@ -239,12 +216,9 @@ public abstract class GitOperation {
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
                 setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + errorMessage).
-                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        callingActivity.setResult(Activity.RESULT_CANCELED);
-                        callingActivity.finish();
-                    }
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
+                    callingActivity.setResult(Activity.RESULT_CANCELED);
+                    callingActivity.finish();
                 }).show();
     }
 

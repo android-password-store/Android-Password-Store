@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
 
     public PasswordGeneratorDialogFragment() {
     }
-
 
     @NotNull
     @SuppressLint("SetTextI18n")
@@ -64,49 +62,35 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         TextView textView = view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
-        ((TextView) view.findViewById(R.id.passwordText)).setTypeface(monoTypeface);
+        TextView passwordText = view.findViewById(R.id.passwordText);
+        passwordText.setTypeface(monoTypeface);
 
-        builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText edit = callingActivity.findViewById(R.id.crypto_password_edit);
-                TextView generate = view.findViewById(R.id.passwordText);
-                edit.setText(generate.getText());
-            }
+        builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {
+            EditText edit = callingActivity.findViewById(R.id.crypto_password_edit);
+            edit.setText(passwordText.getText());
         });
 
-        builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), (dialog, which) -> {
 
-            }
         });
 
         builder.setNeutralButton(getResources().getString(R.string.pwgen_generate), null);
 
         final AlertDialog ad = builder.setTitle(this.getResources().getString(R.string.pwgen_title)).create();
-        ad.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                setPreferences();
-                TextView textView = view.findViewById(R.id.passwordText);
-                textView.setText(PasswordGenerator.INSTANCE.generate(getActivity().getApplicationContext()).get(0));
+        ad.setOnShowListener(dialog -> {
+            setPreferences();
+            passwordText.setText(PasswordGenerator.INSTANCE.generate(getActivity().getApplicationContext()).get(0));
 
-                Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setPreferences();
-                        TextView textView = view.findViewById(R.id.passwordText);
-                        textView.setText(PasswordGenerator.INSTANCE.generate(callingActivity.getApplicationContext()).get(0));
-                    }
-                });
-            }
+            Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
+            b.setOnClickListener(v -> {
+                setPreferences();
+                passwordText.setText(PasswordGenerator.INSTANCE.generate(callingActivity.getApplicationContext()).get(0));
+            });
         });
         return ad;
     }
 
-    private void setPreferences () {
+    private void setPreferences() {
         ArrayList<String> preferences = new ArrayList<>();
         if (!((CheckBox) getDialog().findViewById(R.id.numerals)).isChecked()) {
             preferences.add("0");
@@ -127,7 +111,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         try {
             int length = Integer.valueOf(editText.getText().toString());
             PasswordGenerator.INSTANCE.setPrefs(getActivity().getApplicationContext(), preferences, length);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             PasswordGenerator.INSTANCE.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }

@@ -1,26 +1,25 @@
 package com.zeapo.pwdstore.pwgen
 
 import android.content.Context
-import android.content.SharedPreferences
 
 import java.util.ArrayList
 
 object PasswordGenerator {
-    internal val DIGITS = 0x0001
-    internal val UPPERS = 0x0002
-    internal val SYMBOLS = 0x0004
-    internal val AMBIGUOUS = 0x0008
-    internal val NO_VOWELS = 0x0010
+    internal const val DIGITS = 0x0001
+    internal const val UPPERS = 0x0002
+    internal const val SYMBOLS = 0x0004
+    internal const val AMBIGUOUS = 0x0008
+    internal const val NO_VOWELS = 0x0010
 
-    internal val DIGITS_STR = "0123456789"
-    internal val UPPERS_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    internal val LOWERS_STR = "abcdefghijklmnopqrstuvwxyz"
-    internal val SYMBOLS_STR = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
-    internal val AMBIGUOUS_STR = "B8G6I1l0OQDS5Z2"
-    internal val VOWELS_STR = "01aeiouyAEIOUY"
+    internal const val DIGITS_STR = "0123456789"
+    internal const val UPPERS_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    internal const val LOWERS_STR = "abcdefghijklmnopqrstuvwxyz"
+    internal const val SYMBOLS_STR = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+    internal const val AMBIGUOUS_STR = "B8G6I1l0OQDS5Z2"
+    internal const val VOWELS_STR = "01aeiouyAEIOUY"
 
     // No a, c, n, h, H, C, 1, N
-    private val pwOptions = "0ABsvy"
+    private const val pwOptions = "0ABsvy"
 
     /**
      * Sets password generation preferences.
