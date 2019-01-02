@@ -106,7 +106,7 @@
     <string name="pref_external_repository_summary">Použít externí repozitář hesel</string>
     <string name="pref_select_external_repository">Vybrat externí repozitář</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Generovat</string>
     <string name="pwgen_include">Vložit</string>
     <string name="pwgen_numerals">Čísla</string>

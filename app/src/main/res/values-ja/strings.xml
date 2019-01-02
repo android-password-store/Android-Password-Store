@@ -110,7 +110,7 @@
     <string name="pref_external_repository_summary">外部パスワードリポジトリを使用する</string>
     <string name="pref_select_external_repository">外部リポジトリを選択</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">生成</string>
     <string name="pwgen_include">含める</string>
     <string name="pwgen_length">長さ</string>

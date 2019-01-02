@@ -1,8 +1,5 @@
 package com.zeapo.pwdstore.crypto
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -32,11 +29,12 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
-import com.zeapo.pwdstore.pwgenDialogFragment
+import com.zeapo.pwdstore.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.Otp
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.*
@@ -117,7 +115,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    pwgenDialogFragment().show(supportFragmentManager, "generator")
+                    PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
                 }
 
                 title = getString(R.string.new_password_title)
@@ -324,7 +322,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                                             val editor = settings.edit()
                                                             editor.putBoolean("hotp_remember_check", true)
                                                             editor.putBoolean("hotp_remember_choice", true)
-                                                            editor.commit()
+                                                            editor.apply()
                                                         }
                                                     }
                                                 }
@@ -334,7 +332,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                                     val editor = settings.edit()
                                                     editor.putBoolean("hotp_remember_check", true)
                                                     editor.putBoolean("hotp_remember_choice", false)
-                                                    editor.commit()
+                                                    editor.apply()
                                                 }
                                             }
                                         val updateDialog = dialogBuilder.create()
@@ -439,7 +437,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            pwgenDialogFragment().show(supportFragmentManager, "generator")
+            PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
         }
 
         title = getString(R.string.edit_password_title)
@@ -545,26 +543,26 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "onActivityResult resultCode: " + resultCode)
+        Log.d(TAG, "onActivityResult resultCode: $resultCode")
 
         if (data == null) {
-            setResult(Activity.RESULT_CANCELED, null)
+            setResult(AppCompatActivity.RESULT_CANCELED, null)
             finish()
             return
         }
 
         // try again after user interaction
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_DECRYPT -> decryptAndVerify(data)
                 REQUEST_KEY_ID -> getKeyIds(data)
                 else -> {
-                    setResult(Activity.RESULT_OK)
+                    setResult(AppCompatActivity.RESULT_OK)
                     finish()
                 }
             }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            setResult(Activity.RESULT_CANCELED, data)
+        } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
+            setResult(AppCompatActivity.RESULT_CANCELED, data)
             finish()
         }
     }
@@ -581,7 +579,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             return if (shown) charSequence else super.getTransformation("12345", view)
         }
 
-        @SuppressLint("ClickableViewAccessibility")
+        @Suppress("ClickableViewAccessibility")
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -608,7 +606,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         var clearAfter = 45
         try {
-            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45"))
+            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45") as String)
         } catch (e: NumberFormatException) {
             // ignore and keep default
         }
@@ -662,7 +660,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         return DateUtils.getRelativeTimeSpanString(this, timeStamp.toLong() * 1000, true)
     }
 
-    @SuppressLint("StaticFieldLeak")
+    @Suppress("StaticFieldLeak")
     inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
         private val pb: ProgressBar by lazy { pbLoading }
         private var skip = false
@@ -686,7 +684,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         override fun onPreExecute() {
             showTime = try {
-                Integer.parseInt(settings.getString("general_show_time", "45"))
+                Integer.parseInt(settings.getString("general_show_time", "45") as String)
             } catch (e: NumberFormatException) {
                 45
             }
@@ -744,7 +742,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             if (crypto_password_show != null) {
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
                 if(passwordEntry?.hotpIsIncremented() == false) {
-                    setResult(Activity.RESULT_CANCELED)
+                    setResult(AppCompatActivity.RESULT_CANCELED)
                 }
                 passwordEntry = null
                 crypto_password_show.text = ""
@@ -788,7 +786,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
          * Gets the name of the password (excluding .gpg)
          */
         fun getName(fullPath: String): String {
-            return FilenameUtils.getBaseName(fullPath);
+            return FilenameUtils.getBaseName(fullPath)
         }
 
         /**
@@ -797,16 +795,16 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         @JvmStatic
         fun getLongName(fullPath: String, repositoryPath: String, basename: String): String {
             var relativePath = getRelativePath(fullPath, repositoryPath)
-            if (relativePath.isNotEmpty() && relativePath != "/") {
+            return if (relativePath.isNotEmpty() && relativePath != "/") {
                 // remove preceding '/'
-                relativePath = relativePath.substring(1);
+                relativePath = relativePath.substring(1)
                 if (relativePath.endsWith('/')) {
-                    return relativePath + basename
+                    relativePath + basename
                 } else {
-                    return "$relativePath/$basename"
+                    "$relativePath/$basename"
                 }
             } else {
-                return basename
+                basename
             }
         }
     }
