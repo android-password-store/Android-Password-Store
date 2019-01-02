@@ -5,7 +5,7 @@
 
     <string name="action_settings">設定</string>
     <string name="dialog_delete_title">ディレクトリーはすでに存在します</string>
-    <string name="dialog_delete_msg">対象のディレクトリーはすでに存在します。 現在のバージョンは1つのストアのみをサポートしています。 現在のパスワードストアのディレクトリーを削除しますか:</string>
+    <string name="dialog_delete_msg">対象のディレクトリーはすでに存在します。 現在のバージョンは1つのストアのみをサポートしています。 現在のパスワードストアのディレクトリーを削除しますか\n(%1$s)</string>
     <string name="dialog_delete">ディレクトリーを削除</string>
     <string name="dialog_do_not_delete">キャンセル</string>
     <string name="title_activity_git_clone">リポジトリ情報</string>
@@ -13,7 +13,7 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">パスワードや同期操作を追加する前に、以下の新しいリポジトリをクローンまたは作成してください。</string>
     <string name="key_dialog_text">リポジトリを初期化する前に "PGP 鍵 ID"を選択する必要があります</string>
-    <string name="delete_dialog_text">パスワードを削除してもよろしいですか /"</string>
+    <string name="delete_dialog_text">パスワードを削除してもよろしいですか %1$s</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">追加 %1$s ストアから。</string>

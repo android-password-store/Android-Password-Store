@@ -5,7 +5,7 @@
 
     <string name="action_settings">Ajustes</string>
     <string name="dialog_delete_title">El directorio ya existe</string>
-    <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?</string>
+    <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?\n(%1$s)</string>
     <string name="dialog_delete">Eliminar directorio</string>
     <string name="dialog_do_not_delete">Cancelar</string>
     <string name="title_activity_git_clone">Información de repositorio</string>
@@ -13,7 +13,7 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Por favor clona o crea un nuevo repositorio antes de añadir una contraseña o ejecutar una operación de sincronización.</string>
     <string name="key_dialog_text">Tienes que seleccionar una llave PGP antes de inicializar el repositorio</string>
-    <string name="delete_dialog_text">Confirma que deseas eliminar la contraseña /"</string>
+    <string name="delete_dialog_text">Confirma que deseas eliminar la contraseña %1$s</string>
     <string name="move">Mover</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>

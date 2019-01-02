@@ -5,7 +5,7 @@
 
     <string name="action_settings">Nastavení</string>
     <string name="dialog_delete_title">Adresář již existuje</string>
-    <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adresář úložiště hesel:</string>
+    <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adresář úložiště hesel\n(%1$s)</string>
     <string name="dialog_delete">Smazat adresář</string>
     <string name="dialog_do_not_delete">Zrušit</string>
     <string name="title_activity_git_clone">Informace repozitáře</string>
@@ -13,7 +13,7 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Naklonujte nebo vytvořte nový repozitář před pokusem přidat heslo nebo spustit synchronizaci.</string>
     <string name="key_dialog_text">Před inicializací repozitáře je třeba vybrat "ID PGP klíče"</string>
-    <string name="delete_dialog_text">Opravdu chcete smazat heslo /"</string>
+    <string name="delete_dialog_text">Opravdu chcete smazat heslo %1$s</string>
 
     <!-- git commits -->
 

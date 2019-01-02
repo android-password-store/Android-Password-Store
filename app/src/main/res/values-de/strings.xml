@@ -5,7 +5,7 @@
 
     <string name="action_settings">Einstellungen</string>
     <string name="dialog_delete_title">Ordner existiert bereits</string>
-    <string name="dialog_delete_msg">Zielordner existiert bereits. Aktuelle Version unterstützt nur eine einzige Datenquelle. Möchtest du die aktuelle Datenquelle löschen:</string>
+    <string name="dialog_delete_msg">Zielordner existiert bereits. Aktuelle Version unterstützt nur eine einzige Datenquelle. Möchtest du die aktuelle Datenquelle löschen?\n(%1$s)</string>
     <string name="dialog_delete">Ordner löschen</string>
     <string name="dialog_do_not_delete">Abbruch</string>
     <string name="title_activity_git_clone">Repository Informationen</string>
@@ -13,7 +13,7 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
     <string name="key_dialog_text">Du musst deine PGP-Key ID auwählen, bevor das Repository intialisiert wird.</string>
-    <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest \"</string>
+    <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest %1$s?</string>
     <string name="move">Verschieben</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>

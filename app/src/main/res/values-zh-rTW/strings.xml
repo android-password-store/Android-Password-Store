@@ -17,10 +17,10 @@
     <string name="crypto_pass_label">密碼</string>
     <string name="crypto_extra_label">備註</string>
     <string name="crypto_name_hint">名稱</string>
-    <string name="delete_dialog_text">你確定要刪除密碼 /\"</string>
+    <string name="delete_dialog_text">你確定要刪除密碼 %1$s</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_delete">刪除目錄</string>
-    <string name="dialog_delete_msg">目標目錄已存在. 目前版本僅支援單一儲存區. 真的要刪除現有的 Password Store 目錄嗎:</string>
+    <string name="dialog_delete_msg">目標目錄已存在. 目前版本僅支援單一儲存區. 真的要刪除現有的 Password Store 目錄嗎\n(%1$s)</string>
     <string name="dialog_delete_title">目錄已存在</string>
     <string name="dialog_do_not_delete">取消</string>
     <string name="dialog_negative">呃… 算了吧</string>

@@ -5,7 +5,7 @@
 
     <string name="action_settings">Paramètres</string>
     <string name="dialog_delete_title">Répertoire déjà existant</string>
-    <string name="dialog_delete_msg">Répertoire cible déjà existant. La version actuelle ne supporte qu\'un seul gestionnaire. Voulez vous supprimer le répertoire actual du gestionnaire de mots de passe:</string>
+    <string name="dialog_delete_msg">Répertoire cible déjà existant. La version actuelle ne supporte qu\'un seul gestionnaire. Voulez vous supprimer le répertoire actual du gestionnaire de mots de passe?\n(%1$s)</string>
     <string name="dialog_delete">Suprimer le répertoire</string>
     <string name="dialog_do_not_delete">Annuler</string>
     <string name="title_activity_git_clone">Information sur le dépôt Git</string>
@@ -13,7 +13,7 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de pass ou d\'effectuer une opération de synchornisation.</string>
     <string name="key_dialog_text">Vous devez sélectionner votre "PGP-Key ID" avant d\'initialiser le dépôt</string>
-    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe /"</string>
+    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe %1$s?</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Ajouter %1$s depuis le dépôt.</string>

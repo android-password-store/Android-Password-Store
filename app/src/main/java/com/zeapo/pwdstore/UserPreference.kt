@@ -108,7 +108,7 @@ class UserPreference : AppCompatActivity() {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
                 AlertDialog.Builder(callingActivity)
                     .setTitle(R.string.pref_dialog_delete_title)
-                    .setMessage("${resources.getString(R.string.dialog_delete_msg)} \n $repoDir")
+                    .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
                         try {

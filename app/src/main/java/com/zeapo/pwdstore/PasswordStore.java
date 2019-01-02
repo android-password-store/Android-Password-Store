@@ -536,10 +536,9 @@ public class PasswordStore extends AppCompatActivity {
         }
         final int position = (int) it.next();
         final PasswordItem item = adapter.getValues().get(position);
-        new AlertDialog.Builder(this).
-                setMessage(this.getResources().getString(R.string.delete_dialog_text) +
-                        item + "\"")
-                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), (dialogInterface, i) -> {
+        new AlertDialog.Builder(this)
+                .setMessage(getResources().getString(R.string.delete_dialog_text, item.getLongName()))
+                .setPositiveButton(getResources().getString(R.string.dialog_yes), (dialogInterface, i) -> {
                     item.getFile().delete();
                     adapter.remove(position);
                     it.remove();
