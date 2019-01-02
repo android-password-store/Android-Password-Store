@@ -79,10 +79,7 @@ public class CloneOperation extends GitOperation {
                         + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
                         + errorMessage
                         + "\nPlease check the FAQ for possible reasons why this error might occur.").
-                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                 }).show();
     }
 }

@@ -30,49 +30,43 @@ public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
     @Override
     @NonNull
     protected View.OnLongClickListener getOnLongClickListener(final ViewHolder holder, final PasswordItem pass) {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mActionMode != null) {
-                    return false;
-                }
-                toggleSelection(holder.getAdapterPosition());
-                canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
-                // Start the CAB using the ActionMode.Callback
-                mActionMode = activity.startSupportActionMode(mActionModeCallback);
-                mActionMode.setTitle("" + selectedItems.size());
-                mActionMode.invalidate();
-                notifyItemChanged(holder.getAdapterPosition());
-                return true;
+        return v -> {
+            if (mActionMode != null) {
+                return false;
             }
+            toggleSelection(holder.getAdapterPosition());
+            canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
+            // Start the CAB using the ActionMode.Callback
+            mActionMode = activity.startSupportActionMode(mActionModeCallback);
+            mActionMode.setTitle("" + selectedItems.size());
+            mActionMode.invalidate();
+            notifyItemChanged(holder.getAdapterPosition());
+            return true;
         };
     }
 
     @Override
     @NonNull
     protected View.OnClickListener getOnClickListener(final ViewHolder holder, final PasswordItem pass) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mActionMode != null) {
-                    toggleSelection(holder.getAdapterPosition());
-                    mActionMode.setTitle("" + selectedItems.size());
-                    if (selectedItems.isEmpty()) {
-                        mActionMode.finish();
-                    } else if (selectedItems.size() == 1 && !canEdit) {
-                        if (getValues().get(selectedItems.iterator().next()).getType() == PasswordItem.TYPE_PASSWORD) {
-                            canEdit = true;
-                            mActionMode.invalidate();
-                        }
-                    } else if (selectedItems.size() >= 1 && canEdit) {
-                        canEdit = false;
+        return v -> {
+            if (mActionMode != null) {
+                toggleSelection(holder.getAdapterPosition());
+                mActionMode.setTitle("" + selectedItems.size());
+                if (selectedItems.isEmpty()) {
+                    mActionMode.finish();
+                } else if (selectedItems.size() == 1 && !canEdit) {
+                    if (getValues().get(selectedItems.iterator().next()).getType() == PasswordItem.TYPE_PASSWORD) {
+                        canEdit = true;
                         mActionMode.invalidate();
                     }
-                } else {
-                    listener.onFragmentInteraction(pass);
+                } else if (selectedItems.size() >= 1 && canEdit) {
+                    canEdit = false;
+                    mActionMode.invalidate();
                 }
-                notifyItemChanged(holder.getAdapterPosition());
+            } else {
+                listener.onFragmentInteraction(pass);
             }
+            notifyItemChanged(holder.getAdapterPosition());
         };
     }
 

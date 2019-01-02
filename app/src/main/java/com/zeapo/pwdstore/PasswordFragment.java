@@ -81,12 +81,7 @@ public class PasswordFragment extends Fragment{
         recyclerView.setAdapter(recyclerAdapter);
 
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((PasswordStore) getActivity()).createPassword();
-            }
-        });
+        fab.setOnClickListener(v -> ((PasswordStore) getActivity()).createPassword());
 
         registerForContextMenu(recyclerView);
         return view;
@@ -96,28 +91,26 @@ public class PasswordFragment extends Fragment{
     public void onAttach(final Context context) {
         super.onAttach(context);
         try {
-            mListener = new OnFragmentInteractionListener() {
-                public void onFragmentInteraction(PasswordItem item) {
-                    if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                        // push the current password list (non filtered plz!)
-                        passListStack.push(pathStack.isEmpty() ?
-                                                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context), getSortOrder()) :
-                                                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
-                        //push the category were we're going
-                        pathStack.push(item.getFile());
-                        scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
+            mListener = item -> {
+                if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                    // push the current password list (non filtered plz!)
+                    passListStack.push(pathStack.isEmpty() ?
+                                            PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context), getSortOrder()) :
+                                            PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
+                    //push the category were we're going
+                    pathStack.push(item.getFile());
+                    scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
 
-                        recyclerView.scrollToPosition(0);
-                        recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
+                    recyclerView.scrollToPosition(0);
+                    recyclerAdapter.clear();
+                    recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
 
-                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                } else {
+                    if (getArguments().getBoolean("matchWith", false)) {
+                        ((PasswordStore) getActivity()).matchPasswordWithApp(item);
                     } else {
-                        if (getArguments().getBoolean("matchWith", false)) {
-                            ((PasswordStore) getActivity()).matchPasswordWithApp(item);
-                        } else {
-                            ((PasswordStore) getActivity()).decryptPassword(item);
-                        }
+                        ((PasswordStore) getActivity()).decryptPassword(item);
                     }
                 }
             };

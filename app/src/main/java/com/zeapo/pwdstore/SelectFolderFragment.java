@@ -81,18 +81,16 @@ public class SelectFolderFragment extends Fragment{
     public void onAttach(final Context context) {
         super.onAttach(context);
         try {
-            mListener = new OnFragmentInteractionListener() {
-                public void onFragmentInteraction(PasswordItem item) {
-                    if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                        //push the category were we're going
-                        pathStack.push(item.getFile());
+            mListener = item -> {
+                if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                    //push the category were we're going
+                    pathStack.push(item.getFile());
 
-                        recyclerView.scrollToPosition(0);
-                        recyclerAdapter.clear();
-                        recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
+                    recyclerView.scrollToPosition(0);
+                    recyclerAdapter.clear();
+                    recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
 
-                        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    }
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 }
             };
         } catch (ClassCastException e) {

@@ -140,14 +140,9 @@ public class PasswordStore extends AppCompatActivity {
                     // TODO: strings.xml
                     Snackbar snack = Snackbar.make(findViewById(R.id.main_layout), "The store is on the sdcard but the app does not have permission to access it. Please give permission.",
                             Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.dialog_ok, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    ActivityCompat.requestPermissions(activity,
-                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                            REQUEST_EXTERNAL_STORAGE);
-                                }
-                            });
+                            .setAction(R.string.dialog_ok, view -> ActivityCompat.requestPermissions(activity,
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    REQUEST_EXTERNAL_STORAGE));
                     snack.show();
                     View view = snack.getView();
                     TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
@@ -355,12 +350,9 @@ public class PasswordStore extends AppCompatActivity {
         if (keyIds.isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, GitActivity.REQUEST_INIT);
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivityForResult(intent, GitActivity.REQUEST_INIT);
                     })
                     .setNegativeButton(this.getResources().getString(R.string.dialog_negative), null)
                     .show();
@@ -514,24 +506,18 @@ public class PasswordStore extends AppCompatActivity {
         if (!PasswordRepository.isInitialized()) {
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.creation_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                     }).show();
             return;
         }
 
-        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<String>()).isEmpty()) {
+        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<>()).isEmpty()) {
             new AlertDialog.Builder(this)
                     .setTitle(this.getResources().getString(R.string.no_key_selected_dialog_title))
                     .setMessage(this.getResources().getString(R.string.no_key_selected_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivity(intent);
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivity(intent);
                     }).show();
             return;
         }
@@ -557,25 +543,19 @@ public class PasswordStore extends AppCompatActivity {
         new AlertDialog.Builder(this).
                 setMessage(this.getResources().getString(R.string.delete_dialog_text) +
                         item + "\"")
-                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        item.getFile().delete();
-                        adapter.remove(position);
-                        it.remove();
-                        adapter.updateSelectedItems(position, selectedItems);
+                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), (dialogInterface, i) -> {
+                    item.getFile().delete();
+                    adapter.remove(position);
+                    it.remove();
+                    adapter.updateSelectedItems(position, selectedItems);
 
-                        commitChange(getResources().getString(R.string.git_commit_remove_text,
-                                item.getLongName()));
-                        deletePasswords(adapter, selectedItems);
-                    }
+                    commitChange(getResources().getString(R.string.git_commit_remove_text,
+                            item.getLongName()));
+                    deletePasswords(adapter, selectedItems);
                 })
-                .setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        it.remove();
-                        deletePasswords(adapter, selectedItems);
-                    }
+                .setNegativeButton(this.getResources().getString(R.string.dialog_no), (dialogInterface, i) -> {
+                    it.remove();
+                    deletePasswords(adapter, selectedItems);
                 })
                 .show();
     }
@@ -769,64 +749,54 @@ public class PasswordStore extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(this.getResources().getString(R.string.location_dialog_title))
                 .setMessage(this.getResources().getString(R.string.location_dialog_text))
-                .setPositiveButton(this.getResources().getString(R.string.location_hidden), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", false).apply();
+                .setPositiveButton(this.getResources().getString(R.string.location_hidden), (dialog, whichButton) -> {
+                    settings.edit().putBoolean("git_external", false).apply();
 
-                        switch (operation) {
-                            case NEW_REPO_BUTTON:
-                                initializeRepositoryInfo();
-                                break;
-                            case CLONE_REPO_BUTTON:
-                                PasswordRepository.initialize(PasswordStore.this);
+                    switch (operation) {
+                        case NEW_REPO_BUTTON:
+                            initializeRepositoryInfo();
+                            break;
+                        case CLONE_REPO_BUTTON:
+                            PasswordRepository.initialize(PasswordStore.this);
 
-                                Intent intent = new Intent(activity, GitActivity.class);
-                                intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                break;
-                        }
+                            Intent intent = new Intent(activity, GitActivity.class);
+                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                            break;
                     }
                 })
-                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", true).apply();
+                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), (dialog, whichButton) -> {
+                    settings.edit().putBoolean("git_external", true).apply();
 
-                        String externalRepo = settings.getString("git_external_repo", null);
+                    String externalRepo = settings.getString("git_external_repo", null);
 
-                        if (externalRepo == null) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            intent.putExtra("operation", "git_external");
-                            startActivityForResult(intent, operation);
-                        } else {
-                            new AlertDialog.Builder(activity)
-                                    .setTitle(getResources().getString(R.string.directory_selected_title))
-                                    .setMessage(getResources().getString(R.string.directory_selected_message, externalRepo))
-                                    .setPositiveButton(getResources().getString(R.string.use), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            switch (operation) {
-                                                case NEW_REPO_BUTTON:
-                                                    initializeRepositoryInfo();
-                                                    break;
-                                                case CLONE_REPO_BUTTON:
-                                                    PasswordRepository.initialize(PasswordStore.this);
+                    if (externalRepo == null) {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        intent.putExtra("operation", "git_external");
+                        startActivityForResult(intent, operation);
+                    } else {
+                        new AlertDialog.Builder(activity)
+                                .setTitle(getResources().getString(R.string.directory_selected_title))
+                                .setMessage(getResources().getString(R.string.directory_selected_message, externalRepo))
+                                .setPositiveButton(getResources().getString(R.string.use), (dialog1, which) -> {
+                                    switch (operation) {
+                                        case NEW_REPO_BUTTON:
+                                            initializeRepositoryInfo();
+                                            break;
+                                        case CLONE_REPO_BUTTON:
+                                            PasswordRepository.initialize(PasswordStore.this);
 
-                                                    Intent intent = new Intent(activity, GitActivity.class);
-                                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                                    break;
-                                            }
-                                        }
-                                    })
-                                    .setNegativeButton(getResources().getString(R.string.change), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(activity, UserPreference.class);
-                                            intent.putExtra("operation", "git_external");
-                                            startActivityForResult(intent, operation);
-                                        }
-                                    }).show();
-                        }
+                                            Intent intent = new Intent(activity, GitActivity.class);
+                                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                                            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                                            break;
+                                    }
+                                })
+                                .setNegativeButton(getResources().getString(R.string.change), (dialog12, which) -> {
+                                    Intent intent = new Intent(activity, UserPreference.class);
+                                    intent.putExtra("operation", "git_external");
+                                    startActivityForResult(intent, operation);
+                                }).show();
                     }
                 })
                 .show();

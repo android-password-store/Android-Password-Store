@@ -64,11 +64,6 @@ public class SyncOperation extends GitOperation {
                         + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
                         + errorMessage
                         + "\nPlease check the FAQ for possible reasons why this error might occur.").
-                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        callingActivity.finish();
-                    }
-                }).show();
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> callingActivity.finish()).show();
     }
 }

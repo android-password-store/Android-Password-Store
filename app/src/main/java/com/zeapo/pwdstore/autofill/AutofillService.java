@@ -96,11 +96,6 @@ public class AutofillService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // TODO there should be a better way of disabling service
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return;
-        }
-
         // remove stored password from cache
         if (lastPassword != null && System.currentTimeMillis() > lastPasswordMaxDate) {
             lastPassword = null;
@@ -405,20 +400,14 @@ public class AutofillService extends AccessibilityService {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                dialog.dismiss();
-                dialog = null;
-            }
+        builder.setNegativeButton(R.string.dialog_cancel, (d, which) -> {
+            dialog.dismiss();
+            dialog = null;
         });
-        builder.setPositiveButton(R.string.autofill_paste, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                pasteText(node, password.getUsername());
-                dialog.dismiss();
-                dialog = null;
-            }
+        builder.setPositiveButton(R.string.autofill_paste, (d, which) -> {
+            pasteText(node, password.getUsername());
+            dialog.dismiss();
+            dialog = null;
         });
         builder.setMessage(getString(R.string.autofill_paste_username, password.getUsername()));
 
@@ -436,24 +425,19 @@ public class AutofillService extends AccessibilityService {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                dialog.dismiss();
-                dialog = null;
-            }
+        builder.setNegativeButton(R.string.dialog_cancel, (d, which) -> {
+            dialog.dismiss();
+            dialog = null;
         });
-        builder.setNeutralButton("Settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {    //TODO make icon? gear?
-                // the user will have to return to the app themselves.
-                Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("packageName", packageName);
-                intent.putExtra("appName", appName);
-                intent.putExtra("isWeb", isWeb);
-                startActivity(intent);
-            }
+        builder.setNeutralButton("Settings", (dialog, which) -> {
+            //TODO make icon? gear?
+            // the user will have to return to the app themselves.
+            Intent intent = new Intent(AutofillService.this, AutofillPreferenceActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("packageName", packageName);
+            intent.putExtra("appName", appName);
+            intent.putExtra("isWeb", isWeb);
+            startActivity(intent);
         });
 
         // populate the dialog items, always with pick + pick and match. Could
@@ -464,26 +448,23 @@ public class AutofillService extends AccessibilityService {
         }
         itemNames[items.size()] = getString(R.string.autofill_pick);
         itemNames[items.size() + 1] = getString(R.string.autofill_pick_and_match);
-        builder.setItems(itemNames, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                lastWhichItem = which;
-                if (which < items.size()) {
-                    bindDecryptAndVerify();
-                } else if (which == items.size()) {
-                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("pick", true);
-                    startActivity(intent);
-                } else {
-                    lastWhichItem--;    // will add one element to items, so lastWhichItem=items.size()+1
-                    Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("pickMatchWith", true);
-                    intent.putExtra("packageName", packageName);
-                    intent.putExtra("isWeb", isWeb);
-                    startActivity(intent);
-                }
+        builder.setItems(itemNames, (dialog, which) -> {
+            lastWhichItem = which;
+            if (which < items.size()) {
+                bindDecryptAndVerify();
+            } else if (which == items.size()) {
+                Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("pick", true);
+                startActivity(intent);
+            } else {
+                lastWhichItem--;    // will add one element to items, so lastWhichItem=items.size()+1
+                Intent intent = new Intent(AutofillService.this, AutofillActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra("pickMatchWith", true);
+                intent.putExtra("packageName", packageName);
+                intent.putExtra("isWeb", isWeb);
+                startActivity(intent);
             }
         });
 
@@ -600,7 +581,6 @@ public class AutofillService extends AccessibilityService {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void pasteText(final AccessibilityNodeInfo node, final String text) {
         // if the user focused on something else, take focus back
         // but this will open another dialog...hack to ignore this

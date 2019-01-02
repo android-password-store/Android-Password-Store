@@ -19,12 +19,9 @@ public class FolderRecyclerAdapter extends EntryRecyclerAdapter {
 
     @NonNull
     protected View.OnClickListener getOnClickListener(final ViewHolder holder, final PasswordItem pass) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onFragmentInteraction(pass);
-                notifyItemChanged(holder.getAdapterPosition());
-            }
+        return v -> {
+            listener.onFragmentInteraction(pass);
+            notifyItemChanged(holder.getAdapterPosition());
         };
     }
 

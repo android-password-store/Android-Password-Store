@@ -63,22 +63,13 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         setTitle("Autofill Apps");
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog("", "", true);
-            }
-        });
+        fab.setOnClickListener(v -> showDialog("", "", true));
     }
 
     private class populateTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
-                }
-            });
+            runOnUiThread(() -> findViewById(R.id.progress_bar).setVisibility(View.VISIBLE));
         }
 
         @Override
@@ -109,14 +100,12 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    findViewById(R.id.progress_bar).setVisibility(View.GONE);
-                    recyclerView.setAdapter(recyclerAdapter);
-                    Bundle extras = getIntent().getExtras();
-                    if (extras != null) {
-                        recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
-                    }
+            runOnUiThread(() -> {
+                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                recyclerView.setAdapter(recyclerAdapter);
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                    recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
                 }
             });
         }

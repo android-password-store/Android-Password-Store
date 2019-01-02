@@ -61,18 +61,15 @@ public class SshKeyGen extends AppCompatActivity {
             ((EditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
 
             CheckBox checkbox = v.findViewById(R.id.show_passphrase);
-            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    EditText editText = v.findViewById(R.id.passphrase);
-                    int selection = editText.getSelectionEnd();
-                    if (isChecked) {
-                        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    } else {
-                        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    }
-                    editText.setSelection(selection);
+            checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                EditText editText = v.findViewById(R.id.passphrase);
+                int selection = editText.getSelectionEnd();
+                if (isChecked) {
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                } else {
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 }
+                editText.setSelection(selection);
             });
 
             return v;
@@ -100,38 +97,26 @@ public class SshKeyGen extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            builder.setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (getActivity() instanceof SshKeyGen)
-                        getActivity().finish();
-                }
+            builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {
+                if (getActivity() instanceof SshKeyGen)
+                    getActivity().finish();
             });
 
-            builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), (dialog, which) -> {
 
-                }
             });
 
             builder.setNeutralButton(getResources().getString(R.string.ssh_keygen_copy), null);
 
             final AlertDialog ad = builder.setTitle("Your public key").create();
-            ad.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
-                    b.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            TextView textView = getDialog().findViewById(R.id.public_key);
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("public key", textView.getText().toString());
-                            clipboard.setPrimaryClip(clip);
-                        }
-                    });
-                }
+            ad.setOnShowListener(dialog -> {
+                Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
+                b.setOnClickListener(v1 -> {
+                    TextView textView1 = getDialog().findViewById(R.id.public_key);
+                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("public key", textView1.getText().toString());
+                    clipboard.setPrimaryClip(clip);
+                });
             });
             return ad;
         }
@@ -211,11 +196,8 @@ public class SshKeyGen extends AppCompatActivity {
                 new AlertDialog.Builder(weakReference.get())
                         .setTitle("Error while trying to generate the ssh-key")
                         .setMessage(weakReference.get().getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage())
-                        .setPositiveButton(weakReference.get().getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // pass
-                            }
+                        .setPositiveButton(weakReference.get().getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
+                            // pass
                         }).show();
             }
 

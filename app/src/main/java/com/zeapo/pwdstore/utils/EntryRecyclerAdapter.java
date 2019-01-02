@@ -85,12 +85,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
 
     @NonNull
     View.OnLongClickListener getOnLongClickListener(ViewHolder holder, PasswordItem pass) {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return false;
-            }
-        };
+        return v -> false;
     }
 
     // Replace the contents of a view (invoked by the layout manager)

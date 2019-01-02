@@ -560,36 +560,30 @@ public class GitActivity extends AppCompatActivity {
                     setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString()).
                     setCancelable(false).
                     setPositiveButton(R.string.dialog_delete,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                            (dialog, id) -> {
+                                try {
+                                    FileUtils.deleteDirectory(localDir);
                                     try {
-                                        FileUtils.deleteDirectory(localDir);
-                                        try {
-                                            new CloneOperation(localDir, activity)
-                                                    .setCommand(hostname)
-                                                    .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
-                                        } catch (Exception e) {
-                                            //This is what happens when jgit fails :(
-                                            //TODO Handle the diffent cases of exceptions
-                                            e.printStackTrace();
-                                            new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
-                                        }
-                                    } catch (IOException e) {
-                                        //TODO Handle the exception correctly if we are unable to delete the directory...
+                                        new CloneOperation(localDir, activity)
+                                                .setCommand(hostname)
+                                                .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                                    } catch (Exception e) {
+                                        //This is what happens when jgit fails :(
+                                        //TODO Handle the diffent cases of exceptions
                                         e.printStackTrace();
                                         new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
                                     }
-
-                                    dialog.cancel();
+                                } catch (IOException e) {
+                                    //TODO Handle the exception correctly if we are unable to delete the directory...
+                                    e.printStackTrace();
+                                    new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
                                 }
+
+                                dialog.cancel();
                             }
                     ).
                     setNegativeButton(R.string.dialog_do_not_delete,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            }
+                            (dialog, id) -> dialog.cancel()
                     ).
                     show();
         } else {
@@ -626,20 +620,14 @@ public class GitActivity extends AppCompatActivity {
                 settings.getString("git_remote_location", "").isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(activity.getResources().getString(R.string.set_information_dialog_text))
-                    .setPositiveButton(activity.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, REQUEST_PULL);
-                        }
+                    .setPositiveButton(activity.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivityForResult(intent, REQUEST_PULL);
                     })
-                    .setNegativeButton(activity.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // do nothing :(
-                            setResult(RESULT_OK);
-                            finish();
-                        }
+                    .setNegativeButton(activity.getResources().getString(R.string.dialog_negative), (dialogInterface, i) -> {
+                        // do nothing :(
+                        setResult(RESULT_OK);
+                        finish();
                     })
                     .show();
 
