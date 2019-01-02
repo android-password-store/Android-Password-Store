@@ -85,6 +85,7 @@ public class PasswordItem implements Comparable {
         return longName;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return this.getName().replace(".gpg", "");

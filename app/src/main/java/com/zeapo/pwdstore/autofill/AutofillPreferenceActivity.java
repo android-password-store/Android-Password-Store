@@ -39,7 +39,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.autofill_recycler_view);
-        recyclerView = (RecyclerView) findViewById(R.id.autofill_recycler);
+        recyclerView = findViewById(R.id.autofill_recycler);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -60,7 +60,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         setTitle("Autofill Apps");
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> showDialog("", "", true));
     }
 

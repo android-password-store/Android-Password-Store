@@ -14,8 +14,7 @@ public class GitConfigSessionFactory extends JschConfigSessionFactory {
     }
 
     @Override
-    protected JSch
-    getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
+    protected JSch getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
         JSch jsch = super.getJSch(hc, fs);
         jsch.removeAllIdentity();
         return jsch;

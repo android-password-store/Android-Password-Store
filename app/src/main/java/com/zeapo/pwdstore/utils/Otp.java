@@ -25,7 +25,7 @@ public class Otp {
     public static String calculateCode(String secret, long counter) {
         SecretKeySpec signingKey = new SecretKeySpec(BASE_32.decode(secret), ALGORITHM);
 
-        Mac mac = null;
+        Mac mac;
         try {
             mac = Mac.getInstance(ALGORITHM);
             mac.init(signingKey);

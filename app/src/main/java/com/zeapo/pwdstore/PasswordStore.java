@@ -141,7 +141,7 @@ public class PasswordStore extends AppCompatActivity {
                                     REQUEST_EXTERNAL_STORAGE));
                     snack.show();
                     View view = snack.getView();
-                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    TextView tv = view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.WHITE);
                     tv.setMaxLines(10);
                 } else {

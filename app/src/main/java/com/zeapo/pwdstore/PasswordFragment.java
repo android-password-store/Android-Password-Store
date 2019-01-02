@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,14 +60,14 @@ public class PasswordFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.pass_recycler);
+        recyclerView = view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
 
         // use divider
@@ -75,7 +76,7 @@ public class PasswordFragment extends Fragment {
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
 
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        final FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> ((PasswordStore) getActivity()).createPassword());
 
         registerForContextMenu(recyclerView);

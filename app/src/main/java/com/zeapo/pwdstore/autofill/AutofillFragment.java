@@ -157,7 +157,7 @@ public class AutofillFragment extends DialogFragment {
                 String packageName = getArguments().getString("packageName", "");
                 if (isWeb) {
                     // handle some errors and don't dismiss the dialog
-                    EditText webURL = (EditText) dialog.findViewById(R.id.webURL);
+                    EditText webURL = dialog.findViewById(R.id.webURL);
 
                     packageName = webURL.getText().toString();
 
@@ -173,7 +173,7 @@ public class AutofillFragment extends DialogFragment {
                 }
 
                 // write to preferences accordingly
-                RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.autofill_radiogroup);
+                RadioGroup radioGroup = dialog.findViewById(R.id.autofill_radiogroup);
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.use_default:
                         if (!isWeb) {

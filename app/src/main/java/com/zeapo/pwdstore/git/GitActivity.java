@@ -75,8 +75,8 @@ public class GitActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_git_clone);
                 setTitle(R.string.title_activity_git_clone);
 
-                final Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
-                final Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
+                final Spinner protcol_spinner = findViewById(R.id.clone_protocol);
+                final Spinner connection_mode_spinner = findViewById(R.id.connection_mode);
 
                 // init the spinner for connection modes
                 final ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
@@ -149,11 +149,11 @@ public class GitActivity extends AppCompatActivity {
                 }
 
                 // init the server information
-                final EditText server_url = ((EditText) findViewById(R.id.server_url));
-                final EditText server_port = ((EditText) findViewById(R.id.server_port));
-                final EditText server_path = ((EditText) findViewById(R.id.server_path));
-                final EditText server_user = ((EditText) findViewById(R.id.server_user));
-                final EditText server_uri = ((EditText) findViewById(R.id.clone_uri));
+                final EditText server_url = findViewById(R.id.server_url);
+                final EditText server_port = findViewById(R.id.server_port);
+                final EditText server_path = findViewById(R.id.server_path);
+                final EditText server_user = findViewById(R.id.server_user);
+                final EditText server_uri = findViewById(R.id.clone_uri);
 
                 server_url.setText(settings.getString("git_remote_server", ""));
                 server_port.setText(settings.getString("git_remote_port", ""));
@@ -274,11 +274,11 @@ public class GitActivity extends AppCompatActivity {
      * Fills in the server_uri field with the information coming from other fields
      */
     private void updateURI() {
-        EditText uri = (EditText) findViewById(R.id.clone_uri);
-        EditText server_url = ((EditText) findViewById(R.id.server_url));
-        EditText server_port = ((EditText) findViewById(R.id.server_port));
-        EditText server_path = ((EditText) findViewById(R.id.server_path));
-        EditText server_user = ((EditText) findViewById(R.id.server_user));
+        EditText uri = findViewById(R.id.clone_uri);
+        EditText server_url = findViewById(R.id.server_url);
+        EditText server_port = findViewById(R.id.server_port);
+        EditText server_path = findViewById(R.id.server_path);
+        EditText server_user = findViewById(R.id.server_user);
 
         if (uri != null) {
             switch (protocol) {
@@ -293,7 +293,7 @@ public class GitActivity extends AppCompatActivity {
 
                         findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
-                        TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                        TextView warn_url = findViewById(R.id.warn_url);
                         if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                             warn_url.setText(R.string.warn_malformed_url_port);
                             warn_url.setVisibility(View.VISIBLE);
@@ -334,11 +334,11 @@ public class GitActivity extends AppCompatActivity {
      * Splits the information in server_uri into the other fields
      */
     private void splitURI() {
-        EditText server_uri = (EditText) findViewById(R.id.clone_uri);
-        EditText server_url = ((EditText) findViewById(R.id.server_url));
-        EditText server_port = ((EditText) findViewById(R.id.server_port));
-        EditText server_path = ((EditText) findViewById(R.id.server_path));
-        EditText server_user = ((EditText) findViewById(R.id.server_user));
+        EditText server_uri = findViewById(R.id.clone_uri);
+        EditText server_url = findViewById(R.id.server_url);
+        EditText server_port = findViewById(R.id.server_port);
+        EditText server_path = findViewById(R.id.server_path);
+        EditText server_user = findViewById(R.id.server_user);
 
         String uri = server_uri.getText().toString();
         Pattern pattern = Pattern.compile("(.+)@([\\w\\d\\.]+):([\\d]+)*(.*)");
@@ -353,7 +353,7 @@ public class GitActivity extends AppCompatActivity {
                 server_port.setText(matcher.group(3));
                 server_path.setText(matcher.group(4));
 
-                TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                TextView warn_url = findViewById(R.id.warn_url);
                 if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                     warn_url.setText(R.string.warn_malformed_url_port);
                     warn_url.setVisibility(View.VISIBLE);
@@ -459,8 +459,8 @@ public class GitActivity extends AppCompatActivity {
 
     private void showGitConfig() {
         // init the server information
-        final EditText git_user_name = ((EditText) findViewById(R.id.git_user_name));
-        final EditText git_user_email = ((EditText) findViewById(R.id.git_user_email));
+        final EditText git_user_name = findViewById(R.id.git_user_name);
+        final EditText git_user_email = findViewById(R.id.git_user_email);
 
         git_user_name.setText(settings.getString("git_config_user_name", ""));
         git_user_email.setText(settings.getString("git_config_user_email", ""));
@@ -468,7 +468,7 @@ public class GitActivity extends AppCompatActivity {
         // git status
         Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity.getApplicationContext()));
         if (repo != null) {
-            final TextView git_commit_hash = (TextView) findViewById(R.id.git_commit_hash);
+            final TextView git_commit_hash = findViewById(R.id.git_commit_hash);
             try {
                 ObjectId objectId = repo.resolve(Constants.HEAD);
                 Ref ref = repo.getRef("refs/heads/master");

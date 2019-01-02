@@ -136,7 +136,7 @@ public abstract class GitOperation {
             } else {
                 LayoutInflater layoutInflater = LayoutInflater.from(callingActivity.getApplicationContext());
                 @SuppressLint("InflateParams") final View dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null);
-                final EditText passphrase = (EditText) dialogView.findViewById(R.id.sshkey_passphrase);
+                final EditText passphrase = dialogView.findViewById(R.id.sshkey_passphrase);
                 final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
                 final String sshKeyPassphrase = settings.getString("ssh_key_passphrase", null);
                 if (showError) {

@@ -161,7 +161,7 @@ class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapt
 
         @Override
         public boolean equals(Object o) {
-            return o != null && o instanceof AppInfo && this.appName.equals(((AppInfo) o).appName);
+            return o instanceof AppInfo && this.appName.equals(((AppInfo) o).appName);
         }
     }
 
@@ -177,9 +177,9 @@ class AutofillRecyclerAdapter extends RecyclerView.Adapter<AutofillRecyclerAdapt
         ViewHolder(View view) {
             super(view);
             this.view = view;
-            name = (TextView) view.findViewById(R.id.app_name);
-            secondary = (TextView) view.findViewById(R.id.secondary_text);
-            icon = (ImageView) view.findViewById(R.id.app_icon);
+            name = view.findViewById(R.id.app_name);
+            secondary = view.findViewById(R.id.secondary_text);
+            icon = view.findViewById(R.id.app_icon);
             view.setOnClickListener(this);
         }
 

@@ -90,7 +90,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
     // Replace the contents of a view (invoked by the layout manager)
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final PasswordItem pass = getValues().get(position);
         holder.name.setText(pass.toString());
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
@@ -123,7 +123,8 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
 
     // Create new views (invoked by the layout manager)
     @Override
-    public PasswordRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    @NonNull
+    public PasswordRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                  int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
@@ -144,9 +145,9 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         ViewHolder(View v) {
             super(v);
             view = v;
-            name = (TextView) view.findViewById(R.id.label);
-            type = (TextView) view.findViewById(R.id.type);
-            typeImage = (ImageView) view.findViewById(R.id.type_image);
+            name = view.findViewById(R.id.label);
+            type = view.findViewById(R.id.type);
+            typeImage = view.findViewById(R.id.type_image);
         }
     }
 }
