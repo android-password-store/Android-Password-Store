@@ -1,8 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
-import androidx.annotation.NonNull;
 import android.view.View;
-
+import androidx.annotation.NonNull;
 import com.zeapo.pwdstore.SelectFolderActivity;
 import com.zeapo.pwdstore.SelectFolderFragment;
 

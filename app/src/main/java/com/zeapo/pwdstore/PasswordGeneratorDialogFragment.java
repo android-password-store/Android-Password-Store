@@ -26,7 +26,8 @@ import java.util.ArrayList;
  */
 public class PasswordGeneratorDialogFragment extends DialogFragment {
 
-    public PasswordGeneratorDialogFragment() { }
+    public PasswordGeneratorDialogFragment() {
+    }
 
     @NotNull
     @SuppressLint("SetTextI18n")
@@ -89,7 +90,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         return ad;
     }
 
-    private void setPreferences () {
+    private void setPreferences() {
         ArrayList<String> preferences = new ArrayList<>();
         if (!((CheckBox) getDialog().findViewById(R.id.numerals)).isChecked()) {
             preferences.add("0");
@@ -110,7 +111,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         try {
             int length = Integer.valueOf(editText.getText().toString());
             PasswordGenerator.INSTANCE.setPrefs(getActivity().getApplicationContext(), preferences, length);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             PasswordGenerator.INSTANCE.setPrefs(getActivity().getApplicationContext(), preferences);
         }
     }

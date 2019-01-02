@@ -2,10 +2,7 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import com.zeapo.pwdstore.R;
-
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;

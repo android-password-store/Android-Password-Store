@@ -2,13 +2,9 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import com.zeapo.pwdstore.R;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
-import org.eclipse.jgit.merge.MergeStrategy;
 
 import java.io.File;
 
@@ -26,6 +22,7 @@ public class PullOperation extends GitOperation {
 
     /**
      * Sets the command
+     *
      * @return the current object
      */
     public PullOperation setCommand() {

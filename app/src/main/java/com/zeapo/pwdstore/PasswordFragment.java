@@ -4,16 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -24,16 +23,12 @@ import java.util.Stack;
 
 /**
  * A fragment representing a list of Items.
- * <p />
+ * <p/>
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
- * <p />
+ * <p/>
  */
-public class PasswordFragment extends Fragment{
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(PasswordItem item);
-    }
+public class PasswordFragment extends Fragment {
 
     // store the pass files list in a stack
     private Stack<ArrayList<PasswordItem>> passListStack;
@@ -43,12 +38,12 @@ public class PasswordFragment extends Fragment{
     private RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
     private SharedPreferences settings;
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PasswordFragment() {   }
+    public PasswordFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +55,7 @@ public class PasswordFragment extends Fragment{
         scrollPosition = new Stack<>();
         pathStack = new Stack<>();
         recyclerAdapter = new PasswordRecyclerAdapter((PasswordStore) getActivity(), mListener,
-                                                      PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
+                PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
     }
 
     @Override
@@ -95,8 +90,8 @@ public class PasswordFragment extends Fragment{
                 if (item.getType() == PasswordItem.TYPE_CATEGORY) {
                     // push the current password list (non filtered plz!)
                     passListStack.push(pathStack.isEmpty() ?
-                                            PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context), getSortOrder()) :
-                                            PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
+                            PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(context), getSortOrder()) :
+                            PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
                     //push the category were we're going
                     pathStack.push(item.getFile());
                     scrollPosition.push(recyclerView.getVerticalScrollbarPosition());
@@ -116,7 +111,7 @@ public class PasswordFragment extends Fragment{
             };
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                + " must implement OnFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -139,12 +134,13 @@ public class PasswordFragment extends Fragment{
     public void refreshAdapter() {
         recyclerAdapter.clear();
         recyclerAdapter.addAll(pathStack.isEmpty() ?
-                                        PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()) :
-                                        PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()) :
+                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
     }
 
     /**
      * filters the list adapter
+     *
      * @param filter the filter to apply
      */
     public void filterAdapter(String filter) {
@@ -159,8 +155,9 @@ public class PasswordFragment extends Fragment{
 
     /**
      * recursively filters a directory and extract all the matching items
+     *
      * @param filter the filter to apply
-     * @param dir the directory to filter
+     * @param dir    the directory to filter
      */
     private void recursiveFilter(String filter, File dir) {
         // on the root the pathStack is empty
@@ -198,6 +195,7 @@ public class PasswordFragment extends Fragment{
 
     /**
      * gets the current directory
+     *
      * @return the current directory
      */
     public File getCurrentDir() {
@@ -219,5 +217,9 @@ public class PasswordFragment extends Fragment{
 
     private PasswordRepository.PasswordSortOrder getSortOrder() {
         return PasswordRepository.PasswordSortOrder.getSortOrder(settings);
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(PasswordItem item);
     }
 }

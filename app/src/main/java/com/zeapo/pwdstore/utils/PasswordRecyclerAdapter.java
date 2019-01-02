@@ -1,11 +1,10 @@
 package com.zeapo.pwdstore.utils;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.view.ActionMode;
 import com.zeapo.pwdstore.PasswordFragment;
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
@@ -19,57 +18,6 @@ public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
     private final PasswordFragment.OnFragmentInteractionListener listener;
     public ActionMode mActionMode;
     private Boolean canEdit;
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public PasswordRecyclerAdapter(PasswordStore activity, PasswordFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
-        super(activity, values);
-        this.activity = activity;
-        this.listener = listener;
-    }
-
-    @Override
-    @NonNull
-    protected View.OnLongClickListener getOnLongClickListener(final ViewHolder holder, final PasswordItem pass) {
-        return v -> {
-            if (mActionMode != null) {
-                return false;
-            }
-            toggleSelection(holder.getAdapterPosition());
-            canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
-            // Start the CAB using the ActionMode.Callback
-            mActionMode = activity.startSupportActionMode(mActionModeCallback);
-            mActionMode.setTitle("" + selectedItems.size());
-            mActionMode.invalidate();
-            notifyItemChanged(holder.getAdapterPosition());
-            return true;
-        };
-    }
-
-    @Override
-    @NonNull
-    protected View.OnClickListener getOnClickListener(final ViewHolder holder, final PasswordItem pass) {
-        return v -> {
-            if (mActionMode != null) {
-                toggleSelection(holder.getAdapterPosition());
-                mActionMode.setTitle("" + selectedItems.size());
-                if (selectedItems.isEmpty()) {
-                    mActionMode.finish();
-                } else if (selectedItems.size() == 1 && !canEdit) {
-                    if (getValues().get(selectedItems.iterator().next()).getType() == PasswordItem.TYPE_PASSWORD) {
-                        canEdit = true;
-                        mActionMode.invalidate();
-                    }
-                } else if (selectedItems.size() >= 1 && canEdit) {
-                    canEdit = false;
-                    mActionMode.invalidate();
-                }
-            } else {
-                listener.onFragmentInteraction(pass);
-            }
-            notifyItemChanged(holder.getAdapterPosition());
-        };
-    }
-
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -130,4 +78,54 @@ public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
             activity.findViewById(R.id.fab).setVisibility(View.VISIBLE);
         }
     };
+
+    // Provide a suitable constructor (depends on the kind of dataset)
+    public PasswordRecyclerAdapter(PasswordStore activity, PasswordFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
+        super(activity, values);
+        this.activity = activity;
+        this.listener = listener;
+    }
+
+    @Override
+    @NonNull
+    protected View.OnLongClickListener getOnLongClickListener(final ViewHolder holder, final PasswordItem pass) {
+        return v -> {
+            if (mActionMode != null) {
+                return false;
+            }
+            toggleSelection(holder.getAdapterPosition());
+            canEdit = pass.getType() == PasswordItem.TYPE_PASSWORD;
+            // Start the CAB using the ActionMode.Callback
+            mActionMode = activity.startSupportActionMode(mActionModeCallback);
+            mActionMode.setTitle("" + selectedItems.size());
+            mActionMode.invalidate();
+            notifyItemChanged(holder.getAdapterPosition());
+            return true;
+        };
+    }
+
+    @Override
+    @NonNull
+    protected View.OnClickListener getOnClickListener(final ViewHolder holder, final PasswordItem pass) {
+        return v -> {
+            if (mActionMode != null) {
+                toggleSelection(holder.getAdapterPosition());
+                mActionMode.setTitle("" + selectedItems.size());
+                if (selectedItems.isEmpty()) {
+                    mActionMode.finish();
+                } else if (selectedItems.size() == 1 && !canEdit) {
+                    if (getValues().get(selectedItems.iterator().next()).getType() == PasswordItem.TYPE_PASSWORD) {
+                        canEdit = true;
+                        mActionMode.invalidate();
+                    }
+                } else if (selectedItems.size() >= 1 && canEdit) {
+                    canEdit = false;
+                    mActionMode.invalidate();
+                }
+            } else {
+                listener.onFragmentInteraction(pass);
+            }
+            notifyItemChanged(holder.getAdapterPosition());
+        };
+    }
 }

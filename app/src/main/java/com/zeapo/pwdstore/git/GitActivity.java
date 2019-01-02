@@ -2,13 +2,10 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,11 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.RebaseCommand;
@@ -39,20 +36,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GitActivity extends AppCompatActivity {
-    private static final String TAG = "GitAct";
-    private static final String emailPattern = "^[^@]+@[^@]+$";
-
-    private Activity activity;
-    private Context context;
-
-    private String protocol;
-    private String connectionMode;
-
-    private File localDir;
-    private String hostname;
-
-    private SharedPreferences settings;
-
     public static final int REQUEST_PULL = 101;
     public static final int REQUEST_PUSH = 102;
     public static final int REQUEST_CLONE = 103;
@@ -61,6 +44,15 @@ public class GitActivity extends AppCompatActivity {
     public static final int REQUEST_SYNC = 106;
     public static final int REQUEST_CREATE = 107;
     public static final int EDIT_GIT_CONFIG = 108;
+    private static final String TAG = "GitAct";
+    private static final String emailPattern = "^[^@]+@[^@]+$";
+    private Activity activity;
+    private Context context;
+    private String protocol;
+    private String connectionMode;
+    private File localDir;
+    private String hostname;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -532,6 +524,7 @@ public class GitActivity extends AppCompatActivity {
                     GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                     tasks.execute(new Git(repo).rebase().setOperation(RebaseCommand.Operation.ABORT));
                 }
+
                 @Override
                 public void onSuccess() {
                     showGitConfig();

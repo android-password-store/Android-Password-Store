@@ -8,14 +8,11 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +21,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.KeyPair;
-
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -40,6 +36,34 @@ import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 
 public class SshKeyGen extends AppCompatActivity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle("Generate SSH Key");
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new SshKeyGenFragment()).commit();
+        }
+    }
+
+    // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
+    // private and public key, then replaces the SshKeyGenFragment with a
+    // ShowSshKeyFragment which displays the public key.
+    public void generate(View view) {
+        String length = Integer.toString((Integer) ((Spinner) findViewById(R.id.length)).getSelectedItem());
+        String passphrase = ((EditText) findViewById(R.id.passphrase)).getText().toString();
+        String comment = ((EditText) findViewById(R.id.comment)).getText().toString();
+        new KeyGenerateTask(this).execute(length, passphrase, comment);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     // SSH key generation UI
     public static class SshKeyGenFragment extends Fragment {
@@ -122,22 +146,6 @@ public class SshKeyGen extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setTitle("Generate SSH Key");
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new SshKeyGenFragment()).commit();
-        }
-    }
-
     private static class KeyGenerateTask extends AsyncTask<String, Void, Exception> {
         private ProgressDialog pd;
         private WeakReference<SshKeyGen> weakReference;
@@ -202,18 +210,5 @@ public class SshKeyGen extends AppCompatActivity {
             }
 
         }
-    }
-
-    // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
-    // private and public key, then replaces the SshKeyGenFragment with a
-    // ShowSshKeyFragment which displays the public key.
-    public void generate(View view) {
-        String length = Integer.toString((Integer) ((Spinner) findViewById(R.id.length)).getSelectedItem());
-        String passphrase = ((EditText) findViewById(R.id.passphrase)).getText().toString();
-        String comment = ((EditText) findViewById(R.id.comment)).getText().toString();
-        new KeyGenerateTask(this).execute(length, passphrase, comment);
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

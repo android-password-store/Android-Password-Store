@@ -8,19 +8,18 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.NavUtils;
-import androidx.core.app.TaskStackBuilder;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
@@ -29,9 +28,8 @@ import java.util.Map;
 
 public class AutofillPreferenceActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
     AutofillRecyclerAdapter recyclerAdapter; // let fragment have access
-
+    private RecyclerView recyclerView;
     private PackageManager pm;
 
     private boolean recreate; // flag for action on up press; origin autofill dialog? different act
@@ -64,51 +62,6 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(v -> showDialog("", "", true));
-    }
-
-    private class populateTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            runOnUiThread(() -> findViewById(R.id.progress_bar).setVisibility(View.VISIBLE));
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> allAppsResolveInfo = pm.queryIntentActivities(intent, 0);
-            List<AutofillRecyclerAdapter.AppInfo> allApps = new ArrayList<>();
-
-            for (ResolveInfo app : allAppsResolveInfo) {
-                allApps.add(new AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName
-                        , app.loadLabel(pm).toString(), false, app.loadIcon(pm)));
-            }
-
-            SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
-            Map<String, ?> prefsMap = prefs.getAll();
-            for (String key : prefsMap.keySet()) {
-                try {
-                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, pm.getApplicationIcon("com.android.browser")));
-                } catch (PackageManager.NameNotFoundException e) {
-                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, null));
-                }
-            }
-
-            recyclerAdapter = new AutofillRecyclerAdapter(allApps, pm, AutofillPreferenceActivity.this);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            runOnUiThread(() -> {
-                findViewById(R.id.progress_bar).setVisibility(View.GONE);
-                recyclerView.setAdapter(recyclerAdapter);
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
-                }
-            });
-        }
     }
 
     @Override
@@ -163,5 +116,50 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         args.putBoolean("isWeb", isWeb);
         df.setArguments(args);
         df.show(getFragmentManager(), "autofill_dialog");
+    }
+
+    private class populateTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            runOnUiThread(() -> findViewById(R.id.progress_bar).setVisibility(View.VISIBLE));
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            List<ResolveInfo> allAppsResolveInfo = pm.queryIntentActivities(intent, 0);
+            List<AutofillRecyclerAdapter.AppInfo> allApps = new ArrayList<>();
+
+            for (ResolveInfo app : allAppsResolveInfo) {
+                allApps.add(new AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName
+                        , app.loadLabel(pm).toString(), false, app.loadIcon(pm)));
+            }
+
+            SharedPreferences prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE);
+            Map<String, ?> prefsMap = prefs.getAll();
+            for (String key : prefsMap.keySet()) {
+                try {
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, pm.getApplicationIcon("com.android.browser")));
+                } catch (PackageManager.NameNotFoundException e) {
+                    allApps.add(new AutofillRecyclerAdapter.AppInfo(key, key, true, null));
+                }
+            }
+
+            recyclerAdapter = new AutofillRecyclerAdapter(allApps, pm, AutofillPreferenceActivity.this);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            runOnUiThread(() -> {
+                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                recyclerView.setAdapter(recyclerAdapter);
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                    recyclerView.scrollToPosition(recyclerAdapter.getPosition(extras.getString("appName")));
+                }
+            });
+        }
     }
 }

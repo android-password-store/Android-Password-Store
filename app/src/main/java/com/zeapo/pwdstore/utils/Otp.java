@@ -1,17 +1,15 @@
 package com.zeapo.pwdstore.utils;
 
 import android.util.Log;
-
 import org.apache.commons.codec.binary.Base32;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 public class Otp {
     public static final int TIME_WINDOW = 30;

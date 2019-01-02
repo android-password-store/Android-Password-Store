@@ -2,19 +2,17 @@ package com.zeapo.pwdstore.git;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
@@ -23,7 +21,6 @@ import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -177,8 +174,8 @@ public abstract class GitOperation {
                                             executeAfterAuthentication(connectionMode, username, sshKey, true);
                                         }
                                     }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> {
-                                        // Do nothing.
-                                    }).show();
+                                // Do nothing.
+                            }).show();
                         }
                     } else {
                         setAuthentication(sshKey, username, "").execute();
@@ -207,8 +204,8 @@ public abstract class GitOperation {
                         setAuthentication(username, password.getText().toString()).execute();
 
                     }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> {
-                        // Do nothing.
-                    }).show();
+                // Do nothing.
+            }).show();
         }
     }
 

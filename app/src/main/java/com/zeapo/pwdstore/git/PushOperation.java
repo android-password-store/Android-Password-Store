@@ -2,10 +2,7 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import com.zeapo.pwdstore.R;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 
@@ -25,6 +22,7 @@ public class PushOperation extends GitOperation {
 
     /**
      * Sets the command
+     *
      * @return the current object
      */
     public PushOperation setCommand() {

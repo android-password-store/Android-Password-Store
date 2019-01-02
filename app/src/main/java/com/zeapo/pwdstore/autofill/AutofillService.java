@@ -1,12 +1,10 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.accessibilityservice.AccessibilityService;
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -16,18 +14,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AlertDialog;
 import com.zeapo.pwdstore.PasswordEntry;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.openintents.openpgp.IOpenPgpService2;
 import org.openintents.openpgp.OpenPgpError;
@@ -61,10 +57,6 @@ public class AutofillService extends AccessibilityService {
     private String webViewURL = null;
     private PasswordEntry lastPassword;
     private long lastPasswordMaxDate;
-
-    final class Constants {
-        static final String TAG = "Keychain";
-    }
 
     public static AutofillService getInstance() {
         return instance;
@@ -496,18 +488,6 @@ public class AutofillService extends AccessibilityService {
 
     }
 
-    private class onBoundListener implements OpenPgpServiceConnection.OnBound {
-        @Override
-        public void onBound(IOpenPgpService2 service) {
-            decryptAndVerify();
-        }
-
-        @Override
-        public void onError(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void bindDecryptAndVerify() {
         if (serviceConnection.getService() == null) {
             // the service was disconnected, need to bind again
@@ -606,5 +586,21 @@ public class AutofillService extends AccessibilityService {
             }
         }
         node.recycle();
+    }
+
+    final class Constants {
+        static final String TAG = "Keychain";
+    }
+
+    private class onBoundListener implements OpenPgpServiceConnection.OnBound {
+        @Override
+        public void onBound(IOpenPgpService2 service) {
+            decryptAndVerify();
+        }
+
+        @Override
+        public void onError(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

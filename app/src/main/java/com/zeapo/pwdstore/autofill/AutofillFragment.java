@@ -5,18 +5,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +19,9 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 
@@ -143,7 +140,7 @@ public class AutofillFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         AlertDialog ad = (AlertDialog) getDialog();
-        if(ad != null) {
+        if (ad != null) {
             Button positiveButton = ad.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(v -> {
                 AutofillPreferenceActivity callingActivity = (AutofillPreferenceActivity) getActivity();
@@ -215,7 +212,7 @@ public class AutofillFragment extends DialogFragment {
                         String oldPackageName = getArguments().getString("packageName", "");
                         if (oldPackageName.equals(packageName)) {
                             callingActivity.recyclerAdapter.notifyItemChanged(position);
-                        } else if (oldPackageName.equals("")){
+                        } else if (oldPackageName.equals("")) {
                             callingActivity.recyclerAdapter.addWebsite(packageName);
                         } else {
                             editor.remove(oldPackageName);

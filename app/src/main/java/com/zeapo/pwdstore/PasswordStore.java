@@ -3,7 +3,6 @@ package com.zeapo.pwdstore;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,20 +13,6 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,7 +20,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
@@ -43,7 +37,6 @@ import com.zeapo.pwdstore.git.GitOperation;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jgit.api.Git;
@@ -52,21 +45,15 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
 
-    private static final String TAG = PasswordStore.class.getName();
-    private SharedPreferences settings;
-    private Activity activity;
-    private PasswordFragment plist;
-    private ShortcutManager shortcutManager;
-    private MenuItem searchItem = null;
-    private SearchView searchView;
-
-    private final static int CLONE_REPO_BUTTON = 401;
-    private final static int NEW_REPO_BUTTON = 402;
-    private final static int HOME = 403;
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
     public static final int REQUEST_CODE_SIGN_AND_ENCRYPT = 9912;
@@ -75,6 +62,17 @@ public class PasswordStore extends AppCompatActivity {
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_EDIT = 9916;
     public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
+    private static final String TAG = PasswordStore.class.getName();
+    private final static int CLONE_REPO_BUTTON = 401;
+    private final static int NEW_REPO_BUTTON = 402;
+    private final static int HOME = 403;
+    private final static int REQUEST_EXTERNAL_STORAGE = 50;
+    private SharedPreferences settings;
+    private Activity activity;
+    private PasswordFragment plist;
+    private ShortcutManager shortcutManager;
+    private MenuItem searchItem = null;
+    private SearchView searchView;
 
     private static boolean isPrintable(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
@@ -104,8 +102,6 @@ public class PasswordStore extends AppCompatActivity {
 
         return super.onKeyDown(keyCode, event);
     }
-
-    private final static int REQUEST_EXTERNAL_STORAGE = 50;
 
     @Override
     @SuppressLint("NewApi")

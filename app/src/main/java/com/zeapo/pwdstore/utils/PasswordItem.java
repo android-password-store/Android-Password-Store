@@ -1,8 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
-import com.zeapo.pwdstore.crypto.PgpActivity;
-
 import androidx.annotation.NonNull;
+import com.zeapo.pwdstore.crypto.PgpActivity;
 
 import java.io.File;
 
@@ -18,8 +17,9 @@ public class PasswordItem implements Comparable {
     private final String fullPathToParent;
     private final String longName;
 
-    /** Create a password item
-     *
+    /**
+     * Create a password item
+     * <p>
      * Make it protected so that we use a builder
      */
     private PasswordItem(String name, PasswordItem parent, char type, File file, File rootDir) {
@@ -33,35 +33,39 @@ public class PasswordItem implements Comparable {
         longName = PgpActivity.getLongName(fullPathToParent, rootDir.getAbsolutePath(), toString());
     }
 
-    /** Create a new Category item
+    /**
+     * Create a new Category item
      */
     public static PasswordItem newCategory(String name, File file, PasswordItem parent, File rootDir) {
         return new PasswordItem(name, parent, TYPE_CATEGORY, file, rootDir);
     }
 
-    /** Create a new parentless category item
+    /**
+     * Create a new parentless category item
      */
     public static PasswordItem newCategory(String name, File file, File rootDir) {
         return new PasswordItem(name, null, TYPE_CATEGORY, file, rootDir);
     }
 
-    /** Create a new password item
+    /**
+     * Create a new password item
      */
-    public static PasswordItem newPassword(String name, File file,  PasswordItem parent, File rootDir) {
+    public static PasswordItem newPassword(String name, File file, PasswordItem parent, File rootDir) {
         return new PasswordItem(name, parent, TYPE_PASSWORD, file, rootDir);
     }
 
-    /** Create a new parentless password item
+    /**
+     * Create a new parentless password item
      */
     public static PasswordItem newPassword(String name, File file, File rootDir) {
         return new PasswordItem(name, null, TYPE_PASSWORD, file, rootDir);
     }
 
-    public char getType(){
+    public char getType() {
         return this.type;
     }
 
-    String getName(){
+    String getName() {
         return this.name;
     }
 
@@ -82,7 +86,7 @@ public class PasswordItem implements Comparable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.getName().replace(".gpg", "");
     }
 

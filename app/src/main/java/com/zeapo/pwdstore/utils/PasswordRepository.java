@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
@@ -269,9 +268,7 @@ public class PasswordRepository {
                 return (p2.getType() + p1.getName())
                         .compareToIgnoreCase(p1.getType() + p2.getName());
             }
-        })
-
-        ;
+        });
 
         private Comparator<PasswordItem> comparator;
 
