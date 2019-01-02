@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
-
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.PushCommand;
@@ -52,7 +50,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                     // the previous status will eventually be used to avoid a commit
                     if (nbChanges == null || nbChanges > 0)
                         command.call();
-                }else if (command instanceof PushCommand) {
+                } else if (command instanceof PushCommand) {
                     for (final PushResult result : ((PushCommand) command).call()) {
                         // Code imported (modified) from Gerrit PushOp, license Apache v2
                         for (final RemoteRefUpdate rru : result.getRemoteUpdates()) {

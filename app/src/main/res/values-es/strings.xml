@@ -2,20 +2,18 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">Ajustes</string>
     <string name="dialog_delete_title">El directorio ya existe</string>
-    <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?</string>
+    <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?\n(%1$s)</string>
     <string name="dialog_delete">Eliminar directorio</string>
     <string name="dialog_do_not_delete">Cancelar</string>
     <string name="title_activity_git_clone">Información de repositorio</string>
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Por favor clona o crea un nuevo repositorio antes de añadir una contraseña o ejecutar una operación de sincronización.</string>
-    <string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Tienes que seleccionar una llave PGP antes de inicializar el repositorio</string>
-    <string name="delete_dialog_text">Confirma que deseas eliminar la contraseña /"</string>
+    <string name="delete_dialog_text">Confirma que deseas eliminar la contraseña %1$s</string>
     <string name="move">Mover</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
@@ -98,7 +96,6 @@
     <string name="password">Contraseña:</string>
     <string name="extra_content">Contenido extra:</string>
     <string name="username">Nombre de usuario:</string>
-    <string name="otp">OTP:</string>
     <string name="edit_password">Editar contraseña</string>
     <string name="copy_password">Copiar contraseña</string>
     <string name="copy_username">Copiar nombre de usuario</string>
@@ -233,7 +230,6 @@
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abortar rebase</string>
     <string name="commit_hash">Hash del commit</string>
-    <string name="crypto_password_edit_hint">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">Username: Nombre de usuario\n… o algún contenido extra</string>
     <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
     <string name="hotp_pending">Presiona copiar para calcular el HOTP</string>

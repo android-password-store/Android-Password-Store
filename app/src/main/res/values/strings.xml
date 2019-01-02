@@ -2,11 +2,11 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
+    <string name="app_name" translatable="false">Password Store</string>
 
     <string name="action_settings">Settings</string>
-    <string name="dialog_delete_title">Directory already exist</string>
-    <string name="dialog_delete_msg">Target directory already exist. Current version support only a single store. Do you want to delete the current password store directory:</string>
+    <string name="dialog_delete_title">Directory already exists</string>
+    <string name="dialog_delete_msg">Target directory already exists. Current version only supports a single store. Do you want to delete the current password store directory?\n(%1$s)</string>
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
     <string name="title_activity_git_clone">Repository information</string>
@@ -14,9 +14,8 @@
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
-    <string name="store_git">/store/.git</string>
     <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
-    <string name="delete_dialog_text">Are you sure you want to delete the password /"</string>
+    <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -74,7 +73,7 @@
     <string name="server_name">Server</string>
     <string name="server_protocol">Protocol</string>
     <string name="server_url">Server URL</string>
-    <string name="server_url_hint">server.com</string>
+    <string name="server_url_hint" translatable="false">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -91,9 +90,9 @@
     <!-- Git Config fragment -->
     <string name="git_config" translatable="false">Git config</string>
     <string name="git_user_name" translatable="false">Username</string>
-    <string name="git_user_name_hint" translatable="false">User name</string>
-    <string name="git_user_email" translatable="false">Email</string>
-    <string name="git_user_email_hint" translatable="false">email</string>
+    <string name="git_user_name_hint">User name</string>
+    <string name="git_user_email">Email</string>
+    <string name="git_user_email_hint">email</string>
     <string name="invalid_email_dialog_text">Please enter a valid email address</string>
     <string name="clone_button">Clone!</string>
 
@@ -110,7 +109,7 @@
     <string name="password">Password:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
-    <string name="otp">OTP:</string>
+    <string name="otp" translatable="false">OTP:</string>
     <string name="edit_password">Edit password</string>
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
@@ -173,7 +172,7 @@
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
     <string name="prefs_version">Version</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Generate Password</string>
     <string name="pwgen_generate">Generate</string>
     <string name="pwgen_include">Include</string>
@@ -246,7 +245,7 @@
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase</string>
     <string name="commit_hash">Commit hash</string>
-    <string name="crypto_password_edit_hint">p@ssw0rd!</string>
+    <string name="crypto_password_edit_hint" translatable="false">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="hotp_pending">Tap copy to calculate HOTP</string>

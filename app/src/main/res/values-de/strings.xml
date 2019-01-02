@@ -2,20 +2,18 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">Einstellungen</string>
     <string name="dialog_delete_title">Ordner existiert bereits</string>
-    <string name="dialog_delete_msg">Zielordner existiert bereits. Aktuelle Version unterstützt nur eine einzige Datenquelle. Möchtest du die aktuelle Datenquelle löschen:</string>
+    <string name="dialog_delete_msg">Zielordner existiert bereits. Aktuelle Version unterstützt nur eine einzige Datenquelle. Möchtest du die aktuelle Datenquelle löschen?\n(%1$s)</string>
     <string name="dialog_delete">Ordner löschen</string>
     <string name="dialog_do_not_delete">Abbruch</string>
     <string name="title_activity_git_clone">Repository Informationen</string>
-    
+
     <!-- Password Store -->
     <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
-	<string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Du musst deine PGP-Key ID auwählen, bevor das Repository intialisiert wird.</string>
-    <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest \"</string>
+    <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest %1$s?</string>
     <string name="move">Verschieben</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
@@ -45,7 +43,7 @@
     <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>
     <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
     <string name="clone_button">Klone!</string>
-    
+
     <!-- Clone fragment -->
     <string name="clone">Klone von Server</string>
     <string name="initialize">Nutze lokalen Ordner</string>
@@ -53,7 +51,6 @@
     <string name="server_name">Server</string>
     <string name="server_protocol">Protokoll</string>
     <string name="server_url">Server URL</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -131,7 +128,7 @@
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
     <string name="prefs_version">Version</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Generieren</string>
     <string name="pwgen_include">Include</string>
     <string name="pwgen_numerals">Nummern</string>

@@ -54,6 +54,10 @@ Ways to get in touch:
 
 - [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how something works or you want to submit a feature request.
 
+## Contributing Translations
+Interested in helping to translate Password Store? Contribute here:
+
+https://www.transifex.com/android-password-store/android-password-store/
 
 Libraries
 =========

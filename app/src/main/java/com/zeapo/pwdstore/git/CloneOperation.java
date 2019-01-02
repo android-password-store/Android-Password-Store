@@ -2,10 +2,7 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import com.zeapo.pwdstore.R;
-
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 
@@ -79,10 +76,7 @@ public class CloneOperation extends GitOperation {
                         + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
                         + errorMessage
                         + "\nPlease check the FAQ for possible reasons why this error might occur.").
-                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                 }).show();
     }
 }
