@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[android-password-store.main]
+file_filter = app/src/main/res/values-<lang>/strings.xml
+minimum_perc = 0
+source_file = app/src/main/res/values/strings.xml
+source_lang = en
+type = ANDROID
