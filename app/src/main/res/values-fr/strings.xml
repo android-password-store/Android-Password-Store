@@ -2,20 +2,18 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">Paramètres</string>
     <string name="dialog_delete_title">Répertoire déjà existant</string>
-    <string name="dialog_delete_msg">Répertoire cible déjà existant. La version actuelle ne supporte qu\'un seul gestionnaire. Voulez vous supprimer le répertoire actual du gestionnaire de mots de passe:</string>
+    <string name="dialog_delete_msg">Répertoire cible déjà existant. La version actuelle ne supporte qu\'un seul gestionnaire. Voulez vous supprimer le répertoire actual du gestionnaire de mots de passe?\n(%1$s)</string>
     <string name="dialog_delete">Suprimer le répertoire</string>
     <string name="dialog_do_not_delete">Annuler</string>
     <string name="title_activity_git_clone">Information sur le dépôt Git</string>
-    
+
     <!-- Password Store -->
     <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de pass ou d\'effectuer une opération de synchornisation.</string>
-	<string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Vous devez sélectionner votre "PGP-Key ID" avant d\'initialiser le dépôt</string>
-    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe /"</string>
+    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe %1$s?</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Ajouter %1$s depuis le dépôt.</string>
@@ -42,7 +40,7 @@
     <string name="passphrase_dialog_title">Authentification</string>
     <string name="passphrase_dialog_text">Saisissez le mot de passe associé à pour votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
     <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
-    
+
     <!-- Clone fragment -->
     <string name="clone">Cloner depuis le serveur</string>
     <string name="initialize">Utiliser un répertoire local</string>
@@ -50,7 +48,6 @@
     <string name="server_name">Serveur</string>
     <string name="server_protocol">Protocole</string>
     <string name="server_url">URL du serveur</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -110,7 +107,7 @@
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
     <string name="pref_select_external_repository">Choisissez un dépôt externe</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Générer</string>
     <string name="pwgen_include">Inclure</string>
     <string name="pwgen_length">Longueur</string>

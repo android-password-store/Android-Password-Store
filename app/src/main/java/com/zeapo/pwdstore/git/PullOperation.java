@@ -2,13 +2,9 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import com.zeapo.pwdstore.R;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
-import org.eclipse.jgit.merge.MergeStrategy;
 
 import java.io.File;
 
@@ -26,6 +22,7 @@ public class PullOperation extends GitOperation {
 
     /**
      * Sets the command
+     *
      * @return the current object
      */
     public PullOperation setCommand() {
@@ -52,11 +49,6 @@ public class PullOperation extends GitOperation {
                         + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
                         + errorMessage
                         + "\nPlease check the FAQ for possible reasons why this error might occur.").
-                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        callingActivity.finish();
-                    }
-                }).show();
+                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> callingActivity.finish()).show();
     }
 }

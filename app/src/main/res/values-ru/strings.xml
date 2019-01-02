@@ -2,20 +2,18 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">Настройки</string>
     <string name="dialog_delete_title">Директория уже существует</string>
-    <string name="dialog_delete_msg">Директория уже существует. Текущая версия поддерживает только одно хранилище. Хотите удалить существующую директорию:</string>
+    <string name="dialog_delete_msg">Директория уже существует. Текущая версия поддерживает только одно хранилище. Хотите удалить существующую директорию\n(%1$s)</string>
     <string name="dialog_delete">Удалить директорию</string>
     <string name="dialog_do_not_delete">Отменить</string>
     <string name="title_activity_git_clone">Информация о репозитории</string>
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Пожалуйста, клонируйте или создайте новый репозиторий перед тем, как добавлять пароль или выполнять синхронизацию.</string>
-    <string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Вы должны выбрать PGP ключ перед инициализацией хранилища</string>
-    <string name="delete_dialog_text">Вы уверены что хотите удалить пароль /"</string>
+    <string name="delete_dialog_text">Вы уверены что хотите удалить пароль %1$s</string>
     <string name="move">Переместить</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
@@ -133,7 +131,7 @@
     <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
     <string name="prefs_version">Версия</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Сгенерировать</string>
     <string name="pwgen_include">Включая</string>
     <string name="pwgen_length">Длина</string>

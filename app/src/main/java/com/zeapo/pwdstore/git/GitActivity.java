@@ -2,13 +2,10 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,11 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.RebaseCommand;
@@ -39,20 +36,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GitActivity extends AppCompatActivity {
-    private static final String TAG = "GitAct";
-    private static final String emailPattern = "^[^@]+@[^@]+$";
-
-    private Activity activity;
-    private Context context;
-
-    private String protocol;
-    private String connectionMode;
-
-    private File localDir;
-    private String hostname;
-
-    private SharedPreferences settings;
-
     public static final int REQUEST_PULL = 101;
     public static final int REQUEST_PUSH = 102;
     public static final int REQUEST_CLONE = 103;
@@ -61,6 +44,15 @@ public class GitActivity extends AppCompatActivity {
     public static final int REQUEST_SYNC = 106;
     public static final int REQUEST_CREATE = 107;
     public static final int EDIT_GIT_CONFIG = 108;
+    private static final String TAG = "GitAct";
+    private static final String emailPattern = "^[^@]+@[^@]+$";
+    private Activity activity;
+    private Context context;
+    private String protocol;
+    private String connectionMode;
+    private File localDir;
+    private String hostname;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +75,8 @@ public class GitActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_git_clone);
                 setTitle(R.string.title_activity_git_clone);
 
-                final Spinner protcol_spinner = (Spinner) findViewById(R.id.clone_protocol);
-                final Spinner connection_mode_spinner = (Spinner) findViewById(R.id.connection_mode);
+                final Spinner protcol_spinner = findViewById(R.id.clone_protocol);
+                final Spinner connection_mode_spinner = findViewById(R.id.connection_mode);
 
                 // init the spinner for connection modes
                 final ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
@@ -157,11 +149,11 @@ public class GitActivity extends AppCompatActivity {
                 }
 
                 // init the server information
-                final EditText server_url = ((EditText) findViewById(R.id.server_url));
-                final EditText server_port = ((EditText) findViewById(R.id.server_port));
-                final EditText server_path = ((EditText) findViewById(R.id.server_path));
-                final EditText server_user = ((EditText) findViewById(R.id.server_user));
-                final EditText server_uri = ((EditText) findViewById(R.id.clone_uri));
+                final EditText server_url = findViewById(R.id.server_url);
+                final EditText server_port = findViewById(R.id.server_port);
+                final EditText server_path = findViewById(R.id.server_path);
+                final EditText server_user = findViewById(R.id.server_user);
+                final EditText server_uri = findViewById(R.id.clone_uri);
 
                 server_url.setText(settings.getString("git_remote_server", ""));
                 server_port.setText(settings.getString("git_remote_port", ""));
@@ -282,11 +274,11 @@ public class GitActivity extends AppCompatActivity {
      * Fills in the server_uri field with the information coming from other fields
      */
     private void updateURI() {
-        EditText uri = (EditText) findViewById(R.id.clone_uri);
-        EditText server_url = ((EditText) findViewById(R.id.server_url));
-        EditText server_port = ((EditText) findViewById(R.id.server_port));
-        EditText server_path = ((EditText) findViewById(R.id.server_path));
-        EditText server_user = ((EditText) findViewById(R.id.server_user));
+        EditText uri = findViewById(R.id.clone_uri);
+        EditText server_url = findViewById(R.id.server_url);
+        EditText server_port = findViewById(R.id.server_port);
+        EditText server_path = findViewById(R.id.server_path);
+        EditText server_user = findViewById(R.id.server_user);
 
         if (uri != null) {
             switch (protocol) {
@@ -301,7 +293,7 @@ public class GitActivity extends AppCompatActivity {
 
                         findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
-                        TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                        TextView warn_url = findViewById(R.id.warn_url);
                         if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                             warn_url.setText(R.string.warn_malformed_url_port);
                             warn_url.setVisibility(View.VISIBLE);
@@ -342,11 +334,11 @@ public class GitActivity extends AppCompatActivity {
      * Splits the information in server_uri into the other fields
      */
     private void splitURI() {
-        EditText server_uri = (EditText) findViewById(R.id.clone_uri);
-        EditText server_url = ((EditText) findViewById(R.id.server_url));
-        EditText server_port = ((EditText) findViewById(R.id.server_port));
-        EditText server_path = ((EditText) findViewById(R.id.server_path));
-        EditText server_user = ((EditText) findViewById(R.id.server_user));
+        EditText server_uri = findViewById(R.id.clone_uri);
+        EditText server_url = findViewById(R.id.server_url);
+        EditText server_port = findViewById(R.id.server_port);
+        EditText server_path = findViewById(R.id.server_path);
+        EditText server_user = findViewById(R.id.server_user);
 
         String uri = server_uri.getText().toString();
         Pattern pattern = Pattern.compile("(.+)@([\\w\\d\\.]+):([\\d]+)*(.*)");
@@ -361,7 +353,7 @@ public class GitActivity extends AppCompatActivity {
                 server_port.setText(matcher.group(3));
                 server_path.setText(matcher.group(4));
 
-                TextView warn_url = (TextView) findViewById(R.id.warn_url);
+                TextView warn_url = findViewById(R.id.warn_url);
                 if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                     warn_url.setText(R.string.warn_malformed_url_port);
                     warn_url.setVisibility(View.VISIBLE);
@@ -467,8 +459,8 @@ public class GitActivity extends AppCompatActivity {
 
     private void showGitConfig() {
         // init the server information
-        final EditText git_user_name = ((EditText) findViewById(R.id.git_user_name));
-        final EditText git_user_email = ((EditText) findViewById(R.id.git_user_email));
+        final EditText git_user_name = findViewById(R.id.git_user_name);
+        final EditText git_user_email = findViewById(R.id.git_user_email);
 
         git_user_name.setText(settings.getString("git_config_user_name", ""));
         git_user_email.setText(settings.getString("git_config_user_email", ""));
@@ -476,7 +468,7 @@ public class GitActivity extends AppCompatActivity {
         // git status
         Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity.getApplicationContext()));
         if (repo != null) {
-            final TextView git_commit_hash = (TextView) findViewById(R.id.git_commit_hash);
+            final TextView git_commit_hash = findViewById(R.id.git_commit_hash);
             try {
                 ObjectId objectId = repo.resolve(Constants.HEAD);
                 Ref ref = repo.getRef("refs/heads/master");
@@ -532,6 +524,7 @@ public class GitActivity extends AppCompatActivity {
                     GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                     tasks.execute(new Git(repo).rebase().setOperation(RebaseCommand.Operation.ABORT));
                 }
+
                 @Override
                 public void onSuccess() {
                     showGitConfig();
@@ -560,36 +553,30 @@ public class GitActivity extends AppCompatActivity {
                     setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString()).
                     setCancelable(false).
                     setPositiveButton(R.string.dialog_delete,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                            (dialog, id) -> {
+                                try {
+                                    FileUtils.deleteDirectory(localDir);
                                     try {
-                                        FileUtils.deleteDirectory(localDir);
-                                        try {
-                                            new CloneOperation(localDir, activity)
-                                                    .setCommand(hostname)
-                                                    .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
-                                        } catch (Exception e) {
-                                            //This is what happens when jgit fails :(
-                                            //TODO Handle the diffent cases of exceptions
-                                            e.printStackTrace();
-                                            new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
-                                        }
-                                    } catch (IOException e) {
-                                        //TODO Handle the exception correctly if we are unable to delete the directory...
+                                        new CloneOperation(localDir, activity)
+                                                .setCommand(hostname)
+                                                .executeAfterAuthentication(connectionMode, settings.getString("git_remote_username", "git"), new File(getFilesDir() + "/.ssh_key"));
+                                    } catch (Exception e) {
+                                        //This is what happens when jgit fails :(
+                                        //TODO Handle the diffent cases of exceptions
                                         e.printStackTrace();
                                         new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
                                     }
-
-                                    dialog.cancel();
+                                } catch (IOException e) {
+                                    //TODO Handle the exception correctly if we are unable to delete the directory...
+                                    e.printStackTrace();
+                                    new AlertDialog.Builder(GitActivity.this).setMessage(e.getMessage()).show();
                                 }
+
+                                dialog.cancel();
                             }
                     ).
                     setNegativeButton(R.string.dialog_do_not_delete,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            }
+                            (dialog, id) -> dialog.cancel()
                     ).
                     show();
         } else {
@@ -626,20 +613,14 @@ public class GitActivity extends AppCompatActivity {
                 settings.getString("git_remote_location", "").isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(activity.getResources().getString(R.string.set_information_dialog_text))
-                    .setPositiveButton(activity.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, REQUEST_PULL);
-                        }
+                    .setPositiveButton(activity.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivityForResult(intent, REQUEST_PULL);
                     })
-                    .setNegativeButton(activity.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // do nothing :(
-                            setResult(RESULT_OK);
-                            finish();
-                        }
+                    .setNegativeButton(activity.getResources().getString(R.string.dialog_negative), (dialogInterface, i) -> {
+                        // do nothing :(
+                        setResult(RESULT_OK);
+                        finish();
                     })
                     .show();
 

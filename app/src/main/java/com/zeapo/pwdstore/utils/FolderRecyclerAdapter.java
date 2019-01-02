@@ -1,8 +1,7 @@
 package com.zeapo.pwdstore.utils;
 
-import androidx.annotation.NonNull;
 import android.view.View;
-
+import androidx.annotation.NonNull;
 import com.zeapo.pwdstore.SelectFolderActivity;
 import com.zeapo.pwdstore.SelectFolderFragment;
 
@@ -19,12 +18,9 @@ public class FolderRecyclerAdapter extends EntryRecyclerAdapter {
 
     @NonNull
     protected View.OnClickListener getOnClickListener(final ViewHolder holder, final PasswordItem pass) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onFragmentInteraction(pass);
-                notifyItemChanged(holder.getAdapterPosition());
-            }
+        return v -> {
+            listener.onFragmentInteraction(pass);
+            notifyItemChanged(holder.getAdapterPosition());
         };
     }
 

@@ -3,7 +3,6 @@ package com.zeapo.pwdstore;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,16 +13,6 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,11 +20,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.snackbar.Snackbar;
 import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
 import com.zeapo.pwdstore.git.GitOperation;
-import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -47,20 +45,15 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class PasswordStore extends AppCompatActivity {
-    private static final String TAG = "PwdStrAct";
-    private SharedPreferences settings;
-    private Activity activity;
-    private PasswordFragment plist;
-    private ShortcutManager shortcutManager;
-    private MenuItem searchItem = null;
-    private SearchView searchView;
 
-    private final static int CLONE_REPO_BUTTON = 401;
-    private final static int NEW_REPO_BUTTON = 402;
-    private final static int HOME = 403;
     public static final int REQUEST_CODE_SIGN = 9910;
     public static final int REQUEST_CODE_ENCRYPT = 9911;
     public static final int REQUEST_CODE_SIGN_AND_ENCRYPT = 9912;
@@ -69,6 +62,17 @@ public class PasswordStore extends AppCompatActivity {
     public static final int REQUEST_CODE_GET_KEY_IDS = 9915;
     public static final int REQUEST_CODE_EDIT = 9916;
     public static final int REQUEST_CODE_SELECT_FOLDER = 9917;
+    private static final String TAG = PasswordStore.class.getName();
+    private final static int CLONE_REPO_BUTTON = 401;
+    private final static int NEW_REPO_BUTTON = 402;
+    private final static int HOME = 403;
+    private final static int REQUEST_EXTERNAL_STORAGE = 50;
+    private SharedPreferences settings;
+    private Activity activity;
+    private PasswordFragment plist;
+    private ShortcutManager shortcutManager;
+    private MenuItem searchItem = null;
+    private SearchView searchView;
 
     private static boolean isPrintable(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
@@ -99,8 +103,6 @@ public class PasswordStore extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private final static int REQUEST_EXTERNAL_STORAGE = 50;
-
     @Override
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +111,6 @@ public class PasswordStore extends AppCompatActivity {
             shortcutManager = getSystemService(ShortcutManager.class);
         }
         activity = this;
-        PRNGFixes.apply();
 
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
@@ -132,19 +133,15 @@ public class PasswordStore extends AppCompatActivity {
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    // TODO: strings.xml
                     Snackbar snack = Snackbar.make(findViewById(R.id.main_layout), "The store is on the sdcard but the app does not have permission to access it. Please give permission.",
                             Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.dialog_ok, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    ActivityCompat.requestPermissions(activity,
-                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                            REQUEST_EXTERNAL_STORAGE);
-                                }
-                            });
+                            .setAction(R.string.dialog_ok, view -> ActivityCompat.requestPermissions(activity,
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    REQUEST_EXTERNAL_STORAGE));
                     snack.show();
                     View view = snack.getView();
-                    TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    TextView tv = view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.WHITE);
                     tv.setMaxLines(10);
                 } else {
@@ -224,15 +221,11 @@ public class PasswordStore extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent;
-        Log.d("PASS", "Menu item " + id + " pressed");
+        Log.d(TAG, "Menu item " + id + " pressed");
 
         AlertDialog.Builder initBefore = new AlertDialog.Builder(this)
                 .setMessage(this.getResources().getString(R.string.creation_dialog_text))
-                .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
+                .setPositiveButton(this.getResources().getString(R.string.dialog_ok), null);
 
         switch (id) {
             case R.id.user_pref:
@@ -282,7 +275,7 @@ public class PasswordStore extends AppCompatActivity {
                 return true;
 
             case android.R.id.home:
-                Log.d("PASS", "Home pressed");
+                Log.d(TAG, "Home pressed");
                 this.onBackPressed();
                 break;
 
@@ -338,9 +331,10 @@ public class PasswordStore extends AppCompatActivity {
         if (settings.getBoolean("git_external", false) && externalRepoPath != null) {
             File dir = new File(externalRepoPath);
 
-            PasswordRepository.PasswordSortOrder sortOrder = PasswordRepository.PasswordSortOrder.valueOf(settings.getString("sort_order", null));
+            if (dir.exists() &&
+                    dir.isDirectory() &&
+                    !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this), getSortOrder()).isEmpty()) {
 
-            if (dir.exists() && dir.isDirectory() && !PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this), getSortOrder()).isEmpty()) {
                 PasswordRepository.closeRepository();
                 checkLocalRepository();
                 return; // if not empty, just show me the passwords!
@@ -352,19 +346,11 @@ public class PasswordStore extends AppCompatActivity {
         if (keyIds.isEmpty())
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivityForResult(intent, GitActivity.REQUEST_INIT);
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivityForResult(intent, GitActivity.REQUEST_INIT);
                     })
-                    .setNegativeButton(this.getResources().getString(R.string.dialog_negative), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            // do nothing :(
-                        }
-                    })
+                    .setNegativeButton(this.getResources().getString(R.string.dialog_negative), null)
                     .show();
 
         createRepository();
@@ -385,7 +371,7 @@ public class PasswordStore extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
-            Log.d("PASS", "Check, dir: " + localDir.getAbsolutePath());
+            Log.d(TAG, "Check, dir: " + localDir.getAbsolutePath());
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null || settings.getBoolean("repo_changed", false)) {
                 settings.edit().putBoolean("repo_changed", false).apply();
@@ -516,30 +502,24 @@ public class PasswordStore extends AppCompatActivity {
         if (!PasswordRepository.isInitialized()) {
             new AlertDialog.Builder(this)
                     .setMessage(this.getResources().getString(R.string.creation_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                     }).show();
             return;
         }
 
-        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<String>()).isEmpty()) {
+        if (settings.getStringSet("openpgp_key_ids_set", new HashSet<>()).isEmpty()) {
             new AlertDialog.Builder(this)
                     .setTitle(this.getResources().getString(R.string.no_key_selected_dialog_title))
                     .setMessage(this.getResources().getString(R.string.no_key_selected_dialog_text))
-                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            startActivity(intent);
-                        }
+                    .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        startActivity(intent);
                     }).show();
             return;
         }
 
         File currentDir = getCurrentDir();
-        Log.i("PWDSTR", "Adding file to : " + currentDir.getAbsolutePath());
+        Log.i(TAG, "Adding file to : " + currentDir.getAbsolutePath());
 
         Intent intent = new Intent(this, PgpActivity.class);
         intent.putExtra("FILE_PATH", getCurrentDir().getAbsolutePath());
@@ -556,28 +536,21 @@ public class PasswordStore extends AppCompatActivity {
         }
         final int position = (int) it.next();
         final PasswordItem item = adapter.getValues().get(position);
-        new AlertDialog.Builder(this).
-                setMessage(this.getResources().getString(R.string.delete_dialog_text) +
-                        item + "\"")
-                .setPositiveButton(this.getResources().getString(R.string.dialog_yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        item.getFile().delete();
-                        adapter.remove(position);
-                        it.remove();
-                        adapter.updateSelectedItems(position, selectedItems);
+        new AlertDialog.Builder(this)
+                .setMessage(getResources().getString(R.string.delete_dialog_text, item.getLongName()))
+                .setPositiveButton(getResources().getString(R.string.dialog_yes), (dialogInterface, i) -> {
+                    item.getFile().delete();
+                    adapter.remove(position);
+                    it.remove();
+                    adapter.updateSelectedItems(position, selectedItems);
 
-                        commitChange(getResources().getString(R.string.git_commit_remove_text,
-                                item.getLongName()));
-                        deletePasswords(adapter, selectedItems);
-                    }
+                    commitChange(getResources().getString(R.string.git_commit_remove_text,
+                            item.getLongName()));
+                    deletePasswords(adapter, selectedItems);
                 })
-                .setNegativeButton(this.getResources().getString(R.string.dialog_no), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        it.remove();
-                        deletePasswords(adapter, selectedItems);
-                    }
+                .setNegativeButton(this.getResources().getString(R.string.dialog_no), (dialogInterface, i) -> {
+                    it.remove();
+                    deletePasswords(adapter, selectedItems);
                 })
                 .show();
     }
@@ -628,7 +601,7 @@ public class PasswordStore extends AppCompatActivity {
         new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
             @Override
             public void execute() {
-                Log.d(TAG, "Commiting with message " + message);
+                Log.d(TAG, "Committing with message " + message);
                 Git git = new Git(this.repository);
                 GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
@@ -705,11 +678,11 @@ public class PasswordStore extends AppCompatActivity {
                     startActivityForResult(intent, GitActivity.REQUEST_CLONE);
                     break;
                 case REQUEST_CODE_SELECT_FOLDER:
-                    Log.d("Moving", "Moving passwords to " + data.getStringExtra("SELECTED_FOLDER_PATH"));
-                    Log.d("Moving", TextUtils.join(", ", data.getStringArrayListExtra("Files")));
+                    Log.d(TAG, "Moving passwords to " + data.getStringExtra("SELECTED_FOLDER_PATH"));
+                    Log.d(TAG, TextUtils.join(", ", data.getStringArrayListExtra("Files")));
                     File target = new File(data.getStringExtra("SELECTED_FOLDER_PATH"));
                     if (!target.isDirectory()) {
-                        Log.e("Moving", "Tried moving passwords to a non-existing folder.");
+                        Log.e(TAG, "Tried moving passwords to a non-existing folder.");
                         break;
                     }
 
@@ -721,7 +694,7 @@ public class PasswordStore extends AppCompatActivity {
                     for (String fileString : data.getStringArrayListExtra("Files")) {
                         File source = new File(fileString);
                         if (!source.exists()) {
-                            Log.e("Moving", "Tried moving something that appears non-existent.");
+                            Log.e(TAG, "Tried moving something that appears non-existent.");
                             continue;
                         }
 
@@ -736,12 +709,11 @@ public class PasswordStore extends AppCompatActivity {
                                 repositoryPath, basename);
 
                         if (destinationFile.exists()) {
-                            Log.e("Moving", "Trying to move a file that already exists.");
+                            Log.e(TAG, "Trying to move a file that already exists.");
                             // TODO: Add option to cancel overwrite. Will be easier once this is an async task.
-                            // TODO: Replace with resource strings
                             new AlertDialog.Builder(this)
-                                    .setTitle("Password already exists!")
-                                    .setMessage(String.format("This will overwrite %1$s with %2$s.",
+                                    .setTitle(getResources().getString(R.string.password_exists_title))
+                                    .setMessage(getResources().getString(R.string.password_exists_message,
                                             destinationLongName, sourceLongName))
                                     .setPositiveButton("Okay", null)
                                     .show();
@@ -749,7 +721,7 @@ public class PasswordStore extends AppCompatActivity {
 
                         if (!source.renameTo(destinationFile)) {
                             // TODO this should show a warning to the user
-                            Log.e("Moving", "Something went wrong while moving.");
+                            Log.e(TAG, "Something went wrong while moving.");
                         } else {
                             commitChange(this.getResources()
                                     .getString(R.string.git_commit_move_text,
@@ -772,70 +744,63 @@ public class PasswordStore extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(this.getResources().getString(R.string.location_dialog_title))
                 .setMessage(this.getResources().getString(R.string.location_dialog_text))
-                .setPositiveButton(this.getResources().getString(R.string.location_hidden), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", false).apply();
+                .setPositiveButton(this.getResources().getString(R.string.location_hidden), (dialog, whichButton) -> {
+                    settings.edit().putBoolean("git_external", false).apply();
 
-                        switch (operation) {
-                            case NEW_REPO_BUTTON:
-                                initializeRepositoryInfo();
-                                break;
-                            case CLONE_REPO_BUTTON:
-                                PasswordRepository.initialize(PasswordStore.this);
+                    switch (operation) {
+                        case NEW_REPO_BUTTON:
+                            initializeRepositoryInfo();
+                            break;
+                        case CLONE_REPO_BUTTON:
+                            PasswordRepository.initialize(PasswordStore.this);
 
-                                Intent intent = new Intent(activity, GitActivity.class);
-                                intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                break;
-                        }
+                            Intent intent = new Intent(activity, GitActivity.class);
+                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                            break;
                     }
                 })
-                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        settings.edit().putBoolean("git_external", true).apply();
+                .setNegativeButton(this.getResources().getString(R.string.location_sdcard), (dialog, whichButton) -> {
+                    settings.edit().putBoolean("git_external", true).apply();
 
-                        if (settings.getString("git_external_repo", null) == null) {
-                            Intent intent = new Intent(activity, UserPreference.class);
-                            intent.putExtra("operation", "git_external");
-                            startActivityForResult(intent, operation);
-                        } else {
-                            new AlertDialog.Builder(activity).
-                                    setTitle("Directory already selected").
-                                    setMessage("Do you want to use \"" + settings.getString("git_external_repo", null) + "\"?").
-                                    setPositiveButton("Use", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            switch (operation) {
-                                                case NEW_REPO_BUTTON:
-                                                    initializeRepositoryInfo();
-                                                    break;
-                                                case CLONE_REPO_BUTTON:
-                                                    PasswordRepository.initialize(PasswordStore.this);
+                    String externalRepo = settings.getString("git_external_repo", null);
 
-                                                    Intent intent = new Intent(activity, GitActivity.class);
-                                                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
-                                                    startActivityForResult(intent, GitActivity.REQUEST_CLONE);
-                                                    break;
-                                            }
-                                        }
-                                    }).
-                                    setNegativeButton("Change", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(activity, UserPreference.class);
-                                            intent.putExtra("operation", "git_external");
-                                            startActivityForResult(intent, operation);
-                                        }
-                                    }).show();
-                        }
+                    if (externalRepo == null) {
+                        Intent intent = new Intent(activity, UserPreference.class);
+                        intent.putExtra("operation", "git_external");
+                        startActivityForResult(intent, operation);
+                    } else {
+                        new AlertDialog.Builder(activity)
+                                .setTitle(getResources().getString(R.string.directory_selected_title))
+                                .setMessage(getResources().getString(R.string.directory_selected_message, externalRepo))
+                                .setPositiveButton(getResources().getString(R.string.use), (dialog1, which) -> {
+                                    switch (operation) {
+                                        case NEW_REPO_BUTTON:
+                                            initializeRepositoryInfo();
+                                            break;
+                                        case CLONE_REPO_BUTTON:
+                                            PasswordRepository.initialize(PasswordStore.this);
+
+                                            Intent intent = new Intent(activity, GitActivity.class);
+                                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE);
+                                            startActivityForResult(intent, GitActivity.REQUEST_CLONE);
+                                            break;
+                                    }
+                                })
+                                .setNegativeButton(getResources().getString(R.string.change), (dialog12, which) -> {
+                                    Intent intent = new Intent(activity, UserPreference.class);
+                                    intent.putExtra("operation", "git_external");
+                                    startActivityForResult(intent, operation);
+                                }).show();
                     }
                 })
                 .show();
     }
 
     public void matchPasswordWithApp(PasswordItem item) {
-        String path = item.getFile().getAbsolutePath();
-        path = path.replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "").replace(".gpg", "");
+        String path = item.getFile().getAbsolutePath()
+                .replace(PasswordRepository.getRepositoryDirectory(getApplicationContext()) + "/", "")
+                .replace(".gpg", "");
         Intent data = new Intent();
         data.putExtra("path", path);
         setResult(RESULT_OK, data);

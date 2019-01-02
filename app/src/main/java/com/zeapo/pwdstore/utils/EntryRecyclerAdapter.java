@@ -3,15 +3,14 @@ package com.zeapo.pwdstore.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import com.zeapo.pwdstore.R;
 
 import java.util.ArrayList;
@@ -19,9 +18,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder> {
+    final Set<Integer> selectedItems = new TreeSet<>();
     private final Activity activity;
     private final ArrayList<PasswordItem> values;
-    final Set<Integer> selectedItems = new TreeSet<>();
 
     EntryRecyclerAdapter(Activity activity, ArrayList<PasswordItem> values) {
         this.activity = activity;
@@ -85,18 +84,13 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
 
     @NonNull
     View.OnLongClickListener getOnLongClickListener(ViewHolder holder, PasswordItem pass) {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return false;
-            }
-        };
+        return v -> false;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final PasswordItem pass = getValues().get(position);
         holder.name.setText(pass.toString());
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
@@ -127,6 +121,17 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
     @NonNull
     protected abstract View.OnClickListener getOnClickListener(ViewHolder holder, PasswordItem pass);
 
+    // Create new views (invoked by the layout manager)
+    @Override
+    @NonNull
+    public PasswordRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                                                 int viewType) {
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.password_row_layout, parent, false);
+        return new ViewHolder(v);
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -140,19 +145,9 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         ViewHolder(View v) {
             super(v);
             view = v;
-            name = (TextView) view.findViewById(R.id.label);
-            type = (TextView) view.findViewById(R.id.type);
-            typeImage = (ImageView) view.findViewById(R.id.type_image);
+            name = view.findViewById(R.id.label);
+            type = view.findViewById(R.id.type);
+            typeImage = view.findViewById(R.id.type_image);
         }
-    }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public PasswordRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                 int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.password_row_layout, parent, false);
-        return new ViewHolder(v);
     }
 }

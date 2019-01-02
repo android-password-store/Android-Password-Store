@@ -11,14 +11,13 @@ import java.io.UnsupportedEncodingException;
 public class PasswordEntry {
 
     private static final String[] USERNAME_FIELDS = new String[]{"login", "username"};
-
-    private String extraContent;
     private final String password;
     private final String username;
     private final String totpSecret;
     private final String hotpSecret;
     private final Long hotpCounter;
     private final String content;
+    private String extraContent;
     private boolean isIncremented = false;
 
     public PasswordEntry(final ByteArrayOutputStream os) throws UnsupportedEncodingException {
@@ -34,7 +33,7 @@ public class PasswordEntry {
         hotpCounter = findHotpCounter(content);
         extraContent = findExtraContent(passContent);
         username = findUsername();
-     }
+    }
 
     public String getPassword() {
         return password;
@@ -76,7 +75,9 @@ public class PasswordEntry {
         return hotpSecret != null && hotpCounter != null;
     }
 
-    public boolean hotpIsIncremented() { return isIncremented; }
+    public boolean hotpIsIncremented() {
+        return isIncremented;
+    }
 
     public void incrementHotp() {
         for (String line : content.split("\n")) {
@@ -126,7 +127,7 @@ public class PasswordEntry {
         return null;
     }
 
-    private String findExtraContent(String [] passContent) {
+    private String findExtraContent(String[] passContent) {
         String extraContent = passContent.length > 1 ? passContent[1] : "";
         // if there is a HOTP URI, we must return the extra content with the counter incremented
         if (hasHotp()) {

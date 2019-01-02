@@ -1,17 +1,15 @@
 package com.zeapo.pwdstore.utils;
 
 import android.util.Log;
-
 import org.apache.commons.codec.binary.Base32;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 public class Otp {
     public static final int TIME_WINDOW = 30;
@@ -27,7 +25,7 @@ public class Otp {
     public static String calculateCode(String secret, long counter) {
         SecretKeySpec signingKey = new SecretKeySpec(BASE_32.decode(secret), ALGORITHM);
 
-        Mac mac = null;
+        Mac mac;
         try {
             mac = Mac.getInstance(ALGORITHM);
             mac.init(signingKey);

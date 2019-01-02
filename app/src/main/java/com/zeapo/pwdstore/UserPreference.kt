@@ -15,16 +15,16 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.PreferenceManager
 import android.provider.Settings
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.nononsenseapps.filepicker.FilePickerActivity
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
@@ -36,8 +36,9 @@ import org.openintents.openpgp.util.OpenPgpUtils
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.HashSet
+import java.util.ArrayList
+import java.util.Date
+import java.util.Locale
 
 class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
@@ -75,17 +76,19 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
-            findPreference("ssh_key_clear_passphrase").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
-                it.isEnabled = false
-                true
-            }
+            findPreference("ssh_key_clear_passphrase").onPreferenceClickListener =
+                Preference.OnPreferenceClickListener {
+                    sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
+                    it.isEnabled = false
+                    true
+                }
 
-            findPreference("hotp_remember_clear_choice").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
-                it.isEnabled = false
-                true
-            }
+            findPreference("hotp_remember_clear_choice").onPreferenceClickListener =
+                Preference.OnPreferenceClickListener {
+                    sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
+                    it.isEnabled = false
+                    true
+                }
 
             findPreference("git_server_info").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
@@ -104,28 +107,30 @@ class UserPreference : AppCompatActivity() {
             findPreference("git_delete_repo").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
                 AlertDialog.Builder(callingActivity)
-                        .setTitle(R.string.pref_dialog_delete_title)
-                        .setMessage("${resources.getString(R.string.dialog_delete_msg)} \n $repoDir")
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
-                            try {
-                                FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
-                                PasswordRepository.closeRepository()
-                            } catch (e: Exception) {
-                                //TODO Handle the diffent cases of exceptions
-                            }
+                    .setTitle(R.string.pref_dialog_delete_title)
+                    .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
+                        try {
+                            FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
+                            PasswordRepository.closeRepository()
+                        } catch (e: Exception) {
+                            //TODO Handle the diffent cases of exceptions
+                        }
 
-                            sharedPreferences.edit().putBoolean("repository_initialized", false).apply()
-                            dialogInterface.cancel()
-                            callingActivity.finish()
-                        }.setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ -> run { dialogInterface.cancel() } }
-                        .show()
+                        sharedPreferences.edit().putBoolean("repository_initialized", false).apply()
+                        dialogInterface.cancel()
+                        callingActivity.finish()
+                    }
+                    .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ -> run { dialogInterface.cancel() } }
+                    .show()
 
                 true
             }
 
             val externalRepo = findPreference("pref_select_external")
-            externalRepo.summary = sharedPreferences.getString("git_external_repo", callingActivity.getString(R.string.no_repo_selected))
+            externalRepo.summary =
+                sharedPreferences.getString("git_external_repo", callingActivity.getString(R.string.no_repo_selected))
             externalRepo.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 callingActivity.selectExternalGitRepository()
                 true
@@ -148,10 +153,14 @@ class UserPreference : AppCompatActivity() {
             }
 
             findPreference("autofill_enable").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                AlertDialog.Builder(callingActivity).setTitle(R.string.pref_autofill_enable_title).setView(R.layout.autofill_instructions).setPositiveButton(R.string.dialog_ok) { _, _ ->
+                AlertDialog.Builder(callingActivity).setTitle(R.string.pref_autofill_enable_title)
+                    .setView(R.layout.autofill_instructions).setPositiveButton(R.string.dialog_ok) { _, _ ->
                     val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                     startActivity(intent)
-                }.setNegativeButton(R.string.dialog_cancel, null).setOnDismissListener { (findPreference("autofill_enable") as CheckBoxPreference).isChecked = (activity as UserPreference).isServiceEnabled }.show()
+                }.setNegativeButton(R.string.dialog_cancel, null).setOnDismissListener {
+                    (findPreference("autofill_enable") as CheckBoxPreference).isChecked =
+                        (activity as UserPreference).isServiceEnabled
+                }.show()
                 true
             }
 
@@ -174,26 +183,36 @@ class UserPreference : AppCompatActivity() {
         override fun onStart() {
             super.onStart()
             val sharedPreferences = preferenceManager.sharedPreferences
-            findPreference("pref_select_external").summary = preferenceManager.sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
+            findPreference("pref_select_external").summary =
+                preferenceManager.sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             findPreference("ssh_see_key").isEnabled = sharedPreferences.getBoolean("use_generated_key", false)
             findPreference("git_delete_repo").isEnabled = !sharedPreferences.getBoolean("git_external", false)
-            findPreference("ssh_key_clear_passphrase").isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty() ?: false
-            findPreference("hotp_remember_clear_choice").isEnabled = sharedPreferences.getBoolean("hotp_remember_check", false)
+            findPreference("ssh_key_clear_passphrase").isEnabled = sharedPreferences.getString(
+                "ssh_key_passphrase",
+                null
+            )?.isNotEmpty() ?: false
+            findPreference("hotp_remember_clear_choice").isEnabled =
+                sharedPreferences.getBoolean("hotp_remember_check", false)
             findPreference("clear_after_copy").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             findPreference("clear_clipboard_20x").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val keyPref = findPreference("openpgp_key_id_pref")
-            val selectedKeys: Array<String> = ArrayList<String>(sharedPreferences.getStringSet("openpgp_key_ids_set", HashSet<String>())).toTypedArray()
+            val selectedKeys: Array<String> = ArrayList<String>(
+                sharedPreferences.getStringSet(
+                    "openpgp_key_ids_set",
+                    HashSet<String>()
+                )
+            ).toTypedArray()
             if (selectedKeys.isEmpty()) {
                 keyPref.summary = this.resources.getString(R.string.pref_no_key_selected)
             } else {
-                keyPref.summary = selectedKeys.joinToString(separator = ";") {
-                    s ->
+                keyPref.summary = selectedKeys.joinToString(separator = ";") { s ->
                     OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
                 }
             }
 
             // see if the autofill service is enabled and check the preference accordingly
-            (findPreference("autofill_enable") as CheckBoxPreference).isChecked = (activity as UserPreference).isServiceEnabled
+            (findPreference("autofill_enable") as CheckBoxPreference).isChecked =
+                (activity as UserPreference).isServiceEnabled
         }
     }
 
@@ -215,24 +234,23 @@ class UserPreference : AppCompatActivity() {
     fun selectExternalGitRepository() {
         val activity = this
         AlertDialog.Builder(this)
-                .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
-                .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
-                .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                    // This always works
-                    val i = Intent(activity.applicationContext, FilePickerActivity::class.java)
-                    // This works if you defined the intent filter
-                    // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+            .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
+            .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
+            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                // This always works
+                val i = Intent(activity.applicationContext, FilePickerActivity::class.java)
+                // This works if you defined the intent filter
+                // Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 
-                    // Set these depending on your use case. These are the defaults.
-                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
-                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
-                    i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR)
+                // Set these depending on your use case. These are the defaults.
+                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
+                i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
+                i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR)
 
-                    i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().path)
+                i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().path)
 
-                    startActivityForResult(i, SELECT_GIT_DIRECTORY)
-                }.setNegativeButton(R.string.dialog_cancel, null).show()
-
+                startActivityForResult(i, SELECT_GIT_DIRECTORY)
+            }.setNegativeButton(R.string.dialog_cancel, null).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -254,9 +272,9 @@ class UserPreference : AppCompatActivity() {
      * Opens a file explorer to import the private key
      */
     fun getSshKeyWithPermissions(useDefaultPicker: Boolean) = runWithPermissions(
-            requestedPermission = Manifest.permission.READ_EXTERNAL_STORAGE,
-            requestCode = REQUEST_EXTERNAL_STORAGE_SSH_KEY,
-            reason = "We need access to the sd-card to import the ssh-key"
+        requestedPermission = Manifest.permission.READ_EXTERNAL_STORAGE,
+        requestCode = REQUEST_EXTERNAL_STORAGE_SSH_KEY,
+        reason = "We need access to the sd-card to import the ssh-key"
     ) {
         getSshKey(useDefaultPicker)
     }
@@ -294,9 +312,9 @@ class UserPreference : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, requestedPermission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermission)) {
                 val snack = Snackbar.make(prefsFragment.view, reason, Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.dialog_ok) {
-                            ActivityCompat.requestPermissions(this, arrayOf(requestedPermission), requestCode)
-                        }
+                    .setAction(R.string.dialog_ok) {
+                        ActivityCompat.requestPermissions(this, arrayOf(requestedPermission), requestCode)
+                    }
                 snack.show()
                 val view = snack.view
                 val tv = view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
@@ -309,16 +327,15 @@ class UserPreference : AppCompatActivity() {
         } else {
             body()
         }
-
     }
 
     /**
      * Exports the passwords after requesting permissions
      */
     fun exportPasswordsWithPermissions() = runWithPermissions(
-            requestedPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            requestCode = REQUEST_EXTERNAL_STORAGE_SSH_KEY,
-            reason = "We need access to the sd-card to export the passwords"
+        requestedPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        requestCode = REQUEST_EXTERNAL_STORAGE_SSH_KEY,
+        reason = "We need access to the sd-card to export the passwords"
     ) {
         exportPasswords()
     }
@@ -367,15 +384,16 @@ class UserPreference : AppCompatActivity() {
     private val isServiceEnabled: Boolean
         get() {
             val am = this
-                    .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+                .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             val runningServices = am
-                    .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices.any { "com.zeapo.pwdstore/.autofill.AutofillService" == it.id }
         }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int,
-                                  data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int, resultCode: Int,
+        data: Intent?
+    ) {
         if (resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 setResult(Activity.RESULT_CANCELED)
@@ -388,7 +406,11 @@ class UserPreference : AppCompatActivity() {
                         val uri: Uri = data.data ?: throw IOException("Unable to open file")
 
                         copySshKey(uri)
-                        Toast.makeText(this, this.resources.getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this,
+                            this.resources.getString(R.string.ssh_key_success_dialog_title),
+                            Toast.LENGTH_LONG
+                        ).show()
                         val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
                         prefs.edit().putBoolean("use_generated_key", false).apply()
@@ -400,11 +422,13 @@ class UserPreference : AppCompatActivity() {
 
                         finish()
                     } catch (e: IOException) {
-                        AlertDialog.Builder(this).setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title)).setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message).setPositiveButton(this.resources.getString(R.string.dialog_ok)) { _, _ ->
-                            // pass
-                        }.show()
+                        AlertDialog.Builder(this)
+                            .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
+                            .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                            .setPositiveButton(this.resources.getString(R.string.dialog_ok)) { _, _ ->
+                                // pass
+                            }.show()
                     }
-
                 }
                 EDIT_GIT_INFO -> {
 
@@ -415,21 +439,23 @@ class UserPreference : AppCompatActivity() {
                     if (uri?.path == Environment.getExternalStorageDirectory().path) {
                         // the user wants to use the root of the sdcard as a store...
                         AlertDialog.Builder(this)
-                                .setTitle("SD-Card root selected")
-                                .setMessage("You have selected the root of your sdcard for the store. " +
-                                        "This is extremely dangerous and you will lose your data " +
-                                        "as its content will, eventually, be deleted")
-                                .setPositiveButton("Remove everything") { _, _ ->
-                                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                                            .edit()
-                                            .putString("git_external_repo", uri?.path)
-                                            .apply()
-                                }.setNegativeButton(R.string.dialog_cancel, null).show()
+                            .setTitle("SD-Card root selected")
+                            .setMessage(
+                                "You have selected the root of your sdcard for the store. " +
+                                    "This is extremely dangerous and you will lose your data " +
+                                    "as its content will, eventually, be deleted"
+                            )
+                            .setPositiveButton("Remove everything") { _, _ ->
+                                PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                                    .edit()
+                                    .putString("git_external_repo", uri?.path)
+                                    .apply()
+                            }.setNegativeButton(R.string.dialog_cancel, null).show()
                     } else {
                         PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                                .edit()
-                                .putString("git_external_repo", uri?.path)
-                                .apply()
+                            .edit()
+                            .putString("git_external_repo", uri?.path)
+                            .apply()
                     }
                 }
                 EXPORT_PASSWORDS -> {
@@ -445,7 +471,6 @@ class UserPreference : AppCompatActivity() {
                         } catch (e: IOException) {
                             Log.d("PWD_EXPORT", "Exception happened : " + e.message)
                         }
-
                     }
                 }
                 else -> {
