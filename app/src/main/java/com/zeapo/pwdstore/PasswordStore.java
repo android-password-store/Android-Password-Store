@@ -40,7 +40,6 @@ import com.zeapo.pwdstore.crypto.PgpActivity;
 import com.zeapo.pwdstore.git.GitActivity;
 import com.zeapo.pwdstore.git.GitAsyncTask;
 import com.zeapo.pwdstore.git.GitOperation;
-import com.zeapo.pwdstore.pwgen.PRNGFixes;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordRepository;
@@ -116,7 +115,6 @@ public class PasswordStore extends AppCompatActivity {
             shortcutManager = getSystemService(ShortcutManager.class);
         }
         activity = this;
-        PRNGFixes.INSTANCE.apply();
 
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
