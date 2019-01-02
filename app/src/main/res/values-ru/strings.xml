@@ -2,7 +2,6 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">Настройки</string>
     <string name="dialog_delete_title">Директория уже существует</string>
@@ -13,7 +12,6 @@
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Пожалуйста, клонируйте или создайте новый репозиторий перед тем, как добавлять пароль или выполнять синхронизацию.</string>
-    <string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Вы должны выбрать PGP ключ перед инициализацией хранилища</string>
     <string name="delete_dialog_text">Вы уверены что хотите удалить пароль /"</string>
     <string name="move">Переместить</string>

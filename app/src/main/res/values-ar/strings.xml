@@ -2,14 +2,12 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">الإعدادات</string>
     <string name="dialog_delete_title">إنّ المجلد موجود</string>
     <string name="dialog_delete">حذف المجلد</string>
     <string name="dialog_do_not_delete">إلغاء</string>
     <string name="title_activity_git_clone">معلومات حول المستودع</string>
-    <string name="store_git">/store/.git</string>
     <string name="delete_dialog_text">هل تود حقًا حذف كلمة السر "/</string>
     <string name="move">نقل</string>
     <string name="edit">تعديل</string>
@@ -38,7 +36,6 @@
     <string name="server_name">الخادوم</string>
     <string name="server_protocol">البروتوكول</string>
     <string name="server_url">عنوان الخادوم</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -65,7 +62,6 @@
     <string name="password">كلمة السر :</string>
     <string name="extra_content">بيانات إضافية :</string>
     <string name="username">إسم المستخدم :</string>
-    <string name="otp">OTP :</string>
     <string name="edit_password">تعديل كلمة السر</string>
     <string name="copy_password">نسخ كلمة السر</string>
     <string name="copy_username">نسخ إسم المستخدم</string>
@@ -147,5 +143,4 @@
     <string name="autofill_pick_and_match">إختر و طابق مع ...</string>
     <string name="autofill_paste">إلصاق</string>
     <string name="new_password_title">كلمة السر الجديدة</string>
-    <string name="crypto_password_edit_hint">p@ssw0rd!</string>
-    </resources>
+</resources>

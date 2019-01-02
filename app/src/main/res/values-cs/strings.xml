@@ -2,7 +2,6 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">Nastavení</string>
     <string name="dialog_delete_title">Adresář již existuje</string>
@@ -10,10 +9,9 @@
     <string name="dialog_delete">Smazat adresář</string>
     <string name="dialog_do_not_delete">Zrušit</string>
     <string name="title_activity_git_clone">Informace repozitáře</string>
-    
+
     <!-- Password Store -->
     <string name="creation_dialog_text">Naklonujte nebo vytvořte nový repozitář před pokusem přidat heslo nebo spustit synchronizaci.</string>
-	<string name="store_git">/store/.git</string>
     <string name="key_dialog_text">Před inicializací repozitáře je třeba vybrat "ID PGP klíče"</string>
     <string name="delete_dialog_text">Opravdu chcete smazat heslo /"</string>
 
@@ -40,7 +38,7 @@
     <string name="passphrase_dialog_title">Ověření</string>
     <string name="passphrase_dialog_text">Zadejte prosím heslo pro svůj SSH klíč. Nechte prázdné pokud je bez hesla.</string>
     <string name="password_dialog_text">Zadejte prosím heslo k tomuto repozitáři</string>
-    
+
     <!-- Clone fragment -->
     <string name="clone">Klonovat ze serveru</string>
     <string name="initialize">Použít místní adresář</string>
@@ -48,7 +46,6 @@
     <string name="server_name">Server</string>
     <string name="server_protocol">Protokol</string>
     <string name="server_url">URL serveru</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>

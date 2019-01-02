@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Password Store</string>
     <string name="action_search">搜索</string>
     <string name="action_settings">设置</string>
     <string name="autofill_apps_default">使用默认设置</string>
@@ -92,7 +91,6 @@
     <string name="server_port_hint">22</string>
     <string name="server_protocol">接口</string>
     <string name="server_url">服务器 URL</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_user">用户名</string>
     <string name="server_user_hint">git_username</string>
     <string name="set_information_dialog_text">你必须在与服务器同步前设置服务器信息</string>
@@ -113,7 +111,6 @@
     <string name="ssh_preferences_dialog_import">导入</string>
     <string name="ssh_preferences_dialog_text">请在设置中导入或生成你的SSH密钥文件</string>
     <string name="ssh_preferences_dialog_title">无SSH密钥</string>
-    <string name="store_git">/store/.git</string>
     <string name="title_activity_git_clone">Repo 信息</string>
     <string name="warn_malformed_url_port">如果使用自定义端口, 请提供绝对路径 (从根目录开始)</string>
     <string name="dialog_positive">现在就去</string>

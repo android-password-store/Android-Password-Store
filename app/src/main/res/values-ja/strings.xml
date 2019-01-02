@@ -2,7 +2,6 @@
 <resources>
 
     <!-- Activity names -->
-    <string name="app_name">Password Store</string>
 
     <string name="action_settings">設定</string>
     <string name="dialog_delete_title">ディレクトリーはすでに存在します</string>
@@ -10,10 +9,9 @@
     <string name="dialog_delete">ディレクトリーを削除</string>
     <string name="dialog_do_not_delete">キャンセル</string>
     <string name="title_activity_git_clone">リポジトリ情報</string>
-    
+
     <!-- Password Store -->
     <string name="creation_dialog_text">パスワードや同期操作を追加する前に、以下の新しいリポジトリをクローンまたは作成してください。</string>
-	<string name="store_git">/store/.git</string>
     <string name="key_dialog_text">リポジトリを初期化する前に "PGP 鍵 ID"を選択する必要があります</string>
     <string name="delete_dialog_text">パスワードを削除してもよろしいですか /"</string>
 
@@ -42,7 +40,7 @@
     <string name="passphrase_dialog_title">認証</string>
     <string name="passphrase_dialog_text">SSH 鍵のパスフレーズを入力してください。 パスフレーズがない場合は空のままにします。</string>
     <string name="password_dialog_text">このリポジトリのパスワードを入力してください</string>
-    
+
     <!-- Clone fragment -->
     <string name="clone">サーバーからクローン</string>
     <string name="initialize">ローカルディレクトリーを使用する</string>
