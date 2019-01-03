@@ -203,9 +203,8 @@ public abstract class GitOperation {
                         // authenticate using the user/pwd and then execute the command
                         setAuthentication(username, password.getText().toString()).execute();
 
-                    }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> {
-                // Do nothing.
-            }).show();
+                    })
+                    .setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> callingActivity.finish()).show();
         }
     }
 
