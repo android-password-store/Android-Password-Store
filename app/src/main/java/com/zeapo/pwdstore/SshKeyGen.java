@@ -2,8 +2,6 @@ package com.zeapo.pwdstore;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -27,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.KeyPair;
 import org.apache.commons.io.FileUtils;
@@ -47,7 +47,7 @@ public class SshKeyGen extends AppCompatActivity {
         setTitle("Generate SSH Key");
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, new SshKeyGenFragment()).commit();
         }
     }
@@ -195,7 +195,7 @@ public class SshKeyGen extends AppCompatActivity {
             if (e == null) {
                 Toast.makeText(weakReference.get(), "SSH-key generated", Toast.LENGTH_LONG).show();
                 DialogFragment df = new ShowSshKeyFragment();
-                df.show(weakReference.get().getFragmentManager(), "public_key");
+                df.show(weakReference.get().getSupportFragmentManager(), "public_key");
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(weakReference.get());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("use_generated_key", true);

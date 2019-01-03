@@ -1,6 +1,5 @@
 package com.zeapo.pwdstore.autofill;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.NavUtils;
 import androidx.core.app.TaskStackBuilder;
-import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -69,7 +68,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.autofill_preference, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -115,7 +114,7 @@ public class AutofillPreferenceActivity extends AppCompatActivity {
         args.putString("appName", appName);
         args.putBoolean("isWeb", isWeb);
         df.setArguments(args);
-        df.show(getFragmentManager(), "autofill_dialog");
+        df.show(getSupportFragmentManager(), "autofill_dialog");
     }
 
     private class populateTask extends AsyncTask<Void, Void, Void> {

@@ -15,12 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.zeapo.pwdstore.pwgen.PasswordGenerator;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -33,12 +32,12 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
     public PasswordGeneratorDialogFragment() {
     }
 
-    @NotNull
+    @NonNull
     @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Activity callingActivity = getActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(callingActivity);
         LayoutInflater inflater = callingActivity.getLayoutInflater();
         @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);
         Typeface monoTypeface = Typeface.createFromAsset(callingActivity.getAssets(), "fonts/sourcecodepro.ttf");
@@ -46,7 +45,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         builder.setView(view);
 
         SharedPreferences prefs
-                = getActivity().getApplicationContext().getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
+                = callingActivity.getApplicationContext().getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
 
         CheckBox checkBox = view.findViewById(R.id.numerals);
         checkBox.setChecked(!prefs.getBoolean("0", false));

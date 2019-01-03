@@ -1,6 +1,5 @@
 package com.zeapo.pwdstore
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -45,7 +44,7 @@ class SelectFolderActivity : AppCompatActivity() {
         val id = item.itemId
         when (id) {
             android.R.id.home -> {
-                setResult(Activity.RESULT_CANCELED)
+                setResult(AppCompatActivity.RESULT_CANCELED)
                 finish()
                 return true
             }
@@ -56,7 +55,7 @@ class SelectFolderActivity : AppCompatActivity() {
 
     private fun selectFolder() {
         intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir?.absolutePath)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(AppCompatActivity.RESULT_OK, intent)
         finish()
     }
 }

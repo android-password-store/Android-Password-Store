@@ -2,7 +2,6 @@ package com.zeapo.pwdstore
 
 import android.Manifest
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,13 +9,10 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.preference.CheckBoxPreference
-import android.preference.Preference
-import android.preference.PreferenceFragment
-import android.preference.PreferenceManager
 import android.provider.Settings
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.accessibility.AccessibilityManager
 import android.widget.TextView
 import android.widget.Toast
@@ -24,6 +20,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.nononsenseapps.filepicker.FilePickerActivity
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
@@ -43,9 +43,8 @@ import java.util.Locale
 class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
 
-    class PrefsFragment : PreferenceFragment() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
+    class PrefsFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             val callingActivity = activity as UserPreference
             val sharedPreferences = preferenceManager.sharedPreferences
 
@@ -53,58 +52,56 @@ class UserPreference : AppCompatActivity() {
 
             findPreference("app_version").summary = "Version: ${BuildConfig.VERSION_NAME}"
 
-            findPreference("openpgp_key_id_pref").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("openpgp_key_id_pref").setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, PgpActivity::class.java)
                 intent.putExtra("OPERATION", "GET_KEY_ID")
                 startActivityForResult(intent, IMPORT_PGP_KEY)
                 true
             }
 
-            findPreference("ssh_key").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("ssh_key").setOnPreferenceClickListener {
                 callingActivity.getSshKeyWithPermissions(sharedPreferences.getBoolean("use_android_file_picker", false))
                 true
             }
 
-            findPreference("ssh_keygen").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("ssh_keygen").setOnPreferenceClickListener {
                 callingActivity.makeSshKey(true)
                 true
             }
 
-            findPreference("ssh_see_key").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("ssh_see_key").setOnPreferenceClickListener {
                 val df = SshKeyGen.ShowSshKeyFragment()
                 df.show(fragmentManager, "public_key")
                 true
             }
 
-            findPreference("ssh_key_clear_passphrase").onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
+            findPreference("ssh_key_clear_passphrase").setOnPreferenceClickListener {
                     sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
                     it.isEnabled = false
                     true
                 }
 
-            findPreference("hotp_remember_clear_choice").onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
+            findPreference("hotp_remember_clear_choice").setOnPreferenceClickListener {
                     sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
                     it.isEnabled = false
                     true
                 }
 
-            findPreference("git_server_info").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("git_server_info").setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_SERVER)
                 startActivityForResult(intent, EDIT_GIT_INFO)
                 true
             }
 
-            findPreference("git_config").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("git_config").setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_GIT_CONFIG)
                 startActivityForResult(intent, EDIT_GIT_CONFIG)
                 true
             }
 
-            findPreference("git_delete_repo").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("git_delete_repo").setOnPreferenceClickListener {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
                 AlertDialog.Builder(callingActivity)
                     .setTitle(R.string.pref_dialog_delete_title)
@@ -131,7 +128,7 @@ class UserPreference : AppCompatActivity() {
             val externalRepo = findPreference("pref_select_external")
             externalRepo.summary =
                 sharedPreferences.getString("git_external_repo", callingActivity.getString(R.string.no_repo_selected))
-            externalRepo.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            externalRepo.setOnPreferenceClickListener {
                 callingActivity.selectExternalGitRepository()
                 true
             }
@@ -146,13 +143,13 @@ class UserPreference : AppCompatActivity() {
             findPreference("pref_select_external").onPreferenceChangeListener = resetRepo
             findPreference("git_external").onPreferenceChangeListener = resetRepo
 
-            findPreference("autofill_apps").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("autofill_apps").setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
             }
 
-            findPreference("autofill_enable").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("autofill_enable").setOnPreferenceClickListener {
                 AlertDialog.Builder(callingActivity).setTitle(R.string.pref_autofill_enable_title)
                     .setView(R.layout.autofill_instructions).setPositiveButton(R.string.dialog_ok) { _, _ ->
                     val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
@@ -164,7 +161,7 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
-            findPreference("export_passwords").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findPreference("export_passwords").setOnPreferenceClickListener {
                 callingActivity.exportPasswordsWithPermissions()
                 true
             }
@@ -226,7 +223,7 @@ class UserPreference : AppCompatActivity() {
         }
         prefsFragment = PrefsFragment()
 
-        fragmentManager.beginTransaction().replace(android.R.id.content, prefsFragment).commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, prefsFragment).commit()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -260,7 +257,7 @@ class UserPreference : AppCompatActivity() {
         val id = item.itemId
         when (id) {
             android.R.id.home -> {
-                setResult(Activity.RESULT_OK)
+                setResult(AppCompatActivity.RESULT_OK)
                 finish()
                 return true
             }
@@ -311,7 +308,7 @@ class UserPreference : AppCompatActivity() {
     private fun runWithPermissions(requestedPermission: String, requestCode: Int, reason: String, body: () -> Unit) {
         if (ContextCompat.checkSelfPermission(this, requestedPermission) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermission)) {
-                val snack = Snackbar.make(prefsFragment.view, reason, Snackbar.LENGTH_INDEFINITE)
+                val snack = Snackbar.make(prefsFragment.view as View, reason, Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.dialog_ok) {
                         ActivityCompat.requestPermissions(this, arrayOf(requestedPermission), requestCode)
                     }
@@ -363,7 +360,7 @@ class UserPreference : AppCompatActivity() {
         val intent = Intent(applicationContext, SshKeyGen::class.java)
         startActivity(intent)
         if (!fromPreferences) {
-            setResult(Activity.RESULT_OK)
+            setResult(AppCompatActivity.RESULT_OK)
             finish()
         }
     }
@@ -396,9 +393,9 @@ class UserPreference : AppCompatActivity() {
         requestCode: Int, resultCode: Int,
         data: Intent?
     ) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             if (data == null) {
-                setResult(Activity.RESULT_CANCELED)
+                setResult(AppCompatActivity.RESULT_CANCELED)
                 return
             }
 
@@ -420,7 +417,7 @@ class UserPreference : AppCompatActivity() {
                         //delete the public key from generation
                         val file = File(filesDir.toString() + "/.ssh_key.pub")
                         file.delete()
-                        setResult(Activity.RESULT_OK)
+                        setResult(AppCompatActivity.RESULT_OK)
 
                         finish()
                     } catch (e: IOException) {

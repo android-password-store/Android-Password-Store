@@ -1,7 +1,7 @@
 package com.zeapo.pwdstore.git;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.zeapo.pwdstore.R;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
@@ -16,7 +16,7 @@ public class PullOperation extends GitOperation {
      * @param fileDir         the git working tree directory
      * @param callingActivity the calling activity
      */
-    public PullOperation(File fileDir, Activity callingActivity) {
+    public PullOperation(File fileDir, AppCompatActivity callingActivity) {
         super(fileDir, callingActivity);
     }
 

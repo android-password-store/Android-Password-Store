@@ -1,6 +1,5 @@
 package com.zeapo.pwdstore.git;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,7 +45,7 @@ public class GitActivity extends AppCompatActivity {
     public static final int EDIT_GIT_CONFIG = 108;
     private static final String TAG = "GitAct";
     private static final String emailPattern = "^[^@]+@[^@]+$";
-    private Activity activity;
+    private AppCompatActivity activity;
     private Context context;
     private String protocol;
     private String connectionMode;
@@ -341,7 +340,7 @@ public class GitActivity extends AppCompatActivity {
         EditText server_user = findViewById(R.id.server_user);
 
         String uri = server_uri.getText().toString();
-        Pattern pattern = Pattern.compile("(.+)@([\\w\\d\\.]+):([\\d]+)*(.*)");
+        Pattern pattern = Pattern.compile("(.+)@([\\w\\d.]+):([\\d]+)*(.*)");
         Matcher matcher = pattern.matcher(uri);
         if (matcher.find()) {
             int count = matcher.groupCount();

@@ -1,9 +1,9 @@
 package com.zeapo.pwdstore.git;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 import org.eclipse.jgit.api.CommitCommand;
@@ -15,13 +15,13 @@ import org.eclipse.jgit.transport.RemoteRefUpdate;
 
 
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
-    private Activity activity;
+    private AppCompatActivity activity;
     private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
     private GitOperation operation;
 
-    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
+    public GitAsyncTask(AppCompatActivity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
         this.activity = activity;
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
@@ -102,7 +102,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
             this.operation.onSuccess();
 
             if (finishOnEnd) {
-                this.activity.setResult(Activity.RESULT_OK);
+                this.activity.setResult(AppCompatActivity.RESULT_OK);
                 this.activity.finish();
             }
 

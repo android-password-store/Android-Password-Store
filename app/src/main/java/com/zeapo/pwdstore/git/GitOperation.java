@@ -1,7 +1,6 @@
 package com.zeapo.pwdstore.git;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
@@ -33,7 +33,7 @@ public abstract class GitOperation {
     public static final int GET_SSH_KEY_FROM_CLONE = 201;
 
     protected final Repository repository;
-    final Activity callingActivity;
+    final AppCompatActivity callingActivity;
     UsernamePasswordCredentialsProvider provider;
     GitCommand command;
 
@@ -43,7 +43,7 @@ public abstract class GitOperation {
      * @param fileDir         the git working tree directory
      * @param callingActivity the calling activity
      */
-    public GitOperation(File fileDir, Activity callingActivity) {
+    public GitOperation(File fileDir, AppCompatActivity callingActivity) {
         this.repository = PasswordRepository.getRepository(fileDir);
         this.callingActivity = callingActivity;
     }
@@ -216,7 +216,7 @@ public abstract class GitOperation {
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
                 setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + errorMessage).
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
-                    callingActivity.setResult(Activity.RESULT_CANCELED);
+                    callingActivity.setResult(AppCompatActivity.RESULT_CANCELED);
                     callingActivity.finish();
                 }).show();
     }

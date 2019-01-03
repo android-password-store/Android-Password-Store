@@ -1,9 +1,9 @@
 package com.zeapo.pwdstore.autofill;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +33,7 @@ public class AutofillFragment extends DialogFragment {
     public AutofillFragment() {
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -228,7 +229,7 @@ public class AutofillFragment extends DialogFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             adapter.add(data.getStringExtra("path"));
         }
     }

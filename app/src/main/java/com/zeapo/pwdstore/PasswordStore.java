@@ -2,7 +2,6 @@ package com.zeapo.pwdstore;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -26,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
@@ -68,7 +66,7 @@ public class PasswordStore extends AppCompatActivity {
     private final static int HOME = 403;
     private final static int REQUEST_EXTERNAL_STORAGE = 50;
     private SharedPreferences settings;
-    private Activity activity;
+    private AppCompatActivity activity;
     private PasswordFragment plist;
     private ShortcutManager shortcutManager;
     private MenuItem searchItem = null;
@@ -182,7 +180,7 @@ public class PasswordStore extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
         searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -199,15 +197,15 @@ public class PasswordStore extends AppCompatActivity {
 
         // When using the support library, the setOnActionExpandListener() method is
         // static and accepts the MenuItem object as an argument
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                refreshListAdapter();
+            public boolean onMenuItemActionExpand(MenuItem item) {
                 return true;
             }
 
             @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                refreshListAdapter();
                 return true;
             }
         });
