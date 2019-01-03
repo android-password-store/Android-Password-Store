@@ -13,9 +13,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
 import com.zeapo.pwdstore.pwgen.PasswordGenerator;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -53,6 +57,9 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         checkBox = view.findViewById(R.id.uppercase);
         checkBox.setChecked(!prefs.getBoolean("A", false));
 
+        checkBox = view.findViewById(R.id.lowercase);
+        checkBox.setChecked(!prefs.getBoolean("L", false));
+
         checkBox = view.findViewById(R.id.ambiguous);
         checkBox.setChecked(!prefs.getBoolean("B", false));
 
@@ -79,12 +86,22 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         final AlertDialog ad = builder.setTitle(this.getResources().getString(R.string.pwgen_title)).create();
         ad.setOnShowListener(dialog -> {
             setPreferences();
-            passwordText.setText(PasswordGenerator.INSTANCE.generate(getActivity().getApplicationContext()).get(0));
+            try {
+                passwordText.setText(PasswordGenerator.INSTANCE.generate(getActivity().getApplicationContext()).get(0));
+            } catch (PasswordGenerator.PasswordGeneratorExeption e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                passwordText.setText("");
+            }
 
             Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
             b.setOnClickListener(v -> {
                 setPreferences();
-                passwordText.setText(PasswordGenerator.INSTANCE.generate(callingActivity.getApplicationContext()).get(0));
+                try {
+                    passwordText.setText(PasswordGenerator.INSTANCE.generate(callingActivity.getApplicationContext()).get(0));
+                } catch (PasswordGenerator.PasswordGeneratorExeption e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    passwordText.setText("");
+                }
             });
         });
         return ad;
@@ -107,6 +124,10 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         if (!((CheckBox) getDialog().findViewById(R.id.pronounceable)).isChecked()) {
             preferences.add("s");
         }
+        if (!((CheckBox) getDialog().findViewById(R.id.lowercase)).isChecked()) {
+            preferences.add("L");
+        }
+
         EditText editText = getDialog().findViewById(R.id.lengthNumber);
         try {
             int length = Integer.valueOf(editText.getText().toString());

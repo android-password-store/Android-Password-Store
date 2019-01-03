@@ -1,8 +1,11 @@
 package com.zeapo.pwdstore.pwgen
 
 import android.content.Context
+import com.zeapo.pwdstore.R
 
 import java.util.ArrayList
+
+
 
 object PasswordGenerator {
     internal const val DIGITS = 0x0001
@@ -10,6 +13,7 @@ object PasswordGenerator {
     internal const val SYMBOLS = 0x0004
     internal const val AMBIGUOUS = 0x0008
     internal const val NO_VOWELS = 0x0010
+    internal const val LOWERS = 0x0020
 
     internal const val DIGITS_STR = "0123456789"
     internal const val UPPERS_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -19,7 +23,7 @@ object PasswordGenerator {
     internal const val VOWELS_STR = "01aeiouyAEIOUY"
 
     // No a, c, n, h, H, C, 1, N
-    private const val pwOptions = "0ABsvy"
+    private const val pwOptions = "0ABsvyL"
 
     /**
      * Sets password generation preferences.
@@ -35,6 +39,7 @@ object PasswordGenerator {
      * <tr><td>s</td><td>generate completely random passwords</td></tr>
      * <tr><td>v</td><td>don't include vowels</td></tr>
      * <tr><td>y</td><td>include at least one symbol</td></tr>
+     * <tr><td>L</td><td>don't include lowercase letters</td></tr>
     </table> *
      * @param numArgv numerical options for password generation: length of
      * generated passwords followed by number of passwords to
@@ -76,17 +81,19 @@ object PasswordGenerator {
      * preferences file 'PasswordGenerator'
      * @return list of generated passwords
      */
+    @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
     fun generate(ctx: Context): ArrayList<String> {
         val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
         var phonemes = true
-        var pwgenFlags = DIGITS or UPPERS
+        var pwgenFlags = DIGITS or UPPERS or LOWERS
 
         for (option in pwOptions.toCharArray()) {
             if (prefs.getBoolean(option.toString(), false)) {
                 when (option) {
                     '0' -> pwgenFlags = pwgenFlags and DIGITS.inv()
                     'A' -> pwgenFlags = pwgenFlags and UPPERS.inv()
+                    'L' -> pwgenFlags = pwgenFlags and LOWERS.inv()
                     'B' -> pwgenFlags = pwgenFlags or AMBIGUOUS
                     's' -> phonemes = false
                     'y' -> pwgenFlags = pwgenFlags or SYMBOLS
@@ -99,15 +106,27 @@ object PasswordGenerator {
         }
 
         val length = prefs.getInt("length", 8)
-        if (length < 5) {
+        var numCategories = 0
+        var categories = pwgenFlags and AMBIGUOUS.inv()
+
+        while (categories != 0) {
+            if (categories and 1 == 1)
+                numCategories++
+            categories = categories shr 1
+        }
+        if (numCategories == 0) {
+            throw PasswordGeneratorExeption(ctx.resources.getString(R.string.pwgen_no_chars_error))
+        }
+        if (length < numCategories) {
+            throw PasswordGeneratorExeption(ctx.resources.getString(R.string.pwgen_length_too_short_error))
+        }
+        if ((pwgenFlags and UPPERS) == 0 && (pwgenFlags and LOWERS) == 0) { // Only digits and/or symbols
+            phonemes = false
+            pwgenFlags = pwgenFlags and AMBIGUOUS.inv()
+        } else if (length < 5) {
             phonemes = false
         }
-        if (length <= 2) {
-            pwgenFlags = pwgenFlags and UPPERS.inv()
-        }
-        if (length <= 1) {
-            pwgenFlags = pwgenFlags and DIGITS.inv()
-        }
+
 
         val passwords = ArrayList<String>()
         val num = prefs.getInt("num", 1)
@@ -120,5 +139,7 @@ object PasswordGenerator {
         }
         return passwords
     }
+
+    public class PasswordGeneratorExeption(string: String) : Exception(string)
 }
 

@@ -166,8 +166,11 @@
     <string name="pwgen_numerals">Números</string>
     <string name="pwgen_symbols">Símbolos</string>
     <string name="pwgen_uppercase">Mayúsculas</string>
+    <string name="pwgen_lowercase">Minúsculas</string>
     <string name="pwgen_ambiguous">Caracteres ambiguos</string>
     <string name="pwgen_pronounceable">Pronunciable</string>
+    <string name="pwgen_no_chars_error">No se han incluído caracteres</string>
+    <string name="pwgen_length_too_short_error">Longitud demasiado corta para el criterio seleccionado</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Longitud</string>

@@ -15,6 +15,7 @@ internal object RandomPasswordGenerator {
      * <tr><td>2</td><td>include at least one symbol</td></tr>
      * <tr><td>3</td><td>don't include ambiguous characters</td></tr>
      * <tr><td>4</td><td>don't include vowels</td></tr>
+     * <tr><td>5</td><td>include at least one lowercase</td></tr>
     </table> *
      * @return the generated password
      */
@@ -33,7 +34,9 @@ internal object RandomPasswordGenerator {
         if (pwFlags and PasswordGenerator.UPPERS > 0) {
             bank += PasswordGenerator.UPPERS_STR
         }
-        bank += PasswordGenerator.LOWERS_STR
+        if (pwFlags and PasswordGenerator.LOWERS > 0) {
+            bank += PasswordGenerator.LOWERS_STR
+        }
         if (pwFlags and PasswordGenerator.SYMBOLS > 0) {
             bank += PasswordGenerator.SYMBOLS_STR
         }
@@ -65,8 +68,11 @@ internal object RandomPasswordGenerator {
                 if (PasswordGenerator.SYMBOLS_STR.contains(`val`)) {
                     featureFlags = featureFlags and PasswordGenerator.SYMBOLS.inv()
                 }
+                if (PasswordGenerator.LOWERS_STR.contains(`val`)) {
+                    featureFlags = featureFlags and PasswordGenerator.LOWERS.inv()
+                }
             }
-        } while (featureFlags and (PasswordGenerator.UPPERS or PasswordGenerator.DIGITS or PasswordGenerator.SYMBOLS) > 0)
+        } while (featureFlags and (PasswordGenerator.UPPERS or PasswordGenerator.DIGITS or PasswordGenerator.SYMBOLS or PasswordGenerator.LOWERS) > 0)
         return password
     }
 }
