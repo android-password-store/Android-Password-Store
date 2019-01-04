@@ -74,7 +74,6 @@ dependencies {
     implementation("com.google.android.material:material:1.0.0")
     implementation("androidx.annotation:annotation:1.0.2")
     implementation("org.sufficientlysecure:openpgp-api:12.0")
-    implementation("com.nononsenseapps:filepicker:2.4.2")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }

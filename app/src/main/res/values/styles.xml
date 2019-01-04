@@ -14,17 +14,6 @@
         <item name="background">@color/blue_grey_700</item>
     </style>
 
-    <!-- You can also inherit from NNF_BaseTheme.Light -->
-    <style name="FilePickerTheme" parent="NNF_BaseTheme">
-        <!-- Set these to match your theme -->
-        <item name="colorPrimary">@color/blue_grey_500</item>
-        <item name="colorPrimaryDark">@color/blue_grey_700</item>
-        <item name="colorAccent">@color/teal_A700</item>
-
-        <!-- Need to set this also to style create folder dialog -->
-        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
-    </style>
-
     <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorPrimary">@color/blue_grey_500</item>
         <item name="colorPrimaryDark">@color/blue_grey_700</item>
