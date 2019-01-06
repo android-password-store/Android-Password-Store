@@ -5,6 +5,7 @@ apply plugin: 'eclipse'
 
 android {
     compileSdkVersion 28
+
     defaultConfig {
         applicationId "com.zeapo.pwdstore"
         minSdkVersion 21
@@ -14,19 +15,29 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         abortOnError true // make sure build fails with lint errors!
         disable 'MissingTranslation', 'PluralsCandidate'
     }
+
     packagingOptions {
         exclude '.readme'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+
     //
     // To sign release builds, create the file `gradle.properties` in
     // $HOME/.gradle or in your project directory with this content:
@@ -79,7 +90,4 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0-alpha4'
-}
-repositories {
-    mavenCentral()
 }
