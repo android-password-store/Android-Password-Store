@@ -91,6 +91,3 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0-alpha4'
 }
-repositories {
-    mavenCentral()
-}
