@@ -127,6 +127,14 @@
             android:defaultValue="false"
             android:key="use_android_file_picker"
             android:title="@string/prefs_use_default_file_picker" />
+
+        <EditTextPreference
+            android:defaultValue="/"
+            android:dialogTitle="@string/pref_default_password_directory_title"
+            android:inputType="textNoSuggestions"
+            android:key="default_password_directory"
+            android:summary="@string/pref_default_password_directory_summary"
+            android:title="@string/pref_default_password_directory_title" />
     </PreferenceCategory>
 
     <Preference

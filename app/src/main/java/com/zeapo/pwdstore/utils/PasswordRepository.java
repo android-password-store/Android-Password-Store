@@ -118,13 +118,15 @@ public class PasswordRepository {
         File dir = null;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
+        String defaultDirectory = settings.getString("default_password_directory", "");
+
         if (settings.getBoolean("git_external", false)) {
             String external_repo = settings.getString("git_external_repo", null);
             if (external_repo != null) {
-                dir = new File(external_repo);
+                dir = new File(external_repo + defaultDirectory);
             }
         } else {
-            dir = new File(context.getFilesDir() + "/store");
+            dir = new File(context.getFilesDir() + "/store" + defaultDirectory);
         }
 
         return dir;
