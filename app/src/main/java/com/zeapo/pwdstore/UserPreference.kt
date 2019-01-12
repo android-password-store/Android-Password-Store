@@ -375,7 +375,9 @@ class UserPreference : AppCompatActivity() {
                 .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             val runningServices = am
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
-            return runningServices.any { "com.zeapo.pwdstore/.autofill.AutofillService" == it.id }
+            return runningServices
+                    .map { it.id.substringBefore("/") }
+                    .any { it == BuildConfig.APPLICATION_ID }
         }
 
     override fun onActivityResult(
