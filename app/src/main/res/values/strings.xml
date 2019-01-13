@@ -38,6 +38,7 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP Provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
+    <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
     <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
@@ -136,7 +137,7 @@
     <string name="pref_no_key_selected">No key selected</string>
     <string name="pref_general_title">General</string>
     <string name="pref_password_title">Password Show Time</string>
-    <string name="pref_password_dialog_title">Set the time you want the password to be in clipboard</string>
+    <string name="pref_password_dialog_title">Set the time you want the password to be in clipboard. 0 means forever.</string>
     <string name="pref_copy_title">Automatically Copy Password</string>
     <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
     <string name="ssh_key_success_dialog_title">SSH-key imported</string>
