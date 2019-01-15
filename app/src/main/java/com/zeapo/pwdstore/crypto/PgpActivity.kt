@@ -281,7 +281,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 crypto_username_show_label.visibility = View.VISIBLE
                                 crypto_copy_username.visibility = View.VISIBLE
 
-                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username) }
+                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username!!) }
                                 crypto_username_show.typeface = monoTypeface
                                 crypto_username_show.text = entry.username
                             } else {
@@ -494,8 +494,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun calculateHotp(entry: PasswordEntry) {
-        copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1))
-        crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter + 1)
+        copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter!! + 1))
+        crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter!! + 1)
         crypto_extra_show.text = entry.extraContent
     }
 
