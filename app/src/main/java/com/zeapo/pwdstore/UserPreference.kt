@@ -168,6 +168,16 @@ class UserPreference : AppCompatActivity() {
                 callingActivity.exportPasswordsWithPermissions()
                 true
             }
+
+            findPreference("general_show_time").onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any? ->
+                try {
+                    findPreference("clear_after_copy").isEnabled = newValue.toString().toInt() != 0
+                    findPreference("clear_clipboard_20x").isEnabled = newValue.toString().toInt() != 0
+                    true
+                } catch (e: NumberFormatException) {
+                    false
+                }
+            }
         }
 
         override fun onStart() {
@@ -183,6 +193,8 @@ class UserPreference : AppCompatActivity() {
             )?.isNotEmpty() ?: false
             findPreference("hotp_remember_clear_choice").isEnabled =
                 sharedPreferences.getBoolean("hotp_remember_check", false)
+            findPreference("clear_after_copy").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
+            findPreference("clear_clipboard_20x").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val keyPref = findPreference("openpgp_key_id_pref")
             val selectedKeys: Array<String> = ArrayList<String>(
                 sharedPreferences.getStringSet(
@@ -375,7 +387,9 @@ class UserPreference : AppCompatActivity() {
                 .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             val runningServices = am
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
-            return runningServices.any { "com.zeapo.pwdstore/.autofill.AutofillService" == it.id }
+            return runningServices
+                    .map { it.id.substringBefore("/") }
+                    .any { it == BuildConfig.APPLICATION_ID }
         }
 
     override fun onActivityResult(
