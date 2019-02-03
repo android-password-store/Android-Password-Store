@@ -62,10 +62,10 @@
                     android:text="@string/pwgen_uppercase" />
 
                 <CheckBox
-                    android:id="@+id/ambiguous"
+                    android:id="@+id/lowercase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pwgen_ambiguous" />
+                    android:text="@string/pwgen_lowercase" />
 
             </LinearLayout>
 
@@ -96,6 +96,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/pwgen_pronounceable" />
+
+                <CheckBox
+                    android:id="@+id/ambiguous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pwgen_ambiguous" />
 
             </LinearLayout>
         </LinearLayout>

@@ -65,6 +65,7 @@ internal object Phonemes {
      * <tr><td>1</td><td>include at least one uppercase letter</td></tr>
      * <tr><td>2</td><td>include at least one symbol</td></tr>
      * <tr><td>3</td><td>don't include ambiguous characters</td></tr>
+     * <tr><td>5</td><td>include at least one lowercase letter</td></tr>
     </table> *
      * @return the generated password
      */
@@ -119,7 +120,8 @@ internal object Phonemes {
 
                 // Handle UPPERS
                 if (pwFlags and PasswordGenerator.UPPERS > 0) {
-                    if ((first || flags and CONSONANT > 0) && RandomNumberGenerator.number(10) < 2) {
+                    if ((pwFlags and PasswordGenerator.LOWERS == 0) ||
+                            (first || flags and CONSONANT > 0) && RandomNumberGenerator.number(10) < 2) {
                         val index = password.length - length
                         password = password.substring(0, index) + str.toUpperCase()
                         featureFlags = featureFlags and PasswordGenerator.UPPERS.inv()
@@ -131,6 +133,17 @@ internal object Phonemes {
                     for (ambiguous in PasswordGenerator.AMBIGUOUS_STR.toCharArray()) {
                         if (password.contains(ambiguous.toString())) {
                             password = password.substring(0, curSize)
+
+                            // Still have upper letters
+                            if ((pwFlags and PasswordGenerator.UPPERS) > 0) {
+                                featureFlags = featureFlags or PasswordGenerator.UPPERS
+                                for (upper in PasswordGenerator.UPPERS_STR.toCharArray()) {
+                                    if (password.contains(upper.toString())) {
+                                        featureFlags = featureFlags and PasswordGenerator.UPPERS.inv()
+                                        break
+                                    }
+                                }
+                            }
                             break
                         }
                     }
