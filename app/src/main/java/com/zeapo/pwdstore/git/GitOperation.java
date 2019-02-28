@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
@@ -22,6 +24,7 @@ import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory;
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -76,7 +79,7 @@ public abstract class GitOperation {
         this.provider = null;
         return this;
     }
-    
+
     /**
      * Sets the authentication using OpenKeystore scheme
      *
@@ -202,7 +205,7 @@ public abstract class GitOperation {
                             }).show();
                 }
             }
-        } else if(connectionMode.equalsIgnoreCase("OpenKeychain")) {
+        } else if (connectionMode.equalsIgnoreCase("OpenKeychain")) {
             setAuthentication(username, identity).execute();
         } else {
             final EditText password = new EditText(callingActivity);

@@ -17,12 +17,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.RebaseCommand;
@@ -56,7 +59,7 @@ public class GitActivity extends AppCompatActivity {
     private SharedPreferences settings;
     private SshApiSessionFactory.IdentityBuilder identityBuilder;
     private SshApiSessionFactory.ApiIdentity identity;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +125,7 @@ public class GitActivity extends AppCompatActivity {
                                     // however, if we have some saved that, that's more important!
                                     if (connectionMode.equalsIgnoreCase("ssh-key")) {
                                         connection_mode_spinner.setSelection(0);
-                                    } else if(connectionMode.equalsIgnoreCase("OpenKeychain")) {
+                                    } else if (connectionMode.equalsIgnoreCase("OpenKeychain")) {
                                         connection_mode_spinner.setSelection(2);
                                     } else {
                                         connection_mode_spinner.setSelection(1);
@@ -374,19 +377,17 @@ public class GitActivity extends AppCompatActivity {
         super.onResume();
         updateURI();
     }
-    
+
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         // Do not leak the service connection
-        if(identityBuilder != null)
-        {
+        if (identityBuilder != null) {
             identityBuilder.close();
             identityBuilder = null;
         }
         super.onDestroy();
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -636,7 +637,7 @@ public class GitActivity extends AppCompatActivity {
             launchGitOperation(operation);
         }
     }
-    
+
     /**
      * Attempt to launch the requested GIT operation. Depending on the configured auth, it may not
      * be possible to launch the operation immediately. In that case, this function may launch an
@@ -646,102 +647,96 @@ public class GitActivity extends AppCompatActivity {
      *
      * @param operation The type of GIT operation to launch
      */
-    protected void launchGitOperation(int operation)
-    {
+    protected void launchGitOperation(int operation) {
         GitOperation op;
-    
-        try
-        {
-        
+
+        try {
+
             // Before launching the operation with OpenKeychain auth, we need to issue several requests
             // to the OpenKeychain API. IdentityBuild will take care of launching the relevant intents,
             // we just need to keep calling it until it returns a completed ApiIdentity.
-            if(connectionMode.equalsIgnoreCase("OpenKeychain") && identity == null) {
+            if (connectionMode.equalsIgnoreCase("OpenKeychain") && identity == null) {
                 // Lazy initialization of the IdentityBuilder
-                if(identityBuilder == null) {
+                if (identityBuilder == null) {
                     identityBuilder = new SshApiSessionFactory.IdentityBuilder(this);
                 }
-            
+
                 // Try to get an ApiIdentity and bail if one is not ready yet. The builder will ensure
                 // that onActivityResult is called with operation again, which will re-invoke us here
                 identity = identityBuilder.tryBuild(operation);
-                if(identity == null)
+                if (identity == null)
                     return;
             }
-        
-            switch(operation) {
+
+            switch (operation) {
                 case REQUEST_CLONE:
                     op = new CloneOperation(localDir, activity).setCommand(hostname);
                     break;
-            
+
                 case REQUEST_PULL:
                     op = new PullOperation(localDir, activity).setCommand();
                     break;
-            
+
                 case REQUEST_PUSH:
                     op = new PushOperation(localDir, activity).setCommand();
                     break;
-                    
+
                 case REQUEST_SYNC:
                     op = new SyncOperation(localDir, activity).setCommands();
                     break;
-            
+
                 case GitOperation.GET_SSH_KEY_FROM_CLONE:
                     op = new CloneOperation(localDir, activity).setCommand(hostname);
                     break;
-                    
+
                 case SshApiSessionFactory.POST_SIGNATURE:
                     return;
-                    
+
                 default:
                     Log.e(TAG, "Operation not recognized : " + operation);
                     setResult(RESULT_CANCELED);
                     finish();
                     return;
             }
-        
+
             op.executeAfterAuthentication(connectionMode,
-                                          settings.getString("git_remote_username", "git"),
-                                          new File(getFilesDir() + "/.ssh_key"),
-                                          identity);
-        } catch(Exception e) {
+                    settings.getString("git_remote_username", "git"),
+                    new File(getFilesDir() + "/.ssh_key"),
+                    identity);
+        } catch (Exception e) {
             e.printStackTrace();
             new AlertDialog.Builder(this).setMessage(e.getMessage()).show();
         }
     }
-    
+
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-        
+
         // In addition to the pre-operation-launch series of intents for OpenKeychain auth
         // that will pass through here and back to launchGitOperation, there is one
         // synchronous operation that happens /after/ the operation has been launched in the
         // background thread - the actual signing of the SSH challenge. We pass through the
         // completed signature to the ApiIdentity, which will be blocked in the other thread
         // waiting for it.
-        if(requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null)
-                identity.postSignature(data);
-        
+        if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null)
+            identity.postSignature(data);
+
         if (resultCode == RESULT_CANCELED) {
             setResult(RESULT_CANCELED);
             finish();
-        }
-        else if(resultCode == RESULT_OK)
-        {
+        } else if (resultCode == RESULT_OK) {
             // If an operation has been re-queued via this mechanism, let the
             // IdentityBuilder attempt to extract some updated state from the intent before
             // trying to re-launch the operation.
-            if(identityBuilder != null)
-            {
+            if (identityBuilder != null) {
                 identityBuilder.consume(data);
             }
             launchGitOperation(requestCode);
         }
     }
-    
+
     @Override
-    public void finish()
-    {
+    public void finish() {
         super.finish();
     }
 }
