@@ -753,7 +753,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             clipboard.primaryClip = clip
             if (settings.getBoolean("clear_clipboard_20x", false)) {
                 val handler = Handler()
-                for (i in 0..18) {
+                for (i in 0..19) {
                     val count = i.toString()
                     handler.postDelayed(
                         { clipboard.primaryClip = ClipData.newPlainText(count, count) },

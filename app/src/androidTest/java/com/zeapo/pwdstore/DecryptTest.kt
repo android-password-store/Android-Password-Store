@@ -116,7 +116,9 @@ class DecryptTest {
         SystemClock.sleep(4000)
 
         // The clipboard should be cleared!!
-        assertEquals("", clipboard.primaryClip.getItemAt(0).text)
+        for(i in 0..clipboard.primaryClip.itemCount) {
+            assertEquals("", clipboard.primaryClip.getItemAt(i).text)
+        }
 
         // set back the timer
         activity.settings.edit().putString("general_show_time", showTime.toString()).commit()
