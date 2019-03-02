@@ -68,28 +68,28 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.0.0")
+    implementation("androidx.appcompat:appcompat:1.0.2")
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.android.material:material:1.0.0")
-    implementation("androidx.annotation:annotation:1.0.0")
-    implementation("org.sufficientlysecure:openpgp-api:11.0")
+    implementation("androidx.annotation:annotation:1.0.2")
+    implementation("org.sufficientlysecure:openpgp-api:12.0")
     implementation("com.nononsenseapps:filepicker:2.4.2")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
-    implementation("com.jcraft:jsch:0.1.54")
+    implementation("com.jcraft:jsch:0.1.55")
     implementation("commons-io:commons-io:2.5")
-    implementation("commons-codec:commons-codec:1.11")
-    implementation("com.jayway.android.robotium:robotium-solo:5.3.1")
+    implementation("commons-codec:commons-codec:1.12")
+    implementation("com.jayway.android.robotium:robotium-solo:5.6.3")
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.12")
-    androidTestImplementation("org.mockito:mockito-core:2.18.0")
-    androidTestImplementation("androidx.test:runner:1.1.0-alpha4")
-    androidTestImplementation("androidx.test:rules:1.1.0-alpha4")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.0-alpha4")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.1.0-alpha4")
+    androidTestImplementation("org.mockito:mockito-core:2.24.5")
+    androidTestImplementation("androidx.test:runner:1.1.1")
+    androidTestImplementation("androidx.test:rules:1.1.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.1.1")
 }
