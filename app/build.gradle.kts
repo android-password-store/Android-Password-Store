@@ -82,7 +82,7 @@ dependencies {
     implementation("commons-io:commons-io:2.5")
     implementation("commons-codec:commons-codec:1.12")
     implementation("com.jayway.android.robotium:robotium-solo:5.6.3")
-    implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
+    implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 
     // Testing-only dependencies
