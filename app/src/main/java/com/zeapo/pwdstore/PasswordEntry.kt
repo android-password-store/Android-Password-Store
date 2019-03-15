@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException
 class PasswordEntry(private val content: String) {
     val password: String
     val username: String?
-    val digits: String?
+    val digits: String
     val totpSecret: String?
     val totpPeriod: Long
     val totpAlgorithm: String
@@ -87,11 +87,13 @@ class PasswordEntry(private val content: String) {
         return null
     }
 
-    private fun findOtpDigits(decryptedContent: String): String? {
+    private fun findOtpDigits(decryptedContent: String): String {
         decryptedContent.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("optauth://totp/") ||
-                    line.startsWith("otpauth://hotp/"))
-                return Uri.parse(line).getQueryParameters("digits").toString()
+            if (line.startsWith("otpauth://totp/") ||
+                    line.startsWith("otpauth://hotp/") &&
+                    Uri.parse(line).getQueryParameter("digits") != null) {
+                return Uri.parse(line).getQueryParameter("digits")!!
+            }
         }
         return "6"
     }
