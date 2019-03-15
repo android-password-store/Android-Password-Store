@@ -28,9 +28,10 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     resolutionStrategy {
         componentSelection {
             all {
+                val blacklistedGroups = listOf("com.nononsenseapps", "commons-io", "org.eclipse.jgit")
                 val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview")
                     .map { qualifier -> Regex("(?i).*[.-]$qualifier[.\\d-]*") }
-                    .any { it.matches(candidate.version) }
+                    .any { it.matches(candidate.version) && blacklistedGroups.contains(candidate.group) }
                 if (rejected) {
                     reject("Release candidate")
                 }
