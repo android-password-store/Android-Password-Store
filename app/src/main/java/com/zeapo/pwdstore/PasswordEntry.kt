@@ -89,19 +89,17 @@ class PasswordEntry(private val content: String) {
 
     private fun findOtpDigits(decryptedContent: String): String? {
         decryptedContent.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/")) {
-                return Uri.parse(line).getQueryParameter("digits")
-            }
-            if (line.startsWith("otpauth://hotp/")) {
-                return Uri.parse(line).getQueryParameter("digits")
-            }
+            if (line.startsWith("optauth://totp/") ||
+                    line.startsWith("otpauth://hotp/"))
+                return Uri.parse(line).getQueryParameters("digits").toString()
         }
         return "6"
     }
 
     private fun findTotpPeriod(decryptedContent: String): Long {
         decryptedContent.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/") && Uri.parse(line).getQueryParameter("period") != null) {
+            if (line.startsWith("otpauth://totp/") &&
+                    Uri.parse(line).getQueryParameter("period") != null) {
                 return java.lang.Long.parseLong(Uri.parse(line).getQueryParameter("period")!!)
             }
         }
@@ -110,8 +108,9 @@ class PasswordEntry(private val content: String) {
 
     private fun findTotpAlgorithm(decryptedContent: String): String {
         decryptedContent.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/") && Uri.parse(line).getQueryParameter("algorithm") != null) {
-                return Uri.parse(line).getQueryParameter("algorithm")
+            if (line.startsWith("otpauth://totp/") &&
+                    Uri.parse(line).getQueryParameter("algorithm") != null) {
+                return Uri.parse(line).getQueryParameter("algorithm")!!
             }
         }
         return "sha1"

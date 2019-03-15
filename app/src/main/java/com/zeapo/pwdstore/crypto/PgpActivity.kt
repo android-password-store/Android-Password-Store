@@ -312,7 +312,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     )
                                 }
                                 crypto_otp_show.text =
-                                    Otp.calculateCode(entry.totpSecret, Date().time / (1000 * entry.totpPeriod), entry.totpAlgorithm, entry.digits)
+                                    Otp.calculateCode(
+                                            entry.totpSecret,
+                                            Date().time / (1000 * entry.totpPeriod),
+                                            entry.totpAlgorithm,
+                                            entry.digits)
                             } else {
                                 // we only want to calculate and show HOTP if the user requests it
                                 crypto_copy_otp.setOnClickListener {
