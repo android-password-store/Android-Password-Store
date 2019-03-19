@@ -12,17 +12,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class Otp {
-    public static final int TIME_WINDOW = 30;
-
-    private static final String ALGORITHM = "HmacSHA1";
-    private static final int CODE_DIGITS = 6;
 
     private static final Base32 BASE_32 = new Base32();
 
     private Otp() {
     }
 
-    public static String calculateCode(String secret, long counter) {
+    public static String calculateCode(String secret, long counter, String algorithm, String digits) {
+        String[] steam = {"2", "3", "4", "5", "6", "7", "8", "9", "B", "C",
+                "D", "F", "G", "H", "J", "K", "M", "N", "P", "Q",
+                "R", "T", "V", "W", "X", "Y"};
+        String ALGORITHM = "Hmac" + algorithm.toUpperCase();
         SecretKeySpec signingKey = new SecretKeySpec(BASE_32.decode(secret), ALGORITHM);
 
         Mac mac;
@@ -42,6 +42,15 @@ public class Otp {
         byte[] code = Arrays.copyOfRange(digest, offset, offset + 4);
         code[0] = (byte) (0x7f & code[0]);
         String strCode = new BigInteger(code).toString();
-        return strCode.substring(strCode.length() - CODE_DIGITS);
+        if (digits.equals("s")) {
+            String output = "";
+            int bigInt = new BigInteger(code).intValue();
+            for (int i = 0; i != 5; i++) {
+                output += steam[bigInt % 26];
+                bigInt /= 26;
+            }
+            return output;
+        }
+        else return strCode.substring(strCode.length() - Integer.parseInt(digits));
     }
 }

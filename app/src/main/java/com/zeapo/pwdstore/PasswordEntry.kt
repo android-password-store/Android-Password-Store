@@ -11,7 +11,10 @@ import java.io.UnsupportedEncodingException
 class PasswordEntry(private val content: String) {
     val password: String
     val username: String?
+    val digits: String
     val totpSecret: String?
+    val totpPeriod: Long
+    val totpAlgorithm: String
     val hotpSecret: String?
     val hotpCounter: Long?
     var extraContent: String? = null
@@ -24,7 +27,10 @@ class PasswordEntry(private val content: String) {
     init {
         val passContent = content.split("\n".toRegex(), 2).toTypedArray()
         password = passContent[0]
+        digits = findOtpDigits(content)
         totpSecret = findTotpSecret(content)
+        totpPeriod = findTotpPeriod(content)
+        totpAlgorithm = findTotpAlgorithm(content)
         hotpSecret = findHotpSecret(content)
         hotpCounter = findHotpCounter(content)
         extraContent = findExtraContent(passContent)
@@ -79,6 +85,37 @@ class PasswordEntry(private val content: String) {
             }
         }
         return null
+    }
+
+    private fun findOtpDigits(decryptedContent: String): String {
+        decryptedContent.split("\n".toRegex()).forEach { line ->
+            if (line.startsWith("otpauth://totp/") ||
+                    line.startsWith("otpauth://hotp/") &&
+                    Uri.parse(line).getQueryParameter("digits") != null) {
+                return Uri.parse(line).getQueryParameter("digits")!!
+            }
+        }
+        return "6"
+    }
+
+    private fun findTotpPeriod(decryptedContent: String): Long {
+        decryptedContent.split("\n".toRegex()).forEach { line ->
+            if (line.startsWith("otpauth://totp/") &&
+                    Uri.parse(line).getQueryParameter("period") != null) {
+                return java.lang.Long.parseLong(Uri.parse(line).getQueryParameter("period")!!)
+            }
+        }
+        return 30
+    }
+
+    private fun findTotpAlgorithm(decryptedContent: String): String {
+        decryptedContent.split("\n".toRegex()).forEach { line ->
+            if (line.startsWith("otpauth://totp/") &&
+                    Uri.parse(line).getQueryParameter("algorithm") != null) {
+                return Uri.parse(line).getQueryParameter("algorithm")!!
+            }
+        }
+        return "sha1"
     }
 
     private fun findHotpSecret(decryptedContent: String): String? {
