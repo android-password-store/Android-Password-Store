@@ -305,12 +305,17 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     copyOtpToClipBoard(
                                         Otp.calculateCode(
                                             entry.totpSecret,
-                                            Date().time / (1000 * Otp.TIME_WINDOW)
-                                        )
+                                            Date().time / (1000 * entry.totpPeriod),
+                                                entry.totpAlgorithm,
+                                                entry.digits)
                                     )
                                 }
                                 crypto_otp_show.text =
-                                    Otp.calculateCode(entry.totpSecret, Date().time / (1000 * Otp.TIME_WINDOW))
+                                    Otp.calculateCode(
+                                            entry.totpSecret,
+                                            Date().time / (1000 * entry.totpPeriod),
+                                            entry.totpAlgorithm,
+                                            entry.digits)
                             } else {
                                 // we only want to calculate and show HOTP if the user requests it
                                 crypto_copy_otp.setOnClickListener {
@@ -494,8 +499,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun calculateHotp(entry: PasswordEntry) {
-        copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter!! + 1))
-        crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter!! + 1)
+        copyOtpToClipBoard(Otp.calculateCode(entry.hotpSecret, entry.hotpCounter!! + 1, "sha1", entry.digits))
+        crypto_otp_show.text = Otp.calculateCode(entry.hotpSecret, entry.hotpCounter!! + 1, "sha1", entry.digits)
         crypto_extra_show.text = entry.extraContent
     }
 
