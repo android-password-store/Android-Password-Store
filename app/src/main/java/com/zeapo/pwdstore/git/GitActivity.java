@@ -735,8 +735,4 @@ public class GitActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-    }
 }

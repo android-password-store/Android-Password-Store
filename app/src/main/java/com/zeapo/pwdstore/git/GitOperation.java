@@ -102,9 +102,13 @@ public abstract class GitOperation {
      *
      * @param connectionMode the server-connection mode
      * @param username       the username
-     * @param sshKey         the ssh-key file
+     * @param sshKey         the ssh-key file to use in ssh-key connection mode
+     * @param identity       the api identity to use for auth in OpenKeychain connection mode
      */
-    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, SshApiSessionFactory.ApiIdentity identity) {
+    public void executeAfterAuthentication(final String connectionMode,
+                                           final String username,
+                                           @Nullable final File sshKey,
+                                           SshApiSessionFactory.ApiIdentity identity) {
         executeAfterAuthentication(connectionMode, username, sshKey, identity, false);
     }
 
@@ -113,10 +117,15 @@ public abstract class GitOperation {
      *
      * @param connectionMode the server-connection mode
      * @param username       the username
-     * @param sshKey         the ssh-key file
+     * @param sshKey         the ssh-key file to use in ssh-key connection mode
+     * @param identity       the api identity to use for auth in OpenKeychain connection mode
      * @param showError      show the passphrase edit text in red
      */
-    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, SshApiSessionFactory.ApiIdentity identity, final boolean showError) {
+    private void executeAfterAuthentication(final String connectionMode,
+                                            final String username,
+                                            @Nullable final File sshKey,
+                                            SshApiSessionFactory.ApiIdentity identity,
+                                            final boolean showError) {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
                 new AlertDialog.Builder(callingActivity)
