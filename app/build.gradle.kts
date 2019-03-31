@@ -86,7 +86,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("org.sufficientlysecure:sshauthentication-api:1.0")
 
-
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.12")
     androidTestImplementation("org.mockito:mockito-core:2.25.0")
