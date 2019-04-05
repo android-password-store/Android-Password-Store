@@ -252,4 +252,8 @@
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="hotp_pending">Tap copy to calculate HOTP</string>
+    <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
+    <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
+    <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>
+    <string name="ssh_api_unknown_error">Unknown SSH API Error</string>
 </resources>

@@ -11,16 +11,20 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.git.config.GitConfigSessionFactory;
+import com.zeapo.pwdstore.git.config.SshApiSessionFactory;
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
+
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -77,6 +81,18 @@ public abstract class GitOperation {
     }
 
     /**
+     * Sets the authentication using OpenKeystore scheme
+     *
+     * @param identity The identiy to use
+     * @return the current object
+     */
+    GitOperation setAuthentication(String username, SshApiSessionFactory.ApiIdentity identity) {
+        SshSessionFactory.setInstance(new SshApiSessionFactory(username, identity));
+        this.provider = null;
+        return this;
+    }
+
+    /**
      * Executes the GitCommand in an async task
      */
     public abstract void execute();
@@ -86,10 +102,14 @@ public abstract class GitOperation {
      *
      * @param connectionMode the server-connection mode
      * @param username       the username
-     * @param sshKey         the ssh-key file
+     * @param sshKey         the ssh-key file to use in ssh-key connection mode
+     * @param identity       the api identity to use for auth in OpenKeychain connection mode
      */
-    public void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey) {
-        executeAfterAuthentication(connectionMode, username, sshKey, false);
+    public void executeAfterAuthentication(final String connectionMode,
+                                           final String username,
+                                           @Nullable final File sshKey,
+                                           SshApiSessionFactory.ApiIdentity identity) {
+        executeAfterAuthentication(connectionMode, username, sshKey, identity, false);
     }
 
     /**
@@ -97,10 +117,15 @@ public abstract class GitOperation {
      *
      * @param connectionMode the server-connection mode
      * @param username       the username
-     * @param sshKey         the ssh-key file
+     * @param sshKey         the ssh-key file to use in ssh-key connection mode
+     * @param identity       the api identity to use for auth in OpenKeychain connection mode
      * @param showError      show the passphrase edit text in red
      */
-    private void executeAfterAuthentication(final String connectionMode, final String username, @Nullable final File sshKey, final boolean showError) {
+    private void executeAfterAuthentication(final String connectionMode,
+                                            final String username,
+                                            @Nullable final File sshKey,
+                                            SshApiSessionFactory.ApiIdentity identity,
+                                            final boolean showError) {
         if (connectionMode.equalsIgnoreCase("ssh-key")) {
             if (sshKey == null || !sshKey.exists()) {
                 new AlertDialog.Builder(callingActivity)
@@ -153,7 +178,7 @@ public abstract class GitOperation {
                                 setAuthentication(sshKey, username, sshKeyPassphrase).execute();
                             } else {
                                 // call back the method
-                                executeAfterAuthentication(connectionMode, username, sshKey, true);
+                                executeAfterAuthentication(connectionMode, username, sshKey, identity, true);
                             }
                         } else {
                             new AlertDialog.Builder(callingActivity)
@@ -171,7 +196,7 @@ public abstract class GitOperation {
                                         } else {
                                             settings.edit().putString("ssh_key_passphrase", null).apply();
                                             // call back the method
-                                            executeAfterAuthentication(connectionMode, username, sshKey, true);
+                                            executeAfterAuthentication(connectionMode, username, sshKey, identity, true);
                                         }
                                     }).setNegativeButton(callingActivity.getResources().getString(R.string.dialog_cancel), (dialog, whichButton) -> {
                                 // Do nothing.
@@ -189,6 +214,8 @@ public abstract class GitOperation {
                             }).show();
                 }
             }
+        } else if (connectionMode.equalsIgnoreCase("OpenKeychain")) {
+            setAuthentication(username, identity).execute();
         } else {
             final EditText password = new EditText(callingActivity);
             password.setHint("Password");

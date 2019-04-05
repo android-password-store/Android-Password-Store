@@ -3,6 +3,7 @@
     <string-array name="connection_modes" translatable="false">
         <item>ssh-key</item>
         <item>username/password</item>
+        <item>OpenKeychain</item>
     </string-array>
     <string-array name="clone_protocols" translatable="false">
         <item>ssh://</item>
