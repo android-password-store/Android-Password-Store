@@ -43,6 +43,8 @@ public class PullOperation extends GitOperation {
 
     @Override
     public void onError(String errorMessage) {
+        super.onError(errorMessage);
+
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
                 setMessage("Error occured during the pull operation, "

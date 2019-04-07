@@ -239,13 +239,11 @@ public abstract class GitOperation {
      * Action to execute on error
      */
     public void onError(String errorMessage) {
-        new AlertDialog.Builder(callingActivity).
-                setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
-                setMessage(callingActivity.getResources().getString(R.string.jgit_error_dialog_text) + errorMessage).
-                setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
-                    callingActivity.setResult(Activity.RESULT_CANCELED);
-                    callingActivity.finish();
-                }).show();
+        if (SshSessionFactory.getInstance() instanceof SshApiSessionFactory) {
+            // Clear stored keyid from settings on auth failure
+            PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext())
+                    .edit().putString("ssh_openkeystore_keyid", null).apply();
+        }
     }
 
     /**

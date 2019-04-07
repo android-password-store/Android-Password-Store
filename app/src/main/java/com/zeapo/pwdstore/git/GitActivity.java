@@ -703,8 +703,8 @@ public class GitActivity extends AppCompatActivity {
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent data) {
 
         // In addition to the pre-operation-launch series of intents for OpenKeychain auth
         // that will pass through here and back to launchGitOperation, there is one
@@ -712,8 +712,16 @@ public class GitActivity extends AppCompatActivity {
         // background thread - the actual signing of the SSH challenge. We pass through the
         // completed signature to the ApiIdentity, which will be blocked in the other thread
         // waiting for it.
-        if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null)
+        if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null) {
             identity.postSignature(data);
+
+            // If the signature failed (usually because it was cancelled), reset state
+            if (data == null) {
+                identity = null;
+                identityBuilder = null;
+            }
+            return;
+        }
 
         if (resultCode == RESULT_CANCELED) {
             setResult(RESULT_CANCELED);

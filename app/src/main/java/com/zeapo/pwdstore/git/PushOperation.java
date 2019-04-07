@@ -44,6 +44,9 @@ public class PushOperation extends GitOperation {
     @Override
     public void onError(String errorMessage) {
         // TODO handle the "Nothing to push" case
+
+        super.onError(errorMessage);
+
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
                 setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage).

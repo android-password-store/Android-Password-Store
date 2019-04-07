@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
-
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import androidx.appcompat.app.AlertDialog;
 
 import com.jcraft.jsch.Identity;
@@ -13,7 +14,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.R;
-
+import com.zeapo.pwdstore.git.GitActivity;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -43,6 +44,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
     public static final int POST_SIGNATURE = 301;
     private String username;
     private Identity identity;
+
     public SshApiSessionFactory(String username, Identity identity) {
         this.username = username;
         this.identity = identity;
@@ -98,7 +100,8 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         private SshAuthenticationApi api;
         private String keyId, description, alg;
         private byte[] publicKey;
-        private Activity callingActivity;
+        private GitActivity callingActivity;
+        private SharedPreferences settings;
 
         /**
          * Construct a new IdentityBuilder
@@ -106,7 +109,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
          * @param callingActivity Activity that will be used to launch pending intents and that will
          *                        receive and handle the results.
          */
-        public IdentityBuilder(Activity callingActivity) {
+        public IdentityBuilder(GitActivity callingActivity) {
             this.callingActivity = callingActivity;
 
             List<String> providers = SshAuthenticationApiUtils.getAuthenticationProviderPackageNames(callingActivity);
@@ -116,6 +119,9 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
             // TODO: Handle multiple available providers? Are there actually any in practice beyond
             // OpenKeychain?
             connection = new SshAuthenticationConnection(callingActivity, providers.get(0));
+
+            settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
+            keyId = settings.getString("ssh_openkeystore_keyid", null);
         }
 
         /**
@@ -140,7 +146,24 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
             switch (result.getIntExtra(SshAuthenticationApi.EXTRA_RESULT_CODE, -1)) {
                 case SshAuthenticationApi.RESULT_CODE_ERROR:
                     SshAuthenticationApiError error = result.getParcelableExtra(SshAuthenticationApi.EXTRA_ERROR);
-                    throw new RuntimeException(error.getMessage());
+
+                    //On an OpenKeychain SSH API error, clear out the stored keyid
+                    settings.edit().putString("ssh_openkeystore_keyid", null).apply();
+
+                    switch (error.getError()) {
+                        // If the problem was just a bad keyid, reset to allow them to choose a different one
+                        case (SshAuthenticationApiError.NO_SUCH_KEY):
+                        case (SshAuthenticationApiError.NO_AUTH_KEY):
+                            keyId = null;
+                            publicKey = null;
+                            description = null;
+                            alg = null;
+                            return executeApi(new KeySelectionRequest(), requestCode);
+
+                        // Other errors are fatal
+                        default:
+                            throw new RuntimeException(error.getMessage());
+                    }
                 case SshAuthenticationApi.RESULT_CODE_SUCCESS:
                     break;
                 case SshAuthenticationApi.RESULT_CODE_USER_INTERACTION_REQUIRED:
@@ -172,6 +195,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
             if (intent.hasExtra(SshAuthenticationApi.EXTRA_KEY_ID)) {
                 keyId = intent.getStringExtra(SshAuthenticationApi.EXTRA_KEY_ID);
                 description = intent.getStringExtra(SshAuthenticationApi.EXTRA_KEY_DESCRIPTION);
+                settings.edit().putString("ssh_openkeystore_keyid", keyId).apply();
             }
 
             if (intent.hasExtra(SshAuthenticationApi.EXTRA_SSH_PUBLIC_KEY)) {
@@ -196,9 +220,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
                     @Override
                     public void onBound(ISshAuthenticationService sshAgent) {
                         api = new SshAuthenticationApi(callingActivity, sshAgent);
-                        // We can immediately try the next phase without needing to post back
-                        // though onActivityResult
-                        tryBuild(requestCode);
+                        callingActivity.onActivityResult(requestCode, Activity.RESULT_OK, null);
                     }
 
                     @Override
@@ -323,7 +345,9 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
          */
         public void postSignature(Intent data) {
             try {
-                signature = handleSignResult(data);
+                if (data != null) {
+                    signature = handleSignResult(data);
+                }
             } finally {
                 if (latch != null)
                     latch.countDown();

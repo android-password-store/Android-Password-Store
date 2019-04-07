@@ -20,6 +20,9 @@
             android:key="hotp_remember_clear_choice"
             android:title="@string/hotp_remember_clear_choice" />
         <Preference
+            android:key="ssh_openkeystore_clear_keyid"
+            android:title="@string/ssh_openkeystore_clear_keyid" />
+        <Preference
             android:key="ssh_see_key"
             android:title="@string/pref_ssh_see_key_title" />
         <Preference

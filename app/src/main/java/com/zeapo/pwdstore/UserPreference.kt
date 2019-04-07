@@ -84,6 +84,13 @@ class UserPreference : AppCompatActivity() {
                         true
                     }
 
+            findPreference("ssh_openkeystore_clear_keyid").onPreferenceClickListener =
+                    Preference.OnPreferenceClickListener {
+                        sharedPreferences.edit().putString("ssh_openkeystore_keyid", null).apply()
+                        it.isEnabled = false
+                        true
+                    }
+
             findPreference("git_server_info").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_SERVER)
@@ -190,6 +197,10 @@ class UserPreference : AppCompatActivity() {
             )?.isNotEmpty() ?: false
             findPreference("hotp_remember_clear_choice").isEnabled =
                     sharedPreferences.getBoolean("hotp_remember_check", false)
+            findPreference("ssh_openkeystore_clear_keyid").isEnabled = sharedPreferences.getString(
+                    "ssh_openkeystore_keyid",
+                    null
+            )?.isNotEmpty() ?: false
             findPreference("clear_after_copy").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             findPreference("clear_clipboard_20x").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val keyPref = findPreference("openpgp_key_id_pref")
