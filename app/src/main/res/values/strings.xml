@@ -256,4 +256,6 @@
     <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
     <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>
     <string name="ssh_api_unknown_error">Unknown SSH API Error</string>
+    <string name="sdcard_root_warning_title">SD-Card root selected</string>
+    <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
 </resources>

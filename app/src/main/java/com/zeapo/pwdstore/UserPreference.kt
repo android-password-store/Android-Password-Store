@@ -377,7 +377,15 @@ class UserPreference : AppCompatActivity() {
                     Log.d(TAG, "Selected repository path is $repoPath")
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
-                        TODO("Assert that we haven't selected root directory")
+                        AlertDialog.Builder(this)
+                                .setTitle(getString(R.string.sdcard_root_warning_title))
+                                .setMessage(getString(R.string.sdcard_root_warning_message))
+                                .setPositiveButton("Remove everything") { _, _ ->
+                                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                                            .edit()
+                                            .putString("git_external_repo", uri?.path)
+                                            .apply()
+                                }.setNegativeButton(R.string.dialog_cancel, null).show()
                     }
 
                     PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -386,9 +394,9 @@ class UserPreference : AppCompatActivity() {
                             .apply()
                 }
                 EXPORT_PASSWORDS -> {
-                    var uri = data.data
+                    val uri = data.data
 
-                    val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri);
+                    val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 
                     if (targetDirectory != null) {
                         exportPasswords(targetDirectory)
