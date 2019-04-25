@@ -35,7 +35,6 @@ import java.util.*
 
 class UserPreference : AppCompatActivity() {
 
-    private val TAG = "UserPreference"
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragment() {
@@ -215,7 +214,6 @@ class UserPreference : AppCompatActivity() {
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.applicationContext)
         super.onCreate(savedInstanceState)
         when (intent?.getStringExtra("operation")) {
             "get_ssh_key" -> getSshKey()
@@ -243,15 +241,14 @@ class UserPreference : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        when (id) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 setResult(Activity.RESULT_OK)
                 finish()
-                return true
+                true
             }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     /**
@@ -291,14 +288,14 @@ class UserPreference : AppCompatActivity() {
         val sshKeyInputStream = contentResolver.openInputStream(uri)
         if (sshKeyInputStream != null) {
 
-            val internalKeyFile = File("""${filesDir.toString()}/.ssh_key""")
+            val internalKeyFile = File("""$filesDir/.ssh_key""")
 
             if (internalKeyFile.exists()) {
                 internalKeyFile.delete()
                 internalKeyFile.createNewFile()
             }
 
-            val sshKeyOutputSteam = internalKeyFile.outputStream();
+            val sshKeyOutputSteam = internalKeyFile.outputStream()
 
             sshKeyInputStream.copyTo(sshKeyOutputSteam, 1024)
 
@@ -350,7 +347,7 @@ class UserPreference : AppCompatActivity() {
                         prefs.edit().putBoolean("use_generated_key", false).apply()
 
                         // Delete the public key from generation
-                        File("""${filesDir.toString()}/.ssh_key.pub""").delete()
+                        File("""$filesDir/.ssh_key.pub""").delete()
                         setResult(Activity.RESULT_OK)
 
                         finish()
@@ -396,13 +393,13 @@ class UserPreference : AppCompatActivity() {
                 EXPORT_PASSWORDS -> {
                     val uri = data.data
 
-                    val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
+                    if (uri != null) {
+                        val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 
-                    if (targetDirectory != null) {
-                        exportPasswords(targetDirectory)
+                        if (targetDirectory != null) {
+                            exportPasswords(targetDirectory)
+                        }
                     }
-                }
-                else -> {
                 }
             }
         }
@@ -427,7 +424,7 @@ class UserPreference : AppCompatActivity() {
                     .now()
                     .format(DateTimeFormatter.ISO_DATE_TIME)
         } else {
-            String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")));
+            String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")))
         }
 
         val passDir = targetDirectory.createDirectory("password_store_$dateString")
@@ -450,13 +447,16 @@ class UserPreference : AppCompatActivity() {
         val sourceInputStream = contentResolver.openInputStream(passwordFile.uri)
         val name = passwordFile.name
         val targetPasswordFile = targetDirectory.createFile("application/octet-stream", name!!)
+        if (targetPasswordFile?.exists() == true) {
+            val destOutputStream = contentResolver.openOutputStream(targetPasswordFile.uri)
 
-        val destOutputStream = contentResolver.openOutputStream(targetPasswordFile?.uri)
+            if (destOutputStream != null && sourceInputStream != null) {
+                sourceInputStream.copyTo(destOutputStream, 1024)
 
-        sourceInputStream.copyTo(destOutputStream, 1024)
-
-        sourceInputStream.close()
-        destOutputStream.close()
+                sourceInputStream.close()
+                destOutputStream.close()
+            }
+        }
     }
 
     /**
@@ -466,20 +466,14 @@ class UserPreference : AppCompatActivity() {
      *  @param sourceDirectory directory to copy to.
      */
     private fun copyDirToDir(sourceDirectory: DocumentFile, targetDirectory: DocumentFile) {
-        val files = sourceDirectory.listFiles();
-
-        for (i in files.indices) {
-
-            val f = files[i];
-
-            if (f.isDirectory) {
+        sourceDirectory.listFiles().forEach { file ->
+            if (file.isDirectory) {
                 // Create new directory and recurse
-                val newDir = targetDirectory.createDirectory(f.name!!);
-                copyDirToDir(f, newDir!!)
+                val newDir = targetDirectory.createDirectory(file.name!!)
+                copyDirToDir(file, newDir!!)
             } else {
-                copyFileToDir(f, targetDirectory);
+                copyFileToDir(file, targetDirectory)
             }
-
         }
     }
 
@@ -490,5 +484,6 @@ class UserPreference : AppCompatActivity() {
         private const val SELECT_GIT_DIRECTORY = 4
         private const val EXPORT_PASSWORDS = 5
         private const val EDIT_GIT_CONFIG = 6
+        private const val TAG = "UserPreference"
     }
 }
