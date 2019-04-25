@@ -160,21 +160,14 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    checkLocalRepository();
-                }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // If request is cancelled, the result arrays are empty.
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkLocalRepository();
             }
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -199,7 +192,7 @@ public class PasswordStore extends AppCompatActivity {
 
         // When using the support library, the setOnActionExpandListener() method is
         // static and accepts the MenuItem object as an argument
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 refreshListAdapter();
@@ -341,7 +334,7 @@ public class PasswordStore extends AppCompatActivity {
             }
         }
 
-        final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<String>());
+        final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<>());
 
         if (keyIds.isEmpty())
             new AlertDialog.Builder(this)
@@ -602,7 +595,7 @@ public class PasswordStore extends AppCompatActivity {
             @Override
             public void execute() {
                 Log.d(TAG, "Committing with message " + message);
-                Git git = new Git(this.repository);
+                Git git = new Git(repository);
                 GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
                         git.add().addFilepattern("."),
