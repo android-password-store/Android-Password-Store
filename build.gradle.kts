@@ -7,8 +7,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.3.2")
-        classpath(kotlin("gradle-plugin", "1.3.21"))
+        classpath("com.android.tools.build:gradle:3.4.0")
+        classpath(kotlin("gradle-plugin", "1.3.31"))
     }
 }
 
@@ -23,23 +23,29 @@ allprojects {
         mavenCentral()
     }
 }
-
-tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
-    resolutionStrategy {
-        componentSelection {
-            all {
-                val blacklistedGroups = listOf("commons-io", "org.eclipse.jgit")
-                val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview")
-                    .map { qualifier -> Regex("(?i).*[.-]$qualifier[.\\d-]*") }
-                    .any { it.matches(candidate.version) && blacklistedGroups.contains(candidate.group) }
-                if (rejected) {
-                    reject("Release candidate")
+tasks {
+    named<DependencyUpdatesTask>("dependencyUpdates") {
+        resolutionStrategy {
+            componentSelection {
+                all {
+                    val blacklistedGroups = listOf("commons-io", "org.eclipse.jgit")
+                    val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview")
+                        .map { qualifier -> Regex("(?i).*[.-]$qualifier[.\\d-]*") }
+                        .any { it.matches(candidate.version) && blacklistedGroups.contains(candidate.group) }
+                    if (rejected) {
+                        reject("Release candidate")
+                    }
                 }
             }
         }
+        checkForGradleUpdate = true
+        outputFormatter = "json"
+        outputDir = "build/dependencyUpdates"
+        reportfileName = "report"
     }
-    checkForGradleUpdate = true
-    outputFormatter = "json"
-    outputDir = "build/dependencyUpdates"
-    reportfileName = "report"
+
+    named<Wrapper>("wrapper") {
+        gradleVersion = "5.4.1"
+        distributionType = Wrapper.DistributionType.ALL
+    }
 }
