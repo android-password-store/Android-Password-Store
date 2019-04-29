@@ -19,4 +19,11 @@
         <item name="colorPrimaryDark">@color/blue_grey_700</item>
         <item name="colorAccent">@color/teal_A700</item>
     </style>
+
+    <style name="Swirl">
+        <item name="swirl_errorColor">?attr/colorAccent</item>
+        <item name="swirl_ridgeColor">?android:attr/textColorSecondary</item>
+    </style>
+
+
 </resources>

@@ -127,6 +127,25 @@
             android:defaultValue="false"
             android:key="use_android_file_picker"
             android:title="@string/prefs_use_default_file_picker" />
+
+
+
+        <Preference
+            android:key="set_password"
+            android:summary="@string/pref_set_password_summary"
+            android:title="@string/prefs_set_password" />
+        <Preference
+            android:key="delete_password"
+            android:summary="@string/pref_delete_password" />
+
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fingerprint_authentication"
+            android:summary="@string/pref_fingerprint_summary"
+            android:title="@string/prefs_use_fingerprint_authentication" />
+
+
     </PreferenceCategory>
 
     <Preference

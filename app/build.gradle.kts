@@ -84,6 +84,8 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("org.sufficientlysecure:sshauthentication-api:1.0")
+    implementation("com.mattprecious.swirl:swirl:1.2.0")
+
 
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.12")

@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
@@ -25,6 +26,7 @@ import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
+import kotlinx.android.synthetic.main.set_password_dialog.view.*
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.util.OpenPgpUtils
 import java.io.File
@@ -38,6 +40,7 @@ class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragment() {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             val callingActivity = activity as UserPreference
@@ -166,10 +169,47 @@ class UserPreference : AppCompatActivity() {
                 }
             }
 
+            findPreference("set_password").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                val dialogBuilder = AlertDialog.Builder(callingActivity)
+                dialogBuilder.setTitle("Set New Password")
+                val view = layoutInflater.inflate(R.layout.set_password_dialog, null)
+                dialogBuilder.setView(view)
+                val alertdialog = dialogBuilder.create()
+                alertdialog.show()
+
+                view.set_password_done.setOnClickListener {
+                    val newPassword = view.set_password.text.toString()
+                    PreferenceManager.getDefaultSharedPreferences(callingActivity)
+                            .edit()
+                            .putString("password", SecurityActivity.encodeString(newPassword))
+                            .apply()
+                    alertdialog.cancel()
+                    findPreference("fingerprint_authentication").isEnabled = true
+
+
+                }
+                true
+            };
+
+            findPreference("delete_password").onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                PreferenceManager.getDefaultSharedPreferences(callingActivity)
+                        .edit()
+                        .putString("password", "")
+                        .apply()
+                findPreference("fingerprint_authentication").isEnabled = false
+                Toast.makeText(callingActivity, "Password Deleted Succesfully", Toast.LENGTH_SHORT).show()
+
+                true
+            }
+
+            findPreference("fingerprint_authentication").isEnabled = !PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext).getString("password", null).equals("")
+
+
             findPreference("general_show_time").onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any? ->
                 try {
                     findPreference("clear_after_copy").isEnabled = newValue.toString().toInt() != 0
                     findPreference("clear_clipboard_20x").isEnabled = newValue.toString().toInt() != 0
+
                     true
                 } catch (e: NumberFormatException) {
                     false

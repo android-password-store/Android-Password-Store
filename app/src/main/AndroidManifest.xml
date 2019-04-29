@@ -9,6 +9,7 @@
 	<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
 		tools:ignore="ProtectedPermissions"/>
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:allowBackup="false"
@@ -17,6 +18,7 @@
         android:theme="@style/AppTheme"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".SecurityActivity"></activity>
         <activity
             android:name=".PasswordStore"
             android:label="@string/app_name"
