@@ -189,7 +189,7 @@ class UserPreference : AppCompatActivity() {
 
                 }
                 true
-            };
+            }
 
             findPreference("delete_password").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 PreferenceManager.getDefaultSharedPreferences(callingActivity)
@@ -202,7 +202,7 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
-            findPreference("fingerprint_authentication").isEnabled = !PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext).getString("password", null).equals("")
+            findPreference("fingerprint_authentication").isEnabled = preferenceManager.sharedPreferences.getString("password", "") != ""
 
 
             findPreference("general_show_time").onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any? ->
@@ -354,7 +354,7 @@ class UserPreference : AppCompatActivity() {
             val am = this
                     .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             val runningServices = am
-                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+                    .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
                     .map { it.id.substringBefore("/") }
                     .any { it == BuildConfig.APPLICATION_ID }
