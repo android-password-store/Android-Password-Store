@@ -87,7 +87,7 @@ dependencies {
 
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.12")
-    androidTestImplementation("org.mockito:mockito-core:2.25.0")
+    androidTestImplementation("org.mockito:mockito-core:2.27.0")
     androidTestImplementation("androidx.test:runner:1.1.1")
     androidTestImplementation("androidx.test:rules:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")
