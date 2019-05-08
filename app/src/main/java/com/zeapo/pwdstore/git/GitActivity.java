@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -479,6 +480,7 @@ public class GitActivity extends AppCompatActivity {
         // init the server information
         final EditText git_user_name = findViewById(R.id.git_user_name);
         final EditText git_user_email = findViewById(R.id.git_user_email);
+        final Button abort = findViewById(R.id.git_abort_rebase);
 
         git_user_name.setText(settings.getString("git_config_user_name", ""));
         git_user_email.setText(settings.getString("git_config_user_email", ""));
@@ -492,6 +494,9 @@ public class GitActivity extends AppCompatActivity {
                 Ref ref = repo.getRef("refs/heads/master");
                 String head = ref.getObjectId().equals(objectId) ? ref.getName() : "DETACHED";
                 git_commit_hash.setText(String.format("%s (%s)", objectId.abbreviate(8).name(), head));
+
+                // enable the abort button only if we're in detached
+                abort.setEnabled(head.equals("DETACHED"));
             } catch (Exception e) {
                 // ignore
             }
