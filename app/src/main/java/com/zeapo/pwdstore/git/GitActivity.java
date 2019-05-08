@@ -49,13 +49,13 @@ public class GitActivity extends AppCompatActivity {
     public static final int REQUEST_SYNC = 106;
     public static final int REQUEST_CREATE = 107;
     public static final int EDIT_GIT_CONFIG = 108;
+    public static final int BREAK_OUT_OF_DETACHED = 109;
     private static final String TAG = "GitAct";
     private static final String emailPattern = "^[^@]+@[^@]+$";
     private Activity activity;
     private Context context;
     private String protocol;
     private String connectionMode;
-    private File localDir;
     private String hostname;
     private SharedPreferences settings;
     private SshApiSessionFactory.IdentityBuilder identityBuilder;
@@ -495,8 +495,8 @@ public class GitActivity extends AppCompatActivity {
                 String head = ref.getObjectId().equals(objectId) ? ref.getName() : "DETACHED";
                 git_commit_hash.setText(String.format("%s (%s)", objectId.abbreviate(8).name(), head));
 
-                // enable the abort button only if we're in detached
-                abort.setEnabled(head.equals("DETACHED"));
+                // enable the abort button only if we're rebasing
+                abort.setEnabled(repo.getRepositoryState().isRebasing());
             } catch (Exception e) {
                 // ignore
             }
@@ -537,23 +537,7 @@ public class GitActivity extends AppCompatActivity {
     }
 
     public void abortRebase(View view) {
-        final Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(getApplicationContext()));
-        if (repo != null) {
-            new GitOperation(PasswordRepository.getRepositoryDirectory(activity), activity) {
-                @Override
-                public void execute() {
-                    Log.d(TAG, "Resetting the repository");
-                    assert repository != null;
-                    GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
-                    tasks.execute(new Git(repo).rebase().setOperation(RebaseCommand.Operation.ABORT));
-                }
-
-                @Override
-                public void onSuccess() {
-                    showGitConfig();
-                }
-            }.execute();
-        }
+        launchGitOperation(BREAK_OUT_OF_DETACHED);
     }
 
     /**
@@ -563,7 +547,7 @@ public class GitActivity extends AppCompatActivity {
         if (PasswordRepository.getRepository(null) == null) {
             PasswordRepository.initialize(this);
         }
-        localDir = PasswordRepository.getRepositoryDirectory(context);
+        File localDir = PasswordRepository.getRepositoryDirectory(context);
 
         if (!saveConfiguration())
             return;
@@ -654,6 +638,7 @@ public class GitActivity extends AppCompatActivity {
      */
     protected void launchGitOperation(int operation) {
         GitOperation op;
+        File localDir = PasswordRepository.getRepositoryDirectory(context);
 
         try {
 
@@ -688,6 +673,10 @@ public class GitActivity extends AppCompatActivity {
 
                 case REQUEST_SYNC:
                     op = new SyncOperation(localDir, activity).setCommands();
+                    break;
+
+                case BREAK_OUT_OF_DETACHED:
+                    op = new BreakOutOfDetached(localDir, activity).setCommands();
                     break;
 
                 case GitOperation.GET_SSH_KEY_FROM_CLONE:
