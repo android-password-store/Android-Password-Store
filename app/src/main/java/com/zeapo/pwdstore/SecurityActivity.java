@@ -20,12 +20,11 @@ import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatEditText;
 
-
 import com.mattprecious.swirl.SwirlView;
 import com.zeapo.pwdstore.utils.FingerprintHelper;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
@@ -84,7 +83,6 @@ public class SecurityActivity extends AppCompatActivity {
             }
         });
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).getBoolean("fingerprint_authentication", false)) {
             mFingerprintManagerCompat = FingerprintManagerCompat.from(this);
@@ -124,7 +122,7 @@ public class SecurityActivity extends AppCompatActivity {
         }
 
         mCryptoObject = new FingerprintManagerCompat.CryptoObject(mCipher);
-        FrameLayout fingerprintParent = (FrameLayout) findViewById(R.id.fingerprint_parent);
+        FrameLayout fingerprintParent = findViewById(R.id.fingerprint_parent);
         final SwirlView swirlView = new SwirlView(new ContextThemeWrapper(this, R.style.Swirl));
         swirlView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -154,23 +152,12 @@ public class SecurityActivity extends AppCompatActivity {
         mFingerprintUiHelper.startListening(mCryptoObject);
     }
 
-
     public static String decodeString(String text) {
-        try {
-            return new String(Base64.decode(text, Base64.DEFAULT), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return new String(Base64.decode(text, Base64.DEFAULT), StandardCharsets.UTF_8);
     }
 
     public static String encodeString(String text) {
-        try {
-            return Base64.encodeToString(text.getBytes("UTF-8"), Base64.DEFAULT);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return Base64.encodeToString(text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
     }
 
     @Override

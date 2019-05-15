@@ -55,14 +55,14 @@
             android:title="@string/pref_password_title" />
         <CheckBoxPreference
             android:defaultValue="true"
-            android:title="@string/show_password_pref_title"
+            android:key="show_password"
             android:summary="@string/show_password_pref_summary"
-            android:key="show_password" />
+            android:title="@string/show_password_pref_title" />
         <CheckBoxPreference
             android:defaultValue="true"
-            android:title="@string/show_extra_content_pref_title"
+            android:key="show_extra_content"
             android:summary="@string/show_extra_content_pref_summary"
-            android:key="show_extra_content" />
+            android:title="@string/show_extra_content_pref_title" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:dialogTitle="@string/pref_copy_dialog_title"
@@ -80,42 +80,41 @@
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
         <ListPreference
-            android:title="@string/pref_sort_order_title"
             android:defaultValue="FOLDER_FIRST"
-            android:key="sort_order"
             android:entries="@array/sort_order_entries"
             android:entryValues="@array/sort_order_values"
+            android:key="sort_order"
             android:persistent="true"
-            />
+            android:title="@string/pref_sort_order_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_autofill_title">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="autofill_enable"
-            android:title="@string/pref_autofill_enable_title"/>
+            android:title="@string/pref_autofill_enable_title" />
         <Preference
             android:dependency="autofill_enable"
             android:key="autofill_apps"
-            android:title="@string/pref_autofill_apps_title"/>
+            android:title="@string/pref_autofill_apps_title" />
         <CheckBoxPreference
-            android:dependency="autofill_enable"
             android:defaultValue="true"
+            android:dependency="autofill_enable"
             android:key="autofill_default"
             android:summary="@string/pref_autofill_default_hint"
-            android:title="@string/pref_autofill_default_title"/>
+            android:title="@string/pref_autofill_default_title" />
         <CheckBoxPreference
-            android:dependency="autofill_enable"
             android:defaultValue="false"
+            android:dependency="autofill_enable"
             android:key="autofill_always"
-            android:title="@string/pref_autofill_always_title"/>
+            android:title="@string/pref_autofill_always_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_misc_title">
         <Preference
             android:key="export_passwords"
-            android:title="@string/prefs_export_passwords_title"
-            android:summary="@string/prefs_export_passwords_summary"/>
+            android:summary="@string/prefs_export_passwords_summary"
+            android:title="@string/prefs_export_passwords_title" />
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -128,8 +127,6 @@
             android:key="use_android_file_picker"
             android:title="@string/prefs_use_default_file_picker" />
 
-
-
         <Preference
             android:key="set_password"
             android:summary="@string/pref_set_password_summary"
@@ -137,7 +134,6 @@
         <Preference
             android:key="delete_password"
             android:summary="@string/pref_delete_password" />
-
 
         <CheckBoxPreference
             android:defaultValue="false"

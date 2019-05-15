@@ -7,9 +7,7 @@ import androidx.core.os.CancellationSignal;
 import com.mattprecious.swirl.SwirlView;
 
 
-
-public class FingerprintHelper extends FingerprintManagerCompat.AuthenticationCallback{
-
+public class FingerprintHelper extends FingerprintManagerCompat.AuthenticationCallback {
 
     private boolean mListening;
     private final FingerprintManagerCompat mFingerprintManagerCompat;
@@ -30,7 +28,6 @@ public class FingerprintHelper extends FingerprintManagerCompat.AuthenticationCa
             return new FingerprintHelper(mFingerprintManagerCompat, swirlView, callback);
         }
     }
-
 
     private FingerprintHelper(FingerprintManagerCompat fingerprintManagerCompat, SwirlView swirlView,
                               Callback callback) {
@@ -80,12 +77,7 @@ public class FingerprintHelper extends FingerprintManagerCompat.AuthenticationCa
     @Override
     public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
         mSwirlView.setState(SwirlView.State.OFF);
-        mSwirlView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mCallback.onAuthenticated();
-            }
-        }, 100);
+        mSwirlView.postDelayed(mCallback::onAuthenticated, 100);
     }
 
     private void showError() {
@@ -97,6 +89,4 @@ public class FingerprintHelper extends FingerprintManagerCompat.AuthenticationCa
 
         void onError();
     }
-
-
 }

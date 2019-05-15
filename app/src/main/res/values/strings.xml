@@ -169,6 +169,7 @@
     <string name="prefs_use_fingerprint_authentication">Fingerprint</string>
     <string name="pref_fingerprint_summary">Use fingerprint to pass security check. This will only work as long as you have fingerprints registered.</string>
     <string name="prefs_set_password">Set Password</string>
+    <string name="set_new_password">New Password</string>
     <string name="pref_set_password_summary">You can protect your password by setting up a password. Every time you open this application, you have to enter it. If you forget it, simply wipe the data of this application in settings of your device.</string>
     <string name="pref_delete_password">Delete Password</string>
     <string name="prefs_clear_after_copy_title">Automatically clear the clipboard after copy</string>

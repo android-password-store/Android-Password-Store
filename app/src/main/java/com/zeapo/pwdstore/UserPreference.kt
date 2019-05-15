@@ -173,21 +173,25 @@ class UserPreference : AppCompatActivity() {
                 val dialogBuilder = AlertDialog.Builder(callingActivity)
                 dialogBuilder.setTitle("Set New Password")
                 val view = layoutInflater.inflate(R.layout.set_password_dialog, null)
+                dialogBuilder.setPositiveButton(R.string.dialog_ok) { _, _ ->
+                    val newPassword = view.set_password.text.toString()
+                    if (newPassword == "") {
+                        Toast.makeText(callingActivity.applicationContext, "Password Empty", Toast.LENGTH_SHORT).show()
+                    } else {
+                        PreferenceManager.getDefaultSharedPreferences(callingActivity)
+                                .edit()
+                                .putString("password", SecurityActivity.encodeString(newPassword))
+                                .apply()
+                        findPreference("fingerprint_authentication").isEnabled = true
+                        Toast.makeText(callingActivity.applicationContext, "Password Changed Successfully", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                dialogBuilder.setNegativeButton(R.string.dialog_cancel) { _, _ ->
+                }
                 dialogBuilder.setView(view)
                 val alertdialog = dialogBuilder.create()
                 alertdialog.show()
-
-                view.set_password_done.setOnClickListener {
-                    val newPassword = view.set_password.text.toString()
-                    PreferenceManager.getDefaultSharedPreferences(callingActivity)
-                            .edit()
-                            .putString("password", SecurityActivity.encodeString(newPassword))
-                            .apply()
-                    alertdialog.cancel()
-                    findPreference("fingerprint_authentication").isEnabled = true
-
-
-                }
                 true
             }
 
@@ -203,8 +207,6 @@ class UserPreference : AppCompatActivity() {
             }
 
             findPreference("fingerprint_authentication").isEnabled = preferenceManager.sharedPreferences.getString("password", "") != ""
-
-
             findPreference("general_show_time").onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any? ->
                 try {
                     findPreference("clear_after_copy").isEnabled = newValue.toString().toInt() != 0

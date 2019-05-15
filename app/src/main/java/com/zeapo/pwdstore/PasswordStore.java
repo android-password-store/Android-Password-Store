@@ -110,23 +110,19 @@ public class PasswordStore extends AppCompatActivity {
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-
-
         if (savedInstanceState == null) {
             String password = settings.getString("password", null);
-            if (password !=null && !(password.equals(""))) {
+            if (password != null && !(password.equals(""))) {
                 Intent intent = new Intent(this, SecurityActivity.class);
                 intent.putExtra(SecurityActivity.PASSWORD_INTENT, password);
                 startActivityForResult(intent, 0);
             }
         }
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager = getSystemService(ShortcutManager.class);
         }
         activity = this;
-
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
         if (savedInstanceState != null && (!settings.getBoolean("git_external", false)
