@@ -8,7 +8,10 @@ import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
+import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.RebaseResult;
 import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RemoteRefUpdate;
@@ -50,6 +53,14 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                     // the previous status will eventually be used to avoid a commit
                     if (nbChanges == null || nbChanges > 0)
                         command.call();
+                } else if (command instanceof PullCommand) {
+                    final PullResult result = ((PullCommand) command).call();
+                    final RebaseResult rr = result.getRebaseResult();
+
+                    if (rr.getStatus() == RebaseResult.Status.STOPPED) {
+                        return activity.getString(R.string.git_pull_fail_error);
+                    }
+
                 } else if (command instanceof PushCommand) {
                     for (final PushResult result : ((PushCommand) command).call()) {
                         // Code imported (modified) from Gerrit PushOp, license Apache v2

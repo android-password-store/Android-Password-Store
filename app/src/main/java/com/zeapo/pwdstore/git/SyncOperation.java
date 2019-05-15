@@ -58,9 +58,9 @@ public class SyncOperation extends GitOperation {
         new AlertDialog.Builder(callingActivity).
                 setTitle(callingActivity.getResources().getString(R.string.jgit_error_dialog_title)).
                 setMessage("Error occured during the sync operation, "
+                        + "\nPlease check the FAQ for possible reasons why this error might occur."
                         + callingActivity.getResources().getString(R.string.jgit_error_dialog_text)
-                        + errorMessage
-                        + "\nPlease check the FAQ for possible reasons why this error might occur.").
+                        + errorMessage).
                 setPositiveButton(callingActivity.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> callingActivity.finish()).show();
     }
 }

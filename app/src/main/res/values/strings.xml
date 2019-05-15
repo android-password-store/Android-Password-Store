@@ -238,6 +238,7 @@
     <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
     <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
     <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>
+    <string name="git_pull_fail_error">Pull has failed, you\'re in a detached head. Using "settings > git utils", save your changes to the remote in a new branch and resolve the conflict on your computer.</string>
     <string name="git_push_nff_error">Push was rejected by remote, run pull before pushing again. You can use Synchronize rather than pull/push as it implements both</string>
     <string name="git_push_generic_error">Push was rejected by remote, reason:</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
@@ -246,7 +247,7 @@
     <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
     <string name="remember_the_passphrase">Remember the passphrase in the app configuration (insecure)</string>
     <string name="hackish_tools">Hackish tools</string>
-    <string name="abort_rebase">Abort rebase</string>
+    <string name="abort_rebase">Abort rebase and push new branch</string>
     <string name="commit_hash">Commit hash</string>
     <string name="crypto_password_edit_hint" translatable="false">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
@@ -258,4 +259,5 @@
     <string name="ssh_api_unknown_error">Unknown SSH API Error</string>
     <string name="sdcard_root_warning_title">SD-Card root selected</string>
     <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
+    <string name="git_abort_and_push_title">Abort and Push</string>
 </resources>
