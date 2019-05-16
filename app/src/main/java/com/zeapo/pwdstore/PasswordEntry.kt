@@ -89,8 +89,8 @@ class PasswordEntry(private val content: String) {
 
     private fun findOtpDigits(decryptedContent: String): String {
         decryptedContent.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/") ||
-                    line.startsWith("otpauth://hotp/") &&
+            if ((line.startsWith("otpauth://totp/") ||
+                            line.startsWith("otpauth://hotp/")) &&
                     Uri.parse(line).getQueryParameter("digits") != null) {
                 return Uri.parse(line).getQueryParameter("digits")!!
             }
