@@ -169,6 +169,8 @@ class UserPreference : AppCompatActivity() {
                 }
             }
 
+
+            //Create set Password dialog//
             findPreference("set_password").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val dialogBuilder = AlertDialog.Builder(callingActivity)
                 dialogBuilder.setTitle("Set New Password")
@@ -182,6 +184,7 @@ class UserPreference : AppCompatActivity() {
                                 .edit()
                                 .putString("password", SecurityActivity.encodeString(newPassword))
                                 .apply()
+                        //If password is set then enable fingerprint authentication option//
                         findPreference("fingerprint_authentication").isEnabled = true
                         Toast.makeText(callingActivity.applicationContext, "Password Changed Successfully", Toast.LENGTH_SHORT).show()
                     }
@@ -195,13 +198,14 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
+            //If delete Password set password to "" and disable fingerprint authentication
             findPreference("delete_password").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 PreferenceManager.getDefaultSharedPreferences(callingActivity)
                         .edit()
                         .putString("password", "")
                         .apply()
                 findPreference("fingerprint_authentication").isEnabled = false
-                Toast.makeText(callingActivity, "Password Deleted Succesfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(callingActivity, "Password Deleted Successfully", Toast.LENGTH_SHORT).show()
 
                 true
             }

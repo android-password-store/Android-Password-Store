@@ -110,6 +110,8 @@ public class PasswordStore extends AppCompatActivity {
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+
+        //If the app has been killed in the bg of by the user then show SecurityActivity on launch//
         if (savedInstanceState == null) {
             String password = settings.getString("password", null);
             if (password != null && !(password.equals(""))) {

@@ -16,9 +16,9 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.mattprecious.swirl.SwirlView;
 import com.zeapo.pwdstore.utils.FingerprintHelper;
@@ -53,6 +53,14 @@ public class SecurityActivity extends AppCompatActivity {
     private Cipher mCipher;
     private FingerprintHelper mFingerprintUiHelper;
     private FingerprintManagerCompat.CryptoObject mCryptoObject;
+
+    public static String decodeString(String text) {
+        return new String(Base64.decode(text, Base64.DEFAULT), StandardCharsets.UTF_8);
+    }
+
+    public static String encodeString(String text) {
+        return Base64.encodeToString(text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,20 +105,31 @@ public class SecurityActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void loadFingerprint() {
         try {
+            // Obtain a reference to the Keystore//
             KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+
+            //Generate the key//
             KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+
+            //Obtain a cipher instance and configure it with the properties required for fingerprint authentication//
             mCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
                     + KeyProperties.BLOCK_MODE_CBC + "/"
                     + KeyProperties.ENCRYPTION_PADDING_PKCS7);
 
+            //Initialize an empty KeyStore//
             keyStore.load(null);
+
+            //Specify the operation(s) this key can be used for//
             keyGenerator.init(new KeyGenParameterSpec.Builder(KEY_NAME,
                     KeyProperties.PURPOSE_ENCRYPT |
                             KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    //Configure this key so that the user has to confirm their identity with a fingerprint each time they want to use it//
                     .setUserAuthenticationRequired(true)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                     .build());
+
+            //Generate the key//
             keyGenerator.generateKey();
 
             SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME, null);
@@ -150,14 +169,6 @@ public class SecurityActivity extends AppCompatActivity {
                     }
                 });
         mFingerprintUiHelper.startListening(mCryptoObject);
-    }
-
-    public static String decodeString(String text) {
-        return new String(Base64.decode(text, Base64.DEFAULT), StandardCharsets.UTF_8);
-    }
-
-    public static String encodeString(String text) {
-        return Base64.encodeToString(text.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
     }
 
     @Override
