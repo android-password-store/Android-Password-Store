@@ -170,7 +170,7 @@ class UserPreference : AppCompatActivity() {
             }
 
 
-            //Create set Password dialog//
+            //Create set Password dialog
             findPreference("set_password").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val dialogBuilder = AlertDialog.Builder(callingActivity)
                 dialogBuilder.setTitle("Set New Password")
@@ -184,7 +184,7 @@ class UserPreference : AppCompatActivity() {
                                 .edit()
                                 .putString("password", SecurityActivity.encodeString(newPassword))
                                 .apply()
-                        //If password is set then enable fingerprint authentication option//
+                        //If password is set then enable fingerprint authentication option
                         findPreference("fingerprint_authentication").isEnabled = true
                         Toast.makeText(callingActivity.applicationContext, "Password Changed Successfully", Toast.LENGTH_SHORT).show()
                     }

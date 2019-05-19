@@ -105,31 +105,31 @@ public class SecurityActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void loadFingerprint() {
         try {
-            // Obtain a reference to the Keystore//
+            // Obtain a reference to the Keystore
             KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
 
-            //Generate the key//
+            //Generate the key
             KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
 
-            //Obtain a cipher instance and configure it with the properties required for fingerprint authentication//
+            //Obtain a cipher instance and configure it with the properties required for fingerprint authentication
             mCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
                     + KeyProperties.BLOCK_MODE_CBC + "/"
                     + KeyProperties.ENCRYPTION_PADDING_PKCS7);
 
-            //Initialize an empty KeyStore//
+            //Initialize an empty KeyStore
             keyStore.load(null);
 
-            //Specify the operation(s) this key can be used for//
+            //Specify the operation(s) this key can be used for
             keyGenerator.init(new KeyGenParameterSpec.Builder(KEY_NAME,
                     KeyProperties.PURPOSE_ENCRYPT |
                             KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    //Configure this key so that the user has to confirm their identity with a fingerprint each time they want to use it//
+                    //Configure this key so that the user has to confirm their identity with a fingerprint each time they want to use it
                     .setUserAuthenticationRequired(true)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                     .build());
 
-            //Generate the key//
+            //Generate the key
             keyGenerator.generateKey();
 
             SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME, null);
