@@ -419,8 +419,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val path = if (intent.getBooleanExtra("fromDecrypt", false)) fullPath else "$fullPath/$editName.gpg"
 
         api?.executeApiAsync(data, iStream, oStream) { result: Intent? ->
-            when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-                OpenPgpApi.RESULT_CODE_SUCCESS -> {
+            when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
+                RESULT_CODE_SUCCESS -> {
                     try {
                         // TODO This might fail, we should check that the write is successful
                         val outputStream = FileUtils.openOutputStream(File(path))
@@ -443,7 +443,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         Log.e(TAG, "An Exception occurred", e)
                     }
                 }
-                OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
+                RESULT_CODE_ERROR -> handleError(result)
             }
 
         }
@@ -523,8 +523,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_GET_KEY_IDS
         api?.executeApiAsync(data, null, null) { result: Intent? ->
-            when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-                OpenPgpApi.RESULT_CODE_SUCCESS -> {
+            when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
+                RESULT_CODE_SUCCESS -> {
                     try {
                         val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
                         val keys = ids.map { it.toString() }.toSet()
@@ -541,7 +541,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     }
                 }
                 RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_KEY_ID)
-                OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
+                RESULT_CODE_ERROR -> handleError(result)
             }
         }
     }
@@ -564,23 +564,23 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         Log.d(TAG, "onActivityResult resultCode: $resultCode")
 
         if (data == null) {
-            setResult(AppCompatActivity.RESULT_CANCELED, null)
+            setResult(RESULT_CANCELED, null)
             finish()
             return
         }
 
         // try again after user interaction
-        if (resultCode == AppCompatActivity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_DECRYPT -> decryptAndVerify(data)
                 REQUEST_KEY_ID -> getKeyIds(data)
                 else -> {
-                    setResult(AppCompatActivity.RESULT_OK)
+                    setResult(RESULT_OK)
                     finish()
                 }
             }
-        } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
-            setResult(AppCompatActivity.RESULT_CANCELED, data)
+        } else if (resultCode == RESULT_CANCELED) {
+            setResult(RESULT_CANCELED, data)
             finish()
         }
     }
@@ -770,7 +770,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             if (crypto_password_show != null) {
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
                 if (passwordEntry?.hotpIsIncremented() == false) {
-                    setResult(AppCompatActivity.RESULT_CANCELED)
+                    setResult(RESULT_CANCELED)
                 }
                 passwordEntry = null
                 crypto_password_show.text = ""
