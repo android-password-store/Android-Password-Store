@@ -47,6 +47,7 @@ object PasswordGenerator {
      * @return `false` if a numerical options is invalid,
      * `true` otherwise
      */
+    @JvmStatic
     fun setPrefs(ctx: Context, argv: ArrayList<String>, vararg numArgv: Int): Boolean {
         val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
         val editor = prefs.edit()
@@ -81,7 +82,7 @@ object PasswordGenerator {
      * preferences file 'PasswordGenerator'
      * @return list of generated passwords
      */
-    @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
+    @JvmStatic @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
     fun generate(ctx: Context): ArrayList<String> {
         val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
@@ -140,6 +141,6 @@ object PasswordGenerator {
         return passwords
     }
 
-    public class PasswordGeneratorExeption(string: String) : Exception(string)
+    class PasswordGeneratorExeption(string: String) : Exception(string)
 }
 

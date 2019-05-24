@@ -52,12 +52,12 @@ public class PasswordFragment extends Fragment {
         super.onCreate(savedInstanceState);
         String path = getArguments().getString("Path");
 
-        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        settings = PreferenceManager.getDefaultSharedPreferences(requireActivity());
         passListStack = new Stack<>();
         scrollPosition = new Stack<>();
         pathStack = new Stack<>();
-        recyclerAdapter = new PasswordRecyclerAdapter((PasswordStore) getActivity(), mListener,
-                PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
+        recyclerAdapter = new PasswordRecyclerAdapter((PasswordStore) requireActivity(), mListener,
+                PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(requireContext()), getSortOrder()));
     }
 
     @Override
@@ -66,19 +66,19 @@ public class PasswordFragment extends Fragment {
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
         // use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(requireContext());
 
         recyclerView = view.findViewById(R.id.pass_recycler);
         recyclerView.setLayoutManager(mLayoutManager);
 
         // use divider
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
 
         final FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> ((PasswordStore) getActivity()).createPassword());
+        fab.setOnClickListener(v -> ((PasswordStore) requireActivity()).createPassword());
 
         registerForContextMenu(recyclerView);
         return view;
@@ -102,18 +102,17 @@ public class PasswordFragment extends Fragment {
                     recyclerAdapter.clear();
                     recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
 
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 } else {
                     if (getArguments().getBoolean("matchWith", false)) {
-                        ((PasswordStore) getActivity()).matchPasswordWithApp(item);
+                        ((PasswordStore) requireActivity()).matchPasswordWithApp(item);
                     } else {
-                        ((PasswordStore) getActivity()).decryptPassword(item);
+                        ((PasswordStore) requireActivity()).decryptPassword(item);
                     }
                 }
             };
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(context + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -125,9 +124,9 @@ public class PasswordFragment extends Fragment {
         pathStack.clear();
         scrollPosition.clear();
         recyclerAdapter.clear();
-        recyclerAdapter.addAll(PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
+        recyclerAdapter.addAll(PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(requireContext()), getSortOrder()));
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     /**
@@ -136,8 +135,8 @@ public class PasswordFragment extends Fragment {
     public void refreshAdapter() {
         recyclerAdapter.clear();
         recyclerAdapter.addAll(pathStack.isEmpty() ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()) :
-                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(requireContext()), getSortOrder()) :
+                PasswordRepository.getPasswords(pathStack.peek(), PasswordRepository.getRepositoryDirectory(requireContext()), getSortOrder()));
     }
 
     /**
@@ -164,8 +163,8 @@ public class PasswordFragment extends Fragment {
     private void recursiveFilter(String filter, File dir) {
         // on the root the pathStack is empty
         ArrayList<PasswordItem> passwordItems = dir == null ?
-                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()) :
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder());
+                PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(requireContext()), getSortOrder()) :
+                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(requireContext()), getSortOrder());
 
         boolean rec = settings.getBoolean("filter_recursively", true);
         for (PasswordItem item : passwordItems) {
@@ -202,7 +201,7 @@ public class PasswordFragment extends Fragment {
      */
     public File getCurrentDir() {
         if (pathStack.isEmpty())
-            return PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
+            return PasswordRepository.getRepositoryDirectory(requireContext());
         else
             return pathStack.peek();
     }
