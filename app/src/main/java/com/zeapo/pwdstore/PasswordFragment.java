@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,7 +72,7 @@ public class PasswordFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
 
         // use divider
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
