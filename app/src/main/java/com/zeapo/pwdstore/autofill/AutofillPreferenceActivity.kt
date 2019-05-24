@@ -130,7 +130,7 @@ class AutofillPreferenceActivity : AppCompatActivity() {
                 }
 
             }
-            recyclerAdapter = AutofillRecyclerAdapter(allApps, pm, this@AutofillPreferenceActivity)
+            recyclerAdapter = AutofillRecyclerAdapter(allApps, this@AutofillPreferenceActivity)
             return null
         }
 
