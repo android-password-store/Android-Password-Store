@@ -271,14 +271,25 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         }
 
                         if (entry.hasExtraContent()) {
-                            crypto_extra_show_layout.visibility = if (showExtraContent) View.VISIBLE else View.GONE
-                            crypto_extra_toggle_show.visibility = if (showExtraContent) View.GONE else View.VISIBLE
                             crypto_extra_show.typeface = monoTypeface
                             crypto_extra_show.text = entry.extraContent
-                            crypto_extra_show.transformationMethod = if (showExtraContent) {
-                                null
+
+                            if (showExtraContent) {
+                                crypto_extra_show_layout.visibility = View.VISIBLE
+                                crypto_extra_toggle_show.visibility = View.GONE
+                                crypto_extra_show.transformationMethod = null
                             } else {
-                                HoldToShowExtraTransformation(crypto_extra_toggle_show, Runnable { crypto_extra_show.text = entry.extraContent })
+                                crypto_extra_show_layout.visibility = View.GONE
+                                crypto_extra_toggle_show.visibility = View.VISIBLE
+                                crypto_extra_toggle_show.setOnCheckedChangeListener { _, _ ->
+                                    crypto_extra_show.text = entry.extraContent
+                                }
+
+                                crypto_extra_show.transformationMethod = object : PasswordTransformationMethod() {
+                                    override fun getTransformation(source: CharSequence, view: View): CharSequence {
+                                        return if (crypto_extra_toggle_show.isChecked) source else super.getTransformation(source, view)
+                                    }
+                                }
                             }
 
                             if (entry.hasUsername()) {
@@ -600,34 +611,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         override fun getTransformation(charSequence: CharSequence, view: View): CharSequence {
             return if (shown) charSequence else super.getTransformation("12345", view)
-        }
-
-        @Suppress("ClickableViewAccessibility")
-        override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    shown = true
-                    onToggle.run()
-                }
-                MotionEvent.ACTION_UP -> {
-                    shown = false
-                    onToggle.run()
-                }
-            }
-            return false
-        }
-    }
-
-    private inner class HoldToShowExtraTransformation constructor(button: Button, private val onToggle: Runnable) :
-            PasswordTransformationMethod(), View.OnTouchListener {
-        private var shown = false
-
-        init {
-            button.setOnTouchListener(this)
-        }
-
-        override fun getTransformation(source: CharSequence, view: View): CharSequence {
-            return if (shown) source else super.getTransformation(source, view)
         }
 
         @Suppress("ClickableViewAccessibility")
