@@ -16,7 +16,10 @@ import com.zeapo.pwdstore.R
 import java.util.ArrayList
 import java.util.Locale
 
-internal class AutofillRecyclerAdapter(allApps: List<AppInfo>, private val activity: AutofillPreferenceActivity) : RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder>() {
+internal class AutofillRecyclerAdapter(
+        allApps: List<AppInfo>,
+        private val activity: AutofillPreferenceActivity
+) : RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder>() {
 
     private val apps: SortedList<AppInfo>
     private val allApps: ArrayList<AppInfo> // for filtering, maintain a list of all
@@ -38,15 +41,14 @@ internal class AutofillRecyclerAdapter(allApps: List<AppInfo>, private val activ
                 return item1.appName == item2.appName
             }
         }
-        this.apps = SortedList(AppInfo::class.java, callback)
-        this.apps.addAll(allApps)
+        apps = SortedList(AppInfo::class.java, callback)
+        apps.addAll(allApps)
         this.allApps = ArrayList(allApps)
         try {
             browserIcon = activity.packageManager.getApplicationIcon("com.android.browser")
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -82,10 +84,10 @@ internal class AutofillRecyclerAdapter(allApps: List<AppInfo>, private val activ
             "/never" -> holder.secondary.setText(R.string.autofill_apps_never)
             else -> {
                 holder.secondary.setText(R.string.autofill_apps_match)
-                holder.secondary.append(" " + preference!!.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
-                if (preference.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().size - 1 > 0) {
+                holder.secondary.append(" " + preference!!.splitLines()[0])
+                if (preference.trim { it <= ' ' }.splitLines().size - 1 > 0) {
                     holder.secondary.append(" and "
-                            + (preference.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().size - 1) + " more")
+                            + (preference.trim { it <= ' ' }.splitLines().size - 1) + " more")
                 }
             }
         }
@@ -97,6 +99,10 @@ internal class AutofillRecyclerAdapter(allApps: List<AppInfo>, private val activ
 
     fun getPosition(appName: String): Int {
         return apps.indexOf(AppInfo(null, appName, false, null))
+    }
+
+    private fun String.splitLines(): Array<String> {
+        return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
     // for websites, URL = packageName == appName
@@ -153,14 +159,14 @@ internal class AutofillRecyclerAdapter(allApps: List<AppInfo>, private val activ
         var secondary: TextView = view.findViewById(R.id.secondary_text)
         var packageName: String? = null
         var appName: String? = null
-        var isWeb: Boolean? = null
+        var isWeb: Boolean = false
 
         init {
             view.setOnClickListener(this)
         }
 
         override fun onClick(v: View) {
-            activity.showDialog(packageName, appName, isWeb!!)
+            activity.showDialog(packageName, appName, isWeb)
         }
 
     }
