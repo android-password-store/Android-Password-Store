@@ -44,7 +44,7 @@ class AutofillService : AccessibilityService() {
     private var serviceConnection: OpenPgpServiceConnection? = null
     private var settings: SharedPreferences? = null
     private var info: AccessibilityNodeInfo? = null // the original source of the event (the edittext field)
-    private var items: ArrayList<File>? = null // password choices
+    private var items: ArrayList<File> = arrayListOf() // password choices
     private var lastWhichItem: Int = 0
     private var dialog: AlertDialog? = null
     private var window: AccessibilityWindowInfo? = null
@@ -61,7 +61,7 @@ class AutofillService : AccessibilityService() {
     }
 
     fun setPickedPassword(path: String) {
-        items!!.add(File(PasswordRepository.getRepositoryDirectory(applicationContext).toString() + "/" + path + ".gpg"))
+        items.add(File("${PasswordRepository.getRepositoryDirectory(applicationContext)}/$path.gpg"))
         bindDecryptAndVerify()
     }
 
@@ -217,7 +217,7 @@ class AutofillService : AccessibilityService() {
 
         // if autofill_always checked, show dialog even if no matches (automatic
         // or otherwise)
-        if (items!!.isEmpty() && !settings!!.getBoolean("autofill_always", false)) {
+        if (items.isEmpty() && !settings!!.getBoolean("autofill_always", false)) {
             return
         }
         showSelectPasswordDialog(packageName, appName, isWeb)
@@ -333,7 +333,7 @@ class AutofillService : AccessibilityService() {
         for (password in preferredPasswords) {
             val path = PasswordRepository.getRepositoryDirectory(applicationContext).toString() + "/" + password + ".gpg"
             if (File(path).exists()) {
-                items!!.add(File(path))
+                items.add(File(path))
             }
         }
     }
@@ -408,17 +408,17 @@ class AutofillService : AccessibilityService() {
 
         // populate the dialog items, always with pick + pick and match. Could
         // make it optional (or make height a setting for the same effect)
-        val itemNames = arrayOfNulls<CharSequence>(items!!.size + 2)
-        for (i in items!!.indices) {
-            itemNames[i] = items!![i].name.replace(".gpg", "")
+        val itemNames = arrayOfNulls<CharSequence>(items.size + 2)
+        for (i in items.indices) {
+            itemNames[i] = items[i].name.replace(".gpg", "")
         }
-        itemNames[items!!.size] = getString(R.string.autofill_pick)
-        itemNames[items!!.size + 1] = getString(R.string.autofill_pick_and_match)
+        itemNames[items.size] = getString(R.string.autofill_pick)
+        itemNames[items.size + 1] = getString(R.string.autofill_pick_and_match)
         builder.setItems(itemNames) { _, which ->
             lastWhichItem = which
             when {
-                which < items!!.size -> bindDecryptAndVerify()
-                which == items!!.size -> {
+                which < items.size -> bindDecryptAndVerify()
+                which == items.size -> {
                     val intent = Intent(this@AutofillService, AutofillActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     intent.putExtra("pick", true)
@@ -437,21 +437,26 @@ class AutofillService : AccessibilityService() {
         }
 
         dialog = builder.create()
-        this.setDialogType(dialog)
-        dialog!!.window!!.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
-        dialog!!.window!!.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-        // arbitrary non-annoying size
-        var height = 154
-        height += 46
-        dialog!!.window!!.setLayout((240 * applicationContext.resources.displayMetrics.density).toInt(), (height * applicationContext.resources.displayMetrics.density).toInt())
-        dialog!!.show()
+        setDialogType(dialog)
+        dialog?.window?.apply {
+            val height = 200
+            val density = context.resources.displayMetrics.density
+            addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+            clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            // arbitrary non-annoying size
+            setLayout((240 * density).toInt(), (height * density).toInt())
+        }
+        dialog?.show()
     }
 
     private fun setDialogType(dialog: AlertDialog?) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            dialog!!.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-        } else {
-            dialog!!.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
+        dialog?.window?.apply {
+            setType(
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+                    else
+                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            )
         }
     }
 
@@ -480,7 +485,7 @@ class AutofillService : AccessibilityService() {
         }
         var `is`: InputStream? = null
         try {
-            `is` = FileUtils.openInputStream(items!![lastWhichItem])
+            `is` = FileUtils.openInputStream(items[lastWhichItem])
         } catch (e: IOException) {
             e.printStackTrace()
         }
