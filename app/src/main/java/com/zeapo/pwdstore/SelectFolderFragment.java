@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,8 +47,8 @@ public class SelectFolderFragment extends Fragment {
         String path = getArguments().getString("Path");
 
         pathStack = new Stack<>();
-        recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) getActivity(), mListener,
-                PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(getActivity()), getSortOrder()));
+        recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) requireActivity(), mListener,
+                PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(requireActivity()), getSortOrder()));
     }
 
     @Override
@@ -57,10 +58,10 @@ public class SelectFolderFragment extends Fragment {
 
         // use a linear layout manager
         recyclerView = view.findViewById(R.id.pass_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // use divider
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
@@ -84,7 +85,7 @@ public class SelectFolderFragment extends Fragment {
                     recyclerAdapter.clear();
                     recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
 
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 }
             };
         } catch (ClassCastException e) {
@@ -100,13 +101,13 @@ public class SelectFolderFragment extends Fragment {
      */
     public File getCurrentDir() {
         if (pathStack.isEmpty())
-            return PasswordRepository.getRepositoryDirectory(getActivity().getApplicationContext());
+            return PasswordRepository.getRepositoryDirectory(requireContext());
         else
             return pathStack.peek();
     }
 
     private PasswordRepository.PasswordSortOrder getSortOrder() {
-        return PasswordRepository.PasswordSortOrder.getSortOrder(PreferenceManager.getDefaultSharedPreferences(getActivity()));
+        return PasswordRepository.PasswordSortOrder.getSortOrder(PreferenceManager.getDefaultSharedPreferences(requireContext()));
     }
 
     public interface OnFragmentInteractionListener {
