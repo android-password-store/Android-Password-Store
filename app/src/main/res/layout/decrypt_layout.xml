@@ -228,6 +228,19 @@
                     android:textIsSelectable="true"
                     android:typeface="monospace" />
 
+                <ToggleButton
+                    android:id="@+id/crypto_extra_toggle_show"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/crypto_extra_show"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:checked="false"
+                    android:paddingTop="8dp"
+                    android:textOff="@string/show_extra"
+                    android:textOn="@string/hide_extra" />
+
             </RelativeLayout>
         </LinearLayout>
 

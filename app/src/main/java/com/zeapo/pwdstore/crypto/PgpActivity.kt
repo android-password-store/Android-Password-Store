@@ -271,10 +271,26 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         }
 
                         if (entry.hasExtraContent()) {
-                            crypto_extra_show_layout.visibility = if (showExtraContent) View.VISIBLE else View.GONE
-
                             crypto_extra_show.typeface = monoTypeface
                             crypto_extra_show.text = entry.extraContent
+
+                            if (showExtraContent) {
+                                crypto_extra_show_layout.visibility = View.VISIBLE
+                                crypto_extra_toggle_show.visibility = View.GONE
+                                crypto_extra_show.transformationMethod = null
+                            } else {
+                                crypto_extra_show_layout.visibility = View.GONE
+                                crypto_extra_toggle_show.visibility = View.VISIBLE
+                                crypto_extra_toggle_show.setOnCheckedChangeListener { _, _ ->
+                                    crypto_extra_show.text = entry.extraContent
+                                }
+
+                                crypto_extra_show.transformationMethod = object : PasswordTransformationMethod() {
+                                    override fun getTransformation(source: CharSequence, view: View): CharSequence {
+                                        return if (crypto_extra_toggle_show.isChecked) source else super.getTransformation(source, view)
+                                    }
+                                }
+                            }
 
                             if (entry.hasUsername()) {
                                 crypto_username_show.visibility = View.VISIBLE

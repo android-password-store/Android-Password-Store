@@ -215,6 +215,8 @@
     <string name="no_repo_selected">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="show_password">Show password</string>
+    <string name="show_extra">Show extra content</string>
+    <string name="hide_extra">Hide extra content</string>
     <string name="repository_uri">Repository URI</string>
     <string name="app_icon_hint">App icon</string>
     <string name="folder_icon_hint">Folder icon</string>
