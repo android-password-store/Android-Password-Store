@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zeapo.pwdstore.R
+import java.lang.ref.WeakReference
 import java.util.ArrayList
 
 class AutofillPreferenceActivity : AppCompatActivity() {
@@ -39,7 +40,7 @@ class AutofillPreferenceActivity : AppCompatActivity() {
 
         pm = packageManager
 
-        PopulateTask().execute()
+        PopulateTask(this).execute()
 
         // if the preference activity was started from the autofill dialog
         recreate = false
@@ -105,42 +106,52 @@ class AutofillPreferenceActivity : AppCompatActivity() {
         df.show(supportFragmentManager, "autofill_dialog")
     }
 
-    private inner class PopulateTask : AsyncTask<Void, Void, Void>() {
-        override fun onPreExecute() {
-            runOnUiThread { findViewById<View>(R.id.progress_bar).visibility = View.VISIBLE }
-        }
+    companion object {
+        private class PopulateTask(activity: AutofillPreferenceActivity) : AsyncTask<Void, Void, Void>() {
 
-        override fun doInBackground(vararg params: Void): Void? {
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_LAUNCHER)
-            val allAppsResolveInfo = pm!!.queryIntentActivities(intent, 0)
-            val allApps = ArrayList<AutofillRecyclerAdapter.AppInfo>()
+            val weakReference = WeakReference<AutofillPreferenceActivity>(activity)
 
-            for (app in allAppsResolveInfo) {
-                allApps.add(AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName, app.loadLabel(pm).toString(), false, app.loadIcon(pm)))
+            override fun onPreExecute() {
+                weakReference.get()?.apply {
+                    runOnUiThread { findViewById<View>(R.id.progress_bar).visibility = View.VISIBLE }
+                }
             }
 
-            val prefs = getSharedPreferences("autofill_web", Context.MODE_PRIVATE)
-            val prefsMap = prefs.all
-            for (key in prefsMap.keys) {
-                try {
-                    allApps.add(AutofillRecyclerAdapter.AppInfo(key, key, true, pm!!.getApplicationIcon("com.android.browser")))
-                } catch (e: PackageManager.NameNotFoundException) {
-                    allApps.add(AutofillRecyclerAdapter.AppInfo(key, key, true, null))
+            override fun doInBackground(vararg params: Void): Void? {
+                val pm = weakReference.get()?.pm ?: return null
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                val allAppsResolveInfo = pm.queryIntentActivities(intent, 0)
+                val allApps = ArrayList<AutofillRecyclerAdapter.AppInfo>()
+
+                for (app in allAppsResolveInfo) {
+                    allApps.add(AutofillRecyclerAdapter.AppInfo(app.activityInfo.packageName, app.loadLabel(pm).toString(), false, app.loadIcon(pm)))
                 }
 
-            }
-            recyclerAdapter = AutofillRecyclerAdapter(allApps, this@AutofillPreferenceActivity)
-            return null
-        }
+                val prefs = weakReference.get()?.getSharedPreferences("autofill_web", Context.MODE_PRIVATE)
+                val prefsMap = prefs!!.all
+                for (key in prefsMap.keys) {
+                    try {
+                        allApps.add(AutofillRecyclerAdapter.AppInfo(key, key, true, pm.getApplicationIcon("com.android.browser")))
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        allApps.add(AutofillRecyclerAdapter.AppInfo(key, key, true, null))
+                    }
 
-        override fun onPostExecute(ignored: Void?) {
-            runOnUiThread {
-                findViewById<View>(R.id.progress_bar).visibility = View.GONE
-                recyclerView!!.adapter = recyclerAdapter
-                val extras = intent.extras
-                if (extras != null) {
-                    recyclerView!!.scrollToPosition(recyclerAdapter!!.getPosition(extras.getString("appName")))
+                }
+                weakReference.get()?.recyclerAdapter = AutofillRecyclerAdapter(allApps, weakReference.get()!!)
+                return null
+            }
+
+            override fun onPostExecute(ignored: Void?) {
+                weakReference.get()?.apply {
+                    runOnUiThread {
+                        findViewById<View>(R.id.progress_bar).visibility = View.GONE
+                        recyclerView!!.adapter = recyclerAdapter
+                        val extras = intent.extras
+                        if (extras != null) {
+                            recyclerView!!.scrollToPosition(recyclerAdapter!!.getPosition(extras.getString("appName")!!))
+                        }
+                    }
                 }
             }
         }
