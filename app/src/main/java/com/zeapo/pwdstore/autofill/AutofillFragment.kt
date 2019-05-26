@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.splitLines
 
 class AutofillFragment : DialogFragment() {
     private var adapter: ArrayAdapter<String>? = null
@@ -85,7 +86,7 @@ class AutofillFragment : DialogFragment() {
             else -> {
                 (view.findViewById<View>(R.id.match) as RadioButton).toggle()
                 // trim to remove the last blank element
-                adapter!!.addAll(*preference!!.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+                adapter!!.addAll(*preference!!.trim { it <= ' ' }.splitLines())
             }
         }
 

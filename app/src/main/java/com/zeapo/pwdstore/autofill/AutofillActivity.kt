@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.zeapo.pwdstore.PasswordStore
+import com.zeapo.pwdstore.utils.splitLines
 import org.eclipse.jgit.util.StringUtils
 import java.util.ArrayList
 import java.util.Arrays
@@ -68,7 +69,7 @@ class AutofillActivity : AppCompatActivity() {
                 when (val preference = prefs.getString(packageName, "")) {
                     "", "/first", "/never" -> editor.putString(packageName, path)
                     else -> {
-                        val matches = ArrayList(Arrays.asList(*preference!!.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
+                        val matches = ArrayList(Arrays.asList(*preference!!.trim { it <= ' ' }.splitLines()))
                         matches.add(path)
                         val paths = StringUtils.join(matches, "\n")
                         editor.putString(packageName, paths)

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.splitLines
 import java.util.ArrayList
 import java.util.Locale
 
@@ -99,10 +100,6 @@ internal class AutofillRecyclerAdapter(
 
     fun getPosition(appName: String): Int {
         return apps.indexOf(AppInfo(null, appName, false, null))
-    }
-
-    private fun String.splitLines(): Array<String> {
-        return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
     // for websites, URL = packageName == appName

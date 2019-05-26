@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.splitLines
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
@@ -328,7 +329,7 @@ class AutofillService : AccessibilityService() {
         if (!PasswordRepository.isInitialized()) {
             PasswordRepository.initialize(this)
         }
-        val preferredPasswords = preference.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val preferredPasswords = preference.splitLines()
         items = ArrayList()
         for (password in preferredPasswords) {
             val path = PasswordRepository.getRepositoryDirectory(applicationContext).toString() + "/" + password + ".gpg"
