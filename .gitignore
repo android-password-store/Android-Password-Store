@@ -33,3 +33,5 @@ project.properties
 #IntelliJ IDEA
 .idea
 *.iml
+
+captures/
