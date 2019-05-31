@@ -595,7 +595,7 @@ public class PasswordStore extends AppCompatActivity {
             @Override
             public void execute() {
                 Log.d(TAG, "Committing with message " + message);
-                Git git = new Git(repository);
+                Git git = new Git(getRepository());
                 GitAsyncTask tasks = new GitAsyncTask(activity, false, true, this);
                 tasks.execute(
                         git.add().addFilepattern("."),
