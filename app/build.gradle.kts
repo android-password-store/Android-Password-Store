@@ -1,3 +1,4 @@
+import org.gradle.api.JavaVersion.*
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
@@ -27,8 +28,8 @@ android {
     }
 
     compileOptions {
-        setSourceCompatibility(JavaVersion.VERSION_1_8)
-        setTargetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility = VERSION_1_8
+        targetCompatibility = VERSION_1_8
     }
 
     lintOptions {
@@ -87,9 +88,9 @@ dependencies {
 
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.12")
-    androidTestImplementation("org.mockito:mockito-core:2.27.0")
-    androidTestImplementation("androidx.test:runner:1.1.1")
-    androidTestImplementation("androidx.test:rules:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.1.1")
+    androidTestImplementation("org.mockito:mockito-core:2.28.2")
+    androidTestImplementation("androidx.test:runner:1.2.0")
+    androidTestImplementation("androidx.test:rules:1.2.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0")
 }
