@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base palette -->
+    <color name="primary_color">#607d8b</color>
+    <color name="primary_light_color">#8eacbb</color>
+    <color name="primary_dark_color">#34515e</color>
+    <color name="secondary_color">#ff7043</color>
+    <color name="secondary_light_color">#ffa270</color>
+    <color name="secondary_dark_color">#c63f17</color>
+    <color name="primary_text_color">#ffffff</color>
+    <color name="secondary_text_color">#ffffff</color>
+
+    <!-- Theme variables -->
     <color name="accent">#ff7043</color>
     <color name="background">#eee</color>
     <color name="blue_grey_50">#eceff1</color>
