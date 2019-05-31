@@ -38,15 +38,13 @@
                 android:text="@string/server_protocol"
                 android:id="@+id/label_server_protocol"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <Spinner
                 android:id="@+id/clone_protocol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/label_server_protocol"
-                android:layout_toRightOf="@+id/label_server_protocol" />
+                android:layout_toEndOf="@+id/label_server_protocol" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -61,7 +59,6 @@
                 android:text="@string/server_user"
                 android:id="@+id/label_server_user"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
                 android:paddingBottom="8dp"
                 android:layout_alignParentStart="true" />
 
@@ -70,11 +67,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/server_user_hint"
                 android:id="@+id/server_user"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@+id/label_server_user"
-                android:layout_toRightOf="@+id/label_server_user"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:inputType="textWebEmailAddress"/>
         </RelativeLayout>
@@ -91,7 +85,6 @@
                 android:paddingBottom="8dp"
                 android:id="@+id/label_server_url"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <EditText
@@ -99,11 +92,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/server_url_hint"
                 android:id="@+id/server_url"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@+id/label_server_url"
-                android:layout_toRightOf="@+id/label_server_url"
-                android:layout_toLeftOf="@+id/label_server_port"
                 android:layout_toStartOf="@+id/label_server_port"
                 android:inputType="textWebEmailAddress"
                 tools:ignore="TextFields" />
@@ -113,7 +103,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/server_port"
                 android:layout_toStartOf="@+id/server_port"
                 android:paddingBottom="8dp"
                 android:text=":"
@@ -124,7 +113,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/server_port_hint"
                 android:id="@+id/server_port"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:inputType="number"/>
 
@@ -143,19 +131,15 @@
                 android:paddingBottom="8dp"
                 android:id="@+id/label_server_path"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/server_path_hint"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:id="@+id/server_path"
                 android:layout_toEndOf="@+id/label_server_path"
-                android:layout_toRightOf="@+id/label_server_path"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:inputType="textWebEmailAddress"/>
         </RelativeLayout>
@@ -201,15 +185,13 @@
                 android:text="@string/connection_mode"
                 android:id="@+id/label_connection_mode"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/connection_mode"
-                android:layout_toEndOf="@+id/label_connection_mode"
-                android:layout_toRightOf="@+id/label_connection_mode" />
+                android:layout_toEndOf="@+id/label_connection_mode" />
         </RelativeLayout>
 
         <Button

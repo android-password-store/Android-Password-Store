@@ -32,6 +32,5 @@
         app:borderWidth="0dp"
         android:layout_margin="@dimen/fab_compat_margin"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 </RelativeLayout>
