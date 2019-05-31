@@ -11,7 +11,6 @@
     <color name="secondary_text_color">#ffffff</color>
 
     <!-- Theme variables -->
-    <color name="accent">#ff7043</color>
     <color name="background">#eee</color>
     <color name="blue_grey_50">#eceff1</color>
     <color name="blue_grey_500">#607d8b</color>

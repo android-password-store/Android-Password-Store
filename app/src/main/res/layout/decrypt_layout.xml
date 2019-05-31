@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:textColor="@color/accent"
+                android:textColor="?attr/colorSecondary"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="PASSWORD FILE NAME HERE" />

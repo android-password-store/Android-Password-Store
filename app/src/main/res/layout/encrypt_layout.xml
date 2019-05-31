@@ -39,7 +39,7 @@
                 android:layout_gravity="center_vertical"
                 android:hint="@string/crypto_name_hint"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:textColor="@color/accent"
+                android:textColor="?attr/colorSecondary"
                 android:textSize="24sp"
                 tools:ignore="TextFields" />
 
