@@ -28,8 +28,6 @@ import com.zeapo.pwdstore.git.config.SshApiSessionFactory;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.RebaseCommand;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
@@ -350,7 +348,7 @@ public class GitActivity extends AppCompatActivity {
         EditText server_user = findViewById(R.id.server_user);
 
         String uri = server_uri.getText().toString();
-        Pattern pattern = Pattern.compile("(.+)@([\\w\\d\\.]+):([\\d]+)*(.*)");
+        Pattern pattern = Pattern.compile("(.+)@([\\w\\d.]+):([\\d]+)*(.*)");
         Matcher matcher = pattern.matcher(uri);
         if (matcher.find()) {
             int count = matcher.groupCount();
@@ -402,17 +400,15 @@ public class GitActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id) {
-            case R.id.user_pref:
-                try {
-                    Intent intent = new Intent(this, UserPreference.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("Exception caught :(");
-                    e.printStackTrace();
-                }
-                return true;
-
+        if (id == R.id.user_pref) {
+            try {
+                Intent intent = new Intent(this, UserPreference.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                System.out.println("Exception caught :(");
+                e.printStackTrace();
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -660,6 +656,7 @@ public class GitActivity extends AppCompatActivity {
 
             switch (operation) {
                 case REQUEST_CLONE:
+                case GitOperation.GET_SSH_KEY_FROM_CLONE:
                     op = new CloneOperation(localDir, activity).setCommand(hostname);
                     break;
 
@@ -677,10 +674,6 @@ public class GitActivity extends AppCompatActivity {
 
                 case BREAK_OUT_OF_DETACHED:
                     op = new BreakOutOfDetached(localDir, activity).setCommands();
-                    break;
-
-                case GitOperation.GET_SSH_KEY_FROM_CLONE:
-                    op = new CloneOperation(localDir, activity).setCommand(hostname);
                     break;
 
                 case SshApiSessionFactory.POST_SIGNATURE:
