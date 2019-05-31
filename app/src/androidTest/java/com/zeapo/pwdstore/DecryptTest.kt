@@ -5,10 +5,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.util.Log
 import com.zeapo.pwdstore.crypto.PgpActivity
 import kotlinx.android.synthetic.main.decrypt_layout.*
@@ -22,26 +22,27 @@ import org.junit.runner.RunWith
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.nio.charset.StandardCharsets
 
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class DecryptTest {
-    lateinit var targetContext: Context
-    lateinit var testContext: Context
+    private lateinit var targetContext: Context
+    private lateinit var testContext: Context
     lateinit var activity: PgpActivity
 
-    val name = "sub"
-    val parentPath = "/category/"
+    private val name = "sub"
+    private val parentPath = "/category/"
     lateinit var path: String
     lateinit var repoPath: String
 
     @Rule @JvmField
     var mActivityRule: ActivityTestRule<PgpActivity> = ActivityTestRule<PgpActivity>(PgpActivity::class.java, true, false)
 
-    fun init() {
+    private fun init() {
         targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-        testContext = InstrumentationRegistry.getContext()
+        testContext = InstrumentationRegistry.getInstrumentation().context
         copyAssets("encrypted-store", File(targetContext.filesDir, "test-store").absolutePath)
         repoPath = File(targetContext.filesDir, "test-store").absolutePath
         path = "$repoPath/$parentPath/$name.gpg".replace("//", "/")
@@ -61,14 +62,14 @@ class DecryptTest {
 
         assertEquals("/cat1/n1.gpg", PgpActivity.getRelativePath(pathOne, "/fake/path"))
         assertEquals("/cat1/", PgpActivity.getParentPath(pathOne, "/fake/path"))
-        assertEquals("n1", PgpActivity.getName(pathOne, "/fake/path"))
+        assertEquals("n1", PgpActivity.getName("$pathOne/fake/path"))
         // test that even if we append a `/` it still works
-        assertEquals("n1", PgpActivity.getName(pathOne, "/fake/path/"))
+        assertEquals("n1", PgpActivity.getName("$pathOne/fake/path/"))
 
         assertEquals("/n2.gpg", PgpActivity.getRelativePath(pathTwo, "/fake/path"))
         assertEquals("/", PgpActivity.getParentPath(pathTwo, "/fake/path"))
-        assertEquals("n2", PgpActivity.getName(pathTwo, "/fake/path"))
-        assertEquals("n2", PgpActivity.getName(pathTwo, "/fake/path/"))
+        assertEquals("n2", PgpActivity.getName("$pathTwo/fake/path"))
+        assertEquals("n2", PgpActivity.getName("$pathTwo/fake/path/"))
     }
 
     @Test
@@ -88,13 +89,13 @@ class DecryptTest {
     @Test
     fun shouldDecrypt() {
         init()
-        val clearPass = IOUtils.toString(testContext.assets.open("clear-store/category/sub"))
+        val clearPass = IOUtils.toString(testContext.assets.open("clear-store/category/sub"), StandardCharsets.UTF_8)
         val passEntry = PasswordEntry(clearPass)
 
         // Setup the timer to 1 second
         // first remember the previous timer to set it back later
         val showTime = try {
-            Integer.parseInt(activity.settings.getString("general_show_time", "45"))
+            Integer.parseInt(activity.settings.getString("general_show_time", "45") ?: "45")
         } catch (e: NumberFormatException) {
             45
         }
@@ -129,7 +130,7 @@ class DecryptTest {
             FileUtils.forceMkdir(File(destination))
             FileUtils.cleanDirectory(File(destination))
 
-            val testContext = InstrumentationRegistry.getContext()
+            val testContext = InstrumentationRegistry.getInstrumentation().context
             val assetManager = testContext.assets
             val files: Array<String>? = assetManager.list(source)
 
@@ -150,7 +151,7 @@ class DecryptTest {
                         output.flush()
                         output.close()
                     } catch (e: IOException) {
-                        Log.e("tag", "Failed to copy asset file: " + filename, e)
+                        Log.e("tag", "Failed to copy asset file: $filename", e)
                     }
                 }
             }

@@ -83,7 +83,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
-    private val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
     private var mServiceConnection: OpenPgpServiceConnection? = null
 

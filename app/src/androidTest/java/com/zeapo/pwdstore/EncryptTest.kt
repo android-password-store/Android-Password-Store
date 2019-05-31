@@ -3,15 +3,15 @@ package com.zeapo.pwdstore
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import com.zeapo.pwdstore.crypto.PgpActivity
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -24,21 +24,21 @@ import java.io.File
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class EncryptTest {
-    lateinit var targetContext: Context
-    lateinit var testContext: Context
-    lateinit var activity: PgpActivity
+    private lateinit var targetContext: Context
+    private lateinit var testContext: Context
+    private lateinit var activity: PgpActivity
 
-    val name = "sub"
-    val parentPath = "/category/"
-    lateinit var path: String
-    lateinit var repoPath: String
+    private val name = "sub"
+    private val parentPath = "/category/"
+    private lateinit var path: String
+    private lateinit var repoPath: String
 
     @Rule @JvmField
     var mActivityRule: ActivityTestRule<PgpActivity> = ActivityTestRule<PgpActivity>(PgpActivity::class.java, true, false)
 
-    fun init() {
+    private fun init() {
         targetContext = InstrumentationRegistry.getInstrumentation().targetContext
-        testContext = InstrumentationRegistry.getContext()
+        testContext = InstrumentationRegistry.getInstrumentation().context
 
         // have an empty store
         FileUtils.forceMkdir(File(targetContext.filesDir, "test-store"))

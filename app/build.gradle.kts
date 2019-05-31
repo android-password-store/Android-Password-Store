@@ -91,6 +91,7 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-core:2.28.2")
     androidTestImplementation("androidx.test:runner:1.2.0")
     androidTestImplementation("androidx.test:rules:1.2.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0")
 }

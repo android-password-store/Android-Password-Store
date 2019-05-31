@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class PasswordEntryTest extends TestCase {
 
-    public void testGetPassword() throws Exception {
+    public void testGetPassword() {
         assertEquals("fooooo", new PasswordEntry("fooooo\nbla\n").getPassword());
         assertEquals("fooooo", new PasswordEntry("fooooo\nbla").getPassword());
         assertEquals("fooooo", new PasswordEntry("fooooo\n").getPassword());
@@ -15,7 +15,7 @@ public class PasswordEntryTest extends TestCase {
         assertEquals("", new PasswordEntry("").getPassword());
     }
 
-    public void testGetExtraContent() throws Exception {
+    public void testGetExtraContent() {
         assertEquals("bla\n", new PasswordEntry("fooooo\nbla\n").getExtraContent());
         assertEquals("bla", new PasswordEntry("fooooo\nbla").getExtraContent());
         assertEquals("", new PasswordEntry("fooooo\n").getExtraContent());
@@ -26,7 +26,7 @@ public class PasswordEntryTest extends TestCase {
         assertEquals("", new PasswordEntry("").getExtraContent());
     }
 
-    public void testGetUsername() throws Exception {
+    public void testGetUsername() {
         assertEquals("username", new PasswordEntry("secret\nextra\nlogin: username\ncontent\n").getUsername());
         assertEquals("username", new PasswordEntry("\nextra\nusername: username\ncontent\n").getUsername());
         assertEquals("username", new PasswordEntry("\nUSERNaMe:  username\ncontent\n").getUsername());
@@ -34,7 +34,7 @@ public class PasswordEntryTest extends TestCase {
         assertNull(new PasswordEntry("secret\nextra\ncontent\n").getUsername());
     }
 
-    public void testHasUsername() throws Exception {
+    public void testHasUsername() {
         assertTrue(new PasswordEntry("secret\nextra\nlogin: username\ncontent\n").hasUsername());
         assertFalse(new PasswordEntry("secret\nextra\ncontent\n").hasUsername());
         assertFalse(new PasswordEntry("secret\nlogin failed\n").hasUsername());
