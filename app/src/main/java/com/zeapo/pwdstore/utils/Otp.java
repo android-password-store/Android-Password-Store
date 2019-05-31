@@ -43,13 +43,13 @@ public class Otp {
         code[0] = (byte) (0x7f & code[0]);
         String strCode = new BigInteger(code).toString();
         if (digits.equals("s")) {
-            String output = "";
+            StringBuilder output = new StringBuilder();
             int bigInt = new BigInteger(code).intValue();
             for (int i = 0; i != 5; i++) {
-                output += steam[bigInt % 26];
+                output.append(steam[bigInt % 26]);
                 bigInt /= 26;
             }
-            return output;
+            return output.toString();
         }
         else return strCode.substring(strCode.length() - Integer.parseInt(digits));
     }
