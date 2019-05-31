@@ -16,25 +16,31 @@ import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RemoteRefUpdate;
 
+import java.lang.ref.WeakReference;
+
 
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
-    private Activity activity;
+    private WeakReference<Activity> activityWeakReference;
     private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
     private GitOperation operation;
 
+    private Activity getActivity() {
+        return activityWeakReference.get();
+    }
+
     public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
-        this.activity = activity;
+        this.activityWeakReference = new WeakReference<>(activity);
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
 
-        dialog = new ProgressDialog(this.activity);
+        dialog = new ProgressDialog(getActivity());
     }
 
     protected void onPreExecute() {
-        this.dialog.setMessage(activity.getResources().getString(R.string.running_dialog_text));
+        this.dialog.setMessage(getActivity().getResources().getString(R.string.running_dialog_text));
         this.dialog.setCancelable(false);
         this.dialog.show();
     }
@@ -42,6 +48,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     @Override
     protected String doInBackground(GitCommand... commands) {
         Integer nbChanges = null;
+        final Activity activity = getActivity();
         for (GitCommand command : commands) {
             Log.d("doInBackground", "Executing the command <" + command.toString() + ">");
             try {
@@ -113,13 +120,13 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
             this.operation.onSuccess();
 
             if (finishOnEnd) {
-                this.activity.setResult(Activity.RESULT_OK);
-                this.activity.finish();
+                this.getActivity().setResult(Activity.RESULT_OK);
+                this.getActivity().finish();
             }
 
             if (refreshListOnEnd) {
                 try {
-                    ((PasswordStore) this.activity).updateListAdapter();
+                    ((PasswordStore) this.getActivity()).updateListAdapter();
                 } catch (ClassCastException e) {
                     // oups, mistake
                 }
