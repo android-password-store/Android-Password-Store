@@ -14,7 +14,7 @@ public class FolderRecyclerAdapter extends EntryRecyclerAdapter {
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public FolderRecyclerAdapter(SelectFolderActivity activity, SelectFolderFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
-        super(activity, values);
+        super(values);
         this.listener = listener;
     }
 

@@ -13,7 +13,6 @@
         android:paddingTop="20dp">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg"
@@ -30,7 +29,6 @@
             android:contentDescription="@string/autofill_ins_1_hint" />
 
         <ImageView
-            android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -39,14 +37,12 @@
             android:contentDescription="@string/autofill_ins_2_hint" />
 
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg2"
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="114dp"
             android:layout_marginBottom="8dp"
@@ -55,7 +51,6 @@
             android:contentDescription="@string/autofill_ins_3_hint" />
 
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg3"

@@ -83,7 +83,7 @@ public class PasswordRecyclerAdapter extends EntryRecyclerAdapter {
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public PasswordRecyclerAdapter(PasswordStore activity, PasswordFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
-        super(activity, values);
+        super(values);
         this.activity = activity;
         this.listener = listener;
     }

@@ -18,10 +18,10 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.resolveAttribute
 import com.zeapo.pwdstore.utils.splitLines
 
 class AutofillFragment : DialogFragment() {
@@ -66,7 +66,7 @@ class AutofillFragment : DialogFragment() {
             // set text color to black because default is white...
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val textView = super.getView(position, convertView, parent) as TextView
-                textView.setTextColor(ContextCompat.getColor(context, R.color.grey_black_1000))
+                textView.setTextColor(requireContext().resolveAttribute(android.R.attr.textColor))
                 return textView
             }
         }

@@ -21,11 +21,9 @@ import java.util.TreeSet;
 
 public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder> {
     final Set<Integer> selectedItems = new TreeSet<>();
-    private final Activity activity;
     private final ArrayList<PasswordItem> values;
 
-    EntryRecyclerAdapter(Activity activity, ArrayList<PasswordItem> values) {
-        this.activity = activity;
+    EntryRecyclerAdapter(ArrayList<PasswordItem> values) {
         this.values = values;
     }
 
@@ -96,7 +94,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         final PasswordItem pass = getValues().get(position);
         holder.name.setText(pass.toString());
         if (pass.getType() == PasswordItem.TYPE_CATEGORY) {
-            holder.typeImage.setImageResource(R.drawable.ic_folder_grey600_24dp);
+            holder.typeImage.setImageResource(R.drawable.ic_folder_tinted_24dp);
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure);
             holder.name.setText(pass.toString());
@@ -111,13 +109,6 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         // after removal, everything is rebound for some reason; views are shuffled?
         boolean selected = selectedItems.contains(position);
         holder.view.setSelected(selected);
-        if (selected) {
-            holder.itemView.setBackgroundResource(R.color.deep_orange_200);
-            holder.type.setTextColor(Color.BLACK);
-        } else {
-            holder.itemView.setBackgroundColor(Color.alpha(1));
-            holder.type.setTextColor(ContextCompat.getColor(activity, R.color.grey_500));
-        }
     }
 
     @NonNull

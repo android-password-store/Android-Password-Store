@@ -7,23 +7,13 @@
     <color name="secondary_color">#ff7043</color>
     <color name="secondary_light_color">#ffa270</color>
     <color name="secondary_dark_color">#c63f17</color>
-    <color name="primary_text_color">#ffffff</color>
+    <color name="primary_text_color">#212121</color>
     <color name="secondary_text_color">#ffffff</color>
 
     <!-- Theme variables -->
-    <color name="background">#eee</color>
-    <color name="blue_grey_50">#eceff1</color>
-    <color name="blue_grey_500">#607d8b</color>
-    <color name="blue_grey_200">#b0bec5</color>
-    <color name="blue_grey_700">#455a64</color>
-    <color name="blue_grey_900">#263238</color>
-    <color name="deep_orange_200">#ffab91</color>
-    <color name="grey_300">#e0e0e0</color>
-    <color name="grey_500">#9e9e9e</color>
-    <color name="grey_600">#757575</color>
-    <color name="grey_white_1000">#ffffff</color>
-    <color name="grey_black_1000">#000000</color>
-    <color name="teal_900">#004d40</color>
-    <color name="teal_A700">#00bfa5</color>
+    <color name="window_background">#eceff1</color>
     <color name="ic_launcher_background">#D4F1EA</color>
+    <color name="password_icon_color">#757575</color>
+    <color name="color_control_normal">@color/primary_text_color</color>
+    <color name="color_surface">#FFFFFF</color>
 </resources>

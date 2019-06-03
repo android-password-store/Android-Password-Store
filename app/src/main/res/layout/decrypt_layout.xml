@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="?android:attr/windowBackground"
     android:orientation="vertical"
     tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
 
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:textColor="@color/grey_500"
+                android:textColor="?android:attr/textColor"
                 android:textIsSelectable="false"
                 android:textSize="18sp"
                 tools:text="CATEGORY HERE" />
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:textColor="@color/grey_500"
+                android:textColor="?android:attr/textColor"
                 android:textIsSelectable="false"
                 android:textSize="18sp"
                 tools:text="LAST CHANGED HERE" />
@@ -69,7 +69,6 @@
             android:visibility="invisible">
 
             <GridLayout
-                android:id="@+id/crypto_password_show_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -80,7 +79,7 @@
                     android:layout_column="0"
                     android:layout_row="0"
                     android:text="@string/password"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textStyle="bold" />
 
                 <TextView
@@ -91,7 +90,7 @@
                     android:layout_gravity="fill"
                     android:gravity="bottom"
                     android:layout_row="0"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:typeface="monospace" />
 
                 <ProgressBar
@@ -128,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:background="@color/background"
+                    android:background="?android:attr/windowBackground"
                     android:contentDescription="@string/copy_username"
                     android:src="@drawable/ic_content_copy"
                     android:visibility="invisible" />
@@ -141,7 +140,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_toStartOf="@id/crypto_copy_username"
                     android:text="@string/username"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textStyle="bold"
                     android:visibility="invisible" />
 
@@ -152,7 +151,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/crypto_username_show_label"
                     android:layout_toStartOf="@id/crypto_copy_username"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textIsSelectable="true"
                     android:typeface="monospace"
                     android:visibility="invisible" />
@@ -163,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@id/crypto_username_show"
-                    android:background="@color/background"
+                    android:background="?android:attr/windowBackground"
                     android:contentDescription="@string/copy_otp"
                     android:src="@drawable/ic_content_copy"
                     android:visibility="invisible" />
@@ -176,7 +175,7 @@
                     android:layout_below="@id/crypto_username_show"
                     android:layout_toStartOf="@id/crypto_copy_otp"
                     android:text="@string/otp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textStyle="bold" />
 
                 <TextView
@@ -186,7 +185,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/crypto_otp_show_label"
                     android:layout_toStartOf="@id/crypto_copy_otp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textIsSelectable="true"
                     android:typeface="monospace" />
 
@@ -197,7 +196,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/crypto_otp_show"
                     android:text="@string/extra_content"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textStyle="bold" />
 
                 <TextView
@@ -206,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@id/crypto_extra_show_label"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:attr/textColor"
                     android:textIsSelectable="true"
                     android:typeface="monospace" />
 

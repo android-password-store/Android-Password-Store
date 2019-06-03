@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -108,6 +109,11 @@ public class PasswordStore extends AppCompatActivity {
     @Override
     @SuppressLint("NewApi")
     protected void onCreate(Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+        }
         settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager = getSystemService(ShortcutManager.class);
@@ -642,6 +648,7 @@ public class PasswordStore extends AppCompatActivity {
                     refreshListAdapter();
                     break;
                 case GitActivity.REQUEST_INIT:
+                case NEW_REPO_BUTTON:
                     initializeRepositoryInfo();
                     break;
                 case GitActivity.REQUEST_SYNC:
@@ -650,9 +657,6 @@ public class PasswordStore extends AppCompatActivity {
                     break;
                 case HOME:
                     checkLocalRepository();
-                    break;
-                case NEW_REPO_BUTTON:
-                    initializeRepositoryInfo();
                     break;
                 case CLONE_REPO_BUTTON:
                     // duplicate code

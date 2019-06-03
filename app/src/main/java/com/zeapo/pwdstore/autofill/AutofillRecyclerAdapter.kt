@@ -68,7 +68,6 @@ internal class AutofillRecyclerAdapter(
         holder.name.text = app.appName
 
         holder.secondary.visibility = View.VISIBLE
-        holder.view.setBackgroundResource(R.color.grey_white_1000)
 
         val prefs: SharedPreferences
         prefs = if (app.appName != app.packageName) {
