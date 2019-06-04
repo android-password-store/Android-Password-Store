@@ -1,8 +1,6 @@
 package com.zeapo.pwdstore.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zeapo.pwdstore.R;
+import com.zeapo.pwdstore.widget.MultiselectableLinearLayout;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -109,6 +107,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         // after removal, everything is rebound for some reason; views are shuffled?
         boolean selected = selectedItems.contains(position);
         holder.view.setSelected(selected);
+        ((MultiselectableLinearLayout) holder.itemView).setMultiSelected(selected);
     }
 
     @NonNull

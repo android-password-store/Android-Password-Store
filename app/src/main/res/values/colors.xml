@@ -16,4 +16,5 @@
     <color name="password_icon_color">#757575</color>
     <color name="color_control_normal">@color/primary_text_color</color>
     <color name="color_surface">#FFFFFF</color>
+    <color name="list_multiselect_background">#EEEEEE</color>
 </resources>
