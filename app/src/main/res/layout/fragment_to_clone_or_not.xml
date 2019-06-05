@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     tools:context="com.zeapo.pwdstore.PasswordStore">
 
@@ -57,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
+            android:backgroundTint="?android:attr/windowBackground"
             android:onClick="createNewRepository"
             android:text="@string/initialize"
             android:layout_alignTop="@+id/main_clone_button"
@@ -67,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
-            android:textColor="?attr/colorPrimaryDark"
+            android:backgroundTint="?android:attr/windowBackground"
             android:onClick="cloneExistingRepository"
             android:text="@string/clone"
             android:layout_alignParentBottom="true"
