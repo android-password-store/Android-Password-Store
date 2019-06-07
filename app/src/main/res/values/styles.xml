@@ -26,4 +26,10 @@
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">@color/primary_color</item>
     </style>
+
+    <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">?attr/colorSecondary</item>
+        <item name="hintTextColor">?attr/colorOnPrimary</item>
+    </style>
+
 </resources>

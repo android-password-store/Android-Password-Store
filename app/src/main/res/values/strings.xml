@@ -90,7 +90,7 @@
     <!-- Git Config fragment -->
     <string name="git_config" translatable="false">Git config</string>
     <string name="git_user_name" translatable="false">Username</string>
-    <string name="git_user_name_hint">User name</string>
+    <string name="git_user_name_hint">Username</string>
     <string name="git_user_email">Email</string>
     <string name="git_user_email_hint">email</string>
     <string name="invalid_email_dialog_text">Please enter a valid email address</string>

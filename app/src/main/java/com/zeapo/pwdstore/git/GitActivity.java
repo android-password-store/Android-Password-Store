@@ -14,14 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.UserPreference;
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory;
@@ -474,25 +476,27 @@ public class GitActivity extends AppCompatActivity {
 
     private void showGitConfig() {
         // init the server information
-        final EditText git_user_name = findViewById(R.id.git_user_name);
-        final EditText git_user_email = findViewById(R.id.git_user_email);
-        final Button abort = findViewById(R.id.git_abort_rebase);
+        final TextInputEditText username = findViewById(R.id.git_user_name);
+        final TextInputEditText email = findViewById(R.id.git_user_email);
+        final MaterialButton abort = findViewById(R.id.git_abort_rebase);
 
-        git_user_name.setText(settings.getString("git_config_user_name", ""));
-        git_user_email.setText(settings.getString("git_config_user_email", ""));
+        username.setText(settings.getString("git_config_user_name", ""));
+        email.setText(settings.getString("git_config_user_email", ""));
 
         // git status
         Repository repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(activity.getApplicationContext()));
         if (repo != null) {
-            final TextView git_commit_hash = findViewById(R.id.git_commit_hash);
+            final AppCompatTextView commitHash = findViewById(R.id.git_commit_hash);
             try {
                 ObjectId objectId = repo.resolve(Constants.HEAD);
                 Ref ref = repo.getRef("refs/heads/master");
                 String head = ref.getObjectId().equals(objectId) ? ref.getName() : "DETACHED";
-                git_commit_hash.setText(String.format("%s (%s)", objectId.abbreviate(8).name(), head));
+                commitHash.setText(String.format("%s (%s)", objectId.abbreviate(8).name(), head));
 
                 // enable the abort button only if we're rebasing
-                abort.setEnabled(repo.getRepositoryState().isRebasing());
+                final boolean isRebasing = repo.getRepositoryState().isRebasing();
+                abort.setEnabled(isRebasing);
+                abort.setAlpha(isRebasing ? 1.0f : 0.5f);
             } catch (Exception e) {
                 // ignore
             }
@@ -503,7 +507,7 @@ public class GitActivity extends AppCompatActivity {
         // remember the settings
         SharedPreferences.Editor editor = settings.edit();
 
-        String email = ((EditText) findViewById(R.id.git_user_email)).getText().toString();
+        String email = ((TextInputEditText) findViewById(R.id.git_user_email)).getText().toString();
         editor.putString("git_config_user_email", email);
         editor.putString("git_config_user_name", ((EditText) findViewById(R.id.git_user_name)).getText().toString());
 
@@ -522,14 +526,8 @@ public class GitActivity extends AppCompatActivity {
     public void applyGitConfigs(View view) {
         if (!saveGitConfigs())
             return;
-
-        String git_user_name = settings.getString("git_config_user_name", "");
-        String git_user_email = settings.getString("git_config_user_email", "");
-
-        PasswordRepository.setUserName(git_user_name);
-        PasswordRepository.setUserEmail(git_user_email);
-
-        finish();
+        PasswordRepository.setUserName(settings.getString("git_config_user_name", ""));
+        PasswordRepository.setUserEmail(settings.getString("git_config_user_email", ""));
     }
 
     public void abortRebase(View view) {
