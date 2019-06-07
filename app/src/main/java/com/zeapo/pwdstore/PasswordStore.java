@@ -175,7 +175,7 @@ public class PasswordStore extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
         searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -304,16 +304,21 @@ public class PasswordStore extends AppCompatActivity {
             PasswordRepository.initialize(this);
         }
 
-        File localDir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
-
-        localDir.mkdir();
+        final File localDir = PasswordRepository.getRepositoryDirectory(getApplicationContext());
         try {
+            if (!localDir.mkdir())
+                throw new IllegalStateException("Failed to create directory!");
             PasswordRepository.createRepository(localDir);
-            new File(localDir.getAbsolutePath() + "/.gpg-id").createNewFile();
-            settings.edit().putBoolean("repository_initialized", true).apply();
+            if (new File(localDir.getAbsolutePath() + "/.gpg-id").createNewFile()) {
+                settings.edit().putBoolean("repository_initialized", true).apply();
+            } else {
+                throw new IllegalStateException("Failed to initialize repository state.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            localDir.delete();
+            if (!localDir.delete()) {
+                Log.d(TAG, "Failed to delete local repository");
+            }
             return;
         }
         checkLocalRepository();
