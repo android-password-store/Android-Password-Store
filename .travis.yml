@@ -13,6 +13,10 @@ android:
   licenses:
     - ".+"
 
+before_install:
+  - mkdir -p "$ANDROID_HOME/licenses/"
+  - curl "https://download.msfjarvis.website/.viscerion/sdk-licenses.tar.xz" | tar -C "$ANDROID_HOME/licenses/" --strip-components=1 -xvf -
+
 script:
   - "./gradlew clean build test lintDebug -Dpre-dex=false"
 
