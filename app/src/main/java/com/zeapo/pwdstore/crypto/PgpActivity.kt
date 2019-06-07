@@ -84,7 +84,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-    private val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", emptySet()) }
+    private val keyIDs: MutableSet<String> by lazy { settings.getStringSet("openpgp_key_ids_set", mutableSetOf()) ?: emptySet() }
     private var mServiceConnection: OpenPgpServiceConnection? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -634,7 +634,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             return
 
         val clip = ClipData.newPlainText("pgp_handler_result_pm", passwordEntry?.password)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
 
         var clearAfter = 45
         try {
@@ -654,13 +654,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     private fun copyUsernameToClipBoard(username: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
         showToast(resources.getString(R.string.clipboard_username_toast_text))
     }
 
     private fun copyOtpToClipBoard(code: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
         showToast(resources.getString(R.string.clipboard_otp_toast_text))
     }
 
@@ -771,13 +771,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             // No need to validate clear_after_copy. It was validated in copyPasswordToClipBoard()
             Log.d("DELAY_SHOW", "Clearing the clipboard")
             val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
-            clipboard.primaryClip = clip
+            clipboard.setPrimaryClip(clip)
             if (settings.getBoolean("clear_clipboard_20x", false)) {
                 val handler = Handler()
                 for (i in 0..19) {
                     val count = i.toString()
                     handler.postDelayed(
-                        { clipboard.primaryClip = ClipData.newPlainText(count, count) },
+                        { clipboard.setPrimaryClip(ClipData.newPlainText(count, count))  },
                         (i * 500).toLong()
                     )
                 }

@@ -309,7 +309,7 @@ class AutofillService : AccessibilityService() {
         val prefs: SharedPreferences = getSharedPreferences("autofill", Context.MODE_PRIVATE)
         val preference: String?
 
-        preference = prefs.getString(packageName, defValue)
+        preference = prefs.getString(packageName, defValue) ?: defValue
 
         when (preference) {
             "/first" -> {
@@ -546,15 +546,15 @@ class AutofillService : AccessibilityService() {
         } else {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             var clip = ClipData.newPlainText("autofill_pm", text)
-            clipboard.primaryClip = clip
+            clipboard.setPrimaryClip(clip)
             node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
 
             clip = ClipData.newPlainText("autofill_pm", "")
-            clipboard.primaryClip = clip
+            clipboard.setPrimaryClip(clip)
             if (settings!!.getBoolean("clear_clipboard_20x", false)) {
                 for (i in 0..19) {
                     clip = ClipData.newPlainText(i.toString(), i.toString())
-                    clipboard.primaryClip = clip
+                    clipboard.setPrimaryClip(clip)
                 }
             }
         }
