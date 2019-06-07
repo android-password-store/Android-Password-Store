@@ -193,12 +193,8 @@ class UserPreference : AppCompatActivity() {
             findPreference("clear_after_copy").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             findPreference("clear_clipboard_20x").isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val keyPref = findPreference("openpgp_key_id_pref")
-            val selectedKeys: Array<String> = ArrayList<String>(
-                    sharedPreferences.getStringSet(
-                            "openpgp_key_ids_set",
-                            HashSet<String>()
-                    )
-            ).toTypedArray()
+            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
+                    ?: HashSet<String>()).toTypedArray()
             if (selectedKeys.isEmpty()) {
                 keyPref.summary = this.resources.getString(R.string.pref_no_key_selected)
             } else {
