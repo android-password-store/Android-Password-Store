@@ -23,6 +23,9 @@ import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.resolveAttribute
 import com.zeapo.pwdstore.utils.splitLines
+import android.content.pm.ResolveInfo
+import android.net.Uri
+
 
 class AutofillFragment : DialogFragment() {
     private var adapter: ArrayAdapter<String>? = null
@@ -51,7 +54,10 @@ class AutofillFragment : DialogFragment() {
             builder.setTitle(appName)
             view.findViewById<View>(R.id.webURL).visibility = View.GONE
         } else {
-            iconPackageName = "com.android.browser"
+            val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("http://"))
+            val resolveInfo = requireContext().packageManager
+                    .resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+            iconPackageName = resolveInfo?.activityInfo?.packageName ?: "com.android.browser"
             builder.setTitle("Website")
             (view.findViewById<View>(R.id.webURL) as EditText).setText(packageName)
         }
