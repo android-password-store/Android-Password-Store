@@ -1,11 +1,10 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
-import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
-
 import java.io.File
 
 /**
@@ -60,7 +59,7 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     }
 
     override fun onError(errorMessage: String) {
-        AlertDialog.Builder(callingActivity)
+        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the clone operation, "
                         + callingActivity.resources.getString(R.string.jgit_error_dialog_text)

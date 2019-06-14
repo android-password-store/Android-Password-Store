@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.zeapo.pwdstore.pwgen.PasswordGenerator;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
     @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.AppTheme_Dialog);
         final Activity callingActivity = requireActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
         @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);

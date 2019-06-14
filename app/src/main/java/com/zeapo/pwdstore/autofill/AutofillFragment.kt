@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.resolveAttribute
@@ -32,7 +33,7 @@ class AutofillFragment : DialogFragment() {
     private var isWeb: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
         // this fragment is only created from the settings page (AutofillPreferenceActivity)
         // need to interact with the recyclerAdapter which is a member of activity
         val callingActivity = requireActivity() as AutofillPreferenceActivity

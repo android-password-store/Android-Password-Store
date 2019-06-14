@@ -1,7 +1,7 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
-import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.AddCommand
 import org.eclipse.jgit.api.CommitCommand
@@ -9,7 +9,6 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.StatusCommand
-
 import java.io.File
 
 /**
@@ -49,7 +48,8 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     }
 
     override fun onError(errorMessage: String) {
-        AlertDialog.Builder(callingActivity).setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
+        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the sync operation, "
                         + "\nPlease check the FAQ for possible reasons why this error might occur."
                         + callingActivity.resources.getString(R.string.jgit_error_dialog_text)

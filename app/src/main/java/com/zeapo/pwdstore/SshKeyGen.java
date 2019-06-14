@@ -2,8 +2,6 @@ package com.zeapo.pwdstore;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -29,6 +27,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.KeyPair;
 
@@ -37,6 +41,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 
 public class SshKeyGen extends AppCompatActivity {
 
@@ -50,7 +55,7 @@ public class SshKeyGen extends AppCompatActivity {
         setTitle("Generate SSH Key");
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, new SshKeyGenFragment()).commit();
         }
     }
@@ -77,11 +82,11 @@ public class SshKeyGen extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View v = inflater.inflate(R.layout.fragment_ssh_keygen, container, false);
-            Typeface monoTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/sourcecodepro.ttf");
+            Typeface monoTypeface = Typeface.createFromAsset(requireContext().getAssets(), "fonts/sourcecodepro.ttf");
 
             Spinner spinner = v.findViewById(R.id.length);
             Integer[] lengths = new Integer[]{2048, 4096};
-            ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(),
+            ArrayAdapter<Integer> adapter = new ArrayAdapter<>(requireContext(),
                     android.R.layout.simple_spinner_dropdown_item, lengths);
             spinner.setAdapter(adapter);
 
@@ -105,28 +110,29 @@ public class SshKeyGen extends AppCompatActivity {
 
     // Displays the generated public key .ssh_key.pub
     public static class ShowSshKeyFragment extends DialogFragment {
-        public ShowSshKeyFragment() {
-        }
+        public ShowSshKeyFragment() { }
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final FragmentActivity activity = requireActivity();
+            final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+            LayoutInflater inflater = activity.getLayoutInflater();
             @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
             builder.setView(v);
 
             TextView textView = v.findViewById(R.id.public_key);
-            File file = new File(getActivity().getFilesDir() + "/.ssh_key.pub");
+            File file = new File(activity.getFilesDir() + "/.ssh_key.pub");
             try {
-                textView.setText(FileUtils.readFileToString(file));
+                textView.setText(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
             } catch (Exception e) {
                 System.out.println("Exception caught :(");
                 e.printStackTrace();
             }
 
             builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {
-                if (getActivity() instanceof SshKeyGen)
-                    getActivity().finish();
+                if (activity instanceof SshKeyGen)
+                    activity.finish();
             });
 
             builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), (dialog, which) -> {
@@ -140,7 +146,7 @@ public class SshKeyGen extends AppCompatActivity {
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(v1 -> {
                     TextView textView1 = getDialog().findViewById(R.id.public_key);
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("public key", textView1.getText().toString());
                     clipboard.setPrimaryClip(clip);
                 });
@@ -198,20 +204,19 @@ public class SshKeyGen extends AppCompatActivity {
             if (e == null) {
                 Toast.makeText(weakReference.get(), "SSH-key generated", Toast.LENGTH_LONG).show();
                 DialogFragment df = new ShowSshKeyFragment();
-                df.show(weakReference.get().getFragmentManager(), "public_key");
+                df.show(weakReference.get().getSupportFragmentManager(), "public_key");
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(weakReference.get());
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("use_generated_key", true);
                 editor.apply();
             } else {
-                new AlertDialog.Builder(weakReference.get())
+                new MaterialAlertDialogBuilder(weakReference.get(), R.style.AppTheme_Dialog)
                         .setTitle("Error while trying to generate the ssh-key")
                         .setMessage(weakReference.get().getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage())
                         .setPositiveButton(weakReference.get().getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                             // pass
                         }).show();
             }
-
         }
     }
 }
