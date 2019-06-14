@@ -20,7 +20,14 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/light_status_bar</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/light_navigation_bar</item>
         <item name="actionModeStyle">@style/ActionMode</item>
+        <item name="dialogTheme">@style/AppTheme.Dialog</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
+    </style>
+
+    <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/secondary_color</item>
+        <item name="colorSecondary">@color/secondary_color</item>
+        <item name="android:windowBackground">?attr/colorPrimary</item>
     </style>
 
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
