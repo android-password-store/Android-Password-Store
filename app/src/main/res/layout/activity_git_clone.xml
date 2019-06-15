@@ -1,211 +1,175 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.zeapo.pwdstore.git.GitActivity"
     android:background="?android:attr/windowBackground">
 
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:id="@+id/server_label"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:text="@string/server_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/server_name"
-            android:textStyle="bold"
-            style="@android:style/TextAppearance.Large"
-            android:gravity="start"
-            android:paddingBottom="6dp"
-            android:textColor="?android:attr/textColor"
-            android:background="@drawable/bottom_line"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/label_server_protocol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/server_protocol"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/server_label"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <RelativeLayout
+    <Spinner
+        android:id="@+id/clone_protocol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/server_label"
+        app:layout_constraintStart_toEndOf="@id/label_server_protocol" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutBase"
+        android:id="@+id/server_user_layout"
+        android:hint="@string/server_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/label_server_protocol">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/server_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:inputType="textWebEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutBase"
+        android:id="@+id/label_server_url"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/server_url"
+        app:layout_constraintTop_toBottomOf="@id/server_user_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/label_server_port"
+        app:layout_constraintWidth_percent="0.7">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_protocol"
-                android:id="@+id/label_server_protocol"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
-
-            <Spinner
-                android:id="@+id/clone_protocol"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/label_server_protocol" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:id="@+id/server_url"
+            android:inputType="textWebEmailAddress" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_user"
-                android:id="@+id/label_server_user"
-                android:layout_centerVertical="true"
-                android:paddingBottom="8dp"
-                android:layout_alignParentStart="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/server_user_hint"
-                android:id="@+id/server_user"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@+id/label_server_user"
-                android:layout_alignParentEnd="true"
-                android:inputType="textWebEmailAddress"/>
-        </RelativeLayout>
-        <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutBase"
+        android:id="@+id/label_server_port"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toEndOf="@id/label_server_url"
+        app:layout_constraintTop_toBottomOf="@id/server_user_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/server_port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:hint="@string/server_port_hint"
+            android:inputType="number" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_url"
-                android:paddingBottom="8dp"
-                android:id="@+id/label_server_url"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/server_url_hint"
-                android:id="@+id/server_url"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@+id/label_server_url"
-                android:layout_toStartOf="@+id/label_server_port"
-                android:inputType="textWebEmailAddress"
-                tools:ignore="TextFields" />
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutBase"
+        android:id="@+id/label_server_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/server_path"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_server_url">
 
-            <TextView
-                android:id="@+id/label_server_port"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/server_port"
-                android:paddingBottom="8dp"
-                android:text=":"
-                tools:ignore="HardcodedText" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/server_port_hint"
-                android:id="@+id/server_port"
-                android:layout_alignParentEnd="true"
-                android:inputType="number"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/server_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:inputType="textWebEmailAddress"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_path"
-                android:paddingBottom="8dp"
-                android:id="@+id/label_server_path"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/server_path_hint"
-                android:layout_marginStart="8dp"
-                android:id="@+id/server_path"
-                android:layout_toEndOf="@+id/label_server_path"
-                android:layout_alignParentEnd="true"
-                android:inputType="textWebEmailAddress"/>
-        </RelativeLayout>
+<!--
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/server_resulting_url"
+        android:textStyle="bold"
+        style="@android:style/TextAppearance.Large"
+        android:gravity="start"
+        android:paddingBottom="6dp"
+        android:textColor="?android:attr/textColor"
+        android:background="@drawable/bottom_line"/>
+
+    <EditText
+        android:id="@+id/clone_uri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/repository_uri"
+        android:inputType="textWebEmailAddress"
+        tools:ignore="TextFields" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/red_rectangle"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        android:id="@+id/warn_url"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical">
 
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/server_resulting_url"
-            android:textStyle="bold"
-            style="@android:style/TextAppearance.Large"
-            android:gravity="start"
-            android:paddingBottom="6dp"
-            android:textColor="?android:attr/textColor"
-            android:background="@drawable/bottom_line"/>
+            android:text="@string/connection_mode"
+            android:id="@+id/label_connection_mode"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
-        <EditText
-            android:id="@+id/clone_uri"
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/repository_uri"
-            android:inputType="textWebEmailAddress"
-            tools:ignore="TextFields" />
+            android:id="@+id/connection_mode"
+            android:layout_toEndOf="@+id/label_connection_mode" />
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/red_rectangle"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            android:id="@+id/warn_url"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/connection_mode"
-                android:id="@+id/label_connection_mode"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/connection_mode"
-                android:layout_toEndOf="@+id/label_connection_mode" />
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/clone_button"
-            android:text="@string/clone_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="cloneRepository"/>
-        <Button
-            android:id="@+id/save_button"
-            android:text="@string/crypto_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="saveConfiguration"/>
-    </LinearLayout>
-
-</ScrollView>
+    <Button
+        android:id="@+id/clone_button"
+        android:text="@string/clone_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="cloneRepository"/>
+    <Button
+        android:id="@+id/save_button"
+        android:text="@string/crypto_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="saveConfiguration"/>
+-->
+</androidx.constraintlayout.widget.ConstraintLayout>
