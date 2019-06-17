@@ -109,26 +109,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/server_resulting_url"
-        android:textStyle="bold"
-        style="@android:style/TextAppearance.Large"
-        android:gravity="start"
-        android:paddingBottom="6dp"
-        android:textColor="?android:attr/textColor"
-        android:background="@drawable/bottom_line"/>
-
-    <EditText
-        android:id="@+id/clone_uri"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutBase"
+        android:id="@+id/label_clone_uri"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/repository_uri"
-        android:inputType="textWebEmailAddress"
-        tools:ignore="TextFields" />
+        android:layout_margin="8dp">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/clone_uri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textWebEmailAddress"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
