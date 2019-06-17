@@ -550,8 +550,8 @@ public class GitActivity extends AppCompatActivity {
         if (localDir.exists() && localDir.listFiles().length != 0
                 && !(localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git"))) {
             new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
-                    .setTitle(R.string.dialog_delete_title).
-                    setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString())
+                    .setTitle(R.string.dialog_delete_title)
+                    .setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString())
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete,
                             (dialog, id) -> {
