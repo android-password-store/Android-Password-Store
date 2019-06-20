@@ -74,7 +74,7 @@
     <string name="server_protocol">Protocol</string>
     <string name="server_url">Server URL</string>
     <string name="server_url_hint" translatable="false">server.com</string>
-    <string name="server_port_hint">22</string>
+    <string name="server_port_hint">Port</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
     <string name="server_path">Repo path</string>

@@ -77,6 +77,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:hint="@string/server_port_hint"
         app:layout_constraintStart_toEndOf="@id/label_server_url"
         app:layout_constraintTop_toBottomOf="@id/server_user_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +87,6 @@
             android:id="@+id/server_port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/server_port_hint"
             android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -115,7 +115,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/repository_uri"
-        android:layout_margin="8dp">
+        android:editable="false"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_server_path">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/clone_uri"
@@ -125,48 +128,54 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/red_rectangle"
         android:textColor="@android:color/white"
         android:visibility="gone"
-        android:id="@+id/warn_url"/>
+        android:id="@+id/warn_url"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_clone_uri"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/label_connection_mode"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+        android:text="@string/connection_mode"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warn_url" />
 
+    <Spinner
+        android:id="@+id/connection_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/warn_url"
+        app:layout_constraintStart_toEndOf="@id/label_connection_mode" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connection_mode"
-            android:id="@+id/label_connection_mode"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/connection_mode"
-            android:layout_toEndOf="@+id/label_connection_mode" />
-    </RelativeLayout>
-
-    <Button
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
         android:id="@+id/clone_button"
         android:text="@string/clone_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="cloneRepository"/>
-    <Button
+        android:onClick="cloneRepository"
+        android:textColor="?android:attr/windowBackground"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
         android:id="@+id/save_button"
         android:text="@string/crypto_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="saveConfiguration"/>
--->
+        android:onClick="saveConfiguration"
+        android:textColor="?android:attr/windowBackground"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

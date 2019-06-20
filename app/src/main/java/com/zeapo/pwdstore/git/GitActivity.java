@@ -117,8 +117,6 @@ public class GitActivity extends AppCompatActivity {
                                 if (protocol.equals("ssh://")) {
                                     ((EditText) findViewById(R.id.clone_uri)).setHint("user@hostname:path");
 
-                                    ((EditText) findViewById(R.id.server_port)).setHint(R.string.default_ssh_port);
-
                                     // select ssh-key auth mode as default and enable the spinner in case it was disabled
                                     connection_mode_spinner.setSelection(0);
                                     connection_mode_spinner.setEnabled(true);
