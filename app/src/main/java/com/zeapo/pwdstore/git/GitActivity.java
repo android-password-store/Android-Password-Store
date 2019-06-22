@@ -115,7 +115,6 @@ public class GitActivity extends AppCompatActivity {
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                 protocol = ((Spinner) findViewById(R.id.clone_protocol)).getSelectedItem().toString();
                                 if (protocol.equals("ssh://")) {
-                                    ((EditText) findViewById(R.id.clone_uri)).setHint("user@hostname:path");
 
                                     // select ssh-key auth mode as default and enable the spinner in case it was disabled
                                     connection_mode_spinner.setSelection(0);
@@ -130,10 +129,6 @@ public class GitActivity extends AppCompatActivity {
                                         connection_mode_spinner.setSelection(1);
                                     }
                                 } else {
-                                    ((EditText) findViewById(R.id.clone_uri)).setHint("hostname/path");
-
-                                    ((EditText) findViewById(R.id.server_port)).setHint(R.string.default_https_port);
-
                                     // select user/pwd auth-mode and disable the spinner
                                     connection_mode_spinner.setSelection(1);
                                     connection_mode_spinner.setEnabled(false);
