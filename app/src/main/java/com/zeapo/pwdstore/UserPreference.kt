@@ -42,63 +42,100 @@ class UserPreference : AppCompatActivity() {
 
     class PrefsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            val callingActivity = activity as UserPreference
+            val callingActivity = requireActivity() as UserPreference
+            val context = requireContext()
             val sharedPreferences = preferenceManager.sharedPreferences
 
             addPreferencesFromResource(R.xml.preference)
 
-            findPreference<Preference>("app_version")?.summary = "Version: ${BuildConfig.VERSION_NAME}"
+            val selectExternalGitRepositoryPreference = findPreference<Preference>("pref_select_external")
+            val externalGitRepositoryPreference = findPreference<Preference>("git_external")
+            val viewSshKeyPreference = findPreference<Preference>("ssh_see_key")
+            val deleteRepoPreference = findPreference<Preference>("git_delete_repo")
+            val sshClearPassphrasePreference = findPreference<Preference>("ssh_key_clear_passphrase")
+            val clearHotpIncrementPreference = findPreference<Preference>("hotp_remember_clear_choice")
+            val clearAfterCopyPreference = findPreference<CheckBoxPreference>("clear_after_copy")
+            val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
+            val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
+            val autoFillEnablePreference = findPreference<CheckBoxPreference>("autofill_enable")
+            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
+            val appVersionPreference = findPreference<Preference>("app_version")
+            val sshKeyPreference = findPreference<Preference>("ssh_key")
+            val sshKeygenPreference = findPreference<Preference>("ssh_keygen")
+            val gitServerPreference = findPreference<Preference>("git_server_info")
+            val gitConfigPreference = findPreference<Preference>("git_config")
 
-            findPreference<Preference>("openpgp_key_id_pref")?.setOnPreferenceClickListener {
+            selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
+            viewSshKeyPreference?.isEnabled = sharedPreferences.getBoolean("use_generated_key", false)
+            deleteRepoPreference?.isEnabled = !sharedPreferences.getBoolean("git_external", false)
+            sshClearPassphrasePreference?.isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty() ?: false
+            clearHotpIncrementPreference?.isEnabled = sharedPreferences.getBoolean("hotp_remember_check", false)
+            clearAfterCopyPreference?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
+            clearClipboard20xPreference?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
+            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null) ?: HashSet<String>()).toTypedArray()
+            keyPreference?.summary = if (selectedKeys.isEmpty()) {
+                this.resources.getString(R.string.pref_no_key_selected)
+            } else {
+                selectedKeys.joinToString(separator = ";") { s ->
+                    OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
+                }
+            }
+
+            // see if the autofill service is enabled and check the preference accordingly
+            autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
+
+            appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
+
+            keyPreference?.setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, PgpActivity::class.java)
                 intent.putExtra("OPERATION", "GET_KEY_ID")
                 startActivityForResult(intent, IMPORT_PGP_KEY)
                 true
             }
 
-            findPreference<Preference>("ssh_key")?.setOnPreferenceClickListener {
+            sshKeyPreference?.setOnPreferenceClickListener {
                 callingActivity.getSshKey()
                 true
             }
 
-            findPreference<Preference>("ssh_keygen")?.setOnPreferenceClickListener {
+            sshKeygenPreference?.setOnPreferenceClickListener {
                 callingActivity.makeSshKey(true)
                 true
             }
 
-            findPreference<Preference>("ssh_see_key")?.setOnPreferenceClickListener {
+            viewSshKeyPreference?.setOnPreferenceClickListener {
                 val df = SshKeyGen.ShowSshKeyFragment()
                 df.show(requireFragmentManager(), "public_key")
                 true
             }
 
-            findPreference<Preference>("ssh_key_clear_passphrase")?.setOnPreferenceClickListener {
+            sshClearPassphrasePreference?.setOnPreferenceClickListener {
                 sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
                 it.isEnabled = false
                 true
             }
 
-            findPreference<Preference>("hotp_remember_clear_choice")?.setOnPreferenceClickListener {
+            clearHotpIncrementPreference?.setOnPreferenceClickListener {
                 sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
                 it.isEnabled = false
                 true
             }
 
-            findPreference<Preference>("git_server_info")?.setOnPreferenceClickListener {
+            gitServerPreference?.setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_SERVER)
                 startActivityForResult(intent, EDIT_GIT_INFO)
                 true
             }
 
-            findPreference<Preference>("git_config")?.setOnPreferenceClickListener {
+            gitConfigPreference?.setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_GIT_CONFIG)
                 startActivityForResult(intent, EDIT_GIT_CONFIG)
                 true
             }
 
-            findPreference<Preference>("git_delete_repo")?.setOnPreferenceClickListener {
+            deleteRepoPreference?.setOnPreferenceClickListener {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
                 MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
                         .setTitle(R.string.pref_dialog_delete_title)
@@ -108,8 +145,8 @@ class UserPreference : AppCompatActivity() {
                             try {
                                 FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
                                 PasswordRepository.closeRepository()
-                            } catch (e: Exception) {
-                                //TODO Handle the different cases of exceptions
+                            } catch (ignored: Exception) {
+                                // TODO Handle the different cases of exceptions
                             }
 
                             sharedPreferences.edit().putBoolean("repository_initialized", false).apply()
@@ -122,39 +159,40 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
-            val externalRepo = findPreference<Preference>("pref_select_external")
-            externalRepo?.summary =
-                    sharedPreferences.getString("git_external_repo", callingActivity.getString(R.string.no_repo_selected))
-            externalRepo?.setOnPreferenceClickListener {
+            selectExternalGitRepositoryPreference?.summary =
+                    sharedPreferences.getString("git_external_repo", context.getString(R.string.no_repo_selected))
+            selectExternalGitRepositoryPreference?.setOnPreferenceClickListener {
                 callingActivity.selectExternalGitRepository()
                 true
             }
 
             val resetRepo = Preference.OnPreferenceChangeListener { _, o ->
-                findPreference<Preference>("git_delete_repo")?.isEnabled = !(o as Boolean)
+                deleteRepoPreference?.isEnabled = !(o as Boolean)
                 PasswordRepository.closeRepository()
                 sharedPreferences.edit().putBoolean("repo_changed", true).apply()
                 true
             }
 
-            findPreference<Preference>("pref_select_external")?.onPreferenceChangeListener = resetRepo
-            findPreference<Preference>("git_external")?.onPreferenceChangeListener = resetRepo
+            selectExternalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
+            externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
-            findPreference<Preference>("autofill_apps")?.setOnPreferenceClickListener {
+            autoFillAppsPreference?.setOnPreferenceClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
             }
 
-            findPreference<CheckBoxPreference>("autofill_enable")?.setOnPreferenceClickListener {
+            autoFillEnablePreference?.setOnPreferenceClickListener {
                 MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
                         .setTitle(R.string.pref_autofill_enable_title)
-                        .setView(R.layout.autofill_instructions).setPositiveButton(R.string.dialog_ok) { _, _ ->
+                        .setView(R.layout.autofill_instructions)
+                        .setPositiveButton(R.string.dialog_ok) { _, _ ->
                             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                             startActivity(intent)
                         }
-                        .setNegativeButton(R.string.dialog_cancel, null).setOnDismissListener {
-                            findPreference<CheckBoxPreference>("autofill_enable")?.isChecked =
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .setOnDismissListener {
+                            autoFillEnablePreference?.isChecked =
                                     callingActivity.isServiceEnabled
                         }
                         .show()
@@ -171,46 +209,14 @@ class UserPreference : AppCompatActivity() {
 
             findPreference<Preference>("general_show_time")?.setOnPreferenceChangeListener { _, newValue: Any? ->
                 try {
-                    findPreference<CheckBoxPreference>("clear_after_copy")?.isEnabled =
-                            newValue.toString().toInt() != 0
-                    findPreference<CheckBoxPreference>("clear_clipboard_20x")?.isEnabled =
-                            newValue.toString().toInt() != 0
+                    val isEnabled = newValue.toString().toInt() != 0
+                    clearAfterCopyPreference?.isEnabled = isEnabled
+                    clearClipboard20xPreference?.isEnabled = isEnabled
                     true
                 } catch (e: NumberFormatException) {
                     false
                 }
             }
-        }
-
-        override fun onStart() {
-            super.onStart()
-            val sharedPreferences = preferenceManager.sharedPreferences
-            findPreference<Preference>("pref_select_external")?.summary =
-                    preferenceManager.sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
-            findPreference<Preference>("ssh_see_key")?.isEnabled = sharedPreferences.getBoolean("use_generated_key", false)
-            findPreference<Preference>("git_delete_repo")?.isEnabled = !sharedPreferences.getBoolean("git_external", false)
-            findPreference<Preference>("ssh_key_clear_passphrase")?.isEnabled = sharedPreferences.getString(
-                    "ssh_key_passphrase",
-                    null
-            )?.isNotEmpty() ?: false
-            findPreference<Preference>("hotp_remember_clear_choice")?.isEnabled =
-                    sharedPreferences.getBoolean("hotp_remember_check", false)
-            findPreference<CheckBoxPreference>("clear_after_copy")?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            findPreference<CheckBoxPreference>("clear_clipboard_20x")?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            val keyPref = findPreference<Preference>("openpgp_key_id_pref")
-            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
-                    ?: HashSet<String>()).toTypedArray()
-            if (selectedKeys.isEmpty()) {
-                keyPref?.summary = this.resources.getString(R.string.pref_no_key_selected)
-            } else {
-                keyPref?.summary = selectedKeys.joinToString(separator = ";") { s ->
-                    OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
-                }
-            }
-
-            // see if the autofill service is enabled and check the preference accordingly
-            findPreference<CheckBoxPreference>("autofill_enable")?.isChecked =
-                    (activity as UserPreference).isServiceEnabled
         }
     }
 
@@ -238,7 +244,9 @@ class UserPreference : AppCompatActivity() {
                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
                     val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                     startActivityForResult(Intent.createChooser(i, "Choose Directory"), SELECT_GIT_DIRECTORY)
-                }.setNegativeButton(R.string.dialog_cancel, null).show()
+                }
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
