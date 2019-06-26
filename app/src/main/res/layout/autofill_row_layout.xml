@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/app_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"

@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
@@ -151,7 +151,7 @@ internal class AutofillRecyclerAdapter(
 
     internal inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         var name: AppCompatTextView = view.findViewById(R.id.app_name)
-        var icon: ImageView = view.findViewById(R.id.app_icon)
+        var icon: AppCompatImageView = view.findViewById(R.id.app_icon)
         var secondary: AppCompatTextView = view.findViewById(R.id.secondary_text)
         var packageName: String? = null
         var appName: String? = null

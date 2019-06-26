@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import androidx.annotation.NonNull;
@@ -132,7 +132,7 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
         public final View view;
         public final AppCompatTextView name;
         final AppCompatTextView type;
-        final ImageView typeImage;
+        final AppCompatImageView typeImage;
 
         ViewHolder(View v) {
             super(v);
