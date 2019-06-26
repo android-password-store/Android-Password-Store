@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -295,7 +295,7 @@ public class GitActivity extends AppCompatActivity {
 
                         findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
-                        TextView warn_url = findViewById(R.id.warn_url);
+                        AppCompatTextView warn_url = findViewById(R.id.warn_url);
                         if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                             warn_url.setText(R.string.warn_malformed_url_port);
                             warn_url.setVisibility(View.VISIBLE);
@@ -355,7 +355,7 @@ public class GitActivity extends AppCompatActivity {
                 server_port.setText(matcher.group(3));
                 server_path.setText(matcher.group(4));
 
-                TextView warn_url = findViewById(R.id.warn_url);
+                AppCompatTextView warn_url = findViewById(R.id.warn_url);
                 if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
                     warn_url.setText(R.string.warn_malformed_url_port);
                     warn_url.setVisibility(View.VISIBLE);
@@ -430,7 +430,7 @@ public class GitActivity extends AppCompatActivity {
         String port = ((EditText) findViewById(R.id.server_port)).getText().toString();
         // don't ask the user, take off the protocol that he puts in
         hostname = hostname.replaceFirst("^.+://", "");
-        ((TextView) findViewById(R.id.clone_uri)).setText(hostname);
+        ((AppCompatTextView) findViewById(R.id.clone_uri)).setText(hostname);
 
         if (!protocol.equals("ssh://")) {
             hostname = protocol + hostname;

@@ -26,7 +26,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
@@ -637,7 +637,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun copyPasswordToClipBoard() {
-        if (findViewById<TextView>(R.id.crypto_password_show) == null)
+        if (findViewById<AppCompatTextView>(R.id.crypto_password_show) == null)
             return
 
         val clip = ClipData.newPlainText("pgp_handler_result_pm", passwordEntry?.password)
@@ -742,7 +742,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             val container = findViewById<LinearLayout>(R.id.crypto_container_decrypt)
             container.visibility = View.VISIBLE
 
-            val extraText = findViewById<TextView>(R.id.crypto_extra_show)
+            val extraText = findViewById<AppCompatTextView>(R.id.crypto_extra_show)
 
             if (extraText.text.isNotEmpty())
                 findViewById<View>(R.id.crypto_extra_show_layout).visibility = View.VISIBLE

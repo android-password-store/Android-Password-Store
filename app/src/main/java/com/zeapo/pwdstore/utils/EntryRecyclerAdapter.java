@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -130,8 +130,8 @@ public abstract class EntryRecyclerAdapter extends RecyclerView.Adapter<EntryRec
     static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public final View view;
-        public final TextView name;
-        final TextView type;
+        public final AppCompatTextView name;
+        final AppCompatTextView type;
         final ImageView typeImage;
 
         ViewHolder(View v) {

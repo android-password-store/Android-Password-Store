@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -67,10 +67,10 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         checkBox = view.findViewById(R.id.pronounceable);
         checkBox.setChecked(!prefs.getBoolean("s", true));
 
-        TextView textView = view.findViewById(R.id.lengthNumber);
+        AppCompatTextView textView = view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
-        TextView passwordText = view.findViewById(R.id.passwordText);
+        AppCompatTextView passwordText = view.findViewById(R.id.passwordText);
         passwordText.setTypeface(monoTypeface);
 
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {

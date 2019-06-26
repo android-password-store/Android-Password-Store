@@ -21,12 +21,12 @@
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/secondary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

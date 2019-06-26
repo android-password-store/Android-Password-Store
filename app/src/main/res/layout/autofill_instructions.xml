@@ -12,7 +12,7 @@
         android:paddingRight="24dp"
         android:paddingTop="20dp">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg"
@@ -36,7 +36,7 @@
             android:src="@drawable/autofill_ins_2"
             android:contentDescription="@string/autofill_ins_2_hint" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg2"
@@ -50,7 +50,7 @@
             android:src="@drawable/autofill_ins_3"
             android:contentDescription="@string/autofill_ins_3_hint" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg3"

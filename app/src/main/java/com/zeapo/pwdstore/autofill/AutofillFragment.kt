@@ -15,7 +15,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -72,7 +72,7 @@ class AutofillFragment : DialogFragment() {
         adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, android.R.id.text1) {
             // set text color to black because default is white...
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val textView = super.getView(position, convertView, parent) as TextView
+                val textView = super.getView(position, convertView, parent) as AppCompatTextView
                 textView.setTextColor(requireContext().resolveAttribute(android.R.attr.textColor))
                 return textView
             }

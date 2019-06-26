@@ -20,7 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -121,7 +121,7 @@ public class SshKeyGen extends AppCompatActivity {
             @SuppressLint("InflateParams") final View v = inflater.inflate(R.layout.fragment_show_ssh_key, null);
             builder.setView(v);
 
-            TextView textView = v.findViewById(R.id.public_key);
+            AppCompatTextView textView = v.findViewById(R.id.public_key);
             File file = new File(activity.getFilesDir() + "/.ssh_key.pub");
             try {
                 textView.setText(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
@@ -145,7 +145,7 @@ public class SshKeyGen extends AppCompatActivity {
             ad.setOnShowListener(dialog -> {
                 Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
                 b.setOnClickListener(v1 -> {
-                    TextView textView1 = getDialog().findViewById(R.id.public_key);
+                    AppCompatTextView textView1 = getDialog().findViewById(R.id.public_key);
                     ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("public key", textView1.getText().toString());
                     clipboard.setPrimaryClip(clip);

@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
@@ -150,9 +150,9 @@ internal class AutofillRecyclerAdapter(
     }
 
     internal inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        var name: TextView = view.findViewById(R.id.app_name)
+        var name: AppCompatTextView = view.findViewById(R.id.app_name)
         var icon: ImageView = view.findViewById(R.id.app_icon)
-        var secondary: TextView = view.findViewById(R.id.secondary_text)
+        var secondary: AppCompatTextView = view.findViewById(R.id.secondary_text)
         var packageName: String? = null
         var appName: String? = null
         var isWeb: Boolean = false

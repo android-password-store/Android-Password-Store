@@ -18,7 +18,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -150,7 +150,7 @@ public class PasswordStore extends AppCompatActivity {
                                     REQUEST_EXTERNAL_STORAGE));
                     snack.show();
                     View view = snack.getView();
-                    TextView tv = view.findViewById(com.google.android.material.R.id.snackbar_text);
+                    AppCompatTextView tv = view.findViewById(com.google.android.material.R.id.snackbar_text);
                     tv.setTextColor(Color.WHITE);
                     tv.setMaxLines(10);
                 } else {
