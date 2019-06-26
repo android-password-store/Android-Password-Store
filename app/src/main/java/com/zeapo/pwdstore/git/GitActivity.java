@@ -391,19 +391,20 @@ public class GitActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.user_pref) {
-            try {
-                Intent intent = new Intent(this, UserPreference.class);
-                startActivity(intent);
-            } catch (Exception e) {
-                System.out.println("Exception caught :(");
-                e.printStackTrace();
-            }
-            return true;
+        switch (item.getItemId()) {
+            case R.id.user_pref:
+	            try {
+	                Intent intent = new Intent(this, UserPreference.class);
+	                startActivity(intent);
+	                return true;
+	            } catch (Exception e) {
+	                System.out.println("Exception caught :(");
+	                e.printStackTrace();
+	            }
+	            break;
+	        case android.R.id.home:
+	            finish();
+	            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -521,6 +522,7 @@ public class GitActivity extends AppCompatActivity {
             return;
         PasswordRepository.setUserName(settings.getString("git_config_user_name", ""));
         PasswordRepository.setUserEmail(settings.getString("git_config_user_email", ""));
+        finish();
     }
 
     public void abortRebase(View view) {

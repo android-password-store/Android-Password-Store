@@ -26,11 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".git.GitActivity"
-            android:parentActivityName=".PasswordStore">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+
+        <activity android:name=".git.GitActivity" />
 
         <activity
             android:name=".UserPreference"
