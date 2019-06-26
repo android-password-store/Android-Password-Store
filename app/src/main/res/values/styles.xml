@@ -35,6 +35,7 @@
     </style>
 
     <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">?android:attr/windowBackground</item>
         <item name="boxStrokeColor">?attr/colorSecondary</item>
         <item name="hintTextColor">?attr/colorOnPrimary</item>
     </style>
