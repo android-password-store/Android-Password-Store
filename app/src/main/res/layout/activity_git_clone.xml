@@ -60,8 +60,7 @@
         android:hint="@string/server_url"
         app:layout_constraintTop_toBottomOf="@id/server_user_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/label_server_port"
-        app:layout_constraintWidth_percent="0.7">
+        app:layout_constraintEnd_toStartOf="@id/label_server_port">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -81,7 +80,7 @@
         app:layout_constraintStart_toEndOf="@id/label_server_url"
         app:layout_constraintTop_toBottomOf="@id/server_user_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.2">
+        app:layout_constraintDimensionRatio="1:0.8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/server_port"
