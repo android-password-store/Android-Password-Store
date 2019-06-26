@@ -3,33 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin"
     android:background="?android:attr/windowBackground"
     tools:context="com.zeapo.pwdstore.git.GitActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        style="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:id="@+id/git_config_title"
-        android:text="@string/git_config"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_input_layout"
+        style="@style/TextInputLayoutBase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
-        android:id="@+id/username_input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@id/git_config_title"
-        app:layout_constraintStart_toStartOf="parent">
+        tools:layout_editor_absoluteY="64dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/git_user_name"
@@ -45,9 +33,7 @@
         android:id="@+id/email_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         app:layout_constraintTop_toBottomOf="@id/username_input_layout"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -65,9 +51,7 @@
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         android:text="@string/crypto_save"
         android:onClick="applyGitConfigs"
         android:textColor="?android:attr/windowBackground"
@@ -82,9 +66,7 @@
         android:id="@+id/git_tools_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         android:text="@string/hackish_tools"
         app:layout_constraintTop_toBottomOf="@id/save_button"
         app:layout_constraintStart_toStartOf="parent" />
@@ -93,9 +75,7 @@
         android:id="@+id/commit_hash_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         android:text="@string/commit_hash"
         app:layout_constraintTop_toBottomOf="@id/git_tools_title"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -104,9 +84,7 @@
         android:id="@+id/git_commit_hash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/git_tools_title"
         app:layout_constraintStart_toEndOf="@id/commit_hash_label"
@@ -117,9 +95,7 @@
         android:id="@+id/git_abort_rebase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         android:text="@string/abort_rebase"
         android:onClick="abortRebase"
         android:textColor="?android:attr/windowBackground"
