@@ -430,7 +430,7 @@ public class GitActivity extends AppCompatActivity {
         String port = ((EditText) findViewById(R.id.server_port)).getText().toString();
         // don't ask the user, take off the protocol that he puts in
         hostname = hostname.replaceFirst("^.+://", "");
-        ((AppCompatTextView) findViewById(R.id.clone_uri)).setText(hostname);
+        ((TextInputEditText) findViewById(R.id.clone_uri)).setText(hostname);
 
         if (!protocol.equals("ssh://")) {
             hostname = protocol + hostname;
