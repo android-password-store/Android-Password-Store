@@ -4,7 +4,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.zeapo.pwdstore.SelectFolderActivity;
 import com.zeapo.pwdstore.SelectFolderFragment;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class FolderRecyclerAdapter extends EntryRecyclerAdapter {
     private final SelectFolderFragment.OnFragmentInteractionListener listener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FolderRecyclerAdapter(SelectFolderActivity activity, SelectFolderFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
+    public FolderRecyclerAdapter(SelectFolderFragment.OnFragmentInteractionListener listener, ArrayList<PasswordItem> values) {
         super(values);
         this.listener = listener;
     }
