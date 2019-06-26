@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +16,15 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.resolveAttribute
 import com.zeapo.pwdstore.utils.splitLines
-import android.content.pm.ResolveInfo
-import android.net.Uri
 
 
 class AutofillFragment : DialogFragment() {
@@ -80,7 +79,9 @@ class AutofillFragment : DialogFragment() {
         (view.findViewById<View>(R.id.matched) as ListView).adapter = adapter
         // delete items by clicking them
         (view.findViewById<View>(R.id.matched) as ListView).onItemClickListener =
-                AdapterView.OnItemClickListener { _, _, position, _ -> adapter!!.remove(adapter!!.getItem(position)) }
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    adapter!!.remove(adapter!!.getItem(position))
+                }
 
         // set the existing preference, if any
         val prefs: SharedPreferences = if (!isWeb) {

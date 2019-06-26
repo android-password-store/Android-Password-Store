@@ -26,9 +26,9 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.appcompat.widget.AppCompatTextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
@@ -550,7 +550,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
                 RESULT_CODE_SUCCESS -> {
                     try {
-                        val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS) ?: LongArray(0)
+                        val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
+                                ?: LongArray(0)
                         val keys = ids.map { it.toString() }.toSet()
 
                         // use Long

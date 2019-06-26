@@ -71,11 +71,13 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             viewSshKeyPreference?.isEnabled = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isEnabled = !sharedPreferences.getBoolean("git_external", false)
-            sshClearPassphrasePreference?.isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty() ?: false
+            sshClearPassphrasePreference?.isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty()
+                    ?: false
             clearHotpIncrementPreference?.isEnabled = sharedPreferences.getBoolean("hotp_remember_check", false)
             clearAfterCopyPreference?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             clearClipboard20xPreference?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null) ?: HashSet<String>()).toTypedArray()
+            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
+                    ?: HashSet<String>()).toTypedArray()
             keyPreference?.summary = if (selectedKeys.isEmpty()) {
                 this.resources.getString(R.string.pref_no_key_selected)
             } else {

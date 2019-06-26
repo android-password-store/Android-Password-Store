@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -393,18 +392,18 @@ public class GitActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.user_pref:
-	            try {
-	                Intent intent = new Intent(this, UserPreference.class);
-	                startActivity(intent);
-	                return true;
-	            } catch (Exception e) {
-	                System.out.println("Exception caught :(");
-	                e.printStackTrace();
-	            }
-	            break;
-	        case android.R.id.home:
-	            finish();
-	            return true;
+                try {
+                    Intent intent = new Intent(this, UserPreference.class);
+                    startActivity(intent);
+                    return true;
+                } catch (Exception e) {
+                    System.out.println("Exception caught :(");
+                    e.printStackTrace();
+                }
+                break;
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

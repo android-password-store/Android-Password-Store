@@ -207,7 +207,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
                     public void onError() {
                         new MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
                                 .setMessage(callingActivity.getString(
-                                R.string.openkeychain_ssh_api_connect_fail)).show();
+                                        R.string.openkeychain_ssh_api_connect_fail)).show();
                     }
                 });
 
