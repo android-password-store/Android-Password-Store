@@ -7,26 +7,26 @@ android:
   components:
     - tools
     - build-tools-28.0.3
-    - android-28
-    - extra-google-m2repository
     - extra-android-m2repository
   licenses:
     - ".+"
 
 before_install:
-  - mkdir -p "$ANDROID_HOME/licenses/"
-  - curl "https://download.msfjarvis.website/.viscerion/sdk-licenses.tar.xz" | tar -C "$ANDROID_HOME/licenses/" --strip-components=1 -xvf -
+  - yes | sdkmanager "platforms;android-29"
 
 script:
-  - "./gradlew clean build test lintDebug -Dpre-dex=false"
+  - "./gradlew build test lintDebug -Dpre-dex=false"
 
 notifications:
   email: false
 
 sudo: false
 
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
-    - "$HOME/.m2"
-    - "$HOME/.gradle"
-    - "$ANDROID_HOME"
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
