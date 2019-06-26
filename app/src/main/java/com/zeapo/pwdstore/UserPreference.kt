@@ -36,6 +36,9 @@ import java.util.Calendar
 import java.util.HashSet
 import java.util.TimeZone
 
+typealias ClickListener = Preference.OnPreferenceClickListener
+typealias ChangeListener = Preference.OnPreferenceChangeListener
+
 class UserPreference : AppCompatActivity() {
 
     private lateinit var prefsFragment: PrefsFragment
@@ -86,56 +89,56 @@ class UserPreference : AppCompatActivity() {
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
-            keyPreference?.setOnPreferenceClickListener {
+            keyPreference?.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, PgpActivity::class.java)
                 intent.putExtra("OPERATION", "GET_KEY_ID")
                 startActivityForResult(intent, IMPORT_PGP_KEY)
                 true
             }
 
-            sshKeyPreference?.setOnPreferenceClickListener {
+            sshKeyPreference?.onPreferenceClickListener = ClickListener {
                 callingActivity.getSshKey()
                 true
             }
 
-            sshKeygenPreference?.setOnPreferenceClickListener {
+            sshKeygenPreference?.onPreferenceClickListener = ClickListener {
                 callingActivity.makeSshKey(true)
                 true
             }
 
-            viewSshKeyPreference?.setOnPreferenceClickListener {
+            viewSshKeyPreference?.onPreferenceClickListener = ClickListener {
                 val df = SshKeyGen.ShowSshKeyFragment()
                 df.show(requireFragmentManager(), "public_key")
                 true
             }
 
-            sshClearPassphrasePreference?.setOnPreferenceClickListener {
+            sshClearPassphrasePreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
                 it.isEnabled = false
                 true
             }
 
-            clearHotpIncrementPreference?.setOnPreferenceClickListener {
+            clearHotpIncrementPreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
                 it.isEnabled = false
                 true
             }
 
-            gitServerPreference?.setOnPreferenceClickListener {
+            gitServerPreference?.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_SERVER)
                 startActivityForResult(intent, EDIT_GIT_INFO)
                 true
             }
 
-            gitConfigPreference?.setOnPreferenceClickListener {
+            gitConfigPreference?.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.EDIT_GIT_CONFIG)
                 startActivityForResult(intent, EDIT_GIT_CONFIG)
                 true
             }
 
-            deleteRepoPreference?.setOnPreferenceClickListener {
+            deleteRepoPreference?.onPreferenceClickListener = ClickListener {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
                 MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
                         .setTitle(R.string.pref_dialog_delete_title)
@@ -161,7 +164,7 @@ class UserPreference : AppCompatActivity() {
 
             selectExternalGitRepositoryPreference?.summary =
                     sharedPreferences.getString("git_external_repo", context.getString(R.string.no_repo_selected))
-            selectExternalGitRepositoryPreference?.setOnPreferenceClickListener {
+            selectExternalGitRepositoryPreference?.onPreferenceClickListener = ClickListener {
                 callingActivity.selectExternalGitRepository()
                 true
             }
@@ -176,13 +179,13 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
             externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
-            autoFillAppsPreference?.setOnPreferenceClickListener {
+            autoFillAppsPreference?.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
             }
 
-            autoFillEnablePreference?.setOnPreferenceClickListener {
+            autoFillEnablePreference?.onPreferenceClickListener = ClickListener {
                 MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
                         .setTitle(R.string.pref_autofill_enable_title)
                         .setView(R.layout.autofill_instructions)
@@ -207,16 +210,17 @@ class UserPreference : AppCompatActivity() {
                 }
             }
 
-            findPreference<Preference>("general_show_time")?.setOnPreferenceChangeListener { _, newValue: Any? ->
-                try {
-                    val isEnabled = newValue.toString().toInt() != 0
-                    clearAfterCopyPreference?.isEnabled = isEnabled
-                    clearClipboard20xPreference?.isEnabled = isEnabled
-                    true
-                } catch (e: NumberFormatException) {
-                    false
-                }
-            }
+            findPreference<Preference>("general_show_time")?.onPreferenceChangeListener =
+                    ChangeListener { _, newValue: Any? ->
+                        try {
+                            val isEnabled = newValue.toString().toInt() != 0
+                            clearAfterCopyPreference?.isEnabled = isEnabled
+                            clearClipboard20xPreference?.isEnabled = isEnabled
+                            true
+                        } catch (e: NumberFormatException) {
+                            false
+                        }
+                    }
         }
     }
 
