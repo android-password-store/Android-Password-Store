@@ -155,7 +155,7 @@
         app:layout_constraintStart_toEndOf="@id/label_connection_mode" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/clone_button"
         android:text="@string/clone_button"
         android:layout_width="match_parent"
@@ -168,7 +168,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/save_button"
         android:text="@string/crypto_save"
         android:layout_width="match_parent"

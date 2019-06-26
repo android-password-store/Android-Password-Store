@@ -53,7 +53,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/generate_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
