@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.DialogFragment;
 
@@ -67,7 +68,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         checkBox = view.findViewById(R.id.pronounceable);
         checkBox.setChecked(!prefs.getBoolean("s", true));
 
-        AppCompatTextView textView = view.findViewById(R.id.lengthNumber);
+        AppCompatEditText textView = view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
         AppCompatTextView passwordText = view.findViewById(R.id.passwordText);
