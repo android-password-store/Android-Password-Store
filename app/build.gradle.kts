@@ -69,11 +69,13 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.recyclerview:recyclerview:1.0.0")
+    implementation("androidx.appcompat:appcompat:1.1.0-rc01")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.android.material:material:1.0.0")
-    implementation("androidx.annotation:annotation:1.0.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
+    implementation("androidx.preference:preference:1.1.0-rc01")
+    implementation("androidx.recyclerview:recyclerview:1.1.0-beta01")
+    implementation("com.google.android.material:material:1.1.0-alpha07")
+    implementation("androidx.annotation:annotation:1.1.0")
     implementation("org.sufficientlysecure:openpgp-api:12.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
@@ -83,15 +85,14 @@ dependencies {
     implementation("commons-codec:commons-codec:1.12")
     implementation("com.jayway.android.robotium:robotium-solo:5.6.3")
     implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("org.sufficientlysecure:sshauthentication-api:1.0")
 
     // Testing-only dependencies
-    androidTestImplementation("junit:junit:4.12")
+    androidTestImplementation("junit:junit:4.13-beta-3")
     androidTestImplementation("org.mockito:mockito-core:2.28.2")
-    androidTestImplementation("androidx.test:runner:1.2.0")
-    androidTestImplementation("androidx.test:rules:1.2.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.2.0")
+    androidTestImplementation("androidx.test:runner:1.3.0-alpha01")
+    androidTestImplementation("androidx.test:rules:1.3.0-alpha01")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2-alpha01")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0-alpha01")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0-alpha01")
 }
