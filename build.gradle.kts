@@ -28,12 +28,8 @@ tasks {
         resolutionStrategy {
             componentSelection {
                 all {
-                    val blacklistedGroups = listOf("commons-io", "org.eclipse.jgit")
-                    val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview")
-                        .map { qualifier -> Regex("(?i).*[.-]$qualifier[.\\d-]*") }
-                        .any { it.matches(candidate.version) || blacklistedGroups.contains(candidate.group) }
-                    if (rejected) {
-                        reject("Release candidate")
+                    if (listOf("commons-io", "org.eclipse.jgit").contains(candidate.group)) {
+                        reject("Blacklisted package")
                     }
                 }
             }
