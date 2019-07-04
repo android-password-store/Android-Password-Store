@@ -34,7 +34,7 @@
         <item name="background">@color/primary_color</item>
     </style>
 
-    <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="boxBackgroundColor">?android:attr/windowBackground</item>
         <item name="boxStrokeColor">?attr/colorSecondary</item>
         <item name="hintTextColor">?attr/colorOnPrimary</item>

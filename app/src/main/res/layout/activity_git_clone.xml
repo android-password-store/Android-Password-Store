@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/label_server_protocol">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/server_user"
@@ -58,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/server_url"
+        app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/server_user_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/label_server_port">
@@ -77,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/server_port_hint"
+        app:hintEnabled="true"
         app:layout_constraintStart_toEndOf="@id/label_server_url"
         app:layout_constraintTop_toBottomOf="@id/server_user_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/server_path"
+        app:hintEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label_server_url">
 
@@ -116,6 +120,7 @@
         android:hint="@string/repository_uri"
         android:editable="false"
         android:layout_margin="8dp"
+        app:hintEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label_server_path">
 
