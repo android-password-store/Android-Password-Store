@@ -124,7 +124,7 @@ class AutofillFragment : DialogFragment() {
             val positiveButton = ad.getButton(Dialog.BUTTON_POSITIVE)
             positiveButton.setOnClickListener {
                 val callingActivity = requireActivity() as AutofillPreferenceActivity
-                val dialog = dialog
+                val dialog = requireDialog()
                 val args = requireNotNull(arguments)
 
                 val prefs: SharedPreferences = if (!isWeb) {
@@ -199,8 +199,8 @@ class AutofillFragment : DialogFragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (resultCode == AppCompatActivity.RESULT_OK) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
             adapter!!.add(data.getStringExtra("path"))
         }
     }
