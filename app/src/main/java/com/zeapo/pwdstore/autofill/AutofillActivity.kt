@@ -78,6 +78,7 @@ class AutofillActivity : AppCompatActivity() {
                 editor.apply()
             }
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     companion object {

@@ -720,6 +720,7 @@ public class GitActivity extends AppCompatActivity {
             }
             launchGitOperation(requestCode);
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

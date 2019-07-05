@@ -403,6 +403,7 @@ class UserPreference : AppCompatActivity() {
                 }
             }
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     /**

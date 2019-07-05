@@ -607,7 +607,6 @@ public class PasswordStore extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case GitActivity.REQUEST_CLONE:
@@ -729,6 +728,7 @@ public class PasswordStore extends AppCompatActivity {
                     break;
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initRepository(final int operation) {
