@@ -370,7 +370,7 @@ class UserPreference : AppCompatActivity() {
 
                         finish()
                     } catch (e: IOException) {
-                        AlertDialog.Builder(this)
+                        MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
                                 .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
                                 .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
                                 .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
@@ -392,7 +392,7 @@ class UserPreference : AppCompatActivity() {
                     Log.d(TAG, "Selected repository path is $repoPath")
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
-                        AlertDialog.Builder(this)
+                        MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
                                 .setTitle(getString(R.string.sdcard_root_warning_title))
                                 .setMessage(getString(R.string.sdcard_root_warning_message))
                                 .setPositiveButton("Remove everything") { _, _ ->
@@ -400,7 +400,9 @@ class UserPreference : AppCompatActivity() {
                                             .edit()
                                             .putString("git_external_repo", uri?.path)
                                             .apply()
-                                }.setNegativeButton(R.string.dialog_cancel, null).show()
+                                }
+                                .setNegativeButton(R.string.dialog_cancel, null)
+                                .show()
                     }
 
                     PreferenceManager.getDefaultSharedPreferences(applicationContext)
