@@ -97,9 +97,9 @@
     <string name="clone_button">Clone!</string>
 
     <!-- PGP Handler -->
-    <string name="crypto_name_hint">name</string>
+    <string name="crypto_name_hint">Name</string>
     <string name="crypto_pass_label">Password</string>
-    <string name="crypto_extra_label">Extra</string>
+    <string name="crypto_extra_label">Extra content</string>
     <string name="crypto_select">Select</string>
     <string name="crypto_cancel">Cancel</string>
     <string name="crypto_save">Save</string>
@@ -251,7 +251,6 @@
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>
     <string name="commit_hash">Commit hash</string>
-    <string name="crypto_password_edit_hint" translatable="false">p@ssw0rd!</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="hotp_pending">Tap copy to calculate HOTP</string>

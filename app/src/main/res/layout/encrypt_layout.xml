@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="@string/crypto_password_edit_hint"
+        android:hint="@string/crypto_pass_label"
         app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/name_input_layout"
         app:layout_constraintStart_toStartOf="parent">
