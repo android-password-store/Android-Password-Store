@@ -68,13 +68,13 @@ class UserPreference : AppCompatActivity() {
             val gitConfigPreference = findPreference<Preference>("git_config")
 
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
-            viewSshKeyPreference?.isEnabled = sharedPreferences.getBoolean("use_generated_key", false)
-            deleteRepoPreference?.isEnabled = !sharedPreferences.getBoolean("git_external", false)
-            sshClearPassphrasePreference?.isEnabled = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty()
+            viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
+            deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
+            sshClearPassphrasePreference?.isVisible = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty()
                     ?: false
-            clearHotpIncrementPreference?.isEnabled = sharedPreferences.getBoolean("hotp_remember_check", false)
-            clearAfterCopyPreference?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            clearClipboard20xPreference?.isEnabled = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
+            clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
+            clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
+            clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
                     ?: HashSet<String>()).toTypedArray()
             keyPreference?.summary = if (selectedKeys.isEmpty()) {
@@ -115,13 +115,13 @@ class UserPreference : AppCompatActivity() {
 
             sshClearPassphrasePreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
-                it.isEnabled = false
+                it.isVisible= false
                 true
             }
 
             clearHotpIncrementPreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
-                it.isEnabled = false
+                it.isVisible= false
                 true
             }
 
@@ -171,7 +171,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             val resetRepo = Preference.OnPreferenceChangeListener { _, o ->
-                deleteRepoPreference?.isEnabled = !(o as Boolean)
+                deleteRepoPreference?.isVisible= !(o as Boolean)
                 PasswordRepository.closeRepository()
                 sharedPreferences.edit().putBoolean("repo_changed", true).apply()
                 true
@@ -204,7 +204,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             findPreference<Preference>("export_passwords")?.apply {
-                isEnabled = sharedPreferences.getBoolean("repository_initialized", false)
+                isVisible= sharedPreferences.getBoolean("repository_initialized", false)
                 onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     callingActivity.exportPasswords()
                     true
@@ -215,8 +215,8 @@ class UserPreference : AppCompatActivity() {
                     ChangeListener { _, newValue: Any? ->
                         try {
                             val isEnabled = newValue.toString().toInt() != 0
-                            clearAfterCopyPreference?.isEnabled = isEnabled
-                            clearClipboard20xPreference?.isEnabled = isEnabled
+                            clearAfterCopyPreference?.isVisible = isEnabled
+                            clearClipboard20xPreference?.isVisible = isEnabled
                             true
                         } catch (e: NumberFormatException) {
                             false
