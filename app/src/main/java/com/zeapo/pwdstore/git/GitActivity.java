@@ -441,10 +441,10 @@ public class GitActivity extends AppCompatActivity {
 
             // did he forget the username?
             if (!hostname.matches("^.+@.+")) {
-                new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog).
-                        setMessage(activity.getResources().getString(R.string.forget_username_dialog_text)).
-                        setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null).
-                        show();
+                new MaterialAlertDialogBuilder(this)
+                        .setMessage(activity.getResources().getString(R.string.forget_username_dialog_text))
+                        .setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null)
+                        .show();
                 return false;
             }
         }
@@ -505,7 +505,7 @@ public class GitActivity extends AppCompatActivity {
         editor.putString("git_config_user_name", ((EditText) findViewById(R.id.git_user_name)).getText().toString());
 
         if (!email.matches(emailPattern)) {
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+            new MaterialAlertDialogBuilder(this)
                     .setMessage(activity.getResources().getString(R.string.invalid_email_dialog_text))
                     .setPositiveButton(activity.getResources().getString(R.string.dialog_oops), null)
                     .show();
@@ -543,7 +543,7 @@ public class GitActivity extends AppCompatActivity {
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
         if (localDir.exists() && localDir.listFiles().length != 0
                 && !(localDir.listFiles().length == 1 && localDir.listFiles()[0].getName().equals(".git"))) {
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+            new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_delete_title)
                     .setMessage(getResources().getString(R.string.dialog_delete_msg) + " " + localDir.toString())
                     .setCancelable(false)
@@ -555,7 +555,7 @@ public class GitActivity extends AppCompatActivity {
                                 } catch (IOException e) {
                                     //TODO Handle the exception correctly if we are unable to delete the directory...
                                     e.printStackTrace();
-                                    new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog).setMessage(e.getMessage()).show();
+                                    new MaterialAlertDialogBuilder(this).setMessage(e.getMessage()).show();
                                 }
 
                                 dialog.cancel();
@@ -573,14 +573,14 @@ public class GitActivity extends AppCompatActivity {
                         FileUtils.deleteDirectory(localDir);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog).setMessage(e.getMessage()).show();
+                        new MaterialAlertDialogBuilder(this).setMessage(e.getMessage()).show();
                     }
                 }
             } catch (Exception e) {
                 //This is what happens when jgit fails :(
                 //TODO Handle the diffent cases of exceptions
                 e.printStackTrace();
-                new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog).setMessage(e.getMessage()).show();
+                new MaterialAlertDialogBuilder(this).setMessage(e.getMessage()).show();
             }
             launchGitOperation(REQUEST_CLONE);
         }
@@ -595,7 +595,7 @@ public class GitActivity extends AppCompatActivity {
         if (settings.getString("git_remote_username", "").isEmpty() ||
                 settings.getString("git_remote_server", "").isEmpty() ||
                 settings.getString("git_remote_location", "").isEmpty())
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+            new MaterialAlertDialogBuilder(this)
                     .setMessage(activity.getResources().getString(R.string.set_information_dialog_text))
                     .setPositiveButton(activity.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
                         Intent intent = new Intent(activity, UserPreference.class);
@@ -684,7 +684,7 @@ public class GitActivity extends AppCompatActivity {
                     identity);
         } catch (Exception e) {
             e.printStackTrace();
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog).setMessage(e.getMessage()).show();
+            new MaterialAlertDialogBuilder(this).setMessage(e.getMessage()).show();
         }
     }
 

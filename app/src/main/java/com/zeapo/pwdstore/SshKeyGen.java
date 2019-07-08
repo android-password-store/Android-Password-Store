@@ -211,7 +211,7 @@ public class SshKeyGen extends AppCompatActivity {
                 editor.putBoolean("use_generated_key", true);
                 editor.apply();
             } else {
-                new MaterialAlertDialogBuilder(weakReference.get(), R.style.AppTheme_Dialog)
+                new MaterialAlertDialogBuilder(weakReference.get())
                         .setTitle("Error while trying to generate the ssh-key")
                         .setMessage(weakReference.get().getResources().getString(R.string.ssh_key_error_dialog_text) + e.getMessage())
                         .setPositiveButton(weakReference.get().getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {

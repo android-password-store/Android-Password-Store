@@ -39,7 +39,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
     @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.AppTheme_Dialog);
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         final Activity callingActivity = requireActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
         @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);

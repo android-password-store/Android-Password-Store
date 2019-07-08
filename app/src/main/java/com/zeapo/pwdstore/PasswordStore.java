@@ -223,7 +223,7 @@ public class PasswordStore extends AppCompatActivity {
         int id = item.getItemId();
         Intent intent;
 
-        final MaterialAlertDialogBuilder initBefore = new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+        final MaterialAlertDialogBuilder initBefore = new MaterialAlertDialogBuilder(this)
                 .setMessage(this.getResources().getString(R.string.creation_dialog_text))
                 .setPositiveButton(this.getResources().getString(R.string.dialog_ok), null);
 
@@ -348,7 +348,7 @@ public class PasswordStore extends AppCompatActivity {
         final Set<String> keyIds = settings.getStringSet("openpgp_key_ids_set", new HashSet<>());
 
         if (keyIds.isEmpty())
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+            new MaterialAlertDialogBuilder(this)
                     .setMessage(this.getResources().getString(R.string.key_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_positive), (dialogInterface, i) -> {
                         Intent intent = new Intent(activity, UserPreference.class);
@@ -504,7 +504,7 @@ public class PasswordStore extends AppCompatActivity {
 
     public void createPassword() {
         if (!PasswordRepository.isInitialized()) {
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+            new MaterialAlertDialogBuilder(this)
                     .setMessage(this.getResources().getString(R.string.creation_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
                     }).show();
@@ -512,7 +512,7 @@ public class PasswordStore extends AppCompatActivity {
         }
 
         if (settings.getStringSet("openpgp_key_ids_set", new HashSet<>()).isEmpty()) {
-            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+            new MaterialAlertDialogBuilder(this)
                     .setTitle(this.getResources().getString(R.string.no_key_selected_dialog_title))
                     .setMessage(this.getResources().getString(R.string.no_key_selected_dialog_text))
                     .setPositiveButton(this.getResources().getString(R.string.dialog_ok), (dialogInterface, i) -> {
@@ -540,7 +540,7 @@ public class PasswordStore extends AppCompatActivity {
         }
         final int position = (int) it.next();
         final PasswordItem item = adapter.getValues().get(position);
-        new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+        new MaterialAlertDialogBuilder(this)
                 .setMessage(getResources().getString(R.string.delete_dialog_text, item.getLongName()))
                 .setPositiveButton(getResources().getString(R.string.dialog_yes), (dialogInterface, i) -> {
                     item.getFile().delete();
@@ -712,7 +712,7 @@ public class PasswordStore extends AppCompatActivity {
                         if (destinationFile.exists()) {
                             Log.e(TAG, "Trying to move a file that already exists.");
                             // TODO: Add option to cancel overwrite. Will be easier once this is an async task.
-                            new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+                            new MaterialAlertDialogBuilder(this)
                                     .setTitle(getResources().getString(R.string.password_exists_title))
                                     .setMessage(getResources().getString(R.string.password_exists_message,
                                             destinationLongName, sourceLongName))
@@ -743,7 +743,7 @@ public class PasswordStore extends AppCompatActivity {
     private void initRepository(final int operation) {
         PasswordRepository.closeRepository();
 
-        new MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(this.getResources().getString(R.string.location_dialog_title))
                 .setMessage(this.getResources().getString(R.string.location_dialog_text))
                 .setPositiveButton(this.getResources().getString(R.string.location_hidden), (dialog, whichButton) -> {
@@ -772,7 +772,7 @@ public class PasswordStore extends AppCompatActivity {
                         intent.putExtra("operation", "git_external");
                         startActivityForResult(intent, operation);
                     } else {
-                        new MaterialAlertDialogBuilder(activity, R.style.AppTheme_Dialog)
+                        new MaterialAlertDialogBuilder(activity)
                                 .setTitle(getResources().getString(R.string.directory_selected_title))
                                 .setMessage(getResources().getString(R.string.directory_selected_message, externalRepo))
                                 .setPositiveButton(getResources().getString(R.string.use), (dialog1, which) -> {
