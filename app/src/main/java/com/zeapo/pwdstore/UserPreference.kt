@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
