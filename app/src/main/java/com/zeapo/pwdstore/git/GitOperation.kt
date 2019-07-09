@@ -114,7 +114,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                            showError: Boolean) {
         if (connectionMode.equals("ssh-key", ignoreCase = true)) {
             if (sshKey == null || !sshKey.exists()) {
-                MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                MaterialAlertDialogBuilder(callingActivity)
                         .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
                         .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
                         .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
@@ -167,7 +167,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                 executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                             }
                         } else {
-                            MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                            MaterialAlertDialogBuilder(callingActivity)
                                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                                     .setMessage(callingActivity.resources.getString(R.string.passphrase_dialog_text))
                                     .setView(dialogView)
@@ -192,7 +192,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         setAuthentication(sshKey, username, "").execute()
                     }
                 } catch (e: JSchException) {
-                    MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                    MaterialAlertDialogBuilder(callingActivity)
                             .setTitle("Unable to open the ssh-key")
                             .setMessage("Please check that it was imported.")
                             .setPositiveButton("Ok") { _, _ -> }
@@ -208,7 +208,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
             password.width = LinearLayout.LayoutParams.MATCH_PARENT
             password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
-            MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+            MaterialAlertDialogBuilder(callingActivity)
                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                     .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
                     .setView(password)
@@ -228,7 +228,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * Action to execute on error
      */
     open fun onError(errorMessage: String) {
-        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage(callingActivity.resources.getString(R.string.jgit_error_dialog_text) + errorMessage)
                 .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->

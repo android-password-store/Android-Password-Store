@@ -355,7 +355,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                         val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
                                         val rememberCheck: CheckBox =
                                                 checkLayout.findViewById(R.id.hotp_remember_checkbox)
-                                        val dialogBuilder = MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+                                        val dialogBuilder = MaterialAlertDialogBuilder(this)
                                         dialogBuilder.setView(checkLayout)
                                         dialogBuilder.setMessage(R.string.dialog_update_body)
                                                 .setCancelable(false)

@@ -37,7 +37,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
     override fun execute() {
         val git = Git(repository)
         if (!git.repository.repositoryState.isRebasing) {
-            MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+            MaterialAlertDialogBuilder(callingActivity)
                     .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
                     .setMessage("The repository is not rebasing, no need to push to another branch")
                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
@@ -59,7 +59,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
     }
 
     override fun onError(errorMessage: String) {
-        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occurred when checking out another branch operation $errorMessage")
                 .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
@@ -68,7 +68,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
     }
 
     override fun onSuccess() {
-        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
                 .setMessage("There was a conflict when trying to rebase. " +
                         "Your local master branch was pushed to another branch named conflicting-master-....\n" +

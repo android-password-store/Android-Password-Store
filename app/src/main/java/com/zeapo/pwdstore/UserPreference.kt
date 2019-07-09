@@ -163,7 +163,7 @@ class UserPreference : AppCompatActivity() {
 
             deleteRepoPreference?.onPreferenceClickListener = ClickListener {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
-                MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                MaterialAlertDialogBuilder(callingActivity)
                         .setTitle(R.string.pref_dialog_delete_title)
                         .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
                         .setCancelable(false)
@@ -213,7 +213,7 @@ class UserPreference : AppCompatActivity() {
                 if (isEnabled) {
                     startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
                 } else {
-                    MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                    MaterialAlertDialogBuilder(callingActivity)
                             .setTitle(R.string.pref_autofill_enable_title)
                             .setView(R.layout.autofill_instructions)
                             .setPositiveButton(R.string.dialog_ok) { _, _ ->
@@ -277,7 +277,7 @@ class UserPreference : AppCompatActivity() {
     }
 
     fun selectExternalGitRepository() {
-        MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+        MaterialAlertDialogBuilder(this)
                 .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
                 .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
@@ -403,7 +403,7 @@ class UserPreference : AppCompatActivity() {
 
                         finish()
                     } catch (e: IOException) {
-                        MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+                        MaterialAlertDialogBuilder(this)
                                 .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
                                 .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
                                 .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
@@ -425,7 +425,7 @@ class UserPreference : AppCompatActivity() {
                     Log.d(TAG, "Selected repository path is $repoPath")
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
-                        MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
+                        MaterialAlertDialogBuilder(this)
                                 .setTitle(getString(R.string.sdcard_root_warning_title))
                                 .setMessage(getString(R.string.sdcard_root_warning_message))
                                 .setPositiveButton("Remove everything") { _, _ ->

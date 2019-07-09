@@ -48,7 +48,7 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     }
 
     override fun onError(errorMessage: String) {
-        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the sync operation, "
                         + "\nPlease check the FAQ for possible reasons why this error might occur."

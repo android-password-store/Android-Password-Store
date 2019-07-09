@@ -59,7 +59,7 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     }
 
     override fun onError(errorMessage: String) {
-        MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the clone operation, "
                         + callingActivity.resources.getString(R.string.jgit_error_dialog_text)

@@ -32,7 +32,7 @@ class AutofillFragment : DialogFragment() {
     private var isWeb: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = MaterialAlertDialogBuilder(requireContext(), R.style.AppTheme_Dialog)
+        val builder = MaterialAlertDialogBuilder(requireContext())
         // this fragment is only created from the settings page (AutofillPreferenceActivity)
         // need to interact with the recyclerAdapter which is a member of activity
         val callingActivity = requireActivity() as AutofillPreferenceActivity
