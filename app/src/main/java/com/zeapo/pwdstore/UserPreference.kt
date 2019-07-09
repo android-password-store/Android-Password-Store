@@ -209,25 +209,29 @@ class UserPreference : AppCompatActivity() {
             }
 
             autoFillEnablePreference?.onPreferenceClickListener = ClickListener {
-                MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
-                        .setTitle(R.string.pref_autofill_enable_title)
-                        .setView(R.layout.autofill_instructions)
-                        .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                            startActivity(intent)
-                        }
-                        .setNegativeButton(R.string.dialog_cancel, null)
-                        .setOnDismissListener {
-                            val isEnabled = callingActivity.isServiceEnabled
-                            autoFillEnablePreference?.isChecked = isEnabled
-                            autofillDependencies.forEach { it?.isVisible = isEnabled }
-                        }
-                        .show()
+                var isEnabled = callingActivity.isServiceEnabled
+                if (isEnabled) {
+                    startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                } else {
+                    MaterialAlertDialogBuilder(callingActivity, R.style.AppTheme_Dialog)
+                            .setTitle(R.string.pref_autofill_enable_title)
+                            .setView(R.layout.autofill_instructions)
+                            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                            }
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .setOnDismissListener {
+                                isEnabled = callingActivity.isServiceEnabled
+                                autoFillEnablePreference?.isChecked = isEnabled
+                                autofillDependencies.forEach { it?.isVisible = isEnabled }
+                            }
+                            .show()
+                }
                 true
             }
 
             findPreference<Preference>("export_passwords")?.apply {
-                isVisible= sharedPreferences.getBoolean("repository_initialized", false)
+                isVisible = sharedPreferences.getBoolean("repository_initialized", false)
                 onPreferenceClickListener = Preference.OnPreferenceClickListener {
                     callingActivity.exportPasswords()
                     true
