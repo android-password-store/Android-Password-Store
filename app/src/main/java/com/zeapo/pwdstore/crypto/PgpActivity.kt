@@ -156,8 +156,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             android.R.id.home -> {
                 if (passwordEntry?.hotpIsIncremented() == false) {
                     setResult(RESULT_CANCELED)
