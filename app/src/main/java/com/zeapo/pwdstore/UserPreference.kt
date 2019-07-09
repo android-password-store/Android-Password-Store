@@ -43,29 +43,50 @@ class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragmentCompat() {
+        private var autofillDependencies = listOf<Preference?>()
+        private var autoFillEnablePreference: CheckBoxPreference? = null
+        private lateinit var callingActivity: UserPreference
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            val callingActivity = requireActivity() as UserPreference
+            callingActivity = requireActivity() as UserPreference
             val context = requireContext()
             val sharedPreferences = preferenceManager.sharedPreferences
 
             addPreferencesFromResource(R.xml.preference)
 
-            val selectExternalGitRepositoryPreference = findPreference<Preference>("pref_select_external")
-            val externalGitRepositoryPreference = findPreference<Preference>("git_external")
-            val viewSshKeyPreference = findPreference<Preference>("ssh_see_key")
-            val deleteRepoPreference = findPreference<Preference>("git_delete_repo")
-            val sshClearPassphrasePreference = findPreference<Preference>("ssh_key_clear_passphrase")
-            val clearHotpIncrementPreference = findPreference<Preference>("hotp_remember_clear_choice")
-            val clearAfterCopyPreference = findPreference<CheckBoxPreference>("clear_after_copy")
-            val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
-            val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
-            val autoFillEnablePreference = findPreference<CheckBoxPreference>("autofill_enable")
-            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
-            val appVersionPreference = findPreference<Preference>("app_version")
-            val sshKeyPreference = findPreference<Preference>("ssh_key")
-            val sshKeygenPreference = findPreference<Preference>("ssh_keygen")
+            // Git preferences
             val gitServerPreference = findPreference<Preference>("git_server_info")
             val gitConfigPreference = findPreference<Preference>("git_config")
+            val sshKeyPreference = findPreference<Preference>("ssh_key")
+            val sshKeygenPreference = findPreference<Preference>("ssh_keygen")
+            val sshClearPassphrasePreference = findPreference<Preference>("ssh_key_clear_passphrase")
+            val clearHotpIncrementPreference = findPreference<Preference>("hotp_remember_clear_choice")
+            val viewSshKeyPreference = findPreference<Preference>("ssh_see_key")
+            val deleteRepoPreference = findPreference<Preference>("git_delete_repo")
+            val externalGitRepositoryPreference = findPreference<Preference>("git_external")
+            val selectExternalGitRepositoryPreference = findPreference<Preference>("pref_select_external")
+
+
+            // Crypto preferences
+            val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
+
+            // General preferences
+            val clearAfterCopyPreference = findPreference<CheckBoxPreference>("clear_after_copy")
+            val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
+
+            // Autofill preferences
+            autoFillEnablePreference = findPreference<CheckBoxPreference>("autofill_enable")
+            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
+            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
+            val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
+            autofillDependencies = listOf(
+                    autoFillAppsPreference,
+                    autoFillDefaultPreference,
+                    autoFillAlwaysShowDialogPreference
+            )
+
+            // Misc preferences
+            val appVersionPreference = findPreference<Preference>("app_version")
 
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
@@ -87,6 +108,7 @@ class UserPreference : AppCompatActivity() {
 
             // see if the autofill service is enabled and check the preference accordingly
             autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
+            autofillDependencies.forEach { it?.isVisible = callingActivity.isServiceEnabled }
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
@@ -196,8 +218,9 @@ class UserPreference : AppCompatActivity() {
                         }
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .setOnDismissListener {
-                            autoFillEnablePreference?.isChecked =
-                                    callingActivity.isServiceEnabled
+                            val isEnabled = callingActivity.isServiceEnabled
+                            autoFillEnablePreference?.isChecked = isEnabled
+                            autofillDependencies.forEach { it?.isVisible = isEnabled }
                         }
                         .show()
                 true
@@ -222,6 +245,13 @@ class UserPreference : AppCompatActivity() {
                             false
                         }
                     }
+        }
+
+        override fun onResume() {
+            super.onResume()
+            val isEnabled = callingActivity.isServiceEnabled
+            autoFillEnablePreference?.isChecked = isEnabled
+            autofillDependencies.forEach { it?.isVisible = isEnabled }
         }
     }
 
