@@ -33,6 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.KeyPair;
 
@@ -90,12 +91,12 @@ public class SshKeyGen extends AppCompatActivity {
                     android.R.layout.simple_spinner_dropdown_item, lengths);
             spinner.setAdapter(adapter);
 
-            ((EditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
+            ((TextInputEditText) v.findViewById(R.id.passphrase)).setTypeface(monoTypeface);
 
-            CheckBox checkbox = v.findViewById(R.id.show_passphrase);
+            final CheckBox checkbox = v.findViewById(R.id.show_passphrase);
             checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                EditText editText = v.findViewById(R.id.passphrase);
-                int selection = editText.getSelectionEnd();
+                final TextInputEditText editText = v.findViewById(R.id.passphrase);
+                final int selection = editText.getSelectionEnd();
                 if (isChecked) {
                     editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 } else {

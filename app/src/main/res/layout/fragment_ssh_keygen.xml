@@ -24,13 +24,14 @@
             android:spinnerMode="dropdown" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayoutBase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="@string/ssh_keygen_passphrase"
             app:hintEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passphrase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,13 +48,14 @@
             android:text="@string/ssh_keygen_show_passphrase" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayoutBase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="@string/ssh_keygen_comment"
             app:hintEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
