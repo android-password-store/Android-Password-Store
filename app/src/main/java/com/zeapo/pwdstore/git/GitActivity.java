@@ -81,15 +81,15 @@ public class GitActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_git_clone);
                 setTitle(R.string.title_activity_git_clone);
 
-                final Spinner protcol_spinner = findViewById(R.id.clone_protocol);
-                final Spinner connection_mode_spinner = findViewById(R.id.connection_mode);
+                final Spinner protcolSpinner = findViewById(R.id.clone_protocol);
+                final Spinner connectionModeSpinner = findViewById(R.id.connection_mode);
 
                 // init the spinner for connection modes
-                final ArrayAdapter<CharSequence> connection_mode_adapter = ArrayAdapter.createFromResource(this,
+                final ArrayAdapter<CharSequence> connectionModeAdapter = ArrayAdapter.createFromResource(this,
                         R.array.connection_modes, android.R.layout.simple_spinner_item);
-                connection_mode_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                connection_mode_spinner.setAdapter(connection_mode_adapter);
-                connection_mode_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                connectionModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                connectionModeSpinner.setAdapter(connectionModeAdapter);
+                connectionModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String selection = ((Spinner) findViewById(R.id.connection_mode)).getSelectedItem().toString();
@@ -104,11 +104,11 @@ public class GitActivity extends AppCompatActivity {
                 });
 
                 // init the spinner for protocols
-                ArrayAdapter<CharSequence> protocol_adapter = ArrayAdapter.createFromResource(this,
+                ArrayAdapter<CharSequence> protocolAdapter = ArrayAdapter.createFromResource(this,
                         R.array.clone_protocols, android.R.layout.simple_spinner_item);
-                protocol_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                protcol_spinner.setAdapter(protocol_adapter);
-                protcol_spinner.setOnItemSelectedListener(
+                protocolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                protcolSpinner.setAdapter(protocolAdapter);
+                protcolSpinner.setOnItemSelectedListener(
                         new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -116,21 +116,21 @@ public class GitActivity extends AppCompatActivity {
                                 if (protocol.equals("ssh://")) {
 
                                     // select ssh-key auth mode as default and enable the spinner in case it was disabled
-                                    connection_mode_spinner.setSelection(0);
-                                    connection_mode_spinner.setEnabled(true);
+                                    connectionModeSpinner.setSelection(0);
+                                    connectionModeSpinner.setEnabled(true);
 
                                     // however, if we have some saved that, that's more important!
                                     if (connectionMode.equalsIgnoreCase("ssh-key")) {
-                                        connection_mode_spinner.setSelection(0);
+                                        connectionModeSpinner.setSelection(0);
                                     } else if (connectionMode.equalsIgnoreCase("OpenKeychain")) {
-                                        connection_mode_spinner.setSelection(2);
+                                        connectionModeSpinner.setSelection(2);
                                     } else {
-                                        connection_mode_spinner.setSelection(1);
+                                        connectionModeSpinner.setSelection(1);
                                     }
                                 } else {
                                     // select user/pwd auth-mode and disable the spinner
-                                    connection_mode_spinner.setSelection(1);
-                                    connection_mode_spinner.setEnabled(false);
+                                    connectionModeSpinner.setSelection(1);
+                                    connectionModeSpinner.setEnabled(false);
                                 }
 
                                 updateURI();
@@ -144,31 +144,31 @@ public class GitActivity extends AppCompatActivity {
                 );
 
                 if (protocol.equals("ssh://")) {
-                    protcol_spinner.setSelection(0);
+                    protcolSpinner.setSelection(0);
                 } else {
-                    protcol_spinner.setSelection(1);
+                    protcolSpinner.setSelection(1);
                 }
 
                 // init the server information
-                final EditText server_url = findViewById(R.id.server_url);
-                final EditText server_port = findViewById(R.id.server_port);
-                final EditText server_path = findViewById(R.id.server_path);
-                final EditText server_user = findViewById(R.id.server_user);
-                final EditText server_uri = findViewById(R.id.clone_uri);
+                final EditText serverUrl = findViewById(R.id.server_url);
+                final EditText serverPort = findViewById(R.id.server_port);
+                final EditText serverPath = findViewById(R.id.server_path);
+                final EditText serverUser = findViewById(R.id.server_user);
+                final EditText serverUri = findViewById(R.id.clone_uri);
 
-                server_url.setText(settings.getString("git_remote_server", ""));
-                server_port.setText(settings.getString("git_remote_port", ""));
-                server_user.setText(settings.getString("git_remote_username", ""));
-                server_path.setText(settings.getString("git_remote_location", ""));
+                serverUrl.setText(settings.getString("git_remote_server", ""));
+                serverPort.setText(settings.getString("git_remote_port", ""));
+                serverUser.setText(settings.getString("git_remote_username", ""));
+                serverPath.setText(settings.getString("git_remote_location", ""));
 
-                server_url.addTextChangedListener(new TextWatcher() {
+                serverUrl.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        if (server_url.isFocused())
+                        if (serverUrl.isFocused())
                             updateURI();
                     }
 
@@ -176,14 +176,14 @@ public class GitActivity extends AppCompatActivity {
                     public void afterTextChanged(Editable editable) {
                     }
                 });
-                server_port.addTextChangedListener(new TextWatcher() {
+                serverPort.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        if (server_port.isFocused())
+                        if (serverPort.isFocused())
                             updateURI();
                     }
 
@@ -191,14 +191,14 @@ public class GitActivity extends AppCompatActivity {
                     public void afterTextChanged(Editable editable) {
                     }
                 });
-                server_user.addTextChangedListener(new TextWatcher() {
+                serverUser.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        if (server_user.isFocused())
+                        if (serverUser.isFocused())
                             updateURI();
                     }
 
@@ -206,14 +206,14 @@ public class GitActivity extends AppCompatActivity {
                     public void afterTextChanged(Editable editable) {
                     }
                 });
-                server_path.addTextChangedListener(new TextWatcher() {
+                serverPath.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        if (server_path.isFocused())
+                        if (serverPath.isFocused())
                             updateURI();
                     }
 
@@ -222,14 +222,14 @@ public class GitActivity extends AppCompatActivity {
                     }
                 });
 
-                server_uri.addTextChangedListener(new TextWatcher() {
+                serverUri.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     }
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                        if (server_uri.isFocused())
+                        if (serverUri.isFocused())
                             splitURI();
                     }
 
@@ -267,8 +267,6 @@ public class GitActivity extends AppCompatActivity {
                 syncRepository(REQUEST_SYNC);
                 break;
         }
-
-
     }
 
     /**
@@ -276,32 +274,32 @@ public class GitActivity extends AppCompatActivity {
      */
     private void updateURI() {
         EditText uri = findViewById(R.id.clone_uri);
-        EditText server_url = findViewById(R.id.server_url);
-        EditText server_port = findViewById(R.id.server_port);
-        EditText server_path = findViewById(R.id.server_path);
-        EditText server_user = findViewById(R.id.server_user);
+        EditText serverUrl = findViewById(R.id.server_url);
+        EditText serverPort = findViewById(R.id.server_port);
+        EditText serverPath = findViewById(R.id.server_path);
+        EditText serverUser = findViewById(R.id.server_user);
 
         if (uri != null) {
             switch (protocol) {
                 case "ssh://": {
                     String hostname =
-                            server_user.getText()
+                            serverUser.getText()
                                     + "@" +
-                                    server_url.getText().toString().trim()
+                                    serverUrl.getText().toString().trim()
                                     + ":";
-                    if (server_port.getText().toString().equals("22")) {
-                        hostname += server_path.getText().toString();
+                    if (serverPort.getText().toString().equals("22")) {
+                        hostname += serverPath.getText().toString();
 
                         findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
-                        AppCompatTextView warn_url = findViewById(R.id.warn_url);
-                        if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
-                            warn_url.setText(R.string.warn_malformed_url_port);
-                            warn_url.setVisibility(View.VISIBLE);
+                        AppCompatTextView warnUrl = findViewById(R.id.warn_url);
+                        if (!serverPath.getText().toString().matches("/.*") && !serverPort.getText().toString().isEmpty()) {
+                            warnUrl.setText(R.string.warn_malformed_url_port);
+                            warnUrl.setVisibility(View.VISIBLE);
                         } else {
-                            warn_url.setVisibility(View.GONE);
+                            warnUrl.setVisibility(View.GONE);
                         }
-                        hostname += server_port.getText().toString() + server_path.getText().toString();
+                        hostname += serverPort.getText().toString() + serverPath.getText().toString();
                     }
 
                     if (!hostname.equals("@:")) uri.setText(hostname);
@@ -309,16 +307,16 @@ public class GitActivity extends AppCompatActivity {
                 break;
                 case "https://": {
                     StringBuilder hostname = new StringBuilder();
-                    hostname.append(server_url.getText().toString().trim());
+                    hostname.append(serverUrl.getText().toString().trim());
 
-                    if (server_port.getText().toString().equals("443")) {
-                        hostname.append(server_path.getText().toString());
+                    if (serverPort.getText().toString().equals("443")) {
+                        hostname.append(serverPath.getText().toString());
 
                         findViewById(R.id.warn_url).setVisibility(View.GONE);
                     } else {
                         hostname.append("/");
-                        hostname.append(server_port.getText().toString())
-                                .append(server_path.getText().toString());
+                        hostname.append(serverPort.getText().toString())
+                                .append(serverPath.getText().toString());
                     }
 
                     if (!hostname.toString().equals("@/")) uri.setText(hostname);
@@ -335,31 +333,31 @@ public class GitActivity extends AppCompatActivity {
      * Splits the information in server_uri into the other fields
      */
     private void splitURI() {
-        EditText server_uri = findViewById(R.id.clone_uri);
-        EditText server_url = findViewById(R.id.server_url);
-        EditText server_port = findViewById(R.id.server_port);
-        EditText server_path = findViewById(R.id.server_path);
-        EditText server_user = findViewById(R.id.server_user);
+        EditText serverUri = findViewById(R.id.clone_uri);
+        EditText serverUrl = findViewById(R.id.server_url);
+        EditText serverPort = findViewById(R.id.server_port);
+        EditText serverPath = findViewById(R.id.server_path);
+        EditText serverUser = findViewById(R.id.server_user);
 
-        String uri = server_uri.getText().toString();
+        String uri = serverUri.getText().toString();
         Pattern pattern = Pattern.compile("(.+)@([\\w\\d.]+):([\\d]+)*(.*)");
         Matcher matcher = pattern.matcher(uri);
         if (matcher.find()) {
             int count = matcher.groupCount();
             if (count > 1) {
-                server_user.setText(matcher.group(1));
-                server_url.setText(matcher.group(2));
+                serverUser.setText(matcher.group(1));
+                serverUrl.setText(matcher.group(2));
             }
             if (count == 4) {
-                server_port.setText(matcher.group(3));
-                server_path.setText(matcher.group(4));
+                serverPort.setText(matcher.group(3));
+                serverPath.setText(matcher.group(4));
 
-                AppCompatTextView warn_url = findViewById(R.id.warn_url);
-                if (!server_path.getText().toString().matches("/.*") && !server_port.getText().toString().isEmpty()) {
-                    warn_url.setText(R.string.warn_malformed_url_port);
-                    warn_url.setVisibility(View.VISIBLE);
+                AppCompatTextView warnUrl = findViewById(R.id.warn_url);
+                if (!serverPath.getText().toString().matches("/.*") && !serverPort.getText().toString().isEmpty()) {
+                    warnUrl.setText(R.string.warn_malformed_url_port);
+                    warnUrl.setVisibility(View.VISIBLE);
                 } else {
-                    warn_url.setVisibility(View.GONE);
+                    warnUrl.setVisibility(View.GONE);
                 }
             }
         }
