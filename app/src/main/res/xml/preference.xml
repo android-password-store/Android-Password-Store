@@ -120,14 +120,12 @@
             android:key="clear_clipboard_20x"
             android:summary="@string/pref_clear_clipboard_hint"
             android:title="@string/pref_clear_clipboard_title" />
-
-        <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_android_file_picker"
-            android:title="@string/prefs_use_default_file_picker" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.Preference
-        android:key="app_version"
-        android:title="@string/prefs_version" />
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.Preference
+            android:icon="@mipmap/ic_launcher_round"
+            android:key="app_version"
+            android:title="@string/prefs_version" />
+    </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
