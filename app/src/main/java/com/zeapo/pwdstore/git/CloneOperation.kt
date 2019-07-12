@@ -22,7 +22,10 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
      * @return the current object
      */
     fun setCommand(uri: String): CloneOperation {
-        this.command = Git.cloneRepository().setCloneAllBranches(true).setDirectory(repository.workTree).setURI(uri)
+        this.command = Git.cloneRepository()
+                .setCloneAllBranches(true)
+                .setDirectory(repository?.workTree)
+                .setURI(uri)
         return this
     }
 

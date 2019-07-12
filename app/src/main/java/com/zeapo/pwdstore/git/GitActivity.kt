@@ -451,8 +451,8 @@ open class GitActivity : AppCompatActivity() {
     fun applyGitConfigs(view: View) {
         if (!saveGitConfigs())
             return
-        PasswordRepository.setUserName(settings.getString("git_config_user_name", ""))
-        PasswordRepository.setUserEmail(settings.getString("git_config_user_email", ""))
+        PasswordRepository.setUserName(settings.getString("git_config_user_name", null) ?: "")
+        PasswordRepository.setUserEmail(settings.getString("git_config_user_email", null) ?: "")
         finish()
     }
 

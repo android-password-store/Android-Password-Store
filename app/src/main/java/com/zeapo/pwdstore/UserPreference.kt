@@ -468,7 +468,7 @@ class UserPreference : AppCompatActivity() {
      */
     private fun exportPasswords(targetDirectory: DocumentFile) {
 
-        val repositoryDirectory = PasswordRepository.getRepositoryDirectory(applicationContext)
+        val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory(applicationContext))
         val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
 
         Log.d(TAG, "Copying ${repositoryDirectory.path} to $targetDirectory")

@@ -34,7 +34,7 @@ import java.io.File
  */
 abstract class GitOperation(fileDir: File, internal val callingActivity: Activity) {
 
-    protected val repository: Repository = PasswordRepository.getRepository(fileDir)
+    protected val repository: Repository? = PasswordRepository.getRepository(fileDir)
     internal var provider: UsernamePasswordCredentialsProvider? = null
     internal var command: GitCommand<*>? = null
 
