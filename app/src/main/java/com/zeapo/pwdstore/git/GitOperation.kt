@@ -192,10 +192,11 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         setAuthentication(sshKey, username, "").execute()
                     }
                 } catch (e: JSchException) {
+                    e.printStackTrace()
                     MaterialAlertDialogBuilder(callingActivity)
                             .setTitle("Unable to open the ssh-key")
                             .setMessage("Please check that it was imported.")
-                            .setPositiveButton("Ok") { _, _ -> }
+                            .setPositiveButton("Ok") { _, _ -> callingActivity.finish() }
                             .show()
                 }
 
