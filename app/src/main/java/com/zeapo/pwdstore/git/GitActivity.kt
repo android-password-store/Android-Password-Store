@@ -377,7 +377,7 @@ open class GitActivity : AppCompatActivity() {
                 return false
             }
         }
-        if (PasswordRepository.isInitialized() && settings.getBoolean("repository_initialized", false)) {
+        if (PasswordRepository.isInitialized && settings.getBoolean("repository_initialized", false)) {
             // don't just use the clone_uri text, need to use hostname which has
             // had the proper protocol prepended
             PasswordRepository.addRemote("origin", hostname, true)

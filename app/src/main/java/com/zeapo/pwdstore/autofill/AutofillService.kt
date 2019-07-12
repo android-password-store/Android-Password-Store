@@ -291,7 +291,7 @@ class AutofillService : AccessibilityService() {
 
         when (preference) {
             "/first" -> {
-                if (!PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized) {
                     PasswordRepository.initialize(this)
                 }
                 items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle)
@@ -313,7 +313,7 @@ class AutofillService : AccessibilityService() {
 
         when (preference) {
             "/first" -> {
-                if (!PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized) {
                     PasswordRepository.initialize(this)
                 }
                 items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName)
@@ -326,7 +326,7 @@ class AutofillService : AccessibilityService() {
     // Put the newline separated list of passwords from the SharedPreferences
     // file into the items list.
     private fun getPreferredPasswords(preference: String) {
-        if (!PasswordRepository.isInitialized()) {
+        if (!PasswordRepository.isInitialized) {
             PasswordRepository.initialize(this)
         }
         val preferredPasswords = preference.splitLines()
