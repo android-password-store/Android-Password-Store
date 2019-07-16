@@ -8,7 +8,6 @@ plugins {
     id("eclipse")
 }
 
-val buildTypeRelease = "release"
 android {
     compileSdkVersion(28)
 
@@ -57,14 +56,14 @@ android {
             project.hasProperty("mKeyAlias") &&
             project.hasProperty("mKeyPassword")) {
         signingConfigs {
-            getByName(buildTypeRelease) {
+            getByName("release") {
                 storeFile = file(project.properties["mStoreFile"] as String)
                 storePassword = project.properties["mStorePassword"] as String
                 keyAlias = project.properties["mKeyAlias"] as String
                 keyPassword = project.properties["mKeyPassword"] as String
             }
         }
-        buildTypes.getByName(buildTypeRelease).signingConfig = signingConfigs.getByName(buildTypeRelease)
+        buildTypes.getByName("release").signingConfig = signingConfigs.getByName("release")
     }
 }
 
@@ -74,7 +73,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
     implementation("androidx.preference:preference:1.1.0-rc01")
     implementation("androidx.recyclerview:recyclerview:1.1.0-beta01")
-    implementation("com.google.android.material:material:1.1.0-alpha07")
+    implementation("com.google.android.material:material:1.1.0-alpha08")
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("org.sufficientlysecure:openpgp-api:12.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
@@ -89,10 +88,10 @@ dependencies {
 
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.13-beta-3")
-    androidTestImplementation("org.mockito:mockito-core:2.28.2")
-    androidTestImplementation("androidx.test:runner:1.3.0-alpha01")
-    androidTestImplementation("androidx.test:rules:1.3.0-alpha01")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2-alpha01")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0-alpha01")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0-alpha01")
+    androidTestImplementation("org.mockito:mockito-core:3.0.0")
+    androidTestImplementation("androidx.test:runner:1.3.0-alpha02")
+    androidTestImplementation("androidx.test:rules:1.3.0-alpha02")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2-alpha02")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0-alpha02")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0-alpha02")
 }
