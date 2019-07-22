@@ -250,6 +250,7 @@
     <string name="remember_the_passphrase">Remember the passphrase in the app configuration (insecure)</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>
+    <string name="reset_to_remote">Hard reset to remote branch</string>
     <string name="commit_hash">Commit hash</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>

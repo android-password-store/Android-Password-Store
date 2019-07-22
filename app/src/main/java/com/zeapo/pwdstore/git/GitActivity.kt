@@ -458,6 +458,11 @@ open class GitActivity : AppCompatActivity() {
         launchGitOperation(BREAK_OUT_OF_DETACHED)
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    fun resetToRemote(view: View) {
+        launchGitOperation(REQUEST_RESET)
+    }
+
     /**
      * Clones the repository, the directory exists, deletes it
      */
@@ -587,6 +592,8 @@ open class GitActivity : AppCompatActivity() {
 
                 BREAK_OUT_OF_DETACHED -> op = BreakOutOfDetached(localDir!!, this).setCommands()
 
+                REQUEST_RESET -> op = ResetToRemoteOperation(localDir!!, this).setCommands()
+
                 SshApiSessionFactory.POST_SIGNATURE -> return
 
                 else -> {
@@ -645,6 +652,7 @@ open class GitActivity : AppCompatActivity() {
         @Suppress("Unused") const val REQUEST_CREATE = 107
         const val EDIT_GIT_CONFIG = 108
         const val BREAK_OUT_OF_DETACHED = 109
+        const val REQUEST_RESET = 110
         private const val TAG = "GitAct"
         private const val emailPattern = "^[^@]+@[^@]+$"
     }

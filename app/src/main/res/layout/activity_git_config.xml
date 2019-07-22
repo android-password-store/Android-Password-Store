@@ -103,4 +103,17 @@
         android:textColor="?android:attr/windowBackground"
         app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/commit_hash_label" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/git_reset_to_remote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/reset_to_remote"
+        android:onClick="resetToRemote"
+        android:textColor="?android:attr/windowBackground"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/git_abort_rebase" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
