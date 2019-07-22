@@ -1,6 +1,5 @@
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -32,7 +30,6 @@ import java.io.IOException
 import java.util.regex.Pattern
 
 open class GitActivity : AppCompatActivity() {
-    private lateinit var activity: AppCompatActivity
     private lateinit var context: Context
     private lateinit var settings: SharedPreferences
     private lateinit var protocol: String
@@ -45,12 +42,12 @@ open class GitActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         context = requireNotNull(this)
-        activity = requireNotNull(this)
 
         settings = PreferenceManager.getDefaultSharedPreferences(this)
 
         protocol = settings.getString("git_remote_protocol", null) ?: "ssh://"
         connectionMode = settings.getString("git_remote_auth", null) ?: "ssh-key"
+        hostname = settings.getString("git_remote_location", null) ?: ""
         val operationCode = intent.extras!!.getInt("Operation")
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -121,11 +118,11 @@ open class GitActivity : AppCompatActivity() {
                 }
 
                 // init the server information
-                val serverUrl = findViewById<EditText>(R.id.server_url)
-                val serverPort = findViewById<EditText>(R.id.server_port)
-                val serverPath = findViewById<EditText>(R.id.server_path)
-                val serverUser = findViewById<EditText>(R.id.server_user)
-                val serverUri = findViewById<EditText>(R.id.clone_uri)
+                val serverUrl = findViewById<TextInputEditText>(R.id.server_url)
+                val serverPort = findViewById<TextInputEditText>(R.id.server_port)
+                val serverPath = findViewById<TextInputEditText>(R.id.server_path)
+                val serverUser = findViewById<TextInputEditText>(R.id.server_user)
+                val serverUri = findViewById<TextInputEditText>(R.id.clone_uri)
 
                 serverUrl.setText(settings.getString("git_remote_server", ""))
                 serverPort.setText(settings.getString("git_remote_port", ""))
@@ -212,11 +209,11 @@ open class GitActivity : AppCompatActivity() {
      * Fills in the server_uri field with the information coming from other fields
      */
     private fun updateURI() {
-        val uri = findViewById<EditText>(R.id.clone_uri)
-        val serverUrl = findViewById<EditText>(R.id.server_url)
-        val serverPort = findViewById<EditText>(R.id.server_port)
-        val serverPath = findViewById<EditText>(R.id.server_path)
-        val serverUser = findViewById<EditText>(R.id.server_user)
+        val uri = findViewById<TextInputEditText>(R.id.clone_uri)
+        val serverUrl = findViewById<TextInputEditText>(R.id.server_url)
+        val serverPort = findViewById<TextInputEditText>(R.id.server_port)
+        val serverPath = findViewById<TextInputEditText>(R.id.server_path)
+        val serverUser = findViewById<TextInputEditText>(R.id.server_user)
 
         if (uri != null) {
             when (protocol) {
@@ -269,11 +266,11 @@ open class GitActivity : AppCompatActivity() {
      * Splits the information in server_uri into the other fields
      */
     private fun splitURI() {
-        val serverUri = findViewById<EditText>(R.id.clone_uri)
-        val serverUrl = findViewById<EditText>(R.id.server_url)
-        val serverPort = findViewById<EditText>(R.id.server_port)
-        val serverPath = findViewById<EditText>(R.id.server_path)
-        val serverUser = findViewById<EditText>(R.id.server_user)
+        val serverUri = findViewById<TextInputEditText>(R.id.clone_uri)
+        val serverUrl = findViewById<TextInputEditText>(R.id.server_url)
+        val serverPort = findViewById<TextInputEditText>(R.id.server_port)
+        val serverPath = findViewById<TextInputEditText>(R.id.server_path)
+        val serverUser = findViewById<TextInputEditText>(R.id.server_user)
 
         val uri = serverUri.text.toString()
         val pattern = Pattern.compile("(.+)@([\\w\\d.]+):([\\d]+)*(.*)")
@@ -345,18 +342,18 @@ open class GitActivity : AppCompatActivity() {
         // remember the settings
         val editor = settings.edit()
 
-        editor.putString("git_remote_server", (findViewById<View>(R.id.server_url) as EditText).text.toString())
-        editor.putString("git_remote_location", (findViewById<View>(R.id.server_path) as EditText).text.toString())
-        editor.putString("git_remote_username", (findViewById<View>(R.id.server_user) as EditText).text.toString())
+        editor.putString("git_remote_server", (findViewById<View>(R.id.server_url) as TextInputEditText).text.toString())
+        editor.putString("git_remote_location", (findViewById<View>(R.id.server_path) as TextInputEditText).text.toString())
+        editor.putString("git_remote_username", (findViewById<View>(R.id.server_user) as TextInputEditText).text.toString())
         editor.putString("git_remote_protocol", protocol)
         editor.putString("git_remote_auth", connectionMode)
-        editor.putString("git_remote_port", (findViewById<View>(R.id.server_port) as EditText).text.toString())
-        editor.putString("git_remote_uri", (findViewById<View>(R.id.clone_uri) as EditText).text.toString())
+        editor.putString("git_remote_port", (findViewById<View>(R.id.server_port) as TextInputEditText).text.toString())
+        editor.putString("git_remote_uri", (findViewById<View>(R.id.clone_uri) as TextInputEditText).text.toString())
 
         // 'save' hostname variable for use by addRemote() either here or later
         // in syncRepository()
-        hostname = (findViewById<View>(R.id.clone_uri) as EditText).text.toString()
-        val port = (findViewById<View>(R.id.server_port) as EditText).text.toString()
+        hostname = (findViewById<View>(R.id.clone_uri) as TextInputEditText).text.toString()
+        val port = (findViewById<View>(R.id.server_port) as TextInputEditText).text.toString()
         // don't ask the user, take off the protocol that he puts in
         hostname = hostname.replaceFirst("^.+://".toRegex(), "")
         (findViewById<View>(R.id.clone_uri) as TextInputEditText).setText(hostname)
@@ -433,7 +430,7 @@ open class GitActivity : AppCompatActivity() {
 
         val email = (findViewById<View>(R.id.git_user_email) as TextInputEditText).text!!.toString()
         editor.putString("git_config_user_email", email)
-        editor.putString("git_config_user_name", (findViewById<View>(R.id.git_user_name) as EditText).text.toString())
+        editor.putString("git_config_user_name", (findViewById<View>(R.id.git_user_name) as TextInputEditText).text.toString())
 
         if (!email.matches(emailPattern.toRegex())) {
             MaterialAlertDialogBuilder(this)
@@ -532,12 +529,12 @@ open class GitActivity : AppCompatActivity() {
             MaterialAlertDialogBuilder(this)
                     .setMessage(context.getString(R.string.set_information_dialog_text))
                     .setPositiveButton(context.getString(R.string.dialog_positive)) { _, _ ->
-                        val intent = Intent(activity, UserPreference::class.java)
+                        val intent = Intent(context, UserPreference::class.java)
                         startActivityForResult(intent, REQUEST_PULL)
                     }
                     .setNegativeButton(context.getString(R.string.dialog_negative)) { _, _ ->
                         // do nothing :(
-                        setResult(Activity.RESULT_OK)
+                        setResult(AppCompatActivity.RESULT_OK)
                         finish()
                     }
                     .show()
@@ -580,21 +577,21 @@ open class GitActivity : AppCompatActivity() {
             }
 
             when (operation) {
-                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> op = CloneOperation(localDir!!, activity).setCommand(hostname)
+                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> op = CloneOperation(localDir!!, this).setCommand(hostname)
 
-                REQUEST_PULL -> op = PullOperation(localDir!!, activity).setCommand()
+                REQUEST_PULL -> op = PullOperation(localDir!!, this).setCommand()
 
-                REQUEST_PUSH -> op = PushOperation(localDir!!, activity).setCommand()
+                REQUEST_PUSH -> op = PushOperation(localDir!!, this).setCommand()
 
-                REQUEST_SYNC -> op = SyncOperation(localDir!!, activity).setCommands()
+                REQUEST_SYNC -> op = SyncOperation(localDir!!, this).setCommands()
 
-                BREAK_OUT_OF_DETACHED -> op = BreakOutOfDetached(localDir!!, activity).setCommands()
+                BREAK_OUT_OF_DETACHED -> op = BreakOutOfDetached(localDir!!, this).setCommands()
 
                 SshApiSessionFactory.POST_SIGNATURE -> return
 
                 else -> {
                     Log.e(TAG, "Operation not recognized : $operation")
-                    setResult(Activity.RESULT_CANCELED)
+                    setResult(AppCompatActivity.RESULT_CANCELED)
                     finish()
                     return
                 }
@@ -623,10 +620,10 @@ open class GitActivity : AppCompatActivity() {
         if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null)
             identity!!.postSignature(data)
 
-        if (resultCode == Activity.RESULT_CANCELED) {
-            setResult(Activity.RESULT_CANCELED)
+        if (resultCode == AppCompatActivity.RESULT_CANCELED) {
+            setResult(AppCompatActivity.RESULT_CANCELED)
             finish()
-        } else if (resultCode == Activity.RESULT_OK) {
+        } else if (resultCode == AppCompatActivity.RESULT_OK) {
             // If an operation has been re-queued via this mechanism, let the
             // IdentityBuilder attempt to extract some updated state from the intent before
             // trying to re-launch the operation.
