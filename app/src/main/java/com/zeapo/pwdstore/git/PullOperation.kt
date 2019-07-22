@@ -29,9 +29,7 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     }
 
     override fun execute() {
-        if (this.provider != null) {
-            (this.command as PullCommand).setCredentialsProvider(this.provider)
-        }
+        (this.command as? PullCommand)?.setCredentialsProvider(this.provider)
         GitAsyncTask(callingActivity, true, false, this).execute(this.command)
     }
 

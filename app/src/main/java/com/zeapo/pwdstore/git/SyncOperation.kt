@@ -41,8 +41,8 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
 
     override fun execute() {
         if (this.provider != null) {
-            this.pullCommand!!.setCredentialsProvider(this.provider)
-            this.pushCommand!!.setCredentialsProvider(this.provider)
+            this.pullCommand?.setCredentialsProvider(this.provider)
+            this.pushCommand?.setCredentialsProvider(this.provider)
         }
         GitAsyncTask(callingActivity, true, false, this).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
     }

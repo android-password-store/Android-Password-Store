@@ -55,9 +55,7 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     }
 
     override fun execute() {
-        if (this.provider != null) {
-            (this.command as CloneCommand).setCredentialsProvider(this.provider)
-        }
+        (this.command as? CloneCommand)?.setCredentialsProvider(this.provider)
         GitAsyncTask(callingActivity, true, false, this).execute(this.command)
     }
 
