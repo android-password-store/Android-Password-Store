@@ -366,7 +366,7 @@ class AutofillService : AccessibilityService() {
             dialog = null
         }
 
-        val builder = MaterialAlertDialogBuilder(this)
+        val builder = MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
         builder.setNegativeButton(R.string.dialog_cancel) { _, _ ->
             dialog!!.dismiss()
             dialog = null
@@ -391,7 +391,7 @@ class AutofillService : AccessibilityService() {
             dialog = null
         }
 
-        val builder = MaterialAlertDialogBuilder(this)
+        val builder = MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
         builder.setNegativeButton(R.string.dialog_cancel) { _, _ ->
             dialog!!.dismiss()
             dialog = null

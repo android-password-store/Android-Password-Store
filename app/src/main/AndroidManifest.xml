@@ -55,6 +55,7 @@
             android:parentActivityName=".PasswordStore"
             android:documentLaunchMode="intoExisting"
             android:excludeFromRecents="true"
+            android:theme="@style/AppTheme"
             tools:ignore="UnusedAttribute">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.zeapo.pwdstore.PasswordStore" />
         </activity>
