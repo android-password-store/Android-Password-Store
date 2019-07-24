@@ -52,7 +52,6 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
         Integer nbChanges = null;
         final Activity activity = getActivity();
         for (GitCommand command : commands) {
-            Log.d("doInBackground", "Executing the command <" + command.toString() + ">");
             try {
                 if (command instanceof StatusCommand) {
                     // in case we have changes, we want to keep track of it

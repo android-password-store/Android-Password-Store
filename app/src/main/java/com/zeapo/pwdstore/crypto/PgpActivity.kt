@@ -583,7 +583,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "onActivityResult resultCode: $resultCode")
 
         if (data == null) {
             setResult(RESULT_CANCELED, null)
@@ -760,7 +759,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                 // Block for 1s or until cancel is signalled
                 if (cancelNotify.block(1000)) {
-                    Log.d("DELAY_SHOW", "Cancelled")
                     return true
                 }
 

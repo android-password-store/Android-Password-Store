@@ -148,8 +148,6 @@ public class PasswordFragment extends Fragment {
      * @param filter the filter to apply
      */
     public void filterAdapter(String filter) {
-        Log.d("FRAG", "filter: " + filter);
-
         if (filter.isEmpty()) {
             refreshAdapter();
         } else {
