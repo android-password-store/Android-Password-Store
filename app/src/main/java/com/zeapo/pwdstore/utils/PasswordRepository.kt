@@ -194,7 +194,6 @@ open class PasswordRepository protected constructor() {
         fun getFilesList(path: File?): ArrayList<File> {
             if (path == null || !path.exists()) return ArrayList()
 
-            Log.d("REPO", "current path: " + path.path)
             val directories = (path.listFiles(FileFilterUtils.directoryFileFilter() as FileFilter) ?: emptyArray()).toList()
             val files = (path.listFiles(FileFilterUtils.suffixFileFilter(".gpg") as FileFilter) ?: emptyArray()).toList()
 
