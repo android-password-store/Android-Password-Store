@@ -1,5 +1,6 @@
 import org.gradle.api.JavaVersion.*
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -94,4 +95,17 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.2-alpha02")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0-alpha02")
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0-alpha02")
+}
+
+tasks {
+    withType<JavaCompile> {
+        options.compilerArgs.add("-Xlint:unchecked")
+        options.isDeprecation = true
+    }
+    withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs += "-Xnew-inference"
+        }
+    }
 }
