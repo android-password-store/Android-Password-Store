@@ -1,15 +1,17 @@
 package com.zeapo.pwdstore.utils;
 
 import android.util.Log;
+
 import org.apache.commons.codec.binary.Base32;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Otp {
 
@@ -50,7 +52,6 @@ public class Otp {
                 bigInt /= 26;
             }
             return output.toString();
-        }
-        else return strCode.substring(strCode.length() - Integer.parseInt(digits));
+        } else return strCode.substring(strCode.length() - Integer.parseInt(digits));
     }
 }

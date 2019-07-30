@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
+
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.PullCommand;
@@ -26,10 +28,6 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private ProgressDialog dialog;
     private GitOperation operation;
 
-    private Activity getActivity() {
-        return activityWeakReference.get();
-    }
-
     public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
         this.activityWeakReference = new WeakReference<>(activity);
         this.finishOnEnd = finishOnEnd;
@@ -37,6 +35,10 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
         this.operation = operation;
 
         dialog = new ProgressDialog(getActivity());
+    }
+
+    private Activity getActivity() {
+        return activityWeakReference.get();
     }
 
     protected void onPreExecute() {

@@ -31,7 +31,9 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Calendar
+import java.util.HashSet
+import java.util.TimeZone
 
 class UserPreference : AppCompatActivity() {
 
@@ -310,7 +312,7 @@ class UserPreference : AppCompatActivity() {
             val am = this
                     .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             val runningServices = am
-                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+                    .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
                     .map { it.id.substringBefore("/") }
                     .any { it == BuildConfig.APPLICATION_ID }

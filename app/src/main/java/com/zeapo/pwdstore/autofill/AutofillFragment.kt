@@ -71,7 +71,7 @@ class AutofillFragment : DialogFragment() {
         }
         (view.findViewById<View>(R.id.matched) as ListView).adapter = adapter
         // delete items by clicking them
-        (view.findViewById<View>(R.id.matched) as ListView).setOnItemClickListener { _, _, position, _ -> adapter!!.remove(adapter!!.getItem(position)) }
+        (view.findViewById<View>(R.id.matched) as ListView).onItemClickListener = { _, _, position, _ -> adapter!!.remove(adapter!!.getItem(position)) }
 
         // set the existing preference, if any
         val prefs: SharedPreferences = if (!isWeb) {

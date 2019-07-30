@@ -6,7 +6,6 @@ import com.zeapo.pwdstore.R
 import java.util.ArrayList
 
 
-
 object PasswordGenerator {
     internal const val DIGITS = 0x0001
     internal const val UPPERS = 0x0002
@@ -82,7 +81,8 @@ object PasswordGenerator {
      * preferences file 'PasswordGenerator'
      * @return list of generated passwords
      */
-    @JvmStatic @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
+    @JvmStatic
+    @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
     fun generate(ctx: Context): ArrayList<String> {
         val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 

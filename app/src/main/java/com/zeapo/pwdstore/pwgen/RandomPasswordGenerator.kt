@@ -49,8 +49,8 @@ internal object RandomPasswordGenerator {
                 cha = bank.toCharArray()[num]
                 `val` = cha.toString()
                 if (pwFlags and PasswordGenerator.AMBIGUOUS > 0 && PasswordGenerator.AMBIGUOUS_STR.contains(
-                        `val`
-                    )
+                                `val`
+                        )
                 ) {
                     continue
                 }

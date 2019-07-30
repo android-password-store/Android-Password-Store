@@ -43,6 +43,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
     public static final int POST_SIGNATURE = 301;
     private String username;
     private Identity identity;
+
     public SshApiSessionFactory(String username, Identity identity) {
         this.username = username;
         this.identity = identity;

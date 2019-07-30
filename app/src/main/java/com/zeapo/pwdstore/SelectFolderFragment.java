@@ -2,16 +2,18 @@ package com.zeapo.pwdstore;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zeapo.pwdstore.utils.FolderRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordItem;
@@ -34,6 +36,7 @@ public class SelectFolderFragment extends Fragment {
     private FolderRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
