@@ -423,13 +423,13 @@ public class PasswordStore extends AppCompatActivity {
         return fullPath.replace(repositoryPath, "").replaceAll("/+", "/");
     }
 
-    public int getLastChangedTimestamp(String fullPath) {
+    public long getLastChangedTimestamp(String fullPath) {
         File repoPath = PasswordRepository.getRepositoryDirectory(this);
         Repository repository = PasswordRepository.getRepository(repoPath);
 
         if (repository == null) {
-            Log.e(TAG, "getLastChangedTimestamp: No git repository");
-            return -1;
+            Log.d(TAG, "getLastChangedTimestamp: No git repository");
+            return new File(fullPath).lastModified();
         }
 
         Git git = new Git(repository);
@@ -453,7 +453,7 @@ public class PasswordStore extends AppCompatActivity {
             return -1;
         }
 
-        return iterator.next().getCommitTime();
+        return iterator.next().getCommitTime() * 1000;
     }
 
     public void decryptPassword(PasswordItem item) {

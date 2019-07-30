@@ -79,9 +79,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val name: String by lazy { getName(fullPath) }
     private val lastChangedString: CharSequence by lazy {
         getLastChangedString(
-                intent.getIntExtra(
+                intent.getLongExtra(
                         "LAST_CHANGED_TIMESTAMP",
-                        -1
+                        -1L
                 )
         )
     }
@@ -701,12 +701,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Gets a relative string describing when this shape was last changed
      * (e.g. "one hour ago")
      */
-    private fun getLastChangedString(timeStamp: Int): CharSequence {
+    private fun getLastChangedString(timeStamp: Long): CharSequence {
         if (timeStamp < 0) {
             throw RuntimeException()
         }
 
-        return DateUtils.getRelativeTimeSpanString(this, timeStamp.toLong() * 1000, true)
+        return DateUtils.getRelativeTimeSpanString(this, timeStamp, true)
     }
 
     @Suppress("StaticFieldLeak")
