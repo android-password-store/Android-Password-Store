@@ -216,7 +216,6 @@ public class PasswordStore extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent intent;
-        Log.d(TAG, "Menu item " + id + " pressed");
 
         AlertDialog.Builder initBefore = new AlertDialog.Builder(this)
                 .setMessage(this.getResources().getString(R.string.creation_dialog_text))
@@ -270,7 +269,6 @@ public class PasswordStore extends AppCompatActivity {
                 return true;
 
             case android.R.id.home:
-                Log.d(TAG, "Home pressed");
                 this.onBackPressed();
                 break;
 
