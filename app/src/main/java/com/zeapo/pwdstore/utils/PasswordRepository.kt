@@ -2,7 +2,6 @@ package com.zeapo.pwdstore.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.preference.PreferenceManager
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.eclipse.jgit.api.Git
@@ -20,7 +19,8 @@ open class PasswordRepository protected constructor() {
     @Suppress("Unused")
     enum class PasswordSortOrder(val comparator: Comparator<PasswordItem>) {
 
-        FOLDER_FIRST(Comparator { p1: PasswordItem, p2: PasswordItem -> (p1.type + p1.name)
+        FOLDER_FIRST(Comparator { p1: PasswordItem, p2: PasswordItem ->
+            (p1.type + p1.name)
                     .compareTo(p2.type + p2.name, ignoreCase = true)
         }),
 
@@ -194,8 +194,10 @@ open class PasswordRepository protected constructor() {
         fun getFilesList(path: File?): ArrayList<File> {
             if (path == null || !path.exists()) return ArrayList()
 
-            val directories = (path.listFiles(FileFilterUtils.directoryFileFilter() as FileFilter) ?: emptyArray()).toList()
-            val files = (path.listFiles(FileFilterUtils.suffixFileFilter(".gpg") as FileFilter) ?: emptyArray()).toList()
+            val directories = (path.listFiles(FileFilterUtils.directoryFileFilter() as FileFilter)
+                    ?: emptyArray()).toList()
+            val files = (path.listFiles(FileFilterUtils.suffixFileFilter(".gpg") as FileFilter)
+                    ?: emptyArray()).toList()
 
             val items = ArrayList<File>()
             items.addAll(directories)

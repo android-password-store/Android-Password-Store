@@ -649,7 +649,8 @@ open class GitActivity : AppCompatActivity() {
         const val REQUEST_INIT = 104
         const val EDIT_SERVER = 105
         const val REQUEST_SYNC = 106
-        @Suppress("Unused") const val REQUEST_CREATE = 107
+        @Suppress("Unused")
+        const val REQUEST_CREATE = 107
         const val EDIT_GIT_CONFIG = 108
         const val BREAK_OUT_OF_DETACHED = 109
         const val REQUEST_RESET = 110

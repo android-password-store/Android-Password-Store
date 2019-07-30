@@ -45,7 +45,7 @@ data class PasswordItem(
                 file: File,
                 parent: PasswordItem,
                 rootDir: File
-        ) : PasswordItem {
+        ): PasswordItem {
             return PasswordItem(name, parent, TYPE_CATEGORY, file, rootDir)
         }
 
@@ -54,7 +54,7 @@ data class PasswordItem(
                 name: String,
                 file: File,
                 rootDir: File
-        ) : PasswordItem {
+        ): PasswordItem {
             return PasswordItem(name, null, TYPE_CATEGORY, file, rootDir)
         }
 

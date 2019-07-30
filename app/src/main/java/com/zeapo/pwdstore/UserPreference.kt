@@ -137,13 +137,13 @@ class UserPreference : AppCompatActivity() {
 
             sshClearPassphrasePreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
-                it.isVisible= false
+                it.isVisible = false
                 true
             }
 
             clearHotpIncrementPreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
-                it.isVisible= false
+                it.isVisible = false
                 true
             }
 
@@ -193,7 +193,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             val resetRepo = Preference.OnPreferenceChangeListener { _, o ->
-                deleteRepoPreference?.isVisible= !(o as Boolean)
+                deleteRepoPreference?.isVisible = !(o as Boolean)
                 PasswordRepository.closeRepository()
                 sharedPreferences.edit().putBoolean("repo_changed", true).apply()
                 true

@@ -59,7 +59,8 @@ class AutofillFragment : DialogFragment() {
                     .resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
             iconPackageName = resolveInfo?.activityInfo?.packageName
             builder.setTitle("Website")
-            (view.findViewById<View>(R.id.webURL) as EditText).setText(packageName ?: "com.android.browser")
+            (view.findViewById<View>(R.id.webURL) as EditText).setText(packageName
+                    ?: "com.android.browser")
         }
         try {
             builder.setIcon(callingActivity.packageManager.getApplicationIcon(iconPackageName))

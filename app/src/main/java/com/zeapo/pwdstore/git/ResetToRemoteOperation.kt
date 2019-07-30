@@ -36,7 +36,7 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOper
     override fun execute() {
         this.fetchCommand?.setCredentialsProvider(this.provider)
         GitAsyncTask(callingActivity, true, false, this)
-            .execute(this.addCommand, this.fetchCommand, this.resetCommand)
+                .execute(this.addCommand, this.fetchCommand, this.resetCommand)
     }
 
     override fun onError(errorMessage: String) {
