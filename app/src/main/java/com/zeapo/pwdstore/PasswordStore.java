@@ -453,7 +453,7 @@ public class PasswordStore extends AppCompatActivity {
             return -1;
         }
 
-        return iterator.next().getCommitTime() * 1000;
+        return ((long) iterator.next().getCommitTime()) * 1000;
     }
 
     public void decryptPassword(PasswordItem item) {
