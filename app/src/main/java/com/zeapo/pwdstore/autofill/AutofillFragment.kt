@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ListView
@@ -71,7 +72,8 @@ class AutofillFragment : DialogFragment() {
         }
         (view.findViewById<View>(R.id.matched) as ListView).adapter = adapter
         // delete items by clicking them
-        (view.findViewById<View>(R.id.matched) as ListView).onItemClickListener = { _, _, position, _ -> adapter!!.remove(adapter!!.getItem(position)) }
+        (view.findViewById<View>(R.id.matched) as ListView).onItemClickListener =
+                AdapterView.OnItemClickListener { _, _, position, _ -> adapter!!.remove(adapter!!.getItem(position)) }
 
         // set the existing preference, if any
         val prefs: SharedPreferences = if (!isWeb) {
