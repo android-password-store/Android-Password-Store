@@ -471,13 +471,13 @@ open class GitActivity : AppCompatActivity() {
         if (PasswordRepository.getRepository(null) == null) {
             PasswordRepository.initialize(this)
         }
-        val localDir = PasswordRepository.getRepositoryDirectory(context)
+        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(context))
 
         if (!saveConfiguration())
             return
 
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
-        if (localDir!!.exists() && localDir.listFiles()!!.isNotEmpty()
+        if (localDir.exists() && localDir.listFiles()!!.isNotEmpty()
                 && !(localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git")) {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_delete_title)
@@ -561,7 +561,7 @@ open class GitActivity : AppCompatActivity() {
      */
     private fun launchGitOperation(operation: Int) {
         val op: GitOperation
-        val localDir = PasswordRepository.getRepositoryDirectory(context)
+        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(context))
 
         try {
 
@@ -582,17 +582,17 @@ open class GitActivity : AppCompatActivity() {
             }
 
             when (operation) {
-                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> op = CloneOperation(localDir!!, this).setCommand(hostname)
+                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> op = CloneOperation(localDir, this).setCommand(hostname)
 
-                REQUEST_PULL -> op = PullOperation(localDir!!, this).setCommand()
+                REQUEST_PULL -> op = PullOperation(localDir, this).setCommand()
 
-                REQUEST_PUSH -> op = PushOperation(localDir!!, this).setCommand()
+                REQUEST_PUSH -> op = PushOperation(localDir, this).setCommand()
 
-                REQUEST_SYNC -> op = SyncOperation(localDir!!, this).setCommands()
+                REQUEST_SYNC -> op = SyncOperation(localDir, this).setCommands()
 
-                BREAK_OUT_OF_DETACHED -> op = BreakOutOfDetached(localDir!!, this).setCommands()
+                BREAK_OUT_OF_DETACHED -> op = BreakOutOfDetached(localDir, this).setCommands()
 
-                REQUEST_RESET -> op = ResetToRemoteOperation(localDir!!, this).setCommands()
+                REQUEST_RESET -> op = ResetToRemoteOperation(localDir, this).setCommands()
 
                 SshApiSessionFactory.POST_SIGNATURE -> return
 
