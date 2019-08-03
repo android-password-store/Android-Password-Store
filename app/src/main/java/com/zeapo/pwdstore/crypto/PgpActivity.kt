@@ -24,11 +24,9 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
@@ -638,7 +636,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun copyPasswordToClipBoard() {
-        if (findViewById<AppCompatTextView>(R.id.crypto_password_show) == null)
+        if (crypto_password_show == null)
             return
 
         val clip = ClipData.newPlainText("pgp_handler_result_pm", passwordEntry?.password)
@@ -740,13 +738,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 45
             }
 
-            val container = findViewById<LinearLayout>(R.id.crypto_container_decrypt)
-            container.visibility = View.VISIBLE
+            crypto_container_decrypt.visibility = View.VISIBLE
 
-            val extraText = findViewById<AppCompatTextView>(R.id.crypto_extra_show)
-
-            if (extraText.text.isNotEmpty())
-                findViewById<View>(R.id.crypto_extra_show_layout).visibility = View.VISIBLE
+            if (crypto_extra_show.text.isNotEmpty())
+                crypto_extra_show_layout.visibility = View.VISIBLE
 
             if (showTime == 0) {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own
