@@ -82,7 +82,7 @@ dependencies {
     }
     implementation("com.jcraft:jsch:0.1.55")
     implementation("commons-io:commons-io:2.5")
-    implementation("commons-codec:commons-codec:1.12")
+    implementation("commons-codec:commons-codec:1.13")
     implementation("com.jayway.android.robotium:robotium-solo:5.6.3")
     implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
     implementation("org.sufficientlysecure:sshauthentication-api:1.0")
