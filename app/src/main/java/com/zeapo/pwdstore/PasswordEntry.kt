@@ -70,7 +70,7 @@ class PasswordEntry(private val content: String) {
         val extraLines = extraContent!!.split("\n".toRegex())
         for (line in extraLines) {
             for (field in USERNAME_FIELDS) {
-                if (line.toLowerCase().startsWith("$field:")) {
+                if (line.toLowerCase().startsWith("$field:", ignoreCase = true)) {
                     return line.split(": *".toRegex(), 2).toTypedArray()[1]
                 }
             }
@@ -143,7 +143,7 @@ class PasswordEntry(private val content: String) {
         val extraContent = if (passContent.size > 1) passContent[1] else ""
         // if there is a HOTP URI, we must return the extra content with the counter incremented
         return if (hasHotp()) {
-            extraContent.replaceFirst("counter=[0-9]+".toRegex(), "counter=" + java.lang.Long.toString(hotpCounter!!))
+            extraContent.replaceFirst("counter=[0-9]+".toRegex(), "counter=" + (hotpCounter!!).toString())
         } else extraContent
     }
 
