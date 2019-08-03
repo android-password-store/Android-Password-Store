@@ -74,7 +74,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
     implementation("androidx.preference:preference:1.1.0-rc01")
     implementation("androidx.recyclerview:recyclerview:1.1.0-beta01")
-    implementation("com.google.android.material:material:1.1.0-alpha08")
+    implementation("com.google.android.material:material:1.1.0-alpha09")
     implementation("androidx.annotation:annotation:1.1.0")
     implementation("org.sufficientlysecure:openpgp-api:12.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
