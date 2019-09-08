@@ -7,13 +7,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.0-rc03")
-        classpath(kotlin("gradle-plugin", "1.3.41"))
+        classpath("com.android.tools.build:gradle:3.5.0")
+        classpath(kotlin("gradle-plugin", "1.3.50"))
     }
 }
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.22.0"
+    id("com.github.ben-manes.versions") version "0.24.0"
 }
 
 allprojects {
@@ -41,7 +41,7 @@ tasks {
     }
 
     named<Wrapper>("wrapper") {
-        gradleVersion = "5.6"
+        gradleVersion = "5.6.2"
         distributionType = Wrapper.DistributionType.ALL
     }
 }
