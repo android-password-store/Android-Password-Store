@@ -103,6 +103,7 @@
     <string name="crypto_select">Select</string>
     <string name="crypto_cancel">Cancel</string>
     <string name="crypto_save">Save</string>
+    <string name="crypto_save_and_copy">Save and Copy</string>
 
     <!-- DECRYPT Layout -->
     <string name="action_search">Search</string>

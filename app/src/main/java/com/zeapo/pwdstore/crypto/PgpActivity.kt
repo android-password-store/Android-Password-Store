@@ -168,6 +168,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             R.id.share_password_as_plaintext -> shareAsPlaintext()
             R.id.edit_password -> editPassword()
             R.id.crypto_confirm_add -> encrypt()
+            R.id.crypto_confirm_add_and_copy -> encrypt(true)
             R.id.crypto_cancel_add -> {
                 if (passwordEntry?.hotpIsIncremented() == false) {
                     setResult(RESULT_CANCELED)
@@ -408,7 +409,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt() {
+    private fun encrypt(copy: Boolean = false) {
         // if HOTP was incremented, we leave fields as is; they have already been set
         if (intent.getStringExtra("OPERATION") != "INCREMENT") {
             editName = crypto_password_file_edit.text.toString().trim()
@@ -424,6 +425,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         if (editPass?.isEmpty() == true && editExtra?.isEmpty() == true) {
             showToast(resources.getString(R.string.empty_toast_text))
             return
+        }
+
+        if (copy) {
+            copyPasswordToClipBoard()
         }
 
         val data = Intent()
@@ -635,10 +640,17 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun copyPasswordToClipBoard() {
-        if (findViewById<TextView>(R.id.crypto_password_show) == null)
-            return
+        var pass = passwordEntry?.password
 
-        val clip = ClipData.newPlainText("pgp_handler_result_pm", passwordEntry?.password)
+        if (findViewById<TextView>(R.id.crypto_password_show) == null) {
+            if (editPass == null) {
+                return
+            } else {
+                pass = editPass
+            }
+        }
+
+        val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
         clipboard.setPrimaryClip(clip)
 
         var clearAfter = 45
@@ -738,12 +750,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             }
 
             val container = findViewById<LinearLayout>(R.id.crypto_container_decrypt)
-            container.visibility = View.VISIBLE
+            container?.visibility = View.VISIBLE
 
             val extraText = findViewById<TextView>(R.id.crypto_extra_show)
 
-            if (extraText.text.isNotEmpty())
-                findViewById<View>(R.id.crypto_extra_show_layout).visibility = View.VISIBLE
+            if (extraText?.text?.isNotEmpty() ?: false)
+                findViewById<View>(R.id.crypto_extra_show_layout)?.visibility = View.VISIBLE
 
             if (showTime == 0) {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own
