@@ -41,8 +41,10 @@ class StructureParser {
             parseViewNode(windowNode.getRootViewNode());
         }
         // If not explicit username field found, add the field just before password field.
-        if (result.username.isEmpty() && result.email.isEmpty() && !result.password.isEmpty() && usernameCandidate != null)
+        if (result.username.isEmpty() && result.email.isEmpty() && !result.password.isEmpty() && usernameCandidate != null) {
             result.username.add(usernameCandidate);
+        }
+
         return result;
     }
 
@@ -63,12 +65,15 @@ class StructureParser {
             }
         } else if (node.getAutofillType() == View.AUTOFILL_TYPE_TEXT) {
             int inputType = node.getInputType();
-            if ((inputType & InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) > 0)
+            if ((inputType & InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) > 0) {
                 result.email.add(node.getAutofillId());
-            else if ((inputType & InputType.TYPE_TEXT_VARIATION_PASSWORD) > 0)
+            }
+            else if ((inputType & InputType.TYPE_TEXT_VARIATION_PASSWORD) > 0) {
                 result.password.add(node.getAutofillId());
-            else if (result.password.isEmpty())
+            }
+            else if (result.password.isEmpty()) {
                 usernameCandidate = node.getAutofillId();
+            }
         }
 
         for (int i = 0; i < node.getChildCount(); ++i) {
