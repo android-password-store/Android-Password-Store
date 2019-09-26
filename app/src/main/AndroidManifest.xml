@@ -66,6 +66,15 @@
                 android:resource="@xml/autofill_config" />
         </service>
 
+        <service
+            android:name=".autofill.AutofillService2"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService"/>
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".autofill.AutofillActivity"
             android:documentLaunchMode="intoExisting"
