@@ -2,13 +2,13 @@ package com.zeapo.pwdstore.autofill;
 
 import android.app.assist.AssistStructure;
 import android.os.Build;
+import android.text.InputType;
+import android.view.View;
+import android.view.autofill.AutofillId;
 
 import androidx.annotation.RequiresApi;
 
-import android.text.InputType;
-import android.util.Log;
-import android.view.View;
-import android.view.autofill.AutofillId;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,6 @@ class StructureParser {
 
     final private AssistStructure structure;
     private Result result;
-    private AutofillId usernameCandidate;
 
     StructureParser(AssistStructure structure) {
         this.structure = structure;
@@ -33,52 +32,92 @@ class StructureParser {
 
     Result parse() {
         result = new Result();
-        usernameCandidate = null;
         for (int i = 0; i < structure.getWindowNodeCount(); ++i) {
             AssistStructure.WindowNode windowNode = structure.getWindowNodeAt(i);
             result.title.add(windowNode.getTitle());
-            result.webDomain.add(windowNode.getRootViewNode().getWebDomain());
             parseViewNode(windowNode.getRootViewNode());
         }
-        // If not explicit username field found, add the field just before password field.
-        if (result.username.isEmpty() && result.email.isEmpty() && !result.password.isEmpty() && usernameCandidate != null) {
-            result.username.add(usernameCandidate);
-        }
-
         return result;
     }
 
     private void parseViewNode(AssistStructure.ViewNode node) {
         String[] hints = node.getAutofillHints();
+
+        if (hints == null) {
+            // Could not find native autofill hints.
+            // Try to infer any hints from the ID of the field (ie the #id of a webbased text input)
+            String inferredHint = inferHint(node, node.getIdEntry());
+            if (inferredHint != null) {
+                hints = new String[]{inferredHint};
+            }
+        }
+
         if (hints != null && hints.length > 0) {
-            if (Arrays.asList(hints).contains(View.AUTOFILL_HINT_USERNAME)) {
+            List<String> hintsAsList = Arrays.asList(hints);
+
+            if (hintsAsList.contains(View.AUTOFILL_HINT_USERNAME)) {
                 result.username.add(node.getAutofillId());
             }
-            else if (Arrays.asList(hints).contains(View.AUTOFILL_HINT_EMAIL_ADDRESS)) {
+            else if (hintsAsList.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS)) {
                 result.email.add(node.getAutofillId());
             }
-            else if (Arrays.asList(hints).contains(View.AUTOFILL_HINT_PASSWORD)) {
+            else if (hintsAsList.contains(View.AUTOFILL_HINT_PASSWORD)) {
                 result.password.add(node.getAutofillId());
-            }
-            else {
-                Log.d(TAG, "unsupported hints");
             }
         } else if (node.getAutofillType() == View.AUTOFILL_TYPE_TEXT) {
+            // Attempt to match based on Field Type
             int inputType = node.getInputType();
-            if ((inputType & InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) > 0) {
-                result.email.add(node.getAutofillId());
+            switch (inputType) {
+                case InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS:
+                    result.email.add(node.getAutofillId());
+                    break;
+                case InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD:
+                case InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD:
+                    result.password.add(node.getAutofillId());
+                    break;
+                default:
+                    break;
             }
-            else if ((inputType & InputType.TYPE_TEXT_VARIATION_PASSWORD) > 0) {
-                result.password.add(node.getAutofillId());
-            }
-            else if (result.password.isEmpty()) {
-                usernameCandidate = node.getAutofillId();
-            }
+        }
+
+        // Finally look for domain names
+        String webDomain = node.getWebDomain();
+        if (webDomain != null) {
+            result.webDomain.add(webDomain);
         }
 
         for (int i = 0; i < node.getChildCount(); ++i) {
             parseViewNode(node.getChildAt(i));
         }
+
+    }
+
+    // Attempt to infer the AutoFill type from a string
+    private String inferHint(AssistStructure.ViewNode node, @Nullable String actualHint) {
+        if (actualHint == null) return null;
+
+        String hint = actualHint.toLowerCase();
+        if (hint.contains("label") || hint.contains("container")) {
+            return null;
+        }
+
+        if (hint.contains("password")) {
+            return View.AUTOFILL_HINT_PASSWORD;
+        }
+        if (hint.contains("username") || (hint.contains("login") && hint.contains("id"))){
+            return View.AUTOFILL_HINT_USERNAME;
+        }
+        if (hint.contains("email")){
+            return View.AUTOFILL_HINT_EMAIL_ADDRESS;
+        }
+        if (hint.contains("name")){
+            return View.AUTOFILL_HINT_NAME;
+        }
+        if (hint.contains("phone")){
+            return View.AUTOFILL_HINT_PHONE;
+        }
+
+        return null;
     }
 
     static class Result {
@@ -96,8 +135,14 @@ class StructureParser {
             password = new ArrayList<>();
         }
 
-        Stream<AutofillId> allAutofillIds() {
-            return Stream.concat(Stream.concat(username.stream(), email.stream()), password.stream());
+        public AutofillId[] getAllAutoFillIds() {
+            ArrayList<AutofillId> autofillIds = new ArrayList<>();
+            autofillIds.addAll(username);
+            autofillIds.addAll(email);
+            autofillIds.addAll(password);
+
+            AutofillId[] finalAutoFillIds = new AutofillId[autofillIds.size()];
+            return autofillIds.toArray(finalAutoFillIds);
         }
     }
 }
