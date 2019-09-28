@@ -14,10 +14,8 @@ import androidx.annotation.DrawableRes
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import com.zeapo.pwdstore.PasswordFragment
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.SshKeyGen
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -46,10 +44,9 @@ class AutofillService2 : AutofillService() {
         }
 
         val responseBuilder = FillResponse.Builder()
-        val autofillIds = parseResult.allAutofillIds().toArray<AutofillId> { length -> arrayOfNulls(length) }
 
-        val presentation = getRemoteViews(this, getString(R.string.app_name), android.R.drawable.ic_lock_lock)
-        responseBuilder.setAuthentication(autofillIds, getAuthWindow(this), presentation)
+        val presentation = getRemoteViews(this, getString(R.string.app_name), R.mipmap.ic_launcher)
+        responseBuilder.setAuthentication(parseResult.allAutoFillIds, getAuthWindow(this), presentation)
 
         // If there are no errors, call onSuccess() and pass the response
         callback.onSuccess(responseBuilder.build())
@@ -59,12 +56,12 @@ class AutofillService2 : AutofillService() {
         callback.onFailure("IMPLEMENT ME")
     }
 
-    fun getAuthWindow(context: Context): IntentSender {
-        val intent = Intent(context, SshKeyGen::class.java)
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT).getIntentSender()
+    private fun getAuthWindow(context: Context): IntentSender {
+        val intent = Intent(context, PasswordStore::class.java)
+        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT).intentSender
     }
 
-    fun getRemoteViews(context: Context, text: String, @DrawableRes icon: Int): RemoteViews {
+    private fun getRemoteViews(context: Context, text: String, @DrawableRes icon: Int): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.autofill_service_list_item)
         views.setTextViewText(R.id.textView, text)
         views.setImageViewResource(R.id.imageIcon, icon)
