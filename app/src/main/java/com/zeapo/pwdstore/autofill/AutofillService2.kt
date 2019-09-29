@@ -45,7 +45,7 @@ class AutofillService2 : AutofillService() {
 
         val responseBuilder = FillResponse.Builder()
 
-        val presentation = getRemoteViews(this, getString(R.string.app_name), R.mipmap.ic_launcher)
+        val presentation = getRemoteViews(this, getString(R.string.app_name))
         responseBuilder.setAuthentication(parseResult.allAutoFillIds, getAuthWindow(this), presentation)
 
         // If there are no errors, call onSuccess() and pass the response
@@ -61,10 +61,10 @@ class AutofillService2 : AutofillService() {
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT).intentSender
     }
 
-    private fun getRemoteViews(context: Context, text: String, @DrawableRes icon: Int): RemoteViews {
+    private fun getRemoteViews(context: Context, text: String): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.autofill_service_list_item)
         views.setTextViewText(R.id.textView, text)
-        views.setImageViewResource(R.id.imageIcon, icon)
+        views.setImageViewResource(R.id.imageIcon, R.mipmap.ic_launcher)
         return views
     }
 }
