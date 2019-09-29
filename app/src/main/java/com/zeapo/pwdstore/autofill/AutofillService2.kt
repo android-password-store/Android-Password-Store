@@ -38,7 +38,7 @@ class AutofillService2 : AutofillService() {
         }
 
         val parseResult = StructureParser(structure).parse()
-        if (parseResult.password.isEmpty()) {
+        if (parseResult.password.isEmpty() && parseResult.username.isEmpty() && parseResult.email.isEmpty()) {
             callback.onSuccess(null)
             return
         }
