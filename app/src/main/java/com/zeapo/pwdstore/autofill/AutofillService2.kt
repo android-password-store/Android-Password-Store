@@ -46,7 +46,7 @@ class AutofillService2 : AutofillService() {
         val responseBuilder = FillResponse.Builder()
 
         val presentation = getRemoteViews(this, getString(R.string.app_name))
-        responseBuilder.setAuthentication(parseResult.allAutoFillIds, getAuthWindow(this), presentation)
+        responseBuilder.setAuthentication(parseResult.getAllAutoFillIds(), getAuthWindow(this), presentation)
 
         // If there are no errors, call onSuccess() and pass the response
         callback.onSuccess(responseBuilder.build())

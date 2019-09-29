@@ -47,22 +47,30 @@ internal class StructureParser(private val structure: AssistStructure) {
         if (hints != null && hints.isNotEmpty()) {
             val hintsAsList = listOf(*hints)
 
-            node.autofillId?.let{
+            node.autofillId?.let {
                 when {
                     hintsAsList.contains(View.AUTOFILL_HINT_USERNAME) -> result.username.add(it)
                     hintsAsList.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS) -> result.email.add(it)
                     hintsAsList.contains(View.AUTOFILL_HINT_PASSWORD) -> result.password.add(it)
-                    else -> result.username.add(it)
+                    !hintsAsList.contains("") && !hintsAsList.contains("off")  -> {
+                        // For now assume every input as fillable (except off and empty hint)
+                        result.username.add(it)
+                    }
+                    else -> {
+                        // Ignored
+                    }
                 }
             }
         } else if (node.autofillType == View.AUTOFILL_TYPE_TEXT) {
             // Attempt to match based on Field Type
-            node.autofillId?.let{
+            node.autofillId?.let {
                 when (node.inputType) {
                     InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS -> result.email.add(it)
                     InputType.TYPE_TEXT_VARIATION_PASSWORD -> result.password.add(it)
                     InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD -> result.password.add(it)
-                    else -> result.email.add(it)
+                    else -> {
+                        // Ignored
+                    }
                 }
 
             }
@@ -114,29 +122,18 @@ internal class StructureParser(private val structure: AssistStructure) {
     }
 
     internal class Result {
-        val title: MutableList<CharSequence>
-        val webDomain: MutableList<String>
-        val username: MutableList<AutofillId>
-        val email: MutableList<AutofillId>
-        val password: MutableList<AutofillId>
+        val title: MutableList<CharSequence> = ArrayList()
+        val webDomain: MutableList<String> = ArrayList()
+        val username: MutableList<AutofillId> = ArrayList()
+        val email: MutableList<AutofillId> = ArrayList()
+        val password: MutableList<AutofillId> = ArrayList()
 
-        val allAutoFillIds: Array<AutofillId>
-            get() {
-                val autofillIds = ArrayList<AutofillId>()
-                autofillIds.addAll(username)
-                autofillIds.addAll(email)
-                autofillIds.addAll(password)
-
-                val finalAutoFillIds = arrayOfNulls<AutofillId>(autofillIds.size)
-                return autofillIds.toTypedArray()
-            }
-
-        init {
-            title = ArrayList()
-            webDomain = ArrayList()
-            username = ArrayList()
-            email = ArrayList()
-            password = ArrayList()
+        fun getAllAutoFillIds(): Array<AutofillId> {
+            val autofillIds = ArrayList<AutofillId>()
+            autofillIds.addAll(username)
+            autofillIds.addAll(email)
+            autofillIds.addAll(password)
+            return autofillIds.toTypedArray()
         }
     }
 }
