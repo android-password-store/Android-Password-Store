@@ -5,17 +5,15 @@ import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.*
 import android.service.autofill.AutofillService
-import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import android.service.autofill.FillResponse
 import android.widget.RemoteViews
-import androidx.annotation.DrawableRes
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.autofill.ui.AutoFillFilterView
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -45,7 +43,7 @@ class AutofillService2 : AutofillService() {
 
         val responseBuilder = FillResponse.Builder()
 
-        val presentation = getRemoteViews(this, getString(R.string.app_name))
+        val presentation = getAutocompleteView(this, getString(R.string.app_name))
         responseBuilder.setAuthentication(parseResult.getAllAutoFillIds(), getAuthWindow(this), presentation)
 
         // If there are no errors, call onSuccess() and pass the response
@@ -57,11 +55,11 @@ class AutofillService2 : AutofillService() {
     }
 
     private fun getAuthWindow(context: Context): IntentSender {
-        val intent = Intent(context, PasswordStore::class.java)
+        val intent = Intent(context, AutoFillFilterView::class.java)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT).intentSender
     }
 
-    private fun getRemoteViews(context: Context, text: String): RemoteViews {
+    private fun getAutocompleteView(context: Context, text: String): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.autofill_service_list_item)
         views.setTextViewText(R.id.textView, text)
         views.setImageViewResource(R.id.imageIcon, R.mipmap.ic_launcher)
