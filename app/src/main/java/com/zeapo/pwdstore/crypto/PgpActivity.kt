@@ -722,7 +722,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     @Suppress("StaticFieldLeak")
     inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
-        private val pb: ProgressBar by lazy { pbLoading }
+        private val pb: ProgressBar? by lazy { pbLoading }
         private var skip = false
         private var cancelNotify = ConditionVariable()
 
@@ -761,7 +761,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own
                 cancel(true)
             } else {
-                this.pb.max = showTime
+                this.pb?.max = showTime
             }
         }
 
@@ -814,7 +814,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
-            this.pb.progress = values[0] ?: 0
+            this.pb?.progress = values[0] ?: 0
         }
     }
 
