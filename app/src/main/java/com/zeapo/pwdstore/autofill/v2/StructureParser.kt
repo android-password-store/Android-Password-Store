@@ -1,4 +1,4 @@
-package com.zeapo.pwdstore.autofill
+package com.zeapo.pwdstore.autofill.v2
 
 import android.app.assist.AssistStructure
 import android.os.Build
@@ -9,15 +9,13 @@ import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
 
 import java.util.ArrayList
-import java.util.Arrays
-import java.util.stream.Stream
 
 
 /**
  * Parse AssistStructure and guess username and password fields.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
-internal class StructureParser(private val structure: AssistStructure) {
+class StructureParser(private val structure: AssistStructure) {
     private lateinit var result: Result
 
     fun parse(): Result {
@@ -54,7 +52,7 @@ internal class StructureParser(private val structure: AssistStructure) {
                     hintsAsList.contains(View.AUTOFILL_HINT_PASSWORD) -> result.password.add(it)
                     !hintsAsList.contains("") && !hintsAsList.contains("off")  -> {
                         // For now assume every input as fillable (except off and empty hint)
-                        result.username.add(it)
+                        result.password.add(it)
                     }
                     else -> {
                         // Ignored
@@ -121,7 +119,7 @@ internal class StructureParser(private val structure: AssistStructure) {
 
     }
 
-    internal class Result {
+    class Result {
         val title: MutableList<CharSequence> = ArrayList()
         val webDomain: MutableList<String> = ArrayList()
         val username: MutableList<AutofillId> = ArrayList()
