@@ -67,7 +67,7 @@
         </service>
 
         <service
-            android:name=".autofill.AutofillService2"
+            android:name=".autofill.v2.AutofillService2"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
@@ -99,7 +99,7 @@
             android:parentActivityName=".PasswordStore" />
         <activity android:name=".SelectFolderActivity" />
         <activity
-            android:name=".autofill.ui.AutoFillFilterView"
+            android:name=".autofill.v2.ui.AutofillFilterView"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:taskAffinity=".view.AuthActivity"
