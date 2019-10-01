@@ -25,7 +25,7 @@ internal object RandomPasswordGenerator {
         var i: Int
         var featureFlags: Int
         var num: Int
-        var `val`: String
+        var character: String
 
         var bank = ""
         if (pwFlags and PasswordGenerator.DIGITS > 0) {
@@ -47,28 +47,26 @@ internal object RandomPasswordGenerator {
             while (i < size) {
                 num = RandomNumberGenerator.number(bank.length)
                 cha = bank.toCharArray()[num]
-                `val` = cha.toString()
-                if (pwFlags and PasswordGenerator.AMBIGUOUS > 0 && PasswordGenerator.AMBIGUOUS_STR.contains(
-                                `val`
-                        )
-                ) {
+                character = cha.toString()
+                if (pwFlags and PasswordGenerator.AMBIGUOUS > 0
+                        && PasswordGenerator.AMBIGUOUS_STR.contains(character)) {
                     continue
                 }
-                if (pwFlags and PasswordGenerator.NO_VOWELS > 0 && PasswordGenerator.VOWELS_STR.contains(`val`)) {
+                if (pwFlags and PasswordGenerator.NO_VOWELS > 0 && PasswordGenerator.VOWELS_STR.contains(character)) {
                     continue
                 }
-                password += `val`
+                password += character
                 i++
-                if (PasswordGenerator.DIGITS_STR.contains(`val`)) {
+                if (PasswordGenerator.DIGITS_STR.contains(character)) {
                     featureFlags = featureFlags and PasswordGenerator.DIGITS.inv()
                 }
-                if (PasswordGenerator.UPPERS_STR.contains(`val`)) {
+                if (PasswordGenerator.UPPERS_STR.contains(character)) {
                     featureFlags = featureFlags and PasswordGenerator.UPPERS.inv()
                 }
-                if (PasswordGenerator.SYMBOLS_STR.contains(`val`)) {
+                if (PasswordGenerator.SYMBOLS_STR.contains(character)) {
                     featureFlags = featureFlags and PasswordGenerator.SYMBOLS.inv()
                 }
-                if (PasswordGenerator.LOWERS_STR.contains(`val`)) {
+                if (PasswordGenerator.LOWERS_STR.contains(character)) {
                     featureFlags = featureFlags and PasswordGenerator.LOWERS.inv()
                 }
             }

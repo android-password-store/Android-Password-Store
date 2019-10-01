@@ -160,15 +160,13 @@ internal object Phonemes {
                 // Handle DIGITS
                 if (pwFlags and PasswordGenerator.DIGITS > 0) {
                     if (!first && RandomNumberGenerator.number(10) < 3) {
-                        var `val`: String
+                        var character: String
                         do {
                             cha = Character.forDigit(RandomNumberGenerator.number(10), 10)
-                            `val` = cha.toString()
-                        } while (pwFlags and PasswordGenerator.AMBIGUOUS > 0 && PasswordGenerator.AMBIGUOUS_STR.contains(
-                                        `val`
-                                )
-                        )
-                        password += `val`
+                            character = cha.toString()
+                        } while (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
+                                PasswordGenerator.AMBIGUOUS_STR.contains(character))
+                        password += character
                         curSize++
 
                         featureFlags = featureFlags and PasswordGenerator.DIGITS.inv()
@@ -183,17 +181,15 @@ internal object Phonemes {
                 // Handle SYMBOLS
                 if (pwFlags and PasswordGenerator.SYMBOLS > 0) {
                     if (!first && RandomNumberGenerator.number(10) < 2) {
-                        var `val`: String
+                        var character: String
                         var num: Int
                         do {
                             num = RandomNumberGenerator.number(PasswordGenerator.SYMBOLS_STR.length)
                             cha = PasswordGenerator.SYMBOLS_STR.toCharArray()[num]
-                            `val` = cha.toString()
-                        } while (pwFlags and PasswordGenerator.AMBIGUOUS > 0 && PasswordGenerator.AMBIGUOUS_STR.contains(
-                                        `val`
-                                )
-                        )
-                        password += `val`
+                            character = cha.toString()
+                        } while (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
+                                PasswordGenerator.AMBIGUOUS_STR.contains(character))
+                        password += character
                         curSize++
 
                         featureFlags = featureFlags and PasswordGenerator.SYMBOLS.inv()
