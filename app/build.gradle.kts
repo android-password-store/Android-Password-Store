@@ -77,6 +77,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.1.0-beta04")
     implementation("com.google.android.material:material:1.1.0-alpha10")
     implementation("androidx.annotation:annotation:1.1.0")
+    implementation("androidx.biometric:biometric:1.0.0-beta02")
     implementation("org.sufficientlysecure:openpgp-api:12.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
@@ -106,7 +107,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs += "-Xnew-inference"
+            freeCompilerArgs = freeCompilerArgs + "-Xnew-inference"
         }
     }
 }

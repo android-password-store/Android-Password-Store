@@ -263,4 +263,12 @@
     <string name="sdcard_root_warning_title">SD-Card root selected</string>
     <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
     <string name="git_abort_and_push_title">Abort and Push</string>
+    <string name="biometric_prompt_title">Biometric Prompt</string>
+    <string name="biometric_prompt_negative_text">Cancel</string>
+    <string name="biometric_prompt_retry">Retry</string>
+    <string name="biometric_prompt_cancelled">Authentication canceled</string>
+    <string name="biometric_prompt_no_hardware">No Biometric hardware was found</string>
+    <string name="biometric_auth_title">Enable biometric authentication</string>
+    <string name="biometric_auth_summary">When enabled, Viscerion will prompt you for your fingerprint when launching the app</string>
+    <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
 </resources>
