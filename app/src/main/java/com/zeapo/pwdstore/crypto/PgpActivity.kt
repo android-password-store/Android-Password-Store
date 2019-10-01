@@ -24,7 +24,9 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
@@ -755,7 +757,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
             val extraText = findViewById<TextView>(R.id.crypto_extra_show)
 
-            if (extraText?.text?.isNotEmpty() ?: false)
+            if (extraText?.text?.isNotEmpty() == true)
                 findViewById<View>(R.id.crypto_extra_show_layout)?.visibility = View.VISIBLE
 
             if (showTime == 0) {
