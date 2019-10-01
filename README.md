@@ -8,8 +8,8 @@ This application tries to be 100% compatible with [pass](http://www.passwordstor
 
 You can install the application from:
 
-- [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore) (the prefered way)
-- [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore) (always lags behind)
+- [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore)
+- [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore)
 
 Pull requests are more than welcome (see [TODO](https://github.com/zeapo/Android-Password-Store/projects/1#column-228844)).
 

@@ -166,6 +166,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             R.id.share_password_as_plaintext -> shareAsPlaintext()
             R.id.edit_password -> editPassword()
             R.id.crypto_confirm_add -> encrypt()
+            R.id.crypto_confirm_add_and_copy -> encrypt(true)
             R.id.crypto_cancel_add -> {
                 if (passwordEntry?.hotpIsIncremented() == false) {
                     setResult(RESULT_CANCELED)
@@ -408,7 +409,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt() {
+    private fun encrypt(copy: Boolean = false) {
         // if HOTP was incremented, we leave fields as is; they have already been set
         if (intent.getStringExtra("OPERATION") != "INCREMENT") {
             editName = crypto_password_file_edit.text.toString().trim()
@@ -424,6 +425,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         if (editPass?.isEmpty() == true && editExtra?.isEmpty() == true) {
             showToast(resources.getString(R.string.empty_toast_text))
             return
+        }
+
+        if (copy) {
+            copyPasswordToClipBoard()
         }
 
         val data = Intent()
@@ -636,10 +641,17 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun copyPasswordToClipBoard() {
-        if (crypto_password_show == null)
-            return
+        var pass = passwordEntry?.password
 
-        val clip = ClipData.newPlainText("pgp_handler_result_pm", passwordEntry?.password)
+        if (findViewById<TextView>(R.id.crypto_password_show) == null) {
+            if (editPass == null) {
+                return
+            } else {
+                pass = editPass
+            }
+        }
+
+        val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
         clipboard.setPrimaryClip(clip)
 
         var clearAfter = 45
@@ -711,7 +723,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     @Suppress("StaticFieldLeak")
     inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
-        private val pb: ProgressBar by lazy { pbLoading }
+        private val pb: ProgressBar? by lazy { pbLoading }
         private var skip = false
         private var cancelNotify = ConditionVariable()
 
@@ -738,16 +750,19 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 45
             }
 
-            crypto_container_decrypt.visibility = View.VISIBLE
+            val container = findViewById<LinearLayout>(R.id.crypto_container_decrypt)
+            container?.visibility = View.VISIBLE
 
-            if (crypto_extra_show.text.isNotEmpty())
-                crypto_extra_show_layout.visibility = View.VISIBLE
+            val extraText = findViewById<TextView>(R.id.crypto_extra_show)
+
+            if (extraText?.text?.isNotEmpty() ?: false)
+                findViewById<View>(R.id.crypto_extra_show_layout)?.visibility = View.VISIBLE
 
             if (showTime == 0) {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own
                 cancel(true)
             } else {
-                this.pb.max = showTime
+                this.pb?.max = showTime
             }
         }
 
@@ -800,7 +815,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
-            this.pb.progress = values[0] ?: 0
+            this.pb?.progress = values[0] ?: 0
         }
     }
 

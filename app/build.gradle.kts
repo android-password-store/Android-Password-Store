@@ -16,8 +16,8 @@ android {
         applicationId = "com.zeapo.pwdstore"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 10302
-        versionName = "1.3.2"
+        versionCode = 10303
+        versionName = "1.3.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
