@@ -89,6 +89,7 @@ dependencies {
     implementation("com.jayway.android.robotium:robotium-solo:5.6.3")
     implementation(kotlin("stdlib-jdk8", KotlinCompilerVersion.VERSION))
     implementation("org.sufficientlysecure:sshauthentication-api:1.0")
+    implementation("com.afollestad:recyclical:1.1.0")
 
     // Testing-only dependencies
     androidTestImplementation("junit:junit:4.13-beta-3")
