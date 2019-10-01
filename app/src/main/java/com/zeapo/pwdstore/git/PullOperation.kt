@@ -1,11 +1,10 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
-import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PullCommand
-
 import java.io.File
 
 /**
@@ -30,14 +29,12 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     }
 
     override fun execute() {
-        if (this.provider != null) {
-            (this.command as PullCommand).setCredentialsProvider(this.provider)
-        }
+        (this.command as? PullCommand)?.setCredentialsProvider(this.provider)
         GitAsyncTask(callingActivity, true, false, this).execute(this.command)
     }
 
     override fun onError(errorMessage: String) {
-        AlertDialog.Builder(callingActivity)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the pull operation, "
                         + callingActivity.resources.getString(R.string.jgit_error_dialog_text)

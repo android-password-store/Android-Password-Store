@@ -12,7 +12,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.ConditionVariable
 import android.os.Handler
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
@@ -29,8 +28,9 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.R
@@ -156,8 +156,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             android.R.id.home -> {
                 if (passwordEntry?.hotpIsIncremented() == false) {
                     setResult(RESULT_CANCELED)
@@ -196,10 +196,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
         Log.i(TAG, "RESULT_CODE_USER_INTERACTION_REQUIRED")
 
-        val pi: PendingIntent = result.getParcelableExtra(RESULT_INTENT)
+        val pi: PendingIntent? = result.getParcelableExtra(RESULT_INTENT)
         try {
             this@PgpActivity.startIntentSenderFromChild(
-                    this@PgpActivity, pi.intentSender, requestCode,
+                    this@PgpActivity, pi?.intentSender, requestCode,
                     null, 0, 0, 0
             )
         } catch (e: IntentSender.SendIntentException) {
@@ -219,10 +219,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
          *
          * Check in open-pgp-lib how their definitions and error code
          */
-        val error: OpenPgpError = result.getParcelableExtra(RESULT_ERROR)
-        showToast("Error from OpenKeyChain : " + error.message)
-        Log.e(TAG, "onError getErrorId:" + error.errorId)
-        Log.e(TAG, "onError getMessage:" + error.message)
+        val error: OpenPgpError? = result.getParcelableExtra(RESULT_ERROR)
+        if (error != null) {
+            showToast("Error from OpenKeyChain : " + error.message)
+            Log.e(TAG, "onError getErrorId:" + error.errorId)
+            Log.e(TAG, "onError getMessage:" + error.message)
+        }
     }
 
     private fun initOpenPgpApi() {
@@ -354,7 +356,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                         val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
                                         val rememberCheck: CheckBox =
                                                 checkLayout.findViewById(R.id.hotp_remember_checkbox)
-                                        val dialogBuilder = AlertDialog.Builder(this)
+                                        val dialogBuilder = MaterialAlertDialogBuilder(this)
                                         dialogBuilder.setView(checkLayout)
                                         dialogBuilder.setMessage(R.string.dialog_update_body)
                                                 .setCancelable(false)
@@ -554,6 +556,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 RESULT_CODE_SUCCESS -> {
                     try {
                         val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
+                                ?: LongArray(0)
                         val keys = ids.map { it.toString() }.toSet()
 
                         // use Long
@@ -754,7 +757,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
             val extraText = findViewById<TextView>(R.id.crypto_extra_show)
 
-            if (extraText?.text?.isNotEmpty() ?: false)
+            if (extraText?.text?.isNotEmpty() == true)
                 findViewById<View>(R.id.crypto_extra_show_layout)?.visibility = View.VISIBLE
 
             if (showTime == 0) {

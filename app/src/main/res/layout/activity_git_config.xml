@@ -1,143 +1,119 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:background="?android:attr/windowBackground"
     tools:context="com.zeapo.pwdstore.git.GitActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 
-
-    <TextView
-        android:id="@+id/textView5"
-        style="@android:style/TextAppearance.Large"
-        android:layout_width="344dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_input_layout"
+        style="@style/TextInputLayoutBase"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bottom_line"
-        android:gravity="start"
-        android:paddingBottom="6dp"
-        android:text="@string/git_config"
-        android:textColor="@color/blue_grey_500"
-        android:textStyle="bold"
+        android:layout_margin="8dp"
+        android:hint="@string/git_user_name_hint"
+        app:hintEnabled="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="64dp">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/git_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions|textVisiblePassword" />
 
-    <TextView
-        android:id="@+id/label_git_user_name"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutBase"
+        android:id="@+id/email_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/git_user_email"
+        app:hintEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/username_input_layout"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/git_user_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:paddingBottom="8dp"
-        android:text="@string/git_user_name"
-        app:layout_constraintBaseline_toBaselineOf="@+id/git_user_name"
+        android:layout_margin="8dp"
+        android:text="@string/crypto_save"
+        android:onClick="applyGitConfigs"
+        android:textColor="?android:attr/windowBackground"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/email_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:id="@+id/git_tools_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/hackish_tools"
+        app:layout_constraintTop_toBottomOf="@id/save_button"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/git_user_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/git_user_name_hint"
-        android:inputType="textWebEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/label_git_user_name"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-
-    <TextView
-        android:id="@+id/label_git_user_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:text="@string/git_user_email"
-        app:layout_constraintBaseline_toBaselineOf="@+id/git_user_email"
-        app:layout_constraintEnd_toEndOf="@+id/label_git_user_name"
-        app:layout_constraintStart_toStartOf="@+id/label_git_user_name" />
-
-    <EditText
-        android:id="@+id/git_user_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/git_user_email_hint"
-        android:inputType="textWebEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/git_user_name"
-        app:layout_constraintTop_toBottomOf="@+id/git_user_name" />
-
-
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="applyGitConfigs"
-        android:text="@string/crypto_save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/git_user_email" />
-
-    <TextView
-        android:id="@+id/textView6"
-        style="@android:style/TextAppearance.Large"
-        android:layout_width="344dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bottom_line"
-        android:gravity="start"
-        android:paddingBottom="6dp"
-        android:text="@string/hackish_tools"
-        android:textColor="@color/blue_grey_500"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/save_button" />
-
-    <Button
-        android:id="@+id/git_abort_rebase"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="abortRebase"
-        android:text="@string/abort_rebase"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-    <TextView
-        android:id="@+id/textView7"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/commit_hash_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="8dp"
         android:text="@string/commit_hash"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@id/git_tools_title"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/git_commit_hash"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="HASH"
+        android:layout_margin="8dp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView7"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@id/git_tools_title"
+        app:layout_constraintStart_toEndOf="@id/commit_hash_label"
+        tools:text="HASH"/>
 
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/git_abort_rebase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/abort_rebase"
+        android:onClick="abortRebase"
+        android:textColor="?android:attr/windowBackground"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/commit_hash_label" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/git_reset_to_remote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/reset_to_remote"
+        android:onClick="resetToRemote"
+        android:textColor="?android:attr/windowBackground"
+        app:backgroundTint="?attr/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/git_abort_rebase" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

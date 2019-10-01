@@ -11,8 +11,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <TextView
-            android:id="@+id/label_length"
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:gravity="center_vertical"
@@ -25,16 +24,17 @@
             android:spinnerMode="dropdown" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayoutBase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:hintTextAppearance="@style/TextAppearance.AppCompat">
+            android:hint="@string/ssh_keygen_passphrase"
+            app:hintEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passphrase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/ssh_keygen_passphrase"
                 android:importantForAccessibility="no"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -48,21 +48,21 @@
             android:text="@string/ssh_keygen_show_passphrase" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayoutBase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:hintTextAppearance="@style/TextAppearance.AppCompat">
+            android:hint="@string/ssh_keygen_comment"
+            app:hintEnabled="true">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/ssh_keygen_comment"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/generate_ssh_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

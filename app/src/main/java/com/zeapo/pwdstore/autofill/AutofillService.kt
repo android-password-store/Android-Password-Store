@@ -12,7 +12,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
@@ -21,6 +20,8 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityWindowInfo
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -30,7 +31,6 @@ import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 import org.openintents.openpgp.util.OpenPgpApi
 import org.openintents.openpgp.util.OpenPgpServiceConnection
-
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -291,7 +291,7 @@ class AutofillService : AccessibilityService() {
 
         when (preference) {
             "/first" -> {
-                if (!PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized) {
                     PasswordRepository.initialize(this)
                 }
                 items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle)
@@ -313,7 +313,7 @@ class AutofillService : AccessibilityService() {
 
         when (preference) {
             "/first" -> {
-                if (!PasswordRepository.isInitialized()) {
+                if (!PasswordRepository.isInitialized) {
                     PasswordRepository.initialize(this)
                 }
                 items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName)
@@ -326,7 +326,7 @@ class AutofillService : AccessibilityService() {
     // Put the newline separated list of passwords from the SharedPreferences
     // file into the items list.
     private fun getPreferredPasswords(preference: String) {
-        if (!PasswordRepository.isInitialized()) {
+        if (!PasswordRepository.isInitialized) {
             PasswordRepository.initialize(this)
         }
         val preferredPasswords = preference.splitLines()
@@ -366,7 +366,7 @@ class AutofillService : AccessibilityService() {
             dialog = null
         }
 
-        val builder = AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog)
+        val builder = MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
         builder.setNegativeButton(R.string.dialog_cancel) { _, _ ->
             dialog!!.dismiss()
             dialog = null
@@ -391,7 +391,7 @@ class AutofillService : AccessibilityService() {
             dialog = null
         }
 
-        val builder = AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog)
+        val builder = MaterialAlertDialogBuilder(this, R.style.AppTheme_Dialog)
         builder.setNegativeButton(R.string.dialog_cancel) { _, _ ->
             dialog!!.dismiss()
             dialog = null
@@ -525,11 +525,13 @@ class AutofillService : AccessibilityService() {
             }
             OpenPgpApi.RESULT_CODE_ERROR -> {
                 val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
-                Toast.makeText(this@AutofillService,
-                        "Error from OpenKeyChain : " + error.message,
-                        Toast.LENGTH_LONG).show()
-                Log.e(Constants.TAG, "onError getErrorId:" + error.errorId)
-                Log.e(Constants.TAG, "onError getMessage:" + error.message)
+                if (error != null) {
+                    Toast.makeText(this@AutofillService,
+                            "Error from OpenKeyChain : " + error.message,
+                            Toast.LENGTH_LONG).show()
+                    Log.e(Constants.TAG, "onError getErrorId:" + error.errorId)
+                    Log.e(Constants.TAG, "onError getMessage:" + error.message)
+                }
             }
         }
     }

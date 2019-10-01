@@ -50,8 +50,12 @@ public class SelectFolderFragment extends Fragment {
         String path = getArguments().getString("Path");
 
         pathStack = new Stack<>();
-        recyclerAdapter = new FolderRecyclerAdapter((SelectFolderActivity) requireActivity(), mListener,
-                PasswordRepository.getPasswords(new File(path), PasswordRepository.getRepositoryDirectory(requireActivity()), getSortOrder()));
+        recyclerAdapter = new FolderRecyclerAdapter(mListener,
+                PasswordRepository.getPasswords(
+                        new File(path),
+                        PasswordRepository.getRepositoryDirectory(requireActivity()), getSortOrder()
+                )
+        );
     }
 
     @Override

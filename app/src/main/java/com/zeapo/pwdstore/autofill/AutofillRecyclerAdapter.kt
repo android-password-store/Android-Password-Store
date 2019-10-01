@@ -7,8 +7,8 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
@@ -68,7 +68,6 @@ internal class AutofillRecyclerAdapter(
         holder.name.text = app.appName
 
         holder.secondary.visibility = View.VISIBLE
-        holder.view.setBackgroundResource(R.color.grey_white_1000)
 
         val prefs: SharedPreferences
         prefs = if (app.appName != app.packageName) {
@@ -151,9 +150,9 @@ internal class AutofillRecyclerAdapter(
     }
 
     internal inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        var name: TextView = view.findViewById(R.id.app_name)
-        var icon: ImageView = view.findViewById(R.id.app_icon)
-        var secondary: TextView = view.findViewById(R.id.secondary_text)
+        var name: AppCompatTextView = view.findViewById(R.id.app_name)
+        var icon: AppCompatImageView = view.findViewById(R.id.app_icon)
+        var secondary: AppCompatTextView = view.findViewById(R.id.secondary_text)
         var packageName: String? = null
         var appName: String? = null
         var isWeb: Boolean = false

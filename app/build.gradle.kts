@@ -1,4 +1,4 @@
-import org.gradle.api.JavaVersion.*
+import org.gradle.api.JavaVersion.VERSION_1_8
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 

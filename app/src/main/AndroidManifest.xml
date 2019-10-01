@@ -28,13 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".git.GitActivity"
-            android:parentActivityName=".PasswordStore">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+
+        <activity android:name=".git.GitActivity" />
 
         <activity
             android:name=".UserPreference"
@@ -67,7 +62,7 @@
             android:name=".autofill.AutofillActivity"
             android:documentLaunchMode="intoExisting"
             android:excludeFromRecents="true"
-            android:parentActivityName=".PasswordStore"
+            android:theme="@style/AppTheme"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

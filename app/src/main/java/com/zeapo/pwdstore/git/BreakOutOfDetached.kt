@@ -1,7 +1,7 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
-import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -37,7 +37,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
     override fun execute() {
         val git = Git(repository)
         if (!git.repository.repositoryState.isRebasing) {
-            AlertDialog.Builder(callingActivity)
+            MaterialAlertDialogBuilder(callingActivity)
                     .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
                     .setMessage("The repository is not rebasing, no need to push to another branch")
                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
@@ -59,7 +59,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
     }
 
     override fun onError(errorMessage: String) {
-        AlertDialog.Builder(callingActivity)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occurred when checking out another branch operation $errorMessage")
                 .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
@@ -68,7 +68,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
     }
 
     override fun onSuccess() {
-        AlertDialog.Builder(callingActivity)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
                 .setMessage("There was a conflict when trying to rebase. " +
                         "Your local master branch was pushed to another branch named conflicting-master-....\n" +

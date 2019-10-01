@@ -34,4 +34,7 @@ project.properties
 .idea
 *.iml
 
+# Visual Studio Code
+.vscode/
+
 captures/

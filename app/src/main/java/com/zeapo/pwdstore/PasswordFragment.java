@@ -211,8 +211,8 @@ public class PasswordFragment extends Fragment {
     }
 
     public void dismissActionMode() {
-        if (recyclerAdapter != null && recyclerAdapter.mActionMode != null) {
-            recyclerAdapter.mActionMode.finish();
+        if (recyclerAdapter != null && recyclerAdapter.getActionMode() != null) {
+            recyclerAdapter.getActionMode().finish();
         }
     }
 

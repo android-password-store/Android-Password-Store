@@ -12,14 +12,13 @@
         android:paddingRight="24dp"
         android:paddingTop="20dp">
 
-        <TextView
-            android:id="@+id/textView"
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg"
             android:textSize="16sp" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,8 +28,7 @@
             android:src="@drawable/autofill_ins_1"
             android:contentDescription="@string/autofill_ins_1_hint" />
 
-        <ImageView
-            android:id="@+id/imageView2"
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -38,15 +36,13 @@
             android:src="@drawable/autofill_ins_2"
             android:contentDescription="@string/autofill_ins_2_hint" />
 
-        <TextView
-            android:id="@+id/textView3"
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg2"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/imageView3"
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="114dp"
             android:layout_marginBottom="8dp"
@@ -54,8 +50,7 @@
             android:src="@drawable/autofill_ins_3"
             android:contentDescription="@string/autofill_ins_3_hint" />
 
-        <TextView
-            android:id="@+id/textView4"
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pref_autofill_enable_msg3"

@@ -12,12 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.zeapo.pwdstore.pwgen.PasswordGenerator;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +39,7 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
     @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         final Activity callingActivity = requireActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
         @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);
@@ -66,10 +68,10 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         checkBox = view.findViewById(R.id.pronounceable);
         checkBox.setChecked(!prefs.getBoolean("s", true));
 
-        TextView textView = view.findViewById(R.id.lengthNumber);
+        AppCompatEditText textView = view.findViewById(R.id.lengthNumber);
         textView.setText(Integer.toString(prefs.getInt("length", 20)));
 
-        TextView passwordText = view.findViewById(R.id.passwordText);
+        AppCompatTextView passwordText = view.findViewById(R.id.passwordText);
         passwordText.setTypeface(monoTypeface);
 
         builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {

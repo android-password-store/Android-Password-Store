@@ -14,15 +14,13 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:hintTextAppearance="@style/TextAppearance.AppCompat">
-
-        <EditText
+        android:hint="URL"
+        app:hintEnabled="true">
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/webURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="URL"
-            android:inputType="textUri"
-            tools:ignore="HardcodedText" />
+            android:inputType="textUri"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <RadioGroup
@@ -61,13 +59,15 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/matchButton"
             android:layout_gravity="center_horizontal"
+            android:textColor="?android:attr/windowBackground"
+            app:backgroundTint="?attr/colorSecondary"
             tools:ignore="HardcodedText" />
 
         <RadioButton

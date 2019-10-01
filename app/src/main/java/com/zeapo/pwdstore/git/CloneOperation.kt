@@ -1,11 +1,10 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
-import android.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
-
 import java.io.File
 
 /**
@@ -23,7 +22,10 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
      * @return the current object
      */
     fun setCommand(uri: String): CloneOperation {
-        this.command = Git.cloneRepository().setCloneAllBranches(true).setDirectory(repository.workTree).setURI(uri)
+        this.command = Git.cloneRepository()
+                .setCloneAllBranches(true)
+                .setDirectory(repository?.workTree)
+                .setURI(uri)
         return this
     }
 
@@ -53,14 +55,12 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     }
 
     override fun execute() {
-        if (this.provider != null) {
-            (this.command as CloneCommand).setCredentialsProvider(this.provider)
-        }
+        (this.command as? CloneCommand)?.setCredentialsProvider(this.provider)
         GitAsyncTask(callingActivity, true, false, this).execute(this.command)
     }
 
     override fun onError(errorMessage: String) {
-        AlertDialog.Builder(callingActivity)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the clone operation, "
                         + callingActivity.resources.getString(R.string.jgit_error_dialog_text)

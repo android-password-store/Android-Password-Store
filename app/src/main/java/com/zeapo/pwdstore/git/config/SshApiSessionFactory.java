@@ -5,8 +5,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jcraft.jsch.Identity;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -49,9 +50,9 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         this.identity = identity;
     }
 
+    @NonNull
     @Override
-    protected JSch
-    getJSch(final OpenSshConfig.Host hc, FS fs) throws JSchException {
+    protected JSch getJSch(@NonNull final OpenSshConfig.Host hc, @NonNull FS fs) throws JSchException {
         JSch jsch = super.getJSch(hc, fs);
         jsch.removeAllIdentity();
         jsch.addIdentity(identity, null);
@@ -59,7 +60,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
     }
 
     @Override
-    protected void configure(OpenSshConfig.Host hc, Session session) {
+    protected void configure(@NonNull OpenSshConfig.Host hc, Session session) {
         session.setConfig("StrictHostKeyChecking", "no");
         session.setConfig("PreferredAuthentications", "publickey");
 
@@ -204,8 +205,9 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
 
                     @Override
                     public void onError() {
-                        new AlertDialog.Builder(callingActivity).setMessage(callingActivity.getString(
-                                R.string.openkeychain_ssh_api_connect_fail)).show();
+                        new MaterialAlertDialogBuilder(callingActivity)
+                                .setMessage(callingActivity.getString(
+                                        R.string.openkeychain_ssh_api_connect_fail)).show();
                     }
                 });
 

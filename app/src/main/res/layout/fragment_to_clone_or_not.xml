@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_grey_500"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     tools:context="com.zeapo.pwdstore.PasswordStore">
 
@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -32,7 +32,6 @@
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/main_settings_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="openSettings"
@@ -48,20 +47,19 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/myRectangleView"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:background="@android:color/white">
+        android:background="?android:attr/windowBackground">
         
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
+            android:backgroundTint="?android:attr/windowBackground"
             android:onClick="createNewRepository"
             android:text="@string/initialize"
-            android:id="@+id/button"
             android:layout_alignTop="@+id/main_clone_button"
             android:layout_alignParentStart="true"
             android:textSize="12sp" />
@@ -70,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/borderlessButtonStyle"
-            android:textColor="@color/teal_A700"
+            android:backgroundTint="?android:attr/windowBackground"
             android:onClick="cloneExistingRepository"
             android:text="@string/clone"
             android:layout_alignParentBottom="true"

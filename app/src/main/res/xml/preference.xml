@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/pref_git_title">
-        <Preference
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory android:title="@string/pref_git_title">
+        <androidx.preference.Preference
             android:key="git_server_info"
             android:title="@string/pref_edit_server_info" />
-        <Preference
+        <androidx.preference.Preference
             android:key="git_config"
             android:title="@string/pref_edit_git_config" />
-        <Preference
+        <androidx.preference.Preference
             android:key="ssh_key"
             android:title="@string/pref_ssh_title" />
-        <Preference
+        <androidx.preference.Preference
             android:key="ssh_keygen"
             android:title="@string/pref_ssh_keygen_title" />
-        <Preference
+        <androidx.preference.Preference
             android:key="ssh_key_clear_passphrase"
             android:title="@string/ssh_key_clear_passphrase" />
-        <Preference
+        <androidx.preference.Preference
             android:key="hotp_remember_clear_choice"
             android:title="@string/hotp_remember_clear_choice" />
-        <Preference
+        <androidx.preference.Preference
             android:key="ssh_see_key"
             android:title="@string/pref_ssh_see_key_title" />
-        <Preference
+        <androidx.preference.Preference
             android:key="git_delete_repo"
             android:summary="@string/pref_git_delete_repo_summary"
             android:title="@string/pref_git_delete_repo" />
@@ -30,106 +30,102 @@
             android:key="git_external"
             android:summary="@string/pref_external_repository_summary"
             android:title="@string/pref_external_repository" />
-        <Preference
+        <androidx.preference.Preference
             android:dependency="git_external"
             android:key="pref_select_external"
             android:title="@string/pref_select_external_repository" />
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_crypto_title">
+    <androidx.preference.PreferenceCategory android:title="@string/pref_crypto_title">
+        <!-- TODO(msf): Update the damn library and re-enable this
         <org.openintents.openpgp.util.OpenPgpAppPreference
             android:key="openpgp_provider_list"
             android:title="@string/pref_provider_title" />
-        <Preference
+        -->
+        <androidx.preference.Preference
             android:key="openpgp_key_id_pref"
             android:title="@string/pref_key_title" />
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_general_title">
-        <EditTextPreference
+    <androidx.preference.PreferenceCategory android:title="@string/pref_general_title">
+        <androidx.preference.EditTextPreference
             android:defaultValue="45"
             android:dialogTitle="@string/pref_password_dialog_title"
             android:inputType="number"
             android:key="general_show_time"
             android:summary="@string/pref_password_dialog_title"
             android:title="@string/pref_password_title" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:title="@string/show_password_pref_title"
             android:summary="@string/show_password_pref_summary"
             android:key="show_password" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:title="@string/show_extra_content_pref_title"
             android:summary="@string/show_extra_content_pref_summary"
             android:key="show_extra_content" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:dialogTitle="@string/pref_copy_dialog_title"
             android:key="copy_on_decrypt"
             android:summary="@string/pref_copy_dialog_title"
             android:title="@string/pref_copy_title" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="clear_after_copy"
             android:summary="@string/prefs_clear_after_copy_summary"
             android:title="@string/prefs_clear_after_copy_title" />
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="filter_recursively"
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
-        <ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/pref_sort_order_title"
             android:defaultValue="FOLDER_FIRST"
             android:key="sort_order"
             android:entries="@array/sort_order_entries"
             android:entryValues="@array/sort_order_values"
-            android:persistent="true"
-            />
-    </PreferenceCategory>
+            android:persistent="true" />
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_autofill_title">
-        <CheckBoxPreference
+    <androidx.preference.PreferenceCategory android:title="@string/pref_autofill_title">
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="autofill_enable"
             android:title="@string/pref_autofill_enable_title"/>
-        <Preference
-            android:dependency="autofill_enable"
+        <androidx.preference.Preference
             android:key="autofill_apps"
             android:title="@string/pref_autofill_apps_title"/>
-        <CheckBoxPreference
-            android:dependency="autofill_enable"
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
             android:key="autofill_default"
             android:summary="@string/pref_autofill_default_hint"
             android:title="@string/pref_autofill_default_title"/>
-        <CheckBoxPreference
-            android:dependency="autofill_enable"
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:key="autofill_always"
             android:title="@string/pref_autofill_always_title"/>
-    </PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_misc_title">
-        <Preference
+    <androidx.preference.PreferenceCategory android:title="@string/pref_misc_title">
+        <androidx.preference.Preference
             android:key="export_passwords"
             android:title="@string/prefs_export_passwords_title"
             android:summary="@string/prefs_export_passwords_summary"/>
 
-        <CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:defaultValue="false"
             android:key="clear_clipboard_20x"
             android:summary="@string/pref_clear_clipboard_hint"
             android:title="@string/pref_clear_clipboard_title" />
+    </androidx.preference.PreferenceCategory>
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_android_file_picker"
-            android:title="@string/prefs_use_default_file_picker" />
-    </PreferenceCategory>
-
-    <Preference
-        android:key="app_version"
-        android:title="@string/prefs_version" />
-</PreferenceScreen>
+    <androidx.preference.PreferenceCategory>
+        <androidx.preference.Preference
+            android:icon="@mipmap/ic_launcher_round"
+            android:key="app_version"
+            android:title="@string/prefs_version" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

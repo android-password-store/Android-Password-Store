@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +16,23 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.resolveAttribute
 import com.zeapo.pwdstore.utils.splitLines
+
 
 class AutofillFragment : DialogFragment() {
     private var adapter: ArrayAdapter<String>? = null
     private var isWeb: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
         // this fragment is only created from the settings page (AutofillPreferenceActivity)
         // need to interact with the recyclerAdapter which is a member of activity
         val callingActivity = requireActivity() as AutofillPreferenceActivity
@@ -51,9 +54,13 @@ class AutofillFragment : DialogFragment() {
             builder.setTitle(appName)
             view.findViewById<View>(R.id.webURL).visibility = View.GONE
         } else {
-            iconPackageName = "com.android.browser"
+            val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("http://"))
+            val resolveInfo = requireContext().packageManager
+                    .resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+            iconPackageName = resolveInfo?.activityInfo?.packageName
             builder.setTitle("Website")
-            (view.findViewById<View>(R.id.webURL) as EditText).setText(packageName)
+            (view.findViewById<View>(R.id.webURL) as EditText).setText(packageName
+                    ?: "com.android.browser")
         }
         try {
             builder.setIcon(callingActivity.packageManager.getApplicationIcon(iconPackageName))
@@ -65,15 +72,17 @@ class AutofillFragment : DialogFragment() {
         adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, android.R.id.text1) {
             // set text color to black because default is white...
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val textView = super.getView(position, convertView, parent) as TextView
-                textView.setTextColor(ContextCompat.getColor(context, R.color.grey_black_1000))
+                val textView = super.getView(position, convertView, parent) as AppCompatTextView
+                textView.setTextColor(requireContext().resolveAttribute(android.R.attr.textColor))
                 return textView
             }
         }
         (view.findViewById<View>(R.id.matched) as ListView).adapter = adapter
         // delete items by clicking them
         (view.findViewById<View>(R.id.matched) as ListView).onItemClickListener =
-                AdapterView.OnItemClickListener { _, _, position, _ -> adapter!!.remove(adapter!!.getItem(position)) }
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    adapter!!.remove(adapter!!.getItem(position))
+                }
 
         // set the existing preference, if any
         val prefs: SharedPreferences = if (!isWeb) {

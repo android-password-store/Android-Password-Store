@@ -3,15 +3,14 @@ package com.zeapo.pwdstore.git
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-
+import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
@@ -21,12 +20,10 @@ import com.zeapo.pwdstore.git.config.GitConfigSessionFactory
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
-
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
-
 import java.io.File
 
 /**
@@ -37,7 +34,7 @@ import java.io.File
  */
 abstract class GitOperation(fileDir: File, internal val callingActivity: Activity) {
 
-    protected val repository: Repository = PasswordRepository.getRepository(fileDir)
+    protected val repository: Repository? = PasswordRepository.getRepository(fileDir)
     internal var provider: UsernamePasswordCredentialsProvider? = null
     internal var command: GitCommand<*>? = null
 
@@ -117,7 +114,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                            showError: Boolean) {
         if (connectionMode.equals("ssh-key", ignoreCase = true)) {
             if (sshKey == null || !sshKey.exists()) {
-                AlertDialog.Builder(callingActivity)
+                MaterialAlertDialogBuilder(callingActivity)
                         .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
                         .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
                         .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
@@ -170,7 +167,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                 executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                             }
                         } else {
-                            AlertDialog.Builder(callingActivity)
+                            MaterialAlertDialogBuilder(callingActivity)
                                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                                     .setMessage(callingActivity.resources.getString(R.string.passphrase_dialog_text))
                                     .setView(dialogView)
@@ -195,10 +192,11 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         setAuthentication(sshKey, username, "").execute()
                     }
                 } catch (e: JSchException) {
-                    AlertDialog.Builder(callingActivity)
+                    e.printStackTrace()
+                    MaterialAlertDialogBuilder(callingActivity)
                             .setTitle("Unable to open the ssh-key")
                             .setMessage("Please check that it was imported.")
-                            .setPositiveButton("Ok") { _, _ -> }
+                            .setPositiveButton("Ok") { _, _ -> callingActivity.finish() }
                             .show()
                 }
 
@@ -211,7 +209,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
             password.width = LinearLayout.LayoutParams.MATCH_PARENT
             password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
-            AlertDialog.Builder(callingActivity)
+            MaterialAlertDialogBuilder(callingActivity)
                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                     .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
                     .setView(password)
@@ -231,7 +229,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * Action to execute on error
      */
     open fun onError(errorMessage: String) {
-        AlertDialog.Builder(callingActivity)
+        MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage(callingActivity.resources.getString(R.string.jgit_error_dialog_text) + errorMessage)
                 .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
