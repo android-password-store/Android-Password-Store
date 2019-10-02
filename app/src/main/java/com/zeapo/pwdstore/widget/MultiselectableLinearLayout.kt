@@ -1,9 +1,7 @@
 /*
- * Copyright © 2017-2018 WireGuard LLC.
- * Copyright © 2018-2019 Harsh Shandilya <msfjarvis@gmail.com>. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-2.0
  */
-
 package com.zeapo.pwdstore.widget
 
 import android.content.Context
