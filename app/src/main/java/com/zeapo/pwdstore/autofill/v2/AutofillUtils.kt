@@ -23,7 +23,7 @@ class AutofillUtils {
         }
 
         fun buildDataset(context: Context, title: String, entry: String, struct: StructureParser.Result): Dataset? {
-            val views = getAutocompleteEntry(context, title, R.drawable.ic_action_secure)
+            val views = getAutocompleteEntry(context, title, R.drawable.autofill_icon_entry)
             val builder = Dataset.Builder(views)
 
             // Build the Autofill response (only for password for now)
