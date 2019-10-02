@@ -115,7 +115,7 @@ class AutofillFilterView : AppCompatActivity() {
         val structure = getStructure() ?: return
         val replyIntent = Intent()
 
-        // TODO Replace Title and Entry by user choice
+        // TODO Replace the Entry by the password decoded from the user choice
         val response = FillResponse
                 .Builder()
                 .addDataset(AutofillUtils.buildDataset(this, item.longName, "Password", structure))
