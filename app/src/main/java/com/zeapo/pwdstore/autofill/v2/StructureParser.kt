@@ -14,7 +14,7 @@ import java.util.ArrayList
 /**
  * Parse AssistStructure and guess username and password fields.
  */
-@RequiresApi(api = Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class StructureParser(private val structure: AssistStructure) {
     private lateinit var result: Result
 
@@ -50,7 +50,7 @@ class StructureParser(private val structure: AssistStructure) {
                     hintsAsList.contains(View.AUTOFILL_HINT_USERNAME) -> result.username.add(it)
                     hintsAsList.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS) -> result.email.add(it)
                     hintsAsList.contains(View.AUTOFILL_HINT_PASSWORD) -> result.password.add(it)
-                    !hintsAsList.contains("") && !hintsAsList.contains("off")  -> {
+                    !hintsAsList.contains("") && !hintsAsList.contains("off") -> {
                         // For now assume every input as fillable (except off and empty hint)
                         result.password.add(it)
                     }
@@ -91,32 +91,40 @@ class StructureParser(private val structure: AssistStructure) {
         if (actualHint == null) return null
 
         val hint = actualHint.toLowerCase()
-        if (hint.contains("label") || hint.contains("container")) {
+        val isContain: (String) -> Boolean = { hint.contains(it) }
+
+        val ignoredHints = listOf("label", "container")
+        val passwordHints = listOf("password", "pass")
+        val usernameHints = listOf(View.AUTOFILL_HINT_USERNAME, "login", "id", "user name", "identifier")
+        val emailHints = listOf(View.AUTOFILL_HINT_EMAIL_ADDRESS, "email")
+        val nameHints = listOf("name")
+        val phoneHints = listOf("phone")
+
+        if (ignoredHints.any(isContain)) {
             return null
         }
 
-        if (hint.contains("password") || hint.contains("pass")) {
+        if (passwordHints.any(isContain)) {
             return View.AUTOFILL_HINT_PASSWORD
         }
 
-        if (hint.contains(View.AUTOFILL_HINT_USERNAME) || hint.contains("login") || hint.contains("id") || hint.contains("user name") || hint.contains("identifier")) {
+        if (usernameHints.any(isContain)) {
             return View.AUTOFILL_HINT_USERNAME
         }
 
-        if (hint.contains(View.AUTOFILL_HINT_EMAIL_ADDRESS) || hint.contains("email")) {
+        if (emailHints.any(isContain)) {
             return View.AUTOFILL_HINT_EMAIL_ADDRESS
         }
 
-        if (hint.contains("name")) {
+        if (nameHints.any(isContain)) {
             return View.AUTOFILL_HINT_NAME
         }
 
-        return if (hint.contains("phone")) {
-            View.AUTOFILL_HINT_PHONE
-        } else {
-            null
+        if (phoneHints.any(isContain)) {
+            return View.AUTOFILL_HINT_PHONE
         }
 
+        return null
     }
 
     class Result {

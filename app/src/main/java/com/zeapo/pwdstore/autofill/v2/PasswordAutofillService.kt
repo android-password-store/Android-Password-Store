@@ -13,9 +13,9 @@ import com.zeapo.pwdstore.autofill.v2.AutofillUtils.Companion.getAutocompleteEnt
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillService2 : AutofillService() {
+class PasswordAutofillService : AutofillService() {
 
-    private val TAG = AutofillService2::class.java.name
+    private val TAG = PasswordAutofillService::class.java.name
 
     override fun onConnected() {
         Log.d(TAG, "onConnected")
