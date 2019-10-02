@@ -1,7 +1,7 @@
 Password Store
 ========
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-blue.svg?style=flat)](https://android-arsenal.com/details/1/1208)
-[![Build Status](https://travis-ci.org/zeapo/Android-Password-Store.svg?branch=travis)](https://travis-ci.org/zeapo/Android-Password-Store)
+[![GitHub workflow](https://github.com/password-store/Android-Password-Store/workflows/CI%20builds/badge.svg)](https://github.com/password-store/Android-Password-Store/actions)
 [![Backers on Open Collective](https://opencollective.com/Android-Password-Store/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Android-Password-Store/sponsors/badge.svg)](#sponsors) 
 
 This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
