@@ -71,6 +71,7 @@ android {
 dependencies {
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.core:core-ktx:1.2.0-alpha04")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.preference:preference:1.1.0")

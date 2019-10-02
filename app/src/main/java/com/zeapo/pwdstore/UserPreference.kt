@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
+import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
@@ -278,6 +280,11 @@ class UserPreference : AppCompatActivity() {
                                 }
                             }
                         }.authenticate()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                            requireContext().getSystemService<ShortcutManager>()?.apply {
+                                removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
+                            }
+                        }
                         editor.apply()
                         true
                     }
