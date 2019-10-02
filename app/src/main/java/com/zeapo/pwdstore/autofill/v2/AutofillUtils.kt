@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-2.0
+ */
 package com.zeapo.pwdstore.autofill.v2
 
 import android.content.Context
@@ -7,7 +11,6 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import com.zeapo.pwdstore.R
 import android.view.autofill.AutofillValue
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillUtils {
@@ -25,7 +28,7 @@ class AutofillUtils {
 
             // Build the Autofill response (only for password for now)
             if (entry.isNotEmpty()) {
-                struct.password.forEach  { id -> builder.setValue(id, AutofillValue.forText(entry)) }
+                struct.password.forEach { id -> builder.setValue(id, AutofillValue.forText(entry)) }
             }
 
             return try {
@@ -34,8 +37,6 @@ class AutofillUtils {
                 // if not value be set
                 null
             }
-
         }
     }
-
 }

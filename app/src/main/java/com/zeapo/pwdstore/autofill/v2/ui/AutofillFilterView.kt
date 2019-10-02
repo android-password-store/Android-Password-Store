@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-2.0
+ */
 package com.zeapo.pwdstore.autofill.v2.ui
 
 import android.annotation.SuppressLint
@@ -29,7 +33,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.afterTextChanged
 import java.io.File
 
-
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
 
@@ -42,7 +45,6 @@ class AutofillFilterView : AppCompatActivity() {
 
     private val dataSource = dataSourceOf()
     private var settings: SharedPreferences? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +86,7 @@ class AutofillFilterView : AppCompatActivity() {
     private fun getLastPasswordsList(): List<PasswordItem> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager = getSystemService(ShortcutManager::class.java)
-            if(shortcutManager != null) {
+            if (shortcutManager != null) {
                 val shortcuts = shortcutManager.dynamicShortcuts
                 shortcuts.map {
                     PasswordItem.newPassword(it.shortLabel.toString(), File(it.longLabel.toString()), File("/"))
@@ -107,7 +109,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     private fun setResponse(item: PasswordItem?) {
 
-        if(item == null){
+        if (item == null) {
             setResult(RESULT_CANCELED)
             return
         }
@@ -130,9 +132,9 @@ class AutofillFilterView : AppCompatActivity() {
     private fun recursiveFilter(filter: String, dir: File?) {
         // on the root the pathStack is empty
         val passwordItems = if (dir == null) {
-            PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this), getSortOrder())
-        } else{
-            PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this), getSortOrder())
+            PasswordRepository.getPasswords(PasswordRepository.getRepositoryDirectory(this)!!, getSortOrder())
+        } else {
+            PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(this)!!, getSortOrder())
         }
 
         for (item in passwordItems) {
@@ -151,7 +153,10 @@ class AutofillFilterView : AppCompatActivity() {
     }
 
     private fun getSortOrder(): PasswordRepository.PasswordSortOrder {
-        return PasswordRepository.PasswordSortOrder.getSortOrder(settings)
+        return settings?.let {
+            PasswordRepository.PasswordSortOrder.getSortOrder(it)
+        } ?: run {
+            PasswordRepository.PasswordSortOrder.FOLDER_FIRST
+        }
     }
-
 }
