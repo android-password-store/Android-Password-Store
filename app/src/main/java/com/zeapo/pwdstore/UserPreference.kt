@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,16 +16,21 @@ import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.auth.AuthenticationResult
+import com.zeapo.pwdstore.utils.auth.Authenticator
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.util.OpenPgpUtils
 import java.io.File
@@ -249,6 +255,41 @@ class UserPreference : AppCompatActivity() {
                             false
                         }
                     }
+
+            findPreference<SwitchPreference>("biometric_auth")?.apply {
+                val isFingerprintSupported = BiometricManager.from(requireContext()).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
+                if (!isFingerprintSupported) {
+                    isEnabled = false
+                    isChecked = false
+                    summary = getString(R.string.biometric_auth_summary_error)
+                } else {
+                    setOnPreferenceClickListener {
+                        val editor = sharedPreferences.edit()
+                        val checked = isChecked
+                        Authenticator(requireActivity()) { result ->
+                            when (result) {
+                                is AuthenticationResult.Success -> {
+                                    // Apply the changes
+                                    editor.putBoolean("biometric_auth", checked)
+                                }
+                                else -> {
+                                    // If any error occurs, revert back to the previous state. This
+                                    // catch-all clause includes the cancellation case.
+                                    editor.putBoolean("biometric_auth", !checked)
+                                    isChecked = !checked
+                                }
+                            }
+                        }.authenticate()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                            requireContext().getSystemService<ShortcutManager>()?.apply {
+                                removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
+                            }
+                        }
+                        editor.apply()
+                        true
+                    }
+                }
+            }
         }
 
         override fun onResume() {

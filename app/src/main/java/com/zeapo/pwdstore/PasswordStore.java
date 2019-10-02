@@ -457,12 +457,15 @@ public class PasswordStore extends AppCompatActivity {
     }
 
     public void decryptPassword(PasswordItem item) {
-        Intent intent = new Intent(this, PgpActivity.class);
-        intent.putExtra("NAME", item.toString());
-        intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
-        intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
-        intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.getFile().getAbsolutePath()));
-        intent.putExtra("OPERATION", "DECRYPT");
+        Intent decryptIntent = new Intent(this, PgpActivity.class);
+        Intent authDecryptIntent = new Intent(this, LaunchActivity.class);
+        for (Intent intent : new Intent[] {decryptIntent, authDecryptIntent}) {
+            intent.putExtra("NAME", item.toString());
+            intent.putExtra("FILE_PATH", item.getFile().getAbsolutePath());
+            intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory(getApplicationContext()).getAbsolutePath());
+            intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.getFile().getAbsolutePath()));
+            intent.putExtra("OPERATION", "DECRYPT");
+        }
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -470,7 +473,7 @@ public class PasswordStore extends AppCompatActivity {
                     .setShortLabel(item.toString())
                     .setLongLabel(item.getFullPathToParent() + item.toString())
                     .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                    .setIntent(intent.setAction("DECRYPT_PASS")) // Needs action
+                    .setIntent(authDecryptIntent.setAction("DECRYPT_PASS")) // Needs action
                     .build();
             List<ShortcutInfo> shortcuts = shortcutManager.getDynamicShortcuts();
 
@@ -483,7 +486,7 @@ public class PasswordStore extends AppCompatActivity {
                 shortcutManager.addDynamicShortcuts(Collections.singletonList(shortcut));
             }
         }
-        startActivityForResult(intent, REQUEST_CODE_DECRYPT_AND_VERIFY);
+        startActivityForResult(decryptIntent, REQUEST_CODE_DECRYPT_AND_VERIFY);
     }
 
     public void editPassword(PasswordItem item) {

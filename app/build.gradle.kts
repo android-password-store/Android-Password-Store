@@ -71,12 +71,14 @@ android {
 dependencies {
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.core:core-ktx:1.2.0-alpha04")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.preference:preference:1.1.0")
     implementation("androidx.recyclerview:recyclerview:1.1.0-beta04")
     implementation("com.google.android.material:material:1.1.0-alpha10")
     implementation("androidx.annotation:annotation:1.1.0")
+    implementation("androidx.biometric:biometric:1.0.0-beta02")
     implementation("org.sufficientlysecure:openpgp-api:12.0")
     implementation("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
@@ -106,7 +108,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs += "-Xnew-inference"
+            freeCompilerArgs = freeCompilerArgs + "-Xnew-inference"
         }
     }
 }
