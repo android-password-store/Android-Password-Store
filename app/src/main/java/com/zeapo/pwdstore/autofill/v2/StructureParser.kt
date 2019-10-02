@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-2.0
+ */
 package com.zeapo.pwdstore.autofill.v2
 
 import android.annotation.SuppressLint
@@ -10,7 +14,6 @@ import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
 
 import java.util.ArrayList
-
 
 /**
  * Parse AssistStructure and guess username and password fields.
@@ -71,7 +74,6 @@ class StructureParser(private val structure: AssistStructure) {
                         // Ignored
                     }
                 }
-
             }
         }
 
@@ -84,7 +86,6 @@ class StructureParser(private val structure: AssistStructure) {
         for (i in 0 until node.childCount) {
             parseViewNode(node.getChildAt(i))
         }
-
     }
 
     // Attempt to infer the AutoFill type from a string

@@ -1,20 +1,25 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-2.0
+ */
 package com.zeapo.pwdstore.autofill.v2
 
 import android.os.Build
 import android.os.CancellationSignal
-import android.service.autofill.*
 import android.service.autofill.AutofillService
-import androidx.annotation.RequiresApi
+import android.service.autofill.FillCallback
+import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
+import android.service.autofill.SaveRequest
+import android.service.autofill.SaveCallback
+import androidx.annotation.RequiresApi
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.v2.ui.AutofillFilterView
 import android.util.Log
 import com.zeapo.pwdstore.autofill.v2.AutofillUtils.Companion.getAutocompleteEntry
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 class PasswordAutofillService : AutofillService() {
-
     private val TAG = PasswordAutofillService::class.java.name
 
     override fun onConnected() {

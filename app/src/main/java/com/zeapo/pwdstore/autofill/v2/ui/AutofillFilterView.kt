@@ -22,7 +22,6 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
-import android.view.Window
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.afollestad.recyclical.datasource.dataSourceOf
@@ -34,7 +33,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.afterTextChanged
 import kotlinx.android.synthetic.main.activity_auto_fill_filter_view.*
 import java.io.File
-
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
@@ -81,7 +79,7 @@ class AutofillFilterView : AppCompatActivity() {
 
         search.afterTextChanged {
             dataSource.clear()
-            if(it.isEmpty()) {
+            if (it.isEmpty()) {
                 dataSource.set(getLastPasswordsList())
             } else {
                 recursiveFilter(it, null)
@@ -97,7 +95,7 @@ class AutofillFilterView : AppCompatActivity() {
     private fun getLastPasswordsList(): List<PasswordItem> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager = getSystemService<ShortcutManager>()
-            if(shortcutManager != null) {
+            if (shortcutManager != null) {
                 val shortcuts = shortcutManager.dynamicShortcuts
                 shortcuts.map {
                     PasswordItem.newPassword(it.shortLabel.toString(), File(it.longLabel.toString()), File("/"))
@@ -120,7 +118,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     private fun setResponse(item: PasswordItem?) {
 
-        if(item == null){
+        if (item == null) {
             setResult(RESULT_CANCELED)
             return
         }
@@ -153,7 +151,7 @@ class AutofillFilterView : AppCompatActivity() {
                 recursiveFilter(filter, item.file)
             }
 
-            val matches = ("${item.file.absolutePath}/${item}").toLowerCase().contains(filter.toLowerCase())
+            val matches = ("${item.file.absolutePath}/$item").toLowerCase().contains(filter.toLowerCase())
             val inAdapter = dataSource.contains(item)
             if (item.type == PasswordItem.TYPE_PASSWORD && matches && !inAdapter) {
                 dataSource.add(item)
