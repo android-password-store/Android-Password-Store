@@ -4,11 +4,11 @@ import com.zeapo.pwdstore.crypto.PgpActivity
 import java.io.File
 
 data class PasswordItem(
-        val name: String,
-        val parent: PasswordItem? = null,
-        val type: Char,
-        val file: File,
-        val rootDir: File
+    val name: String,
+    val parent: PasswordItem? = null,
+    val type: Char,
+    val file: File,
+    val rootDir: File
 ) : Comparable<PasswordItem> {
     val fullPathToParent = file.absolutePath
             .replace(rootDir.absolutePath, "")
@@ -41,41 +41,40 @@ data class PasswordItem(
 
         @JvmStatic
         fun newCategory(
-                name: String,
-                file: File,
-                parent: PasswordItem,
-                rootDir: File
+            name: String,
+            file: File,
+            parent: PasswordItem,
+            rootDir: File
         ): PasswordItem {
             return PasswordItem(name, parent, TYPE_CATEGORY, file, rootDir)
         }
 
         @JvmStatic
         fun newCategory(
-                name: String,
-                file: File,
-                rootDir: File
+            name: String,
+            file: File,
+            rootDir: File
         ): PasswordItem {
             return PasswordItem(name, null, TYPE_CATEGORY, file, rootDir)
         }
 
         @JvmStatic
         fun newPassword(
-                name: String,
-                file: File,
-                parent: PasswordItem,
-                rootDir: File
+            name: String,
+            file: File,
+            parent: PasswordItem,
+            rootDir: File
         ): PasswordItem {
             return PasswordItem(name, parent, TYPE_PASSWORD, file, rootDir)
         }
 
         @JvmStatic
         fun newPassword(
-                name: String,
-                file: File,
-                rootDir: File
+            name: String,
+            file: File,
+            rootDir: File
         ): PasswordItem {
             return PasswordItem(name, null, TYPE_PASSWORD, file, rootDir)
         }
     }
-
 }

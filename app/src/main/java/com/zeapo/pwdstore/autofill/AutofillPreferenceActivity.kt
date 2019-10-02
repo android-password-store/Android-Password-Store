@@ -136,7 +136,6 @@ class AutofillPreferenceActivity : AppCompatActivity() {
                     } catch (e: PackageManager.NameNotFoundException) {
                         allApps.add(AutofillRecyclerAdapter.AppInfo(key, key, true, null))
                     }
-
                 }
                 weakReference.get()?.recyclerAdapter = AutofillRecyclerAdapter(allApps, weakReference.get()!!)
                 return null

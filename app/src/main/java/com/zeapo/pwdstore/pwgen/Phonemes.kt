@@ -56,7 +56,7 @@ internal object Phonemes {
     /**
      * Generates a human-readable password.
      *
-     * @param size    length of password to generate
+     * @param size length of password to generate
      * @param pwFlags flag field where set bits indicate conditions the
      * generated password must meet
      * <table summary="bits of flag field">
@@ -105,8 +105,8 @@ internal object Phonemes {
                     continue
                 }
                 // Don't allow VOWEL followed a Vowel/Dipthong pair
-                if (prev and VOWEL > 0 && flags and VOWEL > 0
-                        && flags and DIPTHONG > 0
+                if (prev and VOWEL > 0 && flags and VOWEL > 0 &&
+                        flags and DIPTHONG > 0
                 ) {
                     continue
                 }
@@ -200,8 +200,8 @@ internal object Phonemes {
                 shouldBe = if (shouldBe == CONSONANT) {
                     VOWEL
                 } else {
-                    if (prev and VOWEL > 0 || flags and DIPTHONG > 0
-                            || RandomNumberGenerator.number(10) > 3
+                    if (prev and VOWEL > 0 || flags and DIPTHONG > 0 ||
+                            RandomNumberGenerator.number(10) > 3
                     ) {
                         CONSONANT
                     } else {

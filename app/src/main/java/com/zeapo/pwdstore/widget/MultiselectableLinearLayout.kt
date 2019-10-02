@@ -13,10 +13,10 @@ import android.widget.LinearLayout
 import com.zeapo.pwdstore.R
 
 class MultiselectableLinearLayout @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-        defStyleRes: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
     private var multiselected: Boolean = false
 

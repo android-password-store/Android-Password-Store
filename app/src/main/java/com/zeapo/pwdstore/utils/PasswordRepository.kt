@@ -32,7 +32,6 @@ open class PasswordRepository protected constructor() {
             (p2.type + p1.name).compareTo(p1.type + p2.name, ignoreCase = true)
         });
 
-
         companion object {
             @JvmStatic
             fun getSortOrder(settings: SharedPreferences): PasswordSortOrder {
@@ -63,7 +62,6 @@ open class PasswordRepository protected constructor() {
                     e.printStackTrace()
                     return null
                 }
-
             }
             return repository
         }
@@ -104,7 +102,6 @@ open class PasswordRepository protected constructor() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             } else if (replace!!) {
                 try {
                     val uri = URIish(url)
@@ -127,7 +124,6 @@ open class PasswordRepository protected constructor() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
         }
 
@@ -214,7 +210,7 @@ open class PasswordRepository protected constructor() {
          */
         @JvmStatic
         fun getPasswords(path: File, rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
-            //We need to recover the passwords then parse the files
+            // We need to recover the passwords then parse the files
             val passList = getFilesList(path)
 
             if (passList.size == 0) return ArrayList()
@@ -259,10 +255,10 @@ open class PasswordRepository protected constructor() {
         /**
          * Sets a git config value
          *
-         * @param section    config section name
+         * @param section config section name
          * @param subsection config subsection name
-         * @param name       config name
-         * @param value      the value to be set
+         * @param name config name
+         * @param value the value to be set
          */
         @JvmStatic
         @Suppress("SameParameterValue")
@@ -275,7 +271,6 @@ open class PasswordRepository protected constructor() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
         }
     }

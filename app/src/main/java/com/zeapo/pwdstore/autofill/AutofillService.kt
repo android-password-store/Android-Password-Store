@@ -85,17 +85,17 @@ class AutofillService : AccessibilityService() {
         }
 
         // if returning to the source app from a successful AutofillActivity
-        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                && event.packageName != null && event.packageName == packageName
-                && resultData != null) {
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+                event.packageName != null && event.packageName == packageName &&
+                resultData != null) {
             bindDecryptAndVerify()
         }
 
         // look for webView and trigger accessibility events if window changes
         // or if page changes in chrome
-        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                        && event.packageName != null
-                        && (event.packageName == "com.android.chrome" || event.packageName == "com.android.browser"))) {
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED &&
+                        event.packageName != null &&
+                        (event.packageName == "com.android.chrome" || event.packageName == "com.android.browser"))) {
             // there is a chance for getRootInActiveWindow() to return null at any time. save it.
             try {
                 val root = rootInActiveWindow
@@ -116,23 +116,20 @@ class AutofillService : AccessibilityService() {
                                         webViewURL = URL("http://" + node.text.toString()).host
                                     } catch (ignored: MalformedURLException) {
                                     }
-
                                 }
                             }
-
                         }
                 }
             } catch (e: Exception) {
                 // sadly we were unable to access the data we wanted
                 return
             }
-
         }
 
         // nothing to do if field is keychain app or system ui
-        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                || event.packageName != null && event.packageName == "org.sufficientlysecure.keychain"
-                || event.packageName != null && event.packageName == "com.android.systemui") {
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED ||
+                event.packageName != null && event.packageName == "org.sufficientlysecure.keychain" ||
+                event.packageName != null && event.packageName == "com.android.systemui") {
             dismissDialog(event)
             return
         }
@@ -281,8 +278,8 @@ class AutofillService : AccessibilityService() {
                 // means use default, so ignore it.
                 val value = prefs.getString(key, null)
                 val keyLowerCase = key.toLowerCase(Locale.ROOT)
-                if (value != null && value != ""
-                        && (webViewUrlLowerCase.contains(keyLowerCase) || keyLowerCase.contains(webViewUrlLowerCase))) {
+                if (value != null && value != "" &&
+                        (webViewUrlLowerCase.contains(keyLowerCase) || keyLowerCase.contains(webViewUrlLowerCase))) {
                     preference = value
                     settingsURL = key
                 }
@@ -397,7 +394,7 @@ class AutofillService : AccessibilityService() {
             dialog = null
         }
         builder.setNeutralButton("Settings") { _, _ ->
-            //TODO make icon? gear?
+            // TODO make icon? gear?
             // the user will have to return to the app themselves.
             val intent = Intent(this@AutofillService, AutofillPreferenceActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -426,7 +423,7 @@ class AutofillService : AccessibilityService() {
                     startActivity(intent)
                 }
                 else -> {
-                    lastWhichItem--    // will add one element to items, so lastWhichItem=items.size()+1
+                    lastWhichItem-- // will add one element to items, so lastWhichItem=items.size()+1
                     val intent = Intent(this@AutofillService, AutofillActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     intent.putExtra("pickMatchWith", true)
@@ -512,7 +509,6 @@ class AutofillService : AccessibilityService() {
                 } catch (e: UnsupportedEncodingException) {
                     Log.e(Constants.TAG, "UnsupportedEncodingException", e)
                 }
-
             }
             OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
                 Log.i("PgpHandler", "RESULT_CODE_USER_INTERACTION_REQUIRED")

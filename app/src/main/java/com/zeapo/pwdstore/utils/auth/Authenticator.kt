@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentActivity
 import com.zeapo.pwdstore.R
 
 internal class Authenticator(
-        private val fragmentActivity: FragmentActivity,
-        private val callback: (AuthenticationResult) -> Unit
+    private val fragmentActivity: FragmentActivity,
+    private val callback: (AuthenticationResult) -> Unit
 ) {
     private val handler = Handler()
     private val biometricManager = BiometricManager.from(fragmentActivity)
@@ -18,7 +18,7 @@ internal class Authenticator(
 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
-            Log.d(TAG,"Error: $errorCode: $errString")
+            Log.d(TAG, "Error: $errorCode: $errString")
             callback(AuthenticationResult.UnrecoverableError(errorCode, errString))
         }
 

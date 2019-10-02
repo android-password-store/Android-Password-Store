@@ -5,7 +5,6 @@ import com.zeapo.pwdstore.R
 
 import java.util.ArrayList
 
-
 object PasswordGenerator {
     internal const val DIGITS = 0x0001
     internal const val UPPERS = 0x0002
@@ -27,9 +26,9 @@ object PasswordGenerator {
     /**
      * Sets password generation preferences.
      *
-     * @param ctx     context from which to retrieve SharedPreferences from
+     * @param ctx context from which to retrieve SharedPreferences from
      * preferences file 'PasswordGenerator'
-     * @param argv    options for password generation
+     * @param argv options for password generation
      * <table summary="options for password generation">
      * <tr><td>Option</td><td>Description</td></tr>
      * <tr><td>0</td><td>don't include numbers</td></tr>
@@ -102,7 +101,7 @@ object PasswordGenerator {
                         phonemes = false
                         pwgenFlags = pwgenFlags or NO_VOWELS // | DIGITS | UPPERS;
                     }
-                }// pwgenFlags = DIGITS | UPPERS;
+                } // pwgenFlags = DIGITS | UPPERS;
             }
         }
 
@@ -128,7 +127,6 @@ object PasswordGenerator {
             phonemes = false
         }
 
-
         val passwords = ArrayList<String>()
         val num = prefs.getInt("num", 1)
         for (i in 0 until num) {
@@ -143,4 +141,3 @@ object PasswordGenerator {
 
     class PasswordGeneratorExeption(string: String) : Exception(string)
 }
-

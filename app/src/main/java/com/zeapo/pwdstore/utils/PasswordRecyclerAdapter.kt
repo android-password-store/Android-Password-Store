@@ -12,9 +12,10 @@ import com.zeapo.pwdstore.R
 import java.util.ArrayList
 import java.util.TreeSet
 
-class PasswordRecyclerAdapter(private val activity: PasswordStore,
-                              private val listener: PasswordFragment.OnFragmentInteractionListener,
-                              values: ArrayList<PasswordItem>
+class PasswordRecyclerAdapter(
+    private val activity: PasswordStore,
+    private val listener: PasswordFragment.OnFragmentInteractionListener,
+    values: ArrayList<PasswordItem>
 ) : EntryRecyclerAdapter(values) {
     var actionMode: ActionMode? = null
     private var canEdit: Boolean = false

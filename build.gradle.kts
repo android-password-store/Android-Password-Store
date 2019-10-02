@@ -45,3 +45,5 @@ tasks {
         distributionType = Wrapper.DistributionType.ALL
     }
 }
+
+configureSpotless()

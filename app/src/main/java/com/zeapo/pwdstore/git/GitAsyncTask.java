@@ -3,10 +3,9 @@ package com.zeapo.pwdstore.git;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
-
+import java.lang.ref.WeakReference;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.PullCommand;
@@ -17,9 +16,6 @@ import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RemoteRefUpdate;
 
-import java.lang.ref.WeakReference;
-
-
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private WeakReference<Activity> activityWeakReference;
     private boolean finishOnEnd;
@@ -27,7 +23,11 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private ProgressDialog dialog;
     private GitOperation operation;
 
-    public GitAsyncTask(Activity activity, boolean finishOnEnd, boolean refreshListOnEnd, GitOperation operation) {
+    public GitAsyncTask(
+            Activity activity,
+            boolean finishOnEnd,
+            boolean refreshListOnEnd,
+            GitOperation operation) {
         this.activityWeakReference = new WeakReference<>(activity);
         this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
@@ -41,7 +41,8 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     }
 
     protected void onPreExecute() {
-        this.dialog.setMessage(getActivity().getResources().getString(R.string.running_dialog_text));
+        this.dialog.setMessage(
+                getActivity().getResources().getString(R.string.running_dialog_text));
         this.dialog.setCancelable(false);
         this.dialog.show();
     }
@@ -58,8 +59,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                     nbChanges = status.getChanged().size() + status.getMissing().size();
                 } else if (command instanceof CommitCommand) {
                     // the previous status will eventually be used to avoid a commit
-                    if (nbChanges == null || nbChanges > 0)
-                        command.call();
+                    if (nbChanges == null || nbChanges > 0) command.call();
                 } else if (command instanceof PullCommand) {
                     final PullResult result = ((PullCommand) command).call();
                     final RebaseResult rr = result.getRebaseResult();
@@ -79,12 +79,14 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                                 case REJECTED_REMOTE_CHANGED:
                                 case NON_EXISTING:
                                 case NOT_ATTEMPTED:
-                                    return activity.getString(R.string.git_push_generic_error) + rru.getStatus().name();
+                                    return activity.getString(R.string.git_push_generic_error)
+                                            + rru.getStatus().name();
                                 case REJECTED_OTHER_REASON:
                                     if ("non-fast-forward".equals(rru.getMessage())) {
                                         return activity.getString(R.string.git_push_other_error);
                                     } else {
-                                        return activity.getString(R.string.git_push_generic_error) + rru.getMessage();
+                                        return activity.getString(R.string.git_push_generic_error)
+                                                + rru.getMessage();
                                     }
                                 default:
                                     break;
@@ -111,8 +113,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                 // ignore
             }
 
-        if (result == null)
-            result = "Unexpected error";
+        if (result == null) result = "Unexpected error";
 
         if (!result.isEmpty()) {
             this.operation.onError(result);

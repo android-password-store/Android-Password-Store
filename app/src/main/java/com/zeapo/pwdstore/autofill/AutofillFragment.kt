@@ -26,7 +26,6 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.resolveAttribute
 import com.zeapo.pwdstore.utils.splitLines
 
-
 class AutofillFragment : DialogFragment() {
     private var adapter: ArrayAdapter<String>? = null
     private var isWeb: Boolean = false
@@ -116,8 +115,8 @@ class AutofillFragment : DialogFragment() {
         val editor = prefs.edit()
         if (isWeb) {
             builder.setNeutralButton(R.string.autofill_apps_delete) { _, _ ->
-                if (callingActivity.recyclerAdapter != null
-                        && packageName != null && packageName != "") {
+                if (callingActivity.recyclerAdapter != null &&
+                        packageName != null && packageName != "") {
                     editor.remove(packageName)
                     callingActivity.recyclerAdapter?.removeWebsite(packageName)
                     editor.apply()

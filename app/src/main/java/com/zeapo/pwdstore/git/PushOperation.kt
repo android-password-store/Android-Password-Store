@@ -10,7 +10,7 @@ import java.io.File
 /**
  * Creates a new git operation
  *
- * @param fileDir         the git working tree directory
+ * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
 class PushOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
