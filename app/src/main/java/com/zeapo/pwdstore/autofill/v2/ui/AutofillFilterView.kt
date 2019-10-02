@@ -62,7 +62,7 @@ class AutofillFilterView : AppCompatActivity() {
                 onBind(::PasswordViewHolder) { _, item ->
                     this.label.text = item.longName
                     this.type.text = item.fullPathToParent
-                    this.type_image.setImageResource(R.drawable.ic_action_secure)
+                    this.typeImage.setImageResource(R.drawable.ic_action_secure)
                 }
                 onClick {
                     setResponse(item)

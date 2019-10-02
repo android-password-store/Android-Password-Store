@@ -9,7 +9,7 @@ import com.zeapo.pwdstore.R
 import android.view.autofill.AutofillValue
 
 
-@RequiresApi(api = Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.O)
 class AutofillUtils {
     companion object {
         fun getAutocompleteEntry(context: Context, text: String, icon: Int): RemoteViews {
