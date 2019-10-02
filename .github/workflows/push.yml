@@ -8,4 +8,4 @@ jobs:
     - name: setup-android
       uses: msfjarvis/setup-android@0.2
       with:
-        gradleTasks: build test lintDebug -Dpre-dex=false
+        gradleTasks: spotlessCheck build test lintDebug -Dpre-dex=false
