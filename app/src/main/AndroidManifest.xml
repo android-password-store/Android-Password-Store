@@ -103,6 +103,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:taskAffinity=".view.AuthActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/NoBackgroundTheme" />
     </application>
 
