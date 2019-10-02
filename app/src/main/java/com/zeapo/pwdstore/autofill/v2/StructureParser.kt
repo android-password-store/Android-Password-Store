@@ -1,5 +1,6 @@
 package com.zeapo.pwdstore.autofill.v2
 
+import android.annotation.SuppressLint
 import android.app.assist.AssistStructure
 import android.os.Build
 import android.text.InputType
@@ -87,6 +88,7 @@ class StructureParser(private val structure: AssistStructure) {
     }
 
     // Attempt to infer the AutoFill type from a string
+    @SuppressLint("DefaultLocale")
     private fun inferHint(actualHint: String?): String? {
         if (actualHint == null) return null
 
