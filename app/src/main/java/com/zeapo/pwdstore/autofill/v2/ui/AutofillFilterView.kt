@@ -87,7 +87,6 @@ class AutofillFilterView : AppCompatActivity() {
             if(shortcutManager != null) {
                 val shortcuts = shortcutManager.dynamicShortcuts
                 shortcuts.map {
-                    //PasswordItem.newPassword(it.shortLabel, )
                     PasswordItem.newPassword(it.shortLabel.toString(), File(it.longLabel.toString()), File("/"))
                 }
             } else {
