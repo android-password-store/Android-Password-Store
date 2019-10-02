@@ -27,7 +27,7 @@
             android:id="@+id/cover"
             android:layout_width="0dp"
             android:layout_height="100dp"
-            android:background="@color/blue_grey_500"
+            android:background="@color/primary_color"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toTopOf="@id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"

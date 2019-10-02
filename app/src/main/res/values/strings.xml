@@ -272,5 +272,4 @@
     <string name="biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
     <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
     <string name="autofill_not_support_save">Autofill not supported save</string>
-    <string name="close" >Close</string>
 </resources>

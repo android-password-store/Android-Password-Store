@@ -33,6 +33,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.afterTextChanged
 import java.io.File
 
+
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
 
@@ -86,7 +87,7 @@ class AutofillFilterView : AppCompatActivity() {
     private fun getLastPasswordsList(): List<PasswordItem> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager = getSystemService(ShortcutManager::class.java)
-            if (shortcutManager != null) {
+            if(shortcutManager != null) {
                 val shortcuts = shortcutManager.dynamicShortcuts
                 shortcuts.map {
                     PasswordItem.newPassword(it.shortLabel.toString(), File(it.longLabel.toString()), File("/"))
@@ -109,7 +110,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     private fun setResponse(item: PasswordItem?) {
 
-        if (item == null) {
+        if(item == null){
             setResult(RESULT_CANCELED)
             return
         }

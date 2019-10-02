@@ -1,7 +1,3 @@
-/*
- * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-2.0
- */
 package com.zeapo.pwdstore.autofill.v2.ui.holder
 
 import android.view.View
