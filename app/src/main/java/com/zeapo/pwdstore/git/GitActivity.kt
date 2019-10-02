@@ -73,7 +73,6 @@ open class GitActivity : AppCompatActivity() {
                     }
 
                     override fun onNothingSelected(adapterView: AdapterView<*>) {
-
                     }
                 }
 
@@ -107,7 +106,6 @@ open class GitActivity : AppCompatActivity() {
                     }
 
                     override fun onNothingSelected(adapterView: AdapterView<*>) {
-
                     }
                 }
 
@@ -218,10 +216,10 @@ open class GitActivity : AppCompatActivity() {
         if (uri != null) {
             when (protocol) {
                 "ssh://" -> {
-                    var hostname = (serverUser.text.toString()
-                            + "@" +
-                            serverUrl.text.toString().trim { it <= ' ' }
-                            + ":")
+                    var hostname = (serverUser.text.toString() +
+                            "@" +
+                            serverUrl.text.toString().trim { it <= ' ' } +
+                            ":")
                     if (serverPort.text.toString() == "22") {
                         hostname += serverPath.text.toString()
 
@@ -258,7 +256,6 @@ open class GitActivity : AppCompatActivity() {
                 else -> {
                 }
             }
-
         }
     }
 
@@ -420,7 +417,6 @@ open class GitActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 // ignore
             }
-
         }
     }
 
@@ -477,8 +473,8 @@ open class GitActivity : AppCompatActivity() {
             return
 
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
-        if (localDir.exists() && localDir.listFiles()!!.isNotEmpty()
-                && !(localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git")) {
+        if (localDir.exists() && localDir.listFiles()!!.isNotEmpty() &&
+                !(localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git")) {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_delete_title)
                     .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
@@ -489,7 +485,7 @@ open class GitActivity : AppCompatActivity() {
                             FileUtils.deleteDirectory(localDir)
                             launchGitOperation(REQUEST_CLONE)
                         } catch (e: IOException) {
-                            //TODO Handle the exception correctly if we are unable to delete the directory...
+                            // TODO Handle the exception correctly if we are unable to delete the directory...
                             e.printStackTrace()
                             MaterialAlertDialogBuilder(this).setMessage(e.message).show()
                         }
@@ -509,11 +505,10 @@ open class GitActivity : AppCompatActivity() {
                         e.printStackTrace()
                         MaterialAlertDialogBuilder(this).setMessage(e.message).show()
                     }
-
                 }
             } catch (e: Exception) {
-                //This is what happens when jgit fails :(
-                //TODO Handle the diffent cases of exceptions
+                // This is what happens when jgit fails :(
+                // TODO Handle the diffent cases of exceptions
                 e.printStackTrace()
                 MaterialAlertDialogBuilder(this).setMessage(e.message).show()
             }
@@ -612,11 +607,13 @@ open class GitActivity : AppCompatActivity() {
             e.printStackTrace()
             MaterialAlertDialogBuilder(this).setMessage(e.message).show()
         }
-
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int,
-                                  data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
 
         // In addition to the pre-operation-launch series of intents for OpenKeychain auth
         // that will pass through here and back to launchGitOperation, there is one

@@ -29,7 +29,7 @@ import java.io.File
 /**
  * Creates a new git operation
  *
- * @param fileDir         the git working tree directory
+ * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
 abstract class GitOperation(fileDir: File, internal val callingActivity: Activity) {
@@ -54,8 +54,8 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
     /**
      * Sets the authentication using ssh-key scheme
      *
-     * @param sshKey     the ssh-key file
-     * @param username   the username
+     * @param sshKey the ssh-key file
+     * @param username the username
      * @param passphrase the passphrase
      * @return the current object
      */
@@ -87,14 +87,16 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * Executes the GitCommand in an async task after creating the authentication
      *
      * @param connectionMode the server-connection mode
-     * @param username       the username
-     * @param sshKey         the ssh-key file to use in ssh-key connection mode
-     * @param identity       the api identity to use for auth in OpenKeychain connection mode
+     * @param username the username
+     * @param sshKey the ssh-key file to use in ssh-key connection mode
+     * @param identity the api identity to use for auth in OpenKeychain connection mode
      */
-    fun executeAfterAuthentication(connectionMode: String,
-                                   username: String,
-                                   sshKey: File?,
-                                   identity: SshApiSessionFactory.ApiIdentity?) {
+    fun executeAfterAuthentication(
+        connectionMode: String,
+        username: String,
+        sshKey: File?,
+        identity: SshApiSessionFactory.ApiIdentity?
+    ) {
         executeAfterAuthentication(connectionMode, username, sshKey, identity, false)
     }
 
@@ -102,16 +104,18 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * Executes the GitCommand in an async task after creating the authentication
      *
      * @param connectionMode the server-connection mode
-     * @param username       the username
-     * @param sshKey         the ssh-key file to use in ssh-key connection mode
-     * @param identity       the api identity to use for auth in OpenKeychain connection mode
-     * @param showError      show the passphrase edit text in red
+     * @param username the username
+     * @param sshKey the ssh-key file to use in ssh-key connection mode
+     * @param identity the api identity to use for auth in OpenKeychain connection mode
+     * @param showError show the passphrase edit text in red
      */
-    private fun executeAfterAuthentication(connectionMode: String,
-                                           username: String,
-                                           sshKey: File?,
-                                           identity: SshApiSessionFactory.ApiIdentity?,
-                                           showError: Boolean) {
+    private fun executeAfterAuthentication(
+        connectionMode: String,
+        username: String,
+        sshKey: File?,
+        identity: SshApiSessionFactory.ApiIdentity?,
+        showError: Boolean
+    ) {
         if (connectionMode.equals("ssh-key", ignoreCase = true)) {
             if (sshKey == null || !sshKey.exists()) {
                 MaterialAlertDialogBuilder(callingActivity)
@@ -199,7 +203,6 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                             .setPositiveButton("Ok") { _, _ -> callingActivity.finish() }
                             .show()
                 }
-
             }
         } else if (connectionMode.equals("OpenKeychain", ignoreCase = true)) {
             setAuthentication(username, identity).execute()
@@ -216,7 +219,6 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                         // authenticate using the user/pwd and then execute the command
                         setAuthentication(username, password.text.toString()).execute()
-
                     }
                     .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
                         callingActivity.finish()

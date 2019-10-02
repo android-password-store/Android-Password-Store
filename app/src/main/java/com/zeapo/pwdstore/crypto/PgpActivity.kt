@@ -404,7 +404,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
                 RESULT_CODE_ERROR -> handleError(result)
             }
-
         }
     }
 
@@ -474,7 +473,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 }
                 RESULT_CODE_ERROR -> handleError(result)
             }
-
         }
     }
 
@@ -669,7 +667,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         } else {
             showToast(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
         }
-
     }
 
     private fun copyUsernameToClipBoard(username: String) {
@@ -697,7 +694,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         sendIntent,
                         resources.getText(R.string.send_plaintext_password_to)
                 )
-        )//Always show a picker to give the user a chance to cancel
+        ) // Always show a picker to give the user a chance to cancel
     }
 
     private fun setTimer() {
@@ -872,4 +869,3 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 }
-

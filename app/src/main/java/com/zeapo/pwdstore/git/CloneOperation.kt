@@ -10,7 +10,7 @@ import java.io.File
 /**
  * Creates a new clone operation
  *
- * @param fileDir         the git working tree directory
+ * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
 class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
@@ -44,8 +44,8 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     /**
      * sets the authentication for the ssh-key scheme
      *
-     * @param sshKey     the ssh-key file
-     * @param username   the username
+     * @param sshKey the ssh-key file
+     * @param username the username
      * @param passphrase the passphrase
      * @return the current object
      */
@@ -62,10 +62,10 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     override fun onError(errorMessage: String) {
         MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage("Error occured during the clone operation, "
-                        + callingActivity.resources.getString(R.string.jgit_error_dialog_text)
-                        + errorMessage
-                        + "\nPlease check the FAQ for possible reasons why this error might occur.")
+                .setMessage("Error occured during the clone operation, " +
+                        callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
+                        errorMessage +
+                        "\nPlease check the FAQ for possible reasons why this error might occur.")
                 .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
                 .show()
     }

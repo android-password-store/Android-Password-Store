@@ -5,7 +5,7 @@ internal object RandomPasswordGenerator {
     /**
      * Generates a completely random password.
      *
-     * @param size    length of password to generate
+     * @param size length of password to generate
      * @param pwFlags flag field where set bits indicate conditions the
      * generated password must meet
      * <table summary ="bits of flag field">
@@ -48,8 +48,8 @@ internal object RandomPasswordGenerator {
                 num = RandomNumberGenerator.number(bank.length)
                 cha = bank.toCharArray()[num]
                 character = cha.toString()
-                if (pwFlags and PasswordGenerator.AMBIGUOUS > 0
-                        && PasswordGenerator.AMBIGUOUS_STR.contains(character)) {
+                if (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
+                        PasswordGenerator.AMBIGUOUS_STR.contains(character)) {
                     continue
                 }
                 if (pwFlags and PasswordGenerator.NO_VOWELS > 0 && PasswordGenerator.VOWELS_STR.contains(character)) {

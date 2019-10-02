@@ -1,29 +1,27 @@
 package com.zeapo.pwdstore.utils;
 
 import android.util.Log;
-
-import org.apache.commons.codec.binary.Base32;
-
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base32;
 
 public class Otp {
 
     private static final Base32 BASE_32 = new Base32();
 
-    private Otp() {
-    }
+    private Otp() {}
 
-    public static String calculateCode(String secret, long counter, String algorithm, String digits) {
-        String[] steam = {"2", "3", "4", "5", "6", "7", "8", "9", "B", "C",
-                "D", "F", "G", "H", "J", "K", "M", "N", "P", "Q",
-                "R", "T", "V", "W", "X", "Y"};
+    public static String calculateCode(
+            String secret, long counter, String algorithm, String digits) {
+        String[] steam = {
+            "2", "3", "4", "5", "6", "7", "8", "9", "B", "C", "D", "F", "G", "H", "J", "K", "M",
+            "N", "P", "Q", "R", "T", "V", "W", "X", "Y"
+        };
         String ALGORITHM = "Hmac" + algorithm.toUpperCase();
         SecretKeySpec signingKey = new SecretKeySpec(BASE_32.decode(secret), ALGORITHM);
 

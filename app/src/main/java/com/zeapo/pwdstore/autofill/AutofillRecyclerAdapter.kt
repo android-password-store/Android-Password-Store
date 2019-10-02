@@ -18,8 +18,8 @@ import java.util.ArrayList
 import java.util.Locale
 
 internal class AutofillRecyclerAdapter(
-        allApps: List<AppInfo>,
-        private val activity: AutofillPreferenceActivity
+    allApps: List<AppInfo>,
+    private val activity: AutofillPreferenceActivity
 ) : RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder>() {
 
     private val apps: SortedList<AppInfo>
@@ -86,8 +86,8 @@ internal class AutofillRecyclerAdapter(
                 holder.secondary.setText(R.string.autofill_apps_match)
                 holder.secondary.append(" " + preference!!.splitLines()[0])
                 if (preference.trim { it <= ' ' }.splitLines().size - 1 > 0) {
-                    holder.secondary.append(" and "
-                            + (preference.trim { it <= ' ' }.splitLines().size - 1) + " more")
+                    holder.secondary.append(" and " +
+                            (preference.trim { it <= ' ' }.splitLines().size - 1) + " more")
                 }
             }
         }
@@ -164,6 +164,5 @@ internal class AutofillRecyclerAdapter(
         override fun onClick(v: View) {
             activity.showDialog(packageName, appName, isWeb)
         }
-
     }
 }

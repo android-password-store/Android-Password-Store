@@ -28,7 +28,6 @@ class AutofillActivity : AppCompatActivity() {
             } catch (e: IntentSender.SendIntentException) {
                 Log.e(AutofillService.Constants.TAG, "SendIntentException", e)
             }
-
         } else if (extras != null && extras.containsKey("pick")) {
             val intent = Intent(applicationContext, PasswordStore::class.java)
             intent.putExtra("matchWith", true)
@@ -41,10 +40,10 @@ class AutofillActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        finish()   // go back to the password field app
+        finish() // go back to the password field app
         when (requestCode) {
             REQUEST_CODE_DECRYPT_AND_VERIFY -> if (resultCode == RESULT_OK) {
-                AutofillService.instance?.setResultData(data!!)    // report the result to service
+                AutofillService.instance?.setResultData(data!!) // report the result to service
             }
             REQUEST_CODE_PICK -> if (resultCode == RESULT_OK) {
                 AutofillService.instance?.setPickedPassword(data!!.getStringExtra("path"))

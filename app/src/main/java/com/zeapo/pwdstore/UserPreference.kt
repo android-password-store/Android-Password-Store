@@ -72,7 +72,6 @@ class UserPreference : AppCompatActivity() {
             val externalGitRepositoryPreference = findPreference<Preference>("git_external")
             val selectExternalGitRepositoryPreference = findPreference<Preference>("pref_select_external")
 
-
             // Crypto preferences
             val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
 
@@ -393,8 +392,6 @@ class UserPreference : AppCompatActivity() {
 
             sshKeyInputStream.close()
             sshKeyOutputSteam.close()
-
-
         } else {
             Toast.makeText(this, getString(R.string.ssh_key_does_not_exist), Toast.LENGTH_LONG).show()
         }
@@ -413,8 +410,9 @@ class UserPreference : AppCompatActivity() {
         }
 
     override fun onActivityResult(
-            requestCode: Int, resultCode: Int,
-            data: Intent?
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
     ) {
         if (resultCode == Activity.RESULT_OK) {
             if (data == null) {
@@ -452,7 +450,6 @@ class UserPreference : AppCompatActivity() {
                     }
                 }
                 EDIT_GIT_INFO -> {
-
                 }
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
@@ -527,7 +524,6 @@ class UserPreference : AppCompatActivity() {
         if (passDir != null) {
             copyDirToDir(sourcePassDir, passDir)
         }
-
     }
 
     /**

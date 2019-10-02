@@ -98,19 +98,23 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
     protected abstract fun getOnClickListener(holder: ViewHolder, pass: PasswordItem): View.OnClickListener
 
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
         // create a new view
         val v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.password_row_layout, parent, false)
         return ViewHolder(v)
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    class ViewHolder(// each data item is just a string in this case
-            val view: View) : RecyclerView.ViewHolder(view) {
+    /*
+     Provide a reference to the views for each data item
+     Complex data items may need more than one view per item, and
+     you provide access to all the views for a data item in a view holder
+     each data item is just a string in this case
+    */
+    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val name: AppCompatTextView = view.findViewById(R.id.label)
         val type: AppCompatTextView = view.findViewById(R.id.type)
         val typeImage: AppCompatImageView = view.findViewById(R.id.type_image)

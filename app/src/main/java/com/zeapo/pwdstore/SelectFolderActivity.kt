@@ -21,7 +21,6 @@ class SelectFolderActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-
         passwordList = SelectFolderFragment()
         val args = Bundle()
         args.putString("Path", PasswordRepository.getRepositoryDirectory(applicationContext)?.absolutePath)

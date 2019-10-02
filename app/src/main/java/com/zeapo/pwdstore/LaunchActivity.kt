@@ -40,7 +40,7 @@ class LaunchActivity : AppCompatActivity() {
             decryptIntent.putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
             decryptIntent.putExtra("OPERATION", "DECRYPT")
             startActivity(decryptIntent)
-        }else {
+        } else {
             startActivity(Intent(this, PasswordStore::class.java))
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

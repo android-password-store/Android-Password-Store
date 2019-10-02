@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -13,21 +12,20 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zeapo.pwdstore.utils.FolderRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
-
 import java.io.File;
 import java.util.Stack;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
+ *
+ * <p>Large screen devices (such as tablets) are supported by replacing the ListView with a
+ * GridView.
+ *
+ * <p>
  */
 public class SelectFolderFragment extends Fragment {
 
@@ -38,11 +36,10 @@ public class SelectFolderFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon
+     * screen orientation changes).
      */
-    public SelectFolderFragment() {
-    }
+    public SelectFolderFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,17 +47,18 @@ public class SelectFolderFragment extends Fragment {
         String path = getArguments().getString("Path");
 
         pathStack = new Stack<>();
-        recyclerAdapter = new FolderRecyclerAdapter(mListener,
-                PasswordRepository.getPasswords(
-                        new File(path),
-                        PasswordRepository.getRepositoryDirectory(requireActivity()), getSortOrder()
-                )
-        );
+        recyclerAdapter =
+                new FolderRecyclerAdapter(
+                        mListener,
+                        PasswordRepository.getPasswords(
+                                new File(path),
+                                PasswordRepository.getRepositoryDirectory(requireActivity()),
+                                getSortOrder()));
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.password_recycler_view, container, false);
 
         // use a linear layout manager
@@ -68,7 +66,8 @@ public class SelectFolderFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // use divider
-        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
         // Set the adapter
         recyclerView.setAdapter(recyclerAdapter);
@@ -83,21 +82,28 @@ public class SelectFolderFragment extends Fragment {
     public void onAttach(final Context context) {
         super.onAttach(context);
         try {
-            mListener = item -> {
-                if (item.getType() == PasswordItem.TYPE_CATEGORY) {
-                    //push the category were we're going
-                    pathStack.push(item.getFile());
+            mListener =
+                    item -> {
+                        if (item.getType() == PasswordItem.TYPE_CATEGORY) {
+                            // push the category were we're going
+                            pathStack.push(item.getFile());
 
-                    recyclerView.scrollToPosition(0);
-                    recyclerAdapter.clear();
-                    recyclerAdapter.addAll(PasswordRepository.getPasswords(item.getFile(), PasswordRepository.getRepositoryDirectory(context), getSortOrder()));
+                            recyclerView.scrollToPosition(0);
+                            recyclerAdapter.clear();
+                            recyclerAdapter.addAll(
+                                    PasswordRepository.getPasswords(
+                                            item.getFile(),
+                                            PasswordRepository.getRepositoryDirectory(context),
+                                            getSortOrder()));
 
-                    ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                }
-            };
+                            ((AppCompatActivity) requireActivity())
+                                    .getSupportActionBar()
+                                    .setDisplayHomeAsUpEnabled(true);
+                        }
+                    };
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(
+                    context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -107,14 +113,13 @@ public class SelectFolderFragment extends Fragment {
      * @return the current directory
      */
     public File getCurrentDir() {
-        if (pathStack.isEmpty())
-            return PasswordRepository.getRepositoryDirectory(requireContext());
-        else
-            return pathStack.peek();
+        if (pathStack.isEmpty()) return PasswordRepository.getRepositoryDirectory(requireContext());
+        else return pathStack.peek();
     }
 
     private PasswordRepository.PasswordSortOrder getSortOrder() {
-        return PasswordRepository.PasswordSortOrder.getSortOrder(PreferenceManager.getDefaultSharedPreferences(requireContext()));
+        return PasswordRepository.PasswordSortOrder.getSortOrder(
+                PreferenceManager.getDefaultSharedPreferences(requireContext()));
     }
 
     public interface OnFragmentInteractionListener {

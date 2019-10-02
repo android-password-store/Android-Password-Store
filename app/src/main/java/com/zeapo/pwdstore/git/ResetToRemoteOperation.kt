@@ -12,7 +12,7 @@ import java.io.File
 /**
  * Creates a new git operation
  *
- * @param fileDir         the git working tree directory
+ * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
 class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
@@ -42,10 +42,10 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOper
     override fun onError(errorMessage: String) {
         MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage("Error occured during the sync operation, "
-                        + "\nPlease check the FAQ for possible reasons why this error might occur."
-                        + callingActivity.resources.getString(R.string.jgit_error_dialog_text)
-                        + errorMessage)
+                .setMessage("Error occured during the sync operation, " +
+                        "\nPlease check the FAQ for possible reasons why this error might occur." +
+                        callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
+                        errorMessage)
                 .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
                 .show()
     }

@@ -13,27 +13,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.DialogFragment;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.zeapo.pwdstore.pwgen.PasswordGenerator;
-
+import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
-
-/**
- * A placeholder fragment containing a simple view.
- */
+/** A placeholder fragment containing a simple view. */
 public class PasswordGeneratorDialogFragment extends DialogFragment {
 
-    public PasswordGeneratorDialogFragment() {
-    }
+    public PasswordGeneratorDialogFragment() {}
 
     @NotNull
     @SuppressLint("SetTextI18n")
@@ -42,13 +34,17 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         final Activity callingActivity = requireActivity();
         LayoutInflater inflater = callingActivity.getLayoutInflater();
-        @SuppressLint("InflateParams") final View view = inflater.inflate(R.layout.fragment_pwgen, null);
-        Typeface monoTypeface = Typeface.createFromAsset(callingActivity.getAssets(), "fonts/sourcecodepro.ttf");
+        @SuppressLint("InflateParams")
+        final View view = inflater.inflate(R.layout.fragment_pwgen, null);
+        Typeface monoTypeface =
+                Typeface.createFromAsset(callingActivity.getAssets(), "fonts/sourcecodepro.ttf");
 
         builder.setView(view);
 
-        SharedPreferences prefs
-                = requireActivity().getApplicationContext().getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
+        SharedPreferences prefs =
+                requireActivity()
+                        .getApplicationContext()
+                        .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE);
 
         CheckBox checkBox = view.findViewById(R.id.numerals);
         checkBox.setChecked(!prefs.getBoolean("0", false));
@@ -74,38 +70,53 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         AppCompatTextView passwordText = view.findViewById(R.id.passwordText);
         passwordText.setTypeface(monoTypeface);
 
-        builder.setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> {
-            EditText edit = callingActivity.findViewById(R.id.crypto_password_edit);
-            edit.setText(passwordText.getText());
-        });
+        builder.setPositiveButton(
+                getResources().getString(R.string.dialog_ok),
+                (dialog, which) -> {
+                    EditText edit = callingActivity.findViewById(R.id.crypto_password_edit);
+                    edit.setText(passwordText.getText());
+                });
 
-        builder.setNegativeButton(getResources().getString(R.string.dialog_cancel), (dialog, which) -> {
-
-        });
+        builder.setNegativeButton(
+                getResources().getString(R.string.dialog_cancel), (dialog, which) -> {});
 
         builder.setNeutralButton(getResources().getString(R.string.pwgen_generate), null);
 
-        final AlertDialog ad = builder.setTitle(this.getResources().getString(R.string.pwgen_title)).create();
-        ad.setOnShowListener(dialog -> {
-            setPreferences();
-            try {
-                passwordText.setText(PasswordGenerator.generate(requireActivity().getApplicationContext()).get(0));
-            } catch (PasswordGenerator.PasswordGeneratorExeption e) {
-                Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                passwordText.setText("");
-            }
+        final AlertDialog ad =
+                builder.setTitle(this.getResources().getString(R.string.pwgen_title)).create();
+        ad.setOnShowListener(
+                dialog -> {
+                    setPreferences();
+                    try {
+                        passwordText.setText(
+                                PasswordGenerator.generate(
+                                                requireActivity().getApplicationContext())
+                                        .get(0));
+                    } catch (PasswordGenerator.PasswordGeneratorExeption e) {
+                        Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                        passwordText.setText("");
+                    }
 
-            Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
-            b.setOnClickListener(v -> {
-                setPreferences();
-                try {
-                    passwordText.setText(PasswordGenerator.generate(callingActivity.getApplicationContext()).get(0));
-                } catch (PasswordGenerator.PasswordGeneratorExeption e) {
-                    Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    passwordText.setText("");
-                }
-            });
-        });
+                    Button b = ad.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    b.setOnClickListener(
+                            v -> {
+                                setPreferences();
+                                try {
+                                    passwordText.setText(
+                                            PasswordGenerator.generate(
+                                                            callingActivity.getApplicationContext())
+                                                    .get(0));
+                                } catch (PasswordGenerator.PasswordGeneratorExeption e) {
+                                    Toast.makeText(
+                                                    requireActivity(),
+                                                    e.getMessage(),
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                    passwordText.setText("");
+                                }
+                            });
+                });
         return ad;
     }
 
@@ -133,10 +144,10 @@ public class PasswordGeneratorDialogFragment extends DialogFragment {
         EditText editText = getDialog().findViewById(R.id.lengthNumber);
         try {
             int length = Integer.valueOf(editText.getText().toString());
-            PasswordGenerator.setPrefs(requireActivity().getApplicationContext(), preferences, length);
+            PasswordGenerator.setPrefs(
+                    requireActivity().getApplicationContext(), preferences, length);
         } catch (NumberFormatException e) {
             PasswordGenerator.setPrefs(requireActivity().getApplicationContext(), preferences);
         }
     }
 }
-
