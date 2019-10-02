@@ -269,6 +269,6 @@
     <string name="biometric_prompt_cancelled">Authentication canceled</string>
     <string name="biometric_prompt_no_hardware">No Biometric hardware was found</string>
     <string name="biometric_auth_title">Enable biometric authentication</string>
-    <string name="biometric_auth_summary">When enabled, Viscerion will prompt you for your fingerprint when launching the app</string>
+    <string name="biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
     <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
 </resources>
