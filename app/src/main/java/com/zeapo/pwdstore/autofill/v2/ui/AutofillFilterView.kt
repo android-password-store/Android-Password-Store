@@ -18,6 +18,7 @@ import com.zeapo.pwdstore.autofill.v2.AutofillUtils
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
+import android.content.pm.ShortcutManager
 import androidx.preference.PreferenceManager
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -70,11 +71,30 @@ class AutofillFilterView : AppCompatActivity() {
             }
         }
 
+        dataSource.set(getLastPasswordsList())
+
         search.afterTextChanged { recursiveFilter(it, null) }
 
-        close.setOnClickListener {
+        overlay.setOnClickListener {
             setResponse(null)
             finish()
+        }
+    }
+
+    private fun getLastPasswordsList(): List<PasswordItem> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = getSystemService(ShortcutManager::class.java)
+            if(shortcutManager != null) {
+                val shortcuts = shortcutManager.dynamicShortcuts
+                shortcuts.map {
+                    //PasswordItem.newPassword(it.shortLabel, )
+                    PasswordItem.newPassword(it.shortLabel.toString(), File(it.longLabel.toString()), File("/"))
+                }
+            } else {
+                emptyList()
+            }
+        } else {
+            emptyList()
         }
     }
 
