@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import com.zeapo.pwdstore.R
-import kotlinx.android.synthetic.main.activity_auto_fill_filter_view.*
 import android.service.autofill.FillResponse
 import com.zeapo.pwdstore.autofill.v2.StructureParser
 import android.view.autofill.AutofillManager
@@ -23,6 +22,8 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
+import android.view.Window
+import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -31,6 +32,7 @@ import com.zeapo.pwdstore.autofill.v2.ui.holder.PasswordViewHolder
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.afterTextChanged
+import kotlinx.android.synthetic.main.activity_auto_fill_filter_view.*
 import java.io.File
 
 
@@ -52,6 +54,7 @@ class AutofillFilterView : AppCompatActivity() {
         setContentView(R.layout.activity_auto_fill_filter_view)
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 
+        supportActionBar?.hide()
         settings = PreferenceManager.getDefaultSharedPreferences(this)
 
         bindUI()
@@ -76,7 +79,14 @@ class AutofillFilterView : AppCompatActivity() {
 
         dataSource.set(getLastPasswordsList())
 
-        search.afterTextChanged { recursiveFilter(it, null) }
+        search.afterTextChanged {
+            dataSource.clear()
+            if(it.isEmpty()) {
+                dataSource.set(getLastPasswordsList())
+            } else {
+                recursiveFilter(it, null)
+            }
+        }
 
         overlay.setOnClickListener {
             setResponse(null)
@@ -86,7 +96,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     private fun getLastPasswordsList(): List<PasswordItem> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val shortcutManager = getSystemService(ShortcutManager::class.java)
+            val shortcutManager = getSystemService<ShortcutManager>()
             if(shortcutManager != null) {
                 val shortcuts = shortcutManager.dynamicShortcuts
                 shortcuts.map {
@@ -143,9 +153,9 @@ class AutofillFilterView : AppCompatActivity() {
                 recursiveFilter(filter, item.file)
             }
 
-            val matches = item.toString().toLowerCase().contains(filter.toLowerCase())
+            val matches = ("${item.file.absolutePath}/${item}").toLowerCase().contains(filter.toLowerCase())
             val inAdapter = dataSource.contains(item)
-            if (matches && !inAdapter) {
+            if (item.type == PasswordItem.TYPE_PASSWORD && matches && !inAdapter) {
                 dataSource.add(item)
             } else if (!matches && inAdapter) {
                 dataSource.remove(item)
