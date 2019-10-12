@@ -44,6 +44,7 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOper
     }
 
     override fun onError(errorMessage: String) {
+        super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the sync operation, " +

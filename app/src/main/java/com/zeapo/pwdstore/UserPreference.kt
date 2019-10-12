@@ -66,6 +66,7 @@ class UserPreference : AppCompatActivity() {
 
             // Git preferences
             val gitServerPreference = findPreference<Preference>("git_server_info")
+            val openkeystoreIdPreference = findPreference<Preference>("ssh_openkeystore_clear_keyid")
             val gitConfigPreference = findPreference<Preference>("git_config")
             val sshKeyPreference = findPreference<Preference>("ssh_key")
             val sshKeygenPreference = findPreference<Preference>("ssh_keygen")
@@ -114,6 +115,7 @@ class UserPreference : AppCompatActivity() {
                     OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
                 }
             }
+            openkeystoreIdPreference?.isEnabled = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty() ?: false
 
             // see if the autofill service is enabled and check the preference accordingly
             autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
@@ -153,6 +155,12 @@ class UserPreference : AppCompatActivity() {
             clearHotpIncrementPreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
                 it.isVisible = false
+                true
+            }
+
+            openkeystoreIdPreference?.onPreferenceClickListener = ClickListener {
+                sharedPreferences.edit().putString("ssh_openkeystore_keyid", null).apply()
+                it.isEnabled = false
                 true
             }
 
