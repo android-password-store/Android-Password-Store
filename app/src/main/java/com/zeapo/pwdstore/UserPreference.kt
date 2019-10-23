@@ -115,7 +115,7 @@ class UserPreference : AppCompatActivity() {
                     OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
                 }
             }
-            openkeystoreIdPreference?.isEnabled = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty() ?: false
+            openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty() ?: false
 
             // see if the autofill service is enabled and check the preference accordingly
             autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
@@ -160,7 +160,7 @@ class UserPreference : AppCompatActivity() {
 
             openkeystoreIdPreference?.onPreferenceClickListener = ClickListener {
                 sharedPreferences.edit().putString("ssh_openkeystore_keyid", null).apply()
-                it.isEnabled = false
+                it.isVisible = false
                 true
             }
 
