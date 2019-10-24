@@ -1,6 +1,6 @@
 /*
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-2.0
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.diffplug.gradle.spotless.SpotlessPlugin
@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.configure
 
 val kotlinLicenseHeader = """/*
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-2.0
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 """.trimIndent()
 

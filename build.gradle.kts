@@ -1,6 +1,6 @@
 /*
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-2.0
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
@@ -17,7 +17,7 @@ buildscript {
 }
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.24.0"
+    id("com.github.ben-manes.versions") version "0.27.0"
 }
 
 allprojects {
@@ -45,7 +45,7 @@ tasks {
     }
 
     named<Wrapper>("wrapper") {
-        gradleVersion = "5.6.2"
+        gradleVersion = "5.6.3"
         distributionType = Wrapper.DistributionType.ALL
     }
 }

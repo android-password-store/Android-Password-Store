@@ -1,11 +1,12 @@
-on: push
+on: [push, pull_request]
 name: CI builds
 jobs:
   setup-android:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: setup-android
-      uses: msfjarvis/setup-android@0.2
+    - run: ./gradlew spotlessCheck build test lintDebug -Dpre-dex=false
+    - uses: actions/upload-artifact@master
       with:
-        gradleTasks: spotlessCheck build test lintDebug -Dpre-dex=false
+        name: Debug APK
+        path: app/build/outputs/apk/debug/app-debug.apk
