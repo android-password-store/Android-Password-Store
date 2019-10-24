@@ -1,6 +1,6 @@
 /*
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-2.0
+ * SPDX-License-Identifier: GPL-3.0-only
  */
 package com.zeapo.pwdstore.autofill.v2
 
@@ -16,7 +16,7 @@ import androidx.annotation.RequiresApi
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.v2.ui.AutofillFilterView
 import android.util.Log
-import com.zeapo.pwdstore.autofill.v2.AutofillUtils.Companion.getAutocompleteEntry
+import com.zeapo.pwdstore.autofill.v2.AutofillUtils.getAutocompleteEntry
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PasswordAutofillService : AutofillService() {

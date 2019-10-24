@@ -26,7 +26,11 @@
         <activity
             android:name=".PasswordStore"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name">
+            android:label="@string/app_name" />
+
+        <activity android:name=".LaunchActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -73,7 +77,7 @@
             android:name=".autofill.AutofillActivity"
             android:documentLaunchMode="intoExisting"
             android:excludeFromRecents="true"
-            android:parentActivityName=".PasswordStore"
+            android:theme="@style/AppTheme"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
