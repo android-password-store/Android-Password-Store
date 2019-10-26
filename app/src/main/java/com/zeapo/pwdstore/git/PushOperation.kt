@@ -39,6 +39,7 @@ class PushOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
 
     override fun onError(errorMessage: String) {
         // TODO handle the "Nothing to push" case
+        super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage)

@@ -38,6 +38,7 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     }
 
     override fun onError(errorMessage: String) {
+        super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
                 .setMessage("Error occured during the pull operation, " +

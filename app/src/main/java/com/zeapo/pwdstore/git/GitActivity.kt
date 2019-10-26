@@ -613,7 +613,7 @@ open class GitActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(
+    public override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
         data: Intent?
@@ -625,8 +625,16 @@ open class GitActivity : AppCompatActivity() {
         // background thread - the actual signing of the SSH challenge. We pass through the
         // completed signature to the ApiIdentity, which will be blocked in the other thread
         // waiting for it.
-        if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null)
+        if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null) {
             identity!!.postSignature(data)
+
+            // If the signature failed (usually because it was cancelled), reset state
+            if (data == null) {
+                identity = null
+                identityBuilder = null
+            }
+            return
+        }
 
         if (resultCode == AppCompatActivity.RESULT_CANCELED) {
             setResult(AppCompatActivity.RESULT_CANCELED)

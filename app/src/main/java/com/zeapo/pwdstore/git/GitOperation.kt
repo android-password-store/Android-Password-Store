@@ -235,14 +235,11 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * Action to execute on error
      */
     open fun onError(errorMessage: String) {
-        MaterialAlertDialogBuilder(callingActivity)
-                .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage(callingActivity.resources.getString(R.string.jgit_error_dialog_text) + errorMessage)
-                .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                    callingActivity.setResult(Activity.RESULT_CANCELED)
-                    callingActivity.finish()
-                }
-                .show()
+        if (SshSessionFactory.getInstance() is SshApiSessionFactory) {
+            // Clear stored key id from settings on auth failure
+            PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
+                    .edit().putString("ssh_openkeystore_keyid", null).apply()
+        }
     }
 
     /**
