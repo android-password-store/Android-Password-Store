@@ -30,11 +30,11 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.R
@@ -105,7 +105,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val providerPackageName = settings.getString("openpgp_provider_list", "")
 
         if (TextUtils.isEmpty(providerPackageName)) {
-            Toast.makeText(this, this.resources.getString(R.string.provider_toast_text), Toast.LENGTH_LONG).show()
+            showSnackbar(resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG)
             val intent = Intent(this, UserPreference::class.java)
             startActivityForResult(intent, OPEN_PGP_BOUND)
         } else {
@@ -124,7 +124,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 crypto_password_last_changed.text = try {
                     this.resources.getString(R.string.last_changed, lastChangedString)
                 } catch (e: RuntimeException) {
-                    showToast(getString(R.string.get_last_changed_failed))
+                    showSnackbar(getString(R.string.get_last_changed_failed))
                     ""
                 }
             }
@@ -187,8 +187,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     /**
      * Shows a simple toast message
      */
-    private fun showToast(message: String) {
-        runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+    private fun showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT) {
+        runOnUiThread { Snackbar.make(findViewById(android.R.id.content), message, length).show() }
     }
 
     /**
@@ -225,7 +225,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
          */
         val error: OpenPgpError? = result.getParcelableExtra(RESULT_ERROR)
         if (error != null) {
-            showToast("Error from OpenKeyChain : " + error.message)
+            showSnackbar("Error from OpenKeyChain : " + error.message)
             Log.e(TAG, "onError getErrorId:" + error.errorId)
             Log.e(TAG, "onError getMessage:" + error.message)
         }
@@ -423,12 +423,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         if (editName?.isEmpty() == true) {
-            showToast(resources.getString(R.string.file_toast_text))
+            showSnackbar(resources.getString(R.string.file_toast_text))
             return
         }
 
         if (editPass?.isEmpty() == true && editExtra?.isEmpty() == true) {
-            showToast(resources.getString(R.string.empty_toast_text))
+            showSnackbar(resources.getString(R.string.empty_toast_text))
             return
         }
 
@@ -564,7 +564,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         // use Long
                         settings.edit().putStringSet("openpgp_key_ids_set", keys).apply()
 
-                        showToast("PGP keys selected")
+                        showSnackbar("PGP keys selected")
 
                         setResult(RESULT_OK)
                         finish()
@@ -667,22 +667,22 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         if (settings.getBoolean("clear_after_copy", true) && clearAfter != 0) {
             setTimer()
-            showToast(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
+            showSnackbar(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
         } else {
-            showToast(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
+            showSnackbar(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
         }
     }
 
     private fun copyUsernameToClipBoard(username: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
         clipboard.setPrimaryClip(clip)
-        showToast(resources.getString(R.string.clipboard_username_toast_text))
+        showSnackbar(resources.getString(R.string.clipboard_username_toast_text))
     }
 
     private fun copyOtpToClipBoard(code: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
         clipboard.setPrimaryClip(clip)
-        showToast(resources.getString(R.string.clipboard_otp_toast_text))
+        showSnackbar(resources.getString(R.string.clipboard_otp_toast_text))
     }
 
     private fun shareAsPlaintext() {
