@@ -28,11 +28,11 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
@@ -753,7 +753,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 45
             }
 
-            val container = findViewById<LinearLayout>(R.id.crypto_container_decrypt)
+            val container = findViewById<ConstraintLayout>(R.id.crypto_container_decrypt)
             container?.visibility = View.VISIBLE
 
             val extraText = findViewById<TextView>(R.id.crypto_extra_show)
