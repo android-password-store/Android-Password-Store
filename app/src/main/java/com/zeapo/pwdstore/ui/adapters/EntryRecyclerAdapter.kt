@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.ui.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,18 +76,18 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pass = values[position]
         holder.name.text = pass.toString()
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
+            holder.type.visibility = View.GONE
             holder.typeImage.setImageResource(R.drawable.ic_folder_tinted_24dp)
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure)
             holder.name.text = pass.toString()
+            holder.type.visibility = View.VISIBLE
+            holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
         }
-
-        holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
 
         holder.view.setOnClickListener(getOnClickListener(holder, pass))
 
