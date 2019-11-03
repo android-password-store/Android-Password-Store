@@ -215,22 +215,17 @@ open class PasswordRepository protected constructor() {
         @JvmStatic
         fun getPasswords(path: File, rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
             // We need to recover the passwords then parse the files
-            val passList = getFilesList(path)
-
-            if (passList.size == 0) return ArrayList()
-
+            val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
             val passwordList = ArrayList<PasswordItem>()
 
-            for (file in passList) {
-                if (file.isFile) {
-                    if (!file.isHidden) {
-                        passwordList.add(PasswordItem.newPassword(file.name, file, rootDir))
-                    }
+            if (passList.size == 0) return passwordList
+
+            passList.filter { !it.isHidden }.forEach { file ->
+                passwordList.add(if (file.isFile) {
+                    PasswordItem.newPassword(file.name, file, rootDir)
                 } else {
-                    if (!file.isHidden) {
-                        passwordList.add(PasswordItem.newCategory(file.name, file, rootDir))
-                    }
-                }
+                    PasswordItem.newCategory(file.name, file, rootDir)
+                })
             }
             passwordList.sortWith(sortOrder.comparator)
             return passwordList
