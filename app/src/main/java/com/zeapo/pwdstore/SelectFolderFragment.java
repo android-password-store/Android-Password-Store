@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.zeapo.pwdstore.utils.FolderRecyclerAdapter;
+import com.zeapo.pwdstore.ui.adapters.FolderRecyclerAdapter;
 import com.zeapo.pwdstore.utils.PasswordItem;
 import com.zeapo.pwdstore.utils.PasswordRepository;
 import java.io.File;

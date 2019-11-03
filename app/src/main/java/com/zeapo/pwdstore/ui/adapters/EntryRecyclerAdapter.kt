@@ -2,7 +2,7 @@
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package com.zeapo.pwdstore.utils
+package com.zeapo.pwdstore.ui.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.widget.MultiselectableLinearLayout
 
 import java.util.ArrayList

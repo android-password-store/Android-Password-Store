@@ -2,11 +2,12 @@
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package com.zeapo.pwdstore.utils
+package com.zeapo.pwdstore.ui.adapters
 
 import android.view.View
 
 import com.zeapo.pwdstore.SelectFolderFragment
+import com.zeapo.pwdstore.utils.PasswordItem
 
 import java.util.ArrayList
 
