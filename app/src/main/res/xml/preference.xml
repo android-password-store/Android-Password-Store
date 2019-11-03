@@ -91,7 +91,7 @@
             android:entries="@array/sort_order_entries"
             android:entryValues="@array/sort_order_values"
             android:persistent="true" />
-        <androidx.preference.SwitchPreference
+        <androidx.preference.SwitchPreferenceCompat
             android:key="biometric_auth"
             android:title="@string/biometric_auth_title"
             android:summary="@string/biometric_auth_summary" />

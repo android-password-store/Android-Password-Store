@@ -27,7 +27,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import androidx.preference.SwitchPreference
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
@@ -267,7 +267,7 @@ class UserPreference : AppCompatActivity() {
                         }
                     }
 
-            findPreference<SwitchPreference>("biometric_auth")?.apply {
+            findPreference<SwitchPreferenceCompat>("biometric_auth")?.apply {
                 val isFingerprintSupported = BiometricManager.from(requireContext()).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
                 if (!isFingerprintSupported) {
                     isEnabled = false
