@@ -38,21 +38,15 @@ import java.util.Stack
 
 class SelectFolderFragment : Fragment() {
     // store the pass files list in a stack
-    private lateinit var pathStack: Stack<File>
+    private var pathStack: Stack<File> = Stack()
     private lateinit var recyclerAdapter: FolderRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var mListener: OnFragmentInteractionListener
+    private lateinit var listener: OnFragmentInteractionListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val path = requireArguments().getString("Path")
-        pathStack = Stack()
-        recyclerAdapter = FolderRecyclerAdapter(
-                mListener,
-                getPasswords(
-                        File(path),
-                        getRepositoryDirectory(requireActivity())!!,
-                        sortOrder))
+        val path = requireNotNull(requireArguments().getString("Path"))
+        recyclerAdapter = FolderRecyclerAdapter(listener, getPasswords(File(path), getRepositoryDirectory(requireActivity()), sortOrder))
     }
 
     override fun onCreateView(
@@ -78,18 +72,18 @@ class SelectFolderFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-            mListener = object : OnFragmentInteractionListener {
+            listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
                         // push the category were we're going
                         pathStack.push(item.file)
                         recyclerView.scrollToPosition(0)
                         recyclerAdapter.clear()
-                        recyclerAdapter.addAll(
-                                getPasswords(
-                                        item.file,
-                                        getRepositoryDirectory(context)!!,
-                                        sortOrder))
+                        recyclerAdapter.addAll(getPasswords(
+                                item.file,
+                                getRepositoryDirectory(context),
+                                sortOrder)
+                        )
                         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     }
                 }
