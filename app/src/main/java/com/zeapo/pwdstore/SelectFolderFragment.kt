@@ -28,11 +28,8 @@ import java.util.Stack
 /**
  * A fragment representing a list of Items.
  *
- *
  * Large screen devices (such as tablets) are supported by replacing the ListView with a
  * GridView.
- *
- *
  *
  */
 

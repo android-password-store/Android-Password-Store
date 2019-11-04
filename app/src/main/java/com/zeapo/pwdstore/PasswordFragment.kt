@@ -30,19 +30,12 @@ import java.util.Stack
 /**
  * A fragment representing a list of Items.
  *
- *
  * Large screen devices (such as tablets) are supported by replacing the ListView with a
  * GridView.
  *
- *
- *
  */
-class PasswordFragment
-/**
- * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon
- * screen orientation changes).
- */
-    : Fragment() {
+
+class PasswordFragment : Fragment() {
     // store the pass files list in a stack
     private var passListStack: Stack<ArrayList<PasswordItem>> = Stack()
     private var pathStack: Stack<File> = Stack()
