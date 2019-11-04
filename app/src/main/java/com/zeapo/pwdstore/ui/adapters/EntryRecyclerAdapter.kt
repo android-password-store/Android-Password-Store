@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
-import com.zeapo.pwdstore.widget.MultiselectableLinearLayout
+import com.zeapo.pwdstore.widget.MultiselectableConstraintLayout
 import java.io.File
 import java.util.ArrayList
 import java.util.TreeSet
@@ -103,7 +103,7 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
         // after removal, everything is rebound for some reason; views are shuffled?
         val selected = selectedItems.contains(position)
         holder.view.isSelected = selected
-        (holder.itemView as MultiselectableLinearLayout).setMultiSelected(selected)
+        (holder.itemView as MultiselectableConstraintLayout).setMultiSelected(selected)
     }
 
     protected abstract fun getOnClickListener(holder: ViewHolder, pass: PasswordItem): View.OnClickListener
