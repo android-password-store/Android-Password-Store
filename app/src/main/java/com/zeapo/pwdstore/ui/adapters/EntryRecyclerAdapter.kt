@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.widget.MultiselectableLinearLayout
-
 import java.util.ArrayList
 import java.util.TreeSet
 
@@ -82,11 +80,13 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
             holder.type.visibility = View.GONE
             holder.typeImage.setImageResource(R.drawable.ic_folder_tinted_24dp)
+            holder.folderIndicator.visibility = View.VISIBLE
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure)
             holder.name.text = pass.toString()
             holder.type.visibility = View.VISIBLE
             holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            holder.folderIndicator.visibility = View.GONE
         }
 
         holder.view.setOnClickListener(getOnClickListener(holder, pass))
@@ -122,5 +122,6 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
         val name: AppCompatTextView = view.findViewById(R.id.label)
         val type: AppCompatTextView = view.findViewById(R.id.type)
         val typeImage: AppCompatImageView = view.findViewById(R.id.type_image)
+        val folderIndicator: AppCompatImageView = view.findViewById(R.id.folder_indicator)
     }
 }
