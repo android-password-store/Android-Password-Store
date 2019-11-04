@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.widget.MultiselectableLinearLayout
+import java.io.File
 import java.util.ArrayList
 import java.util.TreeSet
 
@@ -81,11 +82,17 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
             holder.type.visibility = View.GONE
             holder.typeImage.setImageResource(R.drawable.ic_folder_tinted_24dp)
             holder.folderIndicator.visibility = View.VISIBLE
+            val childCount = (pass.file.list { current, name -> File(current, name).isFile } ?: emptyArray<File>()).size
+            if (childCount > 0) {
+                holder.childCount.visibility = View.VISIBLE
+                holder.childCount.text = "$childCount"
+            }
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure)
             holder.name.text = pass.toString()
             holder.type.visibility = View.VISIBLE
             holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            holder.childCount.visibility = View.GONE
             holder.folderIndicator.visibility = View.GONE
         }
 
@@ -122,6 +129,7 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
         val name: AppCompatTextView = view.findViewById(R.id.label)
         val type: AppCompatTextView = view.findViewById(R.id.type)
         val typeImage: AppCompatImageView = view.findViewById(R.id.type_image)
+        val childCount: AppCompatTextView = view.findViewById(R.id.child_count)
         val folderIndicator: AppCompatImageView = view.findViewById(R.id.folder_indicator)
     }
 }
