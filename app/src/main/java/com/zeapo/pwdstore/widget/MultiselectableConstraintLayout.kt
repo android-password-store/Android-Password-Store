@@ -7,15 +7,15 @@ package com.zeapo.pwdstore.widget
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.zeapo.pwdstore.R
 
-class MultiselectableLinearLayout @JvmOverloads constructor(
+class MultiselectableConstraintLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
+) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
     private var multiselected: Boolean = false
 
     override fun onCreateDrawableState(extraSpace: Int): IntArray {
@@ -30,14 +30,6 @@ class MultiselectableLinearLayout @JvmOverloads constructor(
     fun setMultiSelected(on: Boolean) {
         if (!multiselected) {
             multiselected = true
-            refreshDrawableState()
-        }
-        isActivated = on
-    }
-
-    fun setSingleSelected(on: Boolean) {
-        if (multiselected) {
-            multiselected = false
             refreshDrawableState()
         }
         isActivated = on
