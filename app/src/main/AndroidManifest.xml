@@ -41,17 +41,9 @@
 
         <activity
             android:name=".UserPreference"
-            android:parentActivityName=".PasswordStore">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+            android:parentActivityName=".PasswordStore" />
 
-        <activity android:name=".SshKeyGen">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+        <activity android:name=".SshKeyGen" />
 
         <service
             android:name=".autofill.AutofillService"
@@ -69,17 +61,9 @@
             android:documentLaunchMode="intoExisting"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+            tools:ignore="UnusedAttribute" />
 
-        <activity android:name=".autofill.AutofillPreferenceActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+        <activity android:name=".autofill.AutofillPreferenceActivity" />
 
         <activity
             android:name=".crypto.PgpActivity"
