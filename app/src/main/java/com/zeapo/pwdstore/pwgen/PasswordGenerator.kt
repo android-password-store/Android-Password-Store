@@ -6,7 +6,6 @@ package com.zeapo.pwdstore.pwgen
 
 import android.content.Context
 import com.zeapo.pwdstore.R
-
 import java.util.ArrayList
 
 object PasswordGenerator {

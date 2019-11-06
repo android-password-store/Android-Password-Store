@@ -14,9 +14,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.utils.splitLines
-import org.eclipse.jgit.util.StringUtils
 import java.util.ArrayList
 import java.util.Arrays
+import org.eclipse.jgit.util.StringUtils
 
 // blank activity started by service for calling startIntentSenderForResult
 class AutofillActivity : AppCompatActivity() {

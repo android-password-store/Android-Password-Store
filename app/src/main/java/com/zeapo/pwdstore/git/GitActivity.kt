@@ -27,11 +27,11 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
-import org.apache.commons.io.FileUtils
-import org.eclipse.jgit.lib.Constants
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
+import org.apache.commons.io.FileUtils
+import org.eclipse.jgit.lib.Constants
 
 open class GitActivity : AppCompatActivity() {
     private lateinit var context: Context

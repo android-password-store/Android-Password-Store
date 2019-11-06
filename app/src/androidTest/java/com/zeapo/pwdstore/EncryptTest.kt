@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.zeapo.pwdstore
 
 import android.annotation.SuppressLint
@@ -15,13 +19,12 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.zeapo.pwdstore.crypto.PgpActivity
+import java.io.File
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.File
-
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -80,6 +83,3 @@ class EncryptTest {
         assert(File("$path/$name.gpg").exists())
     }
 }
-
-
-

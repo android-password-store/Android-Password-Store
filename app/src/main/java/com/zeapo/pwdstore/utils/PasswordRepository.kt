@@ -7,6 +7,9 @@ package com.zeapo.pwdstore.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import java.io.File
+import java.io.FileFilter
+import java.util.Comparator
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
@@ -14,9 +17,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
-import java.io.File
-import java.io.FileFilter
-import java.util.Comparator
 
 open class PasswordRepository protected constructor() {
 
@@ -138,30 +138,20 @@ open class PasswordRepository protected constructor() {
         }
 
         @JvmStatic
-        fun getRepositoryDirectory(context: Context): File? {
-            var dir: File? = null
+        fun getRepositoryDirectory(context: Context): File {
             val settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-
-            if (settings.getBoolean("git_external", false)) {
+            return if (settings.getBoolean("git_external", false)) {
                 val externalRepo = settings.getString("git_external_repo", null)
-                if (externalRepo != null) {
-                    dir = File(externalRepo)
-                }
+                File(requireNotNull(externalRepo))
             } else {
-                dir = File(context.filesDir.toString() + "/store")
+                File(context.filesDir.toString() + "/store")
             }
-
-            return dir
         }
 
         @JvmStatic
         fun initialize(context: Context): Repository? {
             val dir = getRepositoryDirectory(context)
             val settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-
-            if (dir == null) {
-                return null
-            }
 
             // uninitialize the repo if the dir does not exist or is absolutely empty
             if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
@@ -215,22 +205,17 @@ open class PasswordRepository protected constructor() {
         @JvmStatic
         fun getPasswords(path: File, rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
             // We need to recover the passwords then parse the files
-            val passList = getFilesList(path)
-
-            if (passList.size == 0) return ArrayList()
-
+            val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
             val passwordList = ArrayList<PasswordItem>()
 
-            for (file in passList) {
-                if (file.isFile) {
-                    if (!file.isHidden) {
-                        passwordList.add(PasswordItem.newPassword(file.name, file, rootDir))
-                    }
+            if (passList.size == 0) return passwordList
+
+            passList.filter { !it.isHidden }.forEach { file ->
+                passwordList.add(if (file.isFile) {
+                    PasswordItem.newPassword(file.name, file, rootDir)
                 } else {
-                    if (!file.isHidden) {
-                        passwordList.add(PasswordItem.newCategory(file.name, file, rootDir))
-                    }
-                }
+                    PasswordItem.newCategory(file.name, file, rootDir)
+                })
             }
             passwordList.sortWith(sortOrder.comparator)
             return passwordList

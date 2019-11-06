@@ -1,7 +1,10 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.zeapo.pwdstore;
 
 import com.zeapo.pwdstore.utils.Otp;
-
 import junit.framework.TestCase;
 
 public class OtpTest extends TestCase {

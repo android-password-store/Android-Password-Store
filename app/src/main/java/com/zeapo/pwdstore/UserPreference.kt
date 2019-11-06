@@ -27,7 +27,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import androidx.preference.SwitchPreference
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
@@ -35,8 +35,6 @@ import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
-import org.apache.commons.io.FileUtils
-import org.openintents.openpgp.util.OpenPgpUtils
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -44,6 +42,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.HashSet
 import java.util.TimeZone
+import org.apache.commons.io.FileUtils
+import org.openintents.openpgp.util.OpenPgpUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -267,7 +267,7 @@ class UserPreference : AppCompatActivity() {
                         }
                     }
 
-            findPreference<SwitchPreference>("biometric_auth")?.apply {
+            findPreference<SwitchPreferenceCompat>("biometric_auth")?.apply {
                 val isFingerprintSupported = BiometricManager.from(requireContext()).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
                 if (!isFingerprintSupported) {
                     isEnabled = false

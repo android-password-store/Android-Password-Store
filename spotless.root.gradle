@@ -1,0 +1,15 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+apply plugin: 'com.diffplug.gradle.spotless'
+
+spotless {
+    groovyGradle {
+        target '**/*.gradle', '*.gradle'
+        licenseHeaderFile 'spotless.license', 'import|tasks|apply|plugins|include|buildscript|ext|android'
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+}

@@ -7,9 +7,9 @@ package com.zeapo.pwdstore.git
 import android.app.Activity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PushCommand
-import java.io.File
 
 /**
  * Creates a new git operation

@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.zeapo.pwdstore;
 
 import junit.framework.TestCase;
@@ -27,9 +31,14 @@ public class PasswordEntryTest extends TestCase {
     }
 
     public void testGetUsername() {
-        assertEquals("username", new PasswordEntry("secret\nextra\nlogin: username\ncontent\n").getUsername());
-        assertEquals("username", new PasswordEntry("\nextra\nusername: username\ncontent\n").getUsername());
-        assertEquals("username", new PasswordEntry("\nUSERNaMe:  username\ncontent\n").getUsername());
+        assertEquals(
+                "username",
+                new PasswordEntry("secret\nextra\nlogin: username\ncontent\n").getUsername());
+        assertEquals(
+                "username",
+                new PasswordEntry("\nextra\nusername: username\ncontent\n").getUsername());
+        assertEquals(
+                "username", new PasswordEntry("\nUSERNaMe:  username\ncontent\n").getUsername());
         assertEquals("username", new PasswordEntry("\nLOGiN:username").getUsername());
         assertNull(new PasswordEntry("secret\nextra\ncontent\n").getUsername());
     }
@@ -55,7 +64,9 @@ public class PasswordEntryTest extends TestCase {
     }
 
     public void testTotpUriInContent() {
-        PasswordEntry entry = new PasswordEntry("secret\nusername: test\notpauth://totp/test?secret=JBSWY3DPEHPK3PXP");
+        PasswordEntry entry =
+                new PasswordEntry(
+                        "secret\nusername: test\notpauth://totp/test?secret=JBSWY3DPEHPK3PXP");
         assertTrue(entry.hasTotp());
         assertEquals("JBSWY3DPEHPK3PXP", entry.getTotpSecret());
     }
@@ -68,14 +79,17 @@ public class PasswordEntryTest extends TestCase {
     }
 
     public void testHotpUriInPassword() {
-        PasswordEntry entry = new PasswordEntry("otpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25");
+        PasswordEntry entry =
+                new PasswordEntry("otpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25");
         assertTrue(entry.hasHotp());
         assertEquals("JBSWY3DPEHPK3PXP", entry.getHotpSecret());
-        assertEquals(new Long(25 ), entry.getHotpCounter());
+        assertEquals(new Long(25), entry.getHotpCounter());
     }
 
     public void testHotpUriInContent() {
-        PasswordEntry entry = new PasswordEntry("secret\nusername: test\notpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25");
+        PasswordEntry entry =
+                new PasswordEntry(
+                        "secret\nusername: test\notpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25");
         assertTrue(entry.hasHotp());
         assertEquals("JBSWY3DPEHPK3PXP", entry.getHotpSecret());
         assertEquals(new Long(25), entry.getHotpCounter());
