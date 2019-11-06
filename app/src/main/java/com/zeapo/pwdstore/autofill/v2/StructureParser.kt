@@ -10,9 +10,7 @@ import android.os.Build
 import android.text.InputType
 import android.view.View
 import android.view.autofill.AutofillId
-
 import androidx.annotation.RequiresApi
-
 import java.util.ArrayList
 
 /**

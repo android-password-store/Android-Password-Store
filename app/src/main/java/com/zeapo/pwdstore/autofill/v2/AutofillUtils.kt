@@ -7,10 +7,10 @@ package com.zeapo.pwdstore.autofill.v2
 import android.content.Context
 import android.os.Build
 import android.service.autofill.Dataset
+import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import com.zeapo.pwdstore.R
-import android.view.autofill.AutofillValue
 
 @RequiresApi(Build.VERSION_CODES.O)
 object AutofillUtils {

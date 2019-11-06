@@ -7,32 +7,32 @@ package com.zeapo.pwdstore.autofill.v2.ui
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.PendingIntent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.WindowManager
-import com.zeapo.pwdstore.R
-import android.service.autofill.FillResponse
-import com.zeapo.pwdstore.autofill.v2.StructureParser
-import android.view.autofill.AutofillManager
 import android.app.assist.AssistStructure
 import android.content.Context
-import com.zeapo.pwdstore.autofill.v2.AutofillUtils
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
+import android.os.Build
+import android.os.Bundle
+import android.service.autofill.FillResponse
+import android.view.WindowManager
+import android.view.autofill.AutofillManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
+import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.autofill.v2.AutofillUtils
+import com.zeapo.pwdstore.autofill.v2.StructureParser
 import com.zeapo.pwdstore.autofill.v2.ui.holder.PasswordViewHolder
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.afterTextChanged
-import kotlinx.android.synthetic.main.activity_auto_fill_filter_view.*
 import java.io.File
+import kotlinx.android.synthetic.main.activity_auto_fill_filter_view.*
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {

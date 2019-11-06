@@ -10,13 +10,13 @@ import android.service.autofill.AutofillService
 import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
-import android.service.autofill.SaveRequest
 import android.service.autofill.SaveCallback
+import android.service.autofill.SaveRequest
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.autofill.v2.ui.AutofillFilterView
-import android.util.Log
 import com.zeapo.pwdstore.autofill.v2.AutofillUtils.getAutocompleteEntry
+import com.zeapo.pwdstore.autofill.v2.ui.AutofillFilterView
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PasswordAutofillService : AutofillService() {

@@ -4,12 +4,11 @@
  */
 package com.zeapo.pwdstore.utils
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
-
-import android.content.Context
 import android.util.TypedValue
+import android.widget.EditText
 
 fun String.splitLines(): Array<String> {
     return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
