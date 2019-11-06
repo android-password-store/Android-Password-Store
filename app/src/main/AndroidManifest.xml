@@ -38,20 +38,12 @@
         </activity>
 
         <activity android:name=".git.GitActivity" />
+
         <activity
             android:name=".UserPreference"
-            android:parentActivityName=".PasswordStore">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
-        <activity
-            android:name=".SshKeyGen"
-            android:parentActivityName=".PasswordStore">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
+            android:parentActivityName=".PasswordStore" />
+
+        <activity android:name=".SshKeyGen" />
 
         <service
             android:name=".autofill.AutofillService"
@@ -64,6 +56,20 @@
                 android:resource="@xml/autofill_config" />
         </service>
 
+        <activity
+            android:name=".autofill.AutofillActivity"
+            android:documentLaunchMode="intoExisting"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme"
+            tools:ignore="UnusedAttribute" />
+
+        <activity android:name=".autofill.AutofillPreferenceActivity" />
+
+        <activity
+            android:name=".crypto.PgpActivity"
+            android:parentActivityName=".PasswordStore" />
+        <activity android:name=".SelectFolderActivity" />
+
         <service
             android:name=".autofill.v2.PasswordAutofillService"
             android:label="@string/app_name"
@@ -74,33 +80,13 @@
         </service>
 
         <activity
-            android:name=".autofill.AutofillActivity"
-            android:documentLaunchMode="intoExisting"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppTheme"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
-        <activity
-            android:name=".autofill.AutofillPreferenceActivity"
-            android:parentActivityName=".PasswordStore">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zeapo.pwdstore.PasswordStore" />
-        </activity>
-        <activity
-            android:name=".crypto.PgpActivity"
-            android:parentActivityName=".PasswordStore" />
-        <activity android:name=".SelectFolderActivity" />
-        <activity
             android:name=".autofill.v2.ui.AutofillFilterView"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:taskAffinity=".view.AuthActivity"
             android:windowSoftInputMode="adjustNothing"
             android:theme="@style/NoBackgroundTheme" />
+
     </application>
 
 </manifest>

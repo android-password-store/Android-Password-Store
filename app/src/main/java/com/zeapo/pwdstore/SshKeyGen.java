@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -59,6 +60,16 @@ public class SshKeyGen extends AppCompatActivity {
                     .replace(android.R.id.content, new SshKeyGenFragment())
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // The back arrow in the action bar should act the same as the back button.
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
