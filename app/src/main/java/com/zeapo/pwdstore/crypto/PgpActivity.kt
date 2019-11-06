@@ -40,6 +40,11 @@ import com.zeapo.pwdstore.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.utils.Otp
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.nio.charset.Charset
+import java.util.Date
 import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
@@ -59,11 +64,6 @@ import org.openintents.openpgp.util.OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQU
 import org.openintents.openpgp.util.OpenPgpApi.RESULT_ERROR
 import org.openintents.openpgp.util.OpenPgpApi.RESULT_INTENT
 import org.openintents.openpgp.util.OpenPgpServiceConnection
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.nio.charset.Charset
-import java.util.Date
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard: ClipboardManager by lazy {

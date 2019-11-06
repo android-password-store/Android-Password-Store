@@ -35,8 +35,6 @@ import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
-import org.apache.commons.io.FileUtils
-import org.openintents.openpgp.util.OpenPgpUtils
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -44,6 +42,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.HashSet
 import java.util.TimeZone
+import org.apache.commons.io.FileUtils
+import org.openintents.openpgp.util.OpenPgpUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener

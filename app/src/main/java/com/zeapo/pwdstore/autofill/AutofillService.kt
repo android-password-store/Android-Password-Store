@@ -30,11 +30,6 @@ import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.splitLines
-import org.apache.commons.io.FileUtils
-import org.openintents.openpgp.IOpenPgpService2
-import org.openintents.openpgp.OpenPgpError
-import org.openintents.openpgp.util.OpenPgpApi
-import org.openintents.openpgp.util.OpenPgpServiceConnection
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -44,6 +39,11 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
+import org.apache.commons.io.FileUtils
+import org.openintents.openpgp.IOpenPgpService2
+import org.openintents.openpgp.OpenPgpError
+import org.openintents.openpgp.util.OpenPgpApi
+import org.openintents.openpgp.util.OpenPgpServiceConnection
 
 class AutofillService : AccessibilityService() {
     private var serviceConnection: OpenPgpServiceConnection? = null

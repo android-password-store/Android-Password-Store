@@ -8,12 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.view.ActionMode
-
 import com.zeapo.pwdstore.PasswordFragment
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
-
 import java.util.ArrayList
 import java.util.TreeSet
 

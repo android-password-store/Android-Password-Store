@@ -24,11 +24,11 @@ import com.zeapo.pwdstore.git.config.GitConfigSessionFactory
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
+import java.io.File
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
-import java.io.File
 
 /**
  * Creates a new git operation

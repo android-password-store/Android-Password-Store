@@ -5,10 +5,8 @@
 package com.zeapo.pwdstore.ui.adapters
 
 import android.view.View
-
 import com.zeapo.pwdstore.SelectFolderFragment
 import com.zeapo.pwdstore.utils.PasswordItem
-
 import java.util.ArrayList
 
 class FolderRecyclerAdapter(

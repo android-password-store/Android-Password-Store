@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore
 
 import android.net.Uri
-
 import java.io.ByteArrayOutputStream
 import java.io.UnsupportedEncodingException
 

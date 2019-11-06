@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.zeapo.pwdstore
 
 import android.annotation.SuppressLint
@@ -11,6 +15,10 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.zeapo.pwdstore.crypto.PgpActivity
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.nio.charset.StandardCharsets
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
@@ -23,11 +31,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.nio.charset.StandardCharsets
-
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -121,7 +124,7 @@ class DecryptTest {
         SystemClock.sleep(4000)
 
         // The clipboard should be cleared!!
-        for(i in 0..clipboard.primaryClip.itemCount) {
+        for (i in 0..clipboard.primaryClip.itemCount) {
             assertEquals("", clipboard.primaryClip.getItemAt(i).text)
         }
 
@@ -161,8 +164,4 @@ class DecryptTest {
             }
         }
     }
-
 }
-
-
-
