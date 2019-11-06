@@ -14,8 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.NavUtils
-import androidx.core.app.TaskStackBuilder
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -86,18 +84,10 @@ class AutofillPreferenceActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // in service, we CLEAR_TASK. then we set the recreate flag.
         // something of a hack, but w/o CLEAR_TASK, behaviour was unpredictable
-        if (item.itemId == android.R.id.home) {
-            val upIntent = NavUtils.getParentActivityIntent(this)
-            if (recreate) {
-                TaskStackBuilder.create(this)
-                        .addNextIntentWithParentStack(upIntent!!)
-                        .startActivities()
-            } else {
-                NavUtils.navigateUpTo(this, upIntent!!)
-            }
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+        return if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     fun showDialog(packageName: String?, appName: String?, isWeb: Boolean) {

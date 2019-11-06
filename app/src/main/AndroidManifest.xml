@@ -47,9 +47,7 @@
                 android:value="com.zeapo.pwdstore.PasswordStore" />
         </activity>
 
-        <activity
-            android:name=".SshKeyGen"
-            android:parentActivityName=".PasswordStore">
+        <activity android:name=".SshKeyGen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zeapo.pwdstore.PasswordStore" />
@@ -77,9 +75,7 @@
                 android:value="com.zeapo.pwdstore.PasswordStore" />
         </activity>
 
-        <activity
-            android:name=".autofill.AutofillPreferenceActivity"
-            android:parentActivityName=".PasswordStore">
+        <activity android:name=".autofill.AutofillPreferenceActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zeapo.pwdstore.PasswordStore" />
