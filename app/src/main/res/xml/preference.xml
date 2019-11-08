@@ -40,11 +40,9 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_crypto_title">
-        <!-- TODO(msf): Update the damn library and re-enable this
-        <org.openintents.openpgp.util.OpenPgpAppPreference
+        <org.openintents.openpgp.util.OpenPgpAppPreference2
             android:key="openpgp_provider_list"
             android:title="@string/pref_provider_title" />
-        -->
         <androidx.preference.Preference
             android:key="openpgp_key_id_pref"
             android:title="@string/pref_key_title" />
