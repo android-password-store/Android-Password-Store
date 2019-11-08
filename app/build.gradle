@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.google.android.material:material:' + versions.material
     implementation 'androidx.annotation:annotation:' + versions.annotation
     implementation 'androidx.biometric:biometric:' + versions.biometric
-    implementation 'com.github.msfjarvis:openpgp-api:' + versions.openpgp
+    implementation 'com.github.msfjarvis:openpgp-ktx:' + versions.openpgp
     implementation('org.eclipse.jgit:org.eclipse.jgit:' + versions.jgit) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }

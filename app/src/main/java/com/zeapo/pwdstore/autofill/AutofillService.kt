@@ -39,11 +39,11 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
+import me.msfjarvis.openpgpktx.OpenPgpError
+import me.msfjarvis.openpgpktx.util.OpenPgpApi
+import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
-import org.openintents.openpgp.OpenPgpError
-import org.openintents.openpgp.util.OpenPgpApi
-import org.openintents.openpgp.util.OpenPgpServiceConnection
 
 class AutofillService : AccessibilityService() {
     private var serviceConnection: OpenPgpServiceConnection? = null
@@ -197,11 +197,10 @@ class AutofillService : AccessibilityService() {
 
             // get the app name and find a corresponding password
             val packageManager = packageManager
-            var applicationInfo: ApplicationInfo?
-            try {
-                applicationInfo = packageManager.getApplicationInfo(event.packageName.toString(), 0)
+            val applicationInfo: ApplicationInfo? = try {
+                packageManager.getApplicationInfo(event.packageName.toString(), 0)
             } catch (e: PackageManager.NameNotFoundException) {
-                applicationInfo = null
+                null
             }
 
             appName = (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "").toString()
@@ -494,10 +493,10 @@ class AutofillService : AccessibilityService() {
 
         val os = ByteArrayOutputStream()
 
-        val api = OpenPgpApi(this@AutofillService, serviceConnection!!.service)
+        val api = OpenPgpApi(this@AutofillService, serviceConnection!!.service!!)
         // TODO we are dropping frames, (did we before??) find out why and maybe make this async
         val result = api.executeApi(data, `is`, os)
-        when (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+        when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
             OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 try {
                     val entry = PasswordEntry(os)
@@ -568,12 +567,12 @@ class AutofillService : AccessibilityService() {
     }
 
     private inner class OnBoundListener : OpenPgpServiceConnection.OnBound {
-        override fun onBound(service: IOpenPgpService2) {
+        override fun onBound(service: IOpenPgpService2?) {
             decryptAndVerify()
         }
 
-        override fun onError(e: Exception) {
-            e.printStackTrace()
+        override fun onError(e: Exception?) {
+            e?.printStackTrace()
         }
     }
 

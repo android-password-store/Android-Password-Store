@@ -40,7 +40,7 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_crypto_title">
-        <org.openintents.openpgp.util.OpenPgpAppPreference2
+        <me.msfjarvis.openpgpktx.preference.OpenPgpAppPreference
             android:key="openpgp_provider_list"
             android:title="@string/pref_provider_title" />
         <androidx.preference.Preference
