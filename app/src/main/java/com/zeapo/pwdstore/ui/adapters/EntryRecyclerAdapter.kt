@@ -88,7 +88,7 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
                 holder.childCount.text = "$childCount"
             }
         } else {
-            holder.typeImage.setImageResource(R.drawable.ic_action_secure)
+            holder.typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
             holder.name.text = pass.toString()
             holder.type.visibility = View.VISIBLE
             holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
