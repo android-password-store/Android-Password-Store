@@ -80,7 +80,7 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
         holder.name.text = pass.toString()
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
             holder.type.visibility = View.GONE
-            holder.typeImage.setImageResource(R.drawable.ic_multiple_files_tinted_24dp)
+            holder.typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
             holder.folderIndicator.visibility = View.VISIBLE
             val childCount = (pass.file.list { current, name -> File(current, name).isFile } ?: emptyArray<File>()).size
             if (childCount > 0) {
