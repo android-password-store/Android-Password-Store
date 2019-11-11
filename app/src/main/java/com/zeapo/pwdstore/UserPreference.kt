@@ -42,8 +42,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.HashSet
 import java.util.TimeZone
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.apache.commons.io.FileUtils
-import org.openintents.openpgp.util.OpenPgpUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener

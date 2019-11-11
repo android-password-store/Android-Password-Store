@@ -51,19 +51,19 @@ import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_file_edit
 import kotlinx.android.synthetic.main.encrypt_layout.generate_password
+import me.msfjarvis.openpgpktx.OpenPgpError
+import me.msfjarvis.openpgpktx.util.OpenPgpApi
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.ACTION_DECRYPT_VERIFY
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE_ERROR
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE_SUCCESS
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE_USER_INTERACTION_REQUIRED
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_ERROR
+import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_INTENT
+import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
-import org.openintents.openpgp.OpenPgpError
-import org.openintents.openpgp.util.OpenPgpApi
-import org.openintents.openpgp.util.OpenPgpApi.ACTION_DECRYPT_VERIFY
-import org.openintents.openpgp.util.OpenPgpApi.RESULT_CODE
-import org.openintents.openpgp.util.OpenPgpApi.RESULT_CODE_ERROR
-import org.openintents.openpgp.util.OpenPgpApi.RESULT_CODE_SUCCESS
-import org.openintents.openpgp.util.OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED
-import org.openintents.openpgp.util.OpenPgpApi.RESULT_ERROR
-import org.openintents.openpgp.util.OpenPgpApi.RESULT_INTENT
-import org.openintents.openpgp.util.OpenPgpServiceConnection
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard: ClipboardManager by lazy {
@@ -226,13 +226,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val error: OpenPgpError? = result.getParcelableExtra(RESULT_ERROR)
         if (error != null) {
             showSnackbar("Error from OpenKeyChain : " + error.message)
-            Log.e(TAG, "onError getErrorId:" + error.errorId)
+            Log.e(TAG, "onError getErrorId:" + error.message)
             Log.e(TAG, "onError getMessage:" + error.message)
         }
     }
 
     private fun initOpenPgpApi() {
-        api = api ?: OpenPgpApi(this, mServiceConnection?.service)
+        api = api ?: OpenPgpApi(this, mServiceConnection!!.service!!)
     }
 
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
@@ -242,173 +242,175 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = FileUtils.openInputStream(File(fullPath))
         val oStream = ByteArrayOutputStream()
 
-        api?.executeApiAsync(data, iStream, oStream) { result: Intent? ->
-            when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
-                RESULT_CODE_SUCCESS -> {
-                    try {
-                        val showPassword = settings.getBoolean("show_password", true)
-                        val showExtraContent = settings.getBoolean("show_extra_content", true)
+        api?.executeApiAsync(data, iStream, oStream, object : OpenPgpApi.IOpenPgpCallback {
+            override fun onReturn(result: Intent?) {
+                when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
+                    RESULT_CODE_SUCCESS -> {
+                        try {
+                            val showPassword = settings.getBoolean("show_password", true)
+                            val showExtraContent = settings.getBoolean("show_extra_content", true)
 
-                        crypto_container_decrypt.visibility = View.VISIBLE
+                            crypto_container_decrypt.visibility = View.VISIBLE
 
-                        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
-                        val entry = PasswordEntry(oStream)
+                            val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
+                            val entry = PasswordEntry(oStream)
 
-                        passwordEntry = entry
+                            passwordEntry = entry
 
-                        if (intent.getStringExtra("OPERATION") == "EDIT") {
-                            editPassword()
-                            return@executeApiAsync
-                        }
+                            if (intent.getStringExtra("OPERATION") == "EDIT") {
+                                editPassword()
+                                return
+                            }
 
-                        if (entry.password.isEmpty()) {
-                            crypto_password_show.visibility = View.GONE
-                            crypto_password_show_label.visibility = View.GONE
-                        } else {
-                            crypto_password_show.visibility = View.VISIBLE
-                            crypto_password_show_label.visibility = View.VISIBLE
+                            if (entry.password.isEmpty()) {
+                                crypto_password_show.visibility = View.GONE
+                                crypto_password_show_label.visibility = View.GONE
+                            } else {
+                                crypto_password_show.visibility = View.VISIBLE
+                                crypto_password_show_label.visibility = View.VISIBLE
+                                crypto_password_show.typeface = monoTypeface
+                                crypto_password_show.text = entry.password
+                            }
                             crypto_password_show.typeface = monoTypeface
                             crypto_password_show.text = entry.password
-                        }
-                        crypto_password_show.typeface = monoTypeface
-                        crypto_password_show.text = entry.password
 
-                        crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
-                        crypto_password_show.transformationMethod = if (showPassword) {
-                            null
-                        } else {
-                            HoldToShowPasswordTransformation(
-                                    crypto_password_toggle_show,
-                                    Runnable { crypto_password_show.text = entry.password }
-                            )
-                        }
-
-                        if (entry.hasExtraContent()) {
-                            crypto_extra_show.typeface = monoTypeface
-                            crypto_extra_show.text = entry.extraContent
-
-                            if (showExtraContent) {
-                                crypto_extra_show_layout.visibility = View.VISIBLE
-                                crypto_extra_toggle_show.visibility = View.GONE
-                                crypto_extra_show.transformationMethod = null
+                            crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
+                            crypto_password_show.transformationMethod = if (showPassword) {
+                                null
                             } else {
-                                crypto_extra_show_layout.visibility = View.GONE
-                                crypto_extra_toggle_show.visibility = View.VISIBLE
-                                crypto_extra_toggle_show.setOnCheckedChangeListener { _, _ ->
-                                    crypto_extra_show.text = entry.extraContent
-                                }
+                                HoldToShowPasswordTransformation(
+                                        crypto_password_toggle_show,
+                                        Runnable { crypto_password_show.text = entry.password }
+                                )
+                            }
 
-                                crypto_extra_show.transformationMethod = object : PasswordTransformationMethod() {
-                                    override fun getTransformation(source: CharSequence, view: View): CharSequence {
-                                        return if (crypto_extra_toggle_show.isChecked) source else super.getTransformation(source, view)
+                            if (entry.hasExtraContent()) {
+                                crypto_extra_show.typeface = monoTypeface
+                                crypto_extra_show.text = entry.extraContent
+
+                                if (showExtraContent) {
+                                    crypto_extra_show_layout.visibility = View.VISIBLE
+                                    crypto_extra_toggle_show.visibility = View.GONE
+                                    crypto_extra_show.transformationMethod = null
+                                } else {
+                                    crypto_extra_show_layout.visibility = View.GONE
+                                    crypto_extra_toggle_show.visibility = View.VISIBLE
+                                    crypto_extra_toggle_show.setOnCheckedChangeListener { _, _ ->
+                                        crypto_extra_show.text = entry.extraContent
+                                    }
+
+                                    crypto_extra_show.transformationMethod = object : PasswordTransformationMethod() {
+                                        override fun getTransformation(source: CharSequence, view: View): CharSequence {
+                                            return if (crypto_extra_toggle_show.isChecked) source else super.getTransformation(source, view)
+                                        }
                                     }
                                 }
+
+                                if (entry.hasUsername()) {
+                                    crypto_username_show.visibility = View.VISIBLE
+                                    crypto_username_show_label.visibility = View.VISIBLE
+                                    crypto_copy_username.visibility = View.VISIBLE
+
+                                    crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username!!) }
+                                    crypto_username_show.typeface = monoTypeface
+                                    crypto_username_show.text = entry.username
+                                } else {
+                                    crypto_username_show.visibility = View.GONE
+                                    crypto_username_show_label.visibility = View.GONE
+                                    crypto_copy_username.visibility = View.GONE
+                                }
                             }
 
-                            if (entry.hasUsername()) {
-                                crypto_username_show.visibility = View.VISIBLE
-                                crypto_username_show_label.visibility = View.VISIBLE
-                                crypto_copy_username.visibility = View.VISIBLE
+                            if (entry.hasTotp() || entry.hasHotp()) {
+                                crypto_extra_show_layout.visibility = View.VISIBLE
+                                crypto_extra_show.typeface = monoTypeface
+                                crypto_extra_show.text = entry.extraContent
 
-                                crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username!!) }
-                                crypto_username_show.typeface = monoTypeface
-                                crypto_username_show.text = entry.username
-                            } else {
-                                crypto_username_show.visibility = View.GONE
-                                crypto_username_show_label.visibility = View.GONE
-                                crypto_copy_username.visibility = View.GONE
-                            }
-                        }
+                                crypto_otp_show.visibility = View.VISIBLE
+                                crypto_otp_show_label.visibility = View.VISIBLE
+                                crypto_copy_otp.visibility = View.VISIBLE
 
-                        if (entry.hasTotp() || entry.hasHotp()) {
-                            crypto_extra_show_layout.visibility = View.VISIBLE
-                            crypto_extra_show.typeface = monoTypeface
-                            crypto_extra_show.text = entry.extraContent
-
-                            crypto_otp_show.visibility = View.VISIBLE
-                            crypto_otp_show_label.visibility = View.VISIBLE
-                            crypto_copy_otp.visibility = View.VISIBLE
-
-                            if (entry.hasTotp()) {
-                                crypto_copy_otp.setOnClickListener {
-                                    copyOtpToClipBoard(
+                                if (entry.hasTotp()) {
+                                    crypto_copy_otp.setOnClickListener {
+                                        copyOtpToClipBoard(
+                                                Otp.calculateCode(
+                                                        entry.totpSecret,
+                                                        Date().time / (1000 * entry.totpPeriod),
+                                                        entry.totpAlgorithm,
+                                                        entry.digits)
+                                        )
+                                    }
+                                    crypto_otp_show.text =
                                             Otp.calculateCode(
                                                     entry.totpSecret,
                                                     Date().time / (1000 * entry.totpPeriod),
                                                     entry.totpAlgorithm,
                                                     entry.digits)
-                                    )
-                                }
-                                crypto_otp_show.text =
-                                        Otp.calculateCode(
-                                                entry.totpSecret,
-                                                Date().time / (1000 * entry.totpPeriod),
-                                                entry.totpAlgorithm,
-                                                entry.digits)
-                            } else {
-                                // we only want to calculate and show HOTP if the user requests it
-                                crypto_copy_otp.setOnClickListener {
-                                    if (settings.getBoolean("hotp_remember_check", false)) {
-                                        if (settings.getBoolean("hotp_remember_choice", false)) {
-                                            calculateAndCommitHotp(entry)
+                                } else {
+                                    // we only want to calculate and show HOTP if the user requests it
+                                    crypto_copy_otp.setOnClickListener {
+                                        if (settings.getBoolean("hotp_remember_check", false)) {
+                                            if (settings.getBoolean("hotp_remember_choice", false)) {
+                                                calculateAndCommitHotp(entry)
+                                            } else {
+                                                calculateHotp(entry)
+                                            }
                                         } else {
-                                            calculateHotp(entry)
-                                        }
-                                    } else {
-                                        // show a dialog asking permission to update the HOTP counter in the entry
-                                        val checkInflater = LayoutInflater.from(this)
-                                        val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
-                                        val rememberCheck: CheckBox =
-                                                checkLayout.findViewById(R.id.hotp_remember_checkbox)
-                                        val dialogBuilder = MaterialAlertDialogBuilder(this)
-                                        dialogBuilder.setView(checkLayout)
-                                        dialogBuilder.setMessage(R.string.dialog_update_body)
-                                                .setCancelable(false)
-                                                .setPositiveButton(R.string.dialog_update_positive) { _, _ ->
-                                                    run {
-                                                        calculateAndCommitHotp(entry)
-                                                        if (rememberCheck.isChecked) {
+                                            // show a dialog asking permission to update the HOTP counter in the entry
+                                            val checkInflater = LayoutInflater.from(this@PgpActivity)
+                                            val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
+                                            val rememberCheck: CheckBox =
+                                                    checkLayout.findViewById(R.id.hotp_remember_checkbox)
+                                            val dialogBuilder = MaterialAlertDialogBuilder(this@PgpActivity)
+                                            dialogBuilder.setView(checkLayout)
+                                            dialogBuilder.setMessage(R.string.dialog_update_body)
+                                                    .setCancelable(false)
+                                                    .setPositiveButton(R.string.dialog_update_positive) { _, _ ->
+                                                        run {
+                                                            calculateAndCommitHotp(entry)
+                                                            if (rememberCheck.isChecked) {
+                                                                val editor = settings.edit()
+                                                                editor.putBoolean("hotp_remember_check", true)
+                                                                editor.putBoolean("hotp_remember_choice", true)
+                                                                editor.apply()
+                                                            }
+                                                        }
+                                                    }
+                                                    .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
+                                                        run {
+                                                            calculateHotp(entry)
                                                             val editor = settings.edit()
                                                             editor.putBoolean("hotp_remember_check", true)
-                                                            editor.putBoolean("hotp_remember_choice", true)
+                                                            editor.putBoolean("hotp_remember_choice", false)
                                                             editor.apply()
                                                         }
                                                     }
-                                                }
-                                                .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
-                                                    run {
-                                                        calculateHotp(entry)
-                                                        val editor = settings.edit()
-                                                        editor.putBoolean("hotp_remember_check", true)
-                                                        editor.putBoolean("hotp_remember_choice", false)
-                                                        editor.apply()
-                                                    }
-                                                }
-                                        val updateDialog = dialogBuilder.create()
-                                        updateDialog.setTitle(R.string.dialog_update_title)
-                                        updateDialog.show()
+                                            val updateDialog = dialogBuilder.create()
+                                            updateDialog.setTitle(R.string.dialog_update_title)
+                                            updateDialog.show()
+                                        }
                                     }
+                                    crypto_otp_show.setText(R.string.hotp_pending)
                                 }
-                                crypto_otp_show.setText(R.string.hotp_pending)
+                                crypto_otp_show.typeface = monoTypeface
+                            } else {
+                                crypto_otp_show.visibility = View.GONE
+                                crypto_otp_show_label.visibility = View.GONE
+                                crypto_copy_otp.visibility = View.GONE
                             }
-                            crypto_otp_show.typeface = monoTypeface
-                        } else {
-                            crypto_otp_show.visibility = View.GONE
-                            crypto_otp_show_label.visibility = View.GONE
-                            crypto_copy_otp.visibility = View.GONE
-                        }
 
-                        if (settings.getBoolean("copy_on_decrypt", true)) {
-                            copyPasswordToClipBoard()
+                            if (settings.getBoolean("copy_on_decrypt", true)) {
+                                copyPasswordToClipBoard()
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "An Exception occurred", e)
                         }
-                    } catch (e: Exception) {
-                        Log.e(TAG, "An Exception occurred", e)
                     }
+                    RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
+                    RESULT_CODE_ERROR -> handleError(result)
                 }
-                RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
-                RESULT_CODE_ERROR -> handleError(result)
             }
-        }
+        })
     }
 
     /**
@@ -450,34 +452,36 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         val path = if (intent.getBooleanExtra("fromDecrypt", false)) fullPath else "$fullPath/$editName.gpg"
 
-        api?.executeApiAsync(data, iStream, oStream) { result: Intent? ->
-            when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
-                RESULT_CODE_SUCCESS -> {
-                    try {
-                        // TODO This might fail, we should check that the write is successful
-                        val outputStream = FileUtils.openOutputStream(File(path))
-                        outputStream.write(oStream.toByteArray())
-                        outputStream.close()
+        api?.executeApiAsync(data, iStream, oStream, object : OpenPgpApi.IOpenPgpCallback {
+            override fun onReturn(result: Intent?) {
+                when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
+                    RESULT_CODE_SUCCESS -> {
+                        try {
+                            // TODO This might fail, we should check that the write is successful
+                            val outputStream = FileUtils.openOutputStream(File(path))
+                            outputStream.write(oStream.toByteArray())
+                            outputStream.close()
 
-                        val returnIntent = Intent()
-                        returnIntent.putExtra("CREATED_FILE", path)
-                        returnIntent.putExtra("NAME", editName)
-                        returnIntent.putExtra("LONG_NAME", getLongName(fullPath, repoPath, this.editName!!))
+                            val returnIntent = Intent()
+                            returnIntent.putExtra("CREATED_FILE", path)
+                            returnIntent.putExtra("NAME", editName)
+                            returnIntent.putExtra("LONG_NAME", getLongName(fullPath, repoPath, editName!!))
 
-                        // if coming from decrypt screen->edit button
-                        if (intent.getBooleanExtra("fromDecrypt", false)) {
-                            returnIntent.putExtra("OPERATION", "EDIT")
-                            returnIntent.putExtra("needCommit", true)
+                            // if coming from decrypt screen->edit button
+                            if (intent.getBooleanExtra("fromDecrypt", false)) {
+                                returnIntent.putExtra("OPERATION", "EDIT")
+                                returnIntent.putExtra("needCommit", true)
+                            }
+                            setResult(RESULT_OK, returnIntent)
+                            finish()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "An Exception occurred", e)
                         }
-                        setResult(RESULT_OK, returnIntent)
-                        finish()
-                    } catch (e: Exception) {
-                        Log.e(TAG, "An Exception occurred", e)
                     }
+                    RESULT_CODE_ERROR -> handleError(result)
                 }
-                RESULT_CODE_ERROR -> handleError(result)
             }
-        }
+        })
     }
 
     /**
@@ -553,29 +557,31 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun getKeyIds(receivedIntent: Intent? = null) {
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_GET_KEY_IDS
-        api?.executeApiAsync(data, null, null) { result: Intent? ->
-            when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
-                RESULT_CODE_SUCCESS -> {
-                    try {
-                        val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
-                                ?: LongArray(0)
-                        val keys = ids.map { it.toString() }.toSet()
+        api?.executeApiAsync(data, null, null, object : OpenPgpApi.IOpenPgpCallback {
+            override fun onReturn(result: Intent?) {
+                when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
+                    RESULT_CODE_SUCCESS -> {
+                        try {
+                            val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
+                                    ?: LongArray(0)
+                            val keys = ids.map { it.toString() }.toSet()
 
-                        // use Long
-                        settings.edit().putStringSet("openpgp_key_ids_set", keys).apply()
+                            // use Long
+                            settings.edit().putStringSet("openpgp_key_ids_set", keys).apply()
 
-                        showSnackbar("PGP keys selected")
+                            showSnackbar("PGP keys selected")
 
-                        setResult(RESULT_OK)
-                        finish()
-                    } catch (e: Exception) {
-                        Log.e(TAG, "An Exception occurred", e)
+                            setResult(RESULT_OK)
+                            finish()
+                        } catch (e: Exception) {
+                            Log.e(TAG, "An Exception occurred", e)
+                        }
                     }
+                    RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_KEY_ID)
+                    RESULT_CODE_ERROR -> handleError(result)
                 }
-                RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_KEY_ID)
-                RESULT_CODE_ERROR -> handleError(result)
             }
-        }
+        })
     }
 
     override fun onError(e: Exception?) {}
