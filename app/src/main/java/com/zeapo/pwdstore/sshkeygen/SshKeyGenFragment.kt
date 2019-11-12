@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.sshkeygen
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -14,9 +13,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.R
@@ -46,7 +45,7 @@ class SshKeyGenFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, lengths)
         spinner.adapter = adapter
         generate.setOnClickListener { generate() }
-        checkBox.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+        checkBox.setOnCheckedChangeListener { _, isChecked: Boolean ->
             val selection = passphrase.selectionEnd
             if (isChecked) {
                 passphrase.inputType = (
@@ -81,11 +80,11 @@ class SshKeyGenFragment : Fragment() {
     }
 
     private fun hideKeyboard() {
-        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = activity.getSystemService<InputMethodManager>()
         var view = activity.currentFocus
         if (view == null) {
             view = View(activity)
         }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

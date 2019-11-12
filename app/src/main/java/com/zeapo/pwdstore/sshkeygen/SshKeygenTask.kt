@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore.sshkeygen
 
 import android.app.ProgressDialog
-import android.content.DialogInterface
 import android.os.AsyncTask
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +45,6 @@ class KeyGenerateTask(activity: AppCompatActivity) : AsyncTask<String?, Void?, E
             kp?.writePublicKey(out, comment)
             return null
         } catch (e: Exception) {
-            println("Exception caught :(")
             e.printStackTrace()
             return e
         }
@@ -67,12 +65,9 @@ class KeyGenerateTask(activity: AppCompatActivity) : AsyncTask<String?, Void?, E
                 editor.apply()
             } else {
                 MaterialAlertDialogBuilder(weakReference.get())
-                        .setTitle("Error while trying to generate the ssh-key")
-                        .setMessage(activity.resources.getString(R.string.ssh_key_error_dialog_text) +
-                                e.message)
-                        .setPositiveButton(activity.resources.getString(R.string.dialog_ok)) {
-                            _: DialogInterface?, _: Int ->
-                        }
+                        .setTitle(activity.getString(R.string.error_generate_ssh_key))
+                        .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                        .setPositiveButton(activity.getString(R.string.dialog_ok), null)
                         .show()
             }
         } else {

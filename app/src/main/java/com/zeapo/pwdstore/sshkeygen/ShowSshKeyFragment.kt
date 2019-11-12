@@ -9,7 +9,6 @@ import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -37,7 +36,7 @@ class ShowSshKeyFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = activity.layoutInflater.inflate(R.layout.fragment_show_ssh_key, null)
         publicKey = view.findViewById(R.id.public_key)
-        saveKeyToFile()
+        readKeyFromFile()
         createMaterialDialog(view)
         val ad = builder.create()
         ad.setOnShowListener {
@@ -53,23 +52,17 @@ class ShowSshKeyFragment : DialogFragment() {
 
     private fun createMaterialDialog(view: View) {
         builder.setView(view)
-        builder.setTitle("Your public key")
-        builder.setPositiveButton(resources.getString(R.string.dialog_ok)) {
-            _: DialogInterface?, _: Int ->
-            activity.finish()
-        }
-        builder.setNegativeButton(resources.getString(R.string.dialog_cancel)) {
-            _: DialogInterface?, _: Int ->
-        }
+        builder.setTitle(getString(R.string.your_public_key))
+        builder.setPositiveButton(getString(R.string.dialog_ok)) { _, _ -> activity.finish() }
+        builder.setNegativeButton(getString(R.string.dialog_cancel), null)
         builder.setNeutralButton(resources.getString(R.string.ssh_keygen_copy), null)
     }
 
-    private fun saveKeyToFile() {
+    private fun readKeyFromFile() {
         val file = File(activity.filesDir.toString() + "/.ssh_key.pub")
         try {
             publicKey.text = FileUtils.readFileToString(file, StandardCharsets.UTF_8)
         } catch (e: Exception) {
-            println("Exception caught :(")
             e.printStackTrace()
         }
     }

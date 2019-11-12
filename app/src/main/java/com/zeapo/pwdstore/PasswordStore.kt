@@ -7,7 +7,6 @@ package com.zeapo.pwdstore
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -99,7 +98,7 @@ class PasswordStore : AppCompatActivity() {
         var savedInstance = savedInstanceState
         if (savedInstanceState != null && (!settings.getBoolean("git_external", false) ||
                         ContextCompat.checkSelfPermission(
-                        activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                activity, Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED)) {
             savedInstance = null
         }
@@ -201,7 +200,6 @@ class PasswordStore : AppCompatActivity() {
                     intent = Intent(this, UserPreference::class.java)
                     startActivity(intent)
                 } catch (e: Exception) {
-                    println("Exception caught :(")
                     e.printStackTrace()
                 }
                 return true
@@ -253,7 +251,6 @@ class PasswordStore : AppCompatActivity() {
             intent = Intent(this, UserPreference::class.java)
             startActivity(intent)
         } catch (e: Exception) {
-            println("Exception caught :(")
             e.printStackTrace()
         }
     }
@@ -304,7 +301,7 @@ class PasswordStore : AppCompatActivity() {
         if (keyIds != null && keyIds.isEmpty()) {
             MaterialAlertDialogBuilder(this)
                     .setMessage(this.resources.getString(R.string.key_dialog_text))
-                    .setPositiveButton(this.resources.getString(R.string.dialog_positive)) { _: DialogInterface?, _: Int ->
+                    .setPositiveButton(this.resources.getString(R.string.dialog_positive)) { _, _ ->
                         val intent = Intent(activity, UserPreference::class.java)
                         startActivityForResult(intent, GitActivity.REQUEST_INIT)
                     }
@@ -450,7 +447,7 @@ class PasswordStore : AppCompatActivity() {
             MaterialAlertDialogBuilder(this)
                     .setTitle(this.resources.getString(R.string.no_key_selected_dialog_title))
                     .setMessage(this.resources.getString(R.string.no_key_selected_dialog_text))
-                    .setPositiveButton(this.resources.getString(R.string.dialog_ok)) { _: DialogInterface?, _: Int ->
+                    .setPositiveButton(this.resources.getString(R.string.dialog_ok)) { _, _ ->
                         val intent = Intent(activity, UserPreference::class.java)
                         startActivity(intent)
                     }
@@ -476,7 +473,7 @@ class PasswordStore : AppCompatActivity() {
         val item = adapter.values[position]
         MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
-                .setPositiveButton(resources.getString(R.string.dialog_yes)) { _: DialogInterface?, _: Int ->
+                .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
                     item.file.delete()
                     adapter.remove(position)
                     it.remove()
@@ -484,7 +481,7 @@ class PasswordStore : AppCompatActivity() {
                     commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
                     deletePasswords(adapter, selectedItems)
                 }
-                .setNegativeButton(this.resources.getString(R.string.dialog_no)) { _: DialogInterface?, _: Int ->
+                .setNegativeButton(this.resources.getString(R.string.dialog_no)) { _, _ ->
                     it.remove()
                     deletePasswords(adapter, selectedItems)
                 }
@@ -504,26 +501,20 @@ class PasswordStore : AppCompatActivity() {
 
     /** clears adapter's content and updates it with a fresh list of passwords from the root  */
     fun updateListAdapter() {
-        if (null != plist) {
-            plist!!.updateAdapter()
-        }
+        plist?.updateAdapter()
     }
 
     /** Updates the adapter with the current view of passwords  */
     private fun refreshListAdapter() {
-        if (null != plist) {
-            plist!!.refreshAdapter()
-        }
+        plist?.refreshAdapter()
     }
 
     private fun filterListAdapter(filter: String) {
-        if (null != plist) {
-            plist!!.filterAdapter(filter)
-        }
+        plist?.filterAdapter(filter)
     }
 
     private val currentDir: File?
-        get() = if (null != plist) { plist!!.currentDir } else getRepositoryDirectory(applicationContext)
+        get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
     private fun commitChange(message: String) {
         object : GitOperation(getRepositoryDirectory(activity), activity) {
@@ -658,7 +649,7 @@ class PasswordStore : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
                 .setTitle(this.resources.getString(R.string.location_dialog_title))
                 .setMessage(this.resources.getString(R.string.location_dialog_text))
-                .setPositiveButton(this.resources.getString(R.string.location_hidden)) { _: DialogInterface?, _: Int ->
+                .setPositiveButton(this.resources.getString(R.string.location_hidden)) { _, _ ->
                     settings.edit().putBoolean("git_external", false).apply()
                     when (operation) {
                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
@@ -670,7 +661,7 @@ class PasswordStore : AppCompatActivity() {
                         }
                     }
                 }
-                .setNegativeButton(this.resources.getString(R.string.location_sdcard)) { _: DialogInterface?, _: Int ->
+                .setNegativeButton(this.resources.getString(R.string.location_sdcard)) { _, _ ->
                     settings.edit().putBoolean("git_external", true).apply()
                     val externalRepo = settings.getString("git_external_repo", null)
                     if (externalRepo == null) {
@@ -681,7 +672,7 @@ class PasswordStore : AppCompatActivity() {
                         MaterialAlertDialogBuilder(activity)
                                 .setTitle(resources.getString(R.string.directory_selected_title))
                                 .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
-                                .setPositiveButton(resources.getString(R.string.use)) { _: DialogInterface?, _: Int ->
+                                .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
                                     when (operation) {
                                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
                                         CLONE_REPO_BUTTON -> {
@@ -692,7 +683,7 @@ class PasswordStore : AppCompatActivity() {
                                         }
                                     }
                                 }
-                                .setNegativeButton(resources.getString(R.string.change)) { _: DialogInterface?, _: Int ->
+                                .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
                                     val intent = Intent(activity, UserPreference::class.java)
                                     intent.putExtra("operation", "git_external")
                                     startActivityForResult(intent, operation)

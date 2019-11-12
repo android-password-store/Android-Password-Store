@@ -272,4 +272,6 @@
     <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
     <string name="ssh_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
     <string name="access_sdcard_text">The store is on the sdcard but the app does not have permission to access it. Please give permission.</string>
+    <string name="your_public_key">Your public key</string>
+    <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
 </resources>
