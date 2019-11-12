@@ -36,9 +36,9 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.PasswordEntry
-import com.zeapo.pwdstore.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.Otp
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -132,7 +132,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
+                    PasswordGeneratorDialogFragment()
+                        .show(supportFragmentManager, "generator")
                 }
 
                 title = getString(R.string.new_password_title)
@@ -490,7 +491,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
+            PasswordGeneratorDialogFragment()
+                .show(supportFragmentManager, "generator")
         }
 
         title = getString(R.string.edit_password_title)
