@@ -64,9 +64,10 @@
 
         <activity
             android:name=".crypto.PgpActivity"
-            android:parentActivityName=".PasswordStore" />
+            android:parentActivityName=".PasswordStore"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SelectFolderActivity" />
-        <activity android:name=".sshkeygen.SshKeyGenActivity" />
+        <activity android:name=".sshkeygen.SshKeyGenActivity" android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
