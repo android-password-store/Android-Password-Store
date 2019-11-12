@@ -47,6 +47,7 @@ open class PasswordRepository protected constructor() {
     companion object {
 
         private var repository: Repository? = null
+        private lateinit var settings: SharedPreferences
 
         /**
          * Returns the git repository
@@ -139,7 +140,6 @@ open class PasswordRepository protected constructor() {
 
         @JvmStatic
         fun getRepositoryDirectory(context: Context): File {
-            val settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
             return if (settings.getBoolean("git_external", false)) {
                 val externalRepo = settings.getString("git_external_repo", null)
                 File(requireNotNull(externalRepo))
@@ -150,9 +150,8 @@ open class PasswordRepository protected constructor() {
 
         @JvmStatic
         fun initialize(context: Context): Repository? {
+            settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
             val dir = getRepositoryDirectory(context)
-            val settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-
             // uninitialize the repo if the dir does not exist or is absolutely empty
             if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
                 settings.edit().putBoolean("repository_initialized", false).apply()
@@ -207,10 +206,21 @@ open class PasswordRepository protected constructor() {
             // We need to recover the passwords then parse the files
             val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
             val passwordList = ArrayList<PasswordItem>()
+            val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
 
             if (passList.size == 0) return passwordList
-
-            passList.filter { !it.isHidden }.forEach { file ->
+            if (showHiddenDirs) {
+                passList.filter {
+                    val hidden = it.isHidden
+                    when {
+                        it.isFile && hidden -> false
+                        else -> true
+                    }
+                }.toCollection(passList.apply { clear() })
+            } else {
+                passList.filter { !it.isHidden }.toCollection(passList.apply { clear() })
+            }
+            passList.forEach { file ->
                 passwordList.add(if (file.isFile) {
                     PasswordItem.newPassword(file.name, file, rootDir)
                 } else {

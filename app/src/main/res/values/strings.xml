@@ -274,4 +274,6 @@
     <string name="access_sdcard_text">The store is on the sdcard but the app does not have permission to access it. Please give permission.</string>
     <string name="your_public_key">Your public key</string>
     <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
+    <string name="pref_show_hidden_title">Show hidden folders</string>
+    <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
 </resources>
