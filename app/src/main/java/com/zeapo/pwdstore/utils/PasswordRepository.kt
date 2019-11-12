@@ -210,13 +210,7 @@ open class PasswordRepository protected constructor() {
 
             if (passList.size == 0) return passwordList
             if (showHiddenDirs) {
-                passList.filter {
-                    val hidden = it.isHidden
-                    when {
-                        it.isFile && hidden -> false
-                        else -> true
-                    }
-                }.toCollection(passList.apply { clear() })
+                passList.filter { !(it.isFile && it.isHidden) }.toCollection(passList.apply { clear() })
             } else {
                 passList.filter { !it.isHidden }.toCollection(passList.apply { clear() })
             }
