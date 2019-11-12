@@ -32,6 +32,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
+import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
@@ -141,7 +143,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             viewSshKeyPreference?.onPreferenceClickListener = ClickListener {
-                val df = SshKeyGen.ShowSshKeyFragment()
+                val df = ShowSshKeyFragment()
                 df.show(requireFragmentManager(), "public_key")
                 true
             }
@@ -377,7 +379,7 @@ class UserPreference : AppCompatActivity() {
      * Opens a key generator to generate a public/private key pair
      */
     fun makeSshKey(fromPreferences: Boolean) {
-        val intent = Intent(applicationContext, SshKeyGen::class.java)
+        val intent = Intent(applicationContext, SshKeyGenActivity::class.java)
         startActivity(intent)
         if (!fromPreferences) {
             setResult(Activity.RESULT_OK)

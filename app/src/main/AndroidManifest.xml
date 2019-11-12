@@ -42,9 +42,6 @@
         <activity
             android:name=".UserPreference"
             android:parentActivityName=".PasswordStore" />
-
-        <activity android:name=".SshKeyGen" />
-
         <service
             android:name=".autofill.AutofillService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -69,6 +66,7 @@
             android:name=".crypto.PgpActivity"
             android:parentActivityName=".PasswordStore" />
         <activity android:name=".SelectFolderActivity" />
+        <activity android:name=".sshkeygen.SshKeyGenActivity" />
     </application>
 
 </manifest>

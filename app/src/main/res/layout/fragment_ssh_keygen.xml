@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no"
+                android:fontFamily="@font/sourcecodepro"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,10 +64,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/generate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:onClick="generate"
             android:text="@string/ssh_keygen_generate" />
 
     </LinearLayout>
