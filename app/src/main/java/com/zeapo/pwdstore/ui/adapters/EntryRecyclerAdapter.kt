@@ -82,7 +82,7 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
             holder.type.visibility = View.GONE
             holder.typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
             holder.folderIndicator.visibility = View.VISIBLE
-            val childCount = (pass.file.list { current, name -> File(current, name).isFile } ?: emptyArray<File>()).size
+            val childCount = (pass.file.list() ?: emptyArray<File>()).size
             if (childCount > 0) {
                 holder.childCount.visibility = View.VISIBLE
                 holder.childCount.text = "$childCount"
