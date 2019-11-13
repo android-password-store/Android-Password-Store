@@ -90,6 +90,12 @@
             android:entryValues="@array/sort_order_values"
             android:persistent="true" />
         <androidx.preference.SwitchPreferenceCompat
+            android:title="@string/pref_show_hidden_title"
+            android:summary="@string/pref_show_hidden_summary"
+            android:key="show_hidden_folders"
+            android:defaultValue="false"
+            android:persistent="true" />
+        <androidx.preference.SwitchPreferenceCompat
             android:key="biometric_auth"
             android:title="@string/biometric_auth_title"
             android:summary="@string/biometric_auth_summary" />
