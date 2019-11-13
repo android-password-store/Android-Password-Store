@@ -29,6 +29,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
@@ -126,10 +127,16 @@ class UserPreference : AppCompatActivity() {
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
             keyPreference?.onPreferenceClickListener = ClickListener {
-                val intent = Intent(callingActivity, PgpActivity::class.java)
-                intent.putExtra("OPERATION", "GET_KEY_ID")
-                startActivityForResult(intent, IMPORT_PGP_KEY)
-                true
+                val providerPackageName = requireNotNull(sharedPreferences.getString("openpgp_provider_list", ""))
+                if (providerPackageName.isEmpty()) {
+                    Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
+                    false
+                } else {
+                    val intent = Intent(callingActivity, PgpActivity::class.java)
+                    intent.putExtra("OPERATION", "GET_KEY_ID")
+                    startActivityForResult(intent, IMPORT_PGP_KEY)
+                    true
+                }
             }
 
             sshKeyPreference?.onPreferenceClickListener = ClickListener {
