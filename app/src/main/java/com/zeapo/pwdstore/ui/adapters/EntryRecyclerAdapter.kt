@@ -4,11 +4,13 @@
  */
 package com.zeapo.pwdstore.ui.adapters
 
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -19,6 +21,7 @@ import java.util.TreeSet
 
 abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<PasswordItem>) : RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder>() {
     internal val selectedItems: MutableSet<Int> = TreeSet()
+    internal var settings: SharedPreferences? = null
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
@@ -76,13 +79,18 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        settings = settings ?: PreferenceManager.getDefaultSharedPreferences(holder.view.context.applicationContext)
         val pass = values[position]
+        val showHidden = settings?.getBoolean("show_hidden_folders", false) ?: false
         holder.name.text = pass.toString()
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
             holder.type.visibility = View.GONE
             holder.typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
             holder.folderIndicator.visibility = View.VISIBLE
-            val childCount = (pass.file.list { current, name -> File(current, name).isFile } ?: emptyArray<File>()).size
+            val children = pass.file.listFiles { pathname ->
+                !(!showHidden && (pathname.isDirectory && pathname.isHidden))
+            } ?: emptyArray<File>()
+            val childCount = children.size
             if (childCount > 0) {
                 holder.childCount.visibility = View.VISIBLE
                 holder.childCount.text = "$childCount"
