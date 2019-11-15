@@ -13,8 +13,8 @@ ext {
         buildTools: '29.0.2',
 
         // Plugins
-        gradlePlugin: '3.5.1',
-        kotlin: '1.3.50',
+        gradlePlugin: '3.5.2',
+        kotlin: '1.3.60',
         spotless: '3.25.0',
 
         // AndroidX
