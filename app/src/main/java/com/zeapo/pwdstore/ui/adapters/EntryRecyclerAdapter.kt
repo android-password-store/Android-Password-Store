@@ -21,7 +21,7 @@ import java.util.TreeSet
 
 abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<PasswordItem>) : RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder>() {
     internal val selectedItems: MutableSet<Int> = TreeSet()
-    private lateinit var settings: SharedPreferences
+    internal var settings: SharedPreferences? = null
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
@@ -79,11 +79,9 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        settings = settings ?: PreferenceManager.getDefaultSharedPreferences(holder.view.context.applicationContext)
         val pass = values[position]
-        if (!::settings.isInitialized) {
-            settings = PreferenceManager.getDefaultSharedPreferences(holder.view.context.applicationContext)
-        }
-        val showHidden = settings.getBoolean("show_hidden_folders", false)
+        val showHidden = settings?.getBoolean("show_hidden_folders", false) ?: false
         holder.name.text = pass.toString()
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
             holder.type.visibility = View.GONE
