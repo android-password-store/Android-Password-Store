@@ -25,7 +25,7 @@ ext {
         constraintLayout: '2.0.0-beta3',
         coreKtx: '1.2.0-beta02',
         documentfile: '1.0.1',
-        fragmentKtx: '1.2.0-beta01',
+        fragmentKtx: '1.2.0-rc02',
         material: '1.2.0-alpha01',
         preference: '1.1.0',
         recyclerview: '1.0.0',
