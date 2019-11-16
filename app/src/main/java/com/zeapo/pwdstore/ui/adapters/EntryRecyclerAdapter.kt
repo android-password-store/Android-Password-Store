@@ -5,6 +5,8 @@
 package com.zeapo.pwdstore.ui.adapters
 
 import android.content.SharedPreferences
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,7 +86,6 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
         val showHidden = settings?.getBoolean("show_hidden_folders", false) ?: false
         holder.name.text = pass.toString()
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
-            holder.type.visibility = View.GONE
             holder.typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
             holder.folderIndicator.visibility = View.VISIBLE
             val children = pass.file.listFiles { pathname ->
@@ -97,15 +98,15 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
             }
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
-            holder.name.text = pass.toString()
-            holder.type.visibility = View.VISIBLE
-            holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            val parentPath = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            val source = "$parentPath\n$pass"
+            val spannable = SpannableString(source)
+            spannable.setSpan(RelativeSizeSpan(0.7f), 0, parentPath.length, 0)
+            holder.name.text = spannable
             holder.childCount.visibility = View.GONE
             holder.folderIndicator.visibility = View.GONE
         }
-
         holder.view.setOnClickListener(getOnClickListener(holder, pass))
-
         holder.view.setOnLongClickListener(getOnLongClickListener(holder, pass))
 
         // after removal, everything is rebound for some reason; views are shuffled?
@@ -135,7 +136,6 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
     */
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val name: AppCompatTextView = view.findViewById(R.id.label)
-        val type: AppCompatTextView = view.findViewById(R.id.type)
         val typeImage: AppCompatImageView = view.findViewById(R.id.type_image)
         val childCount: AppCompatTextView = view.findViewById(R.id.child_count)
         val folderIndicator: AppCompatImageView = view.findViewById(R.id.folder_indicator)
