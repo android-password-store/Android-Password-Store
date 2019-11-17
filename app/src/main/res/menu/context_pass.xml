@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/menu_move_password"
-        android:icon="@drawable/ic_folder_white_24dp"
+        android:icon="@drawable/ic_move_folder_white_24dp"
         android:title="@string/move"
         app:showAsAction="ifRoom" />
 

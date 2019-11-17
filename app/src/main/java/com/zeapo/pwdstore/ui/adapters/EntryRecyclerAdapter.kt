@@ -4,11 +4,15 @@
  */
 package com.zeapo.pwdstore.ui.adapters
 
+import android.content.SharedPreferences
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -19,6 +23,7 @@ import java.util.TreeSet
 
 abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<PasswordItem>) : RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder>() {
     internal val selectedItems: MutableSet<Int> = TreeSet()
+    internal var settings: SharedPreferences? = null
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
@@ -76,28 +81,32 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        settings = settings ?: PreferenceManager.getDefaultSharedPreferences(holder.view.context.applicationContext)
         val pass = values[position]
+        val showHidden = settings?.getBoolean("show_hidden_folders", false) ?: false
         holder.name.text = pass.toString()
         if (pass.type == PasswordItem.TYPE_CATEGORY) {
-            holder.type.visibility = View.GONE
-            holder.typeImage.setImageResource(R.drawable.ic_multiple_files_tinted_24dp)
+            holder.typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
             holder.folderIndicator.visibility = View.VISIBLE
-            val childCount = (pass.file.list { current, name -> File(current, name).isFile } ?: emptyArray<File>()).size
+            val children = pass.file.listFiles { pathname ->
+                !(!showHidden && (pathname.isDirectory && pathname.isHidden))
+            } ?: emptyArray<File>()
+            val childCount = children.size
             if (childCount > 0) {
                 holder.childCount.visibility = View.VISIBLE
                 holder.childCount.text = "$childCount"
             }
         } else {
-            holder.typeImage.setImageResource(R.drawable.ic_action_secure)
-            holder.name.text = pass.toString()
-            holder.type.visibility = View.VISIBLE
-            holder.type.text = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            holder.typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
+            val parentPath = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            val source = "$parentPath\n$pass"
+            val spannable = SpannableString(source)
+            spannable.setSpan(RelativeSizeSpan(0.7f), 0, parentPath.length, 0)
+            holder.name.text = spannable
             holder.childCount.visibility = View.GONE
             holder.folderIndicator.visibility = View.GONE
         }
-
         holder.view.setOnClickListener(getOnClickListener(holder, pass))
-
         holder.view.setOnLongClickListener(getOnLongClickListener(holder, pass))
 
         // after removal, everything is rebound for some reason; views are shuffled?
@@ -127,7 +136,6 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
     */
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val name: AppCompatTextView = view.findViewById(R.id.label)
-        val type: AppCompatTextView = view.findViewById(R.id.type)
         val typeImage: AppCompatImageView = view.findViewById(R.id.type_image)
         val childCount: AppCompatTextView = view.findViewById(R.id.child_count)
         val folderIndicator: AppCompatImageView = view.findViewById(R.id.folder_indicator)

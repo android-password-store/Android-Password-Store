@@ -35,7 +35,7 @@ ext {
         commons_codec: '1.13',
         jgit: '3.7.1.201504261725-r',
         jsch: '0.1.55',
-        openpgp: '12.0',
+        openpgp: '0.1.0',
         recyclical: '1.1.0',
         sshauth: '1.0'
     ]

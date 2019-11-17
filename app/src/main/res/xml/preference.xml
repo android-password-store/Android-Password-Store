@@ -40,11 +40,9 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_crypto_title">
-        <!-- TODO(msf): Update the damn library and re-enable this
-        <org.openintents.openpgp.util.OpenPgpAppPreference
+        <me.msfjarvis.openpgpktx.preference.OpenPgpAppPreference
             android:key="openpgp_provider_list"
             android:title="@string/pref_provider_title" />
-        -->
         <androidx.preference.Preference
             android:key="openpgp_key_id_pref"
             android:title="@string/pref_key_title" />
@@ -90,6 +88,12 @@
             android:key="sort_order"
             android:entries="@array/sort_order_entries"
             android:entryValues="@array/sort_order_values"
+            android:persistent="true" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:title="@string/pref_show_hidden_title"
+            android:summary="@string/pref_show_hidden_summary"
+            android:key="show_hidden_folders"
+            android:defaultValue="false"
             android:persistent="true" />
         <androidx.preference.SwitchPreferenceCompat
             android:key="biometric_auth"
