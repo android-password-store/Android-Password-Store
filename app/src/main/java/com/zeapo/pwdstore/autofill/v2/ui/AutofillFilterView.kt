@@ -16,6 +16,8 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import android.os.Bundle
 import android.service.autofill.FillResponse
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.WindowManager
 import android.view.autofill.AutofillManager
 import androidx.appcompat.app.AppCompatActivity
@@ -64,9 +66,12 @@ class AutofillFilterView : AppCompatActivity() {
             withDataSource(dataSource)
             withItem<PasswordItem, PasswordViewHolder>(R.layout.password_row_layout) {
                 onBind(::PasswordViewHolder) { _, item ->
-                    this.label.text = item.longName
-                    this.type.text = item.fullPathToParent
-                    this.typeImage.setImageResource(R.drawable.ic_action_secure)
+                    val source = "${item.fullPathToParent}\n${item.longName}"
+                    val spannable = SpannableString(source).apply {
+                        setSpan(RelativeSizeSpan(0.7f), 0, item.fullPathToParent.length, 0)
+                    }
+                    this.label.text = spannable
+                    this.typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
                 }
                 onClick {
                     setResponse(item)

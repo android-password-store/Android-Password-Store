@@ -12,6 +12,5 @@ import com.zeapo.pwdstore.R
 
 class PasswordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val typeImage: ImageView = itemView.findViewById(R.id.type_image)
-    val type: TextView = itemView.findViewById(R.id.type)
     val label: TextView = itemView.findViewById(R.id.label)
 }
