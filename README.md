@@ -43,7 +43,7 @@ See the [wiki](https://github.com/zeapo/Android-Password-Store/wiki/First-time-s
 
 **Q** OpenKeyChain's password prompt doesn't show up when I tap on my passwords
 
-**A** Be sure to disable battery optimisation for OpenKeychain in the settings and make sure there is no task killer running!
+**A** Be sure to disable battery optimisation for OpenKeychain in your device's settings and make sure there is no task killer running.
 
 ## Community
 
