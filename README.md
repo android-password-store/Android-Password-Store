@@ -41,6 +41,10 @@ See the [wiki](https://github.com/zeapo/Android-Password-Store/wiki/First-time-s
 
 **A** In OpenKeyChain **(under the left drawer) Apps > Password Store > Accounts > (select the account) > Account key** select the key used to encrypt your passwords.
 
+**Q** OpenKeyChain's Password promt doesn't show up when i tap on my passwords
+
+**A** Be sure to disable battery optimisation for OpenKeychain in the settings and make sure there is no task killer running!
+
 ## Community
 
 Ways to get in touch:
