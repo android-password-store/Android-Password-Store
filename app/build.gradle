@@ -1,0 +1,110 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+plugins {
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+final def keystorePropertiesFile = rootProject.file 'keystore.properties'
+
+final def gitHash = { ->
+    final def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short=12', 'HEAD'
+        standardOutput = stdout
+    }
+    stdout.toString().trim()
+}
+
+final def isCi() {
+    return System.env['GITHUB_WORKFLOW'] != null
+}
+
+android {
+    if (!isCi()) {
+        android.applicationVariants.all { final variant ->
+            variant.outputs.all {
+                outputFileName = "password-store_${gitHash()}.apk"
+            }
+        }
+    }
+    defaultConfig {
+        applicationId 'com.zeapo.pwdstore'
+    }
+
+    lintOptions {
+        abortOnError = true // make sure build fails with lint errors!
+    }
+
+    packagingOptions {
+        exclude '.readme'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'GIT_HASH', '\"\"'
+        }
+        debug {
+            applicationIdSuffix = '.debug'
+            versionNameSuffix = '-debug'
+            minifyEnabled = false
+            buildConfigField 'String', 'GIT_HASH', isCi() ? "\"${gitHash()}\"" : '\"\"'
+        }
+    }
+    if (keystorePropertiesFile.exists()) {
+        final def keystoreProperties = new Properties()
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+        signingConfigs {
+            release {
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+                storeFile = rootProject.file keystoreProperties['storeFile']
+                storePassword = keystoreProperties['storePassword']
+            }
+        }
+        buildTypes.release.signingConfig = signingConfigs.release
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:' + versions.appcompat
+    implementation 'androidx.cardview:cardview:' + versions.cardview
+    implementation 'androidx.core:core-ktx:' + versions.coreKtx
+    implementation 'androidx.constraintlayout:constraintlayout:' + versions.constraintLayout
+    implementation 'androidx.documentfile:documentfile:' + versions.documentfile
+    implementation 'androidx.preference:preference:' + versions.preference
+    implementation ('androidx.recyclerview:recyclerview:' + versions.recyclerview) {
+        force = true
+    }
+    implementation 'com.google.android.material:material:' + versions.material
+    implementation 'androidx.annotation:annotation:' + versions.annotation
+    implementation 'androidx.biometric:biometric:' + versions.biometric
+    implementation 'com.github.android-password-store:openpgp-ktx:' + versions.openpgp
+    implementation('org.eclipse.jgit:org.eclipse.jgit:' + versions.jgit) {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
+    implementation 'com.jcraft:jsch:' + versions.jsch
+    implementation 'commons-io:commons-io:' + versions.commons_io
+    implementation 'commons-codec:commons-codec:' + versions.commons_codec
+    implementation 'org.sufficientlysecure:sshauthentication-api:' + versions.sshauth
+    implementation 'com.afollestad:recyclical:' + versions.recyclical
+
+    // Testing-only dependencies
+    androidTestImplementation 'junit:junit:' + versions.junit
+    androidTestImplementation 'org.mockito:mockito-core:' + versions.mockito
+    androidTestImplementation 'androidx.test:runner:' + versions.androidxTest
+    androidTestImplementation 'androidx.test:rules:' + versions.androidxTest
+    androidTestImplementation 'androidx.test.ext:junit:' + versions.androidxTestExt
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + versions.androidxTestEspresso
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:' + versions.androidxTestEspresso
+}

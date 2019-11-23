@@ -1,0 +1,40 @@
+#Android specific
+bin
+gen
+obj
+lint.xml
+local.properties
+release.properties
+ant.properties
+*.class
+*.apk
+!app-release.apk
+!app-debug.apk
+
+#Gradle
+.gradle
+build
+.DS_Store
+
+#Maven
+target
+pom.xml.*
+
+#Eclipse
+.project
+.classpath
+.settings
+.metadata
+
+#Eclipse/Gradle integration
+libs
+project.properties
+
+#IntelliJ IDEA
+.idea
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+captures/

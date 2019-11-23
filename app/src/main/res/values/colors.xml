@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base palette -->
+    <color name="primary_color">#607d8b</color>
+    <color name="primary_light_color">#8eacbb</color>
+    <color name="primary_dark_color">#34515e</color>
+    <color name="secondary_color">#ff7043</color>
+    <color name="secondary_light_color">#ffa270</color>
+    <color name="secondary_dark_color">#c63f17</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#ffffff</color>
+
+    <!-- Theme variables -->
+    <color name="window_background">#eceff1</color>
+    <color name="ic_launcher_background">#D4F1EA</color>
+    <color name="password_icon_color">#757575</color>
+    <color name="color_control_normal">@color/primary_text_color</color>
+    <color name="color_surface">#FFFFFF</color>
+    <color name="list_multiselect_background">#668eacbb</color>
+</resources>

@@ -1,0 +1,76 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+buildscript {
+    apply from: rootProject.file('versions.gradle')
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:' + versions.gradlePlugin
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + versions.kotlin
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:' + versions.spotless
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply from: rootProject.file('versions.gradle')
+    apply from: rootProject.file('spotless.gradle')
+    repositories {
+        google()
+        jcenter()
+    }
+    if (plugins.hasPlugin('kotlin-android')) {
+        dependencies {
+            implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:' + versions.kotlin
+        }
+    }
+    if (it.name == 'app') {
+        apply plugin: 'com.android.application'
+    } else {
+        apply plugin: 'com.android.library'
+    }
+    android {
+        compileSdkVersion versions.compileSdk
+        buildToolsVersion = versions.buildTools
+        defaultConfig {
+            minSdkVersion versions.minSdk
+            targetSdkVersion versions.targetSdk
+            versionCode versions.versionCode
+            versionName versions.versionName
+        }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:unchecked'
+        options.deprecation = true
+    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+        kotlinOptions {
+            jvmTarget = '1.8'
+        }
+    }
+}
+
+apply from: rootProject.file('spotless.root.gradle')
+
+tasks {
+    wrapper {
+        distributionType = Wrapper.DistributionType.ALL
+    }
+}
