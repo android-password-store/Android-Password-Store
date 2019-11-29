@@ -2,8 +2,6 @@
  * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
@@ -68,43 +66,34 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:' + versions.appcompat
-    implementation 'androidx.cardview:cardview:' + versions.cardview
-    implementation 'androidx.core:core-ktx:' + versions.coreKtx
-    implementation 'androidx.constraintlayout:constraintlayout:' + versions.constraintLayout
-    implementation 'androidx.documentfile:documentfile:' + versions.documentfile
-    implementation 'androidx.preference:preference:' + versions.preference
-    implementation ('androidx.recyclerview:recyclerview:' + versions.recyclerview) {
+    implementation deps.androidx.annotation
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.biometric
+    implementation deps.androidx.cardview
+    implementation deps.androidx.core_ktx
+    implementation deps.androidx.constraint_layout
+    implementation deps.androidx.documentfile
+    implementation deps.androidx.preference
+    implementation (deps.androidx.recycler_view) {
         force = true
     }
-    implementation 'com.google.android.material:material:' + versions.material
-    implementation 'androidx.annotation:annotation:' + versions.annotation
-    implementation 'androidx.biometric:biometric:' + versions.biometric
-    implementation 'com.github.android-password-store:openpgp-ktx:' + versions.openpgp
-    implementation('org.eclipse.jgit:org.eclipse.jgit:' + versions.jgit) {
+    implementation deps.androidx.material
+    implementation deps.third_party.commons_io
+    implementation deps.third_party.commons_codec
+
+    implementation(deps.third_party.jgit) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    implementation 'com.jcraft:jsch:' + versions.jsch
-    implementation 'commons-io:commons-io:' + versions.commons_io
-    implementation 'commons-codec:commons-codec:' + versions.commons_codec
-    implementation 'org.sufficientlysecure:sshauthentication-api:' + versions.sshauth
+    implementation deps.third_party.jsch
+    implementation deps.third_party.openpgp_ktx
+    implementation deps.third_party.ssh_auth
 
     // Testing-only dependencies
-    androidTestImplementation 'junit:junit:4.13-rc-1'
-    androidTestImplementation 'org.mockito:mockito-core:3.1.0'
-    androidTestImplementation 'androidx.test:runner:1.3.0-alpha02'
-    androidTestImplementation 'androidx.test:rules:1.3.0-alpha02'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2-alpha02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0-alpha02'
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:unchecked'
-    options.deprecation = true
-}
-tasks.withType(KotlinCompile) {
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+    androidTestImplementation deps.testing.junit
+    androidTestImplementation deps.testing.mockito_core
+    androidTestImplementation deps.testing.androidx.runner
+    androidTestImplementation deps.testing.androidx.rules
+    androidTestImplementation deps.testing.androidx.junit
+    androidTestImplementation deps.testing.androidx.espresso_core
+    androidTestImplementation deps.testing.androidx.espresso_intents
 }
