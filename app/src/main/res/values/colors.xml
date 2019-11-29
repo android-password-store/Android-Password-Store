@@ -17,4 +17,5 @@
     <color name="color_control_normal">@color/primary_text_color</color>
     <color name="color_surface">#FFFFFF</color>
     <color name="list_multiselect_background">#668eacbb</color>
+    <color name="navigation_bar_color">#B3FFFFFF</color>
 </resources>

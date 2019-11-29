@@ -74,6 +74,16 @@ android {
         }
         buildTypes.release.signingConfig = signingConfigs.release
     }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs +="src/test/kotlin"
+        androidTest.java.srcDirs += "src/androidTest/kotlin"
+    }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {

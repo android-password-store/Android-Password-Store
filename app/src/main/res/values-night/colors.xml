@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base palette -->
+    <color name="primary_color">#FF111111</color>
+    <color name="primary_light_color">#FF373737</color>
+    <color name="primary_dark_color">#FF000000</color>
+    <color name="secondary_color">#FFFF7539</color>
+    <color name="secondary_light_color">#FFFFa667</color>
+    <color name="secondary_dark_color">#FFC54506</color>
+    <color name="primary_text_color">#FFFFFFFF</color>
+    <color name="secondary_text_color">#FFFFFFFF</color>
+
+    <!-- Theme variables -->
+    <color name="window_background">@color/primary_color</color>
+    <color name="password_icon_color">#FAFAFA</color>
+    <color name="color_surface">#FF111111</color>
+    <color name="list_multiselect_background">#66EEEEEE</color>
+    <color name="navigation_bar_color">#B3000000</color>
+</resources>

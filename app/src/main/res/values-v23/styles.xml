@@ -1,0 +1,27 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/color_control_normal</item>
+        <item name="colorPrimaryDark">@color/primary_color</item>
+        <item name="colorPrimaryVariant">@color/primary_light_color</item>
+        <item name="colorSecondary">@color/secondary_color</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorOnSurface">@color/color_control_normal</item>
+        <item name="colorControlNormal">@color/color_control_normal</item>
+        <item name="passwordIconColor">@color/password_icon_color</item>
+        <item name="android:colorBackground">@color/window_background</item>
+        <item name="colorBackgroundFloating">@color/primary_dark_color</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:textColorPrimary">@color/primary_text_color</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:statusBarColor">@color/primary_dark_color</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
+        <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
+        <item name="actionModeStyle">@style/ActionMode</item>
+        <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.ActionBar</item>
+    </style>
+</resources>
