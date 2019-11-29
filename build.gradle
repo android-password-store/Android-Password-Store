@@ -3,18 +3,17 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 buildscript {
-    apply from: rootProject.file('versions.gradle')
+    apply from: rootProject.file('dependencies.gradle')
     repositories {
         google()
         jcenter()
-        mavenCentral()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:' + versions.gradlePlugin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + versions.kotlin
-        classpath 'com.diffplug.spotless:spotless-plugin-gradle:' + versions.spotless
+        classpath deps.gradle_plugin.android
+        classpath deps.gradle_plugin.kotlin
+        classpath deps.gradle_plugin.spotless
     }
 }
 
@@ -27,7 +26,7 @@ allprojects {
 }
 
 subprojects {
-    apply from: rootProject.file('versions.gradle')
+    apply from: rootProject.file('dependencies.gradle')
     apply from: rootProject.file('spotless.gradle')
     repositories {
         google()
@@ -35,7 +34,9 @@ subprojects {
     }
     if (plugins.hasPlugin('kotlin-android')) {
         dependencies {
-            implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:' + versions.kotlin
+            implementation (deps.kotlin.stdlib8) {
+                force = true
+            }
         }
     }
     if (it.name == 'app') {
