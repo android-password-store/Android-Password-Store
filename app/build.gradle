@@ -83,6 +83,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation deps.androidx.annotation
     implementation deps.androidx.appcompat
@@ -98,6 +102,8 @@ dependencies {
     implementation deps.androidx.material
     implementation deps.third_party.commons_io
     implementation deps.third_party.commons_codec
+    implementation deps.third_party.epoxy
+    kapt deps.third_party.epoxy_annotation
 
     implementation(deps.third_party.jgit) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
