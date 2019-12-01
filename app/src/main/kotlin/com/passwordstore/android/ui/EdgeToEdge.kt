@@ -36,7 +36,13 @@ private interface EdgeToEdgeImpl {
      * @param appBar An [AppBarLayout].
      * @param toolbar A [Toolbar] in the [appBar].
      */
-    fun setUpAppBar(appBar: AppBarLayout, toolbar: Toolbar) {}
+    fun setUpAppBar(appBar: AppBarLayout, toolbar: Toolbar?) {}
+
+    /**
+     * Configures an app bar and a toolbar for edge-to-edge display.
+     * @param appBar An [AppBarLayout].
+     */
+    fun setUpAppBar(appBar: AppBarLayout) {}
 
     /**
      * Configures a scrolling content for edge-to-edge display.
@@ -60,6 +66,19 @@ private class RealEdgeToEdge : EdgeToEdgeImpl {
     override fun setUpRoot(root: ViewGroup) {
         root.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+    }
+
+    override fun setUpAppBar(appBar: AppBarLayout, toolbar: Toolbar?) {
+        val originalPaddingTop = appBar.marginTop
+
+        appBar.setOnApplyWindowInsetsListener { _, windowInsets ->
+            appBar.updatePadding(top = originalPaddingTop + windowInsets.systemWindowInsetTop)
+            windowInsets
+        }
+    }
+
+    override fun setUpAppBar(appBar: AppBarLayout) {
+        setUpAppBar(appBar, null)
     }
 
     override fun setUpScrollingContent(scrollingContent: ViewGroup, fab: ExtendedFloatingActionButton?) {

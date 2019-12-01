@@ -16,8 +16,11 @@ class ServerConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityServerConfigBinding.inflate(layoutInflater)
-        EdgeToEdge.setUpRoot(binding.root as ViewGroup)
-        EdgeToEdge.setUpAppBar(binding.serverConfigAppbar, binding.serverConfigToolbar)
+        EdgeToEdge.apply {
+            setUpRoot(binding.root as ViewGroup)
+            setUpAppBar(binding.serverConfigAppbar)
+        }
         setContentView(binding.root)
+        setSupportActionBar(binding.serverConfigToolbar)
     }
 }
