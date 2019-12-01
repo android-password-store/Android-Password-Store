@@ -51,15 +51,21 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled = true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', 'GIT_HASH', '\"\"'
         }
         debug {
-            applicationIdSuffix = '.debug'
-            versionNameSuffix = '-debug'
-            minifyEnabled = false
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+            minifyEnabled false
             buildConfigField 'String', 'GIT_HASH', isCi() ? "\"${gitHash()}\"" : '\"\"'
+        }
+        dev {
+            initWith debug
+            debuggable true
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-dev'
         }
     }
     if (keystorePropertiesFile.exists()) {
