@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Password Store</string>
+    <string name="app_name">Password Store</string>
+    <string name="server_config_activity_title">Server configuration</string>
+    <string name="server_title">Server</string>
+    <string name="server_protocol_ssh">SSH</string>
+    <string name="server_protocol_https">HTTPS</string>
 </resources>

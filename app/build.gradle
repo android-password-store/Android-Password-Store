@@ -84,7 +84,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs +="src/test/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
         androidTest.java.srcDirs += "src/androidTest/kotlin"
     }
 }
@@ -102,7 +102,7 @@ dependencies {
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.documentfile
     implementation deps.androidx.preference
-    implementation (deps.androidx.recycler_view) {
+    implementation(deps.androidx.recycler_view) {
         force = true
     }
     implementation deps.androidx.material
