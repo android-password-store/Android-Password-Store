@@ -32,7 +32,10 @@ ext.deps = [
         documentfile: 'androidx.documentfile:documentfile:1.0.1',
         material: 'com.google.android.material:material:1.2.0-alpha01',
         preference: 'androidx.preference:preference:1.1.0',
-        recycler_view: 'androidx.recyclerview:recyclerview:1.0.0'
+        recycler_view: 'androidx.recyclerview:recyclerview:1.0.0',
+        room: 'androidx.room:room-runtime:2.2.2',
+        room_compiler: 'androidx.room:room-compiler:2.2.2',
+        room_ktx: 'androidx.room:room-ktx:2.2.2'
     ],
 
     third_party: [
