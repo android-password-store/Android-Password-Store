@@ -567,12 +567,12 @@ class AutofillService : AccessibilityService() {
     }
 
     private inner class OnBoundListener : OpenPgpServiceConnection.OnBound {
-        override fun onBound(service: IOpenPgpService2?) {
+        override fun onBound(service: IOpenPgpService2) {
             decryptAndVerify()
         }
 
-        override fun onError(e: Exception?) {
-            e?.printStackTrace()
+        override fun onError(e: Exception) {
+            e.printStackTrace()
         }
     }
 

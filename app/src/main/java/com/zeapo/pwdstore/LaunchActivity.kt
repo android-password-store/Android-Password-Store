@@ -6,6 +6,7 @@ package com.zeapo.pwdstore
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.crypto.PgpActivity
@@ -21,7 +22,7 @@ class LaunchActivity : AppCompatActivity() {
             Authenticator(this) {
                 when (it) {
                     is AuthenticationResult.Success -> {
-                        startTargetActivity()
+                        startTargetActivity(false)
                     }
                     is AuthenticationResult.UnrecoverableError -> {
                         finish()
@@ -31,11 +32,11 @@ class LaunchActivity : AppCompatActivity() {
                 }
             }.authenticate()
         } else {
-            startTargetActivity()
+            startTargetActivity(true)
         }
     }
 
-    private fun startTargetActivity() {
+    private fun startTargetActivity(noAuth: Boolean) {
         if (intent?.getStringExtra("OPERATION") == "DECRYPT") {
             val decryptIntent = Intent(this, PgpActivity::class.java)
             decryptIntent.putExtra("NAME", intent.getStringExtra("NAME"))
@@ -48,6 +49,6 @@ class LaunchActivity : AppCompatActivity() {
             startActivity(Intent(this, PasswordStore::class.java))
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        finish()
+        Handler().postDelayed({ finish() }, if (noAuth) 0L else 500L)
     }
 }
