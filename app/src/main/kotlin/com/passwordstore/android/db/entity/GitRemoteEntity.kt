@@ -9,7 +9,10 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.passwordstore.android.db.converter.GitAuthConverter
 
+@TypeConverters(GitAuthConverter::class)
 @Entity(tableName = "GitRemote",
         foreignKeys = [ForeignKey(
                 entity = StoreEntity::class,
@@ -28,6 +31,9 @@ data class GitRemoteEntity(
 
     @ColumnInfo(name = "name")
     val name: String,
+
+    @ColumnInfo(name = "auth")
+    val auth: GitAuth,
 
     @Embedded
     val sshKey: SSHKeyEntity
