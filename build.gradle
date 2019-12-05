@@ -17,6 +17,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.ben-manes.versions" version "0.27.0"
+}
+
 allprojects {
     repositories {
         google()
@@ -32,12 +36,12 @@ subprojects {
         google()
         jcenter()
     }
-    if (plugins.hasPlugin('kotlin-android')) {
+    pluginManager.withPlugin('kotlin-android') {
         dependencies {
             implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:' + versions.kotlin
         }
     }
-    if (it.name == 'app') {
+    if (name == 'app') {
         apply plugin: 'com.android.application'
     } else {
         apply plugin: 'com.android.library'
