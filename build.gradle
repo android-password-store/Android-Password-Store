@@ -38,7 +38,7 @@ subprojects {
     }
     pluginManager.withPlugin('kotlin-android') {
         dependencies {
-            implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:' + versions.kotlin
+            implementation deps.kotlin.stdlib8
         }
     }
     if (name == 'app') {
