@@ -41,4 +41,9 @@ interface StoreDao {
 
     @Query("SELECT * FROM Store WHERE name LIKE :storeName")
     fun getStoreByName(storeName: String): LiveData<List<StoreEntity>>
+
+    // This function can be useful when we save the current store id in shared prefs
+    // Since store names can be same in a db.
+    @Query("SELECT * FROM Store WHERE id LIKE :storeId")
+    fun getStoreById(storeId: Int?): LiveData<StoreEntity>
 }

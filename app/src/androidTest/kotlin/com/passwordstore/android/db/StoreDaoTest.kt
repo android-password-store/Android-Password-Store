@@ -44,7 +44,7 @@ class StoreDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeSingleEntry() {
+    fun testInsertStore() {
         val store = StoreEntity(name = "store", external = false, initialized = true)
         storeDao.insertStore(store)
         val byName = storeDao.getStoreByName("store").blockingObserve()
@@ -53,21 +53,22 @@ class StoreDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeMultipleEntries() {
+    fun testInsertMultipleStores() {
         val storeEntries = arrayListOf<StoreEntity>()
-        for (i in 0 until 5) {
+        for (i in 0 until 7) {
             storeEntries.add(StoreEntity(name = "store$i", external = false, initialized = false))
         }
         storeDao.insertMultipleStores(storeEntries)
+        storeDao.insertMultipleStores(storeEntries[5], storeEntries[6])
         val byName = storeDao.getAllStores().blockingObserve()
-        for (i in 0 until 5) {
+        for (i in 0 until 7) {
             assertThat(byName?.get(i)?.name, equalTo(storeEntries[i].name))
         }
     }
 
     @Test
     @Throws(Exception::class)
-    fun getStoreByName() {
+    fun testGetStoreByName() {
         val storeEntries = arrayListOf<StoreEntity>()
         for (i in 0 until 5) {
             storeEntries.add(StoreEntity(name = "store", external = false, initialized = false))
@@ -76,5 +77,14 @@ class StoreDaoTest {
         storeDao.insertMultipleStores(storeEntries)
         val byName = storeDao.getStoreByName("store").blockingObserve()
         assertThat(byName?.size, equalTo(5))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testGetStoreById() {
+        val storeEntry = StoreEntity(name = "store", external = false, initialized = false)
+        storeDao.insertStore(storeEntry)
+        val byId = storeDao.getAllStores().blockingObserve()
+        assertThat(storeEntry.name, equalTo(byId?.get(0)?.name))
     }
 }
