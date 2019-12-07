@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.passwordstore.android.db
 
 import android.content.Context
@@ -8,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.passwordstore.android.db.dao.StoreDao
 import com.passwordstore.android.db.entity.StoreEntity
+import java.io.IOException
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
@@ -15,8 +20,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import java.io.IOException
-
 
 @RunWith(AndroidJUnit4::class)
 class StoreDaoTest {
@@ -45,7 +48,7 @@ class StoreDaoTest {
         val store = StoreEntity(name = "store", external = false, initialized = true)
         storeDao.insertStore(store)
         val byName = storeDao.getStoreByName("store").blockingObserve()
-        assertThat(byName?.get(0)?.name , equalTo(store.name))
+        assertThat(byName?.get(0)?.name, equalTo(store.name))
     }
 
     @Test
@@ -58,7 +61,7 @@ class StoreDaoTest {
         storeDao.insertMultipleStores(storeEntries)
         val byName = storeDao.getAllStores().blockingObserve()
         for (i in 0 until 5) {
-            assertThat(byName?.get(i)?.name , equalTo(storeEntries[i].name))
+            assertThat(byName?.get(i)?.name, equalTo(storeEntries[i].name))
         }
     }
 
@@ -72,6 +75,6 @@ class StoreDaoTest {
         storeEntries.add(StoreEntity(name = "notStore", external = false, initialized = false))
         storeDao.insertMultipleStores(storeEntries)
         val byName = storeDao.getStoreByName("store").blockingObserve()
-        assertThat(byName?.size , equalTo(5))
+        assertThat(byName?.size, equalTo(5))
     }
 }

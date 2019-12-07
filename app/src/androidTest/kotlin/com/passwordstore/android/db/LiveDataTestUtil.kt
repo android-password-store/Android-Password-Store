@@ -1,10 +1,13 @@
-package com.passwordstore.android.db;
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+package com.passwordstore.android.db
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 fun <T> LiveData<T>.blockingObserve(): T? {
         var value: T? = null

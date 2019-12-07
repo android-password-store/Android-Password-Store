@@ -1,6 +1,14 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.passwordstore.android.db.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "Password",
         indices = [Index("store_id"), Index("name"), Index("password_location")],
@@ -10,24 +18,24 @@ import androidx.room.*
                 childColumns = ["store_id"],
                 onDelete = ForeignKey.CASCADE)
         ])
-data class PasswordEntity (
+data class PasswordEntity(
 
-        @PrimaryKey(autoGenerate = true)
-        @ColumnInfo(name = "id")
-        val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int,
 
-        @ColumnInfo(name = "store_id")
-        val storeId: Int,
+    @ColumnInfo(name = "store_id")
+    val storeId: Int,
 
-        @ColumnInfo(name = "name")
-        val name: String,
+    @ColumnInfo(name = "name")
+    val name: String,
 
-        @ColumnInfo(name = "username")
-        val username: String,
+    @ColumnInfo(name = "username")
+    val username: String,
 
-        @ColumnInfo(name = "password_location")
-        val passwordLocation: String,
+    @ColumnInfo(name = "password_location")
+    val passwordLocation: String,
 
-        @ColumnInfo(name = "notes")
-        val notes: String
+    @ColumnInfo(name = "notes")
+    val notes: String
 )
