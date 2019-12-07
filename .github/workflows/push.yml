@@ -2,10 +2,30 @@ on: [push, pull_request]
 name: CI builds
 jobs:
   setup-android:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@master
+    - name: Install coreutils
+      run: brew install coreutils
+    - name: Install Android SDK
+      uses: malinskiy/action-android/install-sdk@release/0.0.3
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: Install go compiler for libwg-go
+      uses: actions/setup-go@v1
+      with:
+        go-version: '1.13.4'
+    - name: Build App
+      uses: actions/checkout@master
     - run: ./gradlew spotlessCheck build test lintDebug -Dpre-dex=false
+    - name: Run instrumentation tests
+      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.3
+      with:
+        cmd: ./gradlew connectedCheck --stacktrace
+        api: 21
+        tag: default
+        abi: x86
     - uses: actions/upload-artifact@master
       with:
         name: Debug APK
