@@ -30,11 +30,17 @@ interface StoreDao {
     @Update
     fun updateMultipleStore(vararg storeEntity: StoreEntity)
 
+    @Update
+    fun updateMultipleStore(storeEntities: List<StoreEntity>)
+
     @Delete
     fun deleteStore(storeEntity: StoreEntity)
 
     @Delete
-    fun deleteMultipleStore(storeEntity: StoreEntity)
+    fun deleteMultipleStore(vararg storeEntity: StoreEntity)
+
+    @Delete
+    fun deleteMultipleStore(storeEntities: List<StoreEntity>)
 
     @Query("SELECT * FROM Store")
     fun getAllStores(): LiveData<List<StoreEntity>>
