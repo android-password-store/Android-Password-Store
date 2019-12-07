@@ -6,9 +6,14 @@ package com.passwordstore.android.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "SSHKey")
 data class SSHKeyEntity(
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
 
     @ColumnInfo(name = "priv_key_path")
     val privateKeyPath: String,

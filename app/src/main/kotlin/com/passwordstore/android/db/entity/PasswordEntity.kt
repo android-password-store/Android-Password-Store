@@ -3,6 +3,7 @@ package com.passwordstore.android.db.entity
 import androidx.room.*
 
 @Entity(tableName = "Password",
+        indices = [Index("store_id"), Index("name"), Index("password_location")],
         foreignKeys = [ForeignKey(
                 entity = StoreEntity::class,
                 parentColumns = ["id"],
@@ -28,8 +29,5 @@ data class PasswordEntity (
         val passwordLocation: String,
 
         @ColumnInfo(name = "notes")
-        val notes: String,
-
-        @Embedded
-        val passwordUrl: PasswordURLEntity
+        val notes: String
 )

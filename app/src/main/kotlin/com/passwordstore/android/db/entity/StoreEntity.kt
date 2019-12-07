@@ -13,7 +13,7 @@ data class StoreEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int,
+    val id: Int = 0,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -21,6 +21,6 @@ data class StoreEntity(
     @ColumnInfo(name = "external")
     val external: Boolean,
 
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "initialized")
     val initialized: Boolean
 )

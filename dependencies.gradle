@@ -54,11 +54,12 @@ ext.deps = [
         koin_test: 'org.koin:koin-test:2.0.1',
         mockito_core: 'org.mockito:mockito-core:3.1.0',
         androidx: [
-            runner: 'androidx.test:runner:1.3.0-alpha02',
-            rules: 'androidx.test:rules:1.3.0-alpha02',
-            junit: 'androidx.test.ext:junit:1.1.2-alpha02',
+            core_testing: 'androidx.arch.core:core-testing:2.1.0',
             espresso_core: 'androidx.test.espresso:espresso-core:3.3.0-alpha02',
-            espresso_intents: 'androidx.test.espresso:espresso-intents:3.3.0-alpha02'
+            espresso_intents: 'androidx.test.espresso:espresso-intents:3.3.0-alpha02',
+            junit: 'androidx.test.ext:junit:1.1.2-alpha02',
+            rules: 'androidx.test:rules:1.3.0-alpha02',
+            runner: 'androidx.test:runner:1.3.0-alpha02',
         ]
     ]
 ]

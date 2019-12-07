@@ -18,7 +18,7 @@ data class PasswordURLEntity (
         @ColumnInfo(name = "id")
         val id: Int,
 
-        @ColumnInfo(name = "password_id")
+        @ColumnInfo(name = "store_id")
         val storeId: Int,
 
         @ColumnInfo(name = "url")

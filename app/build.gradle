@@ -67,6 +67,19 @@ android {
             applicationIdSuffix '.dev'
             versionNameSuffix '-dev'
         }
+        defaultConfig {
+            // Specifies the application ID for the test APK.
+            testApplicationId "com.test.zeapo.pwdstore"
+            // Specifies the fully-qualified class name of the test instrumentation runner.
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+            // If set to 'true', enables the instrumentation class to start and stop profiling.
+            // If set to false (default), profiling occurs the entire time the instrumentation
+            // class is running.
+            testHandleProfiling true
+            // If set to 'true', indicates that the Android system should run the instrumentation
+            // class as a functional test. The default value is 'false'
+            testFunctionalTest true
+        }
     }
     if (keystorePropertiesFile.exists()) {
         final def keystoreProperties = new Properties()
@@ -83,9 +96,9 @@ android {
     }
 
     sourceSets {
+        androidTest.java.srcDirs += "src/androidTest/kotlin"
         main.java.srcDirs += "src/main/kotlin"
         test.java.srcDirs += "src/test/kotlin"
-        androidTest.java.srcDirs += "src/androidTest/kotlin"
     }
 }
 
@@ -123,11 +136,12 @@ dependencies {
     kapt deps.third_party.epoxy_annotation
 
     // Testing-only dependencies
-    androidTestImplementation deps.testing.junit
-    androidTestImplementation deps.testing.mockito_core
-    androidTestImplementation deps.testing.androidx.runner
-    androidTestImplementation deps.testing.androidx.rules
-    androidTestImplementation deps.testing.androidx.junit
+    androidTestImplementation deps.testing.androidx.core_testing
     androidTestImplementation deps.testing.androidx.espresso_core
     androidTestImplementation deps.testing.androidx.espresso_intents
+    androidTestImplementation deps.testing.androidx.junit
+    androidTestImplementation deps.testing.androidx.rules
+    androidTestImplementation deps.testing.androidx.runner
+    androidTestImplementation deps.testing.junit
+    androidTestImplementation deps.testing.mockito_core
 }
