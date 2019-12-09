@@ -114,6 +114,9 @@ dependencies {
     implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.documentfile
+    implementation deps.androidx.lifecycle
+    implementation deps.androidx.lifecycle_java8
+    implementation deps.androidx.lifecycle_livedata
     implementation deps.androidx.material
     implementation deps.androidx.preference
     implementation(deps.androidx.recycler_view) {

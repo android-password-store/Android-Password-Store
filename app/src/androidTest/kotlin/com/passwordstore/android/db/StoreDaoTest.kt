@@ -6,6 +6,7 @@ package com.passwordstore.android.db
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.asLiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
@@ -47,7 +48,7 @@ class StoreDaoTest {
     fun testInsertStore() {
         val store = StoreEntity(name = "store", external = false, initialized = true)
         storeDao.insertStore(store)
-        val byName = storeDao.getStoreByName("store").blockingObserve()
+        val byName = storeDao.getStoreByName("store").asLiveData().blockingObserve()
         assertThat(byName?.get(0)?.name, equalTo(store.name))
     }
 
@@ -60,7 +61,7 @@ class StoreDaoTest {
         }
         storeDao.insertMultipleStores(storeEntries)
         storeDao.insertMultipleStores(storeEntries[5], storeEntries[6])
-        val byName = storeDao.getAllStores().blockingObserve()
+        val byName = storeDao.getAllStores().asLiveData().blockingObserve()
         for (i in 0 until 7) {
             assertThat(byName?.get(i)?.name, equalTo(storeEntries[i].name))
         }
@@ -75,7 +76,7 @@ class StoreDaoTest {
         }
         storeEntries.add(StoreEntity(name = "notStore", external = false, initialized = false))
         storeDao.insertMultipleStores(storeEntries)
-        val byName = storeDao.getStoreByName("store").blockingObserve()
+        val byName = storeDao.getStoreByName("store").asLiveData().blockingObserve()
         assertThat(byName?.size, equalTo(5))
     }
 
@@ -84,7 +85,7 @@ class StoreDaoTest {
     fun testGetStoreById() {
         val storeEntry = StoreEntity(name = "store", external = false, initialized = false)
         storeDao.insertStore(storeEntry)
-        val byId = storeDao.getAllStores().blockingObserve()
+        val byId = storeDao.getAllStores().asLiveData().blockingObserve()
         assertThat(storeEntry.name, equalTo(byId?.get(0)?.name))
     }
 }
