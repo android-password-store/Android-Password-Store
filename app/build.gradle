@@ -12,7 +12,30 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+final def keystorePropertiesFile = rootProject.file 'keystore.properties'
+
+final def gitHash = { ->
+    final def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    stdout.toString().trim()
+}
+
+static final def isSnapshot() {
+    return System.env['GITHUB_WORKFLOW'] != null && System.env['SNAPSHOT'] != null
+}
+
 android {
+    if (isSnapshot()) {
+        android.applicationVariants.all { final variant ->
+            variant.outputs.all {
+                outputFileName = "aps_${versions.versionName}.apk"
+            }
+        }
+    }
+
     defaultConfig {
         applicationId 'com.zeapo.pwdstore'
     }
@@ -40,28 +63,19 @@ android {
         }
     }
 
-    /*
-     * To sign release builds, create the file `gradle.properties` in
-     * $HOME/.gradle or in your project directory with this content:
-     *
-     * mStoreFile=/path/to/key.store
-     * mStorePassword=xxx
-     * mKeyAlias=alias
-     * mKeyPassword=xxx
-     */
-    if (project.hasProperty('mStoreFile') &&
-            project.hasProperty('mStorePassword') &&
-            project.hasProperty('mKeyAlias') &&
-            project.hasProperty('mKeyPassword')) {
+    if (keystorePropertiesFile.exists()) {
+        final def keystoreProperties = new Properties()
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
         signingConfigs {
             release {
-                storeFile = file(project.properties['mStoreFile'] as String)
-                storePassword = project.properties['mStorePassword'] as String
-                keyAlias = project.properties['mKeyAlias'] as String
-                keyPassword = project.properties['mKeyPassword'] as String
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+                storeFile = rootProject.file keystoreProperties['storeFile']
+                storePassword = keystoreProperties['storePassword']
             }
         }
         buildTypes.release.signingConfig = signingConfigs.release
+        buildTypes.debug.signingConfig = signingConfigs.release
     }
 }
 

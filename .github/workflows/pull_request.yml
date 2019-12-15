@@ -1,7 +1,8 @@
-on: [push, pull_request]
-name: CI builds
+on: pull_request
+
+name: Check pull request
 jobs:
-  setup-android:
+  test-pr:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master

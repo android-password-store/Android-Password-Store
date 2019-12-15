@@ -1,7 +1,7 @@
 # Password Store
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-blue.svg?style=flat)](https://android-arsenal.com/details/1/1208)
-[![GitHub workflow](https://github.com/password-store/Android-Password-Store/workflows/CI%20builds/badge.svg)](https://github.com/password-store/Android-Password-Store/actions)
+[![GitHub workflow](https://github.com/android-password-store/Android-Password-Store/workflows/Deploy%20snapshot%20builds/badge.svg)](https://github.com/android-password-store/Android-Password-Store/actions)
 [![Backers on Open Collective](https://opencollective.com/Android-Password-Store/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Android-Password-Store/sponsors/badge.svg)](#sponsors)
 
 This application tries to be 100% compatible with [pass](http://www.passwordstore.org/)
@@ -10,8 +10,9 @@ You can install the application from:
 
 * [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore)
 * [Play Store](https://play.google.com/store/apps/details?id=com.zeapo.pwdstore)
+* [Snapshot builds](https://dl.msfjarvis.dev/APS/)
 
-Pull requests are more than welcome (see [TODO](https://github.com/zeapo/Android-Password-Store/projects/1#column-228844)).
+Pull requests are more than welcome (see [TODO](https://github.com/android-password-store/Android-Password-Store/projects/1#column-228844)).
 
 ## Features
 
@@ -25,7 +26,7 @@ Pull requests are more than welcome (see [TODO](https://github.com/zeapo/Android
 
 ## How-To
 
-See the [wiki](https://github.com/zeapo/Android-Password-Store/wiki/First-time-setup) for a newer written version of the following gif walkthrough
+See the [wiki](https://github.com/android-password-store/Android-Password-Store/wiki/First-time-setup) for a newer written version of the following gif walkthrough
 
 ## FAQ
 
@@ -49,7 +50,7 @@ See the [wiki](https://github.com/zeapo/Android-Password-Store/wiki/First-time-s
 
 Ways to get in touch:
 
-* [Github issues](https://github.com/zeapo/Android-Password-Store/issues), use it if you have a bug report, you do not understand how something works or you want to submit a feature request.
+* [Github issues](https://github.com/android-password-store/Android-Password-Store/issues), use it if you have a bug report, you do not understand how something works or you want to submit a feature request.
 
 ## Contributing Translations
 
@@ -65,9 +66,9 @@ Libraries that this project uses:
 
 ## Contributors
 
-This project exists thanks to all the people who contribute. Want to contribute? See if you can [find an issue](https://github.com/zeapo/Android-Password-Store/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) you wanna close, then send a PR!
+This project exists thanks to all the people who contribute. Want to contribute? See if you can [find an issue](https://github.com/android-password-store/Android-Password-Store/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) you wanna close, then send a PR!
 
-[![Opencollective](https://opencollective.com/Android-Password-Store/contributors.svg?width=890&button=false)](https://github.com/zeapo/Android-Password-Store/graphs/contributors)
+[![Opencollective](https://opencollective.com/Android-Password-Store/contributors.svg?width=890&button=false)](https://github.com/android-password-store/Android-Password-Store/graphs/contributors)
 
 ## Backers
 

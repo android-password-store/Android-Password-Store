@@ -38,3 +38,5 @@ project.properties
 .vscode/
 
 captures/
+
+keystore.*
