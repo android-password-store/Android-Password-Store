@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - master
+
+name: Deploy snapshot builds
+jobs:
+  deploy-release-snapshot:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v1
+
+    - name: Decrypt secrets
+      run: release/signing-setup.sh "$ENCRYPT_KEY"
+      env:
+        ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
+
+    - name: Download gradle dependencies
+      run: ./gradlew dependencies
+
+    - name: Validate codestyle with Spotless
+      run: ./gradlew spotlessCheck
+
+    - name: Build release app
+      run: ./gradlew :app:assembleRelease
+
+    - name: Clean secrets
+      run: release/signing-cleanup.sh
+
+    - name: Deploy snapshot
+      run: release/deploy-snapshot.sh
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+        SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
+        SERVER_DESTINATION: ${{ secrets.SERVER_DESTINATION }}
+        SSH_PORT: ${{ secrets.SSH_PORT }}
