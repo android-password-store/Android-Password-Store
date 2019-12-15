@@ -25,6 +25,8 @@ jobs:
 
     - name: Build release app
       run: ./gradlew :app:assembleRelease
+      env:
+        SNAPSHOT: "true"
 
     - name: Clean secrets
       run: release/signing-cleanup.sh

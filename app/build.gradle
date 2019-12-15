@@ -23,14 +23,16 @@ final def gitHash = { ->
     stdout.toString().trim()
 }
 
-static final def isCi() {
-    return System.env['GITHUB_WORKFLOW'] != null
+static final def isSnapshot() {
+    return System.env['GITHUB_WORKFLOW'] != null && System.env['SNAPSHOT'] != null
 }
 
 android {
-    android.applicationVariants.all { final variant ->
-        variant.outputs.all {
-            outputFileName = "aps_${isCi() ? versions.versionName : gitHash()}.apk"
+    if (isSnapshot()) {
+        android.applicationVariants.all { final variant ->
+            variant.outputs.all {
+                outputFileName = "aps_${versions.versionName}.apk"
+            }
         }
     }
 
