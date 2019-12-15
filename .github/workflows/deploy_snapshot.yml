@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+      - feature/deploy-snapshots
 
 name: Deploy snapshot builds
 jobs:
