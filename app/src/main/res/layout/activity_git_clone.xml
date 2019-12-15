@@ -139,6 +139,7 @@
         android:textColor="@android:color/white"
         android:visibility="gone"
         android:id="@+id/warn_url"
+        android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label_clone_uri"/>
 
