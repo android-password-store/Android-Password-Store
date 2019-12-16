@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - master
-      - bug/600
 
 name: Deploy snapshot builds
 jobs:
