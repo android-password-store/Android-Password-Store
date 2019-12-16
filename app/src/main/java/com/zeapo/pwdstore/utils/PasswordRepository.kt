@@ -140,6 +140,9 @@ open class PasswordRepository protected constructor() {
 
         @JvmStatic
         fun getRepositoryDirectory(context: Context): File {
+            if (!::settings.isInitialized) {
+                settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+            }
             return if (settings.getBoolean("git_external", false)) {
                 val externalRepo = settings.getString("git_external_repo", null)
                 File(requireNotNull(externalRepo))
@@ -150,7 +153,9 @@ open class PasswordRepository protected constructor() {
 
         @JvmStatic
         fun initialize(context: Context): Repository? {
-            settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+            if (!::settings.isInitialized) {
+                settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+            }
             val dir = getRepositoryDirectory(context)
             // uninitialize the repo if the dir does not exist or is absolutely empty
             if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
