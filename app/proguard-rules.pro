@@ -21,3 +21,4 @@
 -dontwarn com.google.common.**
 -dontwarn org.slf4j.**
 -keep class androidx.appcompat.widget.SearchView { *; }
+-dontobfuscate
