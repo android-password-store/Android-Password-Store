@@ -4,12 +4,7 @@
  */
 plugins {
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'kotlin-android-extensions'
-}
-
-repositories {
-    maven { url 'https://jitpack.io' }
 }
 
 final def keystorePropertiesFile = rootProject.file 'keystore.properties'
@@ -88,9 +83,7 @@ dependencies {
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.documentfile
     implementation deps.androidx.preference
-    implementation (deps.androidx.recycler_view) {
-        force = true
-    }
+    implementation (deps.androidx.recycler_view) { force = true }
     implementation deps.androidx.material
     implementation deps.third_party.commons_io
     implementation deps.third_party.commons_codec
