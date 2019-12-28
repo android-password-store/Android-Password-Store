@@ -1,5 +1,8 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.passwordstore.android.utils
-
 
 import android.os.Handler
 import android.util.Log
@@ -9,8 +12,8 @@ import androidx.fragment.app.FragmentActivity
 import com.passwordstore.android.R
 
 internal class Authenticator(
-        private val fragmentActivity: FragmentActivity,
-        private val callback: (AuthenticationResult) -> Unit
+    private val fragmentActivity: FragmentActivity,
+    private val callback: (AuthenticationResult) -> Unit
 ) {
     private val handler = Handler()
     private val biometricManager = BiometricManager.from(fragmentActivity)

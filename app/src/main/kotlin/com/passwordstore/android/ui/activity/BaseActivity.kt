@@ -1,13 +1,16 @@
+/*
+ * Copyright © 2014-2019 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.passwordstore.android.ui.activity
 
-import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.passwordstore.android.PasswordStoreApplication
 import com.passwordstore.android.utils.AuthenticationResult
 import com.passwordstore.android.utils.Authenticator
 
-abstract class BaseActivity: AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
@@ -15,12 +18,10 @@ abstract class BaseActivity: AppCompatActivity() {
             Authenticator(this) {
                 when (it) {
                     is AuthenticationResult.Success -> {
-                        Toast.makeText(this, "Auth Success", Toast.LENGTH_SHORT).show()
                         PasswordStoreApplication.needAuthentication = false
                     }
                     is AuthenticationResult.UnrecoverableError -> {
-                        Toast.makeText(this, "Auth Fail", Toast.LENGTH_SHORT).show()
-                        finish()
+                        Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show()
                         finishAffinity()
                     }
                     else -> {
