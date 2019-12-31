@@ -5,8 +5,16 @@ jobs:
   test-pr:
     runs-on: ubuntu-latest
     steps:
+
     - uses: actions/checkout@master
+
+    - uses: actions/cache@v1
+      with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/dependencies.gradle') }}
+
     - run: ./gradlew spotlessCheck build test lintDebug -Dpre-dex=false
+
     - uses: actions/upload-artifact@master
       with:
         name: Debug APK

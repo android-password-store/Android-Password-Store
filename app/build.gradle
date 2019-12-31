@@ -4,12 +4,7 @@
  */
 plugins {
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'kotlin-android-extensions'
-}
-
-repositories {
-    maven { url 'https://jitpack.io' }
 }
 
 final def keystorePropertiesFile = rootProject.file 'keystore.properties'
@@ -37,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.zeapo.pwdstore'
+        applicationId versions.packageName
     }
 
     lintOptions {
@@ -88,8 +83,10 @@ dependencies {
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.documentfile
     implementation deps.androidx.preference
-    implementation (deps.androidx.recycler_view) {
-        force = true
+    constraints {
+        implementation(deps.androidx.recycler_view) {
+            because 'versions above 1.0.0 have an accessibility related bug that causes crashes'
+        }
     }
     implementation deps.androidx.material
     implementation deps.third_party.commons_io
