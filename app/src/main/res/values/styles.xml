@@ -19,8 +19,6 @@
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:statusBarColor">@color/primary_dark_color</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/light_status_bar</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/light_navigation_bar</item>
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
