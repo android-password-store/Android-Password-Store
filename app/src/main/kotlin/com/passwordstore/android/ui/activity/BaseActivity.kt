@@ -12,13 +12,15 @@ import com.passwordstore.android.utils.Authenticator
 
 abstract class BaseActivity : AppCompatActivity() {
 
+    private val passwordStoreApplication by lazy { application as PasswordStoreApplication }
+
     override fun onResume() {
         super.onResume()
-        if (PasswordStoreApplication.needAuthentication) {
+        if (passwordStoreApplication.requiresAuthentication.value != false) {
             Authenticator(this) {
                 when (it) {
                     is AuthenticationResult.Success -> {
-                        PasswordStoreApplication.needAuthentication = false
+                        passwordStoreApplication.requiresAuthentication.postValue(false)
                     }
                     is AuthenticationResult.UnrecoverableError -> {
                         Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show()

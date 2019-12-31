@@ -11,6 +11,7 @@ import com.passwordstore.android.databinding.ActivityServerConfigBinding
 import com.passwordstore.android.ui.EdgeToEdge
 
 class ServerConfigActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityServerConfigBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

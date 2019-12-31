@@ -37,7 +37,7 @@ android {
     defaultConfig {
         applicationId 'com.zeapo.pwdstore'
     }
-    viewBinding.enabled = true
+    buildFeatures.viewBinding = true
 
     lintOptions {
         abortOnError = true // make sure build fails with lint errors!
