@@ -1,8 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Password Store</string>
+    <string name="app_name" translatable="false">Password Store</string>
     <string name="server_config_activity_title">Server configuration</string>
     <string name="server_title">Server</string>
     <string name="server_protocol_ssh">SSH</string>
     <string name="server_protocol_https">HTTPS</string>
+
+
+    <!-- Activity names -->
+
+    <string name="action_settings">Settings</string>
+    <string name="dialog_delete_title">Directory already exists</string>
+    <string name="dialog_delete_msg">Target directory already exists. Current version only supports a single store. Do you want to delete the current password store directory?\n(%1$s)</string>
+    <string name="dialog_delete">Delete directory</string>
+    <string name="dialog_do_not_delete">Cancel</string>
+    <string name="title_activity_git_clone">Repository information</string>
+    <string name="title_activity_git_config" translatable="false">Git Configurations</string>
+
+    <!-- Password Store -->
+    <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
+    <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
+    <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
+    <string name="move">Move</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="change">Change</string>
+    <string name="use">Use</string>
+    <string name="directory_selected_title">Directory already selected</string>
+    <string name="directory_selected_message">Do you want to use \"%1$s\"?</string>
+    <string name="no_key_selected_dialog_title">OpenPGP key not selected</string>
+    <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
+    <string name="password_exists_title">Password already exists!</string>
+    <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
+
+    <!-- git commits -->
+    <string name="git_commit_add_text">Add password for %1$s using android password store.</string>
+    <string name="git_commit_edit_text">"Edit %1$s using android password store."</string>
+    <string name="git_commit_remove_text">"Remove %1$s from store."</string>
+    <string name="git_commit_move_text">"Rename %1$s to %2$s."</string>
+    <string name="git_commit_increment_text">"Increment HOTP counter for %1$s."</string>
+
+    <!-- PGPHandler -->
+    <string name="provider_toast_text">No OpenPGP Provider selected!</string>
+    <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
+    <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
+    <string name="clipboard_username_toast_text">Username copied to clipboard</string>
+    <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
+    <string name="file_toast_text">Please provide a file name</string>
+    <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
+
+    <!-- Git Async Task -->
+    <string name="running_dialog_text">Running command…</string>
+    <string name="jgit_error_dialog_title">An error occurred during a Git operation</string>
+    <string name="jgit_error_dialog_text">Message from jgit: \n</string>
+
+    <!-- Git Handler -->
+    <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
+    <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
+    <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
+    <string name="ssh_preferences_dialog_title">No SSH key</string>
+    <string name="ssh_preferences_dialog_import">Import</string>
+    <string name="ssh_preferences_dialog_generate">Generate</string>
+    <string name="passphrase_dialog_title">Authenticate</string>
+    <string name="passphrase_dialog_text">Please provide the passphrase for your SSH key</string>
+    <string name="password_dialog_text">Please provide the password for this repository</string>
+
+    <!-- Clone fragment -->
+    <string name="clone">Clone from server</string>
+    <string name="initialize">Use local directory</string>
+    <string name="location_dialog_title">Repository location</string>
+    <string name="location_dialog_text">Select where to create or clone your password repository.</string>
+    <string name="location_sdcard">SD-Card</string>
+    <string name="location_hidden">Hidden (Preferred)</string>
+    <string name="external_repository_dialog_title">Choose where to store the passwords</string>
+    <string name="external_repository_dialog_text">You must select a directory where to store your passwords. If you want to store your passwords within the hidden storage of the application, cancel this dialog and disable the \"External Repository\" option.</string>
+
+    <string name="server_name">Server</string>
+    <string name="server_protocol">Protocol</string>
+    <string name="server_url">Server URL</string>
+    <string name="server_url_hint" translatable="false">server.com</string>
+    <string name="server_port_hint">Port</string>
+    <string name="default_ssh_port">22</string>
+    <string name="default_https_port">443</string>
+    <string name="server_path">Repo path</string>
+    <string name="server_path_hint">path/to/pass</string>
+    <string name="server_user">Username</string>
+    <string name="server_user_hint">git_username</string>
+
+    <string name="server_resulting_url">Resulting URL</string>
+    <string name="connection_mode">Authentication Mode</string>
+
+    <string name="warn_malformed_url_port">When using custom ports, provide an absolute path (starts with "/")</string>
+
+    <!-- Git Config fragment -->
+    <string name="git_config" translatable="false">Git config</string>
+    <string name="git_user_name" translatable="false">Username</string>
+    <string name="git_user_name_hint">Username</string>
+    <string name="git_user_email">Email</string>
+    <string name="git_user_email_hint">email</string>
+    <string name="invalid_email_dialog_text">Please enter a valid email address</string>
+    <string name="clone_button">Clone!</string>
+
+    <!-- PGP Handler -->
+    <string name="crypto_name_hint">Name</string>
+    <string name="crypto_pass_label">Password</string>
+    <string name="crypto_extra_label">Extra content</string>
+    <string name="crypto_select">Select</string>
+    <string name="crypto_cancel">Cancel</string>
+    <string name="crypto_save">Save</string>
+    <string name="crypto_save_and_copy">Save and Copy</string>
+
+    <!-- DECRYPT Layout -->
+    <string name="action_search">Search</string>
+    <string name="password">Password:</string>
+    <string name="extra_content">Extra content:</string>
+    <string name="username">Username:</string>
+    <string name="otp" translatable="false">OTP:</string>
+    <string name="edit_password">Edit password</string>
+    <string name="copy_password">Copy password</string>
+    <string name="copy_username">Copy username</string>
+    <string name="copy_otp">Copy OTP code</string>
+    <string name="share_as_plaintext">Share as plaintext</string>
+    <string name="last_changed">Last changed %s</string>
+    <string name="dialog_update_title">Attention</string>
+    <string name="dialog_update_positive">Update entry</string>
+    <string name="dialog_update_negative">Leave unchanged</string>
+    <string name="dialog_update_body">The HOTP counter is about to be incremented. This change will be committed. If you press "Leave unchanged", the HOTP code will be shown, but the counter will not be changed.</string>
+    <string name="dialog_update_check">Remember my choice</string>
+
+    <!-- Preferences -->
+    <string name="pref_git_title">Git</string>
+    <string name="pref_edit_server_info">Edit git server settings</string>
+    <string name="pref_edit_git_config">Git utils</string>
+    <string name="pref_ssh_title">Import SSH key</string>
+    <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
+    <string name="pref_ssh_see_key_title">View generated public SSH key</string>
+    <string name="pref_git_delete_repo">Delete repository</string>
+    <string name="pref_dialog_delete_title">Clear repository</string>
+    <string name="pref_crypto_title">Crypto</string>
+    <string name="pref_provider_title">Select OpenPGP Provider</string>
+    <string name="pref_key_title">Select OpenPGP Key id</string>
+    <string name="pref_no_key_selected">No key selected</string>
+    <string name="pref_general_title">General</string>
+    <string name="pref_password_title">Password Show Time</string>
+    <string name="pref_password_dialog_title">Set the time (in seconds) you want the password to be in clipboard. 0 means forever.</string>
+    <string name="pref_copy_title">Automatically copy Password</string>
+    <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
+    <string name="ssh_key_success_dialog_title">SSH-key imported</string>
+    <string name="ssh_key_error_dialog_title">Error while trying to import the ssh-key</string>
+    <string name="ssh_key_error_dialog_text">Message : \n</string>
+    <string name="pref_recursive_filter">Recursive filtering</string>
+    <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
+    <string name="pref_sort_order_title">Password sort order</string>
+    <string name="pref_folder_first_sort_order">Folders First</string>
+    <string name="pref_file_first_sort_order">Files First</string>
+    <string name="pref_type_independent_sort_order">Type Independent</string>
+    <string name="pref_autofill_title">Autofill</string>
+    <string name="pref_autofill_enable_title">Enable autofill</string>
+    <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
+    <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
+    <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>
+    <string name="pref_autofill_apps_title">App and website settings</string>
+    <string name="pref_autofill_default_title">Automatically match by default</string>
+    <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
+    <string name="pref_autofill_always_title">Always show dialog</string>
+    <string name="pref_misc_title">Misc</string>
+    <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
+    <string name="pref_clear_clipboard_hint">Store consecutive numbers in the clipboard 20 times. Useful on Samsung phones that feature clipboard history.</string>
+    <string name="pref_git_delete_repo_summary">Deletes local (hidden) repository</string>
+    <string name="pref_external_repository">External repository</string>
+    <string name="pref_external_repository_summary">Use an external password repository</string>
+    <string name="pref_select_external_repository">Select external repository</string>
+    <string name="prefs_use_default_file_picker">Use default file picker</string>
+    <string name="prefs_clear_after_copy_title">Automatically clear the clipboard after copy</string>
+    <string name="prefs_clear_after_copy_summary">After an automatic copy or a manual copy of the password, the clipboard will be automatically cleared.</string>
+    <string name="prefs_export_passwords_title">Export Passwords</string>
+    <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
+    <string name="prefs_version">Version</string>
+
+    <!-- PasswordGenerator fragment -->
+    <string name="pwgen_title">Generate Password</string>
+    <string name="pwgen_generate">Generate</string>
+    <string name="pwgen_include">Include</string>
+    <string name="pwgen_length">Length</string>
+    <string name="pwgen_numerals">Numerals</string>
+    <string name="pwgen_symbols">Symbols</string>
+    <string name="pwgen_uppercase">Uppercase</string>
+    <string name="pwgen_lowercase">Lowercase</string>
+    <string name="pwgen_ambiguous">Ambiguous</string>
+    <string name="pwgen_pronounceable">Pronounceable</string>
+    <string name="pwgen_no_chars_error">No characters included</string>
+    <string name="pwgen_length_too_short_error">Length too short for selected criteria</string>
+
+    <!-- ssh keygen fragment -->
+    <string name="ssh_keygen_length">Length</string>
+    <string name="ssh_keygen_passphrase">Passphrase</string>
+    <string name="ssh_keygen_comment">Comment</string>
+    <string name="ssh_keygen_generate">Generate</string>
+    <string name="ssh_keygen_copy">Copy</string>
+    <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
+    <string name="ssh_keygen_show_passphrase">Show passphrase</string>
+
+    <!-- Misc -->
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_positive">On my way…</string>
+    <string name="dialog_negative">Nah… later</string>
+    <string name="dialog_oops">Oops…</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="git_sync">Synchronize repository</string>
+    <string name="git_pull">Pull from remote</string>
+    <string name="git_push">Push to remote</string>
+    <string name="show_password_pref_title">Show the password</string>
+    <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
+    <string name="show_extra_content_pref_title">Show extra content</string>
+    <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted</string>
+    <string name="pwd_generate_button">Generate</string>
+    <string name="refresh_list">Refresh list</string>
+    <string name="no_repo_selected">No external repository selected</string>
+    <string name="send_plaintext_password_to">Send password as plaintext using…</string>
+    <string name="show_password">Show password</string>
+    <string name="show_extra">Show extra content</string>
+    <string name="hide_extra">Hide extra content</string>
+    <string name="repository_uri">Repository URI</string>
+    <string name="app_icon_hint">App icon</string>
+    <string name="folder_icon_hint">Folder icon</string>
+
+    <!-- Autofill -->
+    <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
+    <string name="autofill_apps_default">Use default setting</string>
+    <string name="autofill_apps_first">Automatically match</string>
+    <string name="autofill_apps_match_ellipsis">Match with…</string>
+    <string name="autofill_apps_match">Match with</string>
+    <string name="autofill_apps_never">Never match</string>
+    <string name="autofill_apps_delete">Delete</string>
+    <string name="autofill_pick">Pick…</string>
+    <string name="autofill_pick_and_match">Pick and match…</string>
+    <string name="autofill_paste">Paste</string>
+    <string name="autofill_paste_username">Paste username?\n\n%s</string>
+    <string name="autofill_toast_username">Select an editable field to paste the username.\nUsername is available for %d seconds.</string>
+    <string name="ssh_key_does_not_exist">Unable to open the ssh private key, please check that the file exists</string>
+    <string name="new_password_title">New password</string>
+    <string name="edit_password_title">Editing</string>
+    <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
+    <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
+    <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>
+    <string name="git_pull_fail_error">Pull has failed, you\'re in a detached head. Using "settings > git utils", save your changes to the remote in a new branch and resolve the conflict on your computer.</string>
+    <string name="git_push_nff_error">Push was rejected by remote, run pull before pushing again. You can use Synchronize rather than pull/push as it implements both</string>
+    <string name="git_push_generic_error">Push was rejected by remote, reason:</string>
+    <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
+    <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
+    <string name="ssh_key_clear_passphrase">Clear ssh-key saved passphrase</string>
+    <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
+    <string name="remember_the_passphrase">Remember the passphrase in the app configuration (insecure)</string>
+    <string name="hackish_tools">Hackish tools</string>
+    <string name="abort_rebase">Abort rebase and push new branch</string>
+    <string name="reset_to_remote">Hard reset to remote branch</string>
+    <string name="commit_hash">Commit hash</string>
+    <string name="crypto_extra_edit_hint">username: something other extra content</string>
+    <string name="get_last_changed_failed">Failed to get last changed date</string>
+    <string name="hotp_pending">Tap copy to calculate HOTP</string>
+    <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
+    <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
+    <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>
+    <string name="ssh_api_unknown_error">Unknown SSH API Error</string>
+    <string name="sdcard_root_warning_title">SD-Card root selected</string>
+    <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
+    <string name="git_abort_and_push_title">Abort and Push</string>
+    <string name="biometric_prompt_title">Biometric Prompt</string>
+    <string name="biometric_prompt_retry">Retry</string>
+    <string name="biometric_prompt_cancelled">Authentication canceled</string>
+    <string name="biometric_prompt_no_hardware">No Biometric hardware was found</string>
+    <string name="biometric_auth_title">Enable biometric authentication</string>
+    <string name="biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
+    <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
+    <string name="ssh_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
+    <string name="access_sdcard_text">The store is on the sdcard but the app does not have permission to access it. Please give permission.</string>
+    <string name="your_public_key">Your public key</string>
+    <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
+    <string name="pref_show_hidden_title">Show hidden folders</string>
+    <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
 </resources>
