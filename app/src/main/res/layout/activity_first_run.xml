@@ -1,70 +1,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/app_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@mipmap/ic_launcher"
-        android:contentDescription="@string/app_icon_hint"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <fragment
+        android:id="@+id/fragment_first_run"
+        android:name="com.passwordstore.android.ui.fragments.WelcomeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:text="@string/app_name"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        app:layout_constraintTop_toBottomOf="@+id/app_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:id="@+id/use_local_directory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:minWidth="100dp"
-        android:maxWidth="300dp"
-        android:textColor="@android:color/white"
-        android:text="@string/initialize"
-        android:textSize="12sp"
-        android:layout_marginTop="48dp"
-        app:backgroundTint="?attr/colorSecondary"
-        app:rippleColor="?attr/colorControlHighlight"
-        app:layout_constraintTop_toBottomOf="@id/app_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/clone_from_server"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minWidth="100dp"
-        android:maxWidth="300dp"
-        android:textColor="@android:color/white"
-        android:text="@string/clone"
-        android:textSize="12sp"
-        app:backgroundTint="?attr/colorSecondary"
-        app:rippleColor="?attr/colorControlHighlight"
-        app:layout_constraintTop_toBottomOf="@id/use_local_directory"
-        app:layout_constraintStart_toStartOf="@id/use_local_directory"
-        app:layout_constraintEnd_toEndOf="@id/use_local_directory" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

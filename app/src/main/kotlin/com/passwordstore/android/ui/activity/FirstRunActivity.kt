@@ -11,11 +11,9 @@ import com.passwordstore.android.ui.EdgeToEdge
 
 class FirstRunActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityFirstRunBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFirstRunBinding.inflate(layoutInflater)
+        val binding = ActivityFirstRunBinding.inflate(layoutInflater)
         EdgeToEdge.setUpRoot(binding.root as ViewGroup)
         setContentView(binding.root)
     }

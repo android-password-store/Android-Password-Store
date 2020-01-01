@@ -41,6 +41,13 @@
         <item name="hintTextColor">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="MaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?attr/colorSecondary</item>
+        <item name="rippleColor">?attr/colorControlHighlight</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="NoBackgroundTheme" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>

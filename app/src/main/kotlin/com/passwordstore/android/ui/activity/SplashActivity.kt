@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import androidx.preference.PreferenceManager
 import com.passwordstore.android.databinding.ActivitySplashBinding
 import com.passwordstore.android.ui.EdgeToEdge
-import com.passwordstore.android.utils.Constants.IS_FIRST_RUN
+import com.passwordstore.android.utils.PreferenceKeys.IS_FIRST_RUN
 
 class SplashActivity : BaseActivity() {
 
