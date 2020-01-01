@@ -12,10 +12,11 @@ import com.passwordstore.android.utils.Authenticator
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private val application = getApplication() as PasswordStoreApplication
+    private lateinit var application: PasswordStoreApplication
 
     override fun onResume() {
         super.onResume()
+        application = getApplication() as PasswordStoreApplication
         if (application.requiresAuthentication.value != false) {
             Authenticator(this) {
                 when (it) {
