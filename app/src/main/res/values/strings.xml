@@ -68,7 +68,7 @@
     <!-- Clone fragment -->
     <string name="clone">Clone from server</string>
     <string name="initialize">Use local directory</string>
-    <string name="location_dialog_title">Repository location</string>
+    <string name="location_dialog_title">Repository Location</string>
     <string name="location_dialog_text">Select where to create or clone your password repository.</string>
     <string name="location_sdcard">SD-Card</string>
     <string name="location_hidden">Hidden (Preferred)</string>
@@ -281,4 +281,11 @@
     <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
     <string name="pref_show_hidden_title">Show hidden folders</string>
     <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
+    <string name="repository_n_location">Repository \nLocation</string>
+    <string name="select_n_openpgp_provider">Select \nOpenPGP Provider</string>
+    <string name="let_s_go">Let\'s Go</string>
+    <string name="select_n_repository_type">Select \nRepository Type</string>
+    <string name="select_repo_type_text">Select if you want to create a local repo or clone a remote repo.</string>
+    <string name="clone_remote_repo">Clone Remote Repo</string>
+    <string name="create_local_repo">Create Local Repo</string>
 </resources>
