@@ -31,8 +31,8 @@
     <string name="empty_toast_text">无法使用空白密码或者空白的额外内容</string>
     <string name="file_toast_text">请提供一个文件名</string>
     <string name="forget_username_dialog_text">你忘了提供用户名了吗？</string>
-    <string name="git_commit_edit_text">修改 %1$s 从商店</string>
-    <string name="git_commit_add_text">添加 %1$s 从商店</string>
+    <string name="git_commit_edit_text">使用Android Password Store来修改 %1$s</string>
+    <string name="git_commit_add_text">使用Android Password Store来添加 %1$s</string>
     <string name="git_pull">Git Pull</string>
     <string name="git_push">Git Push</string>
     <string name="git_sync">同步 Repo</string>
