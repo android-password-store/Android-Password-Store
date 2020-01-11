@@ -27,7 +27,6 @@ ext.deps = [
         annotation: 'androidx.annotation:annotation:1.1.0',
         appcompat: 'androidx.appcompat:appcompat:1.2.0-alpha01',
         biometric: 'androidx.biometric:biometric:1.0.1',
-        cardview: 'androidx.cardview:cardview:1.0.0',
         constraint_layout: 'androidx.constraintlayout:constraintlayout:2.0.0-beta4',
         core_ktx: 'androidx.core:core-ktx:1.2.0-rc01',
         documentfile: 'androidx.documentfile:documentfile:1.0.1',

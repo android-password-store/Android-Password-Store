@@ -78,7 +78,6 @@ dependencies {
     implementation deps.androidx.annotation
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
-    implementation deps.androidx.cardview
     implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.documentfile
