@@ -18,6 +18,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -440,12 +441,12 @@ class AutofillService : AccessibilityService() {
         dialog = builder.create()
         setDialogType(dialog)
         dialog?.window?.apply {
-            val height = 200
             val density = context.resources.displayMetrics.density
             addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+            setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             // arbitrary non-annoying size
-            setLayout((240 * density).toInt(), (height * density).toInt())
+            setLayout((340 * density).toInt(), WRAP_CONTENT)
         }
         dialog?.show()
     }
