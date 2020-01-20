@@ -411,7 +411,14 @@ class AutofillService : AccessibilityService() {
         // make it optional (or make height a setting for the same effect)
         val itemNames = arrayOfNulls<CharSequence>(items.size + 2)
         for (i in items.indices) {
-            itemNames[i] = items[i].name.replace(".gpg", "")
+            if (settings!!.getBoolean("autofill_full_path", false)) {
+                itemNames[i] = items[i].path.replace(".gpg", "")
+                        .replace(
+                                PasswordRepository.getRepositoryDirectory(applicationContext).toString() + "/",
+                                "")
+            } else {
+                itemNames[i] = items[i].name.replace(".gpg", "")
+            }
         }
         itemNames[items.size] = getString(R.string.autofill_pick)
         itemNames[items.size + 1] = getString(R.string.autofill_pick_and_match)

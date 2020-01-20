@@ -92,10 +92,12 @@ class UserPreference : AppCompatActivity() {
             val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
             val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
             val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
+            val autoFillShowFullNamePreference = findPreference<CheckBoxPreference>("autofill_full_path")
             autofillDependencies = listOf(
                     autoFillAppsPreference,
                     autoFillDefaultPreference,
-                    autoFillAlwaysShowDialogPreference
+                    autoFillAlwaysShowDialogPreference,
+                    autoFillShowFullNamePreference
             )
 
             // Misc preferences

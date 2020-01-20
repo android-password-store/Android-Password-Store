@@ -159,6 +159,8 @@
     <string name="pref_autofill_default_title">Automatically match by default</string>
     <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
     <string name="pref_autofill_always_title">Always show dialog</string>
+    <string name="pref_autofill_full_path_title">Show Full Path</string>
+    <string name="pref_autofill_full_path_hint">Show full path of matching password files</string>
     <string name="pref_misc_title">Misc</string>
     <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
     <string name="pref_clear_clipboard_hint">Store consecutive numbers in the clipboard 20 times. Useful on Samsung phones that feature clipboard history.</string>
