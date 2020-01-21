@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - TBD
+
+### Added
+- Add save-and-copy button
+- Dark theme
+- Setting to save OpenKeychain auth id
+- Add number of passwords to folders
+
+### Changed
+- Updated UI design and iconograph
+- Biometric authentication
+- Use new OpenKeychain integration library
+
+### Fixed
+- Snackbars showing behind keyboards
+
 ## [1.3.2] - 2018-12-23
 
 ### Changed
