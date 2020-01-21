@@ -118,6 +118,11 @@
             android:defaultValue="false"
             android:key="autofill_always"
             android:title="@string/pref_autofill_always_title"/>
+        <androidx.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="autofill_full_path"
+            android:summary="@string/pref_autofill_full_path_hint"
+            android:title="@string/pref_autofill_full_path_title"/>
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_misc_title">
