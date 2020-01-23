@@ -24,8 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
                         application.requiresAuthentication.postValue(false)
                     }
                     is AuthenticationResult.UnrecoverableError -> {
-                        Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show()
-                        finishAffinity()
+                        application.requiresAuthentication.postValue(false)
                     }
                     else -> {
                     }

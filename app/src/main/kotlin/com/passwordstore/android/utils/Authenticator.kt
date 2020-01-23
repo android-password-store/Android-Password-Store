@@ -6,6 +6,7 @@ package com.passwordstore.android.utils
 
 import android.os.Handler
 import android.util.Log
+import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
@@ -23,7 +24,12 @@ internal class Authenticator(
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             Log.d(TAG, "Error: $errorCode: $errString")
-            callback(AuthenticationResult.UnrecoverableError(errorCode, errString))
+            callback(
+                when (errorCode) {
+                    BiometricConstants.ERROR_USER_CANCELED -> AuthenticationResult.Cancelled
+                    else -> AuthenticationResult.UnrecoverableError(errorCode, errString)
+                }
+            )
         }
 
         override fun onAuthenticationFailed() {
