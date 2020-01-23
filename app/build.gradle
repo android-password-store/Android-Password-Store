@@ -110,7 +110,6 @@ dependencies {
     implementation deps.androidx.annotation
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
-    implementation deps.androidx.cardview
     implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.documentfile
@@ -120,8 +119,10 @@ dependencies {
     implementation deps.androidx.lifecycle_livedata
     implementation deps.androidx.material
     implementation deps.androidx.preference
-    implementation(deps.androidx.recycler_view) {
-        force = true
+    constraints {
+        implementation(deps.androidx.recycler_view) {
+            because 'versions above 1.0.0 have an accessibility related bug that causes crashes'
+        }
     }
     implementation deps.androidx.room
     implementation deps.androidx.room_ktx
