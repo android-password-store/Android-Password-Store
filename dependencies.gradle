@@ -38,6 +38,8 @@ ext.deps = [
     third_party: [
         commons_io: 'commons-io:commons-io:2.5',
         commons_codec: 'commons-codec:commons-codec:1.13',
+        dagger: "com.google.dagger:dagger:2.25.4",
+        dagger_compiler: "com.google.dagger:dagger-compiler:2.25.4",
         fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.0',
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
