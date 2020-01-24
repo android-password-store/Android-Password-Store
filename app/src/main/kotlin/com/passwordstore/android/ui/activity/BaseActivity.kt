@@ -4,7 +4,6 @@
  */
 package com.passwordstore.android.ui.activity
 
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.passwordstore.android.PasswordStoreApplication
 import com.passwordstore.android.utils.AuthenticationResult
