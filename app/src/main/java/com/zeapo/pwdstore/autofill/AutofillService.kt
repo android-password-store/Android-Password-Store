@@ -17,7 +17,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
@@ -45,6 +44,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
+import timber.log.Timber
 
 class AutofillService : AccessibilityService() {
     private var serviceConnection: OpenPgpServiceConnection? = null
@@ -518,11 +518,11 @@ class AutofillService : AccessibilityService() {
                         lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L
                     }
                 } catch (e: UnsupportedEncodingException) {
-                    Log.e(Constants.TAG, "UnsupportedEncodingException", e)
+                    Timber.tag(Constants.TAG).e(e, "UnsupportedEncodingException")
                 }
             }
             OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                Log.i("PgpHandler", "RESULT_CODE_USER_INTERACTION_REQUIRED")
+                Timber.tag("PgpHandler").i("RESULT_CODE_USER_INTERACTION_REQUIRED")
                 val pi = result.getParcelableExtra<PendingIntent>(OpenPgpApi.RESULT_INTENT)
                 // need to start a blank activity to call startIntentSenderForResult
                 val intent = Intent(this@AutofillService, AutofillActivity::class.java)
@@ -536,8 +536,8 @@ class AutofillService : AccessibilityService() {
                     Toast.makeText(this@AutofillService,
                             "Error from OpenKeyChain : " + error.message,
                             Toast.LENGTH_LONG).show()
-                    Log.e(Constants.TAG, "onError getErrorId:" + error.errorId)
-                    Log.e(Constants.TAG, "onError getMessage:" + error.message)
+                    Timber.tag(Constants.TAG).e("onError getErrorId: ${error.errorId}")
+                    Timber.tag(Constants.TAG).e("onError getMessage: ${error.message}")
                 }
             }
         }
