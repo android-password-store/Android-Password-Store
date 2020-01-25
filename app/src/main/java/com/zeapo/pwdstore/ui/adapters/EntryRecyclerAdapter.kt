@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.widget.MultiselectableConstraintLayout
-import me.zhanghai.android.fastscroll.PopupTextProvider
 import java.io.File
 import java.util.ArrayList
 import java.util.Locale
 import java.util.TreeSet
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<PasswordItem>) : RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder>(), PopupTextProvider {
     internal val selectedItems: MutableSet<Int> = TreeSet()

@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.splitLines
-import me.zhanghai.android.fastscroll.PopupTextProvider
 import java.util.ArrayList
 import java.util.Locale
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 internal class AutofillRecyclerAdapter(
     allApps: List<AppInfo>,

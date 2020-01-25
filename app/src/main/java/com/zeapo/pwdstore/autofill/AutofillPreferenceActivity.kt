@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zeapo.pwdstore.R
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.lang.ref.WeakReference
 import java.util.ArrayList
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class AutofillPreferenceActivity : AppCompatActivity() {
 

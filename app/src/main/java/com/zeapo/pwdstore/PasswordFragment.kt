@@ -23,10 +23,10 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getPasswords
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.util.Locale
 import java.util.Stack
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 /**
  * A fragment representing a list of Items.
