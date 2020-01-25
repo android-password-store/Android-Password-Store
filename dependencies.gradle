@@ -41,6 +41,7 @@ ext.deps = [
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
         openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:1.2.0',
+        ssh_auth: 'org.sufficientlysecure:sshauthentication-api:1.0',
         timber: "com.jakewharton.timber:timber:4.7.1",
     ],
 
