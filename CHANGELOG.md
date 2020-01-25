@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - TBD
+## Unreleased
+
+### Fixed
+- OpenKeychain errors cause app crash
+
+## [1.4.0] - 2020-01-24
 
 ### Added
 - Add save-and-copy button

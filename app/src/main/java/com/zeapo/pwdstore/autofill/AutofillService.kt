@@ -40,11 +40,11 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
-import me.msfjarvis.openpgpktx.OpenPgpError
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
+import org.openintents.openpgp.OpenPgpError
 
 class AutofillService : AccessibilityService() {
     private var serviceConnection: OpenPgpServiceConnection? = null
