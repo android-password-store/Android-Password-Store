@@ -20,6 +20,7 @@
 -dontwarn com.google.common.**
 -dontwarn org.slf4j.**
 -keep class androidx.appcompat.widget.SearchView { *; }
+-keep class org.openintents.openpgp.**
 -keepattributes SourceFile,LineNumberTable
 -dontobfuscate
 -keep class com.jcraft.jsch.**
