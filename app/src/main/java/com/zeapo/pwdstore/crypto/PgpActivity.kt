@@ -54,7 +54,6 @@ import kotlinx.android.synthetic.main.encrypt_layout.generate_password
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import me.msfjarvis.openpgpktx.OpenPgpError
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.ACTION_DECRYPT_VERIFY
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE
@@ -67,6 +66,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
+import org.openintents.openpgp.OpenPgpError
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard: ClipboardManager by lazy {

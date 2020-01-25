@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Fast scroller with alphabetic hints
 
+### Fixed
+- OpenKeychain errors cause app crash
+
 ## [1.4.0] - 2020-01-24
 
 ### Added
