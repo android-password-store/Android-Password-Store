@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.utils;
 
-import android.util.Log;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -13,6 +12,7 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base32;
+import timber.log.Timber;
 
 public class Otp {
 
@@ -34,10 +34,10 @@ public class Otp {
             mac = Mac.getInstance(ALGORITHM);
             mac.init(signingKey);
         } catch (NoSuchAlgorithmException e) {
-            Log.e("TOTP", ALGORITHM + " unavailable - should never happen", e);
+            Timber.tag("TOTP").e(e, "%s unavailable - should never happen", ALGORITHM);
             return null;
         } catch (InvalidKeyException e) {
-            Log.e("TOTP", "Key is malformed", e);
+            Timber.tag("TOTP").e(e, "Key is malformed");
             return null;
         }
 

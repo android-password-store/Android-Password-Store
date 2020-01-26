@@ -97,6 +97,7 @@ dependencies {
     implementation deps.third_party.jsch
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
+    implementation deps.third_party.timber
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit

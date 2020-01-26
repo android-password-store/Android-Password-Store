@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.Settings
-import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
@@ -47,6 +46,7 @@ import java.util.HashSet
 import java.util.TimeZone
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.apache.commons.io.FileUtils
+import timber.log.Timber
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -477,13 +477,13 @@ class UserPreference : AppCompatActivity() {
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
 
-                    Log.d(TAG, "Selected repository URI is $uri")
+                    Timber.tag(TAG).d("Selected repository URI is $uri")
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     val repoPath = "${Environment.getExternalStorageDirectory()}/${split[1]}"
 
-                    Log.d(TAG, "Selected repository path is $repoPath")
+                    Timber.tag(TAG).d("Selected repository path is $repoPath")
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
                         MaterialAlertDialogBuilder(this)
@@ -532,7 +532,7 @@ class UserPreference : AppCompatActivity() {
         val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory(applicationContext))
         val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
 
-        Log.d(TAG, "Copying ${repositoryDirectory.path} to $targetDirectory")
+        Timber.tag(TAG).d("Copying ${repositoryDirectory.path} to $targetDirectory")
 
         val dateString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime

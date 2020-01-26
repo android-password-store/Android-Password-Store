@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Fast scroller with alphabetic hints
 
+### Changed
+- Logging is now enabled in release builds
+
 ### Fixed
 - OpenKeychain errors cause app crash
 
