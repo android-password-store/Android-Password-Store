@@ -21,6 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zeapo.pwdstore.R
 import java.lang.ref.WeakReference
 import java.util.ArrayList
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class AutofillPreferenceActivity : AppCompatActivity() {
 
@@ -39,6 +40,7 @@ class AutofillPreferenceActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         recyclerView!!.layoutManager = layoutManager
         recyclerView!!.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        FastScrollerBuilder(recyclerView!!).build()
 
         pm = packageManager
 

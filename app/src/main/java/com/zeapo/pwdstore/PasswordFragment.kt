@@ -26,6 +26,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.g
 import java.io.File
 import java.util.Locale
 import java.util.Stack
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 /**
  * A fragment representing a list of Items.
@@ -67,6 +68,8 @@ class PasswordFragment : Fragment() {
         recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         // Set the adapter
         recyclerView.adapter = recyclerAdapter
+        // Setup fast scroller
+        FastScrollerBuilder(recyclerView).build()
         val fab: FloatingActionButton = view.findViewById(R.id.fab)
         fab.setOnClickListener { (requireActivity() as PasswordStore).createPassword() }
         registerForContextMenu(recyclerView)

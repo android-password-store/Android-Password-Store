@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Fast scroller with alphabetic hints
+
 ### Changed
 - Logging is now enabled in release builds
 

@@ -19,15 +19,21 @@ import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.widget.MultiselectableConstraintLayout
 import java.io.File
 import java.util.ArrayList
+import java.util.Locale
 import java.util.TreeSet
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
-abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<PasswordItem>) : RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder>() {
+abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<PasswordItem>) : RecyclerView.Adapter<EntryRecyclerAdapter.ViewHolder>(), PopupTextProvider {
     internal val selectedItems: MutableSet<Int> = TreeSet()
     internal var settings: SharedPreferences? = null
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
         return values.size
+    }
+
+    override fun getPopupText(position: Int): String {
+        return values[position].name[0].toString().toUpperCase(Locale.getDefault())
     }
 
     fun clear() {

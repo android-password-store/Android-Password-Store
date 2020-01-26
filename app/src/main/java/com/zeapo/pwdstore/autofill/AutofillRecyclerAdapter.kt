@@ -20,11 +20,12 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.splitLines
 import java.util.ArrayList
 import java.util.Locale
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 internal class AutofillRecyclerAdapter(
     allApps: List<AppInfo>,
     private val activity: AutofillPreferenceActivity
-) : RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<AutofillRecyclerAdapter.ViewHolder>(), PopupTextProvider {
 
     private val apps: SortedList<AppInfo>
     private val allApps: ArrayList<AppInfo> // for filtering, maintain a list of all
@@ -54,6 +55,10 @@ internal class AutofillRecyclerAdapter(
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
+    }
+
+    override fun getPopupText(position: Int): String {
+        return allApps[position].appName[0].toString().toUpperCase(Locale.getDefault())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
