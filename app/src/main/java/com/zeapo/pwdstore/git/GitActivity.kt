@@ -10,7 +10,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,6 +31,7 @@ import java.io.IOException
 import java.util.regex.Pattern
 import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.lib.Constants
+import timber.log.Timber
 
 open class GitActivity : AppCompatActivity() {
     private lateinit var context: Context
@@ -596,7 +596,7 @@ open class GitActivity : AppCompatActivity() {
                 SshApiSessionFactory.POST_SIGNATURE -> return
 
                 else -> {
-                    Log.e(TAG, "Operation not recognized : $operation")
+                    Timber.tag(TAG).e("Operation not recognized : $operation")
                     setResult(AppCompatActivity.RESULT_CANCELED)
                     finish()
                     return

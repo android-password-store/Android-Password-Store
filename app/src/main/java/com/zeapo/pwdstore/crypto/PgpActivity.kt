@@ -19,7 +19,6 @@ import android.os.Handler
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -67,6 +66,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
+import timber.log.Timber
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard: ClipboardManager by lazy {
@@ -103,6 +103,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        Timber.tag(TAG)
 
         // some persistence
         val providerPackageName = settings.getString("openpgp_provider_list", "")
@@ -202,7 +203,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * @param requestCode The code we'd like to use to identify the behaviour
      */
     private fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
-        Log.i(TAG, "RESULT_CODE_USER_INTERACTION_REQUIRED")
+        Timber.i("RESULT_CODE_USER_INTERACTION_REQUIRED")
 
         val pi: PendingIntent? = result.getParcelableExtra(RESULT_INTENT)
         try {
@@ -211,7 +212,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     null, 0, 0, 0
             )
         } catch (e: IntentSender.SendIntentException) {
-            Log.e(TAG, "SendIntentException", e)
+            Timber.e(e, "SendIntentException")
         }
     }
 
@@ -230,8 +231,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val error: OpenPgpError? = result.getParcelableExtra(RESULT_ERROR)
         if (error != null) {
             showSnackbar("Error from OpenKeyChain : " + error.message)
-            Log.e(TAG, "onError getErrorId:" + error.message)
-            Log.e(TAG, "onError getMessage:" + error.message)
+            Timber.e("onError getErrorId: ${error.errorId}")
+            Timber.e("onError getMessage: ${error.message}")
         }
     }
 
@@ -408,7 +409,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     copyPasswordToClipBoard()
                                 }
                             } catch (e: Exception) {
-                                Log.e(TAG, "An Exception occurred", e)
+                                Timber.e(e, "An Exception occurred")
                             }
                         }
                         RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
@@ -482,7 +483,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 setResult(RESULT_OK, returnIntent)
                                 finish()
                             } catch (e: Exception) {
-                                Log.e(TAG, "An Exception occurred", e)
+                                Timber.e(e, "An Exception occurred")
                             }
                         }
                         RESULT_CODE_ERROR -> handleError(result)
@@ -584,7 +585,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 setResult(RESULT_OK)
                                 finish()
                             } catch (e: Exception) {
-                                Log.e(TAG, "An Exception occurred", e)
+                                Timber.e(e, "An Exception occurred")
                             }
                         }
                         RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_KEY_ID)
@@ -806,7 +807,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             checkAndIncrementHotp()
 
             // No need to validate clear_after_copy. It was validated in copyPasswordToClipBoard()
-            Log.d("DELAY_SHOW", "Clearing the clipboard")
+            Timber.d("Clearing the clipboard")
             val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
             clipboard.setPrimaryClip(clip)
             if (settings.getBoolean("clear_clipboard_20x", false)) {

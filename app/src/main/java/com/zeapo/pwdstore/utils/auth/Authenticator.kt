@@ -5,11 +5,11 @@
 package com.zeapo.pwdstore.utils.auth
 
 import android.os.Handler
-import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
 import com.zeapo.pwdstore.R
+import timber.log.Timber
 
 internal class Authenticator(
     private val fragmentActivity: FragmentActivity,
@@ -22,19 +22,19 @@ internal class Authenticator(
 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
-            Log.d(TAG, "Error: $errorCode: $errString")
+            Timber.tag(TAG).d("Error: $errorCode: $errString")
             callback(AuthenticationResult.UnrecoverableError(errorCode, errString))
         }
 
         override fun onAuthenticationFailed() {
             super.onAuthenticationFailed()
-            Log.d(TAG, "Failed")
+            Timber.tag(TAG).d("Failed")
             callback(AuthenticationResult.Failure)
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
-            Log.d(TAG, "Success")
+            Timber.tag(TAG).d("Success")
             callback(AuthenticationResult.Success(result.cryptoObject))
         }
     }
