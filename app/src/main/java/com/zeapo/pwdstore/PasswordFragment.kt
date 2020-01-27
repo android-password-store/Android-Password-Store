@@ -23,10 +23,10 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getPasswords
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.util.Locale
 import java.util.Stack
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 /**
  * A fragment representing a list of Items.
@@ -70,15 +70,28 @@ class PasswordFragment : Fragment() {
         recyclerView.adapter = recyclerAdapter
         // Setup fast scroller
         FastScrollerBuilder(recyclerView).build()
-        with(view.findViewById<FloatingActionButton>(R.id.fab)) {
-            setOnClickListener {
-                isExpanded = !isExpanded
-                isActivated = isExpanded
-                animate().rotationBy(if(isExpanded) -45f else 45f).setDuration(100).start()
-            }
+        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener {
+            toggleFabExpand(fab)
+        }
+
+        view.findViewById<FloatingActionButton>(R.id.create_folder).setOnClickListener {
+            (requireActivity() as PasswordStore).createFolder()
+            toggleFabExpand(fab)
+        }
+
+        view.findViewById<FloatingActionButton>(R.id.create_password).setOnClickListener {
+            (requireActivity() as PasswordStore).createPassword()
+            toggleFabExpand(fab)
         }
         registerForContextMenu(recyclerView)
         return view
+    }
+
+    private fun toggleFabExpand(fab: FloatingActionButton) = with(fab) {
+        isExpanded = !isExpanded
+        isActivated = isExpanded
+        animate().rotationBy(if (isExpanded) -45f else 45f).setDuration(100).start()
     }
 
     override fun onAttach(context: Context) {
