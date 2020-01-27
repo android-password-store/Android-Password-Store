@@ -100,6 +100,8 @@ dependencies {
     implementation deps.third_party.timber
     implementation deps.third_party.whatthestack
 
+    debugImplementation deps.third_party.leakcanary
+
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit
     androidTestImplementation deps.testing.androidx.runner
