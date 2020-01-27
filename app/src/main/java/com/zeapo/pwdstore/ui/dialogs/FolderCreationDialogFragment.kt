@@ -19,7 +19,7 @@ class FolderCreationDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
-        alertDialogBuilder.setPositiveButton("Create") { _: DialogInterface, _: Int ->
+        alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _: DialogInterface, _: Int ->
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
         return alertDialogBuilder.create()
@@ -34,7 +34,6 @@ class FolderCreationDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val TAG = "FolderCreationDialogFragment"
         private const val CURRENT_DIR_EXTRA = "CURRENT_DIRECTORY"
         fun newInstance(startingDirectory: String): FolderCreationDialogFragment {
             val extras = bundleOf(CURRENT_DIR_EXTRA to startingDirectory)
