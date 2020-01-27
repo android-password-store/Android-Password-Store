@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore
 
+import com.haroldadmin.whatthestack.WhatTheStack
 import timber.log.Timber
 
 @Suppress("Unused")
@@ -12,5 +13,8 @@ class Application : android.app.Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        if (BuildConfig.ENABLE_DEBUG_FEATURES) {
+            WhatTheStack(this).init()
+        }
     }
 }
