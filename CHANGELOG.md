@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Fast scroller with alphabetic hints
+- UI button to create new folders
 
 ### Changed
 - Logging is now enabled in release builds
