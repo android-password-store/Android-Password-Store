@@ -50,11 +50,13 @@ android {
         release {
             minifyEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'boolean', 'ENABLE_DEBUG_FEATURES', isSnapshot() ? 'true' : 'false'
         }
         debug {
             applicationIdSuffix = '.debug'
             versionNameSuffix = '-debug'
             minifyEnabled = false
+            buildConfigField 'boolean', 'ENABLE_DEBUG_FEATURES', 'true'
         }
     }
 
@@ -100,7 +102,11 @@ dependencies {
     implementation deps.third_party.timber
     implementation deps.third_party.whatthestack
 
-    debugImplementation deps.third_party.leakcanary
+    if (isSnapshot()) {
+        implementation deps.third_party.leakcanary
+    } else {
+        debugImplementation deps.third_party.leakcanary
+    }
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit

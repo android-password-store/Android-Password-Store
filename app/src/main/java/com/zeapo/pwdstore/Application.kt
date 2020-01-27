@@ -13,7 +13,7 @@ class Application : android.app.Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.ENABLE_DEBUG_FEATURES) {
             WhatTheStack(this).init()
         }
     }
