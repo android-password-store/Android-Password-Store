@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import java.io.File
 
@@ -27,7 +28,10 @@ class FolderCreationDialogFragment : DialogFragment() {
     private fun createDirectory(currentDir: String) {
         val dialog = requireDialog()
         val materialTextView = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
-        File(currentDir + "/" + materialTextView.text.toString()).mkdir()
+        val folderName = materialTextView.text.toString()
+        File("$currentDir/$folderName").mkdir()
+        (requireActivity() as PasswordStore).updateListAdapter()
+        (requireActivity() as PasswordStore).commitFolder(requireContext().getString(R.string.git_commit_folder_text, folderName))
     }
 
     companion object {

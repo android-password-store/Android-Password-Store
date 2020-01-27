@@ -31,6 +31,7 @@
     <!-- git commits -->
     <string name="git_commit_add_text">Add password for %1$s using android password store.</string>
     <string name="git_commit_edit_text">"Edit %1$s using android password store."</string>
+    <string name="git_commit_folder_text">"Folder %1$s created using android password store."</string>
     <string name="git_commit_remove_text">"Remove %1$s from store."</string>
     <string name="git_commit_move_text">"Rename %1$s to %2$s."</string>
     <string name="git_commit_increment_text">"Increment HOTP counter for %1$s."</string>
