@@ -471,7 +471,7 @@ class PasswordStore : AppCompatActivity() {
 
     fun createFolder() {
         if (!validateState()) return
-        FolderCreationDialogFragment.newInstance(currentDir!!.path).show(supportFragmentManager, "folder_creation")
+        FolderCreationDialogFragment.newInstance(currentDir!!.path).show(supportFragmentManager, null)
     }
 
     // deletes passwords in order from top to bottom
