@@ -474,8 +474,6 @@ class PasswordStore : AppCompatActivity() {
         FolderCreationDialogFragment.newInstance(currentDir!!.path).show(supportFragmentManager, null)
     }
 
-    fun commitFolder(message: String) = commitChange(message)
-
     // deletes passwords in order from top to bottom
     fun deletePasswords(adapter: PasswordRecyclerAdapter, selectedItems: MutableSet<Int>) {
         val it: MutableIterator<*> = selectedItems.iterator()

@@ -31,7 +31,6 @@ class FolderCreationDialogFragment : DialogFragment() {
         val folderName = materialTextView.text.toString()
         File("$currentDir/$folderName").mkdir()
         (requireActivity() as PasswordStore).updateListAdapter()
-        (requireActivity() as PasswordStore).commitFolder(requireContext().getString(R.string.git_commit_folder_text, folderName))
     }
 
     companion object {

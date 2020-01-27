@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Folder"
+        android:text="@string/title_create_folder"
         android:textColor="@color/color_control_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"/>
 
