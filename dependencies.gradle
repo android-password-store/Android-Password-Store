@@ -44,7 +44,7 @@ ext.deps = [
         leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.1',
         openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:1.2.0',
         ssh_auth: 'org.sufficientlysecure:sshauthentication-api:1.0',
-        timber: "com.jakewharton.timber:timber:4.7.1",
+        timber: 'com.jakewharton.timber:timber:4.7.1',
         whatthestack: 'com.github.haroldadmin:WhatTheStack:0.0.1',
     ],
 
