@@ -29,11 +29,11 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
+import com.zeapo.pwdstore.di.injector
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
@@ -50,6 +50,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import java.io.File
 import java.lang.Character.UnicodeBlock
+import javax.inject.Inject
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
@@ -59,10 +60,11 @@ import timber.log.Timber
 
 class PasswordStore : AppCompatActivity() {
 
+    @Inject lateinit var settings: SharedPreferences
+
     private lateinit var activity: PasswordStore
     private lateinit var searchItem: MenuItem
     private lateinit var searchView: SearchView
-    private lateinit var settings: SharedPreferences
     private var plist: PasswordFragment? = null
     private var shortcutManager: ShortcutManager? = null
 
@@ -87,8 +89,8 @@ class PasswordStore : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         activity = this
-        settings = PreferenceManager.getDefaultSharedPreferences(this.applicationContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager = getSystemService(ShortcutManager::class.java)
         }
@@ -245,6 +247,7 @@ class PasswordStore : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun openSettings(view: View?) {
         val intent: Intent
         try {
@@ -255,10 +258,12 @@ class PasswordStore : AppCompatActivity() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun cloneExistingRepository(view: View?) {
         initRepository(CLONE_REPO_BUTTON)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun createNewRepository(view: View?) {
         initRepository(NEW_REPO_BUTTON)
     }
@@ -711,6 +716,7 @@ class PasswordStore : AppCompatActivity() {
     private val sortOrder: PasswordRepository.PasswordSortOrder
         get() = getSortOrder(settings)
 
+    @Suppress("Unused")
     companion object {
         const val REQUEST_CODE_SIGN = 9910
         const val REQUEST_CODE_ENCRYPT = 9911

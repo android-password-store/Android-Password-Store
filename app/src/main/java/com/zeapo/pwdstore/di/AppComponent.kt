@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.zeapo.pwdstore.PasswordStore
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -22,6 +23,8 @@ interface AppComponent {
     interface Factory {
         fun create(@BindsInstance applicationContext: Context): AppComponent
     }
+
+    fun inject(activity: PasswordStore)
 }
 
 @Module
