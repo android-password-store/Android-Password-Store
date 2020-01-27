@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore
 
+import com.haroldadmin.whatthestack.WhatTheStack
 import com.zeapo.pwdstore.di.AppComponent
 import com.zeapo.pwdstore.di.DaggerAppComponent
 import com.zeapo.pwdstore.di.InjectorProvider
@@ -19,5 +20,8 @@ class Application : android.app.Application(), InjectorProvider {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        if (BuildConfig.ENABLE_DEBUG_FEATURES) {
+            WhatTheStack(this).init()
+        }
     }
 }

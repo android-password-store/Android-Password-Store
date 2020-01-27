@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="PasswordIconStyle">
-        <attr name="passwordIconColor" format="reference|color" />
-    </declare-styleable>
     <declare-styleable name="Multiselected">
         <attr name="state_multiselected" format="boolean"/>
     </declare-styleable>

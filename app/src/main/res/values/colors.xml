@@ -9,6 +9,7 @@
     <color name="secondary_dark_color">#c63f17</color>
     <color name="primary_text_color">#212121</color>
     <color name="secondary_text_color">#ffffff</color>
+    <color name="white">#ffffffff</color>
 
     <!-- Theme variables -->
     <color name="window_background">#eceff1</color>
@@ -17,4 +18,5 @@
     <color name="color_control_normal">@color/primary_text_color</color>
     <color name="color_surface">#FFFFFF</color>
     <color name="list_multiselect_background">#668eacbb</color>
+    <color name="status_bar_color">@color/primary_dark_color</color>
 </resources>

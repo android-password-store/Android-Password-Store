@@ -38,6 +38,7 @@ import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.ui.adapters.PasswordRecyclerAdapter
+import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
@@ -440,13 +441,13 @@ class PasswordStore : AppCompatActivity() {
         startActivityForResult(intent, REQUEST_CODE_EDIT)
     }
 
-    fun createPassword() {
+    private fun validateState(): Boolean {
         if (!isInitialized) {
             MaterialAlertDialogBuilder(this)
                     .setMessage(this.resources.getString(R.string.creation_dialog_text))
                     .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
                     .show()
-            return
+            return false
         }
         if (settings.getStringSet("openpgp_key_ids_set", HashSet()).isNullOrEmpty()) {
             MaterialAlertDialogBuilder(this)
@@ -457,8 +458,13 @@ class PasswordStore : AppCompatActivity() {
                         startActivity(intent)
                     }
                     .show()
-            return
+            return false
         }
+        return true
+    }
+
+    fun createPassword() {
+        if (!validateState()) return
         val currentDir = currentDir
         Timber.tag(TAG).i("Adding file to : ${currentDir!!.absolutePath}")
         val intent = Intent(this, PgpActivity::class.java)
@@ -466,6 +472,11 @@ class PasswordStore : AppCompatActivity() {
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
         intent.putExtra("OPERATION", "ENCRYPT")
         startActivityForResult(intent, REQUEST_CODE_ENCRYPT)
+    }
+
+    fun createFolder() {
+        if (!validateState()) return
+        FolderCreationDialogFragment.newInstance(currentDir!!.path).show(supportFragmentManager, null)
     }
 
     // deletes passwords in order from top to bottom

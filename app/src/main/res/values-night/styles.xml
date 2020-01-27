@@ -1,7 +1,0 @@
-<resources>
-    <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
-        <item name="boxBackgroundColor">?attr/colorPrimaryVariant</item>
-        <item name="boxStrokeColor">?attr/colorSecondary</item>
-        <item name="hintTextColor">?attr/colorOnPrimary</item>
-    </style>
-</resources>
