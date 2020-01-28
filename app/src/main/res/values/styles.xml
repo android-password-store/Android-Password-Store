@@ -14,7 +14,8 @@
         <item name="colorControlNormal">@color/color_control_normal</item>
         <item name="android:colorBackgroundFloating">@color/primary_color</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
-        <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
+        <item name="android:windowLightNavigationBar">@bool/light_navigation_bar</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
         <item name="android:windowBackground">@color/window_background</item>
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>

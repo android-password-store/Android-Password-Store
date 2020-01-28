@@ -12,7 +12,8 @@
 
     <!-- Theme variables -->
     <color name="window_background">@color/primary_color</color>
-    <color name="password_icon_color">#FAFAFA</color>
     <color name="color_surface">#FF111111</color>
+    <color name="navigation_bar_color">@color/primary_color</color>
     <color name="list_multiselect_background">#66EEEEEE</color>
+    <color name="status_bar_color">@color/primary_dark_color</color>
 </resources>

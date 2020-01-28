@@ -14,9 +14,9 @@
     <!-- Theme variables -->
     <color name="window_background">#eceff1</color>
     <color name="ic_launcher_background">#D4F1EA</color>
-    <color name="password_icon_color">#757575</color>
     <color name="color_control_normal">@color/primary_text_color</color>
     <color name="color_surface">#FFFFFF</color>
     <color name="list_multiselect_background">#668eacbb</color>
+    <color name="navigation_bar_color">@color/window_background</color>
     <color name="status_bar_color">@color/primary_dark_color</color>
 </resources>
