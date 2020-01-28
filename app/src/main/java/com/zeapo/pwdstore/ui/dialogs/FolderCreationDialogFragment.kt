@@ -8,6 +8,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -21,7 +22,8 @@ class FolderCreationDialogFragment : DialogFragment() {
     private var imm: InputMethodManager? = null
 
     override fun onResume() {
-        requireDialog().getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+        super.onResume()
+        (requireDialog() as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
         setKeyboardVisible(true)
