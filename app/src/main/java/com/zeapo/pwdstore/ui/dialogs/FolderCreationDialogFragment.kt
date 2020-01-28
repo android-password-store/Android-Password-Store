@@ -7,6 +7,8 @@ package com.zeapo.pwdstore.ui.dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,13 +18,39 @@ import com.zeapo.pwdstore.R
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
-        alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
-        alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _: DialogInterface, _: Int ->
+    private var imm: InputMethodManager? = null
+
+    override fun onResume() {
+        requireDialog().getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
-        return alertDialogBuilder.create()
+        setKeyboardVisible(true)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        imm = requireContext().getSystemService()
+
+        val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
+        alertDialogBuilder.setPositiveButton(getString(R.string.button_create), null)
+        val dialog = alertDialogBuilder.create()
+        dialog.findViewById<TextInputEditText>(R.id.folder_name_text)?.requestFocus()
+        return dialog
+    }
+
+    override fun dismiss() {
+        setKeyboardVisible(false)
+        super.dismiss()
+    }
+
+    private fun setKeyboardVisible(visible: Boolean) {
+        imm?.apply {
+            if (visible) {
+                toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+            } else {
+                hideSoftInputFromWindow(requireDialog().findViewById<TextInputEditText>(R.id.folder_name_text)?.windowToken, 0)
+            }
+        }
     }
 
     private fun createDirectory(currentDir: String) {
@@ -31,6 +59,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         val folderName = materialTextView.text.toString()
         File("$currentDir/$folderName").mkdir()
         (requireActivity() as PasswordStore).updateListAdapter()
+        dismiss()
     }
 
     companion object {
