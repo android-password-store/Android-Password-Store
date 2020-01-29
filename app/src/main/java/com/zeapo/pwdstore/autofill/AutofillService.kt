@@ -6,8 +6,6 @@ package com.zeapo.pwdstore.autofill
 
 import android.accessibilityservice.AccessibilityService
 import android.app.PendingIntent
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.Window
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -135,7 +134,7 @@ class AutofillService : AccessibilityService() {
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED ||
                 event.packageName != null && event.packageName == "org.sufficientlysecure.keychain" ||
                 event.packageName != null && event.packageName == "com.android.systemui") {
-            dismissDialog(event)
+            dismissDialog()
             return
         }
 
@@ -145,7 +144,7 @@ class AutofillService : AccessibilityService() {
                 return
             } else {
                 // nothing to do if not password field focus
-                dismissDialog(event)
+                dismissDialog()
                 return
             }
         }
@@ -182,9 +181,7 @@ class AutofillService : AccessibilityService() {
         if (info == null) return
 
         // save the dialog's corresponding window so we can use getWindows() in dismissDialog
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window = info!!.window
-        }
+        window = info!!.window
 
         val packageName: String
         val appName: String
@@ -246,18 +243,8 @@ class AutofillService : AccessibilityService() {
     }
 
     // dismiss the dialog if the window has changed
-    private fun dismissDialog(event: AccessibilityEvent) {
-        // the default keyboard showing/hiding is a window state changed event
-        // on Android 5+ we can use getWindows() to determine when the original window is not visible
-        // on Android 4.3 we have to use window state changed events and filter out the keyboard ones
-        // there may be other exceptions...
-        val dismiss: Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            !windows.contains(window)
-        } else {
-            !(event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
-                    event.packageName != null &&
-                    event.packageName.toString().contains("inputmethod"))
-        }
+    private fun dismissDialog() {
+        val dismiss = !windows.contains(window)
         if (dismiss && dialog != null && dialog!!.isShowing) {
             dialog!!.dismiss()
             dialog = null
@@ -380,9 +367,12 @@ class AutofillService : AccessibilityService() {
         builder.setMessage(getString(R.string.autofill_paste_username, password.username))
 
         dialog = builder.create()
-        this.setDialogType(dialog)
-        dialog!!.window!!.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
-        dialog!!.window!!.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        require(dialog != null) { "Dialog should not be null at this stage" }
+        dialog!!.window!!.apply {
+            setDialogType(this)
+            addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+            clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        }
         dialog!!.show()
     }
 
@@ -446,8 +436,8 @@ class AutofillService : AccessibilityService() {
         }
 
         dialog = builder.create()
-        setDialogType(dialog)
         dialog?.window?.apply {
+            setDialogType(this)
             val density = context.resources.displayMetrics.density
             addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
             setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -458,15 +448,13 @@ class AutofillService : AccessibilityService() {
         dialog?.show()
     }
 
-    private fun setDialogType(dialog: AlertDialog?) {
-        dialog?.window?.apply {
-            setType(
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-                    else
-                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            )
-        }
+    @Suppress("DEPRECATION")
+    private fun setDialogType(window: Window) {
+        window.setType(if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+        else
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        )
     }
 
     override fun onInterrupt() {}
@@ -548,25 +536,9 @@ class AutofillService : AccessibilityService() {
         // but this will open another dialog...hack to ignore this
         // & need to ensure performAction correct (i.e. what is info now?)
         ignoreActionFocus = node.performAction(AccessibilityNodeInfo.ACTION_FOCUS)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val args = Bundle()
-            args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text)
-            node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)
-        } else {
-            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var clip = ClipData.newPlainText("autofill_pm", text)
-            clipboard.setPrimaryClip(clip)
-            node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
-
-            clip = ClipData.newPlainText("autofill_pm", "")
-            clipboard.setPrimaryClip(clip)
-            if (settings!!.getBoolean("clear_clipboard_20x", false)) {
-                for (i in 0..19) {
-                    clip = ClipData.newPlainText(i.toString(), i.toString())
-                    clipboard.setPrimaryClip(clip)
-                }
-            }
-        }
+        val args = Bundle()
+        args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text)
+        node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)
         node.recycle()
     }
 
