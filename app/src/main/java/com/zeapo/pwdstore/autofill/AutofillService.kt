@@ -38,6 +38,13 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
@@ -45,7 +52,7 @@ import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 import timber.log.Timber
 
-class AutofillService : AccessibilityService() {
+class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private var serviceConnection: OpenPgpServiceConnection? = null
     private var settings: SharedPreferences? = null
     private var info: AccessibilityNodeInfo? = null // the original source of the event (the edittext field)
@@ -73,6 +80,12 @@ class AutofillService : AccessibilityService() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        instance = null
+        cancel()
     }
 
     override fun onServiceConnected() {
@@ -470,7 +483,7 @@ class AutofillService : AccessibilityService() {
         }
     }
 
-    private fun decryptAndVerify() {
+    private fun decryptAndVerify() = launch {
         packageName = info!!.packageName
         val data: Intent
         if (resultData == null) {
@@ -480,40 +493,43 @@ class AutofillService : AccessibilityService() {
             data = resultData!!
             resultData = null
         }
-        var `is`: InputStream? = null
-        try {
-            `is` = FileUtils.openInputStream(items[lastWhichItem])
-        } catch (e: IOException) {
-            e.printStackTrace()
+
+        val inputStream: Deferred<InputStream?> = async {
+            try {
+                FileUtils.openInputStream(items[lastWhichItem])
+            } catch (e: IOException) {
+                e.printStackTrace()
+                cancel("", e)
+                null
+            }
         }
 
         val os = ByteArrayOutputStream()
 
         val api = OpenPgpApi(this@AutofillService, serviceConnection!!.service!!)
-        // TODO we are dropping frames, (did we before??) find out why and maybe make this async
-        val result = api.executeApi(data, `is`, os)
+        val result = api.executeApi(data, inputStream.await(), os)
         when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
             OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 try {
                     val entry = PasswordEntry(os)
-                    pasteText(info!!, entry.password)
+                    withContext(Dispatchers.Main) { pasteText(info!!, entry.password) }
 
                     // save password entry for pasting the username as well
                     if (entry.hasUsername()) {
                         lastPassword = entry
                         val ttl = Integer.parseInt(settings!!.getString("general_show_time", "45")!!)
-                        Toast.makeText(this, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show()
                         lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L
                     }
                 } catch (e: UnsupportedEncodingException) {
-                    Timber.tag(Constants.TAG).e(e, "UnsupportedEncodingException")
+                    Timber.tag(Constants.TAG).e(e)
                 }
             }
             OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
                 Timber.tag("PgpHandler").i("RESULT_CODE_USER_INTERACTION_REQUIRED")
                 val pi = result.getParcelableExtra<PendingIntent>(OpenPgpApi.RESULT_INTENT)
                 // need to start a blank activity to call startIntentSenderForResult
-                val intent = Intent(this@AutofillService, AutofillActivity::class.java)
+                val intent = Intent(applicationContext, AutofillActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 intent.putExtra("pending_intent", pi)
                 startActivity(intent)
@@ -521,9 +537,7 @@ class AutofillService : AccessibilityService() {
             OpenPgpApi.RESULT_CODE_ERROR -> {
                 val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
                 if (error != null) {
-                    Toast.makeText(this@AutofillService,
-                            "Error from OpenKeyChain : " + error.message,
-                            Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Error from OpenKeyChain : ${error.message}", Toast.LENGTH_LONG).show()
                     Timber.tag(Constants.TAG).e("onError getErrorId: ${error.errorId}")
                     Timber.tag(Constants.TAG).e("onError getMessage: ${error.message}")
                 }

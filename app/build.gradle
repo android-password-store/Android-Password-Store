@@ -90,6 +90,10 @@ dependencies {
         }
     }
     implementation deps.androidx.material
+
+    implementation deps.kotlin.coroutines.android
+    implementation deps.kotlin.coroutines.core
+
     implementation deps.third_party.commons_io
     implementation deps.third_party.commons_codec
     implementation deps.third_party.fastscroll
