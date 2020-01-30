@@ -13,20 +13,16 @@ import dev.msfjarvis.aps.databinding.FragmentPgpProviderBinding
 
 class PGPProviderFragment : Fragment() {
 
-    lateinit var binding: FragmentPgpProviderBinding
+  lateinit var binding: FragmentPgpProviderBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentPgpProviderBinding.inflate(inflater)
-        return binding.root
-    }
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    super.onCreateView(inflater, container, savedInstanceState)
+    binding = FragmentPgpProviderBinding.inflate(inflater)
+    return binding.root
+  }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
+  companion object {
 
-    companion object {
-
-        fun newInstance(): PGPProviderFragment = PGPProviderFragment()
-    }
+    fun newInstance(): PGPProviderFragment = PGPProviderFragment()
+  }
 }

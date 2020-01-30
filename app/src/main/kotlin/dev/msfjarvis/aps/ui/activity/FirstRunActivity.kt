@@ -11,10 +11,10 @@ import dev.msfjarvis.aps.ui.EdgeToEdge
 
 class FirstRunActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityFirstRunBinding.inflate(layoutInflater)
-        EdgeToEdge.setUpRoot(binding.root as ViewGroup)
-        setContentView(binding.root)
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    val binding = ActivityFirstRunBinding.inflate(layoutInflater)
+    EdgeToEdge.setUpRoot(binding.root as ViewGroup)
+    setContentView(binding.root)
+  }
 }

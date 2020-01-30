@@ -11,16 +11,16 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "SSHKey")
 data class SSHKeyEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0,
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "id")
+  val id: Int = 0,
 
-    @ColumnInfo(name = "priv_key_path")
-    val privateKeyPath: String,
+  @ColumnInfo(name = "priv_key_path")
+  val privateKeyPath: String,
 
-    @ColumnInfo(name = "pub_key_path")
-    val publicKeyPath: String,
+  @ColumnInfo(name = "pub_key_path")
+  val publicKeyPath: String,
 
-    @ColumnInfo(name = "key_passphrase")
-    val KeyPassphrase: String?
+  @ColumnInfo(name = "key_passphrase")
+  val KeyPassphrase: String?
 )

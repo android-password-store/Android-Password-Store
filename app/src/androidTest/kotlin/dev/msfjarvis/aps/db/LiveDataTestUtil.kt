@@ -10,16 +10,16 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 fun <T> LiveData<T>.blockingObserve(): T? {
-        var value: T? = null
-        val latch = CountDownLatch(1)
+  var value: T? = null
+  val latch = CountDownLatch(1)
 
-        val observer = Observer<T> { t ->
-        value = t
-        latch.countDown()
-        }
+  val observer = Observer<T> { t ->
+    value = t
+    latch.countDown()
+  }
 
-        observeForever(observer)
+  observeForever(observer)
 
-        latch.await(2, TimeUnit.SECONDS)
-        return value
+  latch.await(2, TimeUnit.SECONDS)
+  return value
 }

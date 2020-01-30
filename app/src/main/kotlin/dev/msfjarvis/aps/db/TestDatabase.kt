@@ -11,5 +11,5 @@ import dev.msfjarvis.aps.db.entity.StoreEntity
 
 @Database(entities = [StoreEntity::class], version = 1)
 abstract class TestDatabase : RoomDatabase() {
-    abstract fun getStoreDao(): StoreDao
+  abstract fun getStoreDao(): StoreDao
 }

@@ -4,39 +4,33 @@
  */
 package dev.msfjarvis.aps.db.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import androidx.room.*
 import dev.msfjarvis.aps.db.converter.GitAuthConverter
 
 @TypeConverters(GitAuthConverter::class)
 @Entity(tableName = "GitRemote",
-        indices = [Index("store_id"), Index("name")],
-        foreignKeys = [ForeignKey(
-                entity = StoreEntity::class,
-                parentColumns = ["id"],
-                childColumns = ["store_id"],
-                onDelete = ForeignKey.CASCADE)
-        ])
+  indices = [Index("store_id"), Index("name")],
+  foreignKeys = [ForeignKey(
+    entity = StoreEntity::class,
+    parentColumns = ["id"],
+    childColumns = ["store_id"],
+    onDelete = ForeignKey.CASCADE)
+  ])
 data class GitRemoteEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "id")
+  val id: Int,
 
-    @ColumnInfo(name = "store_id")
-    val storeId: Int,
+  @ColumnInfo(name = "store_id")
+  val storeId: Int,
 
-    @ColumnInfo(name = "name")
-    val name: String,
+  @ColumnInfo(name = "name")
+  val name: String,
 
-    @ColumnInfo(name = "auth")
-    val auth: GitAuth,
+  @ColumnInfo(name = "auth")
+  val auth: GitAuth,
 
-    @Embedded(prefix = "ssh")
-    val sshKey: SSHKeyEntity
+  @Embedded(prefix = "ssh")
+  val sshKey: SSHKeyEntity
 )

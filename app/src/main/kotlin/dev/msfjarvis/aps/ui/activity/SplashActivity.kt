@@ -15,24 +15,24 @@ import dev.msfjarvis.aps.utils.PreferenceKeys.IS_FIRST_RUN
 
 class SplashActivity : BaseActivity() {
 
-    private lateinit var binding: ActivitySplashBinding
-    private lateinit var prefs: SharedPreferences
+  private lateinit var binding: ActivitySplashBinding
+  private lateinit var prefs: SharedPreferences
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        EdgeToEdge.setUpRoot(binding.root as ViewGroup)
-        setContentView(binding.root)
-        if (prefs.getBoolean(IS_FIRST_RUN, true)) {
-            startFirstRunFlow()
-        } else {
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    prefs = PreferenceManager.getDefaultSharedPreferences(this)
+    binding = ActivitySplashBinding.inflate(layoutInflater)
+    EdgeToEdge.setUpRoot(binding.root as ViewGroup)
+    setContentView(binding.root)
+    if (prefs.getBoolean(IS_FIRST_RUN, true)) {
+      startFirstRunFlow()
+    } else {
     }
+  }
 
-    private fun startFirstRunFlow() {
-        startActivity(Intent(this, FirstRunActivity::class.java))
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        finish()
-    }
+  private fun startFirstRunFlow() {
+    startActivity(Intent(this, FirstRunActivity::class.java))
+    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    finish()
+  }
 }

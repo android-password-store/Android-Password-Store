@@ -12,16 +12,16 @@ import dev.msfjarvis.aps.ui.EdgeToEdge
 
 class ServerConfigActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityServerConfigBinding
+  private lateinit var binding: ActivityServerConfigBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityServerConfigBinding.inflate(layoutInflater)
-        EdgeToEdge.apply {
-            setUpRoot(binding.root as ViewGroup)
-            setUpAppBar(binding.serverConfigAppbar)
-        }
-        setContentView(binding.root)
-        setSupportActionBar(binding.serverConfigToolbar)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding = ActivityServerConfigBinding.inflate(layoutInflater)
+    EdgeToEdge.apply {
+      setUpRoot(binding.root as ViewGroup)
+      setUpAppBar(binding.serverConfigAppbar)
     }
+    setContentView(binding.root)
+    setSupportActionBar(binding.serverConfigToolbar)
+  }
 }

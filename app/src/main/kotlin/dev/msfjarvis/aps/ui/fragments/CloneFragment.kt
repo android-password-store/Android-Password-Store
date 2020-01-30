@@ -14,22 +14,22 @@ import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class CloneFragment : Fragment() {
 
-    private lateinit var binding: FragmentCloneBinding
+  private lateinit var binding: FragmentCloneBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentCloneBinding.inflate(inflater)
-        return binding.root
-    }
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    super.onCreateView(inflater, container, savedInstanceState)
+    binding = FragmentCloneBinding.inflate(inflater)
+    return binding.root
+  }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.btnCloneRemote.setOnClickListener {
-            parentFragmentManager.performTransactionWithBackStack(RepoLocationFragment.newInstance())
-        }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding.btnCloneRemote.setOnClickListener {
+      parentFragmentManager.performTransactionWithBackStack(RepoLocationFragment.newInstance())
     }
+  }
 
-    companion object {
-        fun newInstance(): CloneFragment = CloneFragment()
-    }
+  companion object {
+    fun newInstance(): CloneFragment = CloneFragment()
+  }
 }

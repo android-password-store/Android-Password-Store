@@ -8,9 +8,9 @@ import androidx.room.TypeConverter
 import dev.msfjarvis.aps.db.entity.GitAuth
 
 class GitAuthConverter {
-    @TypeConverter
-    fun stringToGitAuth(authType: String) = GitAuth.valueOf(authType)
+  @TypeConverter
+  fun stringToGitAuth(authType: String) = GitAuth.valueOf(authType)
 
-    @TypeConverter
-    fun gitAuthToString(authType: GitAuth): String = authType.name
+  @TypeConverter
+  fun gitAuthToString(authType: GitAuth): String = authType.name
 }

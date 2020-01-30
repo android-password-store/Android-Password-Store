@@ -14,22 +14,22 @@ import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class RepoLocationFragment : Fragment() {
 
-    lateinit var binding: FragmentRepoLocationBinding
+  lateinit var binding: FragmentRepoLocationBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentRepoLocationBinding.inflate(inflater)
-        return binding.root
-    }
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    super.onCreateView(inflater, container, savedInstanceState)
+    binding = FragmentRepoLocationBinding.inflate(inflater)
+    return binding.root
+  }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.btnHidden.setOnClickListener {
-            parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
-        }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding.btnHidden.setOnClickListener {
+      parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
     }
+  }
 
-    companion object {
-        fun newInstance(): RepoLocationFragment = RepoLocationFragment()
-    }
+  companion object {
+    fun newInstance(): RepoLocationFragment = RepoLocationFragment()
+  }
 }

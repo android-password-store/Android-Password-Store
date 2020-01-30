@@ -11,24 +11,24 @@ import dev.msfjarvis.aps.utils.Authenticator
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private lateinit var application: PasswordStoreApplication
+  private lateinit var application: PasswordStoreApplication
 
-    override fun onResume() {
-        super.onResume()
-        application = getApplication() as PasswordStoreApplication
-        if (application.requiresAuthentication.value != false) {
-            Authenticator(this) {
-                when (it) {
-                    is AuthenticationResult.Success -> {
-                        application.requiresAuthentication.postValue(false)
-                    }
-                    is AuthenticationResult.UnrecoverableError -> {
-                        application.requiresAuthentication.postValue(false)
-                    }
-                    else -> {
-                    }
-                }
-            }.authenticate()
+  override fun onResume() {
+    super.onResume()
+    application = getApplication() as PasswordStoreApplication
+    if (application.requiresAuthentication.value != false) {
+      Authenticator(this) {
+        when (it) {
+          is AuthenticationResult.Success -> {
+            application.requiresAuthentication.postValue(false)
+          }
+          is AuthenticationResult.UnrecoverableError -> {
+            application.requiresAuthentication.postValue(false)
+          }
+          else -> {
+          }
         }
+      }.authenticate()
     }
+  }
 }

@@ -11,16 +11,16 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Store")
 data class StoreEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0,
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "id")
+  val id: Int = 0,
 
-    @ColumnInfo(name = "name")
-    val name: String,
+  @ColumnInfo(name = "name")
+  val name: String,
 
-    @ColumnInfo(name = "external")
-    val external: Boolean,
+  @ColumnInfo(name = "external")
+  val external: Boolean,
 
-    @ColumnInfo(name = "initialized")
-    val initialized: Boolean
+  @ColumnInfo(name = "initialized")
+  val initialized: Boolean
 )

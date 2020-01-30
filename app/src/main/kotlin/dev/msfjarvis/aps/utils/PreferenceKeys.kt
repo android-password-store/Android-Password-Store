@@ -11,5 +11,5 @@ package dev.msfjarvis.aps.utils
  */
 
 object PreferenceKeys {
-    const val IS_FIRST_RUN = "is_first_run"
+  const val IS_FIRST_RUN = "is_first_run"
 }

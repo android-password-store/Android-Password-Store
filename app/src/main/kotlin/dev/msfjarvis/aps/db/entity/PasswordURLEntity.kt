@@ -10,21 +10,21 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "PasswordUrl",
-        foreignKeys = [ForeignKey(
-                entity = PasswordEntity::class,
-                parentColumns = ["id"],
-                childColumns = ["password_id"],
-                onDelete = ForeignKey.CASCADE)
-        ])
+  foreignKeys = [ForeignKey(
+    entity = PasswordEntity::class,
+    parentColumns = ["id"],
+    childColumns = ["password_id"],
+    onDelete = ForeignKey.CASCADE)
+  ])
 data class PasswordURLEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "id")
+  val id: Int,
 
-    @ColumnInfo(name = "store_id")
-    val storeId: Int,
+  @ColumnInfo(name = "store_id")
+  val storeId: Int,
 
-    @ColumnInfo(name = "url")
-    val url: String
+  @ColumnInfo(name = "url")
+  val url: String
 )

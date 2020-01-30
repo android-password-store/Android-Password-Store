@@ -10,20 +10,20 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "PGPKey",
-        foreignKeys = [ForeignKey(
-                entity = StoreEntity::class,
-                parentColumns = ["id"],
-                childColumns = ["store_id"],
-                onDelete = ForeignKey.CASCADE)
-        ])
+  foreignKeys = [ForeignKey(
+    entity = StoreEntity::class,
+    parentColumns = ["id"],
+    childColumns = ["store_id"],
+    onDelete = ForeignKey.CASCADE)
+  ])
 data class PGPKeyEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "id")
+  val id: Int,
 
-    @ColumnInfo(name = "store_id")
-    val storeId: Int,
+  @ColumnInfo(name = "store_id")
+  val storeId: Int,
 
-    @ColumnInfo(name = "key_id")
-    val keyId: String
+  @ColumnInfo(name = "key_id")
+  val keyId: String
 )
