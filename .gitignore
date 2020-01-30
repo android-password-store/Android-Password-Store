@@ -31,7 +31,10 @@ libs
 project.properties
 
 #IntelliJ IDEA
-.idea
+/.idea/*.xml
+/.idea/caches/
+/.idea/dictionaries/
+/.idea/libraries
 *.iml
 
 # Visual Studio Code
