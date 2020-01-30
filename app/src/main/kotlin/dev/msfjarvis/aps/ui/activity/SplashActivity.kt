@@ -9,19 +9,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import dev.msfjarvis.aps.databinding.ActivitySplashBinding
+import dev.msfjarvis.aps.di.injector
 import dev.msfjarvis.aps.ui.EdgeToEdge
 import dev.msfjarvis.aps.utils.PreferenceKeys.IS_FIRST_RUN
+import javax.inject.Inject
 
 class SplashActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivitySplashBinding
-  private lateinit var prefs: SharedPreferences
+  @Inject lateinit var prefs: SharedPreferences
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    injector.inject(this)
     super.onCreate(savedInstanceState)
-    prefs = PreferenceManager.getDefaultSharedPreferences(this)
     binding = ActivitySplashBinding.inflate(layoutInflater)
     EdgeToEdge.setUpRoot(binding.root as ViewGroup)
     setContentView(binding.root)

@@ -22,7 +22,7 @@ final def gitHash = { ->
     stdout.toString().trim()
 }
 
-final def isCi() {
+static final def isCi() {
     return System.env['GITHUB_WORKFLOW'] != null
 }
 
