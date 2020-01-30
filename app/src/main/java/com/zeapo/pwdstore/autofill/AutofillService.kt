@@ -23,6 +23,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityWindowInfo
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
@@ -31,7 +32,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.splitLines
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
@@ -494,13 +494,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
         var inputStream: InputStream? = null
         withContext(Dispatchers.IO) {
-            try {
-                inputStream = FileUtils.openInputStream(items[lastWhichItem])
-            } catch (e: IOException) {
-                e.printStackTrace()
-                cancel("", e)
-                null
-            }
+            inputStream = FileUtils.openInputStream(items[lastWhichItem])
         }
 
         val os = ByteArrayOutputStream()
@@ -551,8 +545,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         // but this will open another dialog...hack to ignore this
         // & need to ensure performAction correct (i.e. what is info now?)
         ignoreActionFocus = node.performAction(AccessibilityNodeInfo.ACTION_FOCUS)
-        val args = Bundle()
-        args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text)
+        val args = bundleOf(Pair(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text))
         node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)
         node.recycle()
     }
