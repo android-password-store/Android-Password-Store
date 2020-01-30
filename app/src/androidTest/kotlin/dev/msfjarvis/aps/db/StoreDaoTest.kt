@@ -49,7 +49,7 @@ class StoreDaoTest {
     val store = StoreEntity(name = "store", external = false, initialized = true)
     storeDao.insertStore(store)
     val byName = storeDao.getStoreByName("store").asLiveData().blockingObserve()
-    assertThat(byName?.get(0)?.name, equalTo(store.name))
+    assertThat(byName.get(0).name, equalTo(store.name))
   }
 
   @Test
@@ -63,7 +63,7 @@ class StoreDaoTest {
     storeDao.insertMultipleStores(storeEntries[5], storeEntries[6])
     val byName = storeDao.getAllStores().asLiveData().blockingObserve()
     for (i in 0 until 7) {
-      assertThat(byName?.get(i)?.name, equalTo(storeEntries[i].name))
+      assertThat(byName.get(i).name, equalTo(storeEntries[i].name))
     }
   }
 
@@ -77,7 +77,7 @@ class StoreDaoTest {
     storeEntries.add(StoreEntity(name = "notStore", external = false, initialized = false))
     storeDao.insertMultipleStores(storeEntries)
     val byName = storeDao.getStoreByName("store").asLiveData().blockingObserve()
-    assertThat(byName?.size, equalTo(5))
+    assertThat(byName.size, equalTo(5))
   }
 
   @Test
@@ -86,6 +86,6 @@ class StoreDaoTest {
     val storeEntry = StoreEntity(name = "store", external = false, initialized = false)
     storeDao.insertStore(storeEntry)
     val byId = storeDao.getAllStores().asLiveData().blockingObserve()
-    assertThat(storeEntry.name, equalTo(byId?.get(0)?.name))
+    assertThat(storeEntry.name, equalTo(byId.get(0).name))
   }
 }
