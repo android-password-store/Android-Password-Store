@@ -493,7 +493,12 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
         var inputStream: InputStream? = null
         withContext(Dispatchers.IO) {
-            inputStream = FileUtils.openInputStream(items[lastWhichItem])
+            try {
+                inputStream = FileUtils.openInputStream(items[lastWhichItem])
+            } catch (e: IOException) {
+                e.printStackTrace()
+                cancel("", e)
+            }
         }
 
         val os = ByteArrayOutputStream()
