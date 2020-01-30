@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.passwordstore.android"
+    package="dev.msfjarvis.aps"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,25 +14,25 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
-        android:name=".PasswordStoreApplication"
+        android:name="dev.msfjarvis.aps.PasswordStoreApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.passwordstore.android.ui.activity.ServerConfigActivity">
+        <activity android:name="dev.msfjarvis.aps.ui.activity.ServerConfigActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name="com.passwordstore.android.ui.activity.SplashActivity">
+        <activity android:name="dev.msfjarvis.aps.ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.FirstRunActivity" />
+        <activity android:name="dev.msfjarvis.aps.ui.activity.FirstRunActivity" />
 
     </application>
 

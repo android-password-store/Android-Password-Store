@@ -30,12 +30,12 @@ android {
     if (!isCi()) {
         android.applicationVariants.all { final variant ->
             variant.outputs.all {
-                outputFileName = "password-store_${gitHash()}.apk"
+                outputFileName = "aps_${gitHash()}.apk"
             }
         }
     }
     defaultConfig {
-        applicationId 'com.zeapo.pwdstore'
+        applicationId 'dev.msfjarvis.aps'
     }
     buildFeatures.viewBinding = true
 
@@ -61,15 +61,9 @@ android {
             minifyEnabled false
             buildConfigField 'String', 'GIT_HASH', isCi() ? "\"${gitHash()}\"" : '\"\"'
         }
-        dev {
-            initWith debug
-            debuggable true
-            applicationIdSuffix '.dev'
-            versionNameSuffix '-dev'
-        }
         defaultConfig {
             // Specifies the application ID for the test APK.
-            testApplicationId "com.test.zeapo.pwdstore"
+            testApplicationId "dev.msfjarvis.aps.test"
             // Specifies the fully-qualified class name of the test instrumentation runner.
             testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
             // If set to 'true', enables the instrumentation class to start and stop profiling.

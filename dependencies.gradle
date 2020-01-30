@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 ext.versions = [
-    minSdk: 21,
+    minSdk: 23,
     targetSdk: 29,
     compileSdk: 29,
     versionCode: 10303,

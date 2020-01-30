@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_first_run"
-        android:name="com.passwordstore.android.ui.fragments.WelcomeFragment"
+        android:name="dev.msfjarvis.aps.ui.fragments.WelcomeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
