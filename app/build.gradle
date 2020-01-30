@@ -127,7 +127,10 @@ dependencies {
     implementation deps.androidx.room
     implementation deps.androidx.room_ktx
 
+    implementation deps.third_party.dagger
+
     kapt deps.androidx.room_compiler
+    kapt deps.third_party.dagger_compiler
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.androidx.core_testing

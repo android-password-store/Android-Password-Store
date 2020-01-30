@@ -42,6 +42,8 @@ ext.deps = [
     ],
 
     third_party: [
+        dagger: "com.google.dagger:dagger:2.25.4",
+        dagger_compiler: "com.google.dagger:dagger-compiler:2.25.4",
     ],
 
     testing: [
