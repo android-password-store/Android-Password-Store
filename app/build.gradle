@@ -119,6 +119,7 @@ dependencies {
   implementation deps.androidx.room_ktx
 
   implementation deps.third_party.dagger
+  implementation deps.third_party.sshj
 
   kapt deps.androidx.room_compiler
   kapt deps.third_party.dagger_compiler

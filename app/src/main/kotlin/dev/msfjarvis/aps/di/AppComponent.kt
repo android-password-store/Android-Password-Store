@@ -13,6 +13,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dev.msfjarvis.aps.di.factory.SSHClientFactory
 import dev.msfjarvis.aps.ui.activity.SplashActivity
 import javax.inject.Singleton
 
@@ -33,4 +34,8 @@ object APSModule {
   @Provides
   @Singleton
   fun provideSharedPrefs(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+  @Provides
+  @Singleton
+  fun provideSSHClient(context: Context) = SSHClientFactory.provideSSHClient(context)
 }
