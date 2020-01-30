@@ -127,18 +127,7 @@ dependencies {
     implementation deps.androidx.room
     implementation deps.androidx.room_ktx
 
-    implementation deps.third_party.commons_io
-    implementation deps.third_party.commons_codec
-    implementation deps.third_party.epoxy
-    implementation(deps.third_party.jgit) {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }
-    implementation deps.third_party.jsch
-    implementation deps.third_party.openpgp_ktx
-    implementation deps.third_party.ssh_auth
-
     kapt deps.androidx.room_compiler
-    kapt deps.third_party.epoxy_annotation
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.androidx.core_testing
