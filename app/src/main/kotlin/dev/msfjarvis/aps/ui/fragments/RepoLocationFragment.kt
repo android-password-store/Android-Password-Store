@@ -25,7 +25,10 @@ class RepoLocationFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.btnHidden.setOnClickListener {
+      /*
+      OpenKeychain's going to change this soon so no point in using this right now.
       parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
+       */
     }
   }
 

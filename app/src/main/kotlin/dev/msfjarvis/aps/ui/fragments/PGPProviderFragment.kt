@@ -11,9 +11,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.msfjarvis.aps.databinding.FragmentPgpProviderBinding
 
+@Suppress("Unused")
 class PGPProviderFragment : Fragment() {
 
-  lateinit var binding: FragmentPgpProviderBinding
+  private lateinit var binding: FragmentPgpProviderBinding
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
