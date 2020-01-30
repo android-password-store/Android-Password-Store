@@ -10,7 +10,7 @@ jobs:
       uses: malinskiy/action-android/install-sdk@release/0.0.3
     - name: Build App
       uses: actions/checkout@master
-    - run: ./gradlew spotlessCheck build test lintDebug -Dpre-dex=false
+    - run: ./gradlew build test lintDebug -Dpre-dex=false
     - name: Run instrumentation tests
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.3
       with:
