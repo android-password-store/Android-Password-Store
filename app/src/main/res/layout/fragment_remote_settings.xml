@@ -1,0 +1,163 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="?attr/colorPrimary"
+  android:orientation="vertical">
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/iv_app_icon"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_marginTop="64dp"
+    android:contentDescription="@string/app_icon_hint"
+    android:src="@mipmap/ic_launcher"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/tv_app_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_centerHorizontal="true"
+    android:text="@string/app_name"
+    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+    android:textColor="@color/color_control_normal"
+    android:textStyle="bold"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/iv_app_icon" />
+
+  <TextView
+    android:id="@+id/tv_server"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="16dp"
+    android:text="Server"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:layout_constraintTop_toBottomOf="@id/tv_app_name"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <com.google.android.material.textfield.TextInputLayout
+    style="@style/TextInputLayoutBase"
+    android:id="@+id/til_server_ip"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:hint="Server or IP address"
+    app:prefixText="https://"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tv_server">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/tiet_server_ip"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+    style="@style/TextInputLayoutBase"
+    android:id="@+id/til_server_port"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:hint="Port (Default = 443)"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/til_server_ip">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/tiet_server_port"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <TextView
+    android:id="@+id/tv_auth"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="32dp"
+    android:layout_marginStart="16dp"
+    android:text="Authentication"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:layout_constraintTop_toBottomOf="@id/til_server_port"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <com.google.android.material.textfield.TextInputLayout
+    style="@style/TextInputLayoutBase"
+    android:id="@+id/til_auth_username"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:hint="Username"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tv_auth">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/tiet_auth_username"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+    style="@style/TextInputLayoutBase"
+    android:id="@+id/til_auth_pass"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:hint="Password"
+    app:endIconMode="password_toggle"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/til_auth_username">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/tiet_auth_pass"
+      android:inputType="textPassword"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.button.MaterialButton
+    style="@style/MaterialButton"
+    android:id="@+id/btn_positive"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:maxWidth="300dp"
+    android:minWidth="100dp"
+    android:text="Sync Remote"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/btn_negative"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <com.google.android.material.button.MaterialButton
+    style="@style/MaterialButton"
+    android:id="@+id/btn_negative"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="84dp"
+    android:minWidth="100dp"
+    android:maxWidth="300dp"
+    android:text="Test"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="@id/btn_positive"
+    app:layout_constraintEnd_toEndOf="@id/btn_positive" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

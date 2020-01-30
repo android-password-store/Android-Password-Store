@@ -9,23 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import dev.msfjarvis.aps.databinding.FragmentRemoteSettingsBinding
 import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
-class RepoLocationFragment : Fragment() {
+class RemoteSettingsFragment : Fragment() {
 
-  private lateinit var binding: FragmentRepoLocationBinding
+  private lateinit var binding: FragmentRemoteSettingsBinding
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
-    binding = FragmentRepoLocationBinding.inflate(inflater)
+    binding = FragmentRemoteSettingsBinding.inflate(inflater)
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    binding.btnHidden.setOnClickListener {
-      parentFragmentManager.performTransactionWithBackStack(RemoteSettingsFragment.newInstance())
+    binding.btnPositive.setOnClickListener {
       /*
       OpenKeychain's going to change this soon so no point in using this right now.
       parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
@@ -34,6 +34,6 @@ class RepoLocationFragment : Fragment() {
   }
 
   companion object {
-    fun newInstance(): RepoLocationFragment = RepoLocationFragment()
+    fun newInstance(): RemoteSettingsFragment = RemoteSettingsFragment()
   }
 }

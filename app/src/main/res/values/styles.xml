@@ -36,9 +36,9 @@
     </style>
 
     <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="boxBackgroundColor">?android:attr/windowBackground</item>
-        <item name="boxStrokeColor">?attr/colorSecondary</item>
-        <item name="hintTextColor">?attr/colorOnPrimary</item>
+        <item name="boxBackgroundColor">?attr/colorPrimary</item>
+        <item name="boxStrokeColor">@color/til_box_stroke</item>
+        <item name="hintTextColor">?attr/colorSecondary</item>
     </style>
 
     <style name="MaterialButton" parent="Widget.MaterialComponents.Button">
