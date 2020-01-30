@@ -39,9 +39,7 @@ import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -494,9 +492,10 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
             resultData = null
         }
 
-        val inputStream: Deferred<InputStream?> = async {
+        var inputStream: InputStream? = null
+        withContext(Dispatchers.IO) {
             try {
-                FileUtils.openInputStream(items[lastWhichItem])
+                inputStream = FileUtils.openInputStream(items[lastWhichItem])
             } catch (e: IOException) {
                 e.printStackTrace()
                 cancel("", e)
@@ -507,15 +506,17 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         val os = ByteArrayOutputStream()
 
         val api = OpenPgpApi(this@AutofillService, serviceConnection!!.service!!)
-        val result = api.executeApi(data, inputStream.await(), os)
+        val result = api.executeApi(data, inputStream, os)
         when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
             OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 try {
-                    val entry = PasswordEntry(os)
-                    withContext(Dispatchers.Main) { pasteText(info!!, entry.password) }
-
+                    var entry: PasswordEntry? = null
+                    withContext(Dispatchers.IO) {
+                        entry = PasswordEntry(os)
+                    }
+                    withContext(Dispatchers.Main) { pasteText(info!!, entry?.password) }
                     // save password entry for pasting the username as well
-                    if (entry.hasUsername()) {
+                    if (entry?.hasUsername() == true) {
                         lastPassword = entry
                         val ttl = Integer.parseInt(settings!!.getString("general_show_time", "45")!!)
                         Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show()
