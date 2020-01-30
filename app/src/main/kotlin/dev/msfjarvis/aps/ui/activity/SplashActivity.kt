@@ -8,12 +8,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import dev.msfjarvis.aps.databinding.ActivitySplashBinding
 import dev.msfjarvis.aps.ui.EdgeToEdge
 import dev.msfjarvis.aps.utils.PreferenceKeys.IS_FIRST_RUN
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivitySplashBinding
   private lateinit var prefs: SharedPreferences
@@ -26,7 +27,6 @@ class SplashActivity : BaseActivity() {
     setContentView(binding.root)
     if (prefs.getBoolean(IS_FIRST_RUN, true)) {
       startFirstRunFlow()
-    } else {
     }
   }
 

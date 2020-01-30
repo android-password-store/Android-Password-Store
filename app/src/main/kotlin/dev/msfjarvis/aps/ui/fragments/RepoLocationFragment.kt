@@ -14,7 +14,7 @@ import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class RepoLocationFragment : Fragment() {
 
-  lateinit var binding: FragmentRepoLocationBinding
+  private lateinit var binding: FragmentRepoLocationBinding
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)

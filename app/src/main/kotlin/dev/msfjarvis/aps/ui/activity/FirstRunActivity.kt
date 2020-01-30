@@ -6,10 +6,11 @@ package dev.msfjarvis.aps.ui.activity
 
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import dev.msfjarvis.aps.databinding.ActivityFirstRunBinding
 import dev.msfjarvis.aps.ui.EdgeToEdge
 
-class FirstRunActivity : BaseActivity() {
+class FirstRunActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
