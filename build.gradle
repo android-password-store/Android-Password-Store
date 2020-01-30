@@ -3,75 +3,75 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 buildscript {
-    apply from: rootProject.file('dependencies.gradle')
-    repositories {
-        google()
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath deps.gradle_plugin.android
-        classpath deps.gradle_plugin.kotlin
-    }
+  apply from: rootProject.file('dependencies.gradle')
+  repositories {
+    google()
+    jcenter()
+    maven { url 'https://plugins.gradle.org/m2/' }
+  }
+  dependencies {
+    classpath deps.gradle_plugin.android
+    classpath deps.gradle_plugin.kotlin
+  }
 }
 
 plugins {
-    id 'com.github.ben-manes.versions' version '0.27.0'
+  id 'com.github.ben-manes.versions' version '0.27.0'
 }
 
 allprojects {
-    repositories {
-        google()
-        jcenter()
-        mavenCentral()
-    }
+  repositories {
+    google()
+    jcenter()
+    mavenCentral()
+  }
 }
 
 subprojects {
-    apply from: rootProject.file('dependencies.gradle')
-    repositories {
-        google()
-        jcenter()
+  apply from: rootProject.file('dependencies.gradle')
+  repositories {
+    google()
+    jcenter()
+  }
+  if (plugins.hasPlugin('kotlin-android')) {
+    dependencies {
+      implementation(deps.kotlin.stdlib8) {
+        force = true
+      }
     }
-    if (plugins.hasPlugin('kotlin-android')) {
-        dependencies {
-            implementation (deps.kotlin.stdlib8) {
-                force = true
-            }
-        }
+  }
+  if (it.name == 'app') {
+    apply plugin: 'com.android.application'
+  } else {
+    apply plugin: 'com.android.library'
+  }
+  android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion = versions.buildTools
+    defaultConfig {
+      minSdkVersion versions.minSdk
+      targetSdkVersion versions.targetSdk
+      versionCode versions.versionCode
+      versionName versions.versionName
     }
-    if (it.name == 'app') {
-        apply plugin: 'com.android.application'
-    } else {
-        apply plugin: 'com.android.library'
+    compileOptions {
+      sourceCompatibility = JavaVersion.VERSION_1_8
+      targetCompatibility = JavaVersion.VERSION_1_8
     }
-    android {
-        compileSdkVersion versions.compileSdk
-        buildToolsVersion = versions.buildTools
-        defaultConfig {
-            minSdkVersion versions.minSdk
-            targetSdkVersion versions.targetSdk
-            versionCode versions.versionCode
-            versionName versions.versionName
-        }
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
-        }
+  }
+  tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
+    options.deprecation = true
+  }
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+    kotlinOptions {
+      jvmTarget = '1.8'
     }
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << '-Xlint:unchecked'
-        options.deprecation = true
-    }
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
-        kotlinOptions {
-            jvmTarget = '1.8'
-        }
-    }
+  }
 }
 
 tasks {
-    wrapper {
-        distributionType = Wrapper.DistributionType.ALL
-    }
+  wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+  }
 }

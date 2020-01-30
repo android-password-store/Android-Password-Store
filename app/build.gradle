@@ -3,133 +3,133 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 plugins {
-    id 'kotlin-android'
-    id 'kotlin-kapt'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
 }
 
 repositories {
-    maven { url 'https://jitpack.io' }
+  maven { url 'https://jitpack.io' }
 }
 
 final def keystorePropertiesFile = rootProject.file 'keystore.properties'
 
 final def gitHash = { ->
-    final def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short=12', 'HEAD'
-        standardOutput = stdout
-    }
-    stdout.toString().trim()
+  final def stdout = new ByteArrayOutputStream()
+  exec {
+    commandLine 'git', 'rev-parse', '--short=12', 'HEAD'
+    standardOutput = stdout
+  }
+  stdout.toString().trim()
 }
 
 static final def isCi() {
-    return System.env['GITHUB_WORKFLOW'] != null
+  return System.env['GITHUB_WORKFLOW'] != null
 }
 
 android {
-    if (!isCi()) {
-        android.applicationVariants.all { final variant ->
-            variant.outputs.all {
-                outputFileName = "aps_${gitHash()}.apk"
-            }
-        }
+  if (!isCi()) {
+    android.applicationVariants.all { final variant ->
+      variant.outputs.all {
+        outputFileName = "aps_${gitHash()}.apk"
+      }
+    }
+  }
+  defaultConfig {
+    applicationId 'dev.msfjarvis.aps'
+  }
+  buildFeatures.viewBinding = true
+
+  lintOptions {
+    abortOnError = true // make sure build fails with lint errors!
+  }
+
+  packagingOptions {
+    exclude '.readme'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+      buildConfigField 'String', 'GIT_HASH', '\"\"'
+    }
+    debug {
+      applicationIdSuffix '.debug'
+      versionNameSuffix '-debug'
+      minifyEnabled false
+      buildConfigField 'String', 'GIT_HASH', isCi() ? "\"${gitHash()}\"" : '\"\"'
     }
     defaultConfig {
-        applicationId 'dev.msfjarvis.aps'
+      // Specifies the application ID for the test APK.
+      testApplicationId "dev.msfjarvis.aps.test"
+      // Specifies the fully-qualified class name of the test instrumentation runner.
+      testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+      // If set to 'true', enables the instrumentation class to start and stop profiling.
+      // If set to false (default), profiling occurs the entire time the instrumentation
+      // class is running.
+      testHandleProfiling true
+      // If set to 'true', indicates that the Android system should run the instrumentation
+      // class as a functional test. The default value is 'false'
+      testFunctionalTest true
     }
-    buildFeatures.viewBinding = true
+  }
+  if (keystorePropertiesFile.exists()) {
+    final def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    signingConfigs {
+      release {
+        keyAlias = keystoreProperties['keyAlias']
+        keyPassword = keystoreProperties['keyPassword']
+        storeFile = rootProject.file keystoreProperties['storeFile']
+        storePassword = keystoreProperties['storePassword']
+      }
+    }
+    buildTypes.release.signingConfig = signingConfigs.release
+  }
 
-    lintOptions {
-        abortOnError = true // make sure build fails with lint errors!
-    }
-
-    packagingOptions {
-        exclude '.readme'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'GIT_HASH', '\"\"'
-        }
-        debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-debug'
-            minifyEnabled false
-            buildConfigField 'String', 'GIT_HASH', isCi() ? "\"${gitHash()}\"" : '\"\"'
-        }
-        defaultConfig {
-            // Specifies the application ID for the test APK.
-            testApplicationId "dev.msfjarvis.aps.test"
-            // Specifies the fully-qualified class name of the test instrumentation runner.
-            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-            // If set to 'true', enables the instrumentation class to start and stop profiling.
-            // If set to false (default), profiling occurs the entire time the instrumentation
-            // class is running.
-            testHandleProfiling true
-            // If set to 'true', indicates that the Android system should run the instrumentation
-            // class as a functional test. The default value is 'false'
-            testFunctionalTest true
-        }
-    }
-    if (keystorePropertiesFile.exists()) {
-        final def keystoreProperties = new Properties()
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-        signingConfigs {
-            release {
-                keyAlias = keystoreProperties['keyAlias']
-                keyPassword = keystoreProperties['keyPassword']
-                storeFile = rootProject.file keystoreProperties['storeFile']
-                storePassword = keystoreProperties['storePassword']
-            }
-        }
-        buildTypes.release.signingConfig = signingConfigs.release
-    }
-
-    sourceSets {
-        androidTest.java.srcDirs += "src/androidTest/kotlin"
-        main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
-    }
+  sourceSets {
+    androidTest.java.srcDirs += "src/androidTest/kotlin"
+    main.java.srcDirs += "src/main/kotlin"
+    test.java.srcDirs += "src/test/kotlin"
+  }
 }
 
 kapt {
-    correctErrorTypes = true
+  correctErrorTypes = true
 }
 
 dependencies {
-    implementation deps.androidx.annotation
-    implementation deps.androidx.appcompat
-    implementation deps.androidx.biometric
-    implementation deps.androidx.core_ktx
-    implementation deps.androidx.constraint_layout
-    implementation deps.androidx.documentfile
-    implementation deps.androidx.fragment_ktx
-    implementation deps.androidx.material
-    implementation deps.androidx.preference
-    constraints {
-        implementation(deps.androidx.recycler_view) {
-            because 'versions above 1.0.0 have an accessibility related bug that causes crashes'
-        }
+  implementation deps.androidx.annotation
+  implementation deps.androidx.appcompat
+  implementation deps.androidx.biometric
+  implementation deps.androidx.core_ktx
+  implementation deps.androidx.constraint_layout
+  implementation deps.androidx.documentfile
+  implementation deps.androidx.fragment_ktx
+  implementation deps.androidx.material
+  implementation deps.androidx.preference
+  constraints {
+    implementation(deps.androidx.recycler_view) {
+      because 'versions above 1.0.0 have an accessibility related bug that causes crashes'
     }
-    implementation deps.androidx.room
-    implementation deps.androidx.room_ktx
+  }
+  implementation deps.androidx.room
+  implementation deps.androidx.room_ktx
 
-    implementation deps.third_party.dagger
+  implementation deps.third_party.dagger
 
-    kapt deps.androidx.room_compiler
-    kapt deps.third_party.dagger_compiler
+  kapt deps.androidx.room_compiler
+  kapt deps.third_party.dagger_compiler
 
-    // Testing-only dependencies
-    androidTestImplementation deps.testing.androidx.core_testing
-    androidTestImplementation deps.testing.androidx.espresso_core
-    androidTestImplementation deps.testing.androidx.espresso_intents
-    androidTestImplementation deps.testing.androidx.junit
-    androidTestImplementation deps.testing.androidx.rules
-    androidTestImplementation deps.testing.androidx.runner
-    androidTestImplementation deps.testing.junit
-    androidTestImplementation deps.testing.mockito_core
+  // Testing-only dependencies
+  androidTestImplementation deps.testing.androidx.core_testing
+  androidTestImplementation deps.testing.androidx.espresso_core
+  androidTestImplementation deps.testing.androidx.espresso_intents
+  androidTestImplementation deps.testing.androidx.junit
+  androidTestImplementation deps.testing.androidx.rules
+  androidTestImplementation deps.testing.androidx.runner
+  androidTestImplementation deps.testing.junit
+  androidTestImplementation deps.testing.mockito_core
 }
