@@ -18,6 +18,7 @@ import java.io.File
 class FolderCreationDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        alertDialogBuilder.setTitle(R.string.title_create_folder)
         alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
         alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _: DialogInterface, _: Int ->
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)

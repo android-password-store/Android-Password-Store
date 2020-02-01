@@ -88,7 +88,7 @@ class UserPreference : AppCompatActivity() {
             val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
 
             // Autofill preferences
-            autoFillEnablePreference = findPreference<CheckBoxPreference>("autofill_enable")
+            autoFillEnablePreference = findPreference("autofill_enable")
             val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
             val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
             val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
