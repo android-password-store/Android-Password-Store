@@ -145,9 +145,12 @@ open class PasswordRepository protected constructor() {
             }
             return if (settings.getBoolean("git_external", false)) {
                 val externalRepo = settings.getString("git_external_repo", null)
-                File(requireNotNull(externalRepo))
+                if (externalRepo != null)
+                    File(externalRepo)
+                else
+                    File(context.filesDir.toString(), "/store")
             } else {
-                File(context.filesDir.toString() + "/store")
+                File(context.filesDir.toString(), "/store")
             }
         }
 
