@@ -20,17 +20,21 @@ ext.deps = [
     ],
 
     kotlin: [
+        coroutines: [
+            android: 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3',
+            core: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3',
+        ],
         stdlib8: 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61'
     ],
 
     androidx: [
         annotation: 'androidx.annotation:annotation:1.1.0',
-        appcompat: 'androidx.appcompat:appcompat:1.2.0-alpha01',
+        appcompat: 'androidx.appcompat:appcompat:1.2.0-alpha02',
         biometric: 'androidx.biometric:biometric:1.0.1',
         constraint_layout: 'androidx.constraintlayout:constraintlayout:2.0.0-beta4',
-        core_ktx: 'androidx.core:core-ktx:1.2.0-rc01',
+        core_ktx: 'androidx.core:core-ktx:1.3.0-alpha01',
         documentfile: 'androidx.documentfile:documentfile:1.0.1',
-        material: 'com.google.android.material:material:1.2.0-alpha03',
+        material: 'com.google.android.material:material:1.2.0-alpha04',
         preference: 'androidx.preference:preference:1.1.0',
         recycler_view: 'androidx.recyclerview:recyclerview:1.0.0'
     ],

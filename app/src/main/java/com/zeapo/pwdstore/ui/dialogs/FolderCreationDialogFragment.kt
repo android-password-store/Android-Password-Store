@@ -33,6 +33,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         imm = requireContext().getSystemService()
 
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        alertDialogBuilder.setTitle(R.string.title_create_folder)
         alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
         alertDialogBuilder.setPositiveButton(getString(R.string.button_create), null)
         val dialog = alertDialogBuilder.create()
