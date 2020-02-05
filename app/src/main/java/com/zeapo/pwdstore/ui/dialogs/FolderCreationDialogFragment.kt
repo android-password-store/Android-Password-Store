@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.ui.dialogs
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
@@ -23,10 +24,19 @@ class FolderCreationDialogFragment : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        (requireDialog() as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+        val dialog = requireDialog()
+        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
-        setKeyboardVisible(true)
+        val editText = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
+        editText?.setOnFocusChangeListener(object : View.OnFocusChangeListener() {
+            override fun onFocusChange(v: View, hasFocus: Boolean) {
+                editText?.post {
+                    imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
+        }
+        editText?.requestFocus()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -36,24 +46,11 @@ class FolderCreationDialogFragment : DialogFragment() {
         alertDialogBuilder.setTitle(R.string.title_create_folder)
         alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
         alertDialogBuilder.setPositiveButton(getString(R.string.button_create), null)
-        val dialog = alertDialogBuilder.create()
-        dialog.findViewById<TextInputEditText>(R.id.folder_name_text)?.requestFocus()
-        return dialog
+        return alertDialogBuilder.create()
     }
 
     override fun dismiss() {
-        setKeyboardVisible(false)
         super.dismiss()
-    }
-
-    private fun setKeyboardVisible(visible: Boolean) {
-        imm?.apply {
-            if (visible) {
-                toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-            } else {
-                hideSoftInputFromWindow(requireDialog().findViewById<TextInputEditText>(R.id.folder_name_text)?.windowToken, 0)
-            }
-        }
     }
 
     private fun createDirectory(currentDir: String) {
