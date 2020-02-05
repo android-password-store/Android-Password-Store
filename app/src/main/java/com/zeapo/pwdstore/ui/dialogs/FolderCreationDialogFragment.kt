@@ -13,13 +13,23 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import timber.log.Timber
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.AppTheme_Dialog)
+        onGetLayoutInflater(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<TextInputEditText>(R.id.folder_name_text).requestFocus()
+        requireDialog().setOnShowListener { _ ->
+            Timber.tag("DEBUG").d("onShowListener")
+            requireDialog().findViewById<TextInputEditText>(R.id.folder_name_text).requestFocus()
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
