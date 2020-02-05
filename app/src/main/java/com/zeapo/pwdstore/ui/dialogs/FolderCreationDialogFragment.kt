@@ -5,12 +5,8 @@
 package com.zeapo.pwdstore.ui.dialogs
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -20,37 +16,20 @@ import com.zeapo.pwdstore.R
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
-    private var imm: InputMethodManager? = null
 
-    override fun onResume() {
-        super.onResume()
-        val dialog = requireDialog()
-        (dialog as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
-            createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
-        }
-        val editText = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
-        editText?.setOnFocusChangeListener(object : View.OnFocusChangeListener() {
-            override fun onFocusChange(v: View, hasFocus: Boolean) {
-                editText?.post {
-                    imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-                }
-            }
-        }
-        editText?.requestFocus()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<TextInputEditText>(R.id.folder_name_text).requestFocus()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        imm = requireContext().getSystemService()
-
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         alertDialogBuilder.setTitle(R.string.title_create_folder)
         alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
-        alertDialogBuilder.setPositiveButton(getString(R.string.button_create), null)
+        alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _, _ ->
+            createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
+        }
         return alertDialogBuilder.create()
-    }
-
-    override fun dismiss() {
-        super.dismiss()
     }
 
     private fun createDirectory(currentDir: String) {
