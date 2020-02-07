@@ -601,9 +601,9 @@ class PasswordStore : AppCompatActivity() {
                 }
                 REQUEST_CODE_SELECT_FOLDER -> {
                     Timber.tag(TAG)
-                        .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
+                            .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
                     Timber.tag(TAG).d(
-                        TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
+                            TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
                     )
 
                     val target = File(requireNotNull(data.getStringExtra("SELECTED_FOLDER_PATH")))

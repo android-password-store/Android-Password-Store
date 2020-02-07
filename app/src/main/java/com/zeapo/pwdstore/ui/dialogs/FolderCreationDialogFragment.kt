@@ -6,30 +6,33 @@ package com.zeapo.pwdstore.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
+import android.os.Handler
+import android.os.SystemClock
+import android.view.MotionEvent
 import androidx.core.os.bundleOf
+import androidx.core.os.postDelayed
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
-import timber.log.Timber
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
+
+    override fun onResume() {
+        super.onResume()
+        val editText = dialog?.findViewById<TextInputEditText>(R.id.folder_name_text)
+        Handler().postDelayed(300) {
+            editText?.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0))
+            editText?.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.AppTheme_Dialog)
         onGetLayoutInflater(savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        requireDialog().setOnShowListener { _ ->
-            Timber.tag("DEBUG").d("onShowListener")
-            requireDialog().findViewById<TextInputEditText>(R.id.folder_name_text).requestFocus()
-        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
