@@ -21,6 +21,7 @@ import java.io.File
 class FolderCreationDialogFragment : DialogFragment() {
 
     override fun onResume() {
+        // TODO: We really, really should not need this amount of hackery. WTF is going on?
         super.onResume()
         val editText = dialog?.findViewById<TextInputEditText>(R.id.folder_name_text)
         Handler().postDelayed(300) {
