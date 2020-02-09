@@ -29,12 +29,6 @@ class FolderCreationDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.AppTheme_Dialog)
-        onGetLayoutInflater(savedInstanceState)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         alertDialogBuilder.setTitle(R.string.title_create_folder)
