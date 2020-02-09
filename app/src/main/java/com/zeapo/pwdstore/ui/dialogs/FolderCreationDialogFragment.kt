@@ -42,6 +42,10 @@ class FolderCreationDialogFragment : DialogFragment() {
         alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _, _ ->
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
+        alertDialogBuilder.setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
+            dismiss()
+        }
+        isCancelable = false
         return alertDialogBuilder.create()
     }
 
