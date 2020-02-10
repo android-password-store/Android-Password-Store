@@ -5,9 +5,12 @@
 package com.zeapo.pwdstore.ui.dialogs
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
+import android.view.MotionEvent
 import androidx.core.os.bundleOf
+import androidx.core.os.postDelayed
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -16,13 +19,28 @@ import com.zeapo.pwdstore.R
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
+
+    override fun onResume() {
+        // TODO: We really, really should not need this amount of hackery. WTF is going on?
+        super.onResume()
+        val editText = dialog?.findViewById<TextInputEditText>(R.id.folder_name_text)
+        Handler().postDelayed(300) {
+            editText?.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0))
+            editText?.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0))
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         alertDialogBuilder.setTitle(R.string.title_create_folder)
         alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
-        alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _: DialogInterface, _: Int ->
+        alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _, _ ->
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
+        alertDialogBuilder.setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
+            dismiss()
+        }
+        isCancelable = false
         return alertDialogBuilder.create()
     }
 
@@ -32,6 +50,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         val folderName = materialTextView.text.toString()
         File("$currentDir/$folderName").mkdir()
         (requireActivity() as PasswordStore).updateListAdapter()
+        dismiss()
     }
 
     companion object {
