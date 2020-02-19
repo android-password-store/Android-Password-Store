@@ -82,6 +82,11 @@
             android:key="filter_recursively"
             android:summary="@string/pref_recursive_filter_hint"
             android:title="@string/pref_recursive_filter" />
+        <androidx.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="search_on_start"
+            android:summary="@string/pref_search_on_start_hint"
+            android:title="@string/pref_search_on_start" />
         <androidx.preference.ListPreference
             android:title="@string/pref_sort_order_title"
             android:defaultValue="FOLDER_FIRST"

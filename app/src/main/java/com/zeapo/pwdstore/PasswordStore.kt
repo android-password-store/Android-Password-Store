@@ -183,6 +183,9 @@ class PasswordStore : AppCompatActivity() {
                         return true
                     }
                 })
+        if (settings.getBoolean("search_on_start", false)) {
+            searchItem.expandActionView()
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
