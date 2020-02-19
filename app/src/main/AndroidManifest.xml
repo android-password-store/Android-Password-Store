@@ -57,6 +57,13 @@
         <service
           android:name=".ClipboardService"
           android:process=":clipboard_service_process"  />
+        <service android:name=".autofill.oreo.OreoAutofillService"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+            <meta-data android:name="android.autofill" android:resource="@xml/oreo_autofill_service" />
+        </service>
 
         <activity
             android:name=".autofill.AutofillActivity"
@@ -73,6 +80,20 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SelectFolderActivity" />
         <activity android:name=".sshkeygen.SshKeyGenActivity" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".autofill.oreo.ui.AutofillDecryptActivity" />
+        <activity
+            android:name=".autofill.oreo.ui.AutofillFilterView"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/DialogLikeTheme" />
+        <activity
+            android:name=".autofill.oreo.ui.AutofillSaveActivity"
+            android:theme="@style/DialogLikeTheme"/>
+        <activity
+            android:name=".autofill.oreo.ui.AutofillPublisherChangedActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/DialogLikeTheme" />
     </application>
 
 </manifest>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:elevation="2dp"
+    android:scrollbars="vertical"
+    tools:context="com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity">
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/primary_color"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintBottom_toTopOf="@id/warningSign"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <ImageView
+        android:id="@+id/warningSign"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/window_background"
+        android:contentDescription="@string/oreo_autofill_warning_publisher_warning_sign_description"
+        android:src="@drawable/ic_warning_red_24dp"
+        app:layout_constraintBottom_toTopOf="@id/warningHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cover" />
+
+    <TextView
+        android:id="@+id/warningHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/window_background"
+        android:text="@string/oreo_autofill_warning_publisher_header"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/warningAppName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warningSign" />
+
+    <TextView
+        android:id="@+id/warningAppName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@color/window_background"
+        android:gravity="center_horizontal"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/warningAppInstallDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warningHeader"
+        tools:text="Example Banking" />
+
+    <TextView
+        android:id="@+id/warningAppInstallDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@color/window_background"
+        android:gravity="center_horizontal"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/warningAppFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warningAppName"
+        tools:text="Installed: 5 days ago" />
+
+    <TextView
+        android:id="@+id/warningAppFooter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/window_background"
+        android:text="@string/oreo_autofill_warning_publisher_footer"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/okButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warningAppInstallDate" />
+
+    <Button
+        android:id="@+id/okButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="@string/oreo_autofill_warning_publisher_changed_disable_autofill_button"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/advancedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warningAppFooter" />
+
+    <Button
+        android:id="@+id/advancedButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="@string/oreo_autofill_warning_publisher_advanced_info_button"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/warningAppAdvancedInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/okButton" />
+
+    <TextView
+        android:id="@+id/warningAppAdvancedInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@color/window_background"
+        android:fontFamily="monospace"
+        android:gravity="center_horizontal"
+        android:textIsSelectable="true"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/resetButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/advancedButton"
+        tools:ignore="SmallSp"
+        tools:text="Package: com.example.banking\n\nHash:\n8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M="
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/resetButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="@string/oreo_autofill_warning_publisher_reenable_button"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warningAppAdvancedInfo"
+        tools:ignore="SmallSp"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
