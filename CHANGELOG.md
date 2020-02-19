@@ -6,9 +6,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Fast scroller with alphabetic hints
 - UI button to create new folders
+- Option to directly start searching when opening the app
 
 ### Changed
 - Logging is now enabled in release builds
+- Searching now shows folders as well as the passwords inside them
 
 ### Fixed
 - OpenKeychain errors cause app crash
