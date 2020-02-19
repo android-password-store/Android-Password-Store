@@ -142,6 +142,11 @@ class PasswordStore : AppCompatActivity() {
         } else {
             checkLocalRepository()
         }
+        if (settings.getBoolean("search_on_start", false) && ::searchItem.isInitialized) {
+            if (!searchItem.isActionViewExpanded) {
+                searchItem.expandActionView()
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
