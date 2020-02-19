@@ -177,7 +177,7 @@ class PasswordFragment : Fragment() {
             if (item.type == PasswordItem.TYPE_CATEGORY && rec) {
                 recursiveFilter(filter, item.file)
             }
-            val matches = item.toString().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT))
+            val matches = item.longName.toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT))
             val inAdapter = recyclerAdapter.values.contains(item)
             if (matches && !inAdapter) {
                 recyclerAdapter.add(item)
