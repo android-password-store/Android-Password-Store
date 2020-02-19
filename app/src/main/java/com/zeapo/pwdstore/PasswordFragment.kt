@@ -156,7 +156,12 @@ class PasswordFragment : Fragment() {
         if (filter.isEmpty()) {
             refreshAdapter()
         } else {
-            recursiveFilter(filter, if (pathStack.isEmpty()) null else pathStack.peek())
+            recursiveFilter(
+                    filter,
+                    if (pathStack.isEmpty() ||
+                            settings.getBoolean("search_from_root", false))
+                        null
+                    else pathStack.peek())
         }
     }
 

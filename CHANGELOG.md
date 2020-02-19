@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Fast scroller with alphabetic hints
 - UI button to create new folders
 - Option to directly start searching when opening the app
+- Option to always search from root folder regardless of the currently open folder
 
 ### Changed
 - Logging is now enabled in release builds
