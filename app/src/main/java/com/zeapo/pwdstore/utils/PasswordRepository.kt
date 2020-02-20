@@ -174,7 +174,7 @@ open class PasswordRepository protected constructor() {
         /**
          * Gets the password items in the root directory
          *
-         * @return a list of passwords in the root direcotyr
+         * @return a list of passwords in the root directory
          */
         @JvmStatic
         fun getPasswords(rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
