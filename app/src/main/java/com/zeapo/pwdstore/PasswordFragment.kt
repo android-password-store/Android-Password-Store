@@ -24,7 +24,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getPasswords
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import java.io.File
-import java.util.Locale
 import java.util.Stack
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
@@ -157,8 +156,34 @@ class PasswordFragment : Fragment() {
         if (filter.isEmpty()) {
             refreshAdapter()
         } else {
-            recursiveFilter(filter, if (pathStack.isEmpty()) null else pathStack.peek())
+            recursiveFilter(
+                    filter,
+                    if (pathStack.isEmpty() ||
+                            settings.getBoolean("search_from_root", false))
+                        null
+                    else pathStack.peek())
         }
+    }
+
+    /**
+     * fuzzy matches the filter against the given string
+     *
+     * based on https://www.forrestthewoods.com/blog/reverse_engineering_sublime_texts_fuzzy_match/
+     *
+     * @param filter the filter to apply
+     * @param str the string to filter against
+     *
+     * @return true if the filter fuzzymatches the string
+     */
+    private fun fuzzyMatch(filter: String, str: String): Boolean {
+        var i = 0
+        var j = 0
+        while (i < filter.length && j < str.length) {
+            if (filter[i].isWhitespace() || filter[i].toLowerCase() == str[j].toLowerCase())
+                i++
+            j++
+        }
+        return i == filter.length
     }
 
     /**
@@ -177,7 +202,7 @@ class PasswordFragment : Fragment() {
             if (item.type == PasswordItem.TYPE_CATEGORY && rec) {
                 recursiveFilter(filter, item.file)
             }
-            val matches = item.toString().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT))
+            val matches = fuzzyMatch(filter, item.longName)
             val inAdapter = recyclerAdapter.values.contains(item)
             if (matches && !inAdapter) {
                 recyclerAdapter.add(item)
