@@ -137,11 +137,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 passwordText.text = FALLBACK_ERROR_PASS
             }
 
-            val cancelButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
-            var negativeLayout = cancelButton.layoutParams as LinearLayout.LayoutParams
-            negativeLayout.gravity = Gravity.LEFT
-            cancelButton.layoutParams = negativeLayout
-
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 setPreferences()
                 try {
