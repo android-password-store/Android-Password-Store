@@ -23,7 +23,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
-import androidx.preference.*
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
@@ -34,14 +38,16 @@ import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
-import me.msfjarvis.openpgpktx.util.OpenPgpUtils
-import org.apache.commons.io.FileUtils
-import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Calendar
+import java.util.HashSet
+import java.util.TimeZone
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
+import org.apache.commons.io.FileUtils
+import timber.log.Timber
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -307,7 +313,6 @@ class UserPreference : AppCompatActivity() {
                     }
                 }
             }
-
 
             val prefCustomXkpwdDictionary = findPreference<Preference>("pref_key_custom_dict")
             prefCustomXkpwdDictionary?.onPreferenceClickListener = ClickListener {

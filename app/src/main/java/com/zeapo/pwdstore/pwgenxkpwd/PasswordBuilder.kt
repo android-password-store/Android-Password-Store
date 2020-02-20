@@ -1,4 +1,7 @@
-
+/*
+ * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
@@ -8,7 +11,8 @@ import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import java.io.IOException
 import java.security.SecureRandom
-import java.util.*
+import java.util.ArrayList
+import java.util.Locale
 
 class PasswordBuilder constructor(ctx: Context) {
 
@@ -85,7 +89,6 @@ class PasswordBuilder constructor(ctx: Context) {
         return numbers.toString()
     }
 
-
     private fun generateRandomSymbolSequence(numSymbols: Int): Any {
         val secureRandom = SecureRandom()
         val numbers = StringBuilder(numSymbols)
@@ -120,13 +123,13 @@ class PasswordBuilder constructor(ctx: Context) {
             if (wordBank.size == 0) {
                 Toast.makeText(context, String.format("Selected dictionary does not contain enough words of given length %d..%d",
                         minWordLength, maxWordLength), Toast.LENGTH_LONG).show()
-                throw PasswordGeneratorExeption(XkPasswordGeneratorDialogFragment.FALLBACK_ERROR_PASS);
+                throw PasswordGeneratorExeption(XkPasswordGeneratorDialogFragment.FALLBACK_ERROR_PASS)
             }
 
             for (i in 0 until numWords) {
                 val randomIndex = secureRandom.nextInt(wordBank.size)
                 var s = wordBank[randomIndex]
-                
+
                 if (capType != CapType.As_iS) {
                     s = s.toLowerCase(Locale.getDefault())
                     when (capType) {
@@ -171,5 +174,4 @@ class PasswordBuilder constructor(ctx: Context) {
         result = lower.substring(0, 1).toUpperCase(Locale.getDefault()) + result.substring(1)
         return result
     }
-
 }

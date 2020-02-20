@@ -12,7 +12,11 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.graphics.Typeface
-import android.os.*
+import android.os.AsyncTask
+import android.os.Build
+import android.os.Bundle
+import android.os.ConditionVariable
+import android.os.Handler
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
@@ -42,7 +46,23 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Date
-import kotlinx.android.synthetic.main.decrypt_layout.*
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_container_decrypt
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_copy_otp
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_copy_username
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show_layout
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_toggle_show
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_otp_show
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_otp_show_label
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_last_changed
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_show
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_show_label
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_toggle_show
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_username_show
+import kotlinx.android.synthetic.main.decrypt_layout.crypto_username_show_label
+import kotlinx.android.synthetic.main.decrypt_layout.pbLoading
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
@@ -136,7 +156,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    if(settings.getBoolean("pref_key_pwgen_type", false)) {
+                    if (settings.getBoolean("pref_key_pwgen_type", false)) {
                         XkPasswordGeneratorDialogFragment()
                                 .show(supportFragmentManager, "xkpwgenerator")
                     } else {
@@ -509,7 +529,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            if(settings.getBoolean("pwgen_type_xkpwd", false)) {
+            if (settings.getBoolean("pwgen_type_xkpwd", false)) {
                 XkPasswordGeneratorDialogFragment()
                         .show(supportFragmentManager, "xkpwgenerator")
             } else {

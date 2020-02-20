@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
@@ -5,7 +9,8 @@ import android.net.Uri
 import android.text.TextUtils
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 
 class Dictionary(context: Context) {
     val words: HashMap<Int, ArrayList<String>>
@@ -31,8 +36,7 @@ class Dictionary(context: Context) {
         }
 
         if (lines == null) {
-            lines = context.getResources().openRawResource(R.raw.xkpwdict).bufferedReader().readLines();
-
+            lines = context.getResources().openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
         }
 
         for (word in lines) {

@@ -13,7 +13,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
@@ -55,13 +59,11 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         private lateinit var spinnerSymbolsCount: Spinner
     }
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity: Activity = requireActivity()
         val inflater = callingActivity.layoutInflater
         val view = inflater.inflate(R.layout.fragment_xkpwgen, null)
-
 
         var monoTypeface: Typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             callingActivity.resources.getFont(R.font.jetbrains_mono)
@@ -130,7 +132,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             setPreferences()
             try {
                 passwordText.text = makePassword()
-
             } catch (e: PasswordGeneratorExeption) {
                 Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
                 passwordText.text = FALLBACK_ERROR_PASS
@@ -154,14 +155,16 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         return dialog
     }
 
-    private fun setCheckboxLabel(checkBox: CheckBox,
-                                 valueNonEmptyStringResId: Int,
-                                 valueEmptyStringResId: Int,
-                                 newValue:Int) {
+    private fun setCheckboxLabel(
+        checkBox: CheckBox,
+        valueNonEmptyStringResId: Int,
+        valueEmptyStringResId: Int,
+        newValue: Int
+    ) {
         if (checkBox.isChecked) {
-            checkBox.text = resources.getQuantityString(valueNonEmptyStringResId, newValue, newValue);
+            checkBox.text = resources.getQuantityString(valueNonEmptyStringResId, newValue, newValue)
         } else {
-            checkBox.text = resources.getString(valueEmptyStringResId);
+            checkBox.text = resources.getString(valueEmptyStringResId)
         }
     }
 
