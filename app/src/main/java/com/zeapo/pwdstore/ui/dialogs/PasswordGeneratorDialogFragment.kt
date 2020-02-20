@@ -8,6 +8,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.EditText
@@ -29,7 +30,14 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         val callingActivity: Activity = requireActivity()
         val inflater = callingActivity.layoutInflater
         val view = inflater.inflate(R.layout.fragment_pwgen, null)
-        val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
+        var monoTypeface: Typeface?
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            monoTypeface = context?.resources?.getFont(R.font.jetbrains_mono)
+        } else {
+            monoTypeface = Typeface.createFromAsset(context?.assets, "fonts/jetbrains_mono.ttf")
+        }
+
         builder.setView(view)
         val prefs = requireActivity().applicationContext
             .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)

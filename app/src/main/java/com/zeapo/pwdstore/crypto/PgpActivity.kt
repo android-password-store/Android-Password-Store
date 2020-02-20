@@ -12,10 +12,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.graphics.Typeface
-import android.os.AsyncTask
-import android.os.Bundle
-import android.os.ConditionVariable
-import android.os.Handler
+import android.os.*
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
@@ -38,6 +35,7 @@ import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
+import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.Otp
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -105,6 +103,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         Timber.tag(TAG)
 
+        context = applicationContext
+
         // some persistence
         val providerPackageName = settings.getString("openpgp_provider_list", "")
 
@@ -136,8 +136,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    PasswordGeneratorDialogFragment()
-                        .show(supportFragmentManager, "generator")
+                    if(settings.getBoolean("pref_key_pwgen_type", false)) {
+                        XkPasswordGeneratorDialogFragment()
+                                .show(supportFragmentManager, "xkpwgenerator")
+                    } else {
+                        PasswordGeneratorDialogFragment()
+                                .show(supportFragmentManager, "generator")
+                    }
                 }
 
                 title = getString(R.string.new_password_title)
@@ -258,7 +263,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                                 crypto_container_decrypt.visibility = View.VISIBLE
 
-                                val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
+                                var monoTypeface: Typeface?
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    monoTypeface = context!!.resources.getFont(R.font.jetbrains_mono)
+                                } else {
+                                    monoTypeface = Typeface.createFromAsset(assets, "fonts/jetbrains_mono.ttf")
+                                }
                                 val entry = PasswordEntry(oStream)
 
                                 passwordEntry = entry
@@ -499,13 +509,24 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            PasswordGeneratorDialogFragment()
-                .show(supportFragmentManager, "generator")
+            if(settings.getBoolean("pwgen_type_xkpwd", false)) {
+                XkPasswordGeneratorDialogFragment()
+                        .show(supportFragmentManager, "xkpwgenerator")
+            } else {
+                PasswordGeneratorDialogFragment()
+                        .show(supportFragmentManager, "generator")
+            }
         }
 
         title = getString(R.string.edit_password_title)
 
-        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
+        var monoTypeface: Typeface
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            monoTypeface = context?.resources?.getFont(R.font.jetbrains_mono)!!
+        } else {
+            monoTypeface = Typeface.createFromAsset(assets, "fonts/jetbrains_mono.ttf")
+        }
+
         crypto_password_edit.setText(passwordEntry?.password)
         crypto_password_edit.typeface = monoTypeface
         crypto_extra_edit.setText(passwordEntry?.extraContent)
@@ -848,6 +869,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         const val TAG = "PgpActivity"
 
         private var delayTask: DelayShow? = null
+
+        private var context: Context? = null
 
         /**
          * Gets the relative path to the repository

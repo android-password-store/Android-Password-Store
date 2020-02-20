@@ -1,0 +1,175 @@
+
+package com.zeapo.pwdstore.pwgenxkpwd
+
+import android.content.Context
+import android.widget.Toast
+import com.zeapo.pwdstore.pwgen.PasswordGenerator
+import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
+import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
+import java.io.IOException
+import java.security.SecureRandom
+import java.util.*
+
+class PasswordBuilder constructor(ctx: Context) {
+
+    companion object {
+        private const val SYMBOLS = "!@\$%^&*-_+=:|~?/.;#"
+    }
+
+    private var numSymbols = 0
+    private var isAppendSymbolsSeparator = false
+    private var context = ctx
+    private var numWords = 4
+    private var maxWordLength = 8
+    private var minWordLength = 5
+    private var separator = "."
+    private var capType = CapType.As_iS
+    private var prependDigits = 0
+    private var numDigits = 0
+    private var isPrependWithSeparator = false
+    private var isAppendNumberSeparator = false
+
+    fun setNumberOfWords(amount: Int): PasswordBuilder {
+        numWords = amount
+        return this
+    }
+
+    fun setMinimumWordLength(min: Int): PasswordBuilder {
+        minWordLength = min
+        return this
+    }
+
+    fun setMaximumWordLength(max: Int): PasswordBuilder {
+        maxWordLength = max
+        return this
+    }
+
+    fun setSeparator(separator: String): PasswordBuilder {
+        this.separator = separator
+        return this
+    }
+
+    fun setCapitalization(capitalizationScheme: CapType): PasswordBuilder {
+        capType = capitalizationScheme
+        return this
+    }
+
+    @JvmOverloads
+    fun prependNumbers(numDigits: Int, addSeparator: Boolean = true): PasswordBuilder {
+        prependDigits = numDigits
+        isPrependWithSeparator = addSeparator
+        return this
+    }
+
+    @JvmOverloads
+    fun appendNumbers(numDigits: Int, addSeparator: Boolean = true): PasswordBuilder {
+        this.numDigits = numDigits
+        isAppendNumberSeparator = addSeparator
+        return this
+    }
+
+    @JvmOverloads
+    fun appendSymbols(numSymbols: Int, addSeparator: Boolean = false): PasswordBuilder {
+        this.numSymbols = numSymbols
+        isAppendSymbolsSeparator = addSeparator
+        return this
+    }
+
+    private fun generateRandomNumberSequence(totalNumbers: Int): String {
+        val secureRandom = SecureRandom()
+        val numbers = StringBuilder(totalNumbers)
+
+        for (i in 0 until totalNumbers) {
+            numbers.append(secureRandom.nextInt(10))
+        }
+        return numbers.toString()
+    }
+
+
+    private fun generateRandomSymbolSequence(numSymbols: Int): Any {
+        val secureRandom = SecureRandom()
+        val numbers = StringBuilder(numSymbols)
+
+        for (i in 0 until numSymbols) {
+            numbers.append(SYMBOLS[secureRandom.nextInt(SYMBOLS.length)])
+        }
+        return numbers.toString()
+    }
+
+    @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
+    fun create(): String {
+        val wordBank = ArrayList<String>()
+        val secureRandom = SecureRandom()
+        val password = StringBuilder()
+
+        if (prependDigits != 0) {
+            password.append(generateRandomNumberSequence(prependDigits))
+            if (isPrependWithSeparator) {
+                password.append(separator)
+            }
+        }
+        try {
+            val dictionary = Dictionary(context)
+            val words = dictionary.words
+            for (wordLength in words.keys) {
+                if (wordLength in minWordLength..maxWordLength) {
+                    wordBank.addAll(words[wordLength]!!)
+                }
+            }
+
+            if (wordBank.size == 0) {
+                Toast.makeText(context, String.format("Selected dictionary does not contain enough words of given length %d..%d",
+                        minWordLength, maxWordLength), Toast.LENGTH_LONG).show()
+                throw PasswordGeneratorExeption(XkPasswordGeneratorDialogFragment.FALLBACK_ERROR_PASS);
+            }
+
+            for (i in 0 until numWords) {
+                val randomIndex = secureRandom.nextInt(wordBank.size)
+                var s = wordBank[randomIndex]
+                
+                if (capType != CapType.As_iS) {
+                    s = s.toLowerCase(Locale.getDefault())
+                    when (capType) {
+                        CapType.UPPERCASE -> s = s.toUpperCase(Locale.getDefault())
+                        CapType.Sentencecase -> {
+                            if (i == 0) {
+                                s = capitalize(s)
+                            }
+                        }
+                        CapType.TitleCase -> {
+                            s = capitalize(s)
+                        }
+                    }
+                }
+                password.append(s)
+                wordBank.removeAt(randomIndex)
+                if (i + 1 < numWords) {
+                    password.append(separator)
+                }
+            }
+        } catch (e: IOException) {
+            throw PasswordGeneratorExeption("Failed generating password!")
+        }
+        if (numDigits != 0) {
+            if (isAppendNumberSeparator) {
+                password.append(separator)
+            }
+            password.append(generateRandomNumberSequence(numDigits))
+        }
+        if (numSymbols != 0) {
+            if (isAppendSymbolsSeparator) {
+                password.append(separator)
+            }
+            password.append(generateRandomSymbolSequence(numSymbols))
+        }
+        return password.toString()
+    }
+
+    private fun capitalize(s: String): String {
+        var result = s
+        val lower = result.toLowerCase(Locale.getDefault())
+        result = lower.substring(0, 1).toUpperCase(Locale.getDefault()) + result.substring(1)
+        return result
+    }
+
+}

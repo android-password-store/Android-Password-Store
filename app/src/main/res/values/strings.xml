@@ -190,6 +190,15 @@
     <string name="pwgen_no_chars_error">No characters included</string>
     <string name="pwgen_length_too_short_error">Length too short for selected criteria</string>
 
+    <!-- XKPWD password generator -->
+    <string name="xkpwgen_title">Xkpasswd Generator</string>
+    <string name="xkpwgen_length">Total words</string>
+    <string name="xkpwgen_separator">Separator</string>
+    <string name="xkpwgen_custom_dict_imported">Custom dictionary selected</string>
+    <string name="xkpwgen_separator_character">separator character</string>
+    <string name="xkpwgen_numbers">numbers:</string>
+    <string name="xkpwgen_symbols">symbols:</string>
+
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Length</string>
     <string name="ssh_keygen_passphrase">Passphrase</string>

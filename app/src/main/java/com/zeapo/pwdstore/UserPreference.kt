@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.Settings
+import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
@@ -22,11 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
-import androidx.preference.CheckBoxPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
-import androidx.preference.SwitchPreferenceCompat
+import androidx.preference.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
@@ -37,16 +34,14 @@ import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
+import org.apache.commons.io.FileUtils
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.HashSet
-import java.util.TimeZone
-import me.msfjarvis.openpgpktx.util.OpenPgpUtils
-import org.apache.commons.io.FileUtils
-import timber.log.Timber
+import java.util.*
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -312,6 +307,18 @@ class UserPreference : AppCompatActivity() {
                     }
                 }
             }
+
+
+            val prefCustomXkpwdDictionary = findPreference<Preference>("pref_key_custom_dict")
+            prefCustomXkpwdDictionary?.onPreferenceClickListener = ClickListener {
+                callingActivity.storeCustomDictionaryPath()
+                true
+            }
+            val dictUri = sharedPreferences.getString("pref_key_custom_dict", "")
+
+            if (!TextUtils.isEmpty(dictUri)) {
+                prefCustomXkpwdDictionary?.setSummary("Selected dictionary: " + Uri.parse(dictUri).path)
+            }
         }
 
         override fun onResume() {
@@ -394,6 +401,17 @@ class UserPreference : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
+    }
+
+    /**
+     * Pick custom xkpwd dictionary from sdcard
+     */
+    private fun storeCustomDictionaryPath() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
+        startActivityForResult(intent, SET_CUSTOM_XKPWD_DICT)
     }
 
     @Throws(IOException::class)
@@ -515,6 +533,20 @@ class UserPreference : AppCompatActivity() {
                         }
                     }
                 }
+                SET_CUSTOM_XKPWD_DICT -> {
+                    val uri: Uri = data.data ?: throw IOException("Unable to open file")
+
+                    Toast.makeText(
+                            this,
+                            this.resources.getString(R.string.xkpwgen_custom_dict_imported),
+                            Toast.LENGTH_LONG
+                    ).show()
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+                    prefs.edit().putString("pref_key_custom_dict", uri.toString()).apply()
+
+                    setResult(Activity.RESULT_OK)
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -598,6 +630,7 @@ class UserPreference : AppCompatActivity() {
         private const val SELECT_GIT_DIRECTORY = 4
         private const val EXPORT_PASSWORDS = 5
         private const val EDIT_GIT_CONFIG = 6
+        private const val SET_CUSTOM_XKPWD_DICT = 7
         private const val TAG = "UserPreference"
     }
 }
