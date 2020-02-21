@@ -481,7 +481,7 @@ class UserPreference : AppCompatActivity() {
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val repoPath = "${Environment.getExternalStorageDirectory()}/${split[1]}"
+                    val repoPath = "${Environment.getExternalStorageDirectory()}/${split[1] ?: split[0]}"
 
                     Timber.tag(TAG).d("Selected repository path is $repoPath")
 
