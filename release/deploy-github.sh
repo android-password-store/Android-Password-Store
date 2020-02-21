@@ -6,4 +6,4 @@ trap 'exit 1' SIGINT SIGTERM
 TAG="${1}"
 hub tag -afs "${TAG:?}"
 gradle clean bundleRelease assembleRelease
-hub release create "${TAG}" -a app/build/outputs/apk/release/aps_"${TAG}".apk
+hub release create "${TAG}" -a app/build/outputs/apk/release/app-release.apk
