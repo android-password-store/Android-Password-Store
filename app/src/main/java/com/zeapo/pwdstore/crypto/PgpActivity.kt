@@ -13,7 +13,6 @@ import android.content.IntentSender
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.os.ConditionVariable
 import android.os.Handler
@@ -46,23 +45,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Date
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_container_decrypt
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_copy_otp
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_copy_username
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show_layout
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_toggle_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_otp_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_otp_show_label
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_last_changed
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_show_label
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_toggle_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_username_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_username_show_label
-import kotlinx.android.synthetic.main.decrypt_layout.pbLoading
+import kotlinx.android.synthetic.main.decrypt_layout.*
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
@@ -122,8 +105,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         Timber.tag(TAG)
-
-        context = applicationContext
 
         // some persistence
         val providerPackageName = settings.getString("openpgp_provider_list", "")
@@ -283,12 +264,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                                 crypto_container_decrypt.visibility = View.VISIBLE
 
-                                var monoTypeface: Typeface?
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    monoTypeface = context!!.resources.getFont(R.font.jetbrains_mono)
-                                } else {
-                                    monoTypeface = Typeface.createFromAsset(assets, "fonts/jetbrains_mono.ttf")
-                                }
+                                val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
                                 val entry = PasswordEntry(oStream)
 
                                 passwordEntry = entry
@@ -540,13 +516,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         title = getString(R.string.edit_password_title)
 
-        var monoTypeface: Typeface
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            monoTypeface = context?.resources?.getFont(R.font.jetbrains_mono)!!
-        } else {
-            monoTypeface = Typeface.createFromAsset(assets, "fonts/jetbrains_mono.ttf")
-        }
-
+        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
         crypto_password_edit.setText(passwordEntry?.password)
         crypto_password_edit.typeface = monoTypeface
         crypto_extra_edit.setText(passwordEntry?.extraContent)
@@ -889,8 +859,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         const val TAG = "PgpActivity"
 
         private var delayTask: DelayShow? = null
-
-        private var context: Context? = null
 
         /**
          * Gets the relative path to the repository

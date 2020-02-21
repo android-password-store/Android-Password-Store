@@ -9,13 +9,10 @@ import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -65,11 +62,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         val inflater = callingActivity.layoutInflater
         val view = inflater.inflate(R.layout.fragment_xkpwgen, null)
 
-        var monoTypeface: Typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            callingActivity.resources.getFont(R.font.jetbrains_mono)
-        } else {
-            Typeface.createFromAsset(callingActivity.assets, "fonts/jetbrains_mono.ttf")
-        }
+        val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
 
         builder.setView(view)
 
@@ -148,19 +141,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             }
         }
         return dialog
-    }
-
-    private fun setCheckboxLabel(
-        checkBox: CheckBox,
-        valueNonEmptyStringResId: Int,
-        valueEmptyStringResId: Int,
-        newValue: Int
-    ) {
-        if (checkBox.isChecked) {
-            checkBox.text = resources.getQuantityString(valueNonEmptyStringResId, newValue, newValue)
-        } else {
-            checkBox.text = resources.getString(valueEmptyStringResId)
-        }
     }
 
     private fun makePassword(): String {
