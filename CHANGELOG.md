@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Resolve memory leaks on password decryption
+
 ## [1.5.0] - 2020-02-21
 
 ### Added
