@@ -149,6 +149,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         checkAndIncrementHotp()
         super.onDestroy()
         mServiceConnection?.unbindFromService()
+        delayTask = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
