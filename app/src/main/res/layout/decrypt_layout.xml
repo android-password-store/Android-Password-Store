@@ -94,16 +94,6 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/crypto_password_show_label"
                 android:typeface="monospace" />
 
-            <ProgressBar
-                android:id="@+id/pbLoading"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="invisible"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/crypto_password_show_label"/>
-
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.MaterialComponents.Button"
                 android:id="@+id/crypto_password_toggle_show"

@@ -27,7 +27,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -726,7 +725,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         delayTask?.cancelAndSignal(true)
 
         // launch a new one
-        delayTask = DelayShow(this)
+        delayTask = DelayShow()
         delayTask?.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
@@ -743,8 +742,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     @Suppress("StaticFieldLeak")
-    inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
-        private val pb: ProgressBar? by lazy { pbLoading }
+    inner class DelayShow : AsyncTask<Void, Int, Boolean>() {
         private var skip = false
         private var cancelNotify = ConditionVariable()
 
@@ -758,10 +756,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         fun cancelAndSignal(skipClearing: Boolean) {
             skip = skipClearing
             cancelNotify.open()
-        }
-
-        val settings: SharedPreferences by lazy {
-            PreferenceManager.getDefaultSharedPreferences(activity)
         }
 
         override fun onPreExecute() {
@@ -782,12 +776,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             if (showTime == 0) {
                 // treat 0 as forever, and the user must exit and/or clear clipboard on their own
                 cancel(true)
-            } else {
-                this.pb?.max = showTime
             }
         }
 
-        override fun doInBackground(vararg params: Void): Boolean? {
+        override fun doInBackground(vararg params: Void): Boolean {
             var current = 0
             while (current < showTime) {
 
@@ -795,14 +787,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 if (cancelNotify.block(1000)) {
                     return true
                 }
-
                 current++
-                publishProgress(current)
             }
             return true
         }
 
-        override fun onPostExecute(b: Boolean?) {
+        override fun onPostExecute(result: Boolean) {
             if (skip) return
             checkAndIncrementHotp()
 
@@ -833,10 +823,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 crypto_container_decrypt.visibility = View.INVISIBLE
                 finish()
             }
-        }
-
-        override fun onProgressUpdate(vararg values: Int?) {
-            this.pb?.progress = values[0] ?: 0
         }
     }
 
