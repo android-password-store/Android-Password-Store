@@ -493,7 +493,7 @@ class PasswordStore : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
                 .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
-                    item.file.delete()
+                    item.file.deleteRecursively()
                     adapter.remove(position)
                     it.remove()
                     adapter.updateSelectedItems(position, selectedItems)

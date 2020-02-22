@@ -412,12 +412,12 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         // populate the dialog items, always with pick + pick and match. Could
         // make it optional (or make height a setting for the same effect)
         val itemNames = arrayOfNulls<CharSequence>(items.size + 2)
+        val passwordDirectory = PasswordRepository.getRepositoryDirectory(applicationContext).toString()
+        val autofillFullPath = settings!!.getBoolean("autofill_full_path", false)
         for (i in items.indices) {
-            if (settings!!.getBoolean("autofill_full_path", false)) {
+            if (autofillFullPath) {
                 itemNames[i] = items[i].path.replace(".gpg", "")
-                        .replace(
-                                PasswordRepository.getRepositoryDirectory(applicationContext).toString() + "/",
-                                "")
+                        .replace("$passwordDirectory/", "")
             } else {
                 itemNames[i] = items[i].name.replace(".gpg", "")
             }

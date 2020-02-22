@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Can't delete folders containing a password
+
+## [1.5.0] - 2020-02-21
+
 ### Added
 - Fast scroller with alphabetic hints
 - UI button to create new folders
@@ -77,6 +82,9 @@ All notable changes to this project will be documented in this file.
 - Fix elements overlapping.
 
 
+[Unreleased]: https://github.com/zeapo/android-password-store/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/zeapo/android-password-store/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/zeapo/android-password-store/compare/v1.3.0...v1.4.0
 [1.3.2]: https://github.com/zeapo/android-password-store/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/zeapo/android-password-store/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/zeapo/android-password-store/compare/v1.2.0.75...v1.3.0
