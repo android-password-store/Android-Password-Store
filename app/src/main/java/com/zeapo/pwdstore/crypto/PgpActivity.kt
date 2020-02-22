@@ -244,7 +244,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val data = receivedIntent ?: Intent()
         data.action = ACTION_DECRYPT_VERIFY
 
-        val iStream = FileUtils.openInputStream(File(fullPath))
+        val iStream = FileUtils.openInputStream(File(fullPath).getAbsoluteFile())
         val oStream = ByteArrayOutputStream()
 
         GlobalScope.launch(IO) {
