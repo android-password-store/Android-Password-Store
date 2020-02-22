@@ -49,12 +49,15 @@
             android:title="@string/pref_key_title" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="Password Generator">
-        <androidx.preference.CheckBoxPreference
+    <androidx.preference.PreferenceCategory android:title="@string/password_generator_category_title">
+        <androidx.preference.ListPreference
+            android:title="@string/xkpwgen_pref_gentype_title"
+            android:defaultValue="classic"
             android:key="pref_key_pwgen_type"
-            android:summaryOn="@string/xkpwgen_pref_gentype_summary_on"
-            android:summaryOff="@string/xkpwgen_pref_gentype_summary_off"
-            android:title="@string/xkpwgen_pref_gentype_title" />
+            android:entries="@array/pwgen_provider"
+            android:entryValues="@array/pwgen_provider"
+            app:useSimpleSummaryProvider="true"
+            android:persistent="true" />
         <androidx.preference.CheckBoxPreference
             android:title="@string/xkpwgen_pref_custom_dict_title"
             android:summary="@string/xkpwgen_pref_custom_dict_summary"
@@ -64,22 +67,6 @@
             android:title="@string/xkpwgen_pref_custom_dict_picker_title"
             android:summary="@string/xkpwgen_pref_custom_dict_picker_summary"
             android:dependency="pref_key_is_custom_dict"/>
-        <androidx.preference.ListPreference
-            android:title="@string/xkpwgen_pref_min_word_length_title"
-            android:defaultValue="3"
-            android:key="pref_key_min_word_len"
-            android:entries="@array/xk_range_1_30"
-            android:entryValues="@array/xk_range_1_30"
-            app:useSimpleSummaryProvider="true"
-            android:persistent="true" />
-        <androidx.preference.ListPreference
-            android:title="@string/xkpwgen_pref_max_word_length_title"
-            android:defaultValue="8"
-            android:key="pref_key_max_word_len"
-            android:entries="@array/xk_range_1_30"
-            android:entryValues="@array/xk_range_1_30"
-            app:useSimpleSummaryProvider="true"
-            android:persistent="true"/>
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_general_title">

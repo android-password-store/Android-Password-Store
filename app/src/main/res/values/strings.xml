@@ -200,15 +200,12 @@
     <string name="xkpwgen_symbols">symbols:</string>
 
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_summary_on">Use xkpwd-style password generator</string>
-    <string name="xkpwgen_pref_gentype_summary_off">Use pwgen-style password generator</string>
-    <string name="xkpwgen_pref_gentype_title">Use alternative generator</string>
+    <string name="xkpwgen_pref_gentype_title">Password generator type</string>
     <string name="xkpwgen_pref_custom_dict_title">Custom dictionary</string>
     <string name="xkpwgen_pref_custom_dict_summary">Use custom dictionary file</string>
     <string name="xkpwgen_pref_custom_dict_picker_title">Custom dictionary file</string>
     <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom dictionary file containing one word per line</string>
-    <string name="xkpwgen_pref_min_word_length_title">Minimum word length</string>
-    <string name="xkpwgen_pref_max_word_length_title">Maximum word length</string>
+
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Length</string>
@@ -305,5 +302,6 @@
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
     <string name="pref_search_from_root">Always search from root</string>
     <string name="pref_search_from_root_hint">Search from root of store regardless of currently open directory</string>
+    <string name="password_generator_category_title">Password Generator</string>
 
 </resources>

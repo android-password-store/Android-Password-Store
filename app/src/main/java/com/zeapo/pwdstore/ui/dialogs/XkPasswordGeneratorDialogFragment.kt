@@ -27,35 +27,6 @@ import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
 
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
-
-    companion object {
-        const val PREF_KEY_USE_NUMERALS = "pref_key_use_numerals"
-        const val PREF_KEY_USE_SYMBOLS = "pref_key_use_symbols"
-        const val PREF_KEY_CAPITALS_STYLE = "pref_key_capitals_style"
-        const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
-        const val PREF_KEY_SEPARATOR = "pref_key_separator"
-        const val PREF_KEY_NUMBERS_COUNT = "pref_key_xkpwgen_numbers_count"
-        const val PREF_KEY_SYMBOLS_COUNT = "pref_key_symbols_count"
-
-        const val DEFAULT_CAPS_STYLE = "Sentencecase"
-        const val DEFAULT_CAPS_INDEX = 3
-        const val DEFAULT_NUMBER_OF_WORDS = "3"
-        const val DEFAULT_WORD_SEPARATOR = "."
-        const val DEFAULT_MIN_WORD_LENGTH = 3
-        const val DEFAULT_MAX_WORD_LENGTH = 9
-
-        public const val FALLBACK_ERROR_PASS = "42"
-
-        private lateinit var editSeparator: AppCompatEditText
-        private lateinit var editNumWords: AppCompatEditText
-        private lateinit var cbSymbols: CheckBox
-        private lateinit var spinnerCapsType: Spinner
-        private lateinit var cbNumbers: CheckBox
-        private lateinit var prefs: SharedPreferences
-        private lateinit var spinnerNumbersCount: Spinner
-        private lateinit var spinnerSymbolsCount: Spinner
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity: Activity = requireActivity()
@@ -163,5 +134,33 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 .putInt(PREF_KEY_NUMBERS_COUNT, Integer.parseInt(spinnerNumbersCount.selectedItem as String) - 1)
                 .putInt(PREF_KEY_SYMBOLS_COUNT, Integer.parseInt(spinnerSymbolsCount.selectedItem as String) - 1)
                 .apply()
+    }
+
+    companion object {
+        const val PREF_KEY_USE_NUMERALS = "pref_key_use_numerals"
+        const val PREF_KEY_USE_SYMBOLS = "pref_key_use_symbols"
+        const val PREF_KEY_CAPITALS_STYLE = "pref_key_capitals_style"
+        const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
+        const val PREF_KEY_SEPARATOR = "pref_key_separator"
+        const val PREF_KEY_NUMBERS_COUNT = "pref_key_xkpwgen_numbers_count"
+        const val PREF_KEY_SYMBOLS_COUNT = "pref_key_symbols_count"
+
+        const val DEFAULT_CAPS_STYLE = "Sentencecase"
+        const val DEFAULT_CAPS_INDEX = 3
+        const val DEFAULT_NUMBER_OF_WORDS = "3"
+        const val DEFAULT_WORD_SEPARATOR = "."
+        const val DEFAULT_MIN_WORD_LENGTH = 3
+        const val DEFAULT_MAX_WORD_LENGTH = 9
+
+        const val FALLBACK_ERROR_PASS = "42"
+
+        private lateinit var editSeparator: AppCompatEditText
+        private lateinit var editNumWords: AppCompatEditText
+        private lateinit var cbSymbols: CheckBox
+        private lateinit var spinnerCapsType: Spinner
+        private lateinit var cbNumbers: CheckBox
+        private lateinit var prefs: SharedPreferences
+        private lateinit var spinnerNumbersCount: Spinner
+        private lateinit var spinnerSymbolsCount: Spinner
     }
 }

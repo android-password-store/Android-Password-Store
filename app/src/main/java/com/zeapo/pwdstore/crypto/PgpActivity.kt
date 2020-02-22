@@ -137,12 +137,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    if (settings.getBoolean("pref_key_pwgen_type", false)) {
-                        XkPasswordGeneratorDialogFragment()
-                                .show(supportFragmentManager, "xkpwgenerator")
-                    } else {
-                        PasswordGeneratorDialogFragment()
+                    when (settings.getString("pref_key_pwgen_type", "classic")) {
+                        "classic" -> PasswordGeneratorDialogFragment()
                                 .show(supportFragmentManager, "generator")
+                        "xkpasswd" -> XkPasswordGeneratorDialogFragment()
+                                .show(supportFragmentManager, "xkpwgenerator")
                     }
                 }
 
