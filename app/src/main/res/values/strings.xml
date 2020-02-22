@@ -285,4 +285,5 @@
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
     <string name="pref_search_from_root">Always search from root</string>
     <string name="pref_search_from_root_hint">Search from root of store regardless of currently open directory</string>
+    <string name="clipboard_implicit_name_toast_text">Implicit username copied to clipboard</string>
 </resources>

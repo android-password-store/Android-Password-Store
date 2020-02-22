@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+- Copy implicit username (password filename) by long pressing
 
 ## [1.5.0] - 2020-02-21
 
