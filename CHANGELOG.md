@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Can't delete folders containing a password
+
 ## [1.5.0] - 2020-02-21
 
 ### Added
