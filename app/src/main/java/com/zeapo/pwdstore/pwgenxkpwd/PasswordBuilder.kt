@@ -18,60 +18,52 @@ class PasswordBuilder(ctx: Context) {
     private var numSymbols = 0
     private var isAppendSymbolsSeparator = false
     private var context = ctx
-    private var numWords = 4
-    private var maxWordLength = 8
+    private var numWords = 3
+    private var maxWordLength = 9
     private var minWordLength = 5
     private var separator = "."
-    private var capType = CapsType.Sentencecase
+    private var capsType = CapsType.Sentencecase
     private var prependDigits = 0
     private var numDigits = 0
     private var isPrependWithSeparator = false
     private var isAppendNumberSeparator = false
 
-    fun setNumberOfWords(amount: Int): PasswordBuilder {
+    fun setNumberOfWords(amount: Int) = apply {
         numWords = amount
-        return this
     }
 
-    fun setMinimumWordLength(min: Int): PasswordBuilder {
+    fun setMinimumWordLength(min: Int) = apply {
         minWordLength = min
-        return this
     }
 
-    fun setMaximumWordLength(max: Int): PasswordBuilder {
+    fun setMaximumWordLength(max: Int) = apply {
         maxWordLength = max
-        return this
     }
 
-    fun setSeparator(separator: String): PasswordBuilder {
+    fun setSeparator(separator: String) = apply {
         this.separator = separator
-        return this
     }
 
-    fun setCapitalization(capitalizationScheme: CapsType): PasswordBuilder {
-        capType = capitalizationScheme
-        return this
+    fun setCapitalization(capitalizationScheme: CapsType) = apply {
+        capsType = capitalizationScheme
     }
 
     @JvmOverloads
-    fun prependNumbers(numDigits: Int, addSeparator: Boolean = true): PasswordBuilder {
+    fun prependNumbers(numDigits: Int, addSeparator: Boolean = true) = apply {
         prependDigits = numDigits
         isPrependWithSeparator = addSeparator
-        return this
     }
 
     @JvmOverloads
-    fun appendNumbers(numDigits: Int, addSeparator: Boolean = false): PasswordBuilder {
+    fun appendNumbers(numDigits: Int, addSeparator: Boolean = false) = apply {
         this.numDigits = numDigits
         isAppendNumberSeparator = addSeparator
-        return this
     }
 
     @JvmOverloads
-    fun appendSymbols(numSymbols: Int, addSeparator: Boolean = false): PasswordBuilder {
+    fun appendSymbols(numSymbols: Int, addSeparator: Boolean = false) = apply {
         this.numSymbols = numSymbols
         isAppendSymbolsSeparator = addSeparator
-        return this
     }
 
     private fun generateRandomNumberSequence(totalNumbers: Int): String {
@@ -123,9 +115,9 @@ class PasswordBuilder(ctx: Context) {
                 val randomIndex = secureRandom.nextInt(wordBank.size)
                 var s = wordBank[randomIndex]
 
-                if (capType != CapsType.As_iS) {
+                if (capsType != CapsType.As_iS) {
                     s = s.toLowerCase(Locale.getDefault())
-                    when (capType) {
+                    when (capsType) {
                         CapsType.UPPERCASE -> s = s.toUpperCase(Locale.getDefault())
                         CapsType.Sentencecase -> {
                             if (i == 0) {
