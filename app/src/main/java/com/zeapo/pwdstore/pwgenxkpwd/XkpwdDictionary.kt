@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
 import java.io.File
 import java.util.ArrayList
+import java.util.Collections
 import java.util.HashMap
 
 class XkpwdDictionary(context: Context) {
@@ -18,7 +19,7 @@ class XkpwdDictionary(context: Context) {
     init {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        var lines: List<String>? = null
+        var lines: List<String> = Collections.emptyList()
 
         if (prefs.getBoolean("pref_key_is_custom_dict", false)) {
 
@@ -33,7 +34,7 @@ class XkpwdDictionary(context: Context) {
             }
         }
 
-        if (lines == null || lines.isEmpty()) {
+        if (lines.isEmpty()) {
             lines = context.getResources().openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
         }
 
