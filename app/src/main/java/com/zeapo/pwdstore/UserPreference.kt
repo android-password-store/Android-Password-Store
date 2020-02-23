@@ -24,6 +24,7 @@ import androidx.biometric.BiometricManager
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -33,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -322,7 +324,41 @@ class UserPreference : AppCompatActivity() {
             val dictUri = sharedPreferences.getString("pref_key_custom_dict", "")
 
             if (!TextUtils.isEmpty(dictUri)) {
-                prefCustomXkpwdDictionary?.setSummary("Selected dictionary: " + Uri.parse(dictUri).path)
+                setCustomDictSummary(prefCustomXkpwdDictionary, Uri.parse(dictUri))
+            }
+
+            val prefIsCustomDict = findPreference<CheckBoxPreference>("pref_key_is_custom_dict")
+            val prefCustomDictPicker = findPreference<Preference>("pref_key_custom_dict")
+            val prefPwgenType = findPreference<ListPreference>("pref_key_pwgen_type")
+            showHideDependentPrefs(prefPwgenType?.value, prefIsCustomDict, prefCustomDictPicker)
+
+            prefPwgenType?.onPreferenceChangeListener = ChangeListener() { _, newValue ->
+                showHideDependentPrefs(newValue, prefIsCustomDict, prefCustomDictPicker)
+                true
+            }
+
+            prefIsCustomDict?.onPreferenceChangeListener = ChangeListener() { _, newValue ->
+                if (!(newValue as Boolean)) {
+                    val customDictFile = File(context.filesDir.toString() + XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    if (customDictFile.exists()) {
+                        FileUtils.deleteQuietly(customDictFile)
+                    }
+                    prefCustomDictPicker?.setSummary(R.string.xkpwgen_pref_custom_dict_picker_summary)
+                }
+                true
+            }
+        }
+
+        private fun showHideDependentPrefs(newValue: Any?, prefIsCustomDict: CheckBoxPreference?, prefCustomDictPicker: Preference?) {
+            when (newValue as String) {
+                PgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
+                    prefIsCustomDict?.isVisible = false
+                    prefCustomDictPicker?.isVisible = false
+                }
+                PgpActivity.KEY_PWGEN_TYPE_XKPASSWD -> {
+                    prefIsCustomDict?.isVisible = true
+                    prefCustomDictPicker?.isVisible = true
+                }
             }
         }
 
@@ -544,12 +580,19 @@ class UserPreference : AppCompatActivity() {
 
                     Toast.makeText(
                             this,
-                            this.resources.getString(R.string.xkpwgen_custom_dict_imported),
-                            Toast.LENGTH_LONG
+                            this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
+                            Toast.LENGTH_SHORT
                     ).show()
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
                     prefs.edit().putString("pref_key_custom_dict", uri.toString()).apply()
+
+                    val customDictPref = prefsFragment.findPreference<Preference>("pref_key_custom_dict")
+                    setCustomDictSummary(customDictPref, uri)
+                    // copy user selected file to internal storage
+                    val inputStream = this.contentResolver.openInputStream(uri)
+                    val customDictFile = File(this.filesDir.toString() + XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    FileUtils.copyInputStreamToFile(inputStream, customDictFile)
 
                     setResult(Activity.RESULT_OK)
                 }
@@ -638,5 +681,14 @@ class UserPreference : AppCompatActivity() {
         private const val EDIT_GIT_CONFIG = 6
         private const val SET_CUSTOM_XKPWD_DICT = 7
         private const val TAG = "UserPreference"
+
+        /**
+         * Set custom dictionary summary
+         */
+        @JvmStatic
+        private fun setCustomDictSummary(customDictPref: Preference?, uri: Uri) {
+            val fileName = uri.path?.substring(uri.path?.lastIndexOf(":")!! + 1)
+            customDictPref?.setSummary("Selected dictionary: " + fileName)
+        }
     }
 }

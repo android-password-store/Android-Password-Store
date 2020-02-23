@@ -137,10 +137,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    when (settings.getString("pref_key_pwgen_type", "classic")) {
-                        "classic" -> PasswordGeneratorDialogFragment()
+                    when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+                        KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
                                 .show(supportFragmentManager, "generator")
-                        "xkpasswd" -> XkPasswordGeneratorDialogFragment()
+                        KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
                                 .show(supportFragmentManager, "xkpwgenerator")
                     }
                 }
@@ -504,12 +504,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            if (settings.getBoolean("pwgen_type_xkpwd", false)) {
-                XkPasswordGeneratorDialogFragment()
-                        .show(supportFragmentManager, "xkpwgenerator")
-            } else {
-                PasswordGeneratorDialogFragment()
+            when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+                KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
                         .show(supportFragmentManager, "generator")
+                KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
+                        .show(supportFragmentManager, "xkpwgenerator")
             }
         }
 
@@ -856,6 +855,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         const val REQUEST_KEY_ID = 203
 
         const val TAG = "PgpActivity"
+
+        const val KEY_PWGEN_TYPE_CLASSIC = "classic"
+        const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
 
         private var delayTask: DelayShow? = null
 

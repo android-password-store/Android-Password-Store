@@ -5,19 +5,17 @@
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
-import android.net.Uri
 import android.text.TextUtils
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
+import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 
-class Dictionary(context: Context) {
-    val words: HashMap<Int, ArrayList<String>>
+class XkpwdDictionary(context: Context) {
+    val words: HashMap<Int, ArrayList<String>> = HashMap()
 
     init {
-        words = HashMap()
-
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         var lines: List<String>? = null
@@ -27,10 +25,10 @@ class Dictionary(context: Context) {
             val uri = prefs.getString("pref_key_custom_dict", "")
 
             if (!TextUtils.isEmpty(uri)) {
-                val customDictStream = context.contentResolver.openInputStream(Uri.parse(uri))
+                val customDictFile = File(context.filesDir.toString() + XKPWD_CUSTOM_DICT_FILE)
 
-                if (customDictStream != null) {
-                    lines = customDictStream.bufferedReader().readLines()
+                if (customDictFile.exists() && customDictFile.canRead()) {
+                    lines = customDictFile.inputStream().bufferedReader().readLines()
                 }
             }
         }
@@ -52,5 +50,9 @@ class Dictionary(context: Context) {
                 }
             }
         }
+    }
+
+    companion object {
+        const val XKPWD_CUSTOM_DICT_FILE = "/custom_dict.txt"
     }
 }

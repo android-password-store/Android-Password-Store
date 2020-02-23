@@ -22,7 +22,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
-import com.zeapo.pwdstore.pwgenxkpwd.CapType
+import com.zeapo.pwdstore.pwgenxkpwd.CapsType
 import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
 
 /** A placeholder fragment containing a simple view.  */
@@ -54,7 +54,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         spinnerSymbolsCount.setSelection(symbolsCount)
 
         val previousStoredCapStyle: String = try {
-            prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)
+            prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)!!
         } catch (e: Exception) {
             Log.e("xkpw", e.message)
             DEFAULT_CAPS_STYLE
@@ -64,7 +64,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         val lastCapitalsStyleIndex: Int
 
         lastCapitalsStyleIndex = try {
-            CapType.valueOf(previousStoredCapStyle).ordinal
+            CapsType.valueOf(previousStoredCapStyle).ordinal
         } catch (e: Exception) {
             Log.e("xkpw", e.message)
             DEFAULT_CAPS_INDEX
@@ -122,7 +122,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 .setSeparator(editSeparator.text.toString())
                 .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
                 .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
-                .setCapitalization(CapType.valueOf(spinnerCapsType.selectedItem.toString())).create()
+                .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
     }
 
     private fun setPreferences() {
@@ -144,9 +144,8 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val PREF_KEY_SEPARATOR = "pref_key_separator"
         const val PREF_KEY_NUMBERS_COUNT = "pref_key_xkpwgen_numbers_count"
         const val PREF_KEY_SYMBOLS_COUNT = "pref_key_symbols_count"
-
-        const val DEFAULT_CAPS_STYLE = "Sentencecase"
-        const val DEFAULT_CAPS_INDEX = 3
+        val DEFAULT_CAPS_STYLE = CapsType.Sentencecase.name
+        val DEFAULT_CAPS_INDEX = CapsType.Sentencecase.ordinal
         const val DEFAULT_NUMBER_OF_WORDS = "3"
         const val DEFAULT_WORD_SEPARATOR = "."
         const val DEFAULT_MIN_WORD_LENGTH = 3

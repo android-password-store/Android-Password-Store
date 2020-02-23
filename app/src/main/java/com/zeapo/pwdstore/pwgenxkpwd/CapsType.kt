@@ -4,6 +4,6 @@
  */
 package com.zeapo.pwdstore.pwgenxkpwd
 
-enum class CapType {
+enum class CapsType {
     lowercase, UPPERCASE, TitleCase, Sentencecase, As_iS
 }

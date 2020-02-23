@@ -16,10 +16,6 @@ import java.util.Locale
 
 class PasswordBuilder constructor(ctx: Context) {
 
-    companion object {
-        private const val SYMBOLS = "!@\$%^&*-_+=:|~?/.;#"
-    }
-
     private var numSymbols = 0
     private var isAppendSymbolsSeparator = false
     private var context = ctx
@@ -27,7 +23,7 @@ class PasswordBuilder constructor(ctx: Context) {
     private var maxWordLength = 8
     private var minWordLength = 5
     private var separator = "."
-    private var capType = CapType.As_iS
+    private var capType = CapsType.Sentencecase
     private var prependDigits = 0
     private var numDigits = 0
     private var isPrependWithSeparator = false
@@ -53,7 +49,7 @@ class PasswordBuilder constructor(ctx: Context) {
         return this
     }
 
-    fun setCapitalization(capitalizationScheme: CapType): PasswordBuilder {
+    fun setCapitalization(capitalizationScheme: CapsType): PasswordBuilder {
         capType = capitalizationScheme
         return this
     }
@@ -66,7 +62,7 @@ class PasswordBuilder constructor(ctx: Context) {
     }
 
     @JvmOverloads
-    fun appendNumbers(numDigits: Int, addSeparator: Boolean = true): PasswordBuilder {
+    fun appendNumbers(numDigits: Int, addSeparator: Boolean = false): PasswordBuilder {
         this.numDigits = numDigits
         isAppendNumberSeparator = addSeparator
         return this
@@ -112,7 +108,7 @@ class PasswordBuilder constructor(ctx: Context) {
             }
         }
         try {
-            val dictionary = Dictionary(context)
+            val dictionary = XkpwdDictionary(context)
             val words = dictionary.words
             for (wordLength in words.keys) {
                 if (wordLength in minWordLength..maxWordLength) {
@@ -130,16 +126,16 @@ class PasswordBuilder constructor(ctx: Context) {
                 val randomIndex = secureRandom.nextInt(wordBank.size)
                 var s = wordBank[randomIndex]
 
-                if (capType != CapType.As_iS) {
+                if (capType != CapsType.As_iS) {
                     s = s.toLowerCase(Locale.getDefault())
                     when (capType) {
-                        CapType.UPPERCASE -> s = s.toUpperCase(Locale.getDefault())
-                        CapType.Sentencecase -> {
+                        CapsType.UPPERCASE -> s = s.toUpperCase(Locale.getDefault())
+                        CapsType.Sentencecase -> {
                             if (i == 0) {
                                 s = capitalize(s)
                             }
                         }
-                        CapType.TitleCase -> {
+                        CapsType.TitleCase -> {
                             s = capitalize(s)
                         }
                     }
@@ -173,5 +169,9 @@ class PasswordBuilder constructor(ctx: Context) {
         val lower = result.toLowerCase(Locale.getDefault())
         result = lower.substring(0, 1).toUpperCase(Locale.getDefault()) + result.substring(1)
         return result
+    }
+
+    companion object {
+        private const val SYMBOLS = "!@\$%^&*-_+=:|~?/.;#"
     }
 }
