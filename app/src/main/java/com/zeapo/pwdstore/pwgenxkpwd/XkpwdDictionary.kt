@@ -33,7 +33,7 @@ class XkpwdDictionary(context: Context) {
             }
         }
 
-        if (lines == null) {
+        if (lines == null || lines.isEmpty()) {
             lines = context.getResources().openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
         }
 
