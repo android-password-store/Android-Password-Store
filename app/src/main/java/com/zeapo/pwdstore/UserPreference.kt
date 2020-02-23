@@ -339,7 +339,7 @@ class UserPreference : AppCompatActivity() {
 
             prefIsCustomDict?.onPreferenceChangeListener = ChangeListener() { _, newValue ->
                 if (!(newValue as Boolean)) {
-                    val customDictFile = File(context.filesDir.toString() + XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    val customDictFile = File(context.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
                     if (customDictFile.exists()) {
                         FileUtils.deleteQuietly(customDictFile)
                     }
@@ -591,7 +591,7 @@ class UserPreference : AppCompatActivity() {
                     setCustomDictSummary(customDictPref, uri)
                     // copy user selected file to internal storage
                     val inputStream = this.contentResolver.openInputStream(uri)
-                    val customDictFile = File(this.filesDir.toString() + XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    val customDictFile = File(this.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
                     FileUtils.copyInputStreamToFile(inputStream, customDictFile)
 
                     setResult(Activity.RESULT_OK)

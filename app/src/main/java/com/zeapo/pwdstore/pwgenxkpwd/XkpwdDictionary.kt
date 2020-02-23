@@ -25,7 +25,7 @@ class XkpwdDictionary(context: Context) {
             val uri = prefs.getString("pref_key_custom_dict", "")
 
             if (!TextUtils.isEmpty(uri)) {
-                val customDictFile = File(context.filesDir.toString() + XKPWD_CUSTOM_DICT_FILE)
+                val customDictFile = File(context.filesDir.toString(), XKPWD_CUSTOM_DICT_FILE)
 
                 if (customDictFile.exists() && customDictFile.canRead()) {
                     lines = customDictFile.inputStream().bufferedReader().readLines()
@@ -53,6 +53,6 @@ class XkpwdDictionary(context: Context) {
     }
 
     companion object {
-        const val XKPWD_CUSTOM_DICT_FILE = "/custom_dict.txt"
+        const val XKPWD_CUSTOM_DICT_FILE = "custom_dict.txt"
     }
 }
