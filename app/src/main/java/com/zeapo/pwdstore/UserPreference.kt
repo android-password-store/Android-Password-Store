@@ -339,7 +339,7 @@ class UserPreference : AppCompatActivity() {
 
             prefIsCustomDict?.onPreferenceChangeListener = ChangeListener() { _, newValue ->
                 if (!(newValue as Boolean)) {
-                    val customDictFile = File(context.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    val customDictFile = File(context.filesDir, XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
                     if (customDictFile.exists()) {
                         FileUtils.deleteQuietly(customDictFile)
                     }
