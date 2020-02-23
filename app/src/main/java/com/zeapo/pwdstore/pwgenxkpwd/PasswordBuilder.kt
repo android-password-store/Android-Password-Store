@@ -5,16 +5,15 @@
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
-import android.widget.Toast
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.pwgen.PasswordGenerator
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
-import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import java.io.IOException
 import java.security.SecureRandom
 import java.util.ArrayList
 import java.util.Locale
 
-class PasswordBuilder constructor(ctx: Context) {
+class PasswordBuilder(ctx: Context) {
 
     private var numSymbols = 0
     private var isAppendSymbolsSeparator = false
@@ -117,9 +116,7 @@ class PasswordBuilder constructor(ctx: Context) {
             }
 
             if (wordBank.size == 0) {
-                Toast.makeText(context, String.format("Selected dictionary does not contain enough words of given length %d..%d",
-                        minWordLength, maxWordLength), Toast.LENGTH_LONG).show()
-                throw PasswordGeneratorExeption(XkPasswordGeneratorDialogFragment.FALLBACK_ERROR_PASS)
+                throw PasswordGeneratorExeption(context.getString(R.string.xkpwgen_builder_error, minWordLength, maxWordLength))
             }
 
             for (i in 0 until numWords) {

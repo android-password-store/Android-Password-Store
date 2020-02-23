@@ -10,7 +10,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
@@ -24,9 +23,20 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
 import com.zeapo.pwdstore.pwgenxkpwd.CapsType
 import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
+import timber.log.Timber
 
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
+
+    private lateinit var editSeparator: AppCompatEditText
+    private lateinit var editNumWords: AppCompatEditText
+    private lateinit var cbSymbols: CheckBox
+    private lateinit var spinnerCapsType: Spinner
+    private lateinit var cbNumbers: CheckBox
+    private lateinit var prefs: SharedPreferences
+    private lateinit var spinnerNumbersCount: Spinner
+    private lateinit var spinnerSymbolsCount: Spinner
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity: Activity = requireActivity()
@@ -48,7 +58,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         spinnerNumbersCount.setSelection(storedNumbersCount)
 
         cbSymbols = view.findViewById<CheckBox>(R.id.xksymbols)
-        cbSymbols.isChecked = false != prefs.getBoolean(PREF_KEY_USE_SYMBOLS, false)
+        cbSymbols.isChecked = prefs.getBoolean(PREF_KEY_USE_SYMBOLS, false) != false
         spinnerSymbolsCount = view.findViewById<Spinner>(R.id.xk_symbols_count)
         val symbolsCount = prefs.getInt(PREF_KEY_SYMBOLS_COUNT, 0)
         spinnerSymbolsCount.setSelection(symbolsCount)
@@ -56,7 +66,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         val previousStoredCapStyle: String = try {
             prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)!!
         } catch (e: Exception) {
-            Log.e("xkpw", e.message)
+            Timber.tag("xkpw").e(e)
             DEFAULT_CAPS_STYLE
         }
         spinnerCapsType = view.findViewById<Spinner>(R.id.xkCapType)
@@ -66,7 +76,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         lastCapitalsStyleIndex = try {
             CapsType.valueOf(previousStoredCapStyle).ordinal
         } catch (e: Exception) {
-            Log.e("xkpw", e.message)
+            Timber.tag("xkpw").e(e)
             DEFAULT_CAPS_INDEX
         }
         spinnerCapsType.setSelection(lastCapitalsStyleIndex)
@@ -152,14 +162,5 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val DEFAULT_MAX_WORD_LENGTH = 9
 
         const val FALLBACK_ERROR_PASS = "42"
-
-        private lateinit var editSeparator: AppCompatEditText
-        private lateinit var editNumWords: AppCompatEditText
-        private lateinit var cbSymbols: CheckBox
-        private lateinit var spinnerCapsType: Spinner
-        private lateinit var cbNumbers: CheckBox
-        private lateinit var prefs: SharedPreferences
-        private lateinit var spinnerNumbersCount: Spinner
-        private lateinit var spinnerSymbolsCount: Spinner
     }
 }

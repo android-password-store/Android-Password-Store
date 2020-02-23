@@ -198,6 +198,7 @@
     <string name="xkpwgen_separator_character">separator character</string>
     <string name="xkpwgen_numbers">numbers:</string>
     <string name="xkpwgen_symbols">symbols:</string>
+    <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->
     <string name="xkpwgen_pref_gentype_title">Password generator type</string>
