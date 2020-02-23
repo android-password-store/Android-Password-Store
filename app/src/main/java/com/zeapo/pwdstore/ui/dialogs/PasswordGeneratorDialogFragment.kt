@@ -48,8 +48,8 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
             val edit = callingActivity.findViewById<EditText>(R.id.crypto_password_edit)
             edit.setText(passwordText.text)
         }
-        builder.setNegativeButton(resources.getString(R.string.dialog_cancel)) { _, _ -> }
-        builder.setNeutralButton(resources.getString(R.string.pwgen_generate), null)
+        builder.setNeutralButton(resources.getString(R.string.dialog_cancel)) { _, _ -> }
+        builder.setNegativeButton(resources.getString(R.string.pwgen_generate), null)
         val dialog = builder.setTitle(this.resources.getString(R.string.pwgen_title)).create()
         dialog.setOnShowListener {
             setPreferences()
@@ -59,7 +59,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
                 Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
                 passwordText.text = ""
             }
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 setPreferences()
                 try {
                     passwordText.text = generate(callingActivity.applicationContext)[0]
