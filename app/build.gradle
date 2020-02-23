@@ -80,16 +80,17 @@ dependencies {
     implementation deps.androidx.annotation
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
-    implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
+    implementation deps.androidx.core_ktx
     implementation deps.androidx.documentfile
+    implementation deps.androidx.lifecycle_runtime_ktx
+    implementation deps.androidx.material
     implementation deps.androidx.preference
     constraints {
         implementation(deps.androidx.recycler_view) {
             because 'versions above 1.0.0 have an accessibility related bug that causes crashes'
         }
     }
-    implementation deps.androidx.material
 
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core
@@ -105,6 +106,7 @@ dependencies {
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.whatthestack
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
     if (isSnapshot()) {
         implementation deps.third_party.leakcanary
