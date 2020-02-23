@@ -84,6 +84,7 @@ dependencies {
     implementation deps.androidx.core_ktx
     implementation deps.androidx.documentfile
     implementation deps.androidx.lifecycle_runtime_ktx
+    implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material
     implementation deps.androidx.preference
     constraints {
@@ -106,7 +107,6 @@ dependencies {
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.whatthestack
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 
     if (isSnapshot()) {
         implementation deps.third_party.leakcanary
