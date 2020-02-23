@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.ui.dialogs
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Typeface
@@ -26,7 +25,7 @@ import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
 class PasswordGeneratorDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
-        val callingActivity: Activity = requireActivity()
+        val callingActivity = requireActivity()
         val inflater = callingActivity.layoutInflater
         val view = inflater.inflate(R.layout.fragment_pwgen, null)
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")

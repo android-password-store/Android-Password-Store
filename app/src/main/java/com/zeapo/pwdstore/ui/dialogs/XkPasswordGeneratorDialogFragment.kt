@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.ui.dialogs
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -20,7 +19,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
+import com.zeapo.pwdstore.pwgen.PasswordGenerator
 import com.zeapo.pwdstore.pwgenxkpwd.CapsType
 import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
 import timber.log.Timber
@@ -39,7 +38,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
-        val callingActivity: Activity = requireActivity()
+        val callingActivity = requireActivity()
         val inflater = callingActivity.layoutInflater
         val view = inflater.inflate(R.layout.fragment_xkpwgen, null)
 
@@ -104,35 +103,31 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
         dialog.setOnShowListener {
             setPreferences()
-            try {
-                passwordText.text = makePassword()
-            } catch (e: PasswordGeneratorExeption) {
-                Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-                passwordText.text = FALLBACK_ERROR_PASS
-            }
+            makeAndSetPassword(passwordText)
 
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 setPreferences()
-                try {
-                    passwordText.text = makePassword()
-                } catch (e: PasswordGeneratorExeption) {
-                    Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-                    passwordText.text = FALLBACK_ERROR_PASS
-                }
+                makeAndSetPassword(passwordText)
             }
         }
         return dialog
     }
 
-    private fun makePassword(): String {
-        return PasswordBuilder(requireContext())
-                .setNumberOfWords(Integer.valueOf(editNumWords.text.toString()))
-                .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
-                .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
-                .setSeparator(editSeparator.text.toString())
-                .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
-                .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
-                .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
+    private fun makeAndSetPassword(passwordText: AppCompatTextView) {
+        try {
+            passwordText.text = PasswordBuilder(requireContext())
+                    .setNumberOfWords(Integer.valueOf(editNumWords.text.toString()))
+                    .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
+                    .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
+                    .setSeparator(editSeparator.text.toString())
+                    .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
+                    .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
+                    .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
+        } catch (e: PasswordGenerator.PasswordGeneratorExeption) {
+            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+            Timber.tag("xkpw").e(e, "failure generating xkpasswd")
+            passwordText.text = FALLBACK_ERROR_PASS
+        }
     }
 
     private fun setPreferences() {
@@ -160,7 +155,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val DEFAULT_WORD_SEPARATOR = "."
         const val DEFAULT_MIN_WORD_LENGTH = 3
         const val DEFAULT_MAX_WORD_LENGTH = 9
-
         const val FALLBACK_ERROR_PASS = "42"
     }
 }
