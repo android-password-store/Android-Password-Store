@@ -34,7 +34,6 @@ class ClipboardService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
-            Timber.d(intent.action)
             when (intent.action) {
                 ACTION_CLEAR -> {
                     clearClipboard()
@@ -139,7 +138,7 @@ class ClipboardService : Service() {
             if (manager != null) {
                 manager.createNotificationChannel(serviceChannel)
             } else {
-                Timber.tag("Notification").d("Failed to create notification channel")
+                Timber.tag("ClipboardService").d("Failed to create notification channel")
             }
         }
     }

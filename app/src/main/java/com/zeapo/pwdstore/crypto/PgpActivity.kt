@@ -814,21 +814,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             if (skip) return
             checkAndIncrementHotp()
 
-            // No need to validate clear_after_copy. It was validated in copyPasswordToClipBoard()
-            Timber.d("Clearing the clipboard")
-            val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
-            clipboard.primaryClip = clip
-            if (settings.getBoolean("clear_clipboard_20x", false)) {
-                val handler = Handler()
-                for (i in 0..19) {
-                    val count = i.toString()
-                    handler.postDelayed(
-                            { clipboard.primaryClip = ClipData.newPlainText(count, count) },
-                            (i * 500).toLong()
-                    )
-                }
-            }
-
             if (crypto_password_show != null) {
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
                 if (passwordEntry?.hotpIsIncremented() == false) {
