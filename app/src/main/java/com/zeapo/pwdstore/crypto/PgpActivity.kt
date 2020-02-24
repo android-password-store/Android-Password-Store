@@ -127,7 +127,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 crypto_password_file.setOnLongClickListener {
                     val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
                     clipboard.setPrimaryClip(clip)
-                    showSnackbar(this.resources.getString(R.string.clipboard_implicit_name_toast_text))
+                    showSnackbar(this.resources.getString(R.string.clipboard_username_toast_text))
                     true
                 }
 
