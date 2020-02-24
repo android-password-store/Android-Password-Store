@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Copy implicit username (password filename) by long pressing
+
 ### Fixed
 - Can't delete folders containing a password
 

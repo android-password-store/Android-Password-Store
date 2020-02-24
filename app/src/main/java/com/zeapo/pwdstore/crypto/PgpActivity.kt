@@ -124,6 +124,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.decrypt_layout)
                 crypto_password_category_decrypt.text = relativeParentPath
                 crypto_password_file.text = name
+                crypto_password_file.setOnLongClickListener {
+                    val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
+                    clipboard.setPrimaryClip(clip)
+                    showSnackbar(this.resources.getString(R.string.clipboard_username_toast_text))
+                    true
+                }
 
                 crypto_password_last_changed.text = try {
                     this.resources.getString(R.string.last_changed, lastChangedString)
