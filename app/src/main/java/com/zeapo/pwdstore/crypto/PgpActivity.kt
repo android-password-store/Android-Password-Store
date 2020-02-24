@@ -103,7 +103,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private var mServiceConnection: OpenPgpServiceConnection? = null
 
     private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(p0: Context?, p1: Intent?) {
+        override fun onReceive(context: Context, intent: Intent?) {
             delayTask?.doOnPostExecute()
         }
     }
@@ -699,7 +699,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
-        clipboard.setPrimaryClip(clip)
+        clipboard.primaryClip = clip
 
         var clearAfter = 45
         try {

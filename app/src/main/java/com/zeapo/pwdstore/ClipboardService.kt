@@ -21,6 +21,7 @@ import com.zeapo.pwdstore.utils.ClipboardUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -73,8 +74,13 @@ class ClipboardService : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    override fun onBind(p0: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+    override fun onDestroy() {
+        scope.cancel()
+        super.onDestroy()
     }
 
     private fun clearClipboard() {
@@ -116,9 +122,9 @@ class ClipboardService : Service() {
         }
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Password Store")
-                .setContentText("Tap here to clear clipboard")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.tap_clear_clipboard))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .setUsesChronometer(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -131,7 +137,7 @@ class ClipboardService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                     CHANNEL_ID,
-                    "Password Store",
+                    getString(R.string.app_name),
                     NotificationManager.IMPORTANCE_LOW
             )
             val manager = getSystemService<NotificationManager>()
