@@ -8,6 +8,9 @@ jobs:
 
     - uses: actions/checkout@master
 
+    - name: Copy CI gradle.properties
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
     - uses: actions/cache@v1
       with:
           path: ~/.gradle/caches
