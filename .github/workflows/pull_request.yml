@@ -13,7 +13,7 @@ jobs:
           path: ~/.gradle/caches
           key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/dependencies.gradle') }}
 
-    - run: ./gradlew spotlessCheck build test lintDebug -Dpre-dex=false
+    - run: ./gradlew spotlessCheck assembleDebug testDebug lintDebug -Dpre-dex=false
 
     - uses: actions/upload-artifact@master
       with:
