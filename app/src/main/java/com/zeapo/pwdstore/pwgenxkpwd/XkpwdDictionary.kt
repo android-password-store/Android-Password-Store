@@ -10,7 +10,6 @@ import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
 import java.io.File
 import java.util.ArrayList
-import java.util.Collections
 import java.util.HashMap
 
 class XkpwdDictionary(context: Context) {
