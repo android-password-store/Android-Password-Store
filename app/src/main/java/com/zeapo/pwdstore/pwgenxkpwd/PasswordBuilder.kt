@@ -76,7 +76,7 @@ class PasswordBuilder(ctx: Context) {
         return numbers.toString()
     }
 
-    private fun generateRandomSymbolSequence(numSymbols: Int): Any {
+    private fun generateRandomSymbolSequence(numSymbols: Int): String {
         val secureRandom = SecureRandom()
         val numbers = StringBuilder(numSymbols)
 

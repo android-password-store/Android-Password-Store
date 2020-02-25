@@ -19,7 +19,7 @@ class XkpwdDictionary(context: Context) {
     init {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        var lines: List<String> = Collections.emptyList()
+        var lines: List<String> = listOf()
 
         if (prefs.getBoolean("pref_key_is_custom_dict", false)) {
 
