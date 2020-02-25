@@ -88,10 +88,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val name: String by lazy { getName(fullPath) }
     private val lastChangedString: CharSequence by lazy {
         getLastChangedString(
-                intent.getLongExtra(
-                        "LAST_CHANGED_TIMESTAMP",
-                        -1L
-                )
+          intent.getLongExtra(
+            "LAST_CHANGED_TIMESTAMP",
+            -1L
+          )
         )
     }
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
@@ -151,7 +151,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                 generate_password?.setOnClickListener {
                     PasswordGeneratorDialogFragment()
-                            .show(supportFragmentManager, "generator")
+                      .show(supportFragmentManager, "generator")
                 }
 
                 title = getString(R.string.new_password_title)
@@ -233,8 +233,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val pi: PendingIntent? = result.getParcelableExtra(RESULT_INTENT)
         try {
             this@PgpActivity.startIntentSenderFromChild(
-                    this@PgpActivity, pi?.intentSender, requestCode,
-                    null, 0, 0, 0
+              this@PgpActivity, pi?.intentSender, requestCode,
+              null, 0, 0, 0
             )
         } catch (e: IntentSender.SendIntentException) {
             Timber.e(e, "SendIntentException")
@@ -310,8 +310,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     null
                                 } else {
                                     HoldToShowPasswordTransformation(
-                                            crypto_password_toggle_show,
-                                            Runnable { crypto_password_show.text = entry.password }
+                                      crypto_password_toggle_show,
+                                      Runnable { crypto_password_show.text = entry.password }
                                     )
                                 }
 
@@ -364,19 +364,19 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     if (entry.hasTotp()) {
                                         crypto_copy_otp.setOnClickListener {
                                             copyOtpToClipBoard(
-                                                    Otp.calculateCode(
-                                                            entry.totpSecret,
-                                                            Date().time / (1000 * entry.totpPeriod),
-                                                            entry.totpAlgorithm,
-                                                            entry.digits)
+                                              Otp.calculateCode(
+                                                entry.totpSecret,
+                                                Date().time / (1000 * entry.totpPeriod),
+                                                entry.totpAlgorithm,
+                                                entry.digits)
                                             )
                                         }
                                         crypto_otp_show.text =
-                                                Otp.calculateCode(
-                                                        entry.totpSecret,
-                                                        Date().time / (1000 * entry.totpPeriod),
-                                                        entry.totpAlgorithm,
-                                                        entry.digits)
+                                          Otp.calculateCode(
+                                            entry.totpSecret,
+                                            Date().time / (1000 * entry.totpPeriod),
+                                            entry.totpAlgorithm,
+                                            entry.digits)
                                     } else {
                                         // we only want to calculate and show HOTP if the user requests it
                                         crypto_copy_otp.setOnClickListener {
@@ -391,31 +391,31 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                                 val checkInflater = LayoutInflater.from(this@PgpActivity)
                                                 val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
                                                 val rememberCheck: CheckBox =
-                                                        checkLayout.findViewById(R.id.hotp_remember_checkbox)
+                                                  checkLayout.findViewById(R.id.hotp_remember_checkbox)
                                                 val dialogBuilder = MaterialAlertDialogBuilder(this@PgpActivity)
                                                 dialogBuilder.setView(checkLayout)
                                                 dialogBuilder.setMessage(R.string.dialog_update_body)
-                                                        .setCancelable(false)
-                                                        .setPositiveButton(R.string.dialog_update_positive) { _, _ ->
-                                                            run {
-                                                                calculateAndCommitHotp(entry)
-                                                                if (rememberCheck.isChecked) {
-                                                                    val editor = settings.edit()
-                                                                    editor.putBoolean("hotp_remember_check", true)
-                                                                    editor.putBoolean("hotp_remember_choice", true)
-                                                                    editor.apply()
-                                                                }
-                                                            }
-                                                        }
-                                                        .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
-                                                            run {
-                                                                calculateHotp(entry)
-                                                                val editor = settings.edit()
-                                                                editor.putBoolean("hotp_remember_check", true)
-                                                                editor.putBoolean("hotp_remember_choice", false)
-                                                                editor.apply()
-                                                            }
-                                                        }
+                                                  .setCancelable(false)
+                                                  .setPositiveButton(R.string.dialog_update_positive) { _, _ ->
+                                                      run {
+                                                          calculateAndCommitHotp(entry)
+                                                          if (rememberCheck.isChecked) {
+                                                              val editor = settings.edit()
+                                                              editor.putBoolean("hotp_remember_check", true)
+                                                              editor.putBoolean("hotp_remember_choice", true)
+                                                              editor.apply()
+                                                          }
+                                                      }
+                                                  }
+                                                  .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
+                                                      run {
+                                                          calculateHotp(entry)
+                                                          val editor = settings.edit()
+                                                          editor.putBoolean("hotp_remember_check", true)
+                                                          editor.putBoolean("hotp_remember_choice", false)
+                                                          editor.apply()
+                                                      }
+                                                  }
                                                 val updateDialog = dialogBuilder.create()
                                                 updateDialog.setTitle(R.string.dialog_update_title)
                                                 updateDialog.show()
@@ -525,7 +525,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
             PasswordGeneratorDialogFragment()
-                    .show(supportFragmentManager, "generator")
+              .show(supportFragmentManager, "generator")
         }
 
         title = getString(R.string.edit_password_title)
@@ -599,7 +599,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         RESULT_CODE_SUCCESS -> {
                             try {
                                 val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
-                                        ?: LongArray(0)
+                                  ?: LongArray(0)
                                 val keys = ids.map { it.toString() }.toSet()
 
                                 // use Long
@@ -660,7 +660,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private inner class HoldToShowPasswordTransformation constructor(button: Button, private val onToggle: Runnable) :
-            PasswordTransformationMethod(), View.OnTouchListener {
+      PasswordTransformationMethod(), View.OnTouchListener {
         private var shown = false
 
         init {
@@ -737,10 +737,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         sendIntent.putExtra(Intent.EXTRA_TEXT, passwordEntry?.password)
         sendIntent.type = "text/plain"
         startActivity(
-                Intent.createChooser(
-                        sendIntent,
-                        resources.getText(R.string.send_plaintext_password_to)
-                )
+          Intent.createChooser(
+            sendIntent,
+            resources.getText(R.string.send_plaintext_password_to)
+          )
         ) // Always show a picker to give the user a chance to cancel
     }
 
@@ -850,7 +850,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
          * Gets the relative path to the repository
          */
         fun getRelativePath(fullPath: String, repositoryPath: String): String =
-                fullPath.replace(repositoryPath, "").replace("/+".toRegex(), "/")
+          fullPath.replace(repositoryPath, "").replace("/+".toRegex(), "/")
 
         /**
          * Gets the Parent path, relative to the repository

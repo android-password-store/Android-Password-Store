@@ -54,7 +54,9 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/autofill_config" />
         </service>
-        <service android:name=".ClipboardService" />
+        <service
+          android:name=".ClipboardService"
+          android:process=":clipboard_service_process"  />
 
         <activity
             android:name=".autofill.AutofillActivity"

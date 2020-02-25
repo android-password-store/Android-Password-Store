@@ -122,13 +122,13 @@ class ClipboardService : Service() {
         }
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.tap_clear_clipboard))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentIntent(pendingIntent)
-                .setUsesChronometer(true)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .build()
+          .setContentTitle(getString(R.string.app_name))
+          .setContentText(getString(R.string.tap_clear_clipboard))
+          .setSmallIcon(R.drawable.ic_launcher_foreground)
+          .setContentIntent(pendingIntent)
+          .setUsesChronometer(true)
+          .setPriority(NotificationCompat.PRIORITY_LOW)
+          .build()
 
         startForeground(1, notification)
     }
@@ -136,9 +136,9 @@ class ClipboardService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
-                    CHANNEL_ID,
-                    getString(R.string.app_name),
-                    NotificationManager.IMPORTANCE_LOW
+              CHANNEL_ID,
+              getString(R.string.app_name),
+              NotificationManager.IMPORTANCE_LOW
             )
             val manager = getSystemService<NotificationManager>()
             if (manager != null) {
