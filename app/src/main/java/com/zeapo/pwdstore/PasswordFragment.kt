@@ -72,7 +72,7 @@ class PasswordFragment : Fragment() {
             if (!PasswordRepository.isInitialized) {
                 MaterialAlertDialogBuilder(context)
                         .setMessage(getString(R.string.creation_dialog_text))
-                        .setPositiveButton(this.resources.getString(R.string.dialog_ok), null).show()
+                        .setPositiveButton(getString(R.string.dialog_ok), null).show()
                 swipe_refresher.isRefreshing = false
             } else {
                 val intent = Intent(context, GitActivity::class.java)
