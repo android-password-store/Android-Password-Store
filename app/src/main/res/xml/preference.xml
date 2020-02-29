@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.PreferenceCategory android:title="@string/pref_git_title">
         <androidx.preference.Preference
             android:key="git_server_info"
@@ -46,6 +47,27 @@
         <androidx.preference.Preference
             android:key="openpgp_key_id_pref"
             android:title="@string/pref_key_title" />
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/password_generator_category_title">
+        <androidx.preference.ListPreference
+            android:key="pref_key_pwgen_type"
+            android:title="@string/xkpwgen_pref_gentype_title"
+            android:defaultValue="classic"
+            android:entries="@array/pwgen_provider"
+            android:entryValues="@array/pwgen_provider"
+            app:useSimpleSummaryProvider="true"
+            android:persistent="true" />
+        <androidx.preference.CheckBoxPreference
+            android:key="pref_key_is_custom_dict"
+            android:title="@string/xkpwgen_pref_custom_dict_title"
+            android:summaryOn="@string/xkpwgen_pref_custom_dict_summary_on"
+            android:summaryOff="@string/xkpwgen_pref_custom_dict_summary_off"/>
+        <androidx.preference.Preference
+            android:key="pref_key_custom_dict"
+            android:title="@string/xkpwgen_pref_custom_dict_picker_title"
+            android:summary="@string/xkpwgen_pref_custom_dict_picker_summary"
+            android:dependency="pref_key_is_custom_dict"/>
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_general_title">

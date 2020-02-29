@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.ui.dialogs
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Typeface
@@ -26,7 +25,7 @@ import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
 class PasswordGeneratorDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
-        val callingActivity: Activity = requireActivity()
+        val callingActivity = requireActivity()
         val inflater = callingActivity.layoutInflater
         val view = inflater.inflate(R.layout.fragment_pwgen, null)
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
@@ -49,8 +48,8 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
             val edit = callingActivity.findViewById<EditText>(R.id.crypto_password_edit)
             edit.setText(passwordText.text)
         }
-        builder.setNegativeButton(resources.getString(R.string.dialog_cancel)) { _, _ -> }
-        builder.setNeutralButton(resources.getString(R.string.pwgen_generate), null)
+        builder.setNeutralButton(resources.getString(R.string.dialog_cancel)) { _, _ -> }
+        builder.setNegativeButton(resources.getString(R.string.pwgen_generate), null)
         val dialog = builder.setTitle(this.resources.getString(R.string.pwgen_title)).create()
         dialog.setOnShowListener {
             setPreferences()
@@ -60,7 +59,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
                 Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
                 passwordText.text = ""
             }
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 setPreferences()
                 try {
                     passwordText.text = generate(callingActivity.applicationContext)[0]
