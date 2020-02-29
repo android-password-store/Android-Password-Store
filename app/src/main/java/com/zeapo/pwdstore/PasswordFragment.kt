@@ -4,7 +4,9 @@
  */
 package com.zeapo.pwdstore
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +18,10 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.ui.adapters.PasswordRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -44,6 +49,7 @@ class PasswordFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var settings: SharedPreferences
+    private lateinit var swipe_refresher: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +67,19 @@ class PasswordFragment : Fragment() {
         val view = inflater.inflate(R.layout.password_recycler_view, container, false)
         // use a linear layout manager
         val layoutManager = LinearLayoutManager(requireContext())
+        swipe_refresher = view.findViewById(R.id.swipe_refresher)
+        swipe_refresher.setOnRefreshListener {
+            if (!PasswordRepository.isInitialized) {
+                MaterialAlertDialogBuilder(context)
+                        .setMessage(this.resources.getString(R.string.creation_dialog_text))
+                        .setPositiveButton(this.resources.getString(R.string.dialog_ok), null).show()
+                swipe_refresher.isRefreshing = false
+            } else {
+                val intent = Intent(context, GitActivity::class.java)
+                intent.putExtra("Operation", GitActivity.REQUEST_SYNC)
+                startActivityForResult(intent, GitActivity.REQUEST_SYNC)
+            }
+        }
         recyclerView = view.findViewById(R.id.pass_recycler)
         recyclerView.layoutManager = layoutManager
         // use divider
@@ -123,6 +142,14 @@ class PasswordFragment : Fragment() {
             }
         } catch (e: ClassCastException) {
             throw ClassCastException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                GitActivity.REQUEST_SYNC -> swipe_refresher.isRefreshing = false
+            }
         }
     }
 
