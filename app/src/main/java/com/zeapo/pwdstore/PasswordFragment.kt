@@ -70,7 +70,7 @@ class PasswordFragment : Fragment() {
         swipe_refresher = view.findViewById(R.id.swipe_refresher)
         swipe_refresher.setOnRefreshListener {
             if (!PasswordRepository.isInitialized) {
-                MaterialAlertDialogBuilder(context)
+                MaterialAlertDialogBuilder(requireContext())
                         .setMessage(getString(R.string.creation_dialog_text))
                         .setPositiveButton(getString(R.string.dialog_ok), null).show()
                 swipe_refresher.isRefreshing = false
