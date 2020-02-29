@@ -36,7 +36,8 @@ ext.deps = [
         documentfile: 'androidx.documentfile:documentfile:1.0.1',
         material: 'com.google.android.material:material:1.2.0-alpha05',
         preference: 'androidx.preference:preference:1.1.0',
-        recycler_view: 'androidx.recyclerview:recyclerview:1.0.0'
+        recycler_view: 'androidx.recyclerview:recyclerview:1.0.0',
+        swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03'
     ],
 
     third_party: [

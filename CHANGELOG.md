@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Copy implicit username (password filename) by long pressing
 - Create xkpasswd style passwords
+- Swipe on password list to synchronize repository
 
 ### Fixed
 - Can't delete folders containing a password
