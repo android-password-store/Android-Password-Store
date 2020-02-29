@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Copy implicit username (password filename) by long pressing
+- Create xkpasswd style passwords
 
 ### Fixed
 - Can't delete folders containing a password
