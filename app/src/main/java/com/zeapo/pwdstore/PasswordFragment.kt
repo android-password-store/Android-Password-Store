@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -146,11 +145,7 @@ class PasswordFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                GitActivity.REQUEST_SYNC -> swipe_refresher.isRefreshing = false
-            }
-        }
+        swipe_refresher.isRefreshing = false
     }
 
     /** clears the adapter content and sets it back to the root view  */
