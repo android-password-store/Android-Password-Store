@@ -190,6 +190,25 @@
     <string name="pwgen_no_chars_error">No characters included</string>
     <string name="pwgen_length_too_short_error">Length too short for selected criteria</string>
 
+    <!-- XKPWD password generator -->
+    <string name="xkpwgen_title">Xkpasswd Generator</string>
+    <string name="xkpwgen_length">Total words</string>
+    <string name="xkpwgen_separator">Separator</string>
+    <string name="xkpwgen_custom_dict_imported">Custom wordlist: %1$s</string>
+    <string name="xkpwgen_separator_character">separator character</string>
+    <string name="xkpwgen_numbers">numbers:</string>
+    <string name="xkpwgen_symbols">symbols:</string>
+    <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
+
+    <!-- XKPWD prefs -->
+    <string name="xkpwgen_pref_gentype_title">Password generator type</string>
+    <string name="xkpwgen_pref_custom_dict_title">Custom wordlist</string>
+    <string name="xkpwgen_pref_custom_dict_summary_on">Using custom wordlist file</string>
+    <string name="xkpwgen_pref_custom_dict_summary_off">Using built-in wordlist</string>
+    <string name="xkpwgen_pref_custom_dict_picker_title">Custom worldlist file</string>
+    <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
+
+
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Length</string>
     <string name="ssh_keygen_passphrase">Passphrase</string>
@@ -285,5 +304,6 @@
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
     <string name="pref_search_from_root">Always search from root</string>
     <string name="pref_search_from_root_hint">Search from root of store regardless of currently open directory</string>
-  <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
+    <string name="password_generator_category_title">Password Generator</string>
+    <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
 </resources>
