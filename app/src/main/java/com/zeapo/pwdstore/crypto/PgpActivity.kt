@@ -97,9 +97,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-    private val keyIDs: MutableSet<String> by lazy {
-        settings.getStringSet("openpgp_key_ids_set", mutableSetOf()) ?: emptySet()
-    }
+    private val keyIDs get() = _keyIDs
+    private var _keyIDs = emptySet<String>()
     private var mServiceConnection: OpenPgpServiceConnection? = null
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -113,6 +112,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         Timber.tag(TAG)
 
         // some persistence
+        _keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
         val providerPackageName = settings.getString("openpgp_provider_list", "")
 
         if (TextUtils.isEmpty(providerPackageName)) {
