@@ -100,6 +100,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val keyIDs get() = _keyIDs
     private var _keyIDs = emptySet<String>()
     private var mServiceConnection: OpenPgpServiceConnection? = null
+    private var delayTask: DelayShow? = null
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             delayTask?.doOnPostExecute()
@@ -852,8 +853,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
-
-        private var delayTask: DelayShow? = null
 
         /**
          * Gets the relative path to the repository
