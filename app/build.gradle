@@ -80,9 +80,12 @@ dependencies {
     implementation deps.androidx.annotation
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
-    implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
+    implementation deps.androidx.core_ktx
     implementation deps.androidx.documentfile
+    implementation deps.androidx.lifecycle_runtime_ktx
+    implementation deps.androidx.local_broadcast_manager
+    implementation deps.androidx.material
     implementation deps.androidx.preference
     implementation deps.androidx.swiperefreshlayout
     constraints {
@@ -90,7 +93,6 @@ dependencies {
             because 'versions above 1.0.0 have an accessibility related bug that causes crashes'
         }
     }
-    implementation deps.androidx.material
 
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core

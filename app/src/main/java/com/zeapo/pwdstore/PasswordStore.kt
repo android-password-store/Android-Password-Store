@@ -254,6 +254,11 @@ class PasswordStore : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDestroy() {
+        plist = null
+        super.onDestroy()
+    }
+
     fun openSettings(view: View?) {
         val intent: Intent
         try {
