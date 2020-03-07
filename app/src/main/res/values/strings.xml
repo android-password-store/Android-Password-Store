@@ -306,4 +306,5 @@
     <string name="pref_search_from_root_hint">Search from root of store regardless of currently open directory</string>
     <string name="password_generator_category_title">Password Generator</string>
     <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
+    <string name="clone_git_repo">Clone a git repository to sync changes</string>
 </resources>

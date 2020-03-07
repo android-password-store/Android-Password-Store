@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.ui.adapters.PasswordRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -48,7 +48,7 @@ class PasswordFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var settings: SharedPreferences
-    private lateinit var swipe_refresher: SwipeRefreshLayout
+    private lateinit var swipeRefresher: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,13 +66,11 @@ class PasswordFragment : Fragment() {
         val view = inflater.inflate(R.layout.password_recycler_view, container, false)
         // use a linear layout manager
         val layoutManager = LinearLayoutManager(requireContext())
-        swipe_refresher = view.findViewById(R.id.swipe_refresher)
-        swipe_refresher.setOnRefreshListener {
-            if (!PasswordRepository.isInitialized) {
-                MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(getString(R.string.creation_dialog_text))
-                        .setPositiveButton(getString(R.string.dialog_ok), null).show()
-                swipe_refresher.isRefreshing = false
+        swipeRefresher = view.findViewById(R.id.swipe_refresher)
+        swipeRefresher.setOnRefreshListener {
+            if (!PasswordRepository.isGitRepo()) {
+                Snackbar.make(view, getString(R.string.clone_git_repo), Snackbar.LENGTH_SHORT).show()
+                swipeRefresher.isRefreshing = false
             } else {
                 val intent = Intent(context, GitActivity::class.java)
                 intent.putExtra("Operation", GitActivity.REQUEST_SYNC)
@@ -145,7 +143,7 @@ class PasswordFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        swipe_refresher.isRefreshing = false
+        swipeRefresher.isRefreshing = false
     }
 
     /** clears the adapter content and sets it back to the root view  */
