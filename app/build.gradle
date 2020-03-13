@@ -108,6 +108,7 @@ dependencies {
   implementation deps.androidx.constraint_layout
   implementation deps.androidx.documentfile
   implementation deps.androidx.fragment_ktx
+  implementation deps.androidx.lifecycle_livedata_ktx
   implementation deps.androidx.material
   implementation deps.androidx.preference
   constraints {
