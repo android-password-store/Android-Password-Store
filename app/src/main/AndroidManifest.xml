@@ -21,18 +21,18 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name="dev.msfjarvis.aps.ui.activity.ServerConfigActivity">
+    <activity android:name="dev.msfjarvis.aps.ui.serverconfig.activity.ServerConfigActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
       </intent-filter>
     </activity>
-    <activity android:name="dev.msfjarvis.aps.ui.activity.SplashActivity">
+    <activity android:name="dev.msfjarvis.aps.ui.splash.activity.SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name="dev.msfjarvis.aps.ui.activity.FirstRunActivity" />
+    <activity android:name="dev.msfjarvis.aps.ui.firstrun.activity.FirstRunActivity" />
 
   </application>
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
+  ~  SPDX-License-Identifier: GPL-3.0-only
+  ~
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@drawable/border_rect"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <TextView
+    android:id="@+id/tv_use_ssh"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:text="Use SSH connection"
+    android:textColor="@color/default_text_color"
+    android:textSize="14sp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    />
+
+  <TextView
+    android:id="@+id/tv_use_ssh_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="8dp"
+    android:text="(Cloud server must be SSH enabled)"
+    android:textColor="@color/default_text_color"
+    android:textSize="14sp"
+    app:layout_constraintTop_toBottomOf="@id/tv_use_ssh"
+    app:layout_constraintStart_toStartOf="@id/tv_use_ssh"
+    app:layout_constraintBottom_toBottomOf="parent"
+    />
+
+  <Switch
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    style="SwitchTheme"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

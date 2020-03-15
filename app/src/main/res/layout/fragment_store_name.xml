@@ -1,0 +1,94 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="?attr/colorPrimary"
+  android:orientation="vertical">
+
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/iv_app_icon"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_marginStart="32dp"
+    android:layout_marginTop="100dp"
+    android:contentDescription="@string/app_icon_hint"
+    android:src="@mipmap/ic_launcher"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/tv_app_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginStart="16dp"
+    android:text="@string/app_name"
+    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+    android:textColor="@color/color_control_normal"
+    android:textStyle="bold"
+    app:layout_constraintStart_toEndOf="@id/iv_app_icon"
+    app:layout_constraintTop_toTopOf="@+id/iv_app_icon"
+    app:layout_constraintBottom_toBottomOf="@id/iv_app_icon"/>
+
+  <TextView
+    android:id="@+id/tv_store_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="48dp"
+    android:text="@string/select_n_store_name"
+    android:textStyle="bold"
+    android:textColor="@color/color_control_normal"
+    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+    app:layout_constraintStart_toStartOf="@id/iv_app_icon"
+    app:layout_constraintTop_toBottomOf="@id/iv_app_icon" />
+
+  <TextView
+    android:id="@+id/tv_store_name_text"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="48dp"
+    android:text="@string/select_n_store_text"
+    android:textStyle="bold"
+    android:textColor="@color/color_control_normal"
+    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+    app:layout_constraintStart_toStartOf="@id/tv_store_name"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tv_store_name" />
+
+  <com.google.android.material.textfield.TextInputLayout
+    style="@style/TextInputLayoutBase"
+    android:id="@+id/til_store_name"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:hint="@string/store_name"
+    app:layout_constraintStart_toStartOf="@id/tv_store_name_text"
+    app:layout_constraintEnd_toEndOf="@id/tv_store_name_text"
+    app:layout_constraintTop_toBottomOf="@id/tv_store_name_text"
+    app:layout_constraintBottom_toTopOf="@id/btn_lets_go"
+    app:layout_constraintVertical_bias="0.25">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/tiet_store_name"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:maxLines="1"
+      android:singleLine="true"
+      android:imeOptions="actionGo"
+      />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.button.MaterialButton
+    style="@style/MaterialButton"
+    android:id="@+id/btn_lets_go"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="128dp"
+    android:minWidth="100dp"
+    android:maxWidth="300dp"
+    android:text="@string/let_s_go"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

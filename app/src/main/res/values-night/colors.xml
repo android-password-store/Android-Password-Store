@@ -9,6 +9,7 @@
     <color name="secondary_dark_color">#FFC54506</color>
     <color name="primary_text_color">#FFFFFFFF</color>
     <color name="secondary_text_color">#FFFFFFFF</color>
+    <color name="default_text_color">#FF8D8D8D</color>
 
     <!-- Theme variables -->
     <color name="window_background">@color/primary_color</color>
