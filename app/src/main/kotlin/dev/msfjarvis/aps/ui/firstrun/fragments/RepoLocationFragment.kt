@@ -12,8 +12,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.utils.SAFUtils
@@ -21,7 +21,6 @@ import dev.msfjarvis.aps.utils.SAFUtils.REQUEST_OPEN_DOCUMENT_TREE
 import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.di.activityViewModel
 import dev.msfjarvis.aps.di.injector
-import dev.msfjarvis.aps.ui.firstrun.viewmodels.FirstRunViewModel
 import dev.msfjarvis.aps.ui.serverconfig.fragments.RemoteSettingsFragment
 import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
@@ -41,11 +40,7 @@ class RepoLocationFragment : Fragment() {
 
     binding.btnHidden.setOnClickListener {
       viewModel.setExternal(false)
-      if (viewModel.isGitStore.value == true) {
-        parentFragmentManager.performTransactionWithBackStack(RemoteSettingsFragment.newInstance())
-      } else {
-        parentFragmentManager.performTransactionWithBackStack(StoreNameFragment.newInstance())
-      }
+      performFragmentTransaction()
       /*
       OpenKeychain's going to change this soon so no point in using this right now.
       parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
@@ -58,24 +53,33 @@ class RepoLocationFragment : Fragment() {
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (requestCode == REQUEST_OPEN_DOCUMENT_TREE) {
-      if (resultCode == Activity.RESULT_OK) {
-        val directoryUri = data?.data
-        if (directoryUri is Uri) {
-          SAFUtils.makeUriPersistable(this.requireContext(), directoryUri)
-          viewModel.setStoreUri(directoryUri)
-          viewModel.setExternal(true)
-          if (viewModel.isGitStore.value == true) {
-            parentFragmentManager.performTransactionWithBackStack(RemoteSettingsFragment.newInstance())
-          } else {
-            parentFragmentManager.performTransactionWithBackStack(StoreNameFragment.newInstance())
-          }
+    if (requestCode == REQUEST_OPEN_DOCUMENT_TREE && resultCode == Activity.RESULT_OK) {
+      val directoryUri = data?.data
+      if (directoryUri is Uri) {
+        val directoryTree = requireNotNull(DocumentFile.fromTreeUri(this.requireContext(), directoryUri))
+        if (directoryTree.isDirectory && directoryTree.listFiles().isEmpty()) {
+          updateViewModel(directoryUri)
         } else {
-          Snackbar.make(binding.root, getString(R.string.error_directory_uri), Snackbar.LENGTH_LONG).show()
+          Snackbar.make(binding.root, getString(R.string.select_empty_directory), Snackbar.LENGTH_LONG).show()
         }
-      } else if (resultCode == Activity.RESULT_CANCELED) {
+      } else {
         Snackbar.make(binding.root, getString(R.string.select_directory_passwords), Snackbar.LENGTH_LONG).show()
       }
+    }
+  }
+
+  private fun updateViewModel(directoryUri: Uri) {
+    SAFUtils.makeUriPersistable(this.requireContext(), directoryUri)
+    viewModel.setStoreUri(directoryUri)
+    viewModel.setExternal(true)
+    performFragmentTransaction()
+  }
+
+  private fun performFragmentTransaction() {
+    if (viewModel.isGitStore.value == true) {
+      parentFragmentManager.performTransactionWithBackStack(RemoteSettingsFragment.newInstance())
+    } else {
+      parentFragmentManager.performTransactionWithBackStack(StoreNameFragment.newInstance())
     }
   }
 
