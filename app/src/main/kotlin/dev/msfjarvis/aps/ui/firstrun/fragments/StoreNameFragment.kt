@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import dev.msfjarvis.aps.databinding.FragmentCloneBinding
+import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentStoreNameBinding
 import dev.msfjarvis.aps.di.activityViewModel
 import dev.msfjarvis.aps.di.injector
@@ -33,11 +33,11 @@ class StoreNameFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     binding.btnLetsGo.setOnClickListener {
       if (binding.tietStoreName.text.isNullOrEmpty()) {
-        Snackbar.make(binding.root, "Enter a store name to continue", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(binding.root, getString(R.string.err_enter_store_name), Snackbar.LENGTH_LONG).show()
       } else {
         viewModel.setName(binding.tietStoreName.text.toString())
         viewModel.setInitialized(true)
-        viewModel.addPasswordStore(this.requireContext())
+        viewModel.addPasswordStore()
       }
     }
   }

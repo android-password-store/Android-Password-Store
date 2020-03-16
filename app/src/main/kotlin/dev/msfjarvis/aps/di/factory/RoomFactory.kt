@@ -11,7 +11,6 @@ import androidx.room.Room
 import dev.msfjarvis.aps.db.PasswordStoreDatabase
 
 object RoomFactory {
-
   fun provideRoom(context: Context): PasswordStoreDatabase {
     synchronized(PasswordStoreDatabase::class) {
      return Room.databaseBuilder(

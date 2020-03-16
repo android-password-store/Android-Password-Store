@@ -7,7 +7,6 @@
 package dev.msfjarvis.aps.di.modules
 
 import android.content.Context
-import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dev.msfjarvis.aps.StoreRepository
@@ -19,16 +18,15 @@ import javax.inject.Singleton
 
 @Module
 object RoomModule {
-
-  @Singleton
   @Provides
+  @Singleton
   fun provideStoreDatabase(context: Context): PasswordStoreDatabase = RoomFactory.provideRoom(context)
 
-  @Singleton
   @Provides
+  @Singleton
   fun provideStoreDao(storeDatabase: PasswordStoreDatabase): StoreDao = storeDatabase.getStoreDao()
 
-  @Singleton
   @Provides
+  @Singleton
   fun storeRepository(storeDao: StoreDao): StoreRepository = StoreRepository(storeDao)
 }

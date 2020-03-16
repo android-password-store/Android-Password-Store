@@ -6,11 +6,23 @@
 
 package dev.msfjarvis.aps
 
+import android.util.Log
 import dagger.Reusable
 import dev.msfjarvis.aps.db.dao.StoreDao
+import dev.msfjarvis.aps.db.entity.StoreEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @Reusable
-class StoreRepository @Inject constructor(storeDao: StoreDao) {
+class StoreRepository @Inject constructor(private val storeDao: StoreDao) {
 
+  suspend fun addStoreToDB(storeEntity: StoreEntity) {
+    withContext(Dispatchers.IO) {
+      storeDao.insertStore(storeEntity)
+    }
+    withContext(Dispatchers.Main) {
+      Log.d("StoreRepository", "Store added to DB")
+    }
+  }
 }

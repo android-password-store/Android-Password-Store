@@ -10,11 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import dev.msfjarvis.aps.databinding.FragmentCloneBinding
 import dev.msfjarvis.aps.di.activityViewModel
 import dev.msfjarvis.aps.di.injector
-import dev.msfjarvis.aps.ui.firstrun.viewmodels.FirstRunViewModel
 import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class CloneFragment : Fragment() {

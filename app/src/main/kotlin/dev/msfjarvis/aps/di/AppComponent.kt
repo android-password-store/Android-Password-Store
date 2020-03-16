@@ -24,6 +24,7 @@ interface AppComponent {
     fun create(@BindsInstance context: Context): AppComponent
   }
 
+  // ViewModels
   val firstRunViewModel: FirstRunViewModel
 
   // Activities

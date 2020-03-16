@@ -16,13 +16,14 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.utils.SAFUtils
-import dev.msfjarvis.aps.utils.SAFUtils.REQUEST_OPEN_DOCUMENT_TREE
 import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.di.activityViewModel
 import dev.msfjarvis.aps.di.injector
 import dev.msfjarvis.aps.ui.serverconfig.fragments.RemoteSettingsFragment
 import dev.msfjarvis.aps.utils.performTransactionWithBackStack
+import dev.msfjarvis.aps.utils.SAFUtils.REQUEST_OPEN_DOCUMENT_TREE
+import dev.msfjarvis.aps.utils.SAFUtils.makeUriPersistable
+import dev.msfjarvis.aps.utils.SAFUtils.openDirectory
 
 class RepoLocationFragment : Fragment() {
   private var _binding: FragmentRepoLocationBinding? = null
@@ -37,18 +38,13 @@ class RepoLocationFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
     binding.btnHidden.setOnClickListener {
-      viewModel.setExternal(false)
-      performFragmentTransaction()
-      /*
-      OpenKeychain's going to change this soon so no point in using this right now.
-      parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
-       */
+      val documentTree = DocumentFile.fromFile(requireContext().filesDir)
+      updateViewModel(documentTree.uri, persistUri = false, isExternal = false)
     }
 
     binding.btnSdcard.setOnClickListener {
-      SAFUtils.openDirectory(this, null)
+      openDirectory(true, null)
     }
   }
 
@@ -56,9 +52,9 @@ class RepoLocationFragment : Fragment() {
     if (requestCode == REQUEST_OPEN_DOCUMENT_TREE && resultCode == Activity.RESULT_OK) {
       val directoryUri = data?.data
       if (directoryUri is Uri) {
-        val directoryTree = requireNotNull(DocumentFile.fromTreeUri(this.requireContext(), directoryUri))
+        val directoryTree = requireNotNull(DocumentFile.fromTreeUri(requireContext(), directoryUri))
         if (directoryTree.isDirectory && directoryTree.listFiles().isEmpty()) {
-          updateViewModel(directoryUri)
+          updateViewModel(directoryUri, persistUri = true, isExternal = true)
         } else {
           Snackbar.make(binding.root, getString(R.string.select_empty_directory), Snackbar.LENGTH_LONG).show()
         }
@@ -68,10 +64,12 @@ class RepoLocationFragment : Fragment() {
     }
   }
 
-  private fun updateViewModel(directoryUri: Uri) {
-    SAFUtils.makeUriPersistable(this.requireContext(), directoryUri)
+  private fun updateViewModel(directoryUri: Uri, persistUri: Boolean, isExternal: Boolean) {
+    if (persistUri) {
+      makeUriPersistable(directoryUri)
+    }
     viewModel.setStoreUri(directoryUri)
-    viewModel.setExternal(true)
+    viewModel.setExternal(isExternal)
     performFragmentTransaction()
   }
 
