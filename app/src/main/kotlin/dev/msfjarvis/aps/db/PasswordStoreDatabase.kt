@@ -20,23 +20,4 @@ import dev.msfjarvis.aps.db.entity.*
 ], version = 1)
 abstract class PasswordStoreDatabase : RoomDatabase() {
   abstract fun getStoreDao(): StoreDao
-
-  companion object {
-    private lateinit var instance: PasswordStoreDatabase
-
-    fun getInstance(context: Context): PasswordStoreDatabase {
-      if (!this::instance.isInitialized) {
-        synchronized(PasswordStoreDatabase::class) {
-          instance = Room.databaseBuilder(
-            context.applicationContext,
-            PasswordStoreDatabase::class.java, "password_store_database"
-          )
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
-        }
-      }
-      return instance
-    }
-  }
 }
