@@ -24,7 +24,6 @@ class PGPProviderFragment : Fragment() {
   }
 
   companion object {
-
     fun newInstance(): PGPProviderFragment = PGPProviderFragment()
   }
 }

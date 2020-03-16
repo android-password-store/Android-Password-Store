@@ -17,13 +17,12 @@ import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class CloneFragment : Fragment() {
 
-  private var _binding: FragmentCloneBinding? = null
-  private val binding get() = _binding!!
+  private lateinit var binding: FragmentCloneBinding
   private val viewModel by activityViewModel { injector.firstRunViewModel }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
-    _binding = FragmentCloneBinding.inflate(inflater)
+    binding = FragmentCloneBinding.inflate(inflater)
     return binding.root
   }
 
@@ -37,11 +36,6 @@ class CloneFragment : Fragment() {
       viewModel.setGitStore(false)
       parentFragmentManager.performTransactionWithBackStack(RepoLocationFragment.newInstance())
     }
-  }
-
-  override fun onDestroyView() {
-    _binding = null
-    super.onDestroyView()
   }
 
   companion object {

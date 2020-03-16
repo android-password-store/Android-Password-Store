@@ -18,14 +18,12 @@ import dev.msfjarvis.aps.di.injector
 
 class StoreNameFragment : Fragment() {
 
-  private var _binding: FragmentStoreNameBinding? = null
-  private val binding get() = _binding!!
-
+  private lateinit var binding: FragmentStoreNameBinding
   private val viewModel by activityViewModel { injector.firstRunViewModel }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
-    _binding = FragmentStoreNameBinding.inflate(inflater)
+    binding = FragmentStoreNameBinding.inflate(inflater)
     return binding.root
   }
 
@@ -40,11 +38,6 @@ class StoreNameFragment : Fragment() {
         viewModel.addPasswordStore()
       }
     }
-  }
-
-  override fun onDestroyView() {
-    _binding = null
-    super.onDestroyView()
   }
 
   companion object {

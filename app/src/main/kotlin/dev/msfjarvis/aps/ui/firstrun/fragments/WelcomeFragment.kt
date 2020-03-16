@@ -14,6 +14,7 @@ import dev.msfjarvis.aps.ui.firstrun.fragments.CloneFragment
 import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class WelcomeFragment : Fragment() {
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val binding = FragmentWelcomeBinding.inflate(layoutInflater)
     binding.btnGo.setOnClickListener { parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance()) }

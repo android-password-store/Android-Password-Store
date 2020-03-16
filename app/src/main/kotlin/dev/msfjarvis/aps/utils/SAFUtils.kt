@@ -58,14 +58,6 @@ object SAFUtils {
     contentResolver.takePersistableUriPermission(uri, takeFlags)
   }
 
-  fun Activity.makeUriPersistable(uri: Uri) {
-    val contentResolver = applicationContext.contentResolver
-    val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-      Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-
-    contentResolver.takePersistableUriPermission(uri, takeFlags)
-  }
-
   fun Fragment.makeUriPersistable(uri: Uri) {
     val contentResolver = requireContext().applicationContext.contentResolver
     val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or

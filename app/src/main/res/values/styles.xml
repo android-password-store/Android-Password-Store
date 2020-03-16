@@ -61,7 +61,7 @@
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <style name="SwitchTheme" >
+    <style name="SwitchTheme">
         <item name="colorControlActivated">@color/secondary_color</item>
     </style>
 </resources>

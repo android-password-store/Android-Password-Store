@@ -18,6 +18,7 @@ import dev.msfjarvis.aps.StoreRepository
 import dev.msfjarvis.aps.db.entity.StoreEntity
 import dev.msfjarvis.aps.utils.SAFUtils
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 class FirstRunViewModel @Inject constructor(private val storeRepository: StoreRepository, private val context: Context) : ViewModel() {
@@ -34,29 +35,29 @@ class FirstRunViewModel @Inject constructor(private val storeRepository: StoreRe
   val initialized: LiveData<Boolean> get() = _initialized
   val isGitStore: LiveData<Boolean> get() = _isGitStore
 
-  fun setStoreUri(uri: Uri) {
-    _uri.value = uri
-    _uri.postValue(uri)
+  fun setStoreUri(uri: Uri) = _uri.apply {
+    value = uri
+    postValue(uri)
   }
 
-  fun setGitStore(isGitStore: Boolean) {
-    _isGitStore.value = isGitStore
-    _isGitStore.postValue(isGitStore)
+  fun setGitStore(isGitStore: Boolean) = _isGitStore.apply {
+    value = isGitStore
+    postValue(isGitStore)
   }
 
-  fun setInitialized(initialized: Boolean) {
-    _initialized.value = initialized
-    _initialized.postValue(initialized)
+  fun setInitialized(initialized: Boolean) = _initialized.apply {
+    value = initialized
+    postValue(initialized)
   }
 
-  fun setName(name: String) {
-    _name.value = name
-    _name.postValue(name)
+  fun setName(name: String) = _name.apply {
+    value = name
+    postValue(name)
   }
 
-  fun setExternal(external: Boolean) {
-    _external.value = external
-    _external.postValue(external)
+  fun setExternal(external: Boolean) = _external.apply {
+    value = external
+    postValue(external)
   }
 
   fun addPasswordStore() {
@@ -67,7 +68,7 @@ class FirstRunViewModel @Inject constructor(private val storeRepository: StoreRe
     }
   }
 
-  @Throws(Exception::class)
+  @Throws(IOException::class)
   private fun createStoreDirectory(): Uri {
     val rootUri = requireNotNull(uri.value)
     val rootDir = requireNotNull(SAFUtils.documentFileFromUri(context, rootUri))
@@ -76,7 +77,7 @@ class FirstRunViewModel @Inject constructor(private val storeRepository: StoreRe
     if (storeDir != null) {
       return storeDir.uri
     } else {
-      throw Exception(context.getString(R.string.exception_cannot_create_directory))
+      throw IOException(context.getString(R.string.exception_cannot_create_directory))
     }
   }
 }

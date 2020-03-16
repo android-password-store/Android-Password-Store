@@ -26,13 +26,13 @@ import dev.msfjarvis.aps.utils.SAFUtils.makeUriPersistable
 import dev.msfjarvis.aps.utils.SAFUtils.openDirectory
 
 class RepoLocationFragment : Fragment() {
-  private var _binding: FragmentRepoLocationBinding? = null
-  private val binding get() = _binding!!
+
+  private lateinit var binding: FragmentRepoLocationBinding
   private val viewModel by activityViewModel { injector.firstRunViewModel }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
-    _binding = FragmentRepoLocationBinding.inflate(inflater)
+    binding = FragmentRepoLocationBinding.inflate(inflater)
     return binding.root
   }
 
@@ -79,11 +79,6 @@ class RepoLocationFragment : Fragment() {
     } else {
       parentFragmentManager.performTransactionWithBackStack(StoreNameFragment.newInstance())
     }
-  }
-
-  override fun onDestroyView() {
-    _binding = null
-    super.onDestroyView()
   }
 
   companion object {

@@ -1,6 +1,6 @@
 /*
  * Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
- *  SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: GPL-3.0-only
  *
  */
 
@@ -18,7 +18,6 @@ object RoomFactory {
         PasswordStoreDatabase::class.java,
         "password_store_database"
       )
-        .fallbackToDestructiveMigration()
         .build()
     }
   }
