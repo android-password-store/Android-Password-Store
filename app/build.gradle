@@ -40,7 +40,7 @@ android {
   buildFeatures.viewBinding = true
 
   lintOptions {
-    abortOnError = true // make sure build fails with lint errors!
+    abortOnError = false // make sure build does not fail with lint errors!
   }
 
   packagingOptions {

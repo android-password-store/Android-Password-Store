@@ -23,7 +23,7 @@ data class StoreEntity(
   val name: String,
 
   @ColumnInfo(name = "uri")
-  val uri: Uri? = null,
+  val uri: Uri,
 
   @ColumnInfo(name = "external")
   val external: Boolean,
