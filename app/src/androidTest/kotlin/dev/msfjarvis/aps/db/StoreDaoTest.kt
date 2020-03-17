@@ -58,7 +58,7 @@ class StoreDaoTest {
   fun testInsertMultipleStores() {
     val storeEntries = arrayListOf<StoreEntity>()
     for (i in 0 until 7) {
-      val store = StoreEntity(0, "store", Uri.EMPTY, false, true, false)
+      storeEntries.add(StoreEntity(0, "store$i", Uri.EMPTY, false, true, false))
     }
     storeDao.insertMultipleStores(storeEntries)
     storeDao.insertMultipleStores(storeEntries[5], storeEntries[6])
@@ -73,7 +73,7 @@ class StoreDaoTest {
   fun testGetStoreByName() {
     val storeEntries = arrayListOf<StoreEntity>()
     for (i in 0 until 5) {
-      val store = StoreEntity(0, "store", Uri.EMPTY, false, true, false)
+      storeEntries.add(StoreEntity(0, "store", Uri.EMPTY, false, true, false))
     }
     storeEntries.add(StoreEntity(0, "notStore", Uri.EMPTY, false, true, false))
     storeDao.insertMultipleStores(storeEntries)
