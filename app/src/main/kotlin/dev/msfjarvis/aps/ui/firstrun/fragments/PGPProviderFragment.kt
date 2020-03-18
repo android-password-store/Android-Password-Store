@@ -1,8 +1,9 @@
 /*
  * Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
+ *  SPDX-License-Identifier: GPL-3.0-only
+ *
  */
-package dev.msfjarvis.aps.ui.fragments
+package dev.msfjarvis.aps.ui.firstrun.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,7 +24,6 @@ class PGPProviderFragment : Fragment() {
   }
 
   companion object {
-
     fun newInstance(): PGPProviderFragment = PGPProviderFragment()
   }
 }

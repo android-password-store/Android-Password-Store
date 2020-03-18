@@ -288,4 +288,12 @@
     <string name="select_repo_type_text">Select if you want to create a local repo or clone a remote repo.</string>
     <string name="clone_remote_repo">Clone Remote Repo</string>
     <string name="create_local_repo">Create Local Repo</string>
+    <string name="error_directory_uri">Error getting directory uri</string>
+    <string name="select_directory_passwords">Select a directory to store passwords</string>
+    <string name="select_n_store_name">Select \nStore Name</string>
+    <string name="select_n_store_text">Select a name for your password store.</string>
+    <string name="store_name">Store Name</string>
+    <string name="select_empty_directory">Select an empty directory for password store</string>
+    <string name="err_enter_store_name">Enter a store name to continue</string>
+    <string name="exception_cannot_create_directory">Cannot create new directory.</string>
 </resources>

@@ -5,6 +5,7 @@
 package dev.msfjarvis.aps.db
 
 import android.content.Context
+import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.room.Room
@@ -46,10 +47,10 @@ class StoreDaoTest {
   @Test
   @Throws(Exception::class)
   fun testInsertStore() {
-    val store = StoreEntity(name = "store", external = false, initialized = true)
+    val store = StoreEntity(0, "store", Uri.EMPTY, false, true, false)
     storeDao.insertStore(store)
     val byName = storeDao.getStoreByName("store").asLiveData().blockingObserve()
-    assertThat(byName.get(0).name, equalTo(store.name))
+    assertThat(byName?.get(0)?.name, equalTo(store.name))
   }
 
   @Test
@@ -57,13 +58,13 @@ class StoreDaoTest {
   fun testInsertMultipleStores() {
     val storeEntries = arrayListOf<StoreEntity>()
     for (i in 0 until 7) {
-      storeEntries.add(StoreEntity(name = "store$i", external = false, initialized = false))
+      storeEntries.add(StoreEntity(0, "store$i", Uri.EMPTY, false, true, false))
     }
     storeDao.insertMultipleStores(storeEntries)
     storeDao.insertMultipleStores(storeEntries[5], storeEntries[6])
     val byName = storeDao.getAllStores().asLiveData().blockingObserve()
     for (i in 0 until 7) {
-      assertThat(byName.get(i).name, equalTo(storeEntries[i].name))
+      assertThat(byName?.get(i)?.name, equalTo(storeEntries[i].name))
     }
   }
 
@@ -72,20 +73,20 @@ class StoreDaoTest {
   fun testGetStoreByName() {
     val storeEntries = arrayListOf<StoreEntity>()
     for (i in 0 until 5) {
-      storeEntries.add(StoreEntity(name = "store", external = false, initialized = false))
+      storeEntries.add(StoreEntity(0, "store", Uri.EMPTY, false, true, false))
     }
-    storeEntries.add(StoreEntity(name = "notStore", external = false, initialized = false))
+    storeEntries.add(StoreEntity(0, "notStore", Uri.EMPTY, false, true, false))
     storeDao.insertMultipleStores(storeEntries)
     val byName = storeDao.getStoreByName("store").asLiveData().blockingObserve()
-    assertThat(byName.size, equalTo(5))
+    assertThat(byName?.size, equalTo(5))
   }
 
   @Test
   @Throws(Exception::class)
   fun testGetStoreById() {
-    val storeEntry = StoreEntity(name = "store", external = false, initialized = false)
+    val storeEntry = StoreEntity(0, "store", Uri.EMPTY, false, true, false)
     storeDao.insertStore(storeEntry)
     val byId = storeDao.getAllStores().asLiveData().blockingObserve()
-    assertThat(storeEntry.name, equalTo(byId.get(0).name))
+    assertThat(storeEntry.name, equalTo(byId?.get(0)?.name))
   }
 }

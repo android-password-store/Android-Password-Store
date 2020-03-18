@@ -2,7 +2,7 @@
  * Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package dev.msfjarvis.aps.ui.activity
+package dev.msfjarvis.aps.ui.splash.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import dev.msfjarvis.aps.databinding.ActivitySplashBinding
 import dev.msfjarvis.aps.di.injector
 import dev.msfjarvis.aps.ui.EdgeToEdge
+import dev.msfjarvis.aps.ui.firstrun.activity.FirstRunActivity
 import dev.msfjarvis.aps.utils.PreferenceKeys.IS_FIRST_RUN
 import javax.inject.Inject
 

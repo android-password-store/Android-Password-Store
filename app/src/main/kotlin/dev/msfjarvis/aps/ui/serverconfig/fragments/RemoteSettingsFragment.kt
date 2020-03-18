@@ -1,8 +1,9 @@
 /*
  * Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
+ *  SPDX-License-Identifier: GPL-3.0-only
+ *
  */
-package dev.msfjarvis.aps.ui.fragments
+package dev.msfjarvis.aps.ui.serverconfig.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.msfjarvis.aps.databinding.FragmentRemoteSettingsBinding
-import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
-import dev.msfjarvis.aps.utils.performTransactionWithBackStack
 
 class RemoteSettingsFragment : Fragment() {
 
@@ -25,7 +24,7 @@ class RemoteSettingsFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    binding.btnPositive.setOnClickListener {
+    binding.btnSync.setOnClickListener {
       /*
       OpenKeychain's going to change this soon so no point in using this right now.
       parentFragmentManager.performTransactionWithBackStack(PGPProviderFragment.newInstance())
