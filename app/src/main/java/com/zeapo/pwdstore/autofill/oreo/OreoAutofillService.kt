@@ -37,6 +37,11 @@ class OreoAutofillService : AutofillService() {
         private const val DISABLE_AUTOFILL_DURATION_MS = 1000 * 60 * 60 * 24L
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        cachePublicSuffixList(applicationContext)
+    }
+
     override fun onFillRequest(
         request: FillRequest,
         cancellationSignal: CancellationSignal,

@@ -97,7 +97,7 @@ private class Form(context: Context, structure: AssistStructure) {
     }
 
     val scenario = detectFieldsToFill()
-    val formOrigin = determineFormOrigin()
+    val formOrigin = determineFormOrigin(context)
 
     init {
         d { "Origin: $formOrigin" }
@@ -144,15 +144,15 @@ private class Form(context: Context, structure: AssistStructure) {
         }
     }
 
-    private fun webOriginToFormOrigin(origin: String): FormOrigin? {
+    private fun webOriginToFormOrigin(context: Context, origin: String): FormOrigin? {
         val uri = Uri.parse(origin) ?: return null
         val scheme = uri.scheme ?: return null
         if (scheme !in SUPPORTED_SCHEMES) return null
         val host = uri.host ?: return null
-        return FormOrigin.Web(getCanonicalDomain(host))
+        return FormOrigin.Web(getPublicSuffixPlusOne(context, host))
     }
 
-    private fun determineFormOrigin(): FormOrigin? {
+    private fun determineFormOrigin(context: Context): FormOrigin? {
         if (scenario == null) return null
         if (!isBrowser || webOrigins.isEmpty()) {
             // Security assumption: If a trusted browser includes no web origin in the provided
@@ -167,7 +167,7 @@ private class Form(context: Context, structure: AssistStructure) {
                 // multiple origins, it is expected to annotate a single field, in most cases its
                 // URL bar, with a webOrigin. We err on the side of caution and only trust the
                 // reported web origin if no other web origin appears on the page.
-                webOriginToFormOrigin(webOrigins.singleOrNull() ?: return null)
+                webOriginToFormOrigin(context, webOrigins.singleOrNull() ?: return null)
             }
             BrowserMultiOriginMethod.WebView,
             BrowserMultiOriginMethod.Field -> {
@@ -180,6 +180,7 @@ private class Form(context: Context, structure: AssistStructure) {
                 // is null, but we encountered web origins elsewhere in the AssistStructure, the
                 // situation is uncertain and Autofill should not be offered.
                 webOriginToFormOrigin(
+                    context,
                     scenario.allFields.map { it.webOrigin }.toSet().singleOrNull() ?: return null
                 )
             }

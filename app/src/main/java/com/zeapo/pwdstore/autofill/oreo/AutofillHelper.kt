@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
-import com.google.common.net.InternetDomainName
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import java.io.File
@@ -71,19 +70,6 @@ val AssistStructure.ViewNode.webOrigin: String?
         val scheme = (if (Build.VERSION.SDK_INT >= 28) webScheme else null) ?: "http"
         "$scheme://$domain"
     }
-
-/**
- * Returns the eTLD+1, i.e. the direct subdomain of the public suffix of [host].
- *
- * Note: Invalid hosts are returned unchanged and thus never collide with valid canonical domains.
- */
-fun getCanonicalDomain(host: String): String {
-    // Invalid domain names (such as IP addresses) are returned unchanged
-    if (!InternetDomainName.isValid(host)) return host
-    var idn = InternetDomainName.from(host)
-    while (idn != null && !idn.isTopPrivateDomain) idn = idn.parent()
-    return idn.toString()
-}
 
 data class Credentials(val username: String?, val password: String) {
     companion object {
