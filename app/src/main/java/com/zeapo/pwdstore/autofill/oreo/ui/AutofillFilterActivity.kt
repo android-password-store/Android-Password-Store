@@ -36,6 +36,7 @@ class AutofillFilterView : AppCompatActivity() {
     companion object {
         private const val HEIGHT_PERCENTAGE = 0.9
         private const val WIDTH_PERCENTAGE = 0.75
+        private const val DECRYPT_FILL_REQUEST_CODE = 1
 
         private const val EXTRA_FORM_ORIGIN_WEB =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_FORM_ORIGIN_WEB"
@@ -116,9 +117,7 @@ class AutofillFilterView : AppCompatActivity() {
                 onClick { decryptAndFill(item) }
             }
         }
-        rvPassword.apply {
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        }
+        rvPassword.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         search.addTextChangedListener { recursiveFilter(it.toString(), strict = false) }
         val initialFilter =
@@ -126,12 +125,10 @@ class AutofillFilterView : AppCompatActivity() {
         search.setText(initialFilter, TextView.BufferType.EDITABLE)
         recursiveFilter(initialFilter, strict = formOrigin is FormOrigin.Web)
 
-        shouldMatch.apply {
-            text = getString(
-                R.string.oreo_autofill_match_with,
-                formOrigin.getPrettyIdentifier(applicationContext)
-            )
-        }
+        shouldMatch.text = getString(
+            R.string.oreo_autofill_match_with,
+            formOrigin.getPrettyIdentifier(applicationContext)
+        )
     }
 
     private fun decryptAndFill(item: PasswordItem) {
@@ -147,13 +144,13 @@ class AutofillFilterView : AppCompatActivity() {
                 item.file,
                 intent!!.extras!!,
                 this
-            ), 1
+            ), DECRYPT_FILL_REQUEST_CODE
         )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1) {
+        if (requestCode == DECRYPT_FILL_REQUEST_CODE) {
             if (resultCode == RESULT_OK) setResult(RESULT_OK, data)
             finish()
         }
