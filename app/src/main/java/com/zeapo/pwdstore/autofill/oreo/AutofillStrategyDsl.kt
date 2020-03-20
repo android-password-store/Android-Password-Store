@@ -92,13 +92,20 @@ class SingleFieldMatcher(
     override fun match(fields: List<FormField>, alreadyMatched: List<FormField>): List<FormField>? {
         return fields.minus(alreadyMatched).filter { take(it, alreadyMatched) }.let { contestants ->
             var current = contestants
-            for (tieBreaker in tieBreakers) {
+            for ((i, tieBreaker) in tieBreakers.withIndex()) {
                 // Successively filter matched fields via tie breakers...
                 val new = current.filter { tieBreaker(it, alreadyMatched) }
                 // skipping those tie breakers that are not satisfied for any remaining field...
-                if (new.isEmpty()) continue
+                if (new.isEmpty()) {
+                    d { "Tie breaker #$i: Didn't match any field; skipping" }
+                    continue
+                }
                 // and return if the available options have been narrowed to a single field.
-                if (new.size == 1) break
+                if (new.size == 1) {
+                    d { "Tie breaker #$i: Success" }
+                    break
+                }
+                d { "Tie breaker #$i: Matched ${new.size} fields; continuing" }
                 current = new
             }
             listOf(current.singleOrNull() ?: return null)
@@ -117,10 +124,18 @@ class PairOfFieldsMatcher(
             .filter { it.first directlyPrecedes it.second }.filter { take(it, alreadyMatched) }
             .let { contestants ->
                 var current = contestants
-                for (tieBreaker in tieBreakers) {
+                for ((i, tieBreaker) in tieBreakers.withIndex()) {
                     val new = current.filter { tieBreaker(it, alreadyMatched) }
-                    if (new.isEmpty()) continue
-                    if (new.size == 1) break
+                    if (new.isEmpty()) {
+                        d { "Tie breaker #$i: Didn't match any field; skipping" }
+                        continue
+                    }
+                    // and return if the available options have been narrowed to a single field.
+                    if (new.size == 1) {
+                        d { "Tie breaker #$i: Success" }
+                        break
+                    }
+                    d { "Tie breaker #$i: Matched ${new.size} fields; continuing" }
                     current = new
                 }
                 current.singleOrNull()?.toList()
@@ -222,6 +237,7 @@ class AutofillRule private constructor(
             d { "$name: Skipped in single origin mode" }
             return null
         }
+        d { "$name: Applying..." }
         val scenarioBuilder = AutofillScenario.Builder<FormField>()
         val alreadyMatched = mutableListOf<FormField>()
         for ((type, matcher, optional) in matchers) {
