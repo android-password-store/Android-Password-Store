@@ -34,7 +34,7 @@ class XkpwdDictionary(context: Context) {
         }
 
         if (lines.isEmpty()) {
-            lines = context.getResources().openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
+            lines = context.resources.openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
         }
 
         for (word in lines) {

@@ -63,16 +63,16 @@ class EmitExpandableTransformationBehavior @JvmOverloads constructor(
         val set = AnimatorSet()
         set.playTogether(animations)
         set.addListener(
-            onStart = {
-                if (expanded) {
-                    child.isVisible = true
+                onStart = {
+                    if (expanded) {
+                        child.isVisible = true
+                    }
+                },
+                onEnd = {
+                    if (!expanded) {
+                        child.isInvisible = true
+                    }
                 }
-            },
-            onEnd = {
-                if (!expanded) {
-                    child.isInvisible = true
-                }
-            }
         )
         return set
     }
@@ -97,10 +97,10 @@ class EmitExpandableTransformationBehavior @JvmOverloads constructor(
         val alphaHolder = PropertyValuesHolder.ofFloat(View.ALPHA, 1f)
         val animators = child.children.zip(delays) { view, delay ->
             ObjectAnimator.ofPropertyValuesHolder(
-                view,
-                scaleXHolder,
-                scaleYHolder,
-                alphaHolder
+                    view,
+                    scaleXHolder,
+                    scaleYHolder,
+                    alphaHolder
             ).apply {
                 duration = EXPAND_DURATION
                 startDelay = delay
@@ -124,10 +124,10 @@ class EmitExpandableTransformationBehavior @JvmOverloads constructor(
         val alphaHolder = PropertyValuesHolder.ofFloat(View.ALPHA, 0f)
         val animators = child.children.zip(delays) { view, delay ->
             ObjectAnimator.ofPropertyValuesHolder(
-                view,
-                scaleXHolder,
-                scaleYHolder,
-                alphaHolder
+                    view,
+                    scaleXHolder,
+                    scaleYHolder,
+                    alphaHolder
             ).apply {
                 duration = COLLAPSE_DURATION
                 startDelay = delay
