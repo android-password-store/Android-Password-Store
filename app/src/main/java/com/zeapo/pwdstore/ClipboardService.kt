@@ -124,7 +124,7 @@ class ClipboardService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.tap_clear_clipboard))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_action_secure_24dp)
                 .setContentIntent(pendingIntent)
                 .setUsesChronometer(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -148,6 +148,7 @@ class ClipboardService : Service() {
             }
         }
     }
+
     companion object {
         private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
         private const val ACTION_START = "ACTION_START_CLIPBOARD_TIMER"

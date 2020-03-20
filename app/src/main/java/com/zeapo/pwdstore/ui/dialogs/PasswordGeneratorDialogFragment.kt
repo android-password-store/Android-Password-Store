@@ -31,7 +31,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
         builder.setView(view)
         val prefs = requireActivity().applicationContext
-            .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
+                .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
         view.findViewById<CheckBox>(R.id.numerals)?.isChecked = !prefs.getBoolean("0", false)
         view.findViewById<CheckBox>(R.id.symbols)?.isChecked = prefs.getBoolean("y", false)

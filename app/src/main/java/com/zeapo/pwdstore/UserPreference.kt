@@ -123,7 +123,8 @@ class UserPreference : AppCompatActivity() {
                     OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
                 }
             }
-            openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty() ?: false
+            openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
+                    ?: false
 
             // see if the autofill service is enabled and check the preference accordingly
             autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
@@ -332,12 +333,12 @@ class UserPreference : AppCompatActivity() {
             val prefPwgenType = findPreference<ListPreference>("pref_key_pwgen_type")
             showHideDependentPrefs(prefPwgenType?.value, prefIsCustomDict, prefCustomDictPicker)
 
-            prefPwgenType?.onPreferenceChangeListener = ChangeListener() { _, newValue ->
+            prefPwgenType?.onPreferenceChangeListener = ChangeListener { _, newValue ->
                 showHideDependentPrefs(newValue, prefIsCustomDict, prefCustomDictPicker)
                 true
             }
 
-            prefIsCustomDict?.onPreferenceChangeListener = ChangeListener() { _, newValue ->
+            prefIsCustomDict?.onPreferenceChangeListener = ChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     val customDictFile = File(context.filesDir, XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
                     if (customDictFile.exists()) {
@@ -688,7 +689,7 @@ class UserPreference : AppCompatActivity() {
         @JvmStatic
         private fun setCustomDictSummary(customDictPref: Preference?, uri: Uri) {
             val fileName = uri.path?.substring(uri.path?.lastIndexOf(":")!! + 1)
-            customDictPref?.setSummary("Selected dictionary: " + fileName)
+            customDictPref?.summary = "Selected dictionary: " + fileName
         }
     }
 }

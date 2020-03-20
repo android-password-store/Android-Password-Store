@@ -116,9 +116,9 @@ class PasswordStore : AppCompatActivity() {
                     != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     val snack = Snackbar.make(
-                            findViewById(R.id.main_layout),
-                            getString(R.string.access_sdcard_text),
-                            Snackbar.LENGTH_INDEFINITE)
+                                    findViewById(R.id.main_layout),
+                                    getString(R.string.access_sdcard_text),
+                                    Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.dialog_ok) {
                                 ActivityCompat.requestPermissions(
                                         activity,
@@ -615,9 +615,9 @@ class PasswordStore : AppCompatActivity() {
                 }
                 REQUEST_CODE_SELECT_FOLDER -> {
                     Timber.tag(TAG)
-                        .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
+                            .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
                     Timber.tag(TAG).d(
-                        TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
+                            TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
                     )
 
                     val target = File(requireNotNull(data.getStringExtra("SELECTED_FOLDER_PATH")))

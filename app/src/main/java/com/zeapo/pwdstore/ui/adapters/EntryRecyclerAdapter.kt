@@ -87,7 +87,8 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        settings = settings ?: PreferenceManager.getDefaultSharedPreferences(holder.view.context.applicationContext)
+        settings = settings
+                ?: PreferenceManager.getDefaultSharedPreferences(holder.view.context.applicationContext)
         val pass = values[position]
         val showHidden = settings?.getBoolean("show_hidden_folders", false) ?: false
         holder.name.text = pass.toString()
