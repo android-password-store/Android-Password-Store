@@ -79,7 +79,7 @@ open class PasswordRepository protected constructor() {
         fun isGitRepo(): Boolean {
             if (repository != null) {
                 // Check if remote exists
-                return repository!!.config.getSubsections("remote").isNotEmpty() ?: false
+                return repository!!.config.getSubsections("remote").isNotEmpty()
             }
             return false
         }
