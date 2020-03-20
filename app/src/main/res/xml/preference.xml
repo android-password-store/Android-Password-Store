@@ -1,179 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.preference.PreferenceCategory android:title="@string/pref_git_title">
+    <androidx.preference.PreferenceCategory app:title="@string/pref_git_title">
         <androidx.preference.Preference
-            android:key="git_server_info"
-            android:title="@string/pref_edit_server_info" />
+            app:key="git_server_info"
+            app:title="@string/pref_edit_server_info" />
         <androidx.preference.Preference
-            android:key="git_config"
-            android:title="@string/pref_edit_git_config" />
+            app:key="git_config"
+            app:title="@string/pref_edit_git_config" />
         <androidx.preference.Preference
-            android:key="ssh_key"
-            android:title="@string/pref_ssh_title" />
+            app:key="ssh_key"
+            app:title="@string/pref_ssh_title" />
         <androidx.preference.Preference
-            android:key="ssh_keygen"
-            android:title="@string/pref_ssh_keygen_title" />
+            app:key="ssh_keygen"
+            app:title="@string/pref_ssh_keygen_title" />
         <androidx.preference.Preference
-            android:key="ssh_key_clear_passphrase"
-            android:title="@string/ssh_key_clear_passphrase" />
+            app:key="ssh_key_clear_passphrase"
+            app:title="@string/ssh_key_clear_passphrase" />
         <androidx.preference.Preference
-            android:key="hotp_remember_clear_choice"
-            android:title="@string/hotp_remember_clear_choice" />
+            app:key="hotp_remember_clear_choice"
+            app:title="@string/hotp_remember_clear_choice" />
         <androidx.preference.Preference
-            android:key="ssh_openkeystore_clear_keyid"
-            android:title="@string/ssh_openkeystore_clear_keyid" />
+            app:key="ssh_openkeystore_clear_keyid"
+            app:title="@string/ssh_openkeystore_clear_keyid" />
         <androidx.preference.Preference
-            android:key="ssh_see_key"
-            android:title="@string/pref_ssh_see_key_title" />
+            app:key="ssh_see_key"
+            app:title="@string/pref_ssh_see_key_title" />
         <androidx.preference.Preference
-            android:key="git_delete_repo"
-            android:summary="@string/pref_git_delete_repo_summary"
-            android:title="@string/pref_git_delete_repo" />
+            app:key="git_delete_repo"
+            app:summary="@string/pref_git_delete_repo_summary"
+            app:title="@string/pref_git_delete_repo" />
         <CheckBoxPreference
-            android:key="git_external"
-            android:summary="@string/pref_external_repository_summary"
-            android:title="@string/pref_external_repository" />
+            app:key="git_external"
+            app:summary="@string/pref_external_repository_summary"
+            app:title="@string/pref_external_repository" />
         <androidx.preference.Preference
-            android:dependency="git_external"
-            android:key="pref_select_external"
-            android:title="@string/pref_select_external_repository" />
+            app:dependency="git_external"
+            app:key="pref_select_external"
+            app:title="@string/pref_select_external_repository" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/pref_crypto_title">
+    <androidx.preference.PreferenceCategory app:title="@string/pref_crypto_title">
         <me.msfjarvis.openpgpktx.preference.OpenPgpAppPreference
-            android:key="openpgp_provider_list"
-            android:title="@string/pref_provider_title" />
+            app:key="openpgp_provider_list"
+            app:title="@string/pref_provider_title" />
         <androidx.preference.Preference
-            android:key="openpgp_key_id_pref"
-            android:title="@string/pref_key_title" />
+            app:key="openpgp_key_id_pref"
+            app:title="@string/pref_key_title" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/password_generator_category_title">
+    <androidx.preference.PreferenceCategory app:title="@string/password_generator_category_title">
         <androidx.preference.ListPreference
-            android:key="pref_key_pwgen_type"
-            android:title="@string/xkpwgen_pref_gentype_title"
-            android:defaultValue="classic"
-            android:entries="@array/pwgen_provider"
-            android:entryValues="@array/pwgen_provider"
+            app:key="pref_key_pwgen_type"
+            app:title="@string/xkpwgen_pref_gentype_title"
+            app:defaultValue="classic"
+            app:entries="@array/pwgen_provider_labels"
+            app:entryValues="@array/pwgen_provider_values"
             app:useSimpleSummaryProvider="true"
-            android:persistent="true" />
+            app:persistent="true" />
         <androidx.preference.CheckBoxPreference
-            android:key="pref_key_is_custom_dict"
-            android:title="@string/xkpwgen_pref_custom_dict_title"
-            android:summaryOn="@string/xkpwgen_pref_custom_dict_summary_on"
-            android:summaryOff="@string/xkpwgen_pref_custom_dict_summary_off"/>
+            app:key="pref_key_is_custom_dict"
+            app:title="@string/xkpwgen_pref_custom_dict_title"
+            app:summaryOn="@string/xkpwgen_pref_custom_dict_summary_on"
+            app:summaryOff="@string/xkpwgen_pref_custom_dict_summary_off"/>
         <androidx.preference.Preference
-            android:key="pref_key_custom_dict"
-            android:title="@string/xkpwgen_pref_custom_dict_picker_title"
-            android:summary="@string/xkpwgen_pref_custom_dict_picker_summary"
-            android:dependency="pref_key_is_custom_dict"/>
+            app:key="pref_key_custom_dict"
+            app:title="@string/xkpwgen_pref_custom_dict_picker_title"
+            app:summary="@string/xkpwgen_pref_custom_dict_picker_summary"
+            app:dependency="pref_key_is_custom_dict"/>
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/pref_general_title">
+    <androidx.preference.PreferenceCategory app:title="@string/pref_general_title">
         <androidx.preference.EditTextPreference
-            android:defaultValue="45"
-            android:dialogTitle="@string/pref_password_dialog_title"
+            app:defaultValue="45"
+            app:dialogTitle="@string/pref_show_time_summary"
             android:inputType="number"
-            android:key="general_show_time"
-            android:summary="@string/pref_password_dialog_title"
-            android:title="@string/pref_password_title" />
+            app:key="general_show_time"
+            app:summary="@string/pref_show_time_summary"
+            app:title="@string/pref_show_time_title" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:title="@string/show_password_pref_title"
-            android:summary="@string/show_password_pref_summary"
-            android:key="show_password" />
+            app:defaultValue="true"
+            app:title="@string/show_password_pref_title"
+            app:summary="@string/show_password_pref_summary"
+            app:key="show_password" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:title="@string/show_extra_content_pref_title"
-            android:summary="@string/show_extra_content_pref_summary"
-            android:key="show_extra_content" />
+            app:defaultValue="true"
+            app:title="@string/show_extra_content_pref_title"
+            app:summary="@string/show_extra_content_pref_summary"
+            app:key="show_extra_content" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:dialogTitle="@string/pref_copy_dialog_title"
-            android:key="copy_on_decrypt"
-            android:summary="@string/pref_copy_dialog_title"
-            android:title="@string/pref_copy_title" />
+            app:defaultValue="true"
+            app:dialogTitle="@string/pref_copy_dialog_title"
+            app:key="copy_on_decrypt"
+            app:summary="@string/pref_copy_dialog_title"
+            app:title="@string/pref_copy_title" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:key="clear_after_copy"
-            android:summary="@string/prefs_clear_after_copy_summary"
-            android:title="@string/prefs_clear_after_copy_title" />
+            app:defaultValue="true"
+            app:key="clear_after_copy"
+            app:summary="@string/prefs_clear_after_copy_summary"
+            app:title="@string/prefs_clear_after_copy_title" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:key="filter_recursively"
-            android:summary="@string/pref_recursive_filter_hint"
-            android:title="@string/pref_recursive_filter" />
+            app:defaultValue="true"
+            app:key="filter_recursively"
+            app:summary="@string/pref_recursive_filter_hint"
+            app:title="@string/pref_recursive_filter" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="search_on_start"
-            android:summary="@string/pref_search_on_start_hint"
-            android:title="@string/pref_search_on_start" />
+            app:defaultValue="false"
+            app:key="search_on_start"
+            app:summary="@string/pref_search_on_start_hint"
+            app:title="@string/pref_search_on_start" />
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="search_from_root"
-            android:summary="@string/pref_search_from_root_hint"
-            android:title="@string/pref_search_from_root" />
+            app:defaultValue="false"
+            app:key="search_from_root"
+            app:summary="@string/pref_search_from_root_hint"
+            app:title="@string/pref_search_from_root" />
         <androidx.preference.ListPreference
-            android:title="@string/pref_sort_order_title"
-            android:defaultValue="FOLDER_FIRST"
-            android:key="sort_order"
-            android:entries="@array/sort_order_entries"
-            android:entryValues="@array/sort_order_values"
-            android:persistent="true" />
+            app:title="@string/pref_sort_order_title"
+            app:defaultValue="FOLDER_FIRST"
+            app:key="sort_order"
+            app:entries="@array/sort_order_entries"
+            app:entryValues="@array/sort_order_values"
+            app:persistent="true"
+            app:summary="%s" />
+        <androidx.preference.CheckBoxPreference
+            app:title="@string/pref_show_hidden_title"
+            app:summary="@string/pref_show_hidden_summary"
+            app:key="show_hidden_folders"
+            app:defaultValue="false"
+            app:persistent="true" />
         <androidx.preference.SwitchPreferenceCompat
-            android:title="@string/pref_show_hidden_title"
-            android:summary="@string/pref_show_hidden_summary"
-            android:key="show_hidden_folders"
-            android:defaultValue="false"
-            android:persistent="true" />
-        <androidx.preference.SwitchPreferenceCompat
-            android:key="biometric_auth"
-            android:title="@string/biometric_auth_title"
-            android:summary="@string/biometric_auth_summary" />
+            app:key="biometric_auth"
+            app:title="@string/biometric_auth_title"
+            app:summary="@string/biometric_auth_summary" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/pref_autofill_title">
-        <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:key="autofill_enable"
-            android:title="@string/pref_autofill_enable_title"/>
+    <androidx.preference.PreferenceCategory app:title="@string/pref_autofill_title">
+        <androidx.preference.SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="autofill_enable"
+            app:title="@string/pref_autofill_enable_title"/>
         <androidx.preference.Preference
-            android:key="autofill_apps"
-            android:title="@string/pref_autofill_apps_title"/>
+            app:key="autofill_apps"
+            app:title="@string/pref_autofill_apps_title"/>
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="true"
-            android:key="autofill_default"
-            android:summary="@string/pref_autofill_default_hint"
-            android:title="@string/pref_autofill_default_title"/>
+            app:defaultValue="true"
+            app:key="autofill_default"
+            app:summary="@string/pref_autofill_default_hint"
+            app:title="@string/pref_autofill_default_title"/>
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="autofill_always"
-            android:title="@string/pref_autofill_always_title"/>
+            app:defaultValue="false"
+            app:key="autofill_always"
+            app:title="@string/pref_autofill_always_title"/>
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="autofill_full_path"
-            android:summary="@string/pref_autofill_full_path_hint"
-            android:title="@string/pref_autofill_full_path_title"/>
+            app:defaultValue="false"
+            app:key="autofill_full_path"
+            app:summary="@string/pref_autofill_full_path_hint"
+            app:title="@string/pref_autofill_full_path_title"/>
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="@string/pref_misc_title">
+    <androidx.preference.PreferenceCategory app:title="@string/pref_misc_title">
         <androidx.preference.Preference
-            android:key="export_passwords"
-            android:title="@string/prefs_export_passwords_title"
-            android:summary="@string/prefs_export_passwords_summary"/>
+            app:key="export_passwords"
+            app:title="@string/prefs_export_passwords_title"
+            app:summary="@string/prefs_export_passwords_summary"/>
 
         <androidx.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="clear_clipboard_20x"
-            android:summary="@string/pref_clear_clipboard_hint"
-            android:title="@string/pref_clear_clipboard_title" />
+            app:defaultValue="false"
+            app:key="clear_clipboard_20x"
+            app:summary="@string/pref_clear_clipboard_hint"
+            app:title="@string/pref_clear_clipboard_title" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory>
         <androidx.preference.Preference
-            android:icon="@mipmap/ic_launcher_round"
-            android:key="app_version"
-            android:title="@string/prefs_version" />
+            app:icon="@mipmap/ic_launcher_round"
+            app:key="app_version"
+            app:title="@string/prefs_version" />
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
