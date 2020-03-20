@@ -263,7 +263,7 @@
     <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Keep Autofill disabled</string>
     <string name="oreo_autofill_warning_publisher_reenable_button">Re-enable Autofill</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Warning</string>
-    <string name="oreo_autofill_warning_publisher_dataset_summary">Tap for details</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Tap for details…</string>
     <string name="oreo_autofill_warning_publisher_dataset_title">Possible phishing attempt</string>
 
     <!-- Autofill -->
