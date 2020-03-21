@@ -81,8 +81,7 @@
     <string name="pref_provider_title">Sélection du prestataire OpenPGP</string>
     <string name="pref_key_title">Sélection de votre identifiant OpenPGP</string>
     <string name="pref_general_title">Général</string>
-    <string name="pref_password_title">Durée de disponibilité du mot de passe</string>
-    <string name="pref_password_dialog_title">Choisissez la durée pendant laquelle le mot de passe sera disponnible dans le presse-papier</string>
+    <string name="pref_show_time_title">Durée de disponibilité du mot de passe</string>
     <string name="pref_copy_title">Copie automatique du mot de passe</string>
     <string name="pref_copy_dialog_title">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
     <string name="ssh_key_success_dialog_title">Clef SSH importée</string>

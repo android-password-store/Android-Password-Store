@@ -43,7 +43,8 @@
 
         <activity
             android:name=".UserPreference"
-            android:parentActivityName=".PasswordStore" />
+            android:parentActivityName=".PasswordStore"
+            android:label="@string/action_settings" />
         <service
             android:name=".autofill.AutofillService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">

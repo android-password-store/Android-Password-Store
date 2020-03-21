@@ -60,7 +60,7 @@ class UserPreference : AppCompatActivity() {
 
     class PrefsFragment : PreferenceFragmentCompat() {
         private var autofillDependencies = listOf<Preference?>()
-        private var autoFillEnablePreference: CheckBoxPreference? = null
+        private var autoFillEnablePreference: SwitchPreferenceCompat? = null
         private lateinit var callingActivity: UserPreference
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -87,6 +87,7 @@ class UserPreference : AppCompatActivity() {
             val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
 
             // General preferences
+            val showTimePreference = findPreference<Preference>("general_show_time")
             val clearAfterCopyPreference = findPreference<CheckBoxPreference>("clear_after_copy")
             val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
 
@@ -115,7 +116,7 @@ class UserPreference : AppCompatActivity() {
             clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
-                    ?: HashSet<String>()).toTypedArray()
+                    ?: HashSet()).toTypedArray()
             keyPreference?.summary = if (selectedKeys.isEmpty()) {
                 this.resources.getString(R.string.pref_no_key_selected)
             } else {
@@ -270,17 +271,20 @@ class UserPreference : AppCompatActivity() {
                 }
             }
 
-            findPreference<Preference>("general_show_time")?.onPreferenceChangeListener =
-                    ChangeListener { _, newValue: Any? ->
-                        try {
-                            val isEnabled = newValue.toString().toInt() != 0
-                            clearAfterCopyPreference?.isVisible = isEnabled
-                            clearClipboard20xPreference?.isVisible = isEnabled
-                            true
-                        } catch (e: NumberFormatException) {
-                            false
-                        }
-                    }
+            showTimePreference?.onPreferenceChangeListener = ChangeListener { _, newValue: Any? ->
+                try {
+                    val isEnabled = newValue.toString().toInt() != 0
+                    clearAfterCopyPreference?.isVisible = isEnabled
+                    clearClipboard20xPreference?.isVisible = isEnabled
+                    true
+                } catch (e: NumberFormatException) {
+                    false
+                }
+            }
+
+            showTimePreference?.summaryProvider = Preference.SummaryProvider<Preference> {
+                getString(R.string.pref_show_time_summary, sharedPreferences.getString("general_show_time", "45"))
+            }
 
             findPreference<SwitchPreferenceCompat>("biometric_auth")?.apply {
                 val isFingerprintSupported = BiometricManager.from(requireContext()).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
@@ -290,6 +294,7 @@ class UserPreference : AppCompatActivity() {
                     summary = getString(R.string.biometric_auth_summary_error)
                 } else {
                     setOnPreferenceClickListener {
+                        isEnabled = false
                         val editor = sharedPreferences.edit()
                         val checked = isChecked
                         Authenticator(requireActivity()) { result ->
@@ -297,12 +302,14 @@ class UserPreference : AppCompatActivity() {
                                 is AuthenticationResult.Success -> {
                                     // Apply the changes
                                     editor.putBoolean("biometric_auth", checked)
+                                    isEnabled = true
                                 }
                                 else -> {
                                     // If any error occurs, revert back to the previous state. This
                                     // catch-all clause includes the cancellation case.
                                     editor.putBoolean("biometric_auth", !checked)
                                     isChecked = !checked
+                                    isEnabled = true
                                 }
                             }
                         }.authenticate()
@@ -541,7 +548,7 @@ class UserPreference : AppCompatActivity() {
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val path = if (split.size > 0) split[1] else split[0]
+                    val path = if (split.isNotEmpty()) split[1] else split[0]
                     val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
 
                     Timber.tag(TAG).d("Selected repository path is $repoPath")
@@ -689,7 +696,7 @@ class UserPreference : AppCompatActivity() {
         @JvmStatic
         private fun setCustomDictSummary(customDictPref: Preference?, uri: Uri) {
             val fileName = uri.path?.substring(uri.path?.lastIndexOf(":")!! + 1)
-            customDictPref?.summary = "Selected dictionary: " + fileName
+            customDictPref?.summary = "Selected dictionary: $fileName"
         }
     }
 }
