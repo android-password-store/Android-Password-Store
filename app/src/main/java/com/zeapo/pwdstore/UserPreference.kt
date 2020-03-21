@@ -20,6 +20,7 @@ import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
@@ -32,6 +33,8 @@ import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
+import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
+import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
@@ -40,6 +43,7 @@ import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
+import com.zeapo.pwdstore.utils.autofillManager
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -126,9 +130,7 @@ class UserPreference : AppCompatActivity() {
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
                     ?: false
 
-            // see if the autofill service is enabled and check the preference accordingly
-            autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
-            autofillDependencies.forEach { it?.isVisible = callingActivity.isServiceEnabled }
+            updateAutofillSettings()
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
@@ -241,24 +243,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             autoFillEnablePreference?.onPreferenceClickListener = ClickListener {
-                var isEnabled = callingActivity.isServiceEnabled
-                if (isEnabled) {
-                    startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                } else {
-                    MaterialAlertDialogBuilder(callingActivity)
-                            .setTitle(R.string.pref_autofill_enable_title)
-                            .setView(R.layout.autofill_instructions)
-                            .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                            }
-                            .setNegativeButton(R.string.dialog_cancel, null)
-                            .setOnDismissListener {
-                                isEnabled = callingActivity.isServiceEnabled
-                                autoFillEnablePreference?.isChecked = isEnabled
-                                autofillDependencies.forEach { it?.isVisible = isEnabled }
-                            }
-                            .show()
-                }
+                onEnableAutofillClick()
                 true
             }
 
@@ -363,11 +348,79 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
+        private fun updateAutofillSettings() {
+            val isAccessibilityServiceEnabled = callingActivity.isAccessibilityServiceEnabled
+            autoFillEnablePreference?.isChecked =
+                isAccessibilityServiceEnabled || callingActivity.isAutofillServiceEnabled
+            autofillDependencies.forEach {
+                it?.isVisible = isAccessibilityServiceEnabled
+            }
+        }
+
+        private fun onEnableAutofillClick() {
+            if (callingActivity.isAccessibilityServiceEnabled) {
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            } else if (callingActivity.isAutofillServiceEnabled) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    callingActivity.autofillManager!!.disableAutofillServices()
+                else
+                    throw IllegalStateException("isAutofillServiceEnabled == true, but Build.VERSION.SDK_INT < Build.VERSION_CODES.O")
+            } else {
+                val enableOreoAutofill = callingActivity.isAutofillServiceSupported
+                MaterialAlertDialogBuilder(callingActivity).run {
+                    setTitle(R.string.pref_autofill_enable_title)
+                    if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val layout =
+                            layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
+                        val supportedBrowsersTextView =
+                            layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
+                        supportedBrowsersTextView.text =
+                            getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
+                                separator = "\n"
+                            ) {
+                                val appLabel = it.first
+                                val supportDescription = when (it.second) {
+                                    BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
+                                    BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
+                                    BrowserAutofillSupportLevel.Fill -> getString(R.string.oreo_autofill_fill_support)
+                                    BrowserAutofillSupportLevel.FillAndSave -> getString(R.string.oreo_autofill_fill_and_save_support)
+                                }
+                                "$appLabel: $supportDescription"
+                            }
+                        setView(layout)
+                    } else {
+                        setView(R.layout.autofill_instructions)
+                    }
+                    setPositiveButton(R.string.dialog_ok) { _, _ ->
+                        val intent =
+                            if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
+                                    data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                                }
+                            } else {
+                                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                            }
+                        startActivity(intent)
+                    }
+                    setNegativeButton(R.string.dialog_cancel, null)
+                    setOnDismissListener {
+                        val isEnabled =
+                            if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                callingActivity.isAutofillServiceEnabled
+                            } else {
+                                callingActivity.isAccessibilityServiceEnabled
+                            }
+                        autoFillEnablePreference?.isChecked = isEnabled
+                        autofillDependencies.forEach { it?.isVisible = isEnabled }
+                    }
+                    show()
+                }
+            }
+        }
+
         override fun onResume() {
             super.onResume()
-            val isEnabled = callingActivity.isServiceEnabled
-            autoFillEnablePreference?.isChecked = isEnabled
-            autofillDependencies.forEach { it?.isVisible = isEnabled }
+            updateAutofillSettings()
         }
     }
 
@@ -480,16 +533,27 @@ class UserPreference : AppCompatActivity() {
         }
     }
 
-    // Returns whether the autofill service is enabled
-    private val isServiceEnabled: Boolean
+    private val isAccessibilityServiceEnabled: Boolean
         get() {
             val am = this
-                    .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+                .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             val runningServices = am
-                    .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
-                    .map { it.id.substringBefore("/") }
-                    .any { it == BuildConfig.APPLICATION_ID }
+                .map { it.id.substringBefore("/") }
+                .any { it == BuildConfig.APPLICATION_ID }
+        }
+
+    private val isAutofillServiceSupported: Boolean
+        get() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+            return autofillManager?.isAutofillSupported != null
+        }
+
+    private val isAutofillServiceEnabled: Boolean
+        get() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+            return autofillManager?.hasEnabledAutofillServices() == true
         }
 
     override fun onActivityResult(

@@ -5,6 +5,9 @@
 package com.zeapo.pwdstore.autofill.oreo
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 
@@ -151,4 +154,46 @@ fun getBrowserAutofillSupportInfoIfTrusted(
         multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
         saveFlag = getBrowserSaveFlag(appPackage)
     )
+}
+
+private val FLAKY_BROWSERS = listOf(
+    "com.android.chrome"
+)
+
+enum class BrowserAutofillSupportLevel {
+    None,
+    FlakyFill,
+    Fill,
+    FillAndSave
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getBrowserAutofillSupportLevel(
+    context: Context,
+    appPackage: String
+): BrowserAutofillSupportLevel {
+    val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
+    return when {
+        browserInfo == null -> BrowserAutofillSupportLevel.None
+        browserInfo.saveFlag != null -> BrowserAutofillSupportLevel.FillAndSave
+        appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
+        else -> BrowserAutofillSupportLevel.Fill
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getInstalledBrowsersWithAutofillSupportLevel(context: Context): List<Pair<String, BrowserAutofillSupportLevel>> {
+    val testWebIntent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse("http://example.org")
+    }
+    val installedBrowsers = context.packageManager.queryIntentActivities(
+        testWebIntent,
+        PackageManager.MATCH_ALL
+    )
+    return installedBrowsers.map {
+        it to getBrowserAutofillSupportLevel(context, it.activityInfo.packageName)
+    }.filter { it.first.isDefault || it.second != BrowserAutofillSupportLevel.None }.map {
+        context.packageManager.getApplicationLabel(it.first.activityInfo.applicationInfo)
+            .toString() to it.second
+    }
 }

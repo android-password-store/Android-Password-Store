@@ -152,7 +152,7 @@
     <string name="pref_file_first_sort_order">Files First</string>
     <string name="pref_type_independent_sort_order">Type Independent</string>
     <string name="pref_autofill_title">Autofill</string>
-    <string name="pref_autofill_enable_title">Enable autofill</string>
+    <string name="pref_autofill_enable_title">Enable Autofill</string>
     <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
     <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
     <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>
@@ -265,6 +265,10 @@
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Warning</string>
     <string name="oreo_autofill_warning_publisher_dataset_summary">Tap for details…</string>
     <string name="oreo_autofill_warning_publisher_dataset_title">Possible phishing attempt</string>
+    <string name="oreo_autofill_fill_and_save_support">Fill and save credentials</string>
+    <string name="oreo_autofill_fill_support">Fill credentials</string>
+    <string name="oreo_autofill_flaky_fill_support">Fill credentials (may require restarting the browser from time to time)</string>
+    <string name="oreo_autofill_no_support">No support</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
