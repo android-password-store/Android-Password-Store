@@ -81,13 +81,15 @@ private class Form(context: Context, structure: AssistStructure) {
 
     private var appPackage = structure.activityComponent.packageName
 
-    private val isBrowser = isTrustedBrowser(context, appPackage)
+    private val browserAutofillSupportInfo =
+        getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
+    private val isTrustedBrowser = browserAutofillSupportInfo != null
 
-    private val browserMultiOriginMethod = getBrowserMultiOriginMethod(appPackage)
-    private val singleOriginMode =
-        isBrowser && browserMultiOriginMethod == BrowserMultiOriginMethod.None
+    private val browserMultiOriginMethod =
+        browserAutofillSupportInfo?.multiOriginMethod ?: BrowserMultiOriginMethod.None
+    private val singleOriginMode = browserMultiOriginMethod == BrowserMultiOriginMethod.None
 
-    private val isBrowserSupportingSave = isBrowser && isBrowserWithSaveSupport(appPackage)
+    val saveFlags = browserAutofillSupportInfo?.saveFlag
 
     private val webOrigins = mutableSetOf<String>()
 
@@ -103,8 +105,6 @@ private class Form(context: Context, structure: AssistStructure) {
         d { "Origin: $formOrigin" }
     }
 
-    val saveFlags = if (isBrowserSupportingSave) getBrowserSaveFlag(appPackage) else null
-
     private fun parseStructure(structure: AssistStructure) {
         for (i in 0 until structure.windowNodeCount) {
             visitFormNode(structure.getWindowNodeAt(i).rootViewNode)
@@ -113,12 +113,13 @@ private class Form(context: Context, structure: AssistStructure) {
 
     private fun visitFormNode(node: AssistStructure.ViewNode, inheritedWebOrigin: String? = null) {
         trackOrigin(node)
-        val field = if (isBrowser && browserMultiOriginMethod == BrowserMultiOriginMethod.WebView) {
-            FormField(node, fieldIndex, true, inheritedWebOrigin)
-        } else {
-            check(inheritedWebOrigin == null)
-            FormField(node, fieldIndex, false)
-        }
+        val field =
+            if (browserMultiOriginMethod == BrowserMultiOriginMethod.WebView) {
+                FormField(node, fieldIndex, true, inheritedWebOrigin)
+            } else {
+                check(inheritedWebOrigin == null)
+                FormField(node, fieldIndex, false)
+            }
         if (field.isFillable || field.isSaveable) {
             d { "Relevant: $field" }
             relevantFields.add(field)
@@ -135,7 +136,7 @@ private class Form(context: Context, structure: AssistStructure) {
     private fun detectFieldsToFill() = autofillStrategy.apply(relevantFields, singleOriginMode)
 
     private fun trackOrigin(node: AssistStructure.ViewNode) {
-        if (!isBrowser) return
+        if (!isTrustedBrowser) return
         node.webOrigin?.let {
             if (it !in webOrigins) {
                 d { "Origin encountered: $it" }
@@ -154,7 +155,7 @@ private class Form(context: Context, structure: AssistStructure) {
 
     private fun determineFormOrigin(context: Context): FormOrigin? {
         if (scenario == null) return null
-        if (!isBrowser || webOrigins.isEmpty()) {
+        if (!isTrustedBrowser || webOrigins.isEmpty()) {
             // Security assumption: If a trusted browser includes no web origin in the provided
             // AssistStructure, then the form is a native browser form (e.g. for a sync password).
             // TODO: Support WebViews in apps via Digital Asset Links

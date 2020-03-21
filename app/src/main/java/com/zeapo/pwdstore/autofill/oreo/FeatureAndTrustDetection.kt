@@ -73,7 +73,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "org.torproject.torbrowser" to "IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg="
 )
 
-fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
+private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
     val expectedCertificateHash = TRUSTED_BROWSER_CERTIFICATE_HASH[appPackage] ?: return false
     val certificateHash = computeCertificatesHash(context, appPackage)
     return certificateHash == expectedCertificateHash
@@ -110,7 +110,7 @@ private val BROWSER_MULTI_ORIGIN_METHOD = mapOf(
     "org.torproject.torbrowser" to BrowserMultiOriginMethod.WebView
 )
 
-fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginMethod =
+private fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginMethod =
     BROWSER_MULTI_ORIGIN_METHOD[appPackage] ?: BrowserMultiOriginMethod.None
 
 /**
@@ -121,7 +121,7 @@ fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginMethod =
  * `FLAG_SAVE_ON_ALL_VIEW_INVISIBLE` to be set.
  */
 @RequiresApi(Build.VERSION_CODES.O)
-private val BROWSER_SAVE_METHOD = mapOf(
+private val BROWSER_SAVE_FLAG = mapOf(
     "com.duckduckgo.mobile.android" to 0,
     "org.mozilla.klar" to 0,
     "org.mozilla.focus" to 0,
@@ -134,7 +134,21 @@ private val BROWSER_SAVE_METHOD = mapOf(
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun isBrowserWithSaveSupport(appPackage: String): Boolean = getBrowserSaveFlag(appPackage) != null
+private fun getBrowserSaveFlag(appPackage: String): Int? = BROWSER_SAVE_FLAG[appPackage]
+
+data class BrowserAutofillSupportInfo(
+    val multiOriginMethod: BrowserMultiOriginMethod,
+    val saveFlag: Int?
+)
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getBrowserSaveFlag(appPackage: String): Int? = BROWSER_SAVE_METHOD[appPackage]
+fun getBrowserAutofillSupportInfoIfTrusted(
+    context: Context,
+    appPackage: String
+): BrowserAutofillSupportInfo? {
+    if (!isTrustedBrowser(context, appPackage)) return null
+    return BrowserAutofillSupportInfo(
+        multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
+        saveFlag = getBrowserSaveFlag(appPackage)
+    )
+}
