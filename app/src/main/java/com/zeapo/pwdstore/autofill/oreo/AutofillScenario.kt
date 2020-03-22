@@ -95,7 +95,7 @@ sealed class AutofillScenario<out T : Any> {
     abstract val passwordFieldsToFillOnGenerate: List<T>
     abstract val passwordFieldsToSave: List<T>
 
-    val fieldsToSave: List<T>
+    val fieldsToSave
         get() = listOfNotNull(username) + passwordFieldsToSave
 
     val allFields
@@ -130,15 +130,15 @@ data class ClassifiedAutofillScenario<T : Any>(
     val currentPassword: List<T>,
     val newPassword: List<T>
 ) : AutofillScenario<T>() {
-    override val allPasswordFields: List<T>
+    override val allPasswordFields
         get() = currentPassword + newPassword
-    override val passwordFieldsToFillOnMatch: List<T>
+    override val passwordFieldsToFillOnMatch
         get() = currentPassword
-    override val passwordFieldsToFillOnSearch: List<T>
+    override val passwordFieldsToFillOnSearch
         get() = currentPassword
-    override val passwordFieldsToFillOnGenerate: List<T>
+    override val passwordFieldsToFillOnGenerate
         get() = newPassword
-    override val passwordFieldsToSave: List<T>
+    override val passwordFieldsToSave
         get() = if (newPassword.isNotEmpty()) newPassword else currentPassword
 }
 
@@ -148,15 +148,15 @@ data class GenericAutofillScenario<T : Any>(
     override val fillUsername: Boolean,
     val genericPassword: List<T>
 ) : AutofillScenario<T>() {
-    override val allPasswordFields: List<T>
+    override val allPasswordFields
         get() = genericPassword
-    override val passwordFieldsToFillOnMatch: List<T>
+    override val passwordFieldsToFillOnMatch
         get() = if (genericPassword.size == 1) genericPassword else emptyList()
-    override val passwordFieldsToFillOnSearch: List<T>
+    override val passwordFieldsToFillOnSearch
         get() = if (genericPassword.size == 1) genericPassword else emptyList()
-    override val passwordFieldsToFillOnGenerate: List<T>
+    override val passwordFieldsToFillOnGenerate
         get() = genericPassword
-    override val passwordFieldsToSave: List<T>
+    override val passwordFieldsToSave
         get() = genericPassword
 }
 
