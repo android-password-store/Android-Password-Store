@@ -97,15 +97,15 @@ class SingleFieldMatcher(
                 val new = current.filter { tieBreaker(it, alreadyMatched) }
                 // skipping those tie breakers that are not satisfied for any remaining field...
                 if (new.isEmpty()) {
-                    d { "Tie breaker #$i: Didn't match any field; skipping" }
+                    d { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
                     continue
                 }
                 // and return if the available options have been narrowed to a single field.
                 if (new.size == 1) {
-                    d { "Tie breaker #$i: Success" }
+                    d { "Tie breaker #${i + 1}: Success" }
                     break
                 }
-                d { "Tie breaker #$i: Matched ${new.size} fields; continuing" }
+                d { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
                 current = new
             }
             listOf(current.singleOrNull() ?: return null)
@@ -127,15 +127,15 @@ class PairOfFieldsMatcher(
                 for ((i, tieBreaker) in tieBreakers.withIndex()) {
                     val new = current.filter { tieBreaker(it, alreadyMatched) }
                     if (new.isEmpty()) {
-                        d { "Tie breaker #$i: Didn't match any field; skipping" }
+                        d { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
                         continue
                     }
                     // and return if the available options have been narrowed to a single field.
                     if (new.size == 1) {
-                        d { "Tie breaker #$i: Success" }
+                        d { "Tie breaker #${i + 1}: Success" }
                         break
                     }
-                    d { "Tie breaker #$i: Matched ${new.size} fields; continuing" }
+                    d { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
                     current = new
                 }
                 current.singleOrNull()?.toList()
