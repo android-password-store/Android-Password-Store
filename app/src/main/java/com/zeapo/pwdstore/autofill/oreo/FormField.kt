@@ -89,10 +89,6 @@ class FormField(
 
     val autofillId: AutofillId = node.autofillId!!
 
-    // Basic autofill exclusion checks
-    private val hasAutofillTypeText = node.autofillType == View.AUTOFILL_TYPE_TEXT
-    private val isVisible = node.visibility == View.VISIBLE
-
     // Information for heuristics and exclusion rules based only on the current field
     private val htmlId = node.htmlInfo?.attributes?.firstOrNull { it.first == "id" }?.second
     private val resourceId = node.idEntry
@@ -159,6 +155,11 @@ class FormField(
     val hasAutocompleteHintNewPassword = htmlAutocomplete == "new-password"
     private val hasAutocompleteHintPassword =
         hasAutocompleteHintCurrentPassword || hasAutocompleteHintNewPassword
+
+    // Basic autofill exclusion checks
+    private val hasAutofillTypeText = node.autofillType == View.AUTOFILL_TYPE_TEXT
+    private val isVisible =
+        node.visibility == View.VISIBLE && htmlAttributes["aria-hidden"] != "true"
 
     // Hidden username fields are used to help password managers deal with two-step logins
     // See: https://www.chromium.org/developers/design-documents/form-styles-that-chromium-understands
