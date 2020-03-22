@@ -182,9 +182,9 @@ class FormField(
         shouldBeConsidered && (isAndroidPasswordField || isHtmlPasswordField)
     private val isCertainPasswordField =
         isPossiblePasswordField && (isHtmlPasswordField || hasAutofillHintPassword || hasAutocompleteHintPassword)
-    private val isLikelyPasswordField = isCertainPasswordField || (PASSWORD_HEURISTIC_TERMS.any {
+    private val isLikelyPasswordField = isPossiblePasswordField && (isCertainPasswordField || (PASSWORD_HEURISTIC_TERMS.any {
         fieldId.contains(it) || hint.contains(it) || htmlName.contains(it)
-    })
+    }))
     val passwordCertainty =
         if (isCertainPasswordField) CertaintyLevel.Certain else if (isLikelyPasswordField) CertaintyLevel.Likely else if (isPossiblePasswordField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
@@ -192,9 +192,9 @@ class FormField(
     private val isPossibleUsernameField = shouldBeConsidered && !isPossiblePasswordField
     private val isCertainUsernameField =
         isPossibleUsernameField && (hasAutofillHintUsername || hasAutocompleteHintUsername)
-    private val isLikelyUsernameField = isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.any {
+    private val isLikelyUsernameField = isPossibleUsernameField && (isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.any {
         fieldId.contains(it) || hint.contains(it) || htmlName.contains(it)
-    })
+    }))
     val usernameCertainty =
         if (isCertainUsernameField) CertaintyLevel.Certain else if (isLikelyUsernameField) CertaintyLevel.Likely else if (isPossibleUsernameField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
