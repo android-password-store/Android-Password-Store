@@ -113,9 +113,9 @@ sealed class AutofillScenario<out T : Any> {
                 // username field if possible.
                 listOfNotNull(username.takeIf { fillUsername }) + passwordFieldsToFill
             }
-            allPasswordFields.isEmpty() -> {
+            allPasswordFields.isEmpty() && action != AutofillAction.Generate -> {
                 // If there no password fields at all, we still offer to fill the username, e.g. in
-                // two-step login scenarios.
+                // two-step login scenarios, but we do not offer to generate a password.
                 listOfNotNull(username.takeIf { fillUsername })
             }
             else -> emptyList()
