@@ -96,6 +96,7 @@ class AutofillSaveActivity : Activity() {
                     "REPO_PATH" to repo.absolutePath,
                     "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)).absolutePath,
                     "OPERATION" to "ENCRYPT",
+                    "SUGGESTED_NAME" to username,
                     "SUGGESTED_PASS" to intent.getStringExtra(EXTRA_PASSWORD),
                     "SUGGESTED_EXTRA" to suggestedExtra,
                     "GENERATE_PASSWORD" to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
