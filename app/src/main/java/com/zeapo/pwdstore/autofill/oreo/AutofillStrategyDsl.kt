@@ -103,6 +103,7 @@ class SingleFieldMatcher(
                 // and return if the available options have been narrowed to a single field.
                 if (new.size == 1) {
                     d { "Tie breaker #${i + 1}: Success" }
+                    current = new
                     break
                 }
                 d { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
@@ -133,6 +134,7 @@ class PairOfFieldsMatcher(
                     // and return if the available options have been narrowed to a single field.
                     if (new.size == 1) {
                         d { "Tie breaker #${i + 1}: Success" }
+                        current = new
                         break
                     }
                     d { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
