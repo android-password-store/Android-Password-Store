@@ -143,5 +143,4 @@ val autofillStrategy = strategy {
             breakTieOnSingle { hasAutocompleteHintUsername }
         }
     }
-
 }
