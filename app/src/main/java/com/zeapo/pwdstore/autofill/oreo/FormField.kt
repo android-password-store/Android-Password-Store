@@ -175,11 +175,11 @@ class FormField(
     // Note: We still report excluded fields as fillable since they allow adjacency heuristics,
     // but ensure that they are never detected as password or username fields.
     private val hasExcludedTerm = EXCLUDED_TERMS.any { fieldId.contains(it) || hint.contains(it) }
-    private val shouldBeFilled = isFillable && !hasExcludedTerm
+    private val shouldBeConsidered = (isFillable || isSaveable) && !hasExcludedTerm
 
     // Password field heuristics (based only on the current field)
     private val isPossiblePasswordField =
-        shouldBeFilled && (isAndroidPasswordField || isHtmlPasswordField)
+        shouldBeConsidered && (isAndroidPasswordField || isHtmlPasswordField)
     private val isCertainPasswordField =
         isPossiblePasswordField && (isHtmlPasswordField || hasAutofillHintPassword || hasAutocompleteHintPassword)
     private val isLikelyPasswordField = isCertainPasswordField || (PASSWORD_HEURISTIC_TERMS.any {
@@ -189,7 +189,7 @@ class FormField(
         if (isCertainPasswordField) CertaintyLevel.Certain else if (isLikelyPasswordField) CertaintyLevel.Likely else if (isPossiblePasswordField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
     // Username field heuristics (based only on the current field)
-    private val isPossibleUsernameField = shouldBeFilled && !isPossiblePasswordField
+    private val isPossibleUsernameField = shouldBeConsidered && !isPossiblePasswordField
     private val isCertainUsernameField =
         isPossibleUsernameField && (hasAutofillHintUsername || hasAutocompleteHintUsername)
     private val isLikelyUsernameField = isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.any {
