@@ -134,4 +134,14 @@ val autofillStrategy = strategy {
             }
         }
     }
+
+    // Match a single focused username field without a password field.
+    rule(applyInSingleOriginMode = true) {
+        username {
+            takeSingle { usernameCertainty >= Likely && isFocused }
+            breakTieOnSingle { usernameCertainty >= Certain }
+            breakTieOnSingle { hasAutocompleteHintUsername }
+        }
+    }
+
 }
