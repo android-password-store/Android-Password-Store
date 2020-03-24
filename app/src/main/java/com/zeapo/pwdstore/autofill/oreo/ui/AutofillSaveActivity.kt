@@ -88,7 +88,6 @@ class AutofillSaveActivity : Activity() {
         super.onCreate(savedInstanceState)
         val repo = PasswordRepository.getRepositoryDirectory(applicationContext)
         val username = intent.getStringExtra(EXTRA_USERNAME)
-        val suggestedExtra = if (username != null) "username: $username" else null
 
         val saveIntent = Intent(this, PgpActivity::class.java).apply {
             putExtras(
@@ -98,7 +97,6 @@ class AutofillSaveActivity : Activity() {
                     "OPERATION" to "ENCRYPT",
                     "SUGGESTED_NAME" to username,
                     "SUGGESTED_PASS" to intent.getStringExtra(EXTRA_PASSWORD),
-                    "SUGGESTED_EXTRA" to suggestedExtra,
                     "GENERATE_PASSWORD" to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
                 )
             )

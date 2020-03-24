@@ -31,6 +31,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
@@ -49,11 +50,7 @@ import java.io.File
 import java.nio.charset.Charset
 import java.util.Date
 import kotlinx.android.synthetic.main.decrypt_layout.*
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_file_edit
-import kotlinx.android.synthetic.main.encrypt_layout.generate_password
+import kotlinx.android.synthetic.main.encrypt_layout.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -161,7 +158,40 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
                 title = getString(R.string.new_password_title)
                 crypto_password_category.text = getRelativePath(fullPath, repoPath)
-                suggestedName?.let { crypto_password_file_edit.setText(it) }
+                suggestedName?.let {
+                    crypto_password_file_edit.setText(it)
+                    encrypt_username.apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener {
+                            if (isChecked) {
+                                // User wants to enable username encryption, so we add it to the
+                                // encrypted extras as the first line.
+                                val username = crypto_password_file_edit.text!!.toString()
+                                val extras = "username:$username\n${crypto_extra_edit.text!!}"
+
+                                crypto_password_file_edit.setText("")
+                                crypto_extra_edit.setText(extras)
+                            } else {
+                                // User wants to disable username encryption, so we extract the
+                                // username from the encrypted extras and use it as the filename.
+                                val entry = PasswordEntry("PASSWORD\n${crypto_extra_edit.text!!}")
+                                val username = entry.username
+
+                                // username should not be null here by the logic in
+                                // updateEncryptUsernameState, but it could still happen due to
+                                // input lag.
+                                if (username != null) {
+                                    crypto_password_file_edit.setText(username)
+                                    crypto_extra_edit.setText(entry.extraContentWithoutUsername)
+                                }
+                            }
+                            updateEncryptUsernameState()
+                        }
+                    }
+                    crypto_password_file_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    crypto_extra_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    updateEncryptUsernameState()
+                }
                 suggestedPass?.let {
                     crypto_password_edit.setText(it)
                     crypto_password_edit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -172,6 +202,19 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     crypto_password_edit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
             }
+        }
+    }
+
+    fun updateEncryptUsernameState() {
+        encrypt_username.apply {
+            if (visibility != View.VISIBLE)
+                return
+            val hasUsernameInFileName = crypto_password_file_edit.text!!.toString().isNotBlank()
+            // Use PasswordEntry to parse extras for username
+            val entry = PasswordEntry("PLACEHOLDER\n${crypto_extra_edit.text!!}")
+            val hasUsernameInExtras = entry.hasUsername()
+            isEnabled = hasUsernameInFileName xor hasUsernameInExtras
+            isChecked = hasUsernameInExtras
         }
     }
 

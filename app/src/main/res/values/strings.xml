@@ -101,6 +101,7 @@
     <string name="crypto_name_hint">Name</string>
     <string name="crypto_pass_label">Password</string>
     <string name="crypto_extra_label">Extra content</string>
+    <string name="crypto_encrypt_username_label">Encrypt username</string>
     <string name="crypto_select">Select</string>
     <string name="crypto_cancel">Cancel</string>
     <string name="crypto_save">Save</string>
