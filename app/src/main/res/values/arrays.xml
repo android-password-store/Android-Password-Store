@@ -43,7 +43,11 @@
         <item>9</item>
         <item>10</item>
     </string-array>
-    <string-array name="pwgen_provider">
+    <string-array name="pwgen_provider_labels">
+        <item>Classic</item>
+        <item>XKPasswd</item>
+    </string-array>
+    <string-array name="pwgen_provider_values">
         <item>classic</item>
         <item>xkpasswd</item>
     </string-array>

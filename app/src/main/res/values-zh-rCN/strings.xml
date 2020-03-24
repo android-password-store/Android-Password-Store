@@ -65,8 +65,7 @@
     <string name="pref_git_delete_repo_summary">删除本地的 (隐藏) Repo</string>
     <string name="pref_git_title">Git</string>
     <string name="pref_key_title">选择 OpenPGP Key Id</string>
-    <string name="pref_password_dialog_title">选择密码在剪贴板中保存的时间限制</string>
-    <string name="pref_password_title">密码保存时限</string>
+    <string name="pref_show_time_title">密码保存时限</string>
     <string name="pref_provider_title">选择 OpenPGP 应用</string>
     <string name="pref_recursive_filter">搜索子文件夹</string>
     <string name="pref_recursive_filter_hint">在当前目录的子目录中查找密码</string>
