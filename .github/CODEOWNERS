@@ -1,2 +1,7 @@
 # General rule for all code base
 * @msfjarvis @zidhuss @Skrilltrax
+
+# Oreo Autofill
+app/src/main/java/com/zeapo/pwdstore/autofill/oreo/ @FabianHenneke
+*oreo_autofill* @FabianHenneke
+scripts/hash_browser_app.sh @FabianHenneke
