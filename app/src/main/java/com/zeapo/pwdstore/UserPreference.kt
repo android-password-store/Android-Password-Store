@@ -6,7 +6,6 @@ package com.zeapo.pwdstore
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutManager
 import android.net.Uri
