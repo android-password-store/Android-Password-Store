@@ -26,6 +26,12 @@
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Autofill support with installed browsers:"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/supportedBrowsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
