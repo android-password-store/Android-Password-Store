@@ -77,7 +77,7 @@ class FormField(
             "url_bar", // Chrome/Edge/Firefox address bar
             "url_field", // Opera address bar
             "location_bar_edit_text", // Samsung address bar
-            "search", "find"
+            "search", "find", "captcha"
         )
         private val PASSWORD_HEURISTIC_TERMS = listOf(
             "password", "pwd", "pswd", "passwort"
