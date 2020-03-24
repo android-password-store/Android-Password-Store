@@ -120,7 +120,7 @@ private class Form(context: Context, structure: AssistStructure) {
                 check(inheritedWebOrigin == null)
                 FormField(node, fieldIndex, false)
             }
-        if (field.isFillable || field.isSaveable) {
+        if (field.relevantField) {
             d { "Relevant: $field" }
             relevantFields.add(field)
             fieldIndex++

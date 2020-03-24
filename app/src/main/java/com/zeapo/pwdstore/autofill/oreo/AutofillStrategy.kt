@@ -47,6 +47,25 @@ val autofillStrategy = strategy {
         }
     }
 
+    // Match a single focused current password field and hidden username field with autocomplete
+    // hint. This configuration is commonly used in two-step login flows to allow password managers
+    // to save the username.
+    // See: https://www.chromium.org/developers/design-documents/form-styles-that-chromium-understands
+    // Note: The username is never filled in this scenario since usernames are generally only filled
+    // in visible fields.
+    rule {
+        username(matchHidden = true) {
+            takeSingle {
+                couldBeTwoStepHiddenUsername
+            }
+        }
+        currentPassword {
+            takeSingle { alreadyMatched ->
+                hasAutocompleteHintCurrentPassword && isFocused
+            }
+        }
+    }
+
     // Match a single current password field and optional username field with autocomplete hint.
     rule {
         currentPassword {
@@ -131,6 +150,20 @@ val autofillStrategy = strategy {
         username(optional = true) {
             takeSingle { alreadyMatched ->
                 usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull())
+            }
+        }
+    }
+
+    // Match a focused username field with autocomplete hint directly followed by a hidden password
+    // field, which is a common scenario in two-step login flows. No tie breakers are used to limit
+    // filling of hidden password fields to scenarios where this is clearly warranted.
+    rule {
+        username {
+            takeSingle { hasAutocompleteHintUsername && isFocused }
+        }
+        currentPassword(matchHidden = true) {
+            takeSingle { alreadyMatched ->
+                directlyFollows(alreadyMatched.singleOrNull()) && couldBeTwoStepHiddenPassword
             }
         }
     }

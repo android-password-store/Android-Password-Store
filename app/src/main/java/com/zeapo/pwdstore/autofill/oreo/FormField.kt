@@ -136,20 +136,16 @@ class FormField(
 
     // Autofill hint detection for native fields
     private val autofillHints = node.autofillHints?.filter { isSupportedHint(it) } ?: emptyList()
-    private val notExcludedByAutofillHints =
-        if (autofillHints.isEmpty()) true else autofillHints.intersect(HINTS_FILLABLE).isNotEmpty()
+    private val excludedByAutofillHints =
+        if (autofillHints.isEmpty()) false else autofillHints.intersect(HINTS_FILLABLE).isEmpty()
     private val hasAutofillHintPassword = autofillHints.intersect(HINTS_PASSWORD).isNotEmpty()
     private val hasAutofillHintUsername = autofillHints.intersect(HINTS_USERNAME).isNotEmpty()
 
     // W3C autocomplete hint detection for HTML fields
     private val htmlAutocomplete = htmlAttributes["autocomplete"]
 
-    // Since many site put autocomplete=off on login forms for compliance reasons or since they are
-    // worried of the user's browser automatically (i.e., without any user interaction) filling
-    // them, which we never do, we choose to ignore this hint.
-    // TODO: Revisit this decision in the future and potentially use the following instead:
-    // private val notExcludedByAutocompleteHints = htmlAutocomplete != "off"
-    private val notExcludedByAutocompleteHints = true
+    // Ignored for now, see excludedByHints
+    private val excludedByAutocompleteHint = htmlAutocomplete == "off"
     val hasAutocompleteHintUsername = htmlAutocomplete == "username"
     val hasAutocompleteHintCurrentPassword = htmlAutocomplete == "current-password"
     val hasAutocompleteHintNewPassword = htmlAutocomplete == "new-password"
@@ -158,28 +154,37 @@ class FormField(
 
     // Basic autofill exclusion checks
     private val hasAutofillTypeText = node.autofillType == View.AUTOFILL_TYPE_TEXT
-    private val isVisible =
-        node.visibility == View.VISIBLE && htmlAttributes["aria-hidden"] != "true"
+    val isVisible = node.visibility == View.VISIBLE && htmlAttributes["aria-hidden"] != "true"
 
-    // Hidden username fields are used to help password managers deal with two-step logins
+    // Hidden username fields are used to help password managers save credentials in two-step login
+    // flows.
     // See: https://www.chromium.org/developers/design-documents/form-styles-that-chromium-understands
-    private val isHiddenUsernameField = !isVisible && isHtmlTextField && hasAutocompleteHintUsername
+    val couldBeTwoStepHiddenUsername = !isVisible && isHtmlTextField && hasAutocompleteHintUsername
 
-    private val notExcludedByHints = notExcludedByAutofillHints && notExcludedByAutocompleteHints
+    // Some websites with two-step login flows offer hidden password fields to fill the password
+    // already in the first step. Thus, we delegate the decision about filling invisible password
+    // fields to the fill rules and only exclude those fields that have incompatible autocomplete
+    // hint.
+    val couldBeTwoStepHiddenPassword =
+        !isVisible && isHtmlPasswordField && (hasAutocompleteHintCurrentPassword || htmlAutocomplete == null)
 
-    val isFillable = isVisible && isTextField && hasAutofillTypeText && notExcludedByHints
-    val isSaveable =
-        (isVisible || isHiddenUsernameField) && isTextField && hasAutofillTypeText && notExcludedByHints
+    // Since many site put autocomplete=off on login forms for compliance reasons or since they are
+    // worried of the user's browser automatically (i.e., without any user interaction) filling
+    // them, which we never do, we choose to ignore the value of excludedByAutocompleteHint.
+    // TODO: Revisit this decision in the future
+    private val excludedByHints = excludedByAutofillHints
+
+    val relevantField = isTextField && hasAutofillTypeText && !excludedByHints
 
     // Exclude fields based on hint and resource ID
-    // Note: We still report excluded fields as fillable since they allow adjacency heuristics,
+    // Note: We still report excluded fields as relevant since they count for adjacency heuristics,
     // but ensure that they are never detected as password or username fields.
     private val hasExcludedTerm = EXCLUDED_TERMS.any { fieldId.contains(it) || hint.contains(it) }
-    private val shouldBeConsidered = (isFillable || isSaveable) && !hasExcludedTerm
+    private val notExcluded = relevantField && !hasExcludedTerm
 
     // Password field heuristics (based only on the current field)
     private val isPossiblePasswordField =
-        shouldBeConsidered && (isAndroidPasswordField || isHtmlPasswordField)
+        notExcluded && (isAndroidPasswordField || isHtmlPasswordField)
     private val isCertainPasswordField =
         isPossiblePasswordField && (isHtmlPasswordField || hasAutofillHintPassword || hasAutocompleteHintPassword)
     private val isLikelyPasswordField = isPossiblePasswordField && (isCertainPasswordField || (PASSWORD_HEURISTIC_TERMS.any {
@@ -189,7 +194,7 @@ class FormField(
         if (isCertainPasswordField) CertaintyLevel.Certain else if (isLikelyPasswordField) CertaintyLevel.Likely else if (isPossiblePasswordField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
     // Username field heuristics (based only on the current field)
-    private val isPossibleUsernameField = shouldBeConsidered && !isPossiblePasswordField
+    private val isPossibleUsernameField = notExcluded && !isPossiblePasswordField
     private val isCertainUsernameField =
         isPossibleUsernameField && (hasAutofillHintUsername || hasAutocompleteHintUsername)
     private val isLikelyUsernameField = isPossibleUsernameField && (isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.any {

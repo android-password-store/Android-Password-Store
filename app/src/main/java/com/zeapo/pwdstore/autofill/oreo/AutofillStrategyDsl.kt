@@ -155,7 +155,8 @@ class AutofillRule private constructor(
     data class AutofillRuleMatcher(
         val type: FillableFieldType,
         val matcher: FieldMatcher,
-        val optional: Boolean
+        val optional: Boolean,
+        val matchHidden: Boolean
     )
 
     enum class FillableFieldType {
@@ -171,24 +172,26 @@ class AutofillRule private constructor(
         private val matchers = mutableListOf<AutofillRuleMatcher>()
         var name: String? = null
 
-        fun username(optional: Boolean = false, block: SingleFieldMatcher.Builder.() -> Unit) {
+        fun username(optional: Boolean = false, matchHidden: Boolean = false, block: SingleFieldMatcher.Builder.() -> Unit) {
             require(matchers.none { it.type == FillableFieldType.Username }) { "Every rule block can only have at most one username block" }
             matchers.add(
                 AutofillRuleMatcher(
                     type = FillableFieldType.Username,
                     matcher = SingleFieldMatcher.Builder().apply(block).build(),
-                    optional = optional
+                    optional = optional,
+                    matchHidden = matchHidden
                 )
             )
         }
 
-        fun currentPassword(optional: Boolean = false, block: FieldMatcher.Builder.() -> Unit) {
+        fun currentPassword(optional: Boolean = false, matchHidden: Boolean = false, block: FieldMatcher.Builder.() -> Unit) {
             require(matchers.none { it.type == FillableFieldType.GenericPassword }) { "Every rule block can only have either genericPassword or {current,new}Password blocks" }
             matchers.add(
                 AutofillRuleMatcher(
                     type = FillableFieldType.CurrentPassword,
                     matcher = FieldMatcher.Builder().apply(block).build(),
-                    optional = optional
+                    optional = optional,
+                    matchHidden = matchHidden
                 )
             )
         }
@@ -199,7 +202,8 @@ class AutofillRule private constructor(
                 AutofillRuleMatcher(
                     type = FillableFieldType.NewPassword,
                     matcher = FieldMatcher.Builder().apply(block).build(),
-                    optional = optional
+                    optional = optional,
+                    matchHidden = false
                 )
             )
         }
@@ -214,7 +218,8 @@ class AutofillRule private constructor(
                 AutofillRuleMatcher(
                     type = FillableFieldType.GenericPassword,
                     matcher = FieldMatcher.Builder().apply(block).build(),
-                    optional = optional
+                    optional = optional,
+                    matchHidden = false
                 )
             )
         }
@@ -223,6 +228,7 @@ class AutofillRule private constructor(
             if (applyInSingleOriginMode) {
                 require(matchers.none { it.matcher is PairOfFieldsMatcher }) { "Rules with applyInSingleOriginMode set to true must only match single fields" }
                 require(matchers.filter { it.type != FillableFieldType.Username }.size <= 1) { "Rules with applyInSingleOriginMode set to true must only match at most one password field" }
+                require(matchers.none { it.matchHidden }) { "Rules with applyInSingleOriginMode set to true must not fill into hidden fields" }
             }
             return AutofillRule(
                 matchers, applyInSingleOriginMode, name ?: "Rule #$ruleId"
@@ -242,11 +248,12 @@ class AutofillRule private constructor(
         d { "$name: Applying..." }
         val scenarioBuilder = AutofillScenario.Builder<FormField>()
         val alreadyMatched = mutableListOf<FormField>()
-        for ((type, matcher, optional) in matchers) {
-            val matchResult = when (type) {
-                FillableFieldType.Username -> matcher.match(allUsername, alreadyMatched)
-                else -> matcher.match(allPassword, alreadyMatched)
-            } ?: if (optional) {
+        for ((type, matcher, optional, matchHidden) in matchers) {
+            val fieldsToMatchOn = when (type) {
+                FillableFieldType.Username -> allUsername
+                else -> allPassword
+            }.filter { matchHidden || it.isVisible }
+            val matchResult = matcher.match(fieldsToMatchOn, alreadyMatched) ?: if (optional) {
                 d { "$name: Skipping optional $type matcher" }
                 continue
             } else {
@@ -258,8 +265,8 @@ class AutofillRule private constructor(
                 FillableFieldType.Username -> {
                     check(matchResult.size == 1 && scenarioBuilder.username == null)
                     scenarioBuilder.username = matchResult.single()
-                    // E.g. hidden username fields can be saved but not filled.
-                    scenarioBuilder.fillUsername = scenarioBuilder.username?.isFillable == true
+                    // Hidden username fields should be saved but not filled.
+                    scenarioBuilder.fillUsername = scenarioBuilder.username!!.isVisible == true
                 }
                 FillableFieldType.CurrentPassword -> scenarioBuilder.currentPassword.addAll(
                     matchResult
