@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.preference.PreferenceCategory app:title="@string/pref_autofill_title">
+        <androidx.preference.SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="autofill_enable"
+            app:title="@string/pref_autofill_enable_title"/>
+        <androidx.preference.Preference
+            app:key="autofill_apps"
+            app:title="@string/pref_autofill_apps_title"/>
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:key="autofill_default"
+            app:summary="@string/pref_autofill_default_hint"
+            app:title="@string/pref_autofill_default_title"/>
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:key="autofill_always"
+            app:title="@string/pref_autofill_always_title"/>
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:key="autofill_full_path"
+            app:summary="@string/pref_autofill_full_path_hint"
+            app:title="@string/pref_autofill_full_path_title"/>
+    </androidx.preference.PreferenceCategory>
+
     <androidx.preference.PreferenceCategory app:title="@string/pref_git_title">
         <androidx.preference.Preference
             app:key="git_server_info"
@@ -132,30 +156,6 @@
             app:key="biometric_auth"
             app:title="@string/biometric_auth_title"
             app:summary="@string/biometric_auth_summary" />
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory app:title="@string/pref_autofill_title">
-        <androidx.preference.SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="autofill_enable"
-            app:title="@string/pref_autofill_enable_title"/>
-        <androidx.preference.Preference
-            app:key="autofill_apps"
-            app:title="@string/pref_autofill_apps_title"/>
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
-            app:key="autofill_default"
-            app:summary="@string/pref_autofill_default_hint"
-            app:title="@string/pref_autofill_default_title"/>
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:key="autofill_always"
-            app:title="@string/pref_autofill_always_title"/>
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:key="autofill_full_path"
-            app:summary="@string/pref_autofill_full_path_hint"
-            app:title="@string/pref_autofill_full_path_title"/>
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory app:title="@string/pref_misc_title">

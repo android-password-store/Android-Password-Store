@@ -20,7 +20,7 @@ class PasswordEntry(private val content: String) {
     val totpAlgorithm: String
     val hotpSecret: String?
     val hotpCounter: Long?
-    var extraContent: String? = null
+    var extraContent: String
         private set
     private var isIncremented = false
 
@@ -41,7 +41,7 @@ class PasswordEntry(private val content: String) {
     }
 
     fun hasExtraContent(): Boolean {
-        return !extraContent.isNullOrEmpty()
+        return extraContent.isNotEmpty()
     }
 
     fun hasUsername(): Boolean {
@@ -63,19 +63,30 @@ class PasswordEntry(private val content: String) {
     fun incrementHotp() {
         content.split("\n".toRegex()).forEach { line ->
             if (line.startsWith("otpauth://hotp/")) {
-                extraContent = extraContent?.replaceFirst("counter=[0-9]+".toRegex(), "counter=${hotpCounter!! + 1}")
+                extraContent = extraContent.replaceFirst("counter=[0-9]+".toRegex(), "counter=${hotpCounter!! + 1}")
                 isIncremented = true
             }
         }
     }
 
+    val extraContentWithoutUsername by lazy {
+        var usernameFound = false
+        extraContent.splitToSequence("\n").filter { line ->
+            if (usernameFound)
+                return@filter true
+            if (USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) }) {
+                usernameFound = true
+                return@filter false
+            }
+            true
+        }.joinToString(separator = "\n")
+    }
+
     private fun findUsername(): String? {
-        val extraLines = extraContent!!.split("\n".toRegex())
-        for (line in extraLines) {
-            for (field in USERNAME_FIELDS) {
-                if (line.toLowerCase().startsWith("$field:", ignoreCase = true)) {
-                    return line.split(": *".toRegex(), 2).toTypedArray()[1]
-                }
+        extraContent.splitToSequence("\n").forEach { line ->
+            for (prefix in USERNAME_FIELDS) {
+                if (line.startsWith(prefix, ignoreCase = true))
+                    return line.substring(prefix.length).trimStart()
             }
         }
         return null
@@ -152,6 +163,6 @@ class PasswordEntry(private val content: String) {
 
     companion object {
 
-        private val USERNAME_FIELDS = arrayOf("login", "username")
+        private val USERNAME_FIELDS = arrayOf("login:", "username:")
     }
 }

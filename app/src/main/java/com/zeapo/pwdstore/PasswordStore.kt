@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.GitActivity
@@ -650,10 +651,21 @@ class PasswordStore : AppCompatActivity() {
                                     .setPositiveButton("Okay", null)
                                     .show()
                         }
+                        val sourceDestinationMap = if (source.isDirectory) {
+                            check(destinationFile.isDirectory) { "Moving a directory to a file" }
+                            // Recursively list all files (not directories) below `source`, then
+                            // obtain the corresponding target file by resolving the relative path
+                            // starting at the destination folder.
+                            val sourceFiles = FileUtils.listFiles(source, null, true)
+                            sourceFiles.associateWith { destinationFile.resolve(it.relativeTo(source)) }
+                        } else {
+                            mapOf(source to destinationFile)
+                        }
                         if (!source.renameTo(destinationFile)) {
                             // TODO this should show a warning to the user
                             Timber.tag(TAG).e("Something went wrong while moving.")
                         } else {
+                            AutofillMatcher.updateMatchesFor(this, sourceDestinationMap)
                             commitChange(this.resources
                                     .getString(
                                             R.string.git_commit_move_text,
