@@ -115,7 +115,7 @@ class SingleFieldMatcher(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class PairOfFieldsMatcher(
+private class PairOfFieldsMatcher(
     private val take: (Pair<FormField, FormField>, List<FormField>) -> Boolean,
     private val tieBreakers: List<(Pair<FormField, FormField>, List<FormField>) -> Boolean>
 ) : FieldMatcher {
@@ -284,7 +284,7 @@ class AutofillRule private constructor(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillStrategy(private val rules: List<AutofillRule>) {
+class AutofillStrategy private constructor(private val rules: List<AutofillRule>) {
 
     @AutofillDsl
     class Builder {
