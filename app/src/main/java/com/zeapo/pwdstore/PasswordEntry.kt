@@ -70,7 +70,10 @@ class PasswordEntry(private val content: String) {
     }
 
     private fun findUsername(): String? {
-        val extraLines = extraContent.split("\n".toRegex())
+        extraContent.splitToSequence("\n").forEach { line ->
+            for (prefix in USERNAME_FIELDS) {
+                if (line.startsWith(prefix, ignoreCase = true))
+                    return line.substring(prefix.length).trimStart()
             }
         }
         return null
@@ -147,6 +150,6 @@ class PasswordEntry(private val content: String) {
 
     companion object {
 
-        private val USERNAME_FIELDS = arrayOf("login", "username")
+        private val USERNAME_FIELDS = arrayOf("login:", "username:")
     }
 }
