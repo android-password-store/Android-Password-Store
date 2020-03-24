@@ -69,6 +69,19 @@ class PasswordEntry(private val content: String) {
         }
     }
 
+    val extraContentWithoutUsername by lazy {
+        var usernameFound = false
+        extraContent.splitToSequence("\n").filter { line ->
+            if (usernameFound)
+                return@filter true
+            if (USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) }) {
+                usernameFound = true
+                return@filter false
+            }
+            true
+        }.joinToString(separator = "\n")
+    }
+
     private fun findUsername(): String? {
         extraContent.splitToSequence("\n").forEach { line ->
             for (prefix in USERNAME_FIELDS) {
