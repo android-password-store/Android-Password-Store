@@ -21,7 +21,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPublisherChangedException
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.autofill.oreo.computeCertificatesHash
-import kotlinx.android.synthetic.main.activity_oreo_publisher_changed.*
+import kotlinx.android.synthetic.main.activity_oreo_autofill_publisher_changed.*
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillPublisherChangedActivity : AppCompatActivity() {
@@ -48,7 +48,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_oreo_publisher_changed)
+        setContentView(R.layout.activity_oreo_autofill_publisher_changed)
         setFinishOnTouchOutside(true)
 
         appPackage = intent.getStringExtra(EXTRA_APP_PACKAGE) ?: run {
