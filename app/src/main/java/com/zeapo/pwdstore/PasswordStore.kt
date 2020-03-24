@@ -651,7 +651,7 @@ class PasswordStore : AppCompatActivity() {
                                     .setPositiveButton("Okay", null)
                                     .show()
                         }
-                        val sourceDestinationMap: Map<File, File> = if (source.isDirectory) {
+                        val sourceDestinationMap = if (source.isDirectory) {
                             check(destinationFile.isDirectory) { "Moving a directory to a file" }
                             // Recursively list all files (not directories) below `source`, then
                             // obtain the corresponding target file by resolving the relative path

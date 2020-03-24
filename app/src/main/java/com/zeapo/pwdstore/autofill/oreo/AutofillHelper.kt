@@ -67,7 +67,7 @@ fun computeCertificatesHash(context: Context, appPackage: String): String {
  */
 val AssistStructure.ViewNode.webOrigin: String?
     @RequiresApi(Build.VERSION_CODES.O) get() = webDomain?.let { domain ->
-        val scheme = (if (Build.VERSION.SDK_INT >= 28) webScheme else null) ?: "http"
+        val scheme = (if (Build.VERSION.SDK_INT >= 28) webScheme else null) ?: "https"
         "$scheme://$domain"
     }
 
