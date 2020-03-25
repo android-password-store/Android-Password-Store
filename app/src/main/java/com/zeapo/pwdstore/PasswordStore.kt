@@ -499,6 +499,8 @@ class PasswordStore : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
                 .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
+                    val filesToDelete = FileUtils.listFiles(item.file, null, true)
+                    AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                     item.file.deleteRecursively()
                     adapter.remove(position)
                     it.remove()
@@ -665,7 +667,7 @@ class PasswordStore : AppCompatActivity() {
                             // TODO this should show a warning to the user
                             Timber.tag(TAG).e("Something went wrong while moving.")
                         } else {
-                            AutofillMatcher.updateMatchesFor(this, sourceDestinationMap)
+                            AutofillMatcher.updateMatches(this, sourceDestinationMap)
                             commitChange(this.resources
                                     .getString(
                                             R.string.git_commit_move_text,
