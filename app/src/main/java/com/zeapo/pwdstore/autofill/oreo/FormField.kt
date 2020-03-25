@@ -80,7 +80,7 @@ class FormField(
             "search", "find", "captcha"
         )
         private val PASSWORD_HEURISTIC_TERMS = listOf(
-            "password", "pwd", "pswd", "passwort"
+            "pass", "pwd", "pswd"
         )
         private val USERNAME_HEURISTIC_TERMS = listOf(
             "user", "name", "email"
