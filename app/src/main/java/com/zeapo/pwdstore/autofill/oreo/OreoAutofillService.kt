@@ -18,6 +18,7 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.BuildConfig
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSaveActivity
+import com.zeapo.pwdstore.utils.hasFlag
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OreoAutofillService : AutofillService() {
@@ -62,7 +63,10 @@ class OreoAutofillService : AutofillService() {
             }
             return
         }
-        val formToFill = FillableForm.parseAssistStructure(this, structure) ?: run {
+        val formToFill = FillableForm.parseAssistStructure(
+            this, structure,
+            isManualRequest = request.flags hasFlag FillRequest.FLAG_MANUAL_REQUEST
+        ) ?: run {
             d { "Form cannot be filled" }
             callback.onSuccess(null)
             return

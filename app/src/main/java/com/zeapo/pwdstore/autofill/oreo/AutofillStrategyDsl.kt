@@ -149,6 +149,7 @@ private class PairOfFieldsMatcher(
 class AutofillRule private constructor(
     private val matchers: List<AutofillRuleMatcher>,
     private val applyInSingleOriginMode: Boolean,
+    private val applyOnManualRequestOnly: Boolean,
     private val name: String
 ) {
 
@@ -164,7 +165,10 @@ class AutofillRule private constructor(
     }
 
     @AutofillDsl
-    class Builder(private val applyInSingleOriginMode: Boolean) {
+    class Builder(
+        private val applyInSingleOriginMode: Boolean,
+        private val applyOnManualRequestOnly: Boolean
+    ) {
         companion object {
             private var ruleId = 1
         }
@@ -231,18 +235,23 @@ class AutofillRule private constructor(
                 require(matchers.none { it.matchHidden }) { "Rules with applyInSingleOriginMode set to true must not fill into hidden fields" }
             }
             return AutofillRule(
-                matchers, applyInSingleOriginMode, name ?: "Rule #$ruleId"
+                matchers, applyInSingleOriginMode, applyOnManualRequestOnly, name ?: "Rule #$ruleId"
             ).also { ruleId++ }
         }
     }
 
-    fun apply(
+    fun match(
         allPassword: List<FormField>,
         allUsername: List<FormField>,
-        singleOriginMode: Boolean
+        singleOriginMode: Boolean,
+        isManualRequest: Boolean
     ): AutofillScenario<FormField>? {
         if (singleOriginMode && !applyInSingleOriginMode) {
             d { "$name: Skipped in single origin mode" }
+            return null
+        }
+        if (!isManualRequest && applyOnManualRequestOnly) {
+            d { "$name: Skipped since not a manual request" }
             return null
         }
         d { "$name: Applying..." }
@@ -299,15 +308,25 @@ class AutofillStrategy private constructor(private val rules: List<AutofillRule>
 
         fun rule(
             applyInSingleOriginMode: Boolean = false,
+            applyOnManualRequestOnly: Boolean = false,
             block: AutofillRule.Builder.() -> Unit
         ) {
-            rules.add(AutofillRule.Builder(applyInSingleOriginMode).apply(block).build())
+            rules.add(
+                AutofillRule.Builder(
+                    applyInSingleOriginMode = applyInSingleOriginMode,
+                    applyOnManualRequestOnly = applyOnManualRequestOnly
+                ).apply(block).build()
+            )
         }
 
         fun build() = AutofillStrategy(rules)
     }
 
-    fun apply(fields: List<FormField>, multiOriginSupport: Boolean): AutofillScenario<FormField>? {
+    fun match(
+        fields: List<FormField>,
+        singleOriginMode: Boolean,
+        isManualRequest: Boolean
+    ): AutofillScenario<FormField>? {
         val possiblePasswordFields =
             fields.filter { it.passwordCertainty >= CertaintyLevel.Possible }
         d { "Possible password fields: ${possiblePasswordFields.size}" }
@@ -317,7 +336,12 @@ class AutofillStrategy private constructor(private val rules: List<AutofillRule>
         // Return the result of the first rule that matches
         d { "Rules: ${rules.size}" }
         for (rule in rules) {
-            return rule.apply(possiblePasswordFields, possibleUsernameFields, multiOriginSupport)
+            return rule.match(
+                possiblePasswordFields,
+                possibleUsernameFields,
+                singleOriginMode = singleOriginMode,
+                isManualRequest = isManualRequest
+            )
                 ?: continue
         }
         return null

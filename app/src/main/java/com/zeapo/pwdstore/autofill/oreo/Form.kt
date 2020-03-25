@@ -69,7 +69,7 @@ sealed class FormOrigin(open val identifier: String) {
  * Manages the detection of fields to fill in an [AssistStructure] and determines the [FormOrigin].
  */
 @RequiresApi(Build.VERSION_CODES.O)
-private class Form(context: Context, structure: AssistStructure) {
+private class Form(context: Context, structure: AssistStructure, isManualRequest: Boolean) {
 
     companion object {
         private val SUPPORTED_SCHEMES = listOf("http", "https")
@@ -98,7 +98,7 @@ private class Form(context: Context, structure: AssistStructure) {
         parseStructure(structure)
     }
 
-    val scenario = detectFieldsToFill()
+    val scenario = detectFieldsToFill(isManualRequest)
     val formOrigin = determineFormOrigin(context)
 
     init {
@@ -133,7 +133,11 @@ private class Form(context: Context, structure: AssistStructure) {
         }
     }
 
-    private fun detectFieldsToFill() = autofillStrategy.apply(relevantFields, singleOriginMode)
+    private fun detectFieldsToFill(isManualRequest: Boolean) = autofillStrategy.match(
+        relevantFields,
+        singleOriginMode = singleOriginMode,
+        isManualRequest = isManualRequest
+    )
 
     private fun trackOrigin(node: AssistStructure.ViewNode) {
         if (!isTrustedBrowser) return
@@ -219,8 +223,12 @@ class FillableForm private constructor(
         /**
          * Returns a [FillableForm] if a login form could be detected in [structure].
          */
-        fun parseAssistStructure(context: Context, structure: AssistStructure): FillableForm? {
-            val form = Form(context, structure)
+        fun parseAssistStructure(
+            context: Context,
+            structure: AssistStructure,
+            isManualRequest: Boolean
+        ): FillableForm? {
+            val form = Form(context, structure, isManualRequest)
             if (form.formOrigin == null || form.scenario == null) return null
             return FillableForm(
                 form.formOrigin,

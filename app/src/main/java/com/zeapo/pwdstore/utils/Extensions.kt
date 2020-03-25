@@ -10,6 +10,10 @@ import android.util.TypedValue
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 
+infix fun Int.hasFlag(flag: Int): Boolean {
+    return this and flag == flag
+}
+
 fun String.splitLines(): Array<String> {
     return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 }
