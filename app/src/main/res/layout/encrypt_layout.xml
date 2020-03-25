@@ -9,13 +9,13 @@
     android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/crypto_password_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:textColor="?android:attr/textColor"
-        android:textIsSelectable="false"
+        android:enabled="false"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

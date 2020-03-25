@@ -18,7 +18,9 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
+import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.Credentials
+import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -76,6 +78,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
     }
 
     private var continueAfterUserInteraction: Continuation<Intent>? = null
+    private lateinit var directoryStructure: DirectoryStructure
 
     override val coroutineContext
         get() = Dispatchers.IO + SupervisorJob()
@@ -94,6 +97,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
         }
         val isSearchAction = intent?.getBooleanExtra(EXTRA_SEARCH_ACTION, true)!!
         val action = if (isSearchAction) AutofillAction.Search else AutofillAction.Match
+        directoryStructure = AutofillPreferences.directoryStructure(this)
         d { action.toString() }
         launch {
             val credentials = decryptUsernameAndPassword(File(filePath))
@@ -176,7 +180,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
                     val entry = withContext(Dispatchers.IO) {
                         PasswordEntry(decryptedOutput)
                     }
-                    Credentials.fromStoreEntry(file, entry)
+                    Credentials.fromStoreEntry(file, entry, directoryStructure)
                 } catch (e: UnsupportedEncodingException) {
                     e(e) { "Failed to parse password entry" }
                     null

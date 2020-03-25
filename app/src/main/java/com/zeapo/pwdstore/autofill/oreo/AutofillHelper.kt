@@ -73,9 +73,14 @@ val AssistStructure.ViewNode.webOrigin: String?
 
 data class Credentials(val username: String?, val password: String) {
     companion object {
-        fun fromStoreEntry(file: File, entry: PasswordEntry): Credentials {
-            return if (entry.hasUsername()) Credentials(entry.username, entry.password)
-            else Credentials(file.nameWithoutExtension, entry.password)
+        fun fromStoreEntry(
+            file: File,
+            entry: PasswordEntry,
+            directoryStructure: DirectoryStructure
+        ): Credentials {
+            // Always give priority to a username stored in the encrypted extras
+            val username = entry.username ?: directoryStructure.getUsernameFor(file)
+            return Credentials(username, entry.password)
         }
     }
 }
@@ -95,7 +100,7 @@ private fun makeRemoteView(
 
 fun makeFillMatchRemoteView(context: Context, file: File, formOrigin: FormOrigin): RemoteViews {
     val title = formOrigin.getPrettyIdentifier(context, untrusted = false)
-    val summary = file.nameWithoutExtension
+    val summary = AutofillPreferences.directoryStructure(context).getUsernameFor(file)
     val iconRes = R.drawable.ic_person_black_24dp
     return makeRemoteView(context, title, summary, iconRes)
 }

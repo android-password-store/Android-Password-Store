@@ -42,6 +42,7 @@
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
     <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
+    <string name="path_toast_text">Please provide a file path</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
     <!-- Git Async Task -->
@@ -268,6 +269,7 @@
     <string name="oreo_autofill_fill_support">Fill credentials</string>
     <string name="oreo_autofill_flaky_fill_support">Fill credentials (may require restarting the browser from time to time)</string>
     <string name="oreo_autofill_no_support">No support</string>
+    <string name="oreo_autofill_preference_directory_structure">Password file organization</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>

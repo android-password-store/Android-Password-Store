@@ -41,6 +41,8 @@ import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
+import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.Otp
@@ -157,9 +159,23 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 }
 
                 title = getString(R.string.new_password_title)
-                crypto_password_category.text = getRelativePath(fullPath, repoPath)
-                suggestedName?.let {
-                    crypto_password_file_edit.setText(it)
+                crypto_password_category.apply {
+                    setText(getRelativePath(fullPath, repoPath))
+                    // If the activity has been provided with suggested info, we allow the user to
+                    // edit the path, otherwise we style the EditText like a TextView.
+                    if (suggestedName != null) {
+                        isEnabled = true
+                    } else {
+                        setBackgroundColor(getColor(android.R.color.transparent))
+                    }
+                }
+                suggestedName?.let { crypto_password_file_edit.setText(it) }
+                // Allow the user to quickly switch between storing the username as the filename or
+                // in the encrypted extras. This only makes sense if the directory structure is
+                // FileBased.
+                if (suggestedName != null &&
+                    AutofillPreferences.directoryStructure(this) == DirectoryStructure.FileBased
+                ) {
                     encrypt_username.apply {
                         visibility = View.VISIBLE
                         setOnClickListener {
@@ -549,7 +565,20 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = ByteArrayInputStream(content.toByteArray(Charset.forName("UTF-8")))
         val oStream = ByteArrayOutputStream()
 
-        val path = if (intent.getBooleanExtra("fromDecrypt", false)) fullPath else "$fullPath/$editName.gpg"
+        val path = when {
+            intent.getBooleanExtra("fromDecrypt", false) -> fullPath
+            // If we allowed the user to edit the relative path, we have to consider it here instead
+            // of fullPath.
+            crypto_password_category.isEnabled -> {
+                val editRelativePath = crypto_password_category.text!!.toString().trim()
+                if (editRelativePath.isEmpty()) {
+                    showSnackbar(resources.getString(R.string.path_toast_text))
+                    return
+                }
+                "$repoPath/${editRelativePath.trim('/')}/$editName.gpg"
+            }
+            else -> "$fullPath/$editName.gpg"
+        }
 
         lifecycleScope.launch(IO) {
             api?.executeApiAsync(data, iStream, oStream, object : OpenPgpApi.IOpenPgpCallback {
@@ -575,9 +604,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 }
 
                                 if (shouldGeneratePassword) {
+                                    val directoryStructure =
+                                        AutofillPreferences.directoryStructure(applicationContext)
                                     val entry = PasswordEntry(content)
                                     returnIntent.putExtra("PASSWORD", entry.password)
-                                    returnIntent.putExtra("USERNAME", entry.username ?: file.nameWithoutExtension)
+                                    returnIntent.putExtra(
+                                        "USERNAME",
+                                        directoryStructure.getUsernameFor(file)
+                                    )
                                 }
 
                                 setResult(RESULT_OK, returnIntent)
@@ -615,7 +649,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         crypto_extra_edit.setText(passwordEntry?.extraContent)
         crypto_extra_edit.typeface = monoTypeface
 
-        crypto_password_category.text = relativeParentPath
+        crypto_password_category.setText(relativeParentPath)
         crypto_password_file_edit.setText(name)
         crypto_password_file_edit.isEnabled = false
 

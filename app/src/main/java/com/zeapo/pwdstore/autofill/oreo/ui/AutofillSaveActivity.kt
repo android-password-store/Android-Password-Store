@@ -18,6 +18,7 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
+import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
@@ -32,7 +33,7 @@ class AutofillSaveActivity : Activity() {
         private const val EXTRA_FOLDER_NAME =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_FOLDER_NAME"
         private const val EXTRA_PASSWORD = "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_PASSWORD"
-        private const val EXTRA_USERNAME = "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_USERNAME"
+        private const val EXTRA_NAME = "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_NAME"
         private const val EXTRA_SHOULD_MATCH_APP =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_SHOULD_MATCH_APP"
         private const val EXTRA_SHOULD_MATCH_WEB =
@@ -48,15 +49,23 @@ class AutofillSaveActivity : Activity() {
             formOrigin: FormOrigin
         ): IntentSender {
             val identifier = formOrigin.getPrettyIdentifier(context, untrusted = false)
-            val sanitizedIdentifier = identifier.replace("""[\\\/]""", "")
-            val folderName =
-                sanitizedIdentifier.takeUnless { it.isBlank() } ?: formOrigin.identifier
+            // Prevent directory traversals
+            val sanitizedIdentifier = identifier.replace('\\', '_')
+                .replace('/', '_')
+                .trimStart('.')
+                .takeUnless { it.isBlank() } ?: formOrigin.identifier
+            val directoryStructure = AutofillPreferences.directoryStructure(context)
+            val folderName = directoryStructure.getSaveFolderName(
+                sanitizedIdentifier = sanitizedIdentifier,
+                username = credentials?.username
+            )
+            val fileName = directoryStructure.getSaveFileName(username = credentials?.username)
             val intent = Intent(context, AutofillSaveActivity::class.java).apply {
                 putExtras(
                     bundleOf(
                         EXTRA_FOLDER_NAME to folderName,
+                        EXTRA_NAME to fileName,
                         EXTRA_PASSWORD to credentials?.password,
-                        EXTRA_USERNAME to credentials?.username,
                         EXTRA_SHOULD_MATCH_APP to formOrigin.identifier.takeIf { formOrigin is FormOrigin.App },
                         EXTRA_SHOULD_MATCH_WEB to formOrigin.identifier.takeIf { formOrigin is FormOrigin.Web },
                         EXTRA_GENERATE_PASSWORD to (credentials == null)
@@ -87,15 +96,13 @@ class AutofillSaveActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val repo = PasswordRepository.getRepositoryDirectory(applicationContext)
-        val username = intent.getStringExtra(EXTRA_USERNAME)
-
         val saveIntent = Intent(this, PgpActivity::class.java).apply {
             putExtras(
                 bundleOf(
                     "REPO_PATH" to repo.absolutePath,
                     "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)).absolutePath,
                     "OPERATION" to "ENCRYPT",
-                    "SUGGESTED_NAME" to username,
+                    "SUGGESTED_NAME" to intent.getStringExtra(EXTRA_NAME),
                     "SUGGESTED_PASS" to intent.getStringExtra(EXTRA_PASSWORD),
                     "GENERATE_PASSWORD" to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
                 )
