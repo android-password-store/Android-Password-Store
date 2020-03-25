@@ -148,10 +148,11 @@ class AutofillMatcher {
 
         /**
          * Goes through all existing matches and updates their associated entries by using
-         * [sourceDestinationMap] as a lookup table.
+         * [moveFromTo] as a lookup table and deleting the matches for files in [delete].
          */
-        fun updateMatchesFor(context: Context, sourceDestinationMap: Map<File, File>) {
-            val oldNewPathMap = sourceDestinationMap.mapValues { it.value.absolutePath }
+        fun updateMatches(context: Context, moveFromTo: Map<File, File> = emptyMap(), delete: Collection<File> = emptyList()) {
+            val deletePathList = delete.map { it.absolutePath }
+            val oldNewPathMap = moveFromTo.mapValues { it.value.absolutePath }
                 .mapKeys { it.key.absolutePath }
             for (prefs in listOf(context.autofillAppMatches, context.autofillWebMatches)) {
                 for ((key, value) in prefs.all) {
@@ -164,7 +165,10 @@ class AutofillMatcher {
                     // Delete all matches for file locations that are going to be overwritten, then
                     // transfer matches over to the files at their new locations.
                     val newMatches =
-                        oldMatches.asSequence().minus(oldNewPathMap.values).map { match ->
+                        oldMatches.asSequence()
+                            .minus(deletePathList)
+                            .minus(oldNewPathMap.values)
+                            .map { match ->
                             val newPath = oldNewPathMap[match] ?: return@map match
                             d { "Updating match for $key: $match --> $newPath" }
                             newPath
