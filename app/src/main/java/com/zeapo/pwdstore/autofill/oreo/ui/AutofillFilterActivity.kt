@@ -23,10 +23,13 @@ import com.afollestad.recyclical.withItem
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
+import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
+import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
+import java.nio.file.Paths
 import java.util.Locale
 import kotlinx.android.synthetic.main.activity_oreo_autofill_filter.*
 
@@ -69,6 +72,8 @@ class AutofillFilterView : AppCompatActivity() {
         get() = PasswordRepository.PasswordSortOrder.getSortOrder(preferences)
 
     private lateinit var formOrigin: FormOrigin
+    private lateinit var repositoryRoot: File
+    private lateinit var directoryStructure: DirectoryStructure
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +103,8 @@ class AutofillFilterView : AppCompatActivity() {
                 return
             }
         }
+        repositoryRoot = PasswordRepository.getRepositoryDirectory(this)
+        directoryStructure = AutofillPreferences.directoryStructure(this)
 
         supportActionBar?.hide()
         bindUI()
@@ -110,9 +117,19 @@ class AutofillFilterView : AppCompatActivity() {
             withDataSource(dataSource)
             withItem<PasswordItem, PasswordViewHolder>(R.layout.oreo_autofill_filter_row) {
                 onBind(::PasswordViewHolder) { _, item ->
-                    title.text = item.fullPathToParent
-                    // drop the .gpg extension
-                    subtitle.text = item.name.dropLast(4)
+                    when (directoryStructure) {
+                        DirectoryStructure.FileBased -> {
+                            title.text = item.file.relativeTo(item.rootDir).parent
+                            subtitle.text = item.file.nameWithoutExtension
+                        }
+                        DirectoryStructure.DirectoryBased -> {
+                            title.text =
+                                item.file.relativeTo(item.rootDir).parentFile?.parent ?: "/INVALID"
+                            subtitle.text =
+                                Paths.get(item.file.parentFile.name, item.file.nameWithoutExtension)
+                                    .toString()
+                        }
+                    }
                 }
                 onClick { decryptAndFill(item) }
             }
@@ -156,40 +173,41 @@ class AutofillFilterView : AppCompatActivity() {
         }
     }
 
+    private fun File.matches(filter: String, strict: Boolean): Boolean {
+        return if (strict) {
+            val toMatch = directoryStructure.getIdentifierFor(this) ?: return false
+            // In strict mode, we match
+            // * the search term exactly,
+            // * subdomains of the search term,
+            // * or the search term plus an arbitrary protocol.
+            toMatch == filter || toMatch.endsWith(".$filter") || toMatch.endsWith("://$filter")
+        } else {
+            val toMatch =
+                "${relativeTo(repositoryRoot).path}/$nameWithoutExtension".toLowerCase(Locale.getDefault())
+            toMatch.contains(filter.toLowerCase(Locale.getDefault()))
+        }
+    }
+
     private fun recursiveFilter(filter: String, dir: File? = null, strict: Boolean = true) {
-        val root = PasswordRepository.getRepositoryDirectory(this)
         // on the root the pathStack is empty
         val passwordItems = if (dir == null) {
-            PasswordRepository.getPasswords(
-                PasswordRepository.getRepositoryDirectory(this),
-                sortOrder
-            )
+            PasswordRepository.getPasswords(repositoryRoot, sortOrder)
         } else {
-            PasswordRepository.getPasswords(
-                dir,
-                PasswordRepository.getRepositoryDirectory(this),
-                sortOrder
-            )
+            PasswordRepository.getPasswords(dir, repositoryRoot, sortOrder)
         }
 
         for (item in passwordItems) {
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 recursiveFilter(filter, item.file, strict = strict)
-            }
-
-            // TODO: Implement fuzzy search if strict == false?
-            val matches = if (strict) item.file.parentFile.name.let {
-                it == filter || it.endsWith(".$filter") || it.endsWith("://$filter")
-            }
-            else "${item.file.relativeTo(root).path}/${item.file.nameWithoutExtension}".toLowerCase(
-                Locale.getDefault()
-            ).contains(filter.toLowerCase(Locale.getDefault()))
-
-            val inAdapter = dataSource.contains(item)
-            if (item.type == PasswordItem.TYPE_PASSWORD && matches && !inAdapter) {
-                dataSource.add(item)
-            } else if (!matches && inAdapter) {
-                dataSource.remove(item)
+            } else {
+                // TODO: Implement fuzzy search if strict == false?
+                val matches = item.file.matches(filter, strict = strict)
+                val inAdapter = dataSource.contains(item)
+                if (matches && !inAdapter) {
+                    dataSource.add(item)
+                } else if (!matches && inAdapter) {
+                    dataSource.remove(item)
+                }
             }
         }
     }

@@ -62,8 +62,9 @@ class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragmentCompat() {
-        private var autofillDependencies = listOf<Preference?>()
         private var autoFillEnablePreference: SwitchPreferenceCompat? = null
+        private lateinit var autofillDependencies: List<Preference>
+        private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var callingActivity: UserPreference
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -96,16 +97,21 @@ class UserPreference : AppCompatActivity() {
 
             // Autofill preferences
             autoFillEnablePreference = findPreference("autofill_enable")
-            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
-            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
-            val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
-            val autoFillShowFullNamePreference = findPreference<CheckBoxPreference>("autofill_full_path")
+            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")!!
+            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")!!
+            val autoFillAlwaysShowDialogPreference =
+                findPreference<CheckBoxPreference>("autofill_always")!!
+            val autoFillShowFullNamePreference =
+                findPreference<CheckBoxPreference>("autofill_full_path")!!
             autofillDependencies = listOf(
                     autoFillAppsPreference,
                     autoFillDefaultPreference,
                     autoFillAlwaysShowDialogPreference,
                     autoFillShowFullNamePreference
             )
+            val oreoAutofillDirectoryStructurePreference =
+                findPreference<ListPreference>("oreo_autofill_directory_structure")!!
+            oreoAutofillDependencies = listOf(oreoAutofillDirectoryStructurePreference)
 
             // Misc preferences
             val appVersionPreference = findPreference<Preference>("app_version")
@@ -236,7 +242,7 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
             externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
-            autoFillAppsPreference?.onPreferenceClickListener = ClickListener {
+            autoFillAppsPreference.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
@@ -356,10 +362,14 @@ class UserPreference : AppCompatActivity() {
 
         private fun updateAutofillSettings() {
             val isAccessibilityServiceEnabled = callingActivity.isAccessibilityServiceEnabled
+            val isAutofillServiceEnabled = callingActivity.isAutofillServiceEnabled
             autoFillEnablePreference?.isChecked =
-                isAccessibilityServiceEnabled || callingActivity.isAutofillServiceEnabled
+                isAccessibilityServiceEnabled || isAutofillServiceEnabled
             autofillDependencies.forEach {
-                it?.isVisible = isAccessibilityServiceEnabled
+                it.isVisible = isAccessibilityServiceEnabled
+            }
+            oreoAutofillDependencies.forEach {
+                it.isVisible = isAutofillServiceEnabled
             }
         }
 
@@ -409,16 +419,7 @@ class UserPreference : AppCompatActivity() {
                         startActivity(intent)
                     }
                     setNegativeButton(R.string.dialog_cancel, null)
-                    setOnDismissListener {
-                        val isEnabled =
-                            if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                callingActivity.isAutofillServiceEnabled
-                            } else {
-                                callingActivity.isAccessibilityServiceEnabled
-                            }
-                        autoFillEnablePreference?.isChecked = isEnabled
-                        autofillDependencies.forEach { it?.isVisible = isEnabled }
-                    }
+                    setOnDismissListener { updateAutofillSettings() }
                     show()
                 }
             }
