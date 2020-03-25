@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.autofill.oreo
 
 import android.content.Context
+import android.util.Patterns
 import kotlinx.coroutines.runBlocking
 import mozilla.components.lib.publicsuffixlist.PublicSuffixList
 
@@ -34,6 +35,16 @@ fun cachePublicSuffixList(context: Context) {
  * the return value for valid domains.
  */
 fun getPublicSuffixPlusOne(context: Context, domain: String) = runBlocking {
-    PublicSuffixListCache.getOrCachePublicSuffixList(context).getPublicSuffixPlusOne(domain)
-        .await() ?: domain
+    // We only feed valid domain names which are not IP addresses into getPublicSuffixPlusOne.
+    // We do not check whether the domain actually exists (actually, not even whether its TLD
+    // exists). As long as we restrict ourselves to syntactically valid domain names,
+    // getPublicSuffixPlusOne will return non-colliding results.
+    if (!Patterns.DOMAIN_NAME.matcher(domain).matches() || Patterns.IP_ADDRESS.matcher(domain)
+            .matches()
+    ) {
+        domain
+    } else {
+        PublicSuffixListCache.getOrCachePublicSuffixList(context).getPublicSuffixPlusOne(domain)
+            .await() ?: domain
+    }
 }
