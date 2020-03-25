@@ -88,8 +88,7 @@ val autofillStrategy = strategy {
             breakTieOnPair { any { isFocused } }
         }
         username(optional = true) {
-            takeSingle()
-            breakTieOnSingle { usernameCertainty >= Likely }
+            takeSingle { usernameCertainty >= Likely }
             breakTieOnSingle { usernameCertainty >= Certain }
             breakTieOnSingle { alreadyMatched -> directlyPrecedes(alreadyMatched) }
             breakTieOnSingle { isFocused }
@@ -104,8 +103,7 @@ val autofillStrategy = strategy {
             breakTieOnSingle { isFocused }
         }
         username(optional = true) {
-            takeSingle()
-            breakTieOnSingle { usernameCertainty >= Likely }
+            takeSingle { usernameCertainty >= Likely }
             breakTieOnSingle { usernameCertainty >= Certain }
             breakTieOnSingle { alreadyMatched -> directlyPrecedes(alreadyMatched) }
             breakTieOnSingle { isFocused }
@@ -174,6 +172,25 @@ val autofillStrategy = strategy {
             takeSingle { usernameCertainty >= Likely && isFocused }
             breakTieOnSingle { usernameCertainty >= Certain }
             breakTieOnSingle { hasAutocompleteHintUsername }
+        }
+    }
+
+    // Match any focused password field with optional username field on manual request.
+    rule(applyInSingleOriginMode = true, applyOnManualRequestOnly = true) {
+        genericPassword {
+            takeSingle { isFocused }
+        }
+        username(optional = true) {
+            takeSingle { alreadyMatched ->
+                usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull())
+            }
+        }
+    }
+
+    // Match any focused username field on manual request.
+    rule(applyInSingleOriginMode = true, applyOnManualRequestOnly = true) {
+        username {
+            takeSingle { isFocused }
         }
     }
 }
