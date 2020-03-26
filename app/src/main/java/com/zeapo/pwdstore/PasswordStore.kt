@@ -499,7 +499,11 @@ class PasswordStore : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
                 .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
-                    val filesToDelete = FileUtils.listFiles(item.file, null, true)
+                    val filesToDelete = if (item.file.isDirectory) {
+                        FileUtils.listFiles(item.file, null, true)
+                    } else {
+                        listOf(item.file)
+                    }
                     AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                     item.file.deleteRecursively()
                     adapter.remove(position)
