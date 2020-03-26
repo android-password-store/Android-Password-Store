@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Oreo Autofill support
+
 ## [1.6.0] - 2020-03-20
 
 ### Added
