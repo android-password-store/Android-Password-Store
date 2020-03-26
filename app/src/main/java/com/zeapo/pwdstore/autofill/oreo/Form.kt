@@ -213,7 +213,14 @@ class FillableForm private constructor(
         ): Dataset {
             val remoteView = makePlaceholderRemoteView(context)
             val scenario = AutofillScenario.fromBundle(clientState)
-            return Dataset.Builder(remoteView).run {
+            // Before Android P, Datasets used for fill-in had to come with a RemoteViews, even
+            // though they are never shown.
+            val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                Dataset.Builder()
+            } else {
+                Dataset.Builder(remoteView)
+            }
+            return builder.run {
                 if (scenario != null) fillWith(scenario, action, credentials)
                 else e { "Failed to recover scenario from client state" }
                 build()
