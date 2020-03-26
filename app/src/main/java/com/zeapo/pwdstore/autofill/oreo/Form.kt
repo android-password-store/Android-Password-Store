@@ -81,15 +81,9 @@ private class Form(context: Context, structure: AssistStructure, isManualRequest
 
     private var appPackage = structure.activityComponent.packageName
 
-    private val browserAutofillSupportInfo =
+    private val trustedBrowserInfo =
         getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
-    private val isTrustedBrowser = browserAutofillSupportInfo != null
-
-    private val browserMultiOriginMethod =
-        browserAutofillSupportInfo?.multiOriginMethod ?: BrowserMultiOriginMethod.None
-    private val singleOriginMode = browserMultiOriginMethod == BrowserMultiOriginMethod.None
-
-    val saveFlags = browserAutofillSupportInfo?.saveFlag
+    val saveFlags = trustedBrowserInfo?.saveFlags
 
     private val webOrigins = mutableSetOf<String>()
 
@@ -114,7 +108,7 @@ private class Form(context: Context, structure: AssistStructure, isManualRequest
     private fun visitFormNode(node: AssistStructure.ViewNode, inheritedWebOrigin: String? = null) {
         trackOrigin(node)
         val field =
-            if (browserMultiOriginMethod == BrowserMultiOriginMethod.WebView) {
+            if (trustedBrowserInfo?.multiOriginMethod == BrowserMultiOriginMethod.WebView) {
                 FormField(node, fieldIndex, true, inheritedWebOrigin)
             } else {
                 check(inheritedWebOrigin == null)
@@ -135,12 +129,12 @@ private class Form(context: Context, structure: AssistStructure, isManualRequest
 
     private fun detectFieldsToFill(isManualRequest: Boolean) = autofillStrategy.match(
         relevantFields,
-        singleOriginMode = singleOriginMode,
+        singleOriginMode = trustedBrowserInfo?.multiOriginMethod == BrowserMultiOriginMethod.None,
         isManualRequest = isManualRequest
     )
 
     private fun trackOrigin(node: AssistStructure.ViewNode) {
-        if (!isTrustedBrowser) return
+        if (trustedBrowserInfo == null) return
         node.webOrigin?.let {
             if (it !in webOrigins) {
                 d { "Origin encountered: $it" }
@@ -159,14 +153,14 @@ private class Form(context: Context, structure: AssistStructure, isManualRequest
 
     private fun determineFormOrigin(context: Context): FormOrigin? {
         if (scenario == null) return null
-        if (!isTrustedBrowser || webOrigins.isEmpty()) {
+        if (trustedBrowserInfo == null || webOrigins.isEmpty()) {
             // Security assumption: If a trusted browser includes no web origin in the provided
             // AssistStructure, then the form is a native browser form (e.g. for a sync password).
             // TODO: Support WebViews in apps via Digital Asset Links
             // See: https://developer.android.com/reference/android/service/autofill/AutofillService#web-security
             return FormOrigin.App(appPackage)
         }
-        return when (browserMultiOriginMethod) {
+        return when (trustedBrowserInfo.multiOriginMethod) {
             BrowserMultiOriginMethod.None -> {
                 // Security assumption: If a browser is trusted but does not support tracking
                 // multiple origins, it is expected to annotate a single field, in most cases its
