@@ -76,6 +76,15 @@ open class PasswordRepository protected constructor() {
             get() = repository != null
 
         @JvmStatic
+        fun isGitRepo(): Boolean {
+            if (repository != null) {
+                // Check if remote exists
+                return repository!!.config.getSubsections("remote").isNotEmpty()
+            }
+            return false
+        }
+
+        @JvmStatic
         @Throws(Exception::class)
         fun createRepository(localDir: File) {
             localDir.delete()

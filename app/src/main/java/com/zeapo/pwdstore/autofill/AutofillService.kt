@@ -518,7 +518,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
                     if (entry?.hasUsername() == true) {
                         lastPassword = entry
                         val ttl = Integer.parseInt(settings!!.getString("general_show_time", "45")!!)
-                        Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show()
+                        withContext(Dispatchers.Main) { Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show() }
                         lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L
                     }
                 } catch (e: UnsupportedEncodingException) {
@@ -537,7 +537,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
             OpenPgpApi.RESULT_CODE_ERROR -> {
                 val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
                 if (error != null) {
-                    Toast.makeText(applicationContext, "Error from OpenKeyChain : ${error.message}", Toast.LENGTH_LONG).show()
+                    withContext(Dispatchers.Main) { Toast.makeText(applicationContext, "Error from OpenKeyChain : ${error.message}", Toast.LENGTH_LONG).show() }
                     Timber.tag(Constants.TAG).e("onError getErrorId: ${error.errorId}")
                     Timber.tag(Constants.TAG).e("onError getMessage: ${error.message}")
                 }

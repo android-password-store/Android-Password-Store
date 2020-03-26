@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.GitActivity
@@ -115,9 +116,9 @@ class PasswordStore : AppCompatActivity() {
                     != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     val snack = Snackbar.make(
-                            findViewById(R.id.main_layout),
-                            getString(R.string.access_sdcard_text),
-                            Snackbar.LENGTH_INDEFINITE)
+                                    findViewById(R.id.main_layout),
+                                    getString(R.string.access_sdcard_text),
+                                    Snackbar.LENGTH_INDEFINITE)
                             .setAction(R.string.dialog_ok) {
                                 ActivityCompat.requestPermissions(
                                         activity,
@@ -252,6 +253,11 @@ class PasswordStore : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        plist = null
+        super.onDestroy()
     }
 
     fun openSettings(view: View?) {
@@ -493,6 +499,8 @@ class PasswordStore : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
                 .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
+                    val filesToDelete = FileUtils.listFiles(item.file, null, true)
+                    AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                     item.file.deleteRecursively()
                     adapter.remove(position)
                     it.remove()
@@ -609,9 +617,9 @@ class PasswordStore : AppCompatActivity() {
                 }
                 REQUEST_CODE_SELECT_FOLDER -> {
                     Timber.tag(TAG)
-                        .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
+                            .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
                     Timber.tag(TAG).d(
-                        TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
+                            TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
                     )
 
                     val target = File(requireNotNull(data.getStringExtra("SELECTED_FOLDER_PATH")))
@@ -645,10 +653,21 @@ class PasswordStore : AppCompatActivity() {
                                     .setPositiveButton("Okay", null)
                                     .show()
                         }
+                        val sourceDestinationMap = if (source.isDirectory) {
+                            check(destinationFile.isDirectory) { "Moving a directory to a file" }
+                            // Recursively list all files (not directories) below `source`, then
+                            // obtain the corresponding target file by resolving the relative path
+                            // starting at the destination folder.
+                            val sourceFiles = FileUtils.listFiles(source, null, true)
+                            sourceFiles.associateWith { destinationFile.resolve(it.relativeTo(source)) }
+                        } else {
+                            mapOf(source to destinationFile)
+                        }
                         if (!source.renameTo(destinationFile)) {
                             // TODO this should show a warning to the user
                             Timber.tag(TAG).e("Something went wrong while moving.")
                         } else {
+                            AutofillMatcher.updateMatches(this, sourceDestinationMap)
                             commitChange(this.resources
                                     .getString(
                                             R.string.git_commit_move_text,

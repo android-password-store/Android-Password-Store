@@ -3,7 +3,18 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Oreo Autofill support
+
+## [1.6.0] - 2020-03-20
+
+### Added
+- Copy implicit username (password filename) by long pressing
+- Create xkpasswd style passwords
+- Swipe on password list to synchronize repository
+
 ### Fixed
+- Resolve memory leaks on password decryption
 - Can't delete folders containing a password
 
 ## [1.5.0] - 2020-02-21
@@ -82,9 +93,10 @@ All notable changes to this project will be documented in this file.
 - Fix elements overlapping.
 
 
-[Unreleased]: https://github.com/zeapo/android-password-store/compare/v1.5.0...HEAD
-[1.5.0]: https://github.com/zeapo/android-password-store/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/zeapo/android-password-store/compare/v1.3.0...v1.4.0
-[1.3.2]: https://github.com/zeapo/android-password-store/compare/v1.3.1...v1.3.2
-[1.3.1]: https://github.com/zeapo/android-password-store/compare/v1.3.0...v1.3.1
-[1.3.0]: https://github.com/zeapo/android-password-store/compare/v1.2.0.75...v1.3.0
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.5.0..v1.6.0
+[1.5.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.3.0...v1.4.0
+[1.3.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.3.1...v1.3.2
+[1.3.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.2.0.75...v1.3.0

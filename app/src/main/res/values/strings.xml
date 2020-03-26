@@ -10,11 +10,11 @@
     <string name="dialog_delete">Delete directory</string>
     <string name="dialog_do_not_delete">Cancel</string>
     <string name="title_activity_git_clone">Repository information</string>
-    <string name="title_activity_git_config" translatable="false">Git Configurations</string>
+    <string name="title_activity_git_config" translatable="false">Git configuration</string>
 
     <!-- Password Store -->
-    <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or any synchronization operation.</string>
-    <string name="key_dialog_text">You have to select your "PGP-Key ID" before initializing the repository</string>
+    <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
+    <string name="key_dialog_text">You have to select your PGP key ID before initializing the repository</string>
     <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
@@ -29,20 +29,20 @@
     <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
 
     <!-- git commits -->
-    <string name="git_commit_add_text">Add password for %1$s using android password store.</string>
-    <string name="git_commit_edit_text">"Edit %1$s using android password store."</string>
-    <string name="git_commit_folder_text">"Folder %1$s created using android password store."</string>
-    <string name="git_commit_remove_text">"Remove %1$s from store."</string>
-    <string name="git_commit_move_text">"Rename %1$s to %2$s."</string>
-    <string name="git_commit_increment_text">"Increment HOTP counter for %1$s."</string>
+    <string name="git_commit_add_text">Add generated password for %1$s using android password store.</string>
+    <string name="git_commit_edit_text">Edit password for %1$s using android password store.</string>
+    <string name="git_commit_remove_text">Remove %1$s from store.</string>
+    <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
+    <string name="git_commit_increment_text">Increment HOTP counter for %1$s.</string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">No OpenPGP Provider selected!</string>
+    <string name="provider_toast_text">No OpenPGP provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
     <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
+    <string name="path_toast_text">Please provide a file path</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
     <!-- Git Async Task -->
@@ -101,6 +101,7 @@
     <string name="crypto_name_hint">Name</string>
     <string name="crypto_pass_label">Password</string>
     <string name="crypto_extra_label">Extra content</string>
+    <string name="crypto_encrypt_username_label">Encrypt username</string>
     <string name="crypto_select">Select</string>
     <string name="crypto_cancel">Cancel</string>
     <string name="crypto_save">Save</string>
@@ -134,13 +135,13 @@
     <string name="pref_git_delete_repo">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_crypto_title">Crypto</string>
-    <string name="pref_provider_title">Select OpenPGP Provider</string>
-    <string name="pref_key_title">Select OpenPGP Key id</string>
+    <string name="pref_provider_title">Select OpenPGP provider</string>
+    <string name="pref_key_title">Select OpenPGP key ID</string>
     <string name="pref_no_key_selected">No key selected</string>
     <string name="pref_general_title">General</string>
-    <string name="pref_password_title">Password Show Time</string>
-    <string name="pref_password_dialog_title">Set the time (in seconds) you want the password to be in clipboard. 0 means forever.</string>
-    <string name="pref_copy_title">Automatically copy Password</string>
+    <string name="pref_show_time_title">Password show time</string>
+    <string name="pref_show_time_summary">Set the time (in seconds) you want the password to be in clipboard. 0 means forever. Current value: %1$s</string>
+    <string name="pref_copy_title">Automatically copy password</string>
     <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
     <string name="ssh_key_success_dialog_title">SSH-key imported</string>
     <string name="ssh_key_error_dialog_title">Error while trying to import the ssh-key</string>
@@ -148,11 +149,11 @@
     <string name="pref_recursive_filter">Recursive filtering</string>
     <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
     <string name="pref_sort_order_title">Password sort order</string>
-    <string name="pref_folder_first_sort_order">Folders First</string>
-    <string name="pref_file_first_sort_order">Files First</string>
-    <string name="pref_type_independent_sort_order">Type Independent</string>
+    <string name="pref_folder_first_sort_order">Folders first</string>
+    <string name="pref_file_first_sort_order">Files first</string>
+    <string name="pref_type_independent_sort_order">Type independent</string>
     <string name="pref_autofill_title">Autofill</string>
-    <string name="pref_autofill_enable_title">Enable autofill</string>
+    <string name="pref_autofill_enable_title">Enable Autofill</string>
     <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
     <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
     <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>
@@ -160,7 +161,7 @@
     <string name="pref_autofill_default_title">Automatically match by default</string>
     <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
     <string name="pref_autofill_always_title">Always show dialog</string>
-    <string name="pref_autofill_full_path_title">Show Full Path</string>
+    <string name="pref_autofill_full_path_title">Show full path</string>
     <string name="pref_autofill_full_path_hint">Show full path of matching password files</string>
     <string name="pref_misc_title">Misc</string>
     <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
@@ -172,7 +173,7 @@
     <string name="prefs_use_default_file_picker">Use default file picker</string>
     <string name="prefs_clear_after_copy_title">Automatically clear the clipboard after copy</string>
     <string name="prefs_clear_after_copy_summary">After an automatic copy or a manual copy of the password, the clipboard will be automatically cleared.</string>
-    <string name="prefs_export_passwords_title">Export Passwords</string>
+    <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
     <string name="prefs_version">Version</string>
 
@@ -189,6 +190,24 @@
     <string name="pwgen_pronounceable">Pronounceable</string>
     <string name="pwgen_no_chars_error">No characters included</string>
     <string name="pwgen_length_too_short_error">Length too short for selected criteria</string>
+
+    <!-- XKPWD password generator -->
+    <string name="xkpwgen_title">Xkpasswd Generator</string>
+    <string name="xkpwgen_length">Total words</string>
+    <string name="xkpwgen_separator">Separator</string>
+    <string name="xkpwgen_custom_dict_imported">Custom wordlist: %1$s</string>
+    <string name="xkpwgen_separator_character">separator character</string>
+    <string name="xkpwgen_numbers">numbers:</string>
+    <string name="xkpwgen_symbols">symbols:</string>
+    <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
+
+    <!-- XKPWD prefs -->
+    <string name="xkpwgen_pref_gentype_title">Password generator type</string>
+    <string name="xkpwgen_pref_custom_dict_title">Custom wordlist</string>
+    <string name="xkpwgen_pref_custom_dict_summary_on">Using custom wordlist file</string>
+    <string name="xkpwgen_pref_custom_dict_summary_off">Using built-in wordlist</string>
+    <string name="xkpwgen_pref_custom_dict_picker_title">Custom worldlist file</string>
+    <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Length</string>
@@ -224,6 +243,33 @@
     <string name="repository_uri">Repository URI</string>
     <string name="app_icon_hint">App icon</string>
     <string name="folder_icon_hint">Folder icon</string>
+
+    <!-- Oreo Autofill -->
+    <string name="oreo_autofill_match_with">Match with %1$s</string>
+    <string name="oreo_autofill_matches_clear_existing">Clear existing matches</string>
+    <string name="oreo_autofill_search_in_store">Search in store…</string>
+    <string name="oreo_autofill_save_internal_error">Save failed due to an internal error</string>
+    <string name="oreo_autofill_save_app_not_supported">This app is currently not supported</string>
+    <string name="oreo_autofill_save_passwords_dont_match">Passwords don\'t match</string>
+    <string name="oreo_autofill_save_invalid_password">Couldn\'t extract password, please use a different browser for now</string>
+    <string name="oreo_autofill_generate_password">Generate password…</string>
+    <string name="oreo_autofill_publisher_changed">The app\'s publisher has changed; this may be a phishing attempt.</string>
+    <string name="oreo_autofill_max_matches_reached">Maximum number of matches (%1$d) reached; clear matches before adding new ones.</string>
+    <string name="oreo_autofill_warning_publisher_header">This app\'s publisher has changed since you first associated a Password Store entry with it:</string>
+    <string name="oreo_autofill_warning_publisher_footer"><b>The currently installed app may be trying to steal your credentials by pretending to be a trusted app.</b>\n\nTry to uninstall and reinstall the app from a trusted source, such as the Play Store, Amazon Appstore, F-Droid, or your phone manufacturer\'s store.</string>
+    <string name="oreo_autofill_warning_publisher_install_time">Installed: %1$s</string>
+    <string name="oreo_autofill_warning_publisher_advanced_info_template" translatable="false">Package:\n%1$s\n\nHash:\n%2$s</string>
+    <string name="oreo_autofill_warning_publisher_advanced_info_button">Advanced information</string>
+    <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Keep Autofill disabled</string>
+    <string name="oreo_autofill_warning_publisher_reenable_button">Re-enable Autofill</string>
+    <string name="oreo_autofill_warning_publisher_warning_sign_description">Warning</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Tap for details…</string>
+    <string name="oreo_autofill_warning_publisher_dataset_title">Possible phishing attempt</string>
+    <string name="oreo_autofill_fill_and_save_support">Fill and save credentials</string>
+    <string name="oreo_autofill_fill_support">Fill credentials</string>
+    <string name="oreo_autofill_flaky_fill_support">Fill credentials (may require restarting the browser from time to time)</string>
+    <string name="oreo_autofill_no_support">No support</string>
+    <string name="oreo_autofill_preference_directory_structure">Password file organization</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
@@ -285,4 +331,7 @@
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
     <string name="pref_search_from_root">Always search from root</string>
     <string name="pref_search_from_root_hint">Search from root of store regardless of currently open directory</string>
+    <string name="password_generator_category_title">Password Generator</string>
+    <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
+    <string name="clone_git_repo">Clone a git repository to sync changes</string>
 </resources>

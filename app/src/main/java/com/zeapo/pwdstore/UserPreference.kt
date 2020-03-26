@@ -6,7 +6,6 @@ package com.zeapo.pwdstore
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutManager
 import android.net.Uri
@@ -15,14 +14,17 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.Settings
+import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -30,13 +32,17 @@ import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
+import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
+import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
+import com.zeapo.pwdstore.utils.autofillManager
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -56,8 +62,9 @@ class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragmentCompat() {
-        private var autofillDependencies = listOf<Preference?>()
-        private var autoFillEnablePreference: CheckBoxPreference? = null
+        private var autoFillEnablePreference: SwitchPreferenceCompat? = null
+        private lateinit var autofillDependencies: List<Preference>
+        private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var callingActivity: UserPreference
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -84,21 +91,27 @@ class UserPreference : AppCompatActivity() {
             val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
 
             // General preferences
+            val showTimePreference = findPreference<Preference>("general_show_time")
             val clearAfterCopyPreference = findPreference<CheckBoxPreference>("clear_after_copy")
             val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
 
             // Autofill preferences
             autoFillEnablePreference = findPreference("autofill_enable")
-            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
-            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
-            val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
-            val autoFillShowFullNamePreference = findPreference<CheckBoxPreference>("autofill_full_path")
+            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")!!
+            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")!!
+            val autoFillAlwaysShowDialogPreference =
+                findPreference<CheckBoxPreference>("autofill_always")!!
+            val autoFillShowFullNamePreference =
+                findPreference<CheckBoxPreference>("autofill_full_path")!!
             autofillDependencies = listOf(
                     autoFillAppsPreference,
                     autoFillDefaultPreference,
                     autoFillAlwaysShowDialogPreference,
                     autoFillShowFullNamePreference
             )
+            val oreoAutofillDirectoryStructurePreference =
+                findPreference<ListPreference>("oreo_autofill_directory_structure")!!
+            oreoAutofillDependencies = listOf(oreoAutofillDirectoryStructurePreference)
 
             // Misc preferences
             val appVersionPreference = findPreference<Preference>("app_version")
@@ -112,7 +125,7 @@ class UserPreference : AppCompatActivity() {
             clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
-                    ?: HashSet<String>()).toTypedArray()
+                    ?: HashSet()).toTypedArray()
             keyPreference?.summary = if (selectedKeys.isEmpty()) {
                 this.resources.getString(R.string.pref_no_key_selected)
             } else {
@@ -120,11 +133,10 @@ class UserPreference : AppCompatActivity() {
                     OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
                 }
             }
-            openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty() ?: false
+            openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
+                    ?: false
 
-            // see if the autofill service is enabled and check the preference accordingly
-            autoFillEnablePreference?.isChecked = callingActivity.isServiceEnabled
-            autofillDependencies.forEach { it?.isVisible = callingActivity.isServiceEnabled }
+            updateAutofillSettings()
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
@@ -230,31 +242,14 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
             externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
-            autoFillAppsPreference?.onPreferenceClickListener = ClickListener {
+            autoFillAppsPreference.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
             }
 
             autoFillEnablePreference?.onPreferenceClickListener = ClickListener {
-                var isEnabled = callingActivity.isServiceEnabled
-                if (isEnabled) {
-                    startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                } else {
-                    MaterialAlertDialogBuilder(callingActivity)
-                            .setTitle(R.string.pref_autofill_enable_title)
-                            .setView(R.layout.autofill_instructions)
-                            .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                            }
-                            .setNegativeButton(R.string.dialog_cancel, null)
-                            .setOnDismissListener {
-                                isEnabled = callingActivity.isServiceEnabled
-                                autoFillEnablePreference?.isChecked = isEnabled
-                                autofillDependencies.forEach { it?.isVisible = isEnabled }
-                            }
-                            .show()
-                }
+                onEnableAutofillClick()
                 true
             }
 
@@ -266,17 +261,20 @@ class UserPreference : AppCompatActivity() {
                 }
             }
 
-            findPreference<Preference>("general_show_time")?.onPreferenceChangeListener =
-                    ChangeListener { _, newValue: Any? ->
-                        try {
-                            val isEnabled = newValue.toString().toInt() != 0
-                            clearAfterCopyPreference?.isVisible = isEnabled
-                            clearClipboard20xPreference?.isVisible = isEnabled
-                            true
-                        } catch (e: NumberFormatException) {
-                            false
-                        }
-                    }
+            showTimePreference?.onPreferenceChangeListener = ChangeListener { _, newValue: Any? ->
+                try {
+                    val isEnabled = newValue.toString().toInt() != 0
+                    clearAfterCopyPreference?.isVisible = isEnabled
+                    clearClipboard20xPreference?.isVisible = isEnabled
+                    true
+                } catch (e: NumberFormatException) {
+                    false
+                }
+            }
+
+            showTimePreference?.summaryProvider = Preference.SummaryProvider<Preference> {
+                getString(R.string.pref_show_time_summary, sharedPreferences.getString("general_show_time", "45"))
+            }
 
             findPreference<SwitchPreferenceCompat>("biometric_auth")?.apply {
                 val isFingerprintSupported = BiometricManager.from(requireContext()).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
@@ -286,6 +284,7 @@ class UserPreference : AppCompatActivity() {
                     summary = getString(R.string.biometric_auth_summary_error)
                 } else {
                     setOnPreferenceClickListener {
+                        isEnabled = false
                         val editor = sharedPreferences.edit()
                         val checked = isChecked
                         Authenticator(requireActivity()) { result ->
@@ -293,12 +292,14 @@ class UserPreference : AppCompatActivity() {
                                 is AuthenticationResult.Success -> {
                                     // Apply the changes
                                     editor.putBoolean("biometric_auth", checked)
+                                    isEnabled = true
                                 }
                                 else -> {
                                     // If any error occurs, revert back to the previous state. This
                                     // catch-all clause includes the cancellation case.
                                     editor.putBoolean("biometric_auth", !checked)
                                     isChecked = !checked
+                                    isEnabled = true
                                 }
                             }
                         }.authenticate()
@@ -312,13 +313,121 @@ class UserPreference : AppCompatActivity() {
                     }
                 }
             }
+
+            val prefCustomXkpwdDictionary = findPreference<Preference>("pref_key_custom_dict")
+            prefCustomXkpwdDictionary?.onPreferenceClickListener = ClickListener {
+                callingActivity.storeCustomDictionaryPath()
+                true
+            }
+            val dictUri = sharedPreferences.getString("pref_key_custom_dict", "")
+
+            if (!TextUtils.isEmpty(dictUri)) {
+                setCustomDictSummary(prefCustomXkpwdDictionary, Uri.parse(dictUri))
+            }
+
+            val prefIsCustomDict = findPreference<CheckBoxPreference>("pref_key_is_custom_dict")
+            val prefCustomDictPicker = findPreference<Preference>("pref_key_custom_dict")
+            val prefPwgenType = findPreference<ListPreference>("pref_key_pwgen_type")
+            showHideDependentPrefs(prefPwgenType?.value, prefIsCustomDict, prefCustomDictPicker)
+
+            prefPwgenType?.onPreferenceChangeListener = ChangeListener { _, newValue ->
+                showHideDependentPrefs(newValue, prefIsCustomDict, prefCustomDictPicker)
+                true
+            }
+
+            prefIsCustomDict?.onPreferenceChangeListener = ChangeListener { _, newValue ->
+                if (!(newValue as Boolean)) {
+                    val customDictFile = File(context.filesDir, XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    if (customDictFile.exists()) {
+                        FileUtils.deleteQuietly(customDictFile)
+                    }
+                    prefCustomDictPicker?.setSummary(R.string.xkpwgen_pref_custom_dict_picker_summary)
+                }
+                true
+            }
+        }
+
+        private fun showHideDependentPrefs(newValue: Any?, prefIsCustomDict: CheckBoxPreference?, prefCustomDictPicker: Preference?) {
+            when (newValue as String) {
+                PgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
+                    prefIsCustomDict?.isVisible = false
+                    prefCustomDictPicker?.isVisible = false
+                }
+                PgpActivity.KEY_PWGEN_TYPE_XKPASSWD -> {
+                    prefIsCustomDict?.isVisible = true
+                    prefCustomDictPicker?.isVisible = true
+                }
+            }
+        }
+
+        private fun updateAutofillSettings() {
+            val isAccessibilityServiceEnabled = callingActivity.isAccessibilityServiceEnabled
+            val isAutofillServiceEnabled = callingActivity.isAutofillServiceEnabled
+            autoFillEnablePreference?.isChecked =
+                isAccessibilityServiceEnabled || isAutofillServiceEnabled
+            autofillDependencies.forEach {
+                it.isVisible = isAccessibilityServiceEnabled
+            }
+            oreoAutofillDependencies.forEach {
+                it.isVisible = isAutofillServiceEnabled
+            }
+        }
+
+        private fun onEnableAutofillClick() {
+            if (callingActivity.isAccessibilityServiceEnabled) {
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            } else if (callingActivity.isAutofillServiceEnabled) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    callingActivity.autofillManager!!.disableAutofillServices()
+                else
+                    throw IllegalStateException("isAutofillServiceEnabled == true, but Build.VERSION.SDK_INT < Build.VERSION_CODES.O")
+            } else {
+                val enableOreoAutofill = callingActivity.isAutofillServiceSupported
+                MaterialAlertDialogBuilder(callingActivity).run {
+                    setTitle(R.string.pref_autofill_enable_title)
+                    if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val layout =
+                            layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
+                        val supportedBrowsersTextView =
+                            layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
+                        supportedBrowsersTextView.text =
+                            getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
+                                separator = "\n"
+                            ) {
+                                val appLabel = it.first
+                                val supportDescription = when (it.second) {
+                                    BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
+                                    BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
+                                    BrowserAutofillSupportLevel.Fill -> getString(R.string.oreo_autofill_fill_support)
+                                    BrowserAutofillSupportLevel.FillAndSave -> getString(R.string.oreo_autofill_fill_and_save_support)
+                                }
+                                "$appLabel: $supportDescription"
+                            }
+                        setView(layout)
+                    } else {
+                        setView(R.layout.autofill_instructions)
+                    }
+                    setPositiveButton(R.string.dialog_ok) { _, _ ->
+                        val intent =
+                            if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
+                                    data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                                }
+                            } else {
+                                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                            }
+                        startActivity(intent)
+                    }
+                    setNegativeButton(R.string.dialog_cancel, null)
+                    setOnDismissListener { updateAutofillSettings() }
+                    show()
+                }
+            }
         }
 
         override fun onResume() {
             super.onResume()
-            val isEnabled = callingActivity.isServiceEnabled
-            autoFillEnablePreference?.isChecked = isEnabled
-            autofillDependencies.forEach { it?.isVisible = isEnabled }
+            updateAutofillSettings()
         }
     }
 
@@ -396,6 +505,17 @@ class UserPreference : AppCompatActivity() {
         }
     }
 
+    /**
+     * Pick custom xkpwd dictionary from sdcard
+     */
+    private fun storeCustomDictionaryPath() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
+        startActivityForResult(intent, SET_CUSTOM_XKPWD_DICT)
+    }
+
     @Throws(IOException::class)
     private fun copySshKey(uri: Uri) {
         // TODO: Check if valid SSH Key before import
@@ -420,16 +540,26 @@ class UserPreference : AppCompatActivity() {
         }
     }
 
-    // Returns whether the autofill service is enabled
-    private val isServiceEnabled: Boolean
+    private val isAccessibilityServiceEnabled: Boolean
         get() {
-            val am = this
-                    .getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+            val am = getSystemService(AccessibilityManager::class.java)
             val runningServices = am
-                    .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
-                    .map { it.id.substringBefore("/") }
-                    .any { it == BuildConfig.APPLICATION_ID }
+                .map { it.id.substringBefore("/") }
+                .any { it == BuildConfig.APPLICATION_ID }
+        }
+
+    private val isAutofillServiceSupported: Boolean
+        get() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+            return autofillManager?.isAutofillSupported != null
+        }
+
+    private val isAutofillServiceEnabled: Boolean
+        get() {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+            return autofillManager?.hasEnabledAutofillServices() == true
         }
 
     override fun onActivityResult(
@@ -481,7 +611,7 @@ class UserPreference : AppCompatActivity() {
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val path = if (split.size > 0) split[1] else split[0]
+                    val path = if (split.isNotEmpty()) split[1] else split[0]
                     val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
 
                     Timber.tag(TAG).d("Selected repository path is $repoPath")
@@ -515,6 +645,27 @@ class UserPreference : AppCompatActivity() {
                             exportPasswords(targetDirectory)
                         }
                     }
+                }
+                SET_CUSTOM_XKPWD_DICT -> {
+                    val uri: Uri = data.data ?: throw IOException("Unable to open file")
+
+                    Toast.makeText(
+                            this,
+                            this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+                    prefs.edit().putString("pref_key_custom_dict", uri.toString()).apply()
+
+                    val customDictPref = prefsFragment.findPreference<Preference>("pref_key_custom_dict")
+                    setCustomDictSummary(customDictPref, uri)
+                    // copy user selected file to internal storage
+                    val inputStream = this.contentResolver.openInputStream(uri)
+                    val customDictFile = File(this.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
+                    FileUtils.copyInputStreamToFile(inputStream, customDictFile)
+
+                    setResult(Activity.RESULT_OK)
                 }
             }
         }
@@ -599,6 +750,16 @@ class UserPreference : AppCompatActivity() {
         private const val SELECT_GIT_DIRECTORY = 4
         private const val EXPORT_PASSWORDS = 5
         private const val EDIT_GIT_CONFIG = 6
+        private const val SET_CUSTOM_XKPWD_DICT = 7
         private const val TAG = "UserPreference"
+
+        /**
+         * Set custom dictionary summary
+         */
+        @JvmStatic
+        private fun setCustomDictSummary(customDictPref: Preference?, uri: Uri) {
+            val fileName = uri.path?.substring(uri.path?.lastIndexOf(":")!! + 1)
+            customDictPref?.summary = "Selected dictionary: $fileName"
+        }
     }
 }

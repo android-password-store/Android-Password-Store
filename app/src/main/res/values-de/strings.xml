@@ -96,8 +96,7 @@
     <string name="pref_provider_title">Wähle OpenPGP-Provider</string>
     <string name="pref_key_title">Wähle OpenPGP-Key ID</string>
     <string name="pref_general_title">Allgemein</string>
-    <string name="pref_password_title">Ablaufzeit des Passworts</string>
-    <string name="pref_password_dialog_title">Nach dieser Anzahl der Sekunden wird das Passwort aus der Zwischenablage gelöscht.</string>
+    <string name="pref_show_time_title">Ablaufzeit des Passworts</string>
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
     <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
     <string name="ssh_key_success_dialog_title">SSH-Key importiert</string>

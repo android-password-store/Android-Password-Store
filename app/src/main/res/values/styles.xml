@@ -36,4 +36,12 @@
         <item name="boxStrokeColor">?attr/colorSecondary</item>
         <item name="hintTextColor">?attr/colorOnPrimary</item>
     </style>
+
+    <style name="DialogLikeTheme" parent="AppTheme">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- Needs to be set without android: prefix as per https://stackoverflow.com/a/33417456 -->
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

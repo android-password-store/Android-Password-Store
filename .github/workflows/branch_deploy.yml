@@ -1,11 +1,13 @@
-name: "Release nightly snapshots"
 on:
-  schedule:
-  - cron: '0 0 * * *'
+  push:
+    branches-ignore:
+      - master
 
+name: Build debug
 jobs:
-  deploy-release-snapshot:
+  generate-debug-build:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - name: Checkout repository
       uses: actions/checkout@v1
@@ -15,6 +17,9 @@ jobs:
       env:
         ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
+    - name: Copy CI gradle.properties
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
     - uses: actions/cache@v1
       with:
           path: ~/.gradle/caches
@@ -23,19 +28,15 @@ jobs:
     - name: Download gradle dependencies
       run: ./gradlew dependencies
 
-    - name: Build release app
-      run: ./gradlew :app:assembleRelease
-      env:
-        SNAPSHOT: "true"
+    - name: Build debug app
+      run: ./gradlew :app:assembleDebug
 
     - name: Clean secrets
       run: release/signing-cleanup.sh
 
-    - name: Deploy snapshot
-      run: release/deploy-snapshot.sh
+    - name: Send APK to Telegram
+      run: release/deploy-telegram.sh
       env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-        SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
-        SERVER_DESTINATION: ${{ secrets.SERVER_DESTINATION }}
-        SSH_PORT: ${{ secrets.SSH_PORT }}
+        TG_TO: ${{ secrets.TELEGRAM_TO }}
+        TG_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        TG_FILE: ./app/build/outputs/apk/debug/app-debug.apk

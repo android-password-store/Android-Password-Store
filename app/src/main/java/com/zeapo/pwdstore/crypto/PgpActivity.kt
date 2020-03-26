@@ -5,17 +5,18 @@
 package com.zeapo.pwdstore.crypto
 
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.graphics.Typeface
-import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
-import android.os.ConditionVariable
-import android.os.Handler
+import android.text.InputType
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
@@ -27,17 +28,23 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
+import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
+import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.Otp
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -45,13 +52,8 @@ import java.io.File
 import java.nio.charset.Charset
 import java.util.Date
 import kotlinx.android.synthetic.main.decrypt_layout.*
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_file_edit
-import kotlinx.android.synthetic.main.encrypt_layout.generate_password
+import kotlinx.android.synthetic.main.encrypt_layout.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.ACTION_DECRYPT_VERIFY
@@ -79,6 +81,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private var editPass: String? = null
     private var editExtra: String? = null
 
+    private val suggestedName by lazy { intent.getStringExtra("SUGGESTED_NAME") }
+    private val suggestedPass by lazy { intent.getStringExtra("SUGGESTED_PASS") }
+    private val suggestedExtra by lazy { intent.getStringExtra("SUGGESTED_EXTRA") }
+    private val shouldGeneratePassword by lazy { intent.getBooleanExtra("GENERATE_PASSWORD", false) }
+
     private val operation: String by lazy { intent.getStringExtra("OPERATION") }
     private val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
@@ -95,10 +102,15 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val relativeParentPath: String by lazy { getParentPath(fullPath, repoPath) }
 
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-    private val keyIDs: MutableSet<String> by lazy {
-        settings.getStringSet("openpgp_key_ids_set", mutableSetOf()) ?: emptySet()
-    }
+    private val keyIDs get() = _keyIDs
+    private var _keyIDs = emptySet<String>()
     private var mServiceConnection: OpenPgpServiceConnection? = null
+    private var delayTask: DelayShow? = null
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            delayTask?.doOnPostExecute()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +118,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         Timber.tag(TAG)
 
         // some persistence
+        _keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
         val providerPackageName = settings.getString("openpgp_provider_list", "")
 
         if (TextUtils.isEmpty(providerPackageName)) {
@@ -124,6 +137,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.decrypt_layout)
                 crypto_password_category_decrypt.text = relativeParentPath
                 crypto_password_file.text = name
+                crypto_password_file.setOnLongClickListener {
+                    val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
+                    clipboard.primaryClip = clip
+                    showSnackbar(this.resources.getString(R.string.clipboard_username_toast_text))
+                    true
+                }
 
                 crypto_password_last_changed.text = try {
                     this.resources.getString(R.string.last_changed, lastChangedString)
@@ -136,14 +155,102 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 setContentView(R.layout.encrypt_layout)
 
                 generate_password?.setOnClickListener {
-                    PasswordGeneratorDialogFragment()
-                        .show(supportFragmentManager, "generator")
+                    generatePassword()
                 }
 
                 title = getString(R.string.new_password_title)
-                crypto_password_category.text = getRelativePath(fullPath, repoPath)
+                crypto_password_category.apply {
+                    setText(getRelativePath(fullPath, repoPath))
+                    // If the activity has been provided with suggested info, we allow the user to
+                    // edit the path, otherwise we style the EditText like a TextView.
+                    if (suggestedName != null) {
+                        isEnabled = true
+                    } else {
+                        setBackgroundColor(getColor(android.R.color.transparent))
+                    }
+                }
+                suggestedName?.let { crypto_password_file_edit.setText(it) }
+                // Allow the user to quickly switch between storing the username as the filename or
+                // in the encrypted extras. This only makes sense if the directory structure is
+                // FileBased.
+                if (suggestedName != null &&
+                    AutofillPreferences.directoryStructure(this) == DirectoryStructure.FileBased
+                ) {
+                    encrypt_username.apply {
+                        visibility = View.VISIBLE
+                        setOnClickListener {
+                            if (isChecked) {
+                                // User wants to enable username encryption, so we add it to the
+                                // encrypted extras as the first line.
+                                val username = crypto_password_file_edit.text!!.toString()
+                                val extras = "username:$username\n${crypto_extra_edit.text!!}"
+
+                                crypto_password_file_edit.setText("")
+                                crypto_extra_edit.setText(extras)
+                            } else {
+                                // User wants to disable username encryption, so we extract the
+                                // username from the encrypted extras and use it as the filename.
+                                val entry = PasswordEntry("PASSWORD\n${crypto_extra_edit.text!!}")
+                                val username = entry.username
+
+                                // username should not be null here by the logic in
+                                // updateEncryptUsernameState, but it could still happen due to
+                                // input lag.
+                                if (username != null) {
+                                    crypto_password_file_edit.setText(username)
+                                    crypto_extra_edit.setText(entry.extraContentWithoutUsername)
+                                }
+                            }
+                            updateEncryptUsernameState()
+                        }
+                    }
+                    crypto_password_file_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    crypto_extra_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    updateEncryptUsernameState()
+                }
+                suggestedPass?.let {
+                    crypto_password_edit.setText(it)
+                    crypto_password_edit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                }
+                suggestedExtra?.let { crypto_extra_edit.setText(it) }
+                if (shouldGeneratePassword) {
+                    generatePassword()
+                    crypto_password_edit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                }
             }
         }
+    }
+
+    fun updateEncryptUsernameState() {
+        encrypt_username.apply {
+            if (visibility != View.VISIBLE)
+                return
+            val hasUsernameInFileName = crypto_password_file_edit.text!!.toString().isNotBlank()
+            // Use PasswordEntry to parse extras for username
+            val entry = PasswordEntry("PLACEHOLDER\n${crypto_extra_edit.text!!}")
+            val hasUsernameInExtras = entry.hasUsername()
+            isEnabled = hasUsernameInFileName xor hasUsernameInExtras
+            isChecked = hasUsernameInExtras
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter(ACTION_CLEAR))
+    }
+
+    private fun generatePassword() {
+        when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+            KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
+                .show(supportFragmentManager, "generator")
+            KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
+                .show(supportFragmentManager, "xkpwgenerator")
+        }
+    }
+
+    override fun onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
+        super.onStop()
     }
 
     override fun onDestroy() {
@@ -247,7 +354,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val iStream = FileUtils.openInputStream(File(fullPath).canonicalFile)
         val oStream = ByteArrayOutputStream()
 
-        GlobalScope.launch(IO) {
+        lifecycleScope.launch(IO) {
             api?.executeApiAsync(data, iStream, oStream, object : OpenPgpApi.IOpenPgpCallback {
                 override fun onReturn(result: Intent?) {
                     when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
@@ -285,8 +392,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     null
                                 } else {
                                     HoldToShowPasswordTransformation(
-                                        crypto_password_toggle_show,
-                                        Runnable { crypto_password_show.text = entry.password }
+                                            crypto_password_toggle_show,
+                                            Runnable { crypto_password_show.text = entry.password }
                                     )
                                 }
 
@@ -339,19 +446,19 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     if (entry.hasTotp()) {
                                         crypto_copy_otp.setOnClickListener {
                                             copyOtpToClipBoard(
-                                                Otp.calculateCode(
-                                                    entry.totpSecret,
-                                                    Date().time / (1000 * entry.totpPeriod),
-                                                    entry.totpAlgorithm,
-                                                    entry.digits)
+                                                    Otp.calculateCode(
+                                                            entry.totpSecret,
+                                                            Date().time / (1000 * entry.totpPeriod),
+                                                            entry.totpAlgorithm,
+                                                            entry.digits)
                                             )
                                         }
                                         crypto_otp_show.text =
-                                            Otp.calculateCode(
-                                                entry.totpSecret,
-                                                Date().time / (1000 * entry.totpPeriod),
-                                                entry.totpAlgorithm,
-                                                entry.digits)
+                                                Otp.calculateCode(
+                                                        entry.totpSecret,
+                                                        Date().time / (1000 * entry.totpPeriod),
+                                                        entry.totpAlgorithm,
+                                                        entry.digits)
                                     } else {
                                         // we only want to calculate and show HOTP if the user requests it
                                         crypto_copy_otp.setOnClickListener {
@@ -366,31 +473,31 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                                 val checkInflater = LayoutInflater.from(this@PgpActivity)
                                                 val checkLayout = checkInflater.inflate(R.layout.otp_confirm_layout, null)
                                                 val rememberCheck: CheckBox =
-                                                    checkLayout.findViewById(R.id.hotp_remember_checkbox)
+                                                        checkLayout.findViewById(R.id.hotp_remember_checkbox)
                                                 val dialogBuilder = MaterialAlertDialogBuilder(this@PgpActivity)
                                                 dialogBuilder.setView(checkLayout)
                                                 dialogBuilder.setMessage(R.string.dialog_update_body)
-                                                    .setCancelable(false)
-                                                    .setPositiveButton(R.string.dialog_update_positive) { _, _ ->
-                                                        run {
-                                                            calculateAndCommitHotp(entry)
-                                                            if (rememberCheck.isChecked) {
+                                                        .setCancelable(false)
+                                                        .setPositiveButton(R.string.dialog_update_positive) { _, _ ->
+                                                            run {
+                                                                calculateAndCommitHotp(entry)
+                                                                if (rememberCheck.isChecked) {
+                                                                    val editor = settings.edit()
+                                                                    editor.putBoolean("hotp_remember_check", true)
+                                                                    editor.putBoolean("hotp_remember_choice", true)
+                                                                    editor.apply()
+                                                                }
+                                                            }
+                                                        }
+                                                        .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
+                                                            run {
+                                                                calculateHotp(entry)
                                                                 val editor = settings.edit()
                                                                 editor.putBoolean("hotp_remember_check", true)
-                                                                editor.putBoolean("hotp_remember_choice", true)
+                                                                editor.putBoolean("hotp_remember_choice", false)
                                                                 editor.apply()
                                                             }
                                                         }
-                                                    }
-                                                    .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
-                                                        run {
-                                                            calculateHotp(entry)
-                                                            val editor = settings.edit()
-                                                            editor.putBoolean("hotp_remember_check", true)
-                                                            editor.putBoolean("hotp_remember_choice", false)
-                                                            editor.apply()
-                                                        }
-                                                    }
                                                 val updateDialog = dialogBuilder.create()
                                                 updateDialog.setTitle(R.string.dialog_update_title)
                                                 updateDialog.show()
@@ -454,19 +561,34 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
         // TODO Check if we could use PasswordEntry to generate the file
-        val iStream = ByteArrayInputStream("$editPass\n$editExtra".toByteArray(Charset.forName("UTF-8")))
+        val content = "$editPass\n$editExtra"
+        val iStream = ByteArrayInputStream(content.toByteArray(Charset.forName("UTF-8")))
         val oStream = ByteArrayOutputStream()
 
-        val path = if (intent.getBooleanExtra("fromDecrypt", false)) fullPath else "$fullPath/$editName.gpg"
+        val path = when {
+            intent.getBooleanExtra("fromDecrypt", false) -> fullPath
+            // If we allowed the user to edit the relative path, we have to consider it here instead
+            // of fullPath.
+            crypto_password_category.isEnabled -> {
+                val editRelativePath = crypto_password_category.text!!.toString().trim()
+                if (editRelativePath.isEmpty()) {
+                    showSnackbar(resources.getString(R.string.path_toast_text))
+                    return
+                }
+                "$repoPath/${editRelativePath.trim('/')}/$editName.gpg"
+            }
+            else -> "$fullPath/$editName.gpg"
+        }
 
-        GlobalScope.launch(IO) {
+        lifecycleScope.launch(IO) {
             api?.executeApiAsync(data, iStream, oStream, object : OpenPgpApi.IOpenPgpCallback {
                 override fun onReturn(result: Intent?) {
                     when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
                         RESULT_CODE_SUCCESS -> {
                             try {
                                 // TODO This might fail, we should check that the write is successful
-                                val outputStream = FileUtils.openOutputStream(File(path))
+                                val file = File(path)
+                                val outputStream = FileUtils.openOutputStream(file)
                                 outputStream.write(oStream.toByteArray())
                                 outputStream.close()
 
@@ -480,6 +602,18 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     returnIntent.putExtra("OPERATION", "EDIT")
                                     returnIntent.putExtra("needCommit", true)
                                 }
+
+                                if (shouldGeneratePassword) {
+                                    val directoryStructure =
+                                        AutofillPreferences.directoryStructure(applicationContext)
+                                    val entry = PasswordEntry(content)
+                                    returnIntent.putExtra("PASSWORD", entry.password)
+                                    returnIntent.putExtra(
+                                        "USERNAME",
+                                        directoryStructure.getUsernameFor(file)
+                                    )
+                                }
+
                                 setResult(RESULT_OK, returnIntent)
                                 finish()
                             } catch (e: Exception) {
@@ -499,8 +633,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun editPassword() {
         setContentView(R.layout.encrypt_layout)
         generate_password?.setOnClickListener {
-            PasswordGeneratorDialogFragment()
-                .show(supportFragmentManager, "generator")
+            when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+                KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
+                        .show(supportFragmentManager, "generator")
+                KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
+                        .show(supportFragmentManager, "xkpwgenerator")
+            }
         }
 
         title = getString(R.string.edit_password_title)
@@ -511,7 +649,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         crypto_extra_edit.setText(passwordEntry?.extraContent)
         crypto_extra_edit.typeface = monoTypeface
 
-        crypto_password_category.text = relativeParentPath
+        crypto_password_category.setText(relativeParentPath)
         crypto_password_file_edit.setText(name)
         crypto_password_file_edit.isEnabled = false
 
@@ -567,14 +705,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private fun getKeyIds(receivedIntent: Intent? = null) {
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_GET_KEY_IDS
-        GlobalScope.launch(IO) {
+        lifecycleScope.launch(IO) {
             api?.executeApiAsync(data, null, null, object : OpenPgpApi.IOpenPgpCallback {
                 override fun onReturn(result: Intent?) {
                     when (result?.getIntExtra(RESULT_CODE, RESULT_CODE_ERROR)) {
                         RESULT_CODE_SUCCESS -> {
                             try {
                                 val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
-                                    ?: LongArray(0)
+                                        ?: LongArray(0)
                                 val keys = ids.map { it.toString() }.toSet()
 
                                 // use Long
@@ -674,7 +812,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
-        clipboard.setPrimaryClip(clip)
+        clipboard.primaryClip = clip
 
         var clearAfter = 45
         try {
@@ -693,13 +831,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     private fun copyUsernameToClipBoard(username: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
-        clipboard.setPrimaryClip(clip)
+        clipboard.primaryClip = clip
         showSnackbar(resources.getString(R.string.clipboard_username_toast_text))
     }
 
     private fun copyOtpToClipBoard(code: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
-        clipboard.setPrimaryClip(clip)
+        clipboard.primaryClip = clip
         showSnackbar(resources.getString(R.string.clipboard_otp_toast_text))
     }
 
@@ -726,8 +864,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         delayTask?.cancelAndSignal(true)
 
         // launch a new one
-        delayTask = DelayShow(this)
-        delayTask?.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        delayTask = DelayShow()
+        delayTask?.execute()
     }
 
     /**
@@ -743,11 +881,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     @Suppress("StaticFieldLeak")
-    inner class DelayShow(val activity: PgpActivity) : AsyncTask<Void, Int, Boolean>() {
-        private val pb: ProgressBar? by lazy { pbLoading }
-        private var skip = false
-        private var cancelNotify = ConditionVariable()
+    inner class DelayShow {
 
+        private var skip = false
+        private var service: Intent? = null
         private var showTime: Int = 0
 
         // Custom cancellation that can be triggered from another thread.
@@ -757,14 +894,25 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         // is true, the cancelled task won't clear the clipboard.
         fun cancelAndSignal(skipClearing: Boolean) {
             skip = skipClearing
-            cancelNotify.open()
+            if (service != null) {
+                stopService(service)
+                service = null
+            }
         }
 
-        val settings: SharedPreferences by lazy {
-            PreferenceManager.getDefaultSharedPreferences(activity)
+        fun execute() {
+            service = Intent(this@PgpActivity, ClipboardService::class.java).also {
+                it.action = ACTION_START
+            }
+            doOnPreExecute()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(service)
+            } else {
+                startService(service)
+            }
         }
 
-        override fun onPreExecute() {
+        private fun doOnPreExecute() {
             showTime = try {
                 Integer.parseInt(settings.getString("general_show_time", "45") as String)
             } catch (e: NumberFormatException) {
@@ -778,48 +926,11 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
             if (extraText?.text?.isNotEmpty() == true)
                 findViewById<View>(R.id.crypto_extra_show_layout)?.visibility = View.VISIBLE
-
-            if (showTime == 0) {
-                // treat 0 as forever, and the user must exit and/or clear clipboard on their own
-                cancel(true)
-            } else {
-                this.pb?.max = showTime
-            }
         }
 
-        override fun doInBackground(vararg params: Void): Boolean? {
-            var current = 0
-            while (current < showTime) {
-
-                // Block for 1s or until cancel is signalled
-                if (cancelNotify.block(1000)) {
-                    return true
-                }
-
-                current++
-                publishProgress(current)
-            }
-            return true
-        }
-
-        override fun onPostExecute(b: Boolean?) {
+        fun doOnPostExecute() {
             if (skip) return
             checkAndIncrementHotp()
-
-            // No need to validate clear_after_copy. It was validated in copyPasswordToClipBoard()
-            Timber.d("Clearing the clipboard")
-            val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
-            clipboard.setPrimaryClip(clip)
-            if (settings.getBoolean("clear_clipboard_20x", false)) {
-                val handler = Handler()
-                for (i in 0..19) {
-                    val count = i.toString()
-                    handler.postDelayed(
-                            { clipboard.setPrimaryClip(ClipData.newPlainText(count, count)) },
-                            (i * 500).toLong()
-                    )
-                }
-            }
 
             if (crypto_password_show != null) {
                 // clear password; if decrypt changed to encrypt layout via edit button, no need
@@ -834,10 +945,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 finish()
             }
         }
-
-        override fun onProgressUpdate(vararg values: Int?) {
-            this.pb?.progress = values[0] ?: 0
-        }
     }
 
     companion object {
@@ -845,9 +952,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         const val REQUEST_DECRYPT = 202
         const val REQUEST_KEY_ID = 203
 
+        private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
+        private const val ACTION_START = "ACTION_START_CLIPBOARD_TIMER"
+
         const val TAG = "PgpActivity"
 
-        private var delayTask: DelayShow? = null
+        const val KEY_PWGEN_TYPE_CLASSIC = "classic"
+        const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
 
         /**
          * Gets the relative path to the repository
