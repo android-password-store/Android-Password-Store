@@ -548,14 +548,7 @@ class PasswordStore : AppCompatActivity() {
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
     private fun commitChange(message: String) {
-        object : GitOperation(getRepositoryDirectory(activity), activity) {
-            override fun execute() {
-                Timber.tag(TAG).d("Committing with message $message")
-                val git = Git(repository)
-                val tasks = GitAsyncTask(activity, false, true, this)
-                tasks.execute(git.add().addFilepattern("."), git.commit().setAll(true).setMessage(message))
-            }
-        }.execute()
+        Companion.commitChange(activity, message)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -771,6 +764,20 @@ class PasswordStore : AppCompatActivity() {
             val block = UnicodeBlock.of(c)
             return (!Character.isISOControl(c) &&
                     block != null && block !== UnicodeBlock.SPECIALS)
+        }
+
+        fun commitChange(activity: Activity, message: String) {
+            object : GitOperation(getRepositoryDirectory(activity), activity) {
+                override fun execute() {
+                    Timber.tag(TAG).d("Committing with message $message")
+                    val git = Git(repository)
+                    val tasks = GitAsyncTask(activity, false, true, this)
+                    tasks.execute(
+                        git.add().addFilepattern("."),
+                        git.commit().setAll(true).setMessage(message)
+                    )
+                }
+            }.execute()
         }
     }
 }
