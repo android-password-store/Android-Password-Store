@@ -141,7 +141,7 @@ private fun getBrowserSaveFlag(appPackage: String): Int? = BROWSER_SAVE_FLAG[app
 
 data class BrowserAutofillSupportInfo(
     val multiOriginMethod: BrowserMultiOriginMethod,
-    val saveFlag: Int?
+    val saveFlags: Int?
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -152,7 +152,7 @@ fun getBrowserAutofillSupportInfoIfTrusted(
     if (!isTrustedBrowser(context, appPackage)) return null
     return BrowserAutofillSupportInfo(
         multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
-        saveFlag = getBrowserSaveFlag(appPackage)
+        saveFlags = getBrowserSaveFlag(appPackage)
     )
 }
 
@@ -175,7 +175,7 @@ private fun getBrowserAutofillSupportLevel(
     val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
     return when {
         browserInfo == null -> BrowserAutofillSupportLevel.None
-        browserInfo.saveFlag != null -> BrowserAutofillSupportLevel.FillAndSave
+        browserInfo.saveFlags != null -> BrowserAutofillSupportLevel.FillAndSave
         appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
         else -> BrowserAutofillSupportLevel.Fill
     }
