@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
@@ -114,12 +115,15 @@ class AutofillSaveActivity : Activity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PasswordStore.REQUEST_CODE_ENCRYPT && resultCode == RESULT_OK && data != null) {
-            val createdPath = data.getStringExtra("CREATED_FILE")
-            if (createdPath != null) {
-                formOrigin?.let {
-                    AutofillMatcher.addMatchFor(this, it, File(createdPath))
-                }
+            val createdPath = data.getStringExtra("CREATED_FILE")!!
+            formOrigin?.let {
+                AutofillMatcher.addMatchFor(this, it, File(createdPath))
             }
+            val longName = data.getStringExtra("LONG_NAME")!!
+            // PgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
+            // is not involved in an AutofillScenario, we have to commit the file ourself.
+            PasswordStore.commitChange(this, getString(R.string.git_commit_add_text, longName))
+
             val password = data.getStringExtra("PASSWORD")
             val username = data.getStringExtra("USERNAME")
             if (password != null) {
