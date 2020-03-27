@@ -123,7 +123,7 @@ class PasswordFragment : Fragment() {
                         )
                         // push the category were we're going
                         pathStack.push(item.file)
-                        scrollPosition.push(recyclerView.verticalScrollbarPosition)
+                        scrollPosition.push((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition())
                         recyclerView.scrollToPosition(0)
                         recyclerAdapter.clear()
                         recyclerAdapter.addAll(getPasswords(item.file, getRepositoryDirectory(context), sortOrder))
@@ -235,7 +235,7 @@ class PasswordFragment : Fragment() {
     /** Goes back one level back in the path  */
     fun popBack() {
         if (passListStack.isEmpty()) return
-        recyclerView.scrollToPosition(scrollPosition.pop())
+        (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(scrollPosition.pop())
         recyclerAdapter.clear()
         recyclerAdapter.addAll(passListStack.pop())
         pathStack.pop()
