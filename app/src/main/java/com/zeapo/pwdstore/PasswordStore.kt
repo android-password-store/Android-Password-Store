@@ -167,6 +167,7 @@ class PasswordStore : AppCompatActivity() {
         searchView.setOnQueryTextListener(
                 object : OnQueryTextListener {
                     override fun onQueryTextSubmit(s: String): Boolean {
+                        searchView.clearFocus()
                         return true
                     }
 
