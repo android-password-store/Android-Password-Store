@@ -6,11 +6,8 @@ package com.zeapo.pwdstore.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
-import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
-import androidx.core.os.postDelayed
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -19,16 +16,6 @@ import com.zeapo.pwdstore.R
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
-
-    override fun onResume() {
-        // TODO: We really, really should not need this amount of hackery. WTF is going on?
-        super.onResume()
-        val editText = dialog?.findViewById<TextInputEditText>(R.id.folder_name_text)
-        Handler().postDelayed(300) {
-            editText?.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0))
-            editText?.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0))
-        }
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
@@ -40,7 +27,20 @@ class FolderCreationDialogFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
             dismiss()
         }
-        return alertDialogBuilder.create()
+        val dialog = alertDialogBuilder.create()
+        dialog.setOnShowListener {
+            // https://stackoverflow.com/a/13056259/297261
+            dialog.findViewById<TextInputEditText>(R.id.folder_name_text)!!.apply {
+                setOnFocusChangeListener { v, _ ->
+                    v.post {
+                        val imm = activity!!.getSystemService(InputMethodManager::class.java)
+                        imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                    }
+                }
+                requestFocus()
+            }
+        }
+        return dialog
     }
 
     private fun createDirectory(currentDir: String) {
