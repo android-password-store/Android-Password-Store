@@ -99,10 +99,8 @@ abstract class EntryRecyclerAdapter internal constructor(val values: ArrayList<P
                 !(!showHidden && (pathname.isDirectory && pathname.isHidden))
             } ?: emptyArray<File>()
             val childCount = children.size
-            if (childCount > 0) {
-                holder.childCount.visibility = View.VISIBLE
-                holder.childCount.text = "$childCount"
-            }
+            holder.childCount.visibility = if (childCount > 0) View.VISIBLE else View.GONE
+            holder.childCount.text = "$childCount"
         } else {
             holder.typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
             val parentPath = pass.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
