@@ -27,7 +27,6 @@ class FolderCreationDialogFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(getString(android.R.string.cancel)) { _, _ ->
             dismiss()
         }
-        isCancelable = false
         val dialog = alertDialogBuilder.create()
         dialog.setOnShowListener {
             // https://stackoverflow.com/a/13056259/297261
