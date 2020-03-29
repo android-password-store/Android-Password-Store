@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Oreo Autofill support
 
+### Fixed
+- Text input box theming
+
 ## [1.6.0] - 2020-03-20
 
 ### Added
