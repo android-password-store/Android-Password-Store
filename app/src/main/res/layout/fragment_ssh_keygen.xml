@@ -27,8 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="@string/ssh_keygen_passphrase"
-            app:hintEnabled="true">
+            android:hint="@string/ssh_keygen_passphrase">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passphrase"
@@ -51,8 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="@string/ssh_keygen_comment"
-            app:hintEnabled="true">
+            android:hint="@string/ssh_keygen_comment">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/comment"

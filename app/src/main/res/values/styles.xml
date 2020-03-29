@@ -38,8 +38,9 @@
     </style>
 
     <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">?attr/colorSecondary</item>
-        <item name="hintTextColor">?attr/colorOnPrimary</item>
+        <item name="boxStrokeColor">@color/secondary_color</item>
+        <item name="hintTextColor">@color/color_control_normal</item>
+        <item name="hintEnabled">true</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox</item>
     </style>
 

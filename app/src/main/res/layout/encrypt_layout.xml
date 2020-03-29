@@ -28,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/crypto_name_hint"
-        app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/crypto_password_category"
         app:layout_constraintStart_toStartOf="parent">
         <com.google.android.material.textfield.TextInputEditText
@@ -44,7 +43,6 @@
         android:layout_margin="8dp"
         android:hint="@string/crypto_pass_label"
         app:endIconMode="password_toggle"
-        app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/name_input_layout"
         app:layout_constraintStart_toStartOf="parent">
         <com.google.android.material.textfield.TextInputEditText
@@ -72,7 +70,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/crypto_extra_label"
-        app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/generate_password"
         app:layout_constraintStart_toStartOf="parent">
 
