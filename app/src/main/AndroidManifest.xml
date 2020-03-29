@@ -78,7 +78,8 @@
         <activity
             android:name=".crypto.PgpActivity"
             android:parentActivityName=".PasswordStore"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".SelectFolderActivity" />
         <activity android:name=".sshkeygen.SshKeyGenActivity" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".autofill.oreo.ui.AutofillDecryptActivity" />
