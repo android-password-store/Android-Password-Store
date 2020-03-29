@@ -59,5 +59,15 @@
         <item>file</item>
         <item>directory</item>
     </string-array>
+    <string-array name="app_theme_options">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_battery_saver</item>
+    </string-array>
+    <string-array name="app_theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>battery_saver</item>
+    </string-array>
 
 </resources>
