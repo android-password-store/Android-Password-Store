@@ -22,7 +22,6 @@
         tools:text="CATEGORY HERE" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/name_input_layout"
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
@@ -39,7 +38,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/password_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,7 +67,6 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/extra_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -37,7 +37,6 @@
         app:layout_constraintStart_toEndOf="@id/label_server_protocol" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/server_user_layout"
         android:hint="@string/server_user"
         android:layout_width="match_parent"
@@ -53,7 +52,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/label_server_url"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -73,7 +71,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/label_server_port"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -94,7 +91,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/label_server_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,7 +109,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/label_clone_uri"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
