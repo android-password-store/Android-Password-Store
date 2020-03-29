@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base palette -->
     <color name="primary_color">#607d8b</color>
     <color name="primary_light_color">#8eacbb</color>
@@ -19,4 +19,9 @@
     <color name="list_multiselect_background">#668eacbb</color>
     <color name="navigation_bar_color">#000000</color>
     <color name="status_bar_color">@color/primary_dark_color</color>
+
+    <!-- Override TextInputEditText stroke color like a boss -->
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">
+        @color/secondary_color
+    </color>
 </resources>
