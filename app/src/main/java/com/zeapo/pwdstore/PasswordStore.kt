@@ -159,7 +159,7 @@ class PasswordStore : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main_menu, menu)
         searchItem = menu.findItem(R.id.action_search)
@@ -167,6 +167,7 @@ class PasswordStore : AppCompatActivity() {
         searchView.setOnQueryTextListener(
                 object : OnQueryTextListener {
                     override fun onQueryTextSubmit(s: String): Boolean {
+                        filterListAdapter(s)
                         searchView.clearFocus()
                         return true
                     }
@@ -193,7 +194,7 @@ class PasswordStore : AppCompatActivity() {
         if (settings.getBoolean("search_on_start", false)) {
             searchItem.expandActionView()
         }
-        return super.onCreateOptionsMenu(menu)
+        return super.onPrepareOptionsMenu(menu)
     }
 
     // Handle action bar item clicks here. The action bar will
