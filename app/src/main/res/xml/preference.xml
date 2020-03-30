@@ -102,6 +102,13 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory app:title="@string/pref_general_title">
+        <ListPreference
+            android:defaultValue="@string/app_theme_def"
+            android:key="app_theme"
+            android:entries="@array/app_theme_options"
+            android:entryValues="@array/app_theme_values"
+            android:summary="%s"
+            android:title="@string/theme_title" />
         <androidx.preference.EditTextPreference
             app:defaultValue="45"
             app:dialogTitle="@string/pref_show_time_summary"
