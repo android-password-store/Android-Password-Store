@@ -119,7 +119,7 @@ class PasswordStore : AppCompatActivity() {
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
 
-        model.passwordItemsList.observe(this, Observer { list -> d { list.joinToString(separator = "; ") { it.file.path } } })
+        model.passwordItemsList.observe(this, Observer { list -> d { list.joinToString(separator = "\n") { it.longName } } })
     }
 
     public override fun onResume() {

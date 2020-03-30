@@ -29,6 +29,11 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
 
+private fun File.toPasswordItem(root: File) = if (isFile)
+    PasswordItem.newPassword(name, this, root)
+else
+    PasswordItem.newCategory(name, this, root)
+
 @ExperimentalCoroutinesApi
 @FlowPreview
 class SearchableRepositoryViewModel(application: Application) : AndroidViewModel(application) {
@@ -39,28 +44,30 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     private val searchFromRoot = settings.getBoolean("search_from_root", false)
 
     private val searchFilter = MutableLiveData("")
-    private val searchFilterFlow =
-        searchFilter.asFlow().debounce(300).map { it.trim() }
+    private val searchFilterFlow = searchFilter.asFlow()
+        .debounce(300)
+        .map { it.trim() }
 
     private val currentDir = MutableLiveData<File>()
     private val currentDirFlow = currentDir.asFlow()
 
-    private val searchActionFlow =
-        searchFilterFlow.combine(currentDirFlow) { filter, dir -> Pair(filter, dir) }
-    private val passwordItemsFlow =
-        searchActionFlow.distinctUntilChanged().mapLatest { (filter, dir) ->
+    private val searchActionFlow = searchFilterFlow
+        .combine(currentDirFlow) { filter, dir -> Pair(filter, dir) }
+        .distinctUntilChanged()
+    private val passwordItemsFlow = searchActionFlow
+        .mapLatest { (filter, dir) ->
             i { "Searching '$filter' in ${dir.absolutePath}" }
-            if (filter.isNotEmpty()) {
+            val baseFlow = if (filter.isNotEmpty()) {
                 val dirToSearch = if (searchFromRoot) root else dir
-                listFilesRecursively(dirToSearch).filter { file -> file.absolutePath.contains(filter) }
+                listFilesRecursively(dirToSearch)
+                    .filter { file -> file.absolutePath.contains(filter) }
             } else {
                 listFiles(dir)
-            }.map { file ->
-                if (file.isFile)
-                    PasswordItem.newPassword(file.name, file, dir)
-                else
-                    PasswordItem.newCategory(file.name, file, dir)
-            }.toList().sortedWith(sortOrder.comparator)
+            }
+            baseFlow
+                .map { it.toPasswordItem(root) }
+                .toList()
+                .sortedWith(sortOrder.comparator)
         }
 
     val passwordItemsList = passwordItemsFlow.asLiveData(Dispatchers.IO)
