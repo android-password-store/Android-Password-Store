@@ -139,7 +139,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 crypto_password_file.text = name
                 crypto_password_file.setOnLongClickListener {
                     val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
-                    clipboard.primaryClip = clip
+                    clipboard.setPrimaryClip(clip)
                     showSnackbar(this.resources.getString(R.string.clipboard_username_toast_text))
                     true
                 }
@@ -812,7 +812,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
 
         var clearAfter = 45
         try {
@@ -831,13 +831,13 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     private fun copyUsernameToClipBoard(username: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
         showSnackbar(resources.getString(R.string.clipboard_username_toast_text))
     }
 
     private fun copyOtpToClipBoard(code: String) {
         val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
         showSnackbar(resources.getString(R.string.clipboard_otp_toast_text))
     }
 
