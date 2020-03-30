@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,10 +51,13 @@ class PasswordFragment : Fragment() {
     private lateinit var settings: SharedPreferences
     private lateinit var swipeRefresher: SwipeRefreshLayout
 
+    private val model: SearchableRepositoryViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val path = requireNotNull(requireArguments().getString("Path"))
         settings = PreferenceManager.getDefaultSharedPreferences(requireActivity())
+        model.navigateTo(getRepositoryDirectory(requireContext()))
         recyclerAdapter = PasswordRecyclerAdapter((requireActivity() as PasswordStore),
                 listener, getPasswords(File(path), getRepositoryDirectory(requireContext()), sortOrder))
     }
@@ -122,6 +126,7 @@ class PasswordFragment : Fragment() {
                                     getPasswords(pathStack.peek(), getRepositoryDirectory(context), sortOrder)
                         )
                         // push the category were we're going
+                        model.navigateTo(item.file)
                         pathStack.push(item.file)
                         scrollPosition.push((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition())
                         recyclerView.scrollToPosition(0)
@@ -153,17 +158,20 @@ class PasswordFragment : Fragment() {
         scrollPosition.clear()
         recyclerAdapter.clear()
         recyclerAdapter.addAll(getPasswords(getRepositoryDirectory(requireContext()), sortOrder))
+        model.navigateTo(getRepositoryDirectory(requireContext()))
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     /** refreshes the adapter with the latest opened category  */
     fun refreshAdapter() {
         recyclerAdapter.clear()
+        val currentDir = if (pathStack.isEmpty()) getRepositoryDirectory(requireContext()) else pathStack.peek()
+        model.navigateTo(currentDir)
         recyclerAdapter.addAll(
                 if (pathStack.isEmpty())
-                    getPasswords(getRepositoryDirectory(requireContext()), sortOrder)
+                    getPasswords(currentDir, sortOrder)
                 else
-                    getPasswords(pathStack.peek(), getRepositoryDirectory(requireContext()), sortOrder)
+                    getPasswords(currentDir, getRepositoryDirectory(requireContext()), sortOrder)
         )
     }
 
@@ -239,6 +247,7 @@ class PasswordFragment : Fragment() {
         recyclerAdapter.clear()
         recyclerAdapter.addAll(passListStack.pop())
         pathStack.pop()
+        model.navigateTo(if (pathStack.isEmpty()) getRepositoryDirectory(requireContext()) else pathStack.peek())
     }
 
     /**

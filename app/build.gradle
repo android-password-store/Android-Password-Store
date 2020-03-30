@@ -78,11 +78,14 @@ android {
 
 dependencies {
     implementation deps.androidx.annotation
+    implementation deps.androidx.activity_ktx
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.core_ktx
     implementation deps.androidx.documentfile
+    implementation deps.androidx.fragment_ktx
+    implementation deps.androidx.lifecycle_livedata_ktx
     implementation deps.androidx.lifecycle_runtime_ktx
     implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material

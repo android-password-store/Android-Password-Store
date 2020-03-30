@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
@@ -29,7 +30,10 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
@@ -52,6 +56,8 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import java.io.File
 import java.lang.Character.UnicodeBlock
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
@@ -59,6 +65,8 @@ import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
 import timber.log.Timber
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class PasswordStore : AppCompatActivity() {
 
     private lateinit var activity: PasswordStore
@@ -67,6 +75,10 @@ class PasswordStore : AppCompatActivity() {
     private lateinit var settings: SharedPreferences
     private var plist: PasswordFragment? = null
     private var shortcutManager: ShortcutManager? = null
+
+    private val model: SearchableRepositoryViewModel by viewModels {
+        ViewModelProvider.AndroidViewModelFactory(application)
+    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         // open search view on search key, or Ctr+F
@@ -106,6 +118,8 @@ class PasswordStore : AppCompatActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
+
+        model.passwordItemsList.observe(this, Observer { list -> d { list.joinToString(separator = "; ") { it.file.path } } })
     }
 
     public override fun onResume() {
@@ -171,12 +185,14 @@ class PasswordStore : AppCompatActivity() {
         searchView.setOnQueryTextListener(
                 object : OnQueryTextListener {
                     override fun onQueryTextSubmit(s: String): Boolean {
+                        model.search(s)
                         filterListAdapter(s)
                         searchView.clearFocus()
                         return true
                     }
 
                     override fun onQueryTextChange(s: String): Boolean {
+                        model.search(s)
                         filterListAdapter(s)
                         return true
                     }
