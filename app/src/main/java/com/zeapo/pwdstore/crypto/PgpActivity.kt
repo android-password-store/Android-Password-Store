@@ -163,7 +163,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     setText(getRelativePath(fullPath, repoPath))
                     // If the activity has been provided with suggested info, we allow the user to
                     // edit the path, otherwise we style the EditText like a TextView.
-                    if (suggestedName != null) {
+                    if (suggestedName != null || suggestedPass != null) {
                         isEnabled = true
                     } else {
                         setBackgroundColor(getColor(android.R.color.transparent))
