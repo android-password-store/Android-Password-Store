@@ -11,12 +11,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_input_layout"
-        style="@style/TextInputLayoutBase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/git_user_name_hint"
-        app:hintEnabled="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="64dp">
@@ -30,13 +28,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayoutBase"
         android:id="@+id/email_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/git_user_email"
-        app:hintEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/username_input_layout"
         app:layout_constraintStart_toStartOf="parent">
 

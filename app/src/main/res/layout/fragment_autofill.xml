@@ -14,8 +14,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="URL"
-        app:hintEnabled="true">
+        android:hint="URL">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/webURL"
             android:layout_width="match_parent"

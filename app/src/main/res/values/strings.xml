@@ -335,4 +335,9 @@
     <string name="password_generator_category_title">Password Generator</string>
     <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
     <string name="clone_git_repo">Clone a git repository to sync changes</string>
+    <string name="theme_title">App theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_battery_saver">Set by Battery Saver</string>
+    <string name="theme_follow_system">System default</string>
 </resources>
