@@ -52,8 +52,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import java.io.File
 import java.lang.Character.UnicodeBlock
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
@@ -61,8 +59,6 @@ import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
 import timber.log.Timber
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class PasswordStore : AppCompatActivity() {
 
     private lateinit var activity: PasswordStore
