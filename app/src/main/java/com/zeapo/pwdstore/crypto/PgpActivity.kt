@@ -161,9 +161,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 title = getString(R.string.new_password_title)
                 crypto_password_category.apply {
                     setText(getRelativePath(fullPath, repoPath))
-                    // If the activity has been provided with suggested info, we allow the user to
-                    // edit the path, otherwise we style the EditText like a TextView.
-                    if (suggestedName != null || suggestedPass != null) {
+                    // If the activity has been provided with suggested info or is meant to generate
+                    // a password, we allow the user to edit the path, otherwise we style the
+                    // EditText like a TextView.
+                    if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
                         isEnabled = true
                     } else {
                         setBackgroundColor(getColor(android.R.color.transparent))
