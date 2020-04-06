@@ -234,8 +234,6 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             .walkTopDown().onEnter { file -> shouldTake(file) }
             .asFlow()
             .map {
-                // Makes the flow cancellable (to verify, replace next line with `delay(100)`)
-                // TODO: Measure performance impact
                 yield()
                 it
             }
