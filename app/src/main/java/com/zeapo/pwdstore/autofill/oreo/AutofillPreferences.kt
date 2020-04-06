@@ -29,6 +29,14 @@ enum class DirectoryStructure(val value: String) {
         DirectoryBased -> file.parentFile.parentFile?.name
     }
 
+    /**
+     * Returns the path components of [file] until right before the component that contains the
+     * origin identifier according to the current [DirectoryStructure].
+     *
+     * Examples:
+     *   - /work/example.org/john@doe.org --> /work (FileBased)
+     *   - /work/example.org/john@doe.org/password --> /work (DirectoryBased)
+     */
     fun getPathToIdentifierFor(file: File) = when (this) {
         FileBased -> file.parentFile.parent
         DirectoryBased -> file.parentFile.parentFile?.parent

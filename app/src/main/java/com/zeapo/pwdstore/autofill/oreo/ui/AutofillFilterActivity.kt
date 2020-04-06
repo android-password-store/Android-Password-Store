@@ -144,14 +144,14 @@ class AutofillFilterView : AppCompatActivity() {
         model.search(
             initialFilter,
             filterMode = filterMode,
-            searchMode = SearchMode.Recursive,
+            searchMode = SearchMode.RecursivelyInSubdirectories,
             listFilesOnly = true
         )
         search.addTextChangedListener {
             model.search(
                 it.toString(),
                 filterMode = FilterMode.Fuzzy,
-                searchMode = SearchMode.Recursive,
+                searchMode = SearchMode.RecursivelyInSubdirectories,
                 listFilesOnly = true
             )
         }
@@ -159,6 +159,8 @@ class AutofillFilterView : AppCompatActivity() {
             this,
             Observer { list ->
                 searchableAdapter.submitList(list)
+                // Switch RecyclerView out for a "no results" message if the new list is empty and
+                // the message is not yet shown (and vice versa).
                 if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
                     (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id))
                     rvPasswordSwitcher.showNext()

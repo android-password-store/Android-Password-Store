@@ -96,16 +96,16 @@ enum class FilterMode {
 }
 
 enum class SearchMode {
-    Recursive,
-    CurrentDirectoryOnly
+    RecursivelyInSubdirectories,
+    InCurrentDirectoryOnly
 }
 
 private data class SearchAction(
     val currentDir: File,
-    val filter: String = "",
-    val filterMode: FilterMode = FilterMode.ListOnly,
-    val searchMode: SearchMode = SearchMode.CurrentDirectoryOnly,
-    val listFilesOnly: Boolean = true
+    val filter: String,
+    val filterMode: FilterMode,
+    val searchMode: SearchMode,
+    val listFilesOnly: Boolean
 )
 
 @ExperimentalCoroutinesApi
@@ -115,17 +115,25 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     private val settings = PreferenceManager.getDefaultSharedPreferences(getApplication())
     private val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
     private val searchFromRoot = settings.getBoolean("search_from_root", false)
-    private val defaultSearchMode = if (settings.getBoolean(
-            "filter_recursively",
-            true
-        )
-    ) SearchMode.Recursive else SearchMode.CurrentDirectoryOnly
+    private val defaultSearchMode = if (settings.getBoolean("filter_recursively", true)) {
+        SearchMode.RecursivelyInSubdirectories
+    } else {
+        SearchMode.InCurrentDirectoryOnly
+    }
 
     private val typeSortOrder = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
     private val directoryStructure = AutofillPreferences.directoryStructure(application)
     private val itemComparator = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
 
-    private val searchAction = MutableLiveData(SearchAction(root))
+    private val searchAction = MutableLiveData(
+        SearchAction(
+            currentDir = root,
+            filter = "",
+            filterMode = FilterMode.ListOnly,
+            searchMode = SearchMode.InCurrentDirectoryOnly,
+            listFilesOnly = true
+        )
+    )
     private val searchActionFlow = searchAction.asFlow()
         .map { it.copy(filter = it.filter.trim()) }
         .distinctUntilChanged()
@@ -135,8 +143,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             val dirToSearch =
                 if (searchFromRoot && searchAction.filterMode != FilterMode.ListOnly) root else searchAction.currentDir
             val listResultFlow = when (searchAction.searchMode) {
-                SearchMode.Recursive -> listFilesRecursively(dirToSearch)
-                SearchMode.CurrentDirectoryOnly -> listFiles(dirToSearch)
+                SearchMode.RecursivelyInSubdirectories -> listFilesRecursively(dirToSearch)
+                SearchMode.InCurrentDirectoryOnly -> listFiles(dirToSearch)
             }
             val prefilteredResultFlow =
                 if (searchAction.listFilesOnly) listResultFlow.filter { it.isFile } else listResultFlow
@@ -193,7 +201,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 filter = "",
                 currentDir = currentDir,
                 filterMode = FilterMode.ListOnly,
-                searchMode = SearchMode.CurrentDirectoryOnly,
+                searchMode = SearchMode.InCurrentDirectoryOnly,
                 listFilesOnly = false
             )
         )
