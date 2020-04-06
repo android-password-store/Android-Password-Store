@@ -13,26 +13,33 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
-import androidx.preference.PreferenceManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.afollestad.recyclical.datasource.dataSourceOf
-import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.withItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.e
+import com.zeapo.pwdstore.DelegatedSearchableRepositoryAdapter
+import com.zeapo.pwdstore.FilterMode
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.SearchMode
+import com.zeapo.pwdstore.SearchableRepositoryViewModel
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.utils.PasswordItem
-import com.zeapo.pwdstore.utils.PasswordRepository
-import java.io.File
-import java.nio.file.Paths
-import java.util.Locale
 import kotlinx.android.synthetic.main.activity_oreo_autofill_filter.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
 
@@ -66,14 +73,12 @@ class AutofillFilterView : AppCompatActivity() {
         }
     }
 
-    private val dataSource = dataSourceOf()
-    private val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-    private val sortOrder
-        get() = PasswordRepository.PasswordSortOrder.getSortOrder(preferences)
-
     private lateinit var formOrigin: FormOrigin
-    private lateinit var repositoryRoot: File
     private lateinit var directoryStructure: DirectoryStructure
+
+    private val model: SearchableRepositoryViewModel by viewModels {
+        ViewModelProvider.AndroidViewModelFactory(application)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +108,6 @@ class AutofillFilterView : AppCompatActivity() {
                 return
             }
         }
-        repositoryRoot = PasswordRepository.getRepositoryDirectory(this)
         directoryStructure = AutofillPreferences.directoryStructure(this)
 
         supportActionBar?.hide()
@@ -112,35 +116,55 @@ class AutofillFilterView : AppCompatActivity() {
     }
 
     private fun bindUI() {
-        // setup is an extension method provided by recyclical
-        rvPassword.setup {
-            withDataSource(dataSource)
-            withItem<PasswordItem, PasswordViewHolder>(R.layout.oreo_autofill_filter_row) {
-                onBind(::PasswordViewHolder) { _, item ->
-                    when (directoryStructure) {
-                        DirectoryStructure.FileBased -> {
-                            title.text = item.file.relativeTo(item.rootDir).parent
-                            subtitle.text = item.file.nameWithoutExtension
-                        }
-                        DirectoryStructure.DirectoryBased -> {
-                            title.text =
-                                item.file.relativeTo(item.rootDir).parentFile?.parent ?: "/INVALID"
-                            subtitle.text =
-                                Paths.get(item.file.parentFile.name, item.file.nameWithoutExtension)
-                                    .toString()
-                        }
-                    }
-                }
-                onClick { decryptAndFill(item) }
+        val searchableAdapter = DelegatedSearchableRepositoryAdapter(
+            R.layout.oreo_autofill_filter_row,
+            ::PasswordViewHolder
+        ) { item ->
+            val file = item.file.relativeTo(item.rootDir)
+            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
+            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
+            val accountPart = directoryStructure.getAccountPartFor(file)
+            title.text = buildSpannedString {
+                pathToIdentifier?.let { append("$it/") }
+                bold { underline { append(identifier) } }
             }
+            subtitle.text = accountPart
+            itemView.setOnClickListener { decryptAndFill(item) }
         }
-        rvPassword.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        rvPassword.apply {
+            adapter = searchableAdapter
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
 
-        search.addTextChangedListener { recursiveFilter(it.toString(), strict = false) }
-        val initialFilter =
-            formOrigin.getPrettyIdentifier(applicationContext, untrusted = false)
+        val initialFilter = formOrigin.getPrettyIdentifier(applicationContext, untrusted = false)
         search.setText(initialFilter, TextView.BufferType.EDITABLE)
-        recursiveFilter(initialFilter, strict = formOrigin is FormOrigin.Web)
+        val filterMode =
+            if (formOrigin is FormOrigin.Web) FilterMode.StrictDomain else FilterMode.Fuzzy
+        model.search(
+            initialFilter,
+            filterMode = filterMode,
+            searchMode = SearchMode.RecursivelyInSubdirectories,
+            listFilesOnly = true
+        )
+        search.addTextChangedListener {
+            model.search(
+                it.toString(),
+                filterMode = FilterMode.Fuzzy,
+                searchMode = SearchMode.RecursivelyInSubdirectories,
+                listFilesOnly = true
+            )
+        }
+        model.passwordItemsList.observe(
+            this,
+            Observer { list ->
+                searchableAdapter.submitList(list)
+                // Switch RecyclerView out for a "no results" message if the new list is empty and
+                // the message is not yet shown (and vice versa).
+                if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
+                    (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id))
+                    rvPasswordSwitcher.showNext()
+            })
 
         shouldMatch.text = getString(
             R.string.oreo_autofill_match_with,
@@ -170,45 +194,6 @@ class AutofillFilterView : AppCompatActivity() {
         if (requestCode == DECRYPT_FILL_REQUEST_CODE) {
             if (resultCode == RESULT_OK) setResult(RESULT_OK, data)
             finish()
-        }
-    }
-
-    private fun File.matches(filter: String, strict: Boolean): Boolean {
-        return if (strict) {
-            val toMatch = directoryStructure.getIdentifierFor(this) ?: return false
-            // In strict mode, we match
-            // * the search term exactly,
-            // * subdomains of the search term,
-            // * or the search term plus an arbitrary protocol.
-            toMatch == filter || toMatch.endsWith(".$filter") || toMatch.endsWith("://$filter")
-        } else {
-            val toMatch =
-                "${relativeTo(repositoryRoot).path}/$nameWithoutExtension".toLowerCase(Locale.getDefault())
-            toMatch.contains(filter.toLowerCase(Locale.getDefault()))
-        }
-    }
-
-    private fun recursiveFilter(filter: String, dir: File? = null, strict: Boolean = true) {
-        // on the root the pathStack is empty
-        val passwordItems = if (dir == null) {
-            PasswordRepository.getPasswords(repositoryRoot, sortOrder)
-        } else {
-            PasswordRepository.getPasswords(dir, repositoryRoot, sortOrder)
-        }
-
-        for (item in passwordItems) {
-            if (item.type == PasswordItem.TYPE_CATEGORY) {
-                recursiveFilter(filter, item.file, strict = strict)
-            } else {
-                // TODO: Implement fuzzy search if strict == false?
-                val matches = item.file.matches(filter, strict = strict)
-                val inAdapter = dataSource.contains(item)
-                if (matches && !inAdapter) {
-                    dataSource.add(item)
-                } else if (!matches && inAdapter) {
-                    dataSource.remove(item)
-                }
-            }
         }
     }
 }

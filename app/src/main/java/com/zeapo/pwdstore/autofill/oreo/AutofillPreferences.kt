@@ -25,8 +25,26 @@ enum class DirectoryStructure(val value: String) {
     }
 
     fun getIdentifierFor(file: File) = when (this) {
-        FileBased -> file.parentFile?.name
-        DirectoryBased -> file.parentFile?.parentFile?.name
+        FileBased -> file.parentFile.name
+        DirectoryBased -> file.parentFile.parentFile?.name
+    }
+
+    /**
+     * Returns the path components of [file] until right before the component that contains the
+     * origin identifier according to the current [DirectoryStructure].
+     *
+     * Examples:
+     *   - /work/example.org/john@doe.org --> /work (FileBased)
+     *   - /work/example.org/john@doe.org/password --> /work (DirectoryBased)
+     */
+    fun getPathToIdentifierFor(file: File) = when (this) {
+        FileBased -> file.parentFile.parent
+        DirectoryBased -> file.parentFile.parentFile?.parent
+    }
+
+    fun getAccountPartFor(file: File) = when (this) {
+        FileBased -> file.nameWithoutExtension
+        DirectoryBased -> "${file.parentFile.name}/${file.nameWithoutExtension}"
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

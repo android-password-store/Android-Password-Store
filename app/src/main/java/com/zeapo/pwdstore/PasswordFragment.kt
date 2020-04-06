@@ -159,11 +159,12 @@ class PasswordFragment : Fragment() {
     /** refreshes the adapter with the latest opened category  */
     fun refreshAdapter() {
         recyclerAdapter.clear()
+        val currentDir = if (pathStack.isEmpty()) getRepositoryDirectory(requireContext()) else pathStack.peek()
         recyclerAdapter.addAll(
                 if (pathStack.isEmpty())
-                    getPasswords(getRepositoryDirectory(requireContext()), sortOrder)
+                    getPasswords(currentDir, sortOrder)
                 else
-                    getPasswords(pathStack.peek(), getRepositoryDirectory(requireContext()), sortOrder)
+                    getPasswords(currentDir, getRepositoryDirectory(requireContext()), sortOrder)
         )
     }
 
