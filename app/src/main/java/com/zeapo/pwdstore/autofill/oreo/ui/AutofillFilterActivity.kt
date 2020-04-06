@@ -124,8 +124,7 @@ class AutofillFilterView : AppCompatActivity() {
                     subtitle.text = item.file.nameWithoutExtension
                 }
                 DirectoryStructure.DirectoryBased -> {
-                    title.text =
-                        item.file.relativeTo(item.rootDir).parentFile?.parent ?: "/INVALID"
+                    title.text = item.file.relativeTo(item.rootDir).parentFile?.parent ?: "/INVALID"
                     subtitle.text =
                         Paths.get(item.file.parentFile.name, item.file.nameWithoutExtension)
                             .toString()
