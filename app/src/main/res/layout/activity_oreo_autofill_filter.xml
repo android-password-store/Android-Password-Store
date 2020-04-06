@@ -29,7 +29,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@id/rvPassword"
+        app:layout_constraintBottom_toTopOf="@id/rvPasswordSwitcher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cover">
@@ -43,19 +43,31 @@
             android:inputType="text"
             tools:text="example.com" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPassword"
+    <ViewSwitcher
+        android:id="@+id/rvPasswordSwitcher"
         android:layout_width="0dp"
-        android:layout_height="0dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/shouldMatch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchLayout"
-        tools:itemCount="5"
-        tools:listitem="@layout/password_row_layout" />
+        android:layout_height="0dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:itemCount="5"
+            tools:listitem="@layout/password_row_layout" />
+
+        <TextView
+            android:id="@+id/rvPasswordEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No results." />
+
+    </ViewSwitcher>
 
     <Switch
         android:id="@+id/shouldMatch"
@@ -68,7 +80,7 @@
         app:layout_constraintBottom_toTopOf="@id/shouldClear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvPassword"
+        app:layout_constraintTop_toBottomOf="@id/rvPasswordSwitcher"
         app:layout_constraintVertical_bias="1.0"
         tools:text="Match with example.org" />
 
