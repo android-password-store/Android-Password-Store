@@ -127,7 +127,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     private val itemComparator = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
 
     private val searchAction = MutableLiveData(SearchAction(root))
-    private val searchActionFlow = searchAction.asFlow().distinctUntilChanged()
+    private val searchActionFlow = searchAction.asFlow()
+        .map { it.copy(filter = it.filter.trim()) }
+        .distinctUntilChanged()
 
     private val passwordItemsFlow = searchActionFlow
         .mapLatest { searchAction ->
