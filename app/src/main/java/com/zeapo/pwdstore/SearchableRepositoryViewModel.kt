@@ -5,29 +5,37 @@
 package com.zeapo.pwdstore
 
 import android.app.Application
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.recyclical.ViewHolderCreator
 import com.github.ajalt.timberkt.i
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 private fun File.toPasswordItem(root: File) = if (isFile)
     PasswordItem.newPassword(name, this, root)
@@ -44,21 +52,42 @@ private fun PasswordItem.fuzzyMatch(filter: String): Int {
     val toMatch = longName
 
     while (i < filter.length && j < toMatch.length) {
-        if (filter[i].isWhitespace()) {
-            i++
-        } else if (filter[i].toLowerCase() == toMatch[j].toLowerCase()) {
-            i++
-            bonusIncrement += 1
-            bonus += bonusIncrement
-            score += bonus
-        } else {
-            bonus = 0
-            bonusIncrement = 0
+        when {
+            filter[i].isWhitespace() -> i++
+            filter[i].toLowerCase() == toMatch[j].toLowerCase() -> {
+                i++
+                bonusIncrement += 1
+                bonus += bonusIncrement
+                score += bonus
+            }
+            else -> {
+                bonus = 0
+                bonusIncrement = 0
+            }
         }
         j++
     }
     return if (i == filter.length) score else 0
 }
+
+enum class FilterMode {
+    ListOnly,
+    StrictDomain,
+    Fuzzy
+}
+
+enum class SearchMode {
+    Recursive,
+    CurrentDirectoryOnly
+}
+
+private data class SearchAction(
+    val currentDir: File,
+    val filter: String = "",
+    val filterMode: FilterMode = FilterMode.ListOnly,
+    val searchMode: SearchMode = SearchMode.CurrentDirectoryOnly,
+    val listFilesOnly: Boolean = true
+)
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -68,28 +97,41 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     private val sortOrder = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
     private val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
     private val searchFromRoot = settings.getBoolean("search_from_root", false)
+    private val defaultSearchMode = if (settings.getBoolean(
+            "filter_recursively",
+            true
+        )
+    ) SearchMode.Recursive else SearchMode.CurrentDirectoryOnly
 
-    private val searchFilter = MutableLiveData("")
-    private val searchFilterFlow = searchFilter.asFlow()
+    private val searchAction = MutableLiveData(SearchAction(root))
+    private val searchActionFlow = searchAction.asFlow()
         .debounce(300)
-        .map { it.trim() }
-
-    private val currentDir = MutableLiveData<File>()
-    private val currentDirFlow = currentDir.asFlow()
-
-    private val searchActionFlow = searchFilterFlow
-        .combine(currentDirFlow) { filter, dir -> Pair(filter, dir) }
         .distinctUntilChanged()
+
     private val passwordItemsFlow = searchActionFlow
-        .mapLatest { (filter, dir) ->
-            i { "Searching '$filter' in ${dir.absolutePath}" }
-            if (filter.isNotEmpty()) {
-                // Search directory contents recursively
-                val dirToSearch = if (searchFromRoot) root else dir
-                listFilesRecursively(dirToSearch)
-                    .map {
+        .mapLatest { searchAction ->
+            val dirToSearch =
+                if (searchFromRoot && searchAction.filterMode != FilterMode.ListOnly) root else searchAction.currentDir
+            i { "Searching '$searchAction' in ${dirToSearch.absolutePath}" }
+            val listResultFlow = when (searchAction.searchMode) {
+                SearchMode.Recursive -> listFilesRecursively(dirToSearch)
+                SearchMode.CurrentDirectoryOnly -> listFiles(dirToSearch)
+            }
+            val prefilteredResultFlow =
+                if (searchAction.listFilesOnly) listResultFlow.filter { it.isFile } else listResultFlow
+            when (searchAction.filterMode) {
+                FilterMode.ListOnly -> {
+                    prefilteredResultFlow.map { it.toPasswordItem(root) }.toList()
+                        .sortedWith(sortOrder.comparator)
+                }
+                FilterMode.StrictDomain -> {
+                    check(searchAction.listFilesOnly) { "Searches with StrictDomain search mode can only list files" }
+                    prefilteredResultFlow.map { it.toPasswordItem(root) }.toList()
+                }
+                FilterMode.Fuzzy -> {
+                    prefilteredResultFlow.map {
                         val item = it.toPasswordItem(root)
-                        Pair(item.fuzzyMatch(filter), item)
+                        Pair(item.fuzzyMatch(searchAction.filter), item)
                     }
                     .filter { it.first > 0 }
                     .toList()
@@ -98,24 +140,42 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                             sortOrder.comparator
                         ) { it.second })
                     .map { it.second }
-            } else {
-                // List directory contents non-recursively
-                listFiles(dir)
-                    .map { it.toPasswordItem(root) }
-                    .toList()
-                    .sortedWith(sortOrder.comparator)
+                }
             }
         }
 
     val passwordItemsList = passwordItemsFlow.asLiveData(Dispatchers.IO)
 
-    fun navigateTo(file: File) {
-        require(file.isDirectory) { "Cannot navigate to a file" }
-        currentDir.postValue(file)
+    fun list(currentDir: File) {
+        require(currentDir.isDirectory) { "Can only list files in a directory" }
+        searchAction.postValue(
+            SearchAction(
+                filter = "",
+                currentDir = currentDir,
+                filterMode = FilterMode.ListOnly,
+                searchMode = SearchMode.CurrentDirectoryOnly,
+                listFilesOnly = false
+            )
+        )
     }
 
-    fun search(filter: String) {
-        searchFilter.postValue(filter)
+    fun search(
+        filter: String,
+        currentDir: File? = null,
+        filterMode: FilterMode = FilterMode.Fuzzy,
+        searchMode: SearchMode? = null,
+        listFilesOnly: Boolean = false
+    ) {
+        require(currentDir?.isDirectory != false) { "Can only search in a directory" }
+        searchAction.postValue(
+            SearchAction(
+                filter = filter.trim(),
+                currentDir = currentDir ?: searchAction.value!!.currentDir,
+                filterMode = filterMode,
+                searchMode = searchMode ?: defaultSearchMode,
+                listFilesOnly = listFilesOnly
+            )
+        )
     }
 
     private fun shouldTake(file: File) = with(file) {
@@ -126,8 +186,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         }
     }
 
-    private fun listFiles(dir: File): Sequence<File> {
-        return dir.listFiles { file -> shouldTake(file) }?.asSequence() ?: emptySequence()
+    private fun listFiles(dir: File): Flow<File> {
+        return dir.listFiles { file -> shouldTake(file) }?.asFlow() ?: emptyFlow()
     }
 
     private fun listFilesRecursively(dir: File): Flow<File> {
@@ -144,9 +204,32 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     }
 }
 
-object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() {
+private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() {
     override fun areItemsTheSame(oldItem: PasswordItem, newItem: PasswordItem) =
         oldItem.file.absolutePath == newItem.file.absolutePath
 
     override fun areContentsTheSame(oldItem: PasswordItem, newItem: PasswordItem) = oldItem == newItem
+}
+
+abstract class PasswordItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    abstract fun bind(item: PasswordItem)
+}
+
+class DelegatedSearchableRepositoryAdapter<T : PasswordItemViewHolder>(
+    private val layoutRes: Int,
+    private val viewHolderCreator: ViewHolderCreator<T>
+) : ListAdapter<PasswordItem, T>(PasswordItemDiffCallback), PopupTextProvider {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(layoutRes, parent, false)
+        return viewHolderCreator(view)
+    }
+
+    override fun onBindViewHolder(holder: T, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    override fun getPopupText(position: Int): String {
+        return getItem(position).file.name[0].toString().toUpperCase(Locale.getDefault())
+    }
 }
