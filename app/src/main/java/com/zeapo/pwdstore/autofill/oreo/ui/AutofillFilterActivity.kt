@@ -15,6 +15,9 @@ import android.view.autofill.AutofillManager
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +34,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.utils.PasswordItem
+import java.io.File
 import java.nio.file.Paths
 import kotlinx.android.synthetic.main.activity_oreo_autofill_filter.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -120,7 +124,13 @@ class AutofillFilterView : AppCompatActivity() {
         ) { item ->
             when (directoryStructure) {
                 DirectoryStructure.FileBased -> {
-                    title.text = item.file.relativeTo(item.rootDir).parent
+                    val parent: File = item.file.relativeTo(item.rootDir).parentFile
+                    val originParent: String? = parent.parent
+                    val origin: String = parent.name
+                    title.text = buildSpannedString {
+                        originParent?.let { append("$it/") }
+                        bold { underline { append(origin) } }
+                    }
                     subtitle.text = item.file.nameWithoutExtension
                 }
                 DirectoryStructure.DirectoryBased -> {
