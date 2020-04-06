@@ -65,7 +65,10 @@
             android:id="@+id/rvPasswordEmpty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="No results." />
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/oreo_autofill_filter_no_results"
+            android:textSize="18sp" />
 
     </ViewSwitcher>
 
