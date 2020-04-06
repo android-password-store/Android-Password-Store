@@ -22,7 +22,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
@@ -30,10 +29,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
-import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
@@ -76,10 +72,6 @@ class PasswordStore : AppCompatActivity() {
     private var plist: PasswordFragment? = null
     private var shortcutManager: ShortcutManager? = null
 
-    private val model: SearchableRepositoryViewModel by viewModels {
-        ViewModelProvider.AndroidViewModelFactory(application)
-    }
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         // open search view on search key, or Ctr+F
         if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) &&
@@ -118,8 +110,6 @@ class PasswordStore : AppCompatActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
-
-        model.passwordItemsList.observe(this, Observer { list -> d { list.joinToString(separator = "\n") { it.longName } } })
     }
 
     public override fun onResume() {
@@ -185,14 +175,12 @@ class PasswordStore : AppCompatActivity() {
         searchView.setOnQueryTextListener(
                 object : OnQueryTextListener {
                     override fun onQueryTextSubmit(s: String): Boolean {
-                        model.search(s)
                         filterListAdapter(s)
                         searchView.clearFocus()
                         return true
                     }
 
                     override fun onQueryTextChange(s: String): Boolean {
-                        model.search(s)
                         filterListAdapter(s)
                         return true
                     }

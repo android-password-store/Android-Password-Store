@@ -51,13 +51,10 @@ class PasswordFragment : Fragment() {
     private lateinit var settings: SharedPreferences
     private lateinit var swipeRefresher: SwipeRefreshLayout
 
-    private val model: SearchableRepositoryViewModel by activityViewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val path = requireNotNull(requireArguments().getString("Path"))
         settings = PreferenceManager.getDefaultSharedPreferences(requireActivity())
-        model.list(getRepositoryDirectory(requireContext()))
         recyclerAdapter = PasswordRecyclerAdapter((requireActivity() as PasswordStore),
                 listener, getPasswords(File(path), getRepositoryDirectory(requireContext()), sortOrder))
     }
@@ -126,7 +123,6 @@ class PasswordFragment : Fragment() {
                                     getPasswords(pathStack.peek(), getRepositoryDirectory(context), sortOrder)
                         )
                         // push the category were we're going
-                        model.list(item.file)
                         pathStack.push(item.file)
                         scrollPosition.push((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition())
                         recyclerView.scrollToPosition(0)
@@ -158,7 +154,6 @@ class PasswordFragment : Fragment() {
         scrollPosition.clear()
         recyclerAdapter.clear()
         recyclerAdapter.addAll(getPasswords(getRepositoryDirectory(requireContext()), sortOrder))
-        model.list(getRepositoryDirectory(requireContext()))
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
@@ -166,7 +161,6 @@ class PasswordFragment : Fragment() {
     fun refreshAdapter() {
         recyclerAdapter.clear()
         val currentDir = if (pathStack.isEmpty()) getRepositoryDirectory(requireContext()) else pathStack.peek()
-        model.list(currentDir)
         recyclerAdapter.addAll(
                 if (pathStack.isEmpty())
                     getPasswords(currentDir, sortOrder)
@@ -247,7 +241,6 @@ class PasswordFragment : Fragment() {
         recyclerAdapter.clear()
         recyclerAdapter.addAll(passListStack.pop())
         pathStack.pop()
-        model.list(if (pathStack.isEmpty()) getRepositoryDirectory(requireContext()) else pathStack.peek())
     }
 
     /**
