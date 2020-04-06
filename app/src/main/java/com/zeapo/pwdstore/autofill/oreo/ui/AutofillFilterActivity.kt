@@ -34,8 +34,6 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.utils.PasswordItem
-import java.io.File
-import java.nio.file.Paths
 import kotlinx.android.synthetic.main.activity_oreo_autofill_filter.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -122,24 +120,15 @@ class AutofillFilterView : AppCompatActivity() {
             R.layout.oreo_autofill_filter_row,
             ::PasswordViewHolder
         ) { item ->
-            when (directoryStructure) {
-                DirectoryStructure.FileBased -> {
-                    val parent: File = item.file.relativeTo(item.rootDir).parentFile
-                    val originParent: String? = parent.parent
-                    val origin: String = parent.name
-                    title.text = buildSpannedString {
-                        originParent?.let { append("$it/") }
-                        bold { underline { append(origin) } }
-                    }
-                    subtitle.text = item.file.nameWithoutExtension
-                }
-                DirectoryStructure.DirectoryBased -> {
-                    title.text = item.file.relativeTo(item.rootDir).parentFile?.parent ?: "/INVALID"
-                    subtitle.text =
-                        Paths.get(item.file.parentFile.name, item.file.nameWithoutExtension)
-                            .toString()
-                }
+            val file = item.file.relativeTo(item.rootDir)
+            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
+            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
+            val accountPart = directoryStructure.getAccountPartFor(file)
+            title.text = buildSpannedString {
+                pathToIdentifier?.let { append("$it/") }
+                bold { underline { append(identifier) } }
             }
+            subtitle.text = accountPart
             itemView.setOnClickListener { decryptAndFill(item) }
         }
         rvPassword.apply {

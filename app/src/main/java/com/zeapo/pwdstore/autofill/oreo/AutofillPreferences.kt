@@ -25,8 +25,18 @@ enum class DirectoryStructure(val value: String) {
     }
 
     fun getIdentifierFor(file: File) = when (this) {
-        FileBased -> file.parentFile?.name
-        DirectoryBased -> file.parentFile?.parentFile?.name
+        FileBased -> file.parentFile.name
+        DirectoryBased -> file.parentFile.parentFile?.name
+    }
+
+    fun getPathToIdentifierFor(file: File) = when (this) {
+        FileBased -> file.parentFile.parent
+        DirectoryBased -> file.parentFile.parentFile?.parent
+    }
+
+    fun getAccountPartFor(file: File) = when (this) {
+        FileBased -> file.nameWithoutExtension
+        DirectoryBased -> "${file.parentFile.name}/${file.nameWithoutExtension}"
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
