@@ -16,7 +16,6 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.ajalt.timberkt.i
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -135,7 +134,6 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         .mapLatest { searchAction ->
             val dirToSearch =
                 if (searchFromRoot && searchAction.filterMode != FilterMode.ListOnly) root else searchAction.currentDir
-            i { "Searching '$searchAction' in ${dirToSearch.absolutePath}" }
             val listResultFlow = when (searchAction.searchMode) {
                 SearchMode.Recursive -> listFilesRecursively(dirToSearch)
                 SearchMode.CurrentDirectoryOnly -> listFiles(dirToSearch)
