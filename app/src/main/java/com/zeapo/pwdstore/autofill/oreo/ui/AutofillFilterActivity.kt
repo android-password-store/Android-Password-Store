@@ -19,15 +19,16 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.DelegatedSearchableRepositoryAdapter
 import com.zeapo.pwdstore.FilterMode
+import com.zeapo.pwdstore.ListMode
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.SearchMode
+import com.zeapo.pwdstore.SearchableRepositoryAdapter
 import com.zeapo.pwdstore.SearchableRepositoryViewModel
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
@@ -35,11 +36,7 @@ import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.utils.PasswordItem
 import kotlinx.android.synthetic.main.activity_oreo_autofill_filter.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
 
@@ -80,6 +77,26 @@ class AutofillFilterView : AppCompatActivity() {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
+    private val recyclerAdapter = object : SearchableRepositoryAdapter<PasswordViewHolder>(
+        R.layout.oreo_autofill_filter_row,
+        ::PasswordViewHolder,
+        { item ->
+            val file = item.file.relativeTo(item.rootDir)
+            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
+            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
+            val accountPart = directoryStructure.getAccountPartFor(file)
+            title.text = buildSpannedString {
+                pathToIdentifier?.let { append("$it/") }
+                bold { underline { append(identifier) } }
+            }
+            subtitle.text = accountPart
+        }) {
+
+        override fun onItemClicked(holder: PasswordViewHolder, item: PasswordItem) {
+            decryptAndFill(item)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_oreo_autofill_filter)
@@ -116,23 +133,8 @@ class AutofillFilterView : AppCompatActivity() {
     }
 
     private fun bindUI() {
-        val searchableAdapter = DelegatedSearchableRepositoryAdapter(
-            R.layout.oreo_autofill_filter_row,
-            ::PasswordViewHolder
-        ) { item ->
-            val file = item.file.relativeTo(item.rootDir)
-            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
-            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
-            val accountPart = directoryStructure.getAccountPartFor(file)
-            title.text = buildSpannedString {
-                pathToIdentifier?.let { append("$it/") }
-                bold { underline { append(identifier) } }
-            }
-            subtitle.text = accountPart
-            itemView.setOnClickListener { decryptAndFill(item) }
-        }
         rvPassword.apply {
-            adapter = searchableAdapter
+            adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
@@ -145,26 +147,26 @@ class AutofillFilterView : AppCompatActivity() {
             initialFilter,
             filterMode = filterMode,
             searchMode = SearchMode.RecursivelyInSubdirectories,
-            listFilesOnly = true
+            listMode = ListMode.FilesOnly
         )
         search.addTextChangedListener {
             model.search(
                 it.toString(),
                 filterMode = FilterMode.Fuzzy,
                 searchMode = SearchMode.RecursivelyInSubdirectories,
-                listFilesOnly = true
+                listMode = ListMode.FilesOnly
             )
         }
-        model.passwordItemsList.observe(
-            this,
-            Observer { list ->
-                searchableAdapter.submitList(list)
-                // Switch RecyclerView out for a "no results" message if the new list is empty and
-                // the message is not yet shown (and vice versa).
-                if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
-                    (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id))
-                    rvPasswordSwitcher.showNext()
-            })
+        model.searchResult.observe(this) { result ->
+            val list = result.passwordItems
+            recyclerAdapter.submitList(list)
+            // Switch RecyclerView out for a "no results" message if the new list is empty and
+            // the message is not yet shown (and vice versa).
+            if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
+                (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id)
+            )
+                rvPasswordSwitcher.showNext()
+        }
 
         shouldMatch.text = getString(
             R.string.oreo_autofill_match_with,

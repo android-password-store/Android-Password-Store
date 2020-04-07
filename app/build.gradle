@@ -86,12 +86,13 @@ dependencies {
     implementation deps.androidx.documentfile
     implementation deps.androidx.fragment_ktx
     implementation deps.androidx.lifecycle_livedata_ktx
-    implementation deps.androidx.lifecycle_runtime_ktx
+    implementation deps.androidx.lifecycle_viewmodel_ktx
     implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material
     implementation deps.androidx.preference
     implementation deps.androidx.swiperefreshlayout
-    implementation(deps.androidx.recycler_view)
+    implementation deps.androidx.recycler_view
+    implementation deps.androidx.recycler_view_selection
 
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core

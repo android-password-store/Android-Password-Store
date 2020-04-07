@@ -131,7 +131,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
 
             if (refreshListOnEnd) {
                 try {
-                    ((PasswordStore) this.getActivity()).updateListAdapter();
+                    ((PasswordStore) this.getActivity()).resetPasswordList();
                 } catch (ClassCastException e) {
                     // oups, mistake
                 }

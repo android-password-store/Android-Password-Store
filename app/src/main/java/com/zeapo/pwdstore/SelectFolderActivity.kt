@@ -58,7 +58,7 @@ class SelectFolderActivity : AppCompatActivity() {
     }
 
     private fun selectFolder() {
-        intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir?.absolutePath)
+        intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir.absolutePath)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

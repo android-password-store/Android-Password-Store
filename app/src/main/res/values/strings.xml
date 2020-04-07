@@ -330,8 +330,6 @@
     <string name="button_create">Create</string>
     <string name="pref_search_on_start">Open search on start</string>
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
-    <string name="pref_search_from_root">Always search from root</string>
-    <string name="pref_search_from_root_hint">Search from root of store regardless of currently open directory</string>
     <string name="password_generator_category_title">Password Generator</string>
     <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
     <string name="clone_git_repo">Clone a git repository to sync changes</string>
