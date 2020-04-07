@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Activity names -->
-
     <string name="action_settings">الإعدادات</string>
     <string name="dialog_delete_title">إنّ المجلد موجود</string>
     <string name="dialog_delete">حذف المجلد</string>
@@ -12,9 +10,6 @@
     <string name="move">نقل</string>
     <string name="edit">تعديل</string>
     <string name="delete">حذف</string>
-
-    <!-- git commits -->
-
     <!-- PGPHandler -->
     <string name="provider_toast_text">لم يتم إختيار مزود الأوبن بي جي بي بعد !</string>
     <string name="clipboard_username_toast_text">تم نسخ إسم المستخدم إلى الحافظة</string>
@@ -32,7 +27,6 @@
     <!-- Clone fragment -->
     <string name="clone">أنسخ مِن الخادوم</string>
     <string name="initialize">إستخدام مجلد محلي</string>
-
     <string name="server_name">الخادوم</string>
     <string name="server_protocol">البروتوكول</string>
     <string name="server_url">عنوان الخادوم</string>
@@ -47,6 +41,7 @@
     <string name="server_resulting_url">عنوان الرابط الناتج</string>
     <string name="connection_mode">نوع المصادقة</string>
 
+    <string name="git_user_name_hint">إسم المستخدم</string>
     <string name="invalid_email_dialog_text">يرجى إدخال عنوان بريد إلكتروني صالح</string>
     <string name="clone_button">أنسخ !</string>
 
@@ -56,7 +51,6 @@
     <string name="crypto_select">إختر</string>
     <string name="crypto_cancel">إلغاء</string>
     <string name="crypto_save">حفظ</string>
-
     <!-- DECRYPT Layout -->
     <string name="action_search">البحث</string>
     <string name="password">كلمة السر :</string>
@@ -68,7 +62,6 @@
     <string name="copy_otp">نسخ رمز الـ OTP</string>
     <string name="share_as_plaintext">شارك كنص مجرد</string>
     <string name="last_changed">آخِر تعديل %s</string>
-
     <!-- Preferences -->
     <string name="pref_git_title">جيت</string>
     <string name="pref_edit_server_info">تعديل إعدادات خادوم جيت</string>
@@ -100,7 +93,6 @@
     <string name="prefs_export_passwords_title">تصدير كلمات السر</string>
     <string name="prefs_version">النسخة</string>
 
-    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">توليد</string>
     <string name="pwgen_include">تحتوي على</string>
     <string name="pwgen_length">الطول</string>
@@ -109,7 +101,6 @@
     <string name="pwgen_uppercase">حروف كبيرة</string>
     <string name="pwgen_ambiguous">مبهمة</string>
     <string name="pwgen_pronounceable">منطوقة</string>
-
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">الطول</string>
     <string name="ssh_keygen_passphrase">العبارة السرية</string>
@@ -130,6 +121,7 @@
     <string name="pwd_generate_button">توليد</string>
     <string name="refresh_list">تحديث القائمة</string>
     <string name="show_password">إظهار كلمة السر</string>
+    <string name="show_extra">إظهار المزيد من المحتوى</string>
     <string name="repository_uri">عنوان المستودع</string>
     <string name="app_icon_hint">أيقونة التطبيق</string>
     <string name="folder_icon_hint">أيقونة المجلد</string>
@@ -143,4 +135,4 @@
     <string name="autofill_pick_and_match">إختر و طابق مع ...</string>
     <string name="autofill_paste">إلصاق</string>
     <string name="new_password_title">كلمة السر الجديدة</string>
-</resources>
+    </resources>

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Activity names -->
-
     <string name="action_settings">Einstellungen</string>
     <string name="dialog_delete_title">Ordner existiert bereits</string>
     <string name="dialog_delete_msg">Zielordner existiert bereits. Aktuelle Version unterstützt nur eine einzige Datenquelle. Möchtest du die aktuelle Datenquelle löschen?\n(%1$s)</string>
     <string name="dialog_delete">Ordner löschen</string>
     <string name="dialog_do_not_delete">Abbruch</string>
     <string name="title_activity_git_clone">Repository Informationen</string>
-
     <!-- Password Store -->
     <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
     <string name="key_dialog_text">Du musst deine PGP-Key ID auwählen, bevor das Repository intialisiert wird.</string>
@@ -17,9 +14,6 @@
     <string name="move">Verschieben</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
-
-    <!-- git commits -->
-
     <!-- PGPHandler -->
     <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
     <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
@@ -42,12 +36,10 @@
     <string name="passphrase_dialog_title">Authentifizieren</string>
     <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>
     <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
-    <string name="clone_button">Klone!</string>
 
     <!-- Clone fragment -->
     <string name="clone">Klone von Server</string>
     <string name="initialize">Nutze lokalen Ordner</string>
-
     <string name="server_name">Server</string>
     <string name="server_protocol">Protokoll</string>
     <string name="server_url">Server URL</string>
@@ -63,7 +55,10 @@
     <string name="connection_mode">Authentifizierungsmethode</string>
 
     <string name="warn_malformed_url_port">Wenn du einen anderen Port nutzt, setze den absoluten Pfad (startet mit "/")</string>
+
+    <string name="git_user_name_hint">Nutzername</string>
     <string name="invalid_email_dialog_text">Bitte valide Email eingeben</string>
+    <string name="clone_button">Klone!</string>
 
     <!-- PGP Handler -->
     <string name="crypto_name_hint">Name</string>
@@ -72,7 +67,6 @@
     <string name="crypto_select">Auswählen</string>
     <string name="crypto_cancel">Abbrechen</string>
     <string name="crypto_save">Speichern</string>
-
     <!-- DECRYPT Layout -->
     <string name="action_search">Suche</string>
     <string name="password">Passwort:</string>
@@ -82,7 +76,7 @@
     <string name="copy_password">Passwort kopieren</string>
     <string name="copy_username">Benutzername kopieren</string>
     <string name="share_as_plaintext">Als Klartext teilen</string>
-
+    <string name="last_changed">Zuletzt geändert %s</string>
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">Git-Server Einstellungen</string>
@@ -127,16 +121,14 @@
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
     <string name="prefs_version">Version</string>
 
-    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">Generieren</string>
     <string name="pwgen_include">Include</string>
+    <string name="pwgen_length">Länge</string>
     <string name="pwgen_numerals">Nummern</string>
     <string name="pwgen_symbols">Symbole</string>
     <string name="pwgen_uppercase">Großbuchstaben</string>
     <string name="pwgen_ambiguous">Zweideutig</string>
-    <string name="pwgen_length">Länge</string>
     <string name="pwgen_pronounceable">Aussprechbar</string>
-
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Länge</string>
     <string name="ssh_keygen_passphrase">Passwort</string>
@@ -157,19 +149,19 @@
     <string name="git_sync">Synchronisiere Repository</string>
     <string name="git_pull">Git Pull</string>
     <string name="git_push">Git Push</string>
-    <string name="refresh_list">Aktualisieren</string>
     <string name="show_password_pref_title">Zeige das Password</string>
     <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
     <string name="show_extra_content_pref_title">Zeige weiteren Inhalt</string>
     <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
     <string name="pwd_generate_button">Generieren</string>
+    <string name="refresh_list">Aktualisieren</string>
     <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
     <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
     <string name="show_password">Password wiedergeben</string>
+    <string name="show_extra">Zeige weiteren Inhalt</string>
     <string name="repository_uri">Repository URI</string>
     <string name="app_icon_hint">App Icon</string>
     <string name="folder_icon_hint">Verzeichnis Icon</string>
-
 
     <!-- Autofill -->
     <string name="autofill_description">Füge das Passwort automatisch in Apps ein (Autofill). Funktioniert nur unter Android 4.3 und höher. Dies basiert nicht auf der Zwischenablage für Android 5.0 oder höher.</string>
@@ -187,6 +179,5 @@
     <string name="autofill_ins_1_hint">Bildschirmfoto Accessibility Services</string>
     <string name="autofill_ins_2_hint">Bildschirmfoto des Schalters in Accessibility Services</string>
     <string name="autofill_ins_3_hint">Bildschirmfoto von Autofill in Aktion</string>
-    <string name="last_changed">Zuletzt geändert %s</string>
     <string name="get_last_changed_failed">Das Abrufen des letzten Änderungsdatums ist fehlgeschlagen.</string>
-</resources>
+    </resources>
