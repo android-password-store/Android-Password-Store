@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Activity names -->
-
     <string name="action_settings">設定</string>
     <string name="dialog_delete_title">ディレクトリーはすでに存在します</string>
     <string name="dialog_delete_msg">対象のディレクトリーはすでに存在します。 現在のバージョンは1つのストアのみをサポートしています。 現在のパスワードストアのディレクトリーを削除しますか\n(%1$s)</string>
     <string name="dialog_delete">ディレクトリーを削除</string>
     <string name="dialog_do_not_delete">キャンセル</string>
     <string name="title_activity_git_clone">リポジトリ情報</string>
-
     <!-- Password Store -->
     <string name="creation_dialog_text">パスワードや同期操作を追加する前に、以下の新しいリポジトリをクローンまたは作成してください。</string>
     <string name="key_dialog_text">リポジトリを初期化する前に "PGP 鍵 ID"を選択する必要があります</string>
     <string name="delete_dialog_text">パスワードを削除してもよろしいですか %1$s</string>
-
+    <string name="delete">削除</string>
     <!-- git commits -->
     <string name="git_commit_add_text">追加 %1$s ストアから。</string>
     <string name="git_commit_edit_text">編集 %1$s ストアから。</string>
-
     <!-- PGPHandler -->
     <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>
     <string name="clipboard_password_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に貼り付けしてください。</string>
@@ -44,11 +40,9 @@
     <!-- Clone fragment -->
     <string name="clone">サーバーからクローン</string>
     <string name="initialize">ローカルディレクトリーを使用する</string>
-
     <string name="server_name">サーバー</string>
     <string name="server_protocol">プロトコル</string>
     <string name="server_url">サーバー URL</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -62,14 +56,14 @@
 
     <string name="warn_malformed_url_port">カスタムポートを使用する場合は、絶対パスを入力 ("/" で始まる)</string>
 
+    <string name="git_user_name_hint">ユーザー名</string>
     <!-- PGP Handler -->
     <string name="crypto_name_hint">名前</string>
     <string name="crypto_pass_label">パスワード</string>
     <string name="crypto_extra_label">追加</string>
-
+    <string name="crypto_cancel">キャンセル</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">検索</string>
-
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">git サーバー設定を編集</string>
@@ -106,8 +100,6 @@
     <string name="pref_external_repository">外部リポジトリ</string>
     <string name="pref_external_repository_summary">外部パスワードリポジトリを使用する</string>
     <string name="pref_select_external_repository">外部リポジトリを選択</string>
-
-    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">生成</string>
     <string name="pwgen_include">含める</string>
     <string name="pwgen_length">長さ</string>
@@ -116,7 +108,6 @@
     <string name="pwgen_uppercase">大文字</string>
     <string name="pwgen_ambiguous">あいまい</string>
     <string name="pwgen_pronounceable">発音可能</string>
-
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">長さ</string>
     <string name="ssh_keygen_passphrase">パスフレーズ</string>
@@ -140,7 +131,10 @@
     <string name="show_password_pref_title">パスワードを表示</string>
     <string name="show_password_pref_summary">一度復号化されたパスワードの可視性を制御します。これはパスワードのコピーを無効にしません</string>
     <string name="pwd_generate_button">生成</string>
-
+    <string name="refresh_list">リストを更新</string>
+    <string name="no_repo_selected">外部リポジトリが選択されていません</string>
+    <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
+    <string name="show_password">パスワードを表示</string>
     <!-- Autofill -->
     <string name="autofill_description">アプリのパスワードフィールドを自動入力します。 Android バージョン 4.3 以降でのみ動作します。 Android 5.0 以降のクリップボードには依存しません。</string>
     <string name="autofill_apps_default">デフォルト設定を使用する</string>
@@ -149,9 +143,5 @@
     <string name="autofill_apps_match">一致</string>
     <string name="autofill_apps_never">一致しない</string>
     <string name="autofill_apps_delete">削除</string>
-    <string name="refresh_list">リストを更新</string>
-    <string name="no_repo_selected">外部リポジトリが選択されていません</string>
-    <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
-    <string name="show_password">パスワードを表示</string>
     <string name="get_last_changed_failed">最終変更日の取得に失敗しました</string>
-</resources>
+    </resources>

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Activity names -->
-
     <string name="action_settings">Ajustes</string>
     <string name="dialog_delete_title">El directorio ya existe</string>
     <string name="dialog_delete_msg">El directorio seleccionado ya existe. La versión actual solo soporta un almacén de contraseñas. ¿Quieres eliminar el almacén actual?\n(%1$s)</string>
     <string name="dialog_delete">Eliminar directorio</string>
     <string name="dialog_do_not_delete">Cancelar</string>
     <string name="title_activity_git_clone">Información de repositorio</string>
-
     <!-- Password Store -->
     <string name="creation_dialog_text">Por favor clona o crea un nuevo repositorio antes de añadir una contraseña o ejecutar una operación de sincronización.</string>
     <string name="key_dialog_text">Tienes que seleccionar una llave PGP antes de inicializar el repositorio</string>
@@ -19,7 +16,6 @@
     <string name="delete">Eliminar</string>
     <string name="no_key_selected_dialog_title">No se ha seleccionado una llave OpenPGP</string>
     <string name="no_key_selected_dialog_text">Serás redirigido a los ajustes. Por favor selecciona tu llave OpenPGP.</string>
-
     <!-- git commits -->
     <string name="git_commit_add_text">"Contraseña para %1$s agregada usando Android Password Store."</string>
     <string name="git_commit_edit_text">"%1$s editada usando Android Password Store."</string>
@@ -65,7 +61,6 @@
     <string name="server_name">Servidor</string>
     <string name="server_protocol">Protocolo</string>
     <string name="server_url">URL de servidor</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -79,7 +74,7 @@
 
     <string name="warn_malformed_url_port">Al usar puertos personalizados, ingresa una ruta absoluta (empieza con "/")</string>
 
-    <!-- Git Config fragment -->
+    <string name="git_user_name_hint">Nombre de usuario</string>
     <string name="invalid_email_dialog_text">Por favor ingresa una dirección de correo</string>
     <string name="clone_button">¡Clonar!</string>
 
@@ -90,7 +85,6 @@
     <string name="crypto_select">Seleccionar</string>
     <string name="crypto_cancel">Cancelar</string>
     <string name="crypto_save">Guardar</string>
-
     <!-- DECRYPT Layout -->
     <string name="action_search">Buscar</string>
     <string name="password">Contraseña:</string>
@@ -157,7 +151,7 @@
     <string name="prefs_export_passwords_summary">Exporta las contraseñas cifradas a un directorio externo.</string>
     <string name="prefs_version">Versión</string>
 
-    <!-- pwgen fragment -->
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Generar Contraseña</string>
     <string name="pwgen_generate">Generar</string>
     <string name="pwgen_include">Incluir:</string>
@@ -200,6 +194,7 @@
     <string name="no_repo_selected">Ningún repositorio externo seleccionado</string>
     <string name="send_plaintext_password_to">Enviar contraseña en texto plano usando…</string>
     <string name="show_password">Mostrar contraseña</string>
+    <string name="show_extra">Mostrar contenido extra</string>
     <string name="repository_uri">URI del repositorio</string>
     <string name="app_icon_hint">Ícono de app</string>
     <string name="folder_icon_hint">Ícono de directorio</string>
@@ -235,4 +230,4 @@
     <string name="crypto_extra_edit_hint">Username: Nombre de usuario\n… o algún contenido extra</string>
     <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
     <string name="hotp_pending">Presiona copiar para calcular el HOTP</string>
-</resources>
+    </resources>
