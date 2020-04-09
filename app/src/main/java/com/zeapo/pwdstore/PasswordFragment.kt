@@ -89,9 +89,12 @@ class PasswordFragment : Fragment() {
             itemAnimator = OnOffItemAnimator()
             adapter = recyclerAdapter
         }
-        recyclerAdapter.makeSelectable(recyclerView)
 
+        // FastScrollerBuilder.build() needs to be called *before* recyclerAdapter.makeSelectable(),
+        // as otherwise dragging the fast scroller will lead to items being selected.
+        // See https://github.com/zhanghai/AndroidFastScroll/issues/13
         FastScrollerBuilder(recyclerView).build()
+        recyclerAdapter.makeSelectable(recyclerView)
         registerForContextMenu(recyclerView)
 
         val path = requireNotNull(requireArguments().getString("Path"))
