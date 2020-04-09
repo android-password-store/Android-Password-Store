@@ -131,7 +131,6 @@ class AutofillFilterView : AppCompatActivity() {
         rvPassword.apply {
             adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
         val initialFilter = formOrigin.getPrettyIdentifier(applicationContext, untrusted = false)

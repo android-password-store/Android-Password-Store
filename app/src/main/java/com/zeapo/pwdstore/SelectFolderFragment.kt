@@ -49,12 +49,6 @@ class SelectFolderFragment : Fragment() {
         recyclerView = rootView.findViewById(R.id.pass_recycler)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
             itemAnimator = null
             adapter = recyclerAdapter
         }
