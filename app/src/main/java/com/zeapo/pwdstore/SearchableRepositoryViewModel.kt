@@ -133,18 +133,24 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         _updateCounter++
     }
 
-    private val root = PasswordRepository.getRepositoryDirectory(application)
+    private val root
+        get() = PasswordRepository.getRepositoryDirectory(getApplication())
     private val settings = PreferenceManager.getDefaultSharedPreferences(getApplication())
-    private val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
-    private val defaultSearchMode = if (settings.getBoolean("filter_recursively", true)) {
+    private val showHiddenDirs
+        get() = settings.getBoolean("show_hidden_folders", false)
+    private val defaultSearchMode
+        get() = if (settings.getBoolean("filter_recursively", true)) {
         SearchMode.RecursivelyInSubdirectories
     } else {
         SearchMode.InCurrentDirectoryOnly
     }
 
-    private val typeSortOrder = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
-    private val directoryStructure = AutofillPreferences.directoryStructure(application)
-    private val itemComparator = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
+    private val typeSortOrder
+        get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
+    private val directoryStructure
+        get() = AutofillPreferences.directoryStructure(getApplication())
+    private val itemComparator
+        get() = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
 
     private data class SearchAction(
         val baseDirectory: File,
