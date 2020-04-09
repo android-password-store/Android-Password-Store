@@ -41,7 +41,6 @@ import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
-import com.zeapo.pwdstore.ui.adapters.PasswordRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -518,7 +517,7 @@ class PasswordStore : AppCompatActivity() {
     }
 
     // deletes passwords in order from top to bottom
-    fun deletePasswords(adapter: PasswordRecyclerAdapter, selectedItems: Stack<PasswordItem>) {
+    fun deletePasswords(selectedItems: Stack<PasswordItem>) {
         if (selectedItems.isEmpty()) {
             refreshPasswordList()
             return
@@ -535,10 +534,10 @@ class PasswordStore : AppCompatActivity() {
                     AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                     item.file.deleteRecursively()
                     commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
-                    deletePasswords(adapter, selectedItems)
+                    deletePasswords(selectedItems)
                 }
                 .setNegativeButton(this.resources.getString(R.string.dialog_no)) { _, _ ->
-                    deletePasswords(adapter, selectedItems)
+                    deletePasswords(selectedItems)
                 }
                 .show()
     }

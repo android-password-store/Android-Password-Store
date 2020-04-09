@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.Selection
 import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.SearchableRepositoryAdapter
@@ -19,8 +20,8 @@ import com.zeapo.pwdstore.stableId
 import com.zeapo.pwdstore.utils.PasswordItem
 import java.io.File
 
-open class EntryRecyclerAdapter :
-    SearchableRepositoryAdapter<EntryRecyclerAdapter.PasswordItemViewHolder>(
+open class PasswordItemRecyclerAdapter :
+    SearchableRepositoryAdapter<PasswordItemRecyclerAdapter.PasswordItemViewHolder>(
         R.layout.password_row_layout,
         ::PasswordItemViewHolder,
         PasswordItemViewHolder::bind
@@ -28,6 +29,14 @@ open class EntryRecyclerAdapter :
 
     fun makeSelectable(recyclerView: RecyclerView) {
         makeSelectable(recyclerView, ::PasswordItemDetailsLookup)
+    }
+
+    override fun onItemClicked(listener: (holder: PasswordItemViewHolder, item: PasswordItem) -> Unit): PasswordItemRecyclerAdapter {
+        return super.onItemClicked(listener) as PasswordItemRecyclerAdapter
+    }
+
+    override fun onSelectionChanged(listener: (selection: Selection<String>) -> Unit): PasswordItemRecyclerAdapter {
+        return super.onSelectionChanged(listener) as PasswordItemRecyclerAdapter
     }
 
     class PasswordItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {

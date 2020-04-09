@@ -18,6 +18,7 @@ import androidx.lifecycle.asLiveData
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
+import androidx.recyclerview.selection.Selection
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
@@ -410,14 +411,27 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
         ).withSelectionPredicate(SelectionPredicates.createSelectAnything()).build().apply {
             addObserver(object : SelectionTracker.SelectionObserver<String>() {
                 override fun onSelectionChanged() {
-                    this@SearchableRepositoryAdapter.onSelectionChanged()
+                    this@SearchableRepositoryAdapter.onSelectionChangedListener?.invoke(
+                        requireSelectionTracker().selection
+                    )
                 }
             })
         }
     }
-    open fun onItemClicked(holder: T, item: PasswordItem) {}
 
-    open fun onSelectionChanged() {}
+    private var onItemClickedListener: ((holder: T, item: PasswordItem) -> Unit)? = null
+    open fun onItemClicked(listener: (holder: T, item: PasswordItem) -> Unit): SearchableRepositoryAdapter<T> {
+        check(onItemClickedListener == null) { "Only a single listener can be registered for onItemClicked" }
+        onItemClickedListener = listener
+        return this
+    }
+
+    private var onSelectionChangedListener: ((selection: Selection<String>) -> Unit)? = null
+    open fun onSelectionChanged(listener: (selection: Selection<String>) -> Unit): SearchableRepositoryAdapter<T> {
+        check(onSelectionChangedListener == null) { "Only a single listener can be registered for onSelectionChanged" }
+        onSelectionChangedListener = listener
+        return this
+    }
 
     private val itemKeyProvider = object : ItemKeyProvider<String>(SCOPE_MAPPED) {
         override fun getKey(position: Int) = getItem(position).stableId
@@ -451,7 +465,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
             itemView.setOnClickListener {
                 // Do not emit custom click events while the user is selecting items.
                 if (selectionTracker?.hasSelection() != true)
-                    onItemClicked(holder, item)
+                    onItemClickedListener?.invoke(holder, item)
             }
         }
     }

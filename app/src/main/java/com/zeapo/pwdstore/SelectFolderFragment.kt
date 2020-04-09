@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.zeapo.pwdstore.ui.adapters.FolderRecyclerAdapter
+import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
 import java.io.File
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class SelectFolderFragment : Fragment() {
-    private lateinit var recyclerAdapter: FolderRecyclerAdapter
+    private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var listener: OnFragmentInteractionListener
 
@@ -42,7 +42,10 @@ class SelectFolderFragment : Fragment() {
     }
 
     private fun initializePasswordList(rootView: View) {
-        recyclerAdapter = FolderRecyclerAdapter(listener)
+        recyclerAdapter = PasswordItemRecyclerAdapter()
+            .onItemClicked { _, item ->
+                listener.onFragmentInteraction(item)
+            }
         recyclerView = rootView.findViewById(R.id.pass_recycler)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())

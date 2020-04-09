@@ -9,8 +9,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
@@ -22,19 +25,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
-import com.zeapo.pwdstore.ui.adapters.PasswordRecyclerAdapter
+import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
+import java.util.Stack
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment() {
-    private lateinit var recyclerAdapter: PasswordRecyclerAdapter
+    private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var swipeRefresher: SwipeRefreshLayout
 
     private var recyclerViewStateToRestore: Parcelable? = null
+    private var actionMode: ActionMode? = null
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
 
@@ -76,7 +81,26 @@ class PasswordFragment : Fragment() {
             }
         }
 
-        recyclerAdapter = PasswordRecyclerAdapter(requireStore(), listener)
+        recyclerAdapter = PasswordItemRecyclerAdapter()
+            .onItemClicked { _, item ->
+                listener.onFragmentInteraction(item)
+            }
+            .onSelectionChanged { selection ->
+                // In order to not interfere with drag selection, we disable the SwipeRefreshLayout
+                // once an item is selected.
+                swipeRefresher.isEnabled = selection.isEmpty
+
+                if (actionMode == null)
+                    actionMode = requireStore().startSupportActionMode(actionModeCallback)
+                        ?: return@onSelectionChanged
+
+                if (!selection.isEmpty) {
+                    actionMode!!.title = "${selection.size()}"
+                    actionMode!!.invalidate()
+                } else {
+                    actionMode!!.finish()
+                }
+            }
         recyclerView = rootView.findViewById(R.id.pass_recycler)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -116,6 +140,63 @@ class PasswordFragment : Fragment() {
         isExpanded = !isExpanded
         isActivated = isExpanded
         animate().rotationBy(if (isExpanded) -45f else 45f).setDuration(100).start()
+    }
+
+    private val actionModeCallback = object : ActionMode.Callback {
+
+        // Called when the action mode is created; startActionMode() was called
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            // Inflate a menu resource providing context menu items
+            mode.menuInflater.inflate(R.menu.context_pass, menu)
+            // hide the fab
+            requireActivity().findViewById<View>(R.id.fab).visibility = View.GONE
+            return true
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            menu.findItem(R.id.menu_edit_password).isVisible =
+                recyclerAdapter.getSelectedItems(requireContext())
+                    .map { it.type == PasswordItem.TYPE_PASSWORD }
+                    .singleOrNull() == true
+            return true // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.menu_delete_password -> {
+                    requireStore().deletePasswords(
+                        Stack<PasswordItem>().apply {
+                            recyclerAdapter.getSelectedItems(requireContext()).forEach { push(it) }
+                        }
+                    )
+                    mode.finish() // Action picked, so close the CAB
+                    return true
+                }
+                R.id.menu_edit_password -> {
+                    requireStore().editPassword(
+                        recyclerAdapter.getSelectedItems(requireContext()).first()
+                    )
+                    mode.finish()
+                    return true
+                }
+                R.id.menu_move_password -> {
+                    requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    return false
+                }
+                else -> return false
+            }
+        }
+
+        // Called when the user exits the action mode
+        override fun onDestroyActionMode(mode: ActionMode) {
+            recyclerAdapter.requireSelectionTracker().clearSelection()
+            actionMode = null
+            // show the fab
+            requireActivity().findViewById<View>(R.id.fab).visibility = View.VISIBLE
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -166,7 +247,7 @@ class PasswordFragment : Fragment() {
         get() = model.currentDir.value!!
 
     fun dismissActionMode() {
-        recyclerAdapter.actionMode?.finish()
+        actionMode?.finish()
     }
 
     interface OnFragmentInteractionListener {

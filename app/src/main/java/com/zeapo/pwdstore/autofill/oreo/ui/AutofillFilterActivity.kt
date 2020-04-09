@@ -77,26 +77,6 @@ class AutofillFilterView : AppCompatActivity() {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
-    private val recyclerAdapter = object : SearchableRepositoryAdapter<PasswordViewHolder>(
-        R.layout.oreo_autofill_filter_row,
-        ::PasswordViewHolder,
-        { item ->
-            val file = item.file.relativeTo(item.rootDir)
-            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
-            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
-            val accountPart = directoryStructure.getAccountPartFor(file)
-            title.text = buildSpannedString {
-                pathToIdentifier?.let { append("$it/") }
-                bold { underline { append(identifier) } }
-            }
-            subtitle.text = accountPart
-        }) {
-
-        override fun onItemClicked(holder: PasswordViewHolder, item: PasswordItem) {
-            decryptAndFill(item)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_oreo_autofill_filter)
@@ -133,6 +113,21 @@ class AutofillFilterView : AppCompatActivity() {
     }
 
     private fun bindUI() {
+        val recyclerAdapter = SearchableRepositoryAdapter(
+            R.layout.oreo_autofill_filter_row,
+            ::PasswordViewHolder) { item ->
+            val file = item.file.relativeTo(item.rootDir)
+            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
+            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
+            val accountPart = directoryStructure.getAccountPartFor(file)
+            title.text = buildSpannedString {
+                pathToIdentifier?.let { append("$it/") }
+                bold { underline { append(identifier) } }
+            }
+            subtitle.text = accountPart
+        }.onItemClicked { _, item ->
+            decryptAndFill(item)
+        }
         rvPassword.apply {
             adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
