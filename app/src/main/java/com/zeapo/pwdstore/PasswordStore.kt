@@ -196,7 +196,7 @@ class PasswordStore : AppCompatActivity() {
                         val filter = s.trim()
                         // List the contents of the current directory if the user enters a blank
                         // search term.
-                        if (filter == "")
+                        if (filter.isEmpty())
                             model.navigateTo(
                                 newDirectory = model.currentDir.value!!,
                                 pushPreviousLocation = false
