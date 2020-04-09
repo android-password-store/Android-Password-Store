@@ -193,7 +193,16 @@ class PasswordStore : AppCompatActivity() {
                     }
 
                     override fun onQueryTextChange(s: String): Boolean {
-                        model.search(s)
+                        val filter = s.trim()
+                        // List the contents of the current directory if the user enters a blank
+                        // search term.
+                        if (filter == "")
+                            model.navigateTo(
+                                newDirectory = model.currentDir.value!!,
+                                pushPreviousLocation = false
+                            )
+                        else
+                            model.search(filter)
                         return true
                     }
                 })

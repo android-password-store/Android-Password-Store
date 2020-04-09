@@ -151,7 +151,7 @@ class AutofillFilterView : AppCompatActivity() {
         )
         search.addTextChangedListener {
             model.search(
-                it.toString(),
+                it.toString().trim(),
                 filterMode = FilterMode.Fuzzy,
                 searchMode = SearchMode.RecursivelyInSubdirectories,
                 listMode = ListMode.FilesOnly

@@ -192,9 +192,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             listMode = ListMode.AllEntries
         )
     )
-    private val searchActionFlow = searchAction.asFlow()
-        .map { it.copy(filter = it.filter.trim()) }
-        .distinctUntilChanged()
+    private val searchActionFlow = searchAction.asFlow().distinctUntilChanged()
 
     data class SearchResult(val passwordItems: List<PasswordItem>, val isFiltered: Boolean)
 
@@ -371,7 +369,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         require(baseDirectory?.isDirectory != false) { "Can only search in a directory" }
         searchAction.postValue(
             makeSearchAction(
-                filter = filter.trim(),
+                filter = filter,
                 baseDirectory = baseDirectory ?: _currentDir.value!!,
                 filterMode = filterMode,
                 searchMode = searchMode ?: defaultSearchMode,
