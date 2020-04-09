@@ -94,7 +94,7 @@ class PasswordFragment : Fragment() {
                         ?: return@onSelectionChanged
 
                 if (!selection.isEmpty) {
-                    actionMode!!.title = "${selection.size()}"
+                    actionMode!!.title = resources.getQuantityString(R.plurals.delete_title, selection.size(), selection.size())
                     actionMode!!.invalidate()
                 } else {
                     actionMode!!.finish()
