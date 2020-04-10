@@ -33,8 +33,8 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
+import com.zeapo.pwdstore.databinding.ActivityOreoAutofillFilterBinding
 import com.zeapo.pwdstore.utils.PasswordItem
-import kotlinx.android.synthetic.main.activity_oreo_autofill_filter.*
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
@@ -71,6 +71,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     private lateinit var formOrigin: FormOrigin
     private lateinit var directoryStructure: DirectoryStructure
+    private lateinit var binding: ActivityOreoAutofillFilterBinding
 
     private val model: SearchableRepositoryViewModel by viewModels {
         ViewModelProvider.AndroidViewModelFactory(application)
@@ -78,7 +79,8 @@ class AutofillFilterView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_oreo_autofill_filter)
+        binding = ActivityOreoAutofillFilterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setFinishOnTouchOutside(true)
 
         val params = window.attributes
@@ -127,13 +129,13 @@ class AutofillFilterView : AppCompatActivity() {
         }.onItemClicked { _, item ->
             decryptAndFill(item)
         }
-        rvPassword.apply {
+        binding.rvPassword.apply {
             adapter = recyclerAdapter
             layoutManager = LinearLayoutManager(context)
         }
 
         val initialFilter = formOrigin.getPrettyIdentifier(applicationContext, untrusted = false)
-        search.setText(initialFilter, TextView.BufferType.EDITABLE)
+        binding.search.setText(initialFilter, TextView.BufferType.EDITABLE)
         val filterMode =
             if (formOrigin is FormOrigin.Web) FilterMode.StrictDomain else FilterMode.Fuzzy
         model.search(
@@ -142,7 +144,7 @@ class AutofillFilterView : AppCompatActivity() {
             searchMode = SearchMode.RecursivelyInSubdirectories,
             listMode = ListMode.FilesOnly
         )
-        search.addTextChangedListener {
+        binding.search.addTextChangedListener {
             model.search(
                 it.toString().trim(),
                 filterMode = FilterMode.Fuzzy,
@@ -155,21 +157,21 @@ class AutofillFilterView : AppCompatActivity() {
             recyclerAdapter.submitList(list)
             // Switch RecyclerView out for a "no results" message if the new list is empty and
             // the message is not yet shown (and vice versa).
-            if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
-                (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id)
+            if ((list.isEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPasswordEmpty.id) ||
+                (list.isNotEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPassword.id)
             )
-                rvPasswordSwitcher.showNext()
+                binding.rvPasswordSwitcher.showNext()
         }
 
-        shouldMatch.text = getString(
+        binding.shouldMatch.text = getString(
             R.string.oreo_autofill_match_with,
             formOrigin.getPrettyIdentifier(applicationContext)
         )
     }
 
     private fun decryptAndFill(item: PasswordItem) {
-        if (shouldClear.isChecked) AutofillMatcher.clearMatchesFor(applicationContext, formOrigin)
-        if (shouldMatch.isChecked) AutofillMatcher.addMatchFor(
+        if (binding.shouldClear.isChecked) AutofillMatcher.clearMatchesFor(applicationContext, formOrigin)
+        if (binding.shouldMatch.isChecked) AutofillMatcher.addMatchFor(
             applicationContext,
             formOrigin,
             item.file
