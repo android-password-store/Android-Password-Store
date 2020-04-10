@@ -95,9 +95,9 @@ class GitServerConfigActivity : BaseGitActivity() {
                     putString("git_remote_username", serverUser)
                     putString("git_remote_location", serverPath)
                 }
-                Snackbar.make(binding.root, "Successfully saved configuration", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
             } else {
-                Snackbar.make(binding.root, "Configuration error: please verify your settings and try again", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, getString(R.string.git_server_config_save_failure), Snackbar.LENGTH_LONG).show()
             }
         }
     }

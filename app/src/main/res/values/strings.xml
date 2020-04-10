@@ -348,4 +348,6 @@
     <string name="connection_mode_ssh_key" translatable="false">SSH key</string>
     <string name="connection_mode_basic_authentication" translatable="false">Password</string>
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
+    <string name="git_server_config_save_success">Successfully saved configuration</string>
+    <string name="git_server_config_save_failure">Configuration error: please verify your settings and try again</string>
 </resources>
