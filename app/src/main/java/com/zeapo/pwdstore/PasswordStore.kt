@@ -114,11 +114,11 @@ class PasswordStore : AppCompatActivity() {
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
 
-        model.currentDir.observe(this) {
+        model.currentDir.observe(this) { dir ->
             val basePath = getRepositoryDirectory(applicationContext).absoluteFile
             supportActionBar!!.apply {
-                if (it != basePath)
-                    title = it.name
+                if (dir != basePath)
+                    title = dir.name
                 else
                     setTitle(R.string.app_name)
             }
