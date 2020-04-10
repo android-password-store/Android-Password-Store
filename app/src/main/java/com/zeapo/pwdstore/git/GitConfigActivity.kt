@@ -47,7 +47,7 @@ class GitConfigActivity : BaseGitActivity() {
             if (!email.matches(Patterns.EMAIL_ADDRESS.toRegex())) {
                 MaterialAlertDialogBuilder(this)
                         .setMessage(getString(R.string.invalid_email_dialog_text))
-                        .setPositiveButton(getString(R.string.dialog_oops), null)
+                        .setPositiveButton(getString(R.string.dialog_ok), null)
                         .show()
             } else {
                 val editor = settings.edit()
