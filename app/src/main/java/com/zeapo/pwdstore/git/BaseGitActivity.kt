@@ -104,13 +104,13 @@ abstract class BaseGitActivity : AppCompatActivity() {
     }
 
     /**
-     * Attempt to launch the requested GIT operation. Depending on the configured auth, it may not
+     * Attempt to launch the requested Git operation. Depending on the configured auth, it may not
      * be possible to launch the operation immediately. In that case, this function may launch an
      * intermediate activity instead, which will gather necessary information and post it back via
      * onActivityResult, which will then re-call this function. This may happen multiple times,
      * until either an error is encountered or the operation is successfully launched.
      *
-     * @param operation The type of GIT operation to launch
+     * @param operation The type of git operation to launch
      */
     fun launchGitOperation(operation: Int) {
         val op: GitOperation
@@ -146,10 +146,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     return
                 }
             }
-            op.executeAfterAuthentication(connectionMode,
-                    settings.getString("git_remote_username", "git")!!,
-                    File("$filesDir/.ssh_key"),
-                    identity)
+            op.executeAfterAuthentication(connectionMode, serverUser,
+                    File("$filesDir/.ssh_key"), identity)
         } catch (e: Exception) {
             e.printStackTrace()
             MaterialAlertDialogBuilder(this).setMessage(e.message).show()
