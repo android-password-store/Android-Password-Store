@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
@@ -39,8 +40,10 @@ class PasswordFragment : Fragment() {
 
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
+    private var _binding: PasswordRecyclerViewBinding? = null
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
+    private val binding get() = _binding!!
 
     private fun requireStore() = requireActivity() as PasswordStore
 
@@ -49,28 +52,28 @@ class PasswordFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.password_recycler_view, container, false)
-        initializePasswordList(view)
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
+        _binding = PasswordRecyclerViewBinding.inflate(inflater, container, false)
+        initializePasswordList()
+        val fab = binding.fab
         fab.setOnClickListener {
             toggleFabExpand(fab)
         }
-        view.findViewById<FloatingActionButton>(R.id.create_folder).setOnClickListener {
+        binding.createFolder.setOnClickListener {
             requireStore().createFolder()
             toggleFabExpand(fab)
         }
-        view.findViewById<FloatingActionButton>(R.id.create_password).setOnClickListener {
+        binding.createPassword.setOnClickListener {
             requireStore().createPassword()
             toggleFabExpand(fab)
         }
-        return view
+        return binding.root
     }
 
-    private fun initializePasswordList(rootView: View) {
-        swipeRefresher = rootView.findViewById(R.id.swipe_refresher)
+    private fun initializePasswordList() {
+        swipeRefresher = binding.swipeRefresher
         swipeRefresher.setOnRefreshListener {
             if (!PasswordRepository.isGitRepo()) {
-                Snackbar.make(rootView, getString(R.string.clone_git_repo), Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_SHORT)
                     .show()
                 swipeRefresher.isRefreshing = false
             } else {
@@ -100,7 +103,7 @@ class PasswordFragment : Fragment() {
                     actionMode!!.finish()
                 }
             }
-        recyclerView = rootView.findViewById(R.id.pass_recycler)
+        recyclerView = binding.passRecycler
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             itemAnimator = OnOffItemAnimator()
@@ -129,6 +132,11 @@ class PasswordFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
     private fun toggleFabExpand(fab: FloatingActionButton) = with(fab) {
         isExpanded = !isExpanded
         isActivated = isExpanded
@@ -142,7 +150,7 @@ class PasswordFragment : Fragment() {
             // Inflate a menu resource providing context menu items
             mode.menuInflater.inflate(R.menu.context_pass, menu)
             // hide the fab
-            requireActivity().findViewById<View>(R.id.fab).visibility = View.GONE
+            binding.fab.visibility = View.GONE
             return true
         }
 
@@ -188,7 +196,7 @@ class PasswordFragment : Fragment() {
             recyclerAdapter.requireSelectionTracker().clearSelection()
             actionMode = null
             // show the fab
-            requireActivity().findViewById<View>(R.id.fab).visibility = View.VISIBLE
+            binding.fab.visibility = View.VISIBLE
         }
     }
 
