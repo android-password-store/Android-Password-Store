@@ -51,7 +51,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/crypto_save"
-        android:onClick="applyGitConfigs"
         android:textColor="?android:attr/windowBackground"
         app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/email_input_layout"
@@ -95,7 +94,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/abort_rebase"
-        android:onClick="abortRebase"
         android:textColor="?android:attr/windowBackground"
         app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/commit_hash_label" />
@@ -107,7 +105,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/reset_to_remote"
-        android:onClick="resetToRemote"
         android:textColor="?android:attr/windowBackground"
         app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/git_abort_rebase" />

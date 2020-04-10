@@ -20,6 +20,7 @@ import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.GitConfigSessionFactory
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory
@@ -96,7 +97,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * @param identity the api identity to use for auth in OpenKeychain connection mode
      */
     fun executeAfterAuthentication(
-        connectionMode: String,
+        connectionMode: ConnectionMode,
         username: String,
         sshKey: File?,
         identity: SshApiSessionFactory.ApiIdentity?
@@ -114,13 +115,13 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * @param showError show the passphrase edit text in red
      */
     private fun executeAfterAuthentication(
-        connectionMode: String,
+        connectionMode: ConnectionMode,
         username: String,
         sshKey: File?,
         identity: SshApiSessionFactory.ApiIdentity?,
         showError: Boolean
     ) {
-        if (connectionMode.equals("ssh-key", ignoreCase = true)) {
+        if (connectionMode == ConnectionMode.Ssh) {
             if (sshKey == null || !sshKey.exists()) {
                 MaterialAlertDialogBuilder(callingActivity)
                         .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
@@ -208,7 +209,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                             .show()
                 }
             }
-        } else if (connectionMode.equals("OpenKeychain", ignoreCase = true)) {
+        } else if (connectionMode == ConnectionMode.OpenKeychain) {
             setAuthentication(username, identity).execute()
         } else {
             val password = EditText(callingActivity)

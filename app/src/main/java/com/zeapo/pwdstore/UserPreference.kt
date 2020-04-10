@@ -35,7 +35,8 @@ import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.PgpActivity
-import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.git.GitConfigActivity
+import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
@@ -188,16 +189,12 @@ class UserPreference : AppCompatActivity() {
             }
 
             gitServerPreference?.onPreferenceClickListener = ClickListener {
-                val intent = Intent(callingActivity, GitActivity::class.java)
-                intent.putExtra("Operation", GitActivity.EDIT_SERVER)
-                startActivityForResult(intent, EDIT_GIT_INFO)
+                startActivity(Intent(callingActivity, GitServerConfigActivity::class.java))
                 true
             }
 
             gitConfigPreference?.onPreferenceClickListener = ClickListener {
-                val intent = Intent(callingActivity, GitActivity::class.java)
-                intent.putExtra("Operation", GitActivity.EDIT_GIT_CONFIG)
-                startActivityForResult(intent, EDIT_GIT_CONFIG)
+                startActivity(Intent(callingActivity, GitConfigActivity::class.java))
                 true
             }
 

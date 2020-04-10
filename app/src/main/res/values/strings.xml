@@ -343,4 +343,9 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_battery_saver">Set by Battery Saver</string>
     <string name="theme_follow_system">System default</string>
+    <string name="clone_protocol_ssh" translatable="false">SSH</string>
+    <string name="clone_protocol_https" translatable="false">HTTPS</string>
+    <string name="connection_mode_ssh_key" translatable="false">SSH key</string>
+    <string name="connection_mode_basic_authentication" translatable="false">Password</string>
+    <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
 </resources>

@@ -41,6 +41,14 @@
 
         <activity android:name=".git.GitActivity" />
 
+        <activity android:name=".git.GitServerConfigActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:label="@string/title_activity_git_clone" />
+
+        <activity android:name=".git.GitConfigActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:label="@string/title_activity_git_config" />
+
         <activity
             android:name=".UserPreference"
             android:parentActivityName=".PasswordStore"

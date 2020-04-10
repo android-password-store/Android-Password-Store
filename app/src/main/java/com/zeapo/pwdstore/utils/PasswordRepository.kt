@@ -95,7 +95,7 @@ open class PasswordRepository protected constructor() {
 
         // TODO add multiple remotes support for pull/push
         @JvmStatic
-        fun addRemote(name: String, url: String, replace: Boolean?) {
+        fun addRemote(name: String, url: String, replace: Boolean = false) {
             val storedConfig = repository!!.config
             val remotes = storedConfig.getSubsections("remote")
 
@@ -116,7 +116,7 @@ open class PasswordRepository protected constructor() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            } else if (replace!!) {
+            } else if (replace) {
                 try {
                     val uri = URIish(url)
 
