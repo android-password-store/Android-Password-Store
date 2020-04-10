@@ -64,6 +64,11 @@ abstract class BaseGitActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Update the [hostname] field with the values that build it up. This function returns a boolean
+     * indicating whether or not the values are valid or not, and only adds the `origin` remote when
+     * it is.
+     */
     fun updateHostname(): Boolean {
         var valid = false
         hostname = when (protocol) {
@@ -161,9 +166,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
         const val REQUEST_CLONE = 103
         const val REQUEST_INIT = 104
         const val REQUEST_SYNC = 105
-        const val REQUEST_CREATE = 106
-        const val BREAK_OUT_OF_DETACHED = 107
-        const val REQUEST_RESET = 108
+        const val BREAK_OUT_OF_DETACHED = 106
+        const val REQUEST_RESET = 107
         const val TAG = "AbstractGitActivity"
     }
 }
