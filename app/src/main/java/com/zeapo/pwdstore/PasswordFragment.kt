@@ -114,7 +114,7 @@ class PasswordFragment : Fragment() {
         recyclerAdapter.makeSelectable(recyclerView)
         registerForContextMenu(recyclerView)
 
-        val path = requireNotNull(requireArguments().getString("Path"))
+        val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
         model.navigateTo(File(path), pushPreviousLocation = false)
         model.searchResult.observe(this) { result ->
             // Only run animations when the new list is filtered, i.e., the user submitted a search,

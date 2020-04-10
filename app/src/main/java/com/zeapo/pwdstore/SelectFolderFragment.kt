@@ -55,7 +55,7 @@ class SelectFolderFragment : Fragment() {
         FastScrollerBuilder(recyclerView).build()
         registerForContextMenu(recyclerView)
 
-        val path = requireNotNull(requireArguments().getString("Path"))
+        val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
         model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)
         model.searchResult.observe(this) { result ->
             recyclerAdapter.submitList(result.passwordItems)

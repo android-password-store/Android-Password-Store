@@ -382,7 +382,7 @@ class PasswordStore : AppCompatActivity() {
                 settings.edit().putBoolean("repo_changed", false).apply()
                 plist = PasswordFragment()
                 val args = Bundle()
-                args.putString("Path", getRepositoryDirectory(applicationContext).absolutePath)
+                args.putString(REQUEST_ARG_PATH, getRepositoryDirectory(applicationContext).absolutePath)
 
                 // if the activity was started from the autofill settings, the
                 // intent is to match a clicked pwd with app. pass this to fragment
@@ -784,6 +784,7 @@ class PasswordStore : AppCompatActivity() {
         const val REQUEST_CODE_GET_KEY_IDS = 9915
         const val REQUEST_CODE_EDIT = 9916
         const val REQUEST_CODE_SELECT_FOLDER = 9917
+        const val REQUEST_ARG_PATH = "PATH"
         private val TAG = PasswordStore::class.java.name
         private const val CLONE_REPO_BUTTON = 401
         private const val NEW_REPO_BUTTON = 402
