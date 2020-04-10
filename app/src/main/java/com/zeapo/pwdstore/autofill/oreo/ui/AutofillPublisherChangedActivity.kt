@@ -60,36 +60,39 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
         showPackageInfo()
-
-        binding.okButton.setOnClickListener { finish() }
-        binding.advancedButton.setOnClickListener {
-            binding.advancedButton.visibility = View.INVISIBLE
-            binding.warningAppAdvancedInfo.visibility = View.VISIBLE
-            binding.resetButton.visibility = View.VISIBLE
-        }
-        binding.resetButton.setOnClickListener {
-            AutofillMatcher.clearMatchesFor(this, FormOrigin.App(appPackage))
-            finish()
+        with(binding) {
+            okButton.setOnClickListener { finish() }
+            advancedButton.setOnClickListener {
+                advancedButton.visibility = View.INVISIBLE
+                warningAppAdvancedInfo.visibility = View.VISIBLE
+                resetButton.visibility = View.VISIBLE
+            }
+            resetButton.setOnClickListener {
+                AutofillMatcher.clearMatchesFor(this@AutofillPublisherChangedActivity, FormOrigin.App(appPackage))
+                finish()
+            }
         }
     }
 
     private fun showPackageInfo() {
         try {
-            val packageInfo =
-                packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
-            val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
-            binding.warningAppInstallDate.text =
-                getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
-            val appInfo =
-                packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
-            binding.warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
+            with(binding) {
+                val packageInfo =
+                        packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
+                val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
+                warningAppInstallDate.text =
+                        getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
+                val appInfo =
+                        packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
+                warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
 
-            val currentHash = computeCertificatesHash(this, appPackage)
-            binding.warningAppAdvancedInfo.text = getString(
-                R.string.oreo_autofill_warning_publisher_advanced_info_template,
-                appPackage,
-                currentHash
-            )
+                val currentHash = computeCertificatesHash(this@AutofillPublisherChangedActivity, appPackage)
+                warningAppAdvancedInfo.text = getString(
+                        R.string.oreo_autofill_warning_publisher_advanced_info_template,
+                        appPackage,
+                        currentHash
+                )
+            }
         } catch (exception: Exception) {
             e(exception) { "Failed to retrieve package info for $appPackage" }
             finish()
