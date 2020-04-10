@@ -159,6 +159,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val REQUEST_ARG_OP = "OPERATION"
         const val REQUEST_PULL = 101
         const val REQUEST_PUSH = 102
         const val REQUEST_CLONE = 103

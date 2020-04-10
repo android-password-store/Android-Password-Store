@@ -67,61 +67,6 @@ open class GitActivity : BaseGitActivity() {
     }
 
     /**
-     * Clones the repository, the directory exists, deletes it
-     */
-    @Suppress("Unused")
-    fun cloneRepository() {
-        if (PasswordRepository.getRepository(null) == null) {
-            PasswordRepository.initialize(this)
-        }
-        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
-
-        // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
-        if (localDir.exists() && localDir.listFiles()!!.isNotEmpty() &&
-                !(localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git")) {
-            MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.dialog_delete_title)
-                    .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.dialog_delete
-                    ) { dialog, _ ->
-                        try {
-                            FileUtils.deleteDirectory(localDir)
-                            launchGitOperation(REQUEST_CLONE)
-                        } catch (e: IOException) {
-                            // TODO Handle the exception correctly if we are unable to delete the directory...
-                            e.printStackTrace()
-                            MaterialAlertDialogBuilder(this).setMessage(e.message).show()
-                        }
-
-                        dialog.cancel()
-                    }
-                    .setNegativeButton(R.string.dialog_do_not_delete
-                    ) { dialog, _ -> dialog.cancel() }
-                    .show()
-        } else {
-            try {
-                // Silently delete & replace the lone .git folder if it exists
-                if (localDir.exists() && localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git") {
-                    try {
-                        FileUtils.deleteDirectory(localDir)
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        MaterialAlertDialogBuilder(this).setMessage(e.message).show()
-                    }
-                }
-            } catch (e: Exception) {
-                // This is what happens when jgit fails :(
-                // TODO Handle the different cases of exceptions
-                e.printStackTrace()
-                MaterialAlertDialogBuilder(this).setMessage(e.message).show()
-            }
-
-            launchGitOperation(REQUEST_CLONE)
-        }
-    }
-
-    /**
      * Syncs the local repository with the remote one (either pull or push)
      *
      * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH

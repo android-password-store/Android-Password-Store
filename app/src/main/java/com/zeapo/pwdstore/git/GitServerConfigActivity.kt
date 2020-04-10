@@ -7,11 +7,14 @@ package com.zeapo.pwdstore.git
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitCloneBinding
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
+import com.zeapo.pwdstore.utils.PasswordRepository
+import java.io.IOException
 
 /**
  * Activity that encompasses both the initial clone as well as editing the server config for future
@@ -22,6 +25,10 @@ class GitServerConfigActivity : BaseGitActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityGitCloneBinding.inflate(layoutInflater)
+        val isClone = intent?.extras?.getInt(REQUEST_ARG_OP) ?: -1 == REQUEST_CLONE
+        if (isClone) {
+            binding.saveButton.text = getString(R.string.clone_button)
+        }
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -95,10 +102,67 @@ class GitServerConfigActivity : BaseGitActivity() {
                     putString("git_remote_username", serverUser)
                     putString("git_remote_location", serverPath)
                 }
-                Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+                if (!isClone)
+                    Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
             } else {
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_failure), Snackbar.LENGTH_LONG).show()
             }
+            if (isClone) {
+                cloneRepository()
+            }
+        }
+    }
+
+    /**
+     * Clones the repository, the directory exists, deletes it
+     */
+    private fun cloneRepository() {
+        if (PasswordRepository.getRepository(null) == null) {
+            PasswordRepository.initialize(this)
+        }
+        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
+
+        // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
+        if (localDir.exists() && localDir.listFiles()!!.isNotEmpty() &&
+                !(localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git")) {
+            MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_delete_title)
+                    .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
+                        try {
+                            localDir.deleteRecursively()
+                            launchGitOperation(REQUEST_CLONE)
+                        } catch (e: IOException) {
+                            // TODO Handle the exception correctly if we are unable to delete the directory...
+                            e.printStackTrace()
+                            MaterialAlertDialogBuilder(this).setMessage(e.message).show()
+                        } finally {
+                            dialog.cancel()
+                        }
+                    }
+                    .setNegativeButton(R.string.dialog_do_not_delete) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
+        } else {
+            try {
+                // Silently delete & replace the lone .git folder if it exists
+                if (localDir.exists() && localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git") {
+                    try {
+                        localDir.deleteRecursively()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        MaterialAlertDialogBuilder(this).setMessage(e.message).show()
+                    }
+                }
+            } catch (e: Exception) {
+                // This is what happens when JGit fails :(
+                // TODO Handle the different cases of exceptions
+                e.printStackTrace()
+                MaterialAlertDialogBuilder(this).setMessage(e.message).show()
+            }
+            launchGitOperation(REQUEST_CLONE)
         }
     }
 }

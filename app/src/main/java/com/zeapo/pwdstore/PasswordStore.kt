@@ -42,6 +42,7 @@ import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
+import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -722,9 +723,8 @@ class PasswordStore : AppCompatActivity() {
                     when (operation) {
                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
                         CLONE_REPO_BUTTON -> {
-                            initialize(this@PasswordStore)
-                            val intent = Intent(activity, GitActivity::class.java)
-                            intent.putExtra("Operation", BaseGitActivity.REQUEST_CLONE)
+                            val intent = Intent(activity, GitServerConfigActivity::class.java)
+                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
                             startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                         }
                     }
@@ -744,9 +744,8 @@ class PasswordStore : AppCompatActivity() {
                                     when (operation) {
                                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
                                         CLONE_REPO_BUTTON -> {
-                                            initialize(this@PasswordStore)
-                                            val intent = Intent(activity, GitActivity::class.java)
-                                            intent.putExtra("Operation", BaseGitActivity.REQUEST_CLONE)
+                                            val intent = Intent(activity, GitServerConfigActivity::class.java)
+                                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
                                             startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                                         }
                                     }
