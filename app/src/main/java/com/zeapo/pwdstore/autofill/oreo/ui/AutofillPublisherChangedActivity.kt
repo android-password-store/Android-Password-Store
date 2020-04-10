@@ -21,7 +21,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPublisherChangedException
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.autofill.oreo.computeCertificatesHash
-import kotlinx.android.synthetic.main.activity_oreo_autofill_publisher_changed.*
+import com.zeapo.pwdstore.databinding.ActivityOreoAutofillPublisherChangedBinding
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillPublisherChangedActivity : AppCompatActivity() {
@@ -45,10 +45,12 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
     }
 
     private lateinit var appPackage: String
+    private lateinit var binding: ActivityOreoAutofillPublisherChangedBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_oreo_autofill_publisher_changed)
+        binding = ActivityOreoAutofillPublisherChangedBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setFinishOnTouchOutside(true)
 
         appPackage = intent.getStringExtra(EXTRA_APP_PACKAGE) ?: run {
@@ -59,13 +61,13 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
         supportActionBar?.hide()
         showPackageInfo()
 
-        okButton.setOnClickListener { finish() }
-        advancedButton.setOnClickListener {
-            advancedButton.visibility = View.INVISIBLE
-            warningAppAdvancedInfo.visibility = View.VISIBLE
-            resetButton.visibility = View.VISIBLE
+        binding.okButton.setOnClickListener { finish() }
+        binding.advancedButton.setOnClickListener {
+            binding.advancedButton.visibility = View.INVISIBLE
+            binding.warningAppAdvancedInfo.visibility = View.VISIBLE
+            binding.resetButton.visibility = View.VISIBLE
         }
-        resetButton.setOnClickListener {
+        binding.resetButton.setOnClickListener {
             AutofillMatcher.clearMatchesFor(this, FormOrigin.App(appPackage))
             finish()
         }
@@ -76,14 +78,14 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
             val packageInfo =
                 packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
             val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
-            warningAppInstallDate.text =
+            binding.warningAppInstallDate.text =
                 getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
             val appInfo =
                 packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
-            warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
+            binding.warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
 
             val currentHash = computeCertificatesHash(this, appPackage)
-            warningAppAdvancedInfo.text = getString(
+            binding.warningAppAdvancedInfo.text = getString(
                 R.string.oreo_autofill_warning_publisher_advanced_info_template,
                 appPackage,
                 currentHash
