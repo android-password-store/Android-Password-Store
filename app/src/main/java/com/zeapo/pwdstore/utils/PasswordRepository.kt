@@ -181,16 +181,6 @@ open class PasswordRepository protected constructor() {
         }
 
         /**
-         * Gets the password items in the root directory
-         *
-         * @return a list of passwords in the root directory
-         */
-        @JvmStatic
-        fun getPasswords(rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
-            return getPasswords(rootDir, rootDir, sortOrder)
-        }
-
-        /**
          * Gets the .gpg files in a directory
          *
          * @param path the directory path
