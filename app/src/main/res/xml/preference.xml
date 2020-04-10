@@ -147,11 +147,6 @@
             app:key="search_on_start"
             app:summary="@string/pref_search_on_start_hint"
             app:title="@string/pref_search_on_start" />
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:key="search_from_root"
-            app:summary="@string/pref_search_from_root_hint"
-            app:title="@string/pref_search_from_root" />
         <androidx.preference.ListPreference
             app:title="@string/pref_sort_order_title"
             app:defaultValue="FOLDER_FIRST"

@@ -318,8 +318,6 @@
     <string name="button_create">Создать</string>
     <string name="pref_search_on_start">Открыть поиск на старте</string>
     <string name="pref_search_on_start_hint">Открыть панель поиска при запуске приложения</string>
-    <string name="pref_search_from_root">Всегда начинать поиск от корня</string>
-    <string name="pref_search_from_root_hint">Искать от корня хранилища независимо от текущей открытой директории</string>
     <string name="password_generator_category_title">Генератор паролей</string>
     <string name="tap_clear_clipboard">Нажмите здесь чтобы очистить буфер обмена</string>
     <string name="clone_git_repo">Для синхронизации изменений клонируйте git репозиторий</string>

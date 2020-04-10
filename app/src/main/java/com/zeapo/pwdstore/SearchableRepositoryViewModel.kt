@@ -5,14 +5,23 @@
 package com.zeapo.pwdstore
 
 import android.app.Application
+import android.content.Context
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
+import androidx.recyclerview.selection.Selection
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +31,8 @@ import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
 import java.text.Collator
+import java.util.Locale
+import java.util.Stack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -32,8 +43,10 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 private fun File.toPasswordItem(root: File) = if (isFile)
     PasswordItem.newPassword(name, this, root)
@@ -89,8 +102,11 @@ private fun PasswordItem.Companion.makeComparator(
         .then(compareBy(CaseInsensitiveComparator) { directoryStructure.getUsernameFor(it.file) })
 }
 
+val PasswordItem.stableId: String
+    get() = file.absolutePath
+
 enum class FilterMode {
-    ListOnly,
+    NoFilter,
     StrictDomain,
     Fuzzy
 }
@@ -100,65 +116,109 @@ enum class SearchMode {
     InCurrentDirectoryOnly
 }
 
-private data class SearchAction(
-    val currentDir: File,
-    val filter: String,
-    val filterMode: FilterMode,
-    val searchMode: SearchMode,
-    val listFilesOnly: Boolean
-)
+enum class ListMode {
+    FilesOnly,
+    DirectoriesOnly,
+    AllEntries
+}
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 class SearchableRepositoryViewModel(application: Application) : AndroidViewModel(application) {
-    private val root = PasswordRepository.getRepositoryDirectory(application)
+
+    private var _updateCounter = 0
+    private val updateCounter: Int
+        get() = _updateCounter
+
+    private fun forceUpdateOnNextSearchAction() {
+        _updateCounter++
+    }
+
+    private val root
+        get() = PasswordRepository.getRepositoryDirectory(getApplication())
     private val settings = PreferenceManager.getDefaultSharedPreferences(getApplication())
-    private val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
-    private val searchFromRoot = settings.getBoolean("search_from_root", false)
-    private val defaultSearchMode = if (settings.getBoolean("filter_recursively", true)) {
+    private val showHiddenDirs
+        get() = settings.getBoolean("show_hidden_folders", false)
+    private val defaultSearchMode
+        get() = if (settings.getBoolean("filter_recursively", true)) {
         SearchMode.RecursivelyInSubdirectories
     } else {
         SearchMode.InCurrentDirectoryOnly
     }
 
-    private val typeSortOrder = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
-    private val directoryStructure = AutofillPreferences.directoryStructure(application)
-    private val itemComparator = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
+    private val typeSortOrder
+        get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
+    private val directoryStructure
+        get() = AutofillPreferences.directoryStructure(getApplication())
+    private val itemComparator
+        get() = PasswordItem.makeComparator(typeSortOrder, directoryStructure)
+
+    private data class SearchAction(
+        val baseDirectory: File,
+        val filter: String,
+        val filterMode: FilterMode,
+        val searchMode: SearchMode,
+        val listMode: ListMode,
+        // This counter can be increased to force a reexecution of the search action even if all
+        // other arguments are left unchanged.
+        val updateCounter: Int
+    )
+
+    private fun makeSearchAction(
+        baseDirectory: File,
+        filter: String,
+        filterMode: FilterMode,
+        searchMode: SearchMode,
+        listMode: ListMode
+    ): SearchAction {
+        return SearchAction(
+            baseDirectory = baseDirectory,
+            filter = filter,
+            filterMode = filterMode,
+            searchMode = searchMode,
+            listMode = listMode,
+            updateCounter = updateCounter
+        )
+    }
+
+    private fun updateSearchAction(action: SearchAction) =
+        action.copy(updateCounter = updateCounter)
 
     private val searchAction = MutableLiveData(
-        SearchAction(
-            currentDir = root,
+        makeSearchAction(
+            baseDirectory = root,
             filter = "",
-            filterMode = FilterMode.ListOnly,
+            filterMode = FilterMode.NoFilter,
             searchMode = SearchMode.InCurrentDirectoryOnly,
-            listFilesOnly = true
+            listMode = ListMode.AllEntries
         )
     )
-    private val searchActionFlow = searchAction.asFlow()
-        .map { it.copy(filter = it.filter.trim()) }
-        .distinctUntilChanged()
+    private val searchActionFlow = searchAction.asFlow().distinctUntilChanged()
 
-    private val passwordItemsFlow = searchActionFlow
+    data class SearchResult(val passwordItems: List<PasswordItem>, val isFiltered: Boolean)
+
+    private val newResultFlow = searchActionFlow
         .mapLatest { searchAction ->
-            val dirToSearch =
-                if (searchFromRoot && searchAction.filterMode != FilterMode.ListOnly) root else searchAction.currentDir
             val listResultFlow = when (searchAction.searchMode) {
-                SearchMode.RecursivelyInSubdirectories -> listFilesRecursively(dirToSearch)
-                SearchMode.InCurrentDirectoryOnly -> listFiles(dirToSearch)
+                SearchMode.RecursivelyInSubdirectories -> listFilesRecursively(searchAction.baseDirectory)
+                SearchMode.InCurrentDirectoryOnly -> listFiles(searchAction.baseDirectory)
             }
-            val prefilteredResultFlow =
-                if (searchAction.listFilesOnly) listResultFlow.filter { it.isFile } else listResultFlow
+            val prefilteredResultFlow = when (searchAction.listMode) {
+                ListMode.FilesOnly -> listResultFlow.filter { it.isFile }
+                ListMode.DirectoriesOnly -> listResultFlow.filter { it.isDirectory }
+                ListMode.AllEntries -> listResultFlow
+            }
             val filterModeToUse =
-                if (searchAction.filter == "") FilterMode.ListOnly else searchAction.filterMode
-            when (filterModeToUse) {
-                FilterMode.ListOnly -> {
+                if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode
+            val passwordList = when (filterModeToUse) {
+                FilterMode.NoFilter -> {
                     prefilteredResultFlow
                         .map { it.toPasswordItem(root) }
                         .toList()
                         .sortedWith(itemComparator)
                 }
                 FilterMode.StrictDomain -> {
-                    check(searchAction.listFilesOnly) { "Searches with StrictDomain search mode can only list files" }
+                    check(searchAction.listMode == ListMode.FilesOnly) { "Searches with StrictDomain search mode can only list files" }
                     prefilteredResultFlow
                         .filter { file ->
                             val toMatch =
@@ -190,40 +250,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                         .map { it.second }
                 }
             }
+            SearchResult(passwordList, isFiltered = searchAction.filterMode != FilterMode.NoFilter)
         }
-
-    val passwordItemsList = passwordItemsFlow.asLiveData(Dispatchers.IO)
-
-    fun list(currentDir: File) {
-        require(currentDir.isDirectory) { "Can only list files in a directory" }
-        searchAction.postValue(
-            SearchAction(
-                filter = "",
-                currentDir = currentDir,
-                filterMode = FilterMode.ListOnly,
-                searchMode = SearchMode.InCurrentDirectoryOnly,
-                listFilesOnly = false
-            )
-        )
-    }
-
-    fun search(
-        filter: String,
-        currentDir: File? = null,
-        filterMode: FilterMode = FilterMode.Fuzzy,
-        searchMode: SearchMode? = null,
-        listFilesOnly: Boolean = false
-    ) {
-        require(currentDir?.isDirectory != false) { "Can only search in a directory" }
-        val action = SearchAction(
-            filter = filter.trim(),
-            currentDir = currentDir ?: searchAction.value!!.currentDir,
-            filterMode = filterMode,
-            searchMode = searchMode ?: defaultSearchMode,
-            listFilesOnly = listFilesOnly
-        )
-        searchAction.postValue(action)
-    }
 
     private fun shouldTake(file: File) = with(file) {
         if (isDirectory) {
@@ -247,6 +275,114 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             }
             .filter { file -> shouldTake(file) }
     }
+
+    private val cachedResult = MutableLiveData<SearchResult>()
+    val searchResult =
+        listOf(newResultFlow, cachedResult.asFlow()).merge().asLiveData(Dispatchers.IO)
+
+    private val _currentDir = MutableLiveData(root)
+    val currentDir = _currentDir as LiveData<File>
+
+    data class NavigationStackEntry(
+        val dir: File,
+        val items: List<PasswordItem>?,
+        val recyclerViewState: Parcelable?
+    )
+
+    private val navigationStack = Stack<NavigationStackEntry>()
+
+    fun navigateTo(
+        newDirectory: File = root,
+        listMode: ListMode = ListMode.AllEntries,
+        recyclerViewState: Parcelable? = null,
+        pushPreviousLocation: Boolean = true
+    ) {
+        require(newDirectory.isDirectory) { "Can only navigate to a directory" }
+        if (pushPreviousLocation) {
+            // We cache the current list entries only if the current list has not been filtered,
+            // otherwise it will be regenerated when moving back.
+            if (searchAction.value?.filterMode == FilterMode.NoFilter) {
+                navigationStack.push(
+                    NavigationStackEntry(
+                        _currentDir.value!!,
+                        searchResult.value?.passwordItems,
+                        recyclerViewState
+                    )
+                )
+            } else {
+                navigationStack.push(
+                    NavigationStackEntry(
+                        _currentDir.value!!,
+                        null,
+                        recyclerViewState
+                    )
+                )
+            }
+        }
+        searchAction.postValue(
+            makeSearchAction(
+                filter = "",
+                baseDirectory = newDirectory,
+                filterMode = FilterMode.NoFilter,
+                searchMode = SearchMode.InCurrentDirectoryOnly,
+                listMode = listMode
+            )
+        )
+        _currentDir.postValue(newDirectory)
+    }
+
+    val canNavigateBack
+        get() = navigationStack.isNotEmpty()
+
+    /**
+     * Navigate back to the last location on the [navigationStack] using a cached list of entries
+     * if possible.
+     *
+     * Returns the old RecyclerView's LinearLayoutManager state as a [Parcelable] if it was cached.
+     */
+    fun navigateBack(): Parcelable? {
+        if (!canNavigateBack) return null
+        val (oldDir, oldPasswordItems, oldRecyclerViewState) = navigationStack.pop()
+        return if (oldPasswordItems != null) {
+            // We cached the contents of oldDir and restore them directly without file operations.
+            cachedResult.postValue(SearchResult(oldPasswordItems, isFiltered = false))
+            _currentDir.postValue(oldDir)
+            oldRecyclerViewState
+        } else {
+            navigateTo(oldDir, pushPreviousLocation = false)
+            null
+        }
+    }
+
+    fun reset() {
+        navigationStack.clear()
+        forceUpdateOnNextSearchAction()
+        navigateTo(pushPreviousLocation = false)
+    }
+
+    fun search(
+        filter: String,
+        baseDirectory: File? = null,
+        filterMode: FilterMode = FilterMode.Fuzzy,
+        searchMode: SearchMode? = null,
+        listMode: ListMode = ListMode.AllEntries
+    ) {
+        require(baseDirectory?.isDirectory != false) { "Can only search in a directory" }
+        searchAction.postValue(
+            makeSearchAction(
+                filter = filter,
+                baseDirectory = baseDirectory ?: _currentDir.value!!,
+                filterMode = filterMode,
+                searchMode = searchMode ?: defaultSearchMode,
+                listMode = listMode
+            )
+        )
+    }
+
+    fun forceRefresh() {
+        forceUpdateOnNextSearchAction()
+        searchAction.postValue(updateSearchAction(searchAction.value!!))
+    }
 }
 
 private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() {
@@ -256,19 +392,85 @@ private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() 
     override fun areContentsTheSame(oldItem: PasswordItem, newItem: PasswordItem) = oldItem == newItem
 }
 
-class DelegatedSearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
+open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
     private val layoutRes: Int,
     private val viewHolderCreator: (view: View) -> T,
     private val viewHolderBinder: T.(item: PasswordItem) -> Unit
-) : ListAdapter<PasswordItem, T>(PasswordItemDiffCallback) {
+) : ListAdapter<PasswordItem, T>(PasswordItemDiffCallback), PopupTextProvider {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
+    fun <T : ItemDetailsLookup<String>> makeSelectable(
+        recyclerView: RecyclerView,
+        itemDetailsLookupCreator: (recyclerView: RecyclerView) -> T
+    ) {
+        selectionTracker = SelectionTracker.Builder(
+            "SearchableRepositoryAdapter",
+            recyclerView,
+            itemKeyProvider,
+            itemDetailsLookupCreator(recyclerView),
+            StorageStrategy.createStringStorage()
+        ).withSelectionPredicate(SelectionPredicates.createSelectAnything()).build().apply {
+            addObserver(object : SelectionTracker.SelectionObserver<String>() {
+                override fun onSelectionChanged() {
+                    this@SearchableRepositoryAdapter.onSelectionChangedListener?.invoke(
+                        requireSelectionTracker().selection
+                    )
+                }
+            })
+        }
+    }
+
+    private var onItemClickedListener: ((holder: T, item: PasswordItem) -> Unit)? = null
+    open fun onItemClicked(listener: (holder: T, item: PasswordItem) -> Unit): SearchableRepositoryAdapter<T> {
+        check(onItemClickedListener == null) { "Only a single listener can be registered for onItemClicked" }
+        onItemClickedListener = listener
+        return this
+    }
+
+    private var onSelectionChangedListener: ((selection: Selection<String>) -> Unit)? = null
+    open fun onSelectionChanged(listener: (selection: Selection<String>) -> Unit): SearchableRepositoryAdapter<T> {
+        check(onSelectionChangedListener == null) { "Only a single listener can be registered for onSelectionChanged" }
+        onSelectionChangedListener = listener
+        return this
+    }
+
+    private val itemKeyProvider = object : ItemKeyProvider<String>(SCOPE_MAPPED) {
+        override fun getKey(position: Int) = getItem(position).stableId
+
+        override fun getPosition(key: String) =
+            (0 until itemCount).firstOrNull { getItem(it).stableId == key }
+                ?: RecyclerView.NO_POSITION
+    }
+
+    private var selectionTracker: SelectionTracker<String>? = null
+    fun requireSelectionTracker() = selectionTracker!!
+
+    private val selectedFiles
+        get() = requireSelectionTracker().selection.map { File(it) }
+    fun getSelectedItems(context: Context): List<PasswordItem> {
+        val root = PasswordRepository.getRepositoryDirectory(context)
+        return selectedFiles.map { it.toPasswordItem(root) }
+    }
+
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val view = LayoutInflater.from(parent.context)
             .inflate(layoutRes, parent, false)
         return viewHolderCreator(view)
     }
 
-    override fun onBindViewHolder(holder: T, position: Int) {
-        viewHolderBinder.invoke(holder, getItem(position))
+    final override fun onBindViewHolder(holder: T, position: Int) {
+        val item = getItem(position)
+        holder.apply {
+            viewHolderBinder.invoke(this, item)
+            selectionTracker?.let { itemView.isSelected = it.isSelected(item.stableId) }
+            itemView.setOnClickListener {
+                // Do not emit custom click events while the user is selecting items.
+                if (selectionTracker?.hasSelection() != true)
+                    onItemClickedListener?.invoke(holder, item)
+            }
+        }
+    }
+
+    final override fun getPopupText(position: Int): String {
+        return getItem(position).name[0].toString().toUpperCase(Locale.getDefault())
     }
 }

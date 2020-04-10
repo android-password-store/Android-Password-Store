@@ -37,18 +37,19 @@ ext.deps = [
         documentfile: 'androidx.documentfile:documentfile:1.0.1',
         fragment_ktx: 'androidx.fragment:fragment-ktx:1.1.0',
         lifecycle_livedata_ktx: 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha01',
-        lifecycle_runtime_ktx: 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha01',
+        lifecycle_viewmodel_ktx: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01',
         local_broadcast_manager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01',
         material: 'com.google.android.material:material:1.2.0-alpha05',
         preference: 'androidx.preference:preference:1.1.0',
-        recycler_view: 'androidx.recyclerview:recyclerview:1.2.0-alpha01',
+        recycler_view: 'androidx.recyclerview:recyclerview:1.2.0-alpha02',
+        recycler_view_selection: 'androidx.recyclerview:recyclerview-selection:1.1.0-rc01',
         swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-beta01'
     ],
 
     third_party: [
         commons_io: 'commons-io:commons-io:2.5',
         commons_codec: 'commons-codec:commons-codec:1.13',
-        fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.1',
+        fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.2',
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
         leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.2',
