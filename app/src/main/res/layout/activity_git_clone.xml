@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/activity_horizontal_margin"
-    tools:context="com.zeapo.pwdstore.git.GitActivity"
+    tools:context="com.zeapo.pwdstore.git.GitOperationActivity"
     android:background="?android:attr/windowBackground">
 
     <androidx.appcompat.widget.AppCompatTextView

@@ -64,6 +64,15 @@ abstract class BaseGitActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        // Do not leak the service connection
+        if (identityBuilder != null) {
+            identityBuilder!!.close()
+            identityBuilder = null
+        }
+        super.onDestroy()
+    }
+
     /**
      * Update the [hostname] field with the values that build it up. This function returns a boolean
      * indicating whether or not the values are valid or not, and only adds the `origin` remote when

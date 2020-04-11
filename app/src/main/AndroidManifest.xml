@@ -39,7 +39,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".git.GitActivity" />
+        <activity android:name=".git.GitOperationActivity"
+            android:theme="@style/NoBackgroundTheme" />
 
         <activity android:name=".git.GitServerConfigActivity"
             android:windowSoftInputMode="adjustResize"

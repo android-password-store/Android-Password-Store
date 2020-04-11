@@ -33,6 +33,21 @@
         <item name="background">@color/primary_color</item>
     </style>
 
+    <style name="NoBackgroundTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="colorControlActivated">@color/color_control_normal</item>
     </style>

@@ -24,7 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -78,8 +78,8 @@ class PasswordFragment : Fragment() {
                     .show()
                 swipeRefresher.isRefreshing = false
             } else {
-                val intent = Intent(context, GitActivity::class.java)
-                intent.putExtra("Operation", BaseGitActivity.REQUEST_SYNC)
+                val intent = Intent(context, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
                 startActivityForResult(intent, BaseGitActivity.REQUEST_SYNC)
             }
         }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/activity_horizontal_margin"
     android:background="?android:attr/windowBackground"
-    tools:context="com.zeapo.pwdstore.git.GitActivity"
+    tools:context="com.zeapo.pwdstore.git.GitConfigActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 

@@ -39,7 +39,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.git.GitServerConfigActivity
@@ -251,8 +251,8 @@ class PasswordStore : AppCompatActivity() {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitActivity::class.java)
-                intent.putExtra("Operation", BaseGitActivity.REQUEST_PUSH)
+                intent = Intent(this, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PUSH)
                 startActivityForResult(intent, BaseGitActivity.REQUEST_PUSH)
                 return true
             }
@@ -261,8 +261,8 @@ class PasswordStore : AppCompatActivity() {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitActivity::class.java)
-                intent.putExtra("Operation", BaseGitActivity.REQUEST_PULL)
+                intent = Intent(this, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PULL)
                 startActivityForResult(intent, BaseGitActivity.REQUEST_PULL)
                 return true
             }
@@ -271,8 +271,8 @@ class PasswordStore : AppCompatActivity() {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitActivity::class.java)
-                intent.putExtra("Operation", BaseGitActivity.REQUEST_SYNC)
+                intent = Intent(this, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
                 startActivityForResult(intent, BaseGitActivity.REQUEST_SYNC)
                 return true
             }
@@ -551,7 +551,7 @@ class PasswordStore : AppCompatActivity() {
             fileLocations.add(file.absolutePath)
         }
         intent.putExtra("Files", fileLocations)
-        intent.putExtra("Operation", "SELECTFOLDER")
+        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
         startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
     }
 
@@ -640,8 +640,8 @@ class PasswordStore : AppCompatActivity() {
                             return // if not empty, just show me the passwords!
                         }
                     }
-                    val intent = Intent(activity, GitActivity::class.java)
-                    intent.putExtra("Operation", BaseGitActivity.REQUEST_CLONE)
+                    val intent = Intent(activity, GitOperationActivity::class.java)
+                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
                     startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                 }
                 REQUEST_CODE_SELECT_FOLDER -> {

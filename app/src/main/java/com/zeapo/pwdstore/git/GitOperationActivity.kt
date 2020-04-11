@@ -14,33 +14,18 @@ import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 
-open class GitActivity : BaseGitActivity() {
+open class GitOperationActivity : BaseGitActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val operationCode = intent.extras!!.getInt("Operation")
-
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        when (operationCode) {
+        when (intent.extras?.getInt(REQUEST_ARG_OP)) {
             REQUEST_PULL -> syncRepository(REQUEST_PULL)
-
             REQUEST_PUSH -> syncRepository(REQUEST_PUSH)
-
             REQUEST_SYNC -> syncRepository(REQUEST_SYNC)
         }
     }
 
     public override fun onResume() {
         super.onResume()
-    }
-
-    override fun onDestroy() {
-        // Do not leak the service connection
-        if (identityBuilder != null) {
-            identityBuilder!!.close()
-            identityBuilder = null
-        }
-        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -91,7 +76,6 @@ open class GitActivity : BaseGitActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         // In addition to the pre-operation-launch series of intents for OpenKeychain auth
         // that will pass through here and back to launchGitOperation, there is one
         // synchronous operation that happens /after/ the operation has been launched in the
