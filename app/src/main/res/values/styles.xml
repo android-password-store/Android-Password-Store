@@ -33,7 +33,7 @@
         <item name="background">@color/primary_color</item>
     </style>
 
-    <style name="NoBackgroundTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="NoBackgroundTheme" parent="@style/AppTheme">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>

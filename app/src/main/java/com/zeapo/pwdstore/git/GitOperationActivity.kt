@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.view.ContextThemeWrapper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
@@ -57,7 +56,7 @@ open class GitOperationActivity : BaseGitActivity() {
      */
     private fun syncRepository(operation: Int) {
         if (serverUser.isEmpty() || serverUrl.isEmpty() || hostname.isEmpty())
-            MaterialAlertDialogBuilder(ContextThemeWrapper(this, R.style.AppTheme))
+            MaterialAlertDialogBuilder(this)
                     .setMessage(getString(R.string.set_information_dialog_text))
                     .setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
                         val intent = Intent(this, UserPreference::class.java)
