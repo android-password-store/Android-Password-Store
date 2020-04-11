@@ -32,6 +32,7 @@ android {
     }
 
     viewBinding.enabled = true
+
     defaultConfig {
         applicationId versions.packageName
     }
