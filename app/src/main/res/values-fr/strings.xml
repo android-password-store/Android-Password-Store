@@ -9,7 +9,6 @@
     <string name="title_activity_git_clone">Information sur le dépôt Git</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de pass ou d\'effectuer une opération de synchornisation.</string>
-    <string name="key_dialog_text">Vous devez sélectionner votre "PGP-Key ID" avant d\'initialiser le dépôt</string>
     <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe %1$s?</string>
     <string name="move">Déplacer</string>
     <string name="edit">Éditer</string>
@@ -45,7 +44,6 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">Avez-vous oublié to renseigner votre nom d\'utilisateur ?</string>
-    <string name="set_information_dialog_text">Vous devez renseignez les informations à propos du serveur avant d\'effectuer une synchronisation avec celui-ci</string>
     <string name="ssh_preferences_dialog_text">Vous devez importer ou générer votre fichier de clef SSH dans les préférences</string>
     <string name="ssh_preferences_dialog_title">Absence de cled SSH</string>
     <string name="ssh_preferences_dialog_import">Importer</string>
@@ -179,8 +177,6 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Oui</string>
     <string name="dialog_no">Non</string>
-    <string name="dialog_positive">En chemin…</string>
-    <string name="dialog_negative">Non… plus tard</string>
     <string name="dialog_oops">Oups…</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="git_sync">Synchronisation du dépôt</string>

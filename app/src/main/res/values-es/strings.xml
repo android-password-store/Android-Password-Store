@@ -9,7 +9,6 @@
     <string name="title_activity_git_clone">Información de repositorio</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Por favor clona o crea un nuevo repositorio antes de añadir una contraseña o ejecutar una operación de sincronización.</string>
-    <string name="key_dialog_text">Tienes que seleccionar una llave PGP antes de inicializar el repositorio</string>
     <string name="delete_dialog_text">Confirma que deseas eliminar la contraseña %1$s</string>
     <string name="move">Mover</string>
     <string name="edit">Editar</string>
@@ -39,7 +38,6 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">Olvidaste especificar un nombre de usuario?</string>
-    <string name="set_information_dialog_text">Necesitas configurar la información del servidor antes de sincronizar</string>
     <string name="ssh_preferences_dialog_text">Por favor importa o genera tu llave SSH en los ajustes</string>
     <string name="ssh_preferences_dialog_title">No hay llave SSH</string>
     <string name="ssh_preferences_dialog_import">Importar</string>
@@ -178,8 +176,6 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Sí</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_positive">Ok, Vamos…</string>
-    <string name="dialog_negative">Nah… después</string>
     <string name="dialog_oops">Ups…</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="git_sync">Sincronizar con servidor</string>

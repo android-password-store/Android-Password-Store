@@ -9,7 +9,6 @@
     <string name="title_activity_git_clone">リポジトリ情報</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">パスワードや同期操作を追加する前に、以下の新しいリポジトリをクローンまたは作成してください。</string>
-    <string name="key_dialog_text">リポジトリを初期化する前に "PGP 鍵 ID"を選択する必要があります</string>
     <string name="delete_dialog_text">パスワードを削除してもよろしいですか %1$s</string>
     <string name="delete">削除</string>
     <!-- git commits -->
@@ -28,7 +27,6 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">ユーザー名の指定を忘れましたか?</string>
-    <string name="set_information_dialog_text">サーバーと同期する前に、サーバーに関する情報を設定する必要があります</string>
     <string name="ssh_preferences_dialog_text">プリファレンスで SSH 鍵ファイルをインポートまたは生成してください</string>
     <string name="ssh_preferences_dialog_title">SSH 鍵がありませんkey</string>
     <string name="ssh_preferences_dialog_import">インポート</string>
@@ -121,8 +119,6 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
-    <string name="dialog_positive">途中…</string>
-    <string name="dialog_negative">いや…あとで</string>
     <string name="dialog_oops">おっと…</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="git_sync">リポジトリを同期</string>

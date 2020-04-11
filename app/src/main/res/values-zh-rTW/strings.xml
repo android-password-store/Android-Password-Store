@@ -9,7 +9,6 @@
     <string name="title_activity_git_clone">Repo 訊息</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">在嘗試新增密碼或任何同步操作之前請在下方 clone 或新增一個新的 Repo</string>
-    <string name="key_dialog_text">在初始化 Repo 之前你必須選擇你的\"PGP-Key ID\"</string>
     <string name="delete_dialog_text">你確定要刪除密碼 %1$s</string>
     <string name="delete">刪除</string>
     <!-- PGPHandler -->
@@ -25,7 +24,6 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">你忘記輸入使用者名稱了嗎？</string>
-    <string name="set_information_dialog_text">你必須在與伺服器同步前設定伺服器資訊</string>
     <string name="ssh_preferences_dialog_text">請在設定中匯入或產生你的 SSH 金鑰</string>
     <string name="ssh_preferences_dialog_title">無 SSH 金鑰</string>
     <string name="ssh_preferences_dialog_import">匯入</string>
@@ -115,8 +113,6 @@
     <string name="dialog_ok">確定</string>
     <string name="dialog_yes">確定</string>
     <string name="dialog_no">否</string>
-    <string name="dialog_positive">確定</string>
-    <string name="dialog_negative">呃… 算了吧</string>
     <string name="dialog_oops">糟糕…</string>
     <string name="dialog_cancel">取消</string>
     <string name="git_sync">同步 Repo</string>

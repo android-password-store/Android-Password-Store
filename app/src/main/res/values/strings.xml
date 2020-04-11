@@ -19,7 +19,7 @@
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
-    <string name="key_dialog_text">You have to select your PGP key ID before initializing the repository</string>
+    <string name="key_dialog_text">A valid PGP key must be selected in Settings before initializing the repository</string>
     <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
@@ -57,7 +57,7 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
-    <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
+    <string name="set_information_dialog_text">Please fix the remote server configuration in settings before proceeding</string>
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
     <string name="ssh_preferences_dialog_title">No SSH key</string>
     <string name="ssh_preferences_dialog_import">Import</string>
@@ -227,8 +227,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_positive">On my way…</string>
-    <string name="dialog_negative">Nah… later</string>
+    <string name="dialog_positive">Go to Settings</string>
+    <string name="dialog_negative">Go back</string>
     <string name="dialog_oops">Oops…</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="git_sync">Synchronize repository</string>

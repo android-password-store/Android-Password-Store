@@ -113,7 +113,6 @@
     <string name="dialog_ok">حسناً</string>
     <string name="dialog_yes">نعم</string>
     <string name="dialog_no">لا</string>
-    <string name="dialog_negative">لا … لاحقاً</string>
     <string name="dialog_cancel">إلغاء</string>
     <string name="git_sync">زامن المستودع</string>
     <string name="show_password_pref_title">إظهار كلمة السر</string>
