@@ -39,9 +39,9 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
+import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
