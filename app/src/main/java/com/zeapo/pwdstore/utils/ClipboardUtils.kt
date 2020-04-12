@@ -15,12 +15,12 @@ object ClipboardUtils {
     suspend fun clearClipboard(clipboard: ClipboardManager, deepClear: Boolean = false) {
         Timber.d("Clearing the clipboard")
         val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
         if (deepClear) {
             withContext(Dispatchers.IO) {
                 repeat(20) {
                     val count = (it * 500).toString()
-                    clipboard.primaryClip = ClipData.newPlainText(count, count)
+                    clipboard.setPrimaryClip(ClipData.newPlainText(count, count))
                 }
             }
         }

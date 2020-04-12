@@ -43,7 +43,7 @@ class ShowSshKeyFragment : DialogFragment() {
             b.setOnClickListener {
                 val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("public key", publicKey.text.toString())
-                clipboard.primaryClip = clip
+                clipboard.setPrimaryClip(clip)
             }
         }
         return ad
