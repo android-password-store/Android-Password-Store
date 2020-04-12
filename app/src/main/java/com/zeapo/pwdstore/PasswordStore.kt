@@ -107,7 +107,7 @@ class PasswordStore : AppCompatActivity() {
         var savedInstance = savedInstanceState
         if (savedInstanceState != null && (!settings.getBoolean("git_external", false) ||
                         ContextCompat.checkSelfPermission(
-                                activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED)) {
             savedInstance = null
         }
@@ -129,9 +129,9 @@ class PasswordStore : AppCompatActivity() {
         super.onResume()
         // do not attempt to checkLocalRepository() if no storage permission: immediate crash
         if (settings.getBoolean("git_external", false)) {
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     val snack = Snackbar.make(
                                     findViewById(R.id.main_layout),
                                     getString(R.string.access_sdcard_text),
@@ -139,7 +139,7 @@ class PasswordStore : AppCompatActivity() {
                             .setAction(R.string.dialog_ok) {
                                 ActivityCompat.requestPermissions(
                                         activity,
-                                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                                         REQUEST_EXTERNAL_STORAGE)
                             }
                     snack.show()
@@ -151,7 +151,7 @@ class PasswordStore : AppCompatActivity() {
                     // No explanation needed, we can request the permission.
                     ActivityCompat.requestPermissions(
                             activity,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                             REQUEST_EXTERNAL_STORAGE)
                 }
             } else {
