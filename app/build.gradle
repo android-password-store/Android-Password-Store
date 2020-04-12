@@ -115,8 +115,8 @@ dependencies {
 
     if (isSnapshot()) {
         implementation deps.third_party.leakcanary
-    } else {
-        debugImplementation deps.third_party.leakcanary
+//    } else {
+//        debugImplementation deps.third_party.leakcanary
     }
 
     // Testing-only dependencies
