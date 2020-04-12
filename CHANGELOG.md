@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Text input box theming
-- Password repository held in non-hidden storage often fails
+- Password repository held in non-hidden storage no longer fails
 
 ## [1.6.0] - 2020-03-20
 
