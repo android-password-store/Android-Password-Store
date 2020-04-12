@@ -31,6 +31,8 @@ android {
         }
     }
 
+    viewBinding.enabled = true
+
     defaultConfig {
         applicationId versions.packageName
     }
@@ -78,17 +80,21 @@ android {
 
 dependencies {
     implementation deps.androidx.annotation
+    implementation deps.androidx.activity_ktx
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.core_ktx
     implementation deps.androidx.documentfile
-    implementation deps.androidx.lifecycle_runtime_ktx
+    implementation deps.androidx.fragment_ktx
+    implementation deps.androidx.lifecycle_livedata_ktx
+    implementation deps.androidx.lifecycle_viewmodel_ktx
     implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material
     implementation deps.androidx.preference
     implementation deps.androidx.swiperefreshlayout
-    implementation(deps.androidx.recycler_view)
+    implementation deps.androidx.recycler_view
+    implementation deps.androidx.recycler_view_selection
 
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core
@@ -102,7 +108,6 @@ dependencies {
     implementation deps.third_party.jsch
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.publicsuffixlist
-    implementation deps.third_party.recyclical
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.timberkt

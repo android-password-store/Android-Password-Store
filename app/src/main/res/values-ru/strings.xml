@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Activity names -->
-
     <string name="action_settings">Настройки</string>
     <string name="dialog_delete_title">Директория уже существует</string>
     <string name="dialog_delete_msg">Директория уже существует. Текущая версия поддерживает только одно хранилище. Хотите удалить существующую директорию\n(%1$s)</string>
     <string name="dialog_delete">Удалить директорию</string>
     <string name="dialog_do_not_delete">Отменить</string>
     <string name="title_activity_git_clone">Информация о репозитории</string>
-
     <!-- Password Store -->
     <string name="creation_dialog_text">Пожалуйста, клонируйте или создайте новый репозиторий перед тем, как добавлять пароль или выполнять синхронизацию.</string>
     <string name="key_dialog_text">Вы должны выбрать PGP ключ перед инициализацией хранилища</string>
@@ -17,16 +14,30 @@
     <string name="move">Переместить</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
+    <string name="change">Изменить</string>
+    <string name="use">Использовать</string>
+    <string name="directory_selected_title">Директория уже выбрана</string>
+    <string name="directory_selected_message">Вы хотите использовать \"%1$s\"?</string>
+    <string name="no_key_selected_dialog_title">Ключ OpenPGP не выбран</string>
+    <string name="no_key_selected_dialog_text">Мы перенаправим вас в настройки. Пожалуйста, выберите ваш OpenGPG ключ.</string>
+    <string name="password_exists_title">Пароль уже существует!</string>
+    <string name="password_exists_message">Это перезапишет %1$sна%2$s</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Добавлен пароль %1$s из хранилища.</string>
     <string name="git_commit_edit_text">Отредактирован %1$s из хранилища.</string>
+    <string name="git_commit_remove_text">Удалить %1$sиз хранилища.</string>
+    <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
+    <string name="git_commit_increment_text">Увеличить значение HOTP счетчика для %1$s</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
+    <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
     <string name="clipboard_username_toast_text">Имя пользователя скопировано в буфер обмена</string>
+    <string name="clipboard_otp_toast_text">OTP код скопирован в буфер обмена</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
+    <string name="path_toast_text">Пожалуйста, задайте путь к файлу</string>
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
 
     <!-- Git Async Task -->
@@ -48,11 +59,16 @@
     <!-- Clone fragment -->
     <string name="clone">Клонировать с сервера</string>
     <string name="initialize">Использовать локальную директорию</string>
+    <string name="location_dialog_title">Расположение репозитория</string>
+    <string name="location_dialog_text">Укажите где создать/клонироввать ваш репозиторий с паролями.</string>
+    <string name="location_sdcard">SD-Карта</string>
+    <string name="location_hidden">Скрытый (Предпочтительно)</string>
+    <string name="external_repository_dialog_title">Выберете где хранить пароли</string>
+    <string name="external_repository_dialog_text">Вы должны выбрать директорию где хранить пароли. Если вы хотите хранить пароли в скрытом хранилище приложения, тогда отмените этот диалог и отключите настройку \"Внешний репозиторий\".</string>
 
     <string name="server_name">Сервер</string>
     <string name="server_protocol">Протокол</string>
     <string name="server_url">URL сервера</string>
-    <string name="server_url_hint">server.com</string>
     <string name="server_port_hint">22</string>
     <string name="default_ssh_port">22</string>
     <string name="default_https_port">443</string>
@@ -66,7 +82,9 @@
 
     <string name="warn_malformed_url_port">При использовании нестандартных портов, укажите полный путь (начинается с "/")</string>
 
-    <!-- Git Config fragment -->
+    <string name="git_user_name_hint">Имя пользователя</string>
+    <string name="git_user_email">Электронная почта</string>
+    <string name="git_user_email_hint">электронная почта</string>
     <string name="invalid_email_dialog_text">Введите корректный email</string>
     <string name="clone_button">Клонировать</string>
 
@@ -74,9 +92,11 @@
     <string name="crypto_name_hint">название</string>
     <string name="crypto_pass_label">Пароль</string>
     <string name="crypto_extra_label">Дополнительно</string>
+    <string name="crypto_encrypt_username_label">Зашифровать имя пользователя</string>
     <string name="crypto_select">Выбрать</string>
     <string name="crypto_cancel">Отменить</string>
     <string name="crypto_save">Сохранить</string>
+    <string name="crypto_save_and_copy">Сохранить и скопировать</string>
 
     <!-- DECRYPT Layout -->
     <string name="action_search">Поиск</string>
@@ -86,11 +106,19 @@
     <string name="edit_password">Редактировать пароль</string>
     <string name="copy_password">Скопировать пароль</string>
     <string name="copy_username">Скопировать имя пользователя</string>
+    <string name="copy_otp">Скопировать OTP код</string>
     <string name="share_as_plaintext">Поделиться в открытом виде</string>
+    <string name="last_changed">Последние изменение %s</string>
+    <string name="dialog_update_title">Внимание</string>
+    <string name="dialog_update_positive">Обновить запись</string>
+    <string name="dialog_update_negative">Оставить без изменений</string>
+    <string name="dialog_update_body">HOTP счетчик будет увеличен. Это изменение будет сохранено. Если вы нажмете \"Оставить без изменений\", тогда HOTP код будет показан, но счетчик не изменится.</string>
+    <string name="dialog_update_check">Запомнить мой выбор</string>
 
     <!-- Preferences -->
     <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">Изменить настройки сервера git</string>
+    <string name="pref_edit_git_config">Утилиты Git</string>
     <string name="pref_ssh_title">Импортировать SSH ключ</string>
     <string name="pref_ssh_keygen_title">Сгенерировать пару SSH ключей</string>
     <string name="pref_ssh_see_key_title">Просмотреть публичный SSH ключ</string>
@@ -99,8 +127,10 @@
     <string name="pref_crypto_title">Шифрование</string>
     <string name="pref_provider_title">Выберите провайдера OpenPGP</string>
     <string name="pref_key_title">Выберите ключ OpenPGP</string>
+    <string name="pref_no_key_selected">Ключи не выбраны</string>
     <string name="pref_general_title">Общие</string>
     <string name="pref_show_time_title">Время в буфере</string>
+    <string name="pref_show_time_summary">Уставить время (в секундах) в течении которого пароль будет находиться в буфере обмена. 0 - останется навсегда. Текущее значение: %1$s</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
     <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
     <string name="ssh_key_success_dialog_title">SSH ключ импортирован</string>
@@ -108,7 +138,12 @@
     <string name="ssh_key_error_dialog_text">Сообщение: \n</string>
     <string name="pref_recursive_filter">Рекурсивная фильтрация</string>
     <string name="pref_recursive_filter_hint">Рекурсивный поиск паролей в текущей директории</string>
-    <string name="pref_autofill_enable_title">Автозаполнение</string>
+    <string name="pref_sort_order_title">Порядок сортировки паролей</string>
+    <string name="pref_folder_first_sort_order">Сначала папки</string>
+    <string name="pref_file_first_sort_order">Сначала файлы</string>
+    <string name="pref_type_independent_sort_order">Типонезависимый</string>
+    <string name="pref_autofill_title">Автозаполнение</string>
+    <string name="pref_autofill_enable_title">Включить автозаполнение</string>
     <string name="pref_autofill_enable_msg">Нажмите ОК чтобы перейти в Специальные Возможности. Выберите Password Store в службах, а потом нажмите на переключатель.</string>
     <string name="pref_autofill_enable_msg2">После активации сервиса, при клике на поле ввода пароля в приложении появится диалоговое окно, если подходящий пароль существует</string>
     <string name="pref_autofill_enable_msg3">Password Store пытается сопоставлять пароли с приложениями автоматически. Вы можете изменить это поведение.</string>
@@ -116,6 +151,8 @@
     <string name="pref_autofill_default_title">Автоматически сопоставлять по умолчанию</string>
     <string name="pref_autofill_default_hint">По умолчанию \'Автоматически сопоставлять\' для приложений без пользовательских настроек. В другом случае, \'Никогда не сопоставлять\'</string>
     <string name="pref_autofill_always_title">Всегда показывать диалоговое окно</string>
+    <string name="pref_autofill_full_path_title">Показать полный путь</string>
+    <string name="pref_autofill_full_path_hint">Показать полный путь к соответствущим файлам паролей</string>
     <string name="pref_misc_title">Другое</string>
     <string name="pref_clear_clipboard_title">Очистить буфер 20 раз</string>
     <string name="pref_clear_clipboard_hint">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
@@ -131,14 +168,36 @@
     <string name="prefs_version">Версия</string>
 
     <!-- PasswordGenerator fragment -->
+    <string name="pwgen_title">Сгенерировать пароль</string>
     <string name="pwgen_generate">Сгенерировать</string>
     <string name="pwgen_include">Включая</string>
     <string name="pwgen_length">Длина</string>
     <string name="pwgen_numerals">Цифры</string>
     <string name="pwgen_symbols">Символы</string>
     <string name="pwgen_uppercase">Верхний регистр</string>
+    <string name="pwgen_lowercase">Нижний регистр</string>
     <string name="pwgen_ambiguous">Неоднозначные</string>
     <string name="pwgen_pronounceable">Произносимые</string>
+    <string name="pwgen_no_chars_error">Не включать символы</string>
+    <string name="pwgen_length_too_short_error">Длина не соответствует выбранным критериям</string>
+
+    <!-- XKPWD password generator -->
+    <string name="xkpwgen_title">Генератор Xkpasswd</string>
+    <string name="xkpwgen_length">Всего слов</string>
+    <string name="xkpwgen_separator">Разделитель</string>
+    <string name="xkpwgen_custom_dict_imported">Пользовательский список слов: %1$s</string>
+    <string name="xkpwgen_separator_character">символ разделитель</string>
+    <string name="xkpwgen_numbers">числа:</string>
+    <string name="xkpwgen_symbols">символы:</string>
+    <string name="xkpwgen_builder_error">Выбранный словарь не содержит достаточного количества слова заданной длинны %1$d..%2$d</string>
+
+    <!-- XKPWD prefs -->
+    <string name="xkpwgen_pref_gentype_title">Тип генератора паролей</string>
+    <string name="xkpwgen_pref_custom_dict_title">Пользовательский список слов</string>
+    <string name="xkpwgen_pref_custom_dict_summary_on">Использовать файл списка слов созданный пользователем</string>
+    <string name="xkpwgen_pref_custom_dict_summary_off">Использовать встроенный список слов</string>
+    <string name="xkpwgen_pref_custom_dict_picker_title">Файл пользовательского списка слов</string>
+    <string name="xkpwgen_pref_custom_dict_picker_summary">Нажмите чтобы выбрать файл пользовательского списка слов содержащий одно слово на строку</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_length">Длина</string>
@@ -169,7 +228,37 @@
     <string name="no_repo_selected">Внешний репозиторий не выбран</string>
     <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
     <string name="show_password">Показать пароль</string>
+    <string name="show_extra">Показать дополнительную информацию</string>
+    <string name="hide_extra">Скрыть расширенный контекст</string>
     <string name="repository_uri">URI репозитория</string>
+    <string name="app_icon_hint">Иконка приложения</string>
+    <string name="folder_icon_hint">Иконка папки</string>
+
+    <!-- Oreo Autofill -->
+    <string name="oreo_autofill_match_with">Совпадает с %1$s</string>
+    <string name="oreo_autofill_matches_clear_existing">Очистить существующие совпадения</string>
+    <string name="oreo_autofill_search_in_store">Искать в хранилище...</string>
+    <string name="oreo_autofill_save_internal_error">Сохранение не удалось из-за внутренней ошибки</string>
+    <string name="oreo_autofill_save_app_not_supported">Это приложение в настоящее время не поддерживается</string>
+    <string name="oreo_autofill_save_passwords_dont_match">Пароли не совпадают</string>
+    <string name="oreo_autofill_save_invalid_password">Невозможно извлечь пароль, пожалуйста, используйте другой браузер</string>
+    <string name="oreo_autofill_generate_password">Сгенерировать пароль...</string>
+    <string name="oreo_autofill_publisher_changed">Издатель приложения изменился; это может быть попытка фишинга.</string>
+    <string name="oreo_autofill_max_matches_reached">Достигнуто максимальное количество совпадений (%1$d); очистите совпадения перед тем как добавите новые.</string>
+    <string name="oreo_autofill_warning_publisher_header">Издатель приложения изменился с тех пор как вы первый раз связали с ним запись хранилища паролей:</string>
+    <string name="oreo_autofill_warning_publisher_footer"><b>Установленное приложение может попытаться украсть ваши учетные данные, выдавая себя за доверенное приложение</b>\n\nПопробуйте удалить или переустановить  приложение из доверенного источника, такого как Play Store, Amazon Appstore, F-Droid или магазин приложений производителя вашего смартфона.</string>
+    <string name="oreo_autofill_warning_publisher_install_time">Установлено: %1$s</string>
+    <string name="oreo_autofill_warning_publisher_advanced_info_button">Расширенная информация</string>
+    <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Оставить автозаполнение отключенным</string>
+    <string name="oreo_autofill_warning_publisher_reenable_button">Включить автозаполнение снова</string>
+    <string name="oreo_autofill_warning_publisher_warning_sign_description">Предупреждение</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Нажмите для получения подробностей...</string>
+    <string name="oreo_autofill_warning_publisher_dataset_title">Возможная попытка фишинга</string>
+    <string name="oreo_autofill_fill_and_save_support">Заполнить и сохранить учетные данные</string>
+    <string name="oreo_autofill_fill_support">Заполнить учетные данные</string>
+    <string name="oreo_autofill_flaky_fill_support">Заполнить учетные данные (время от времени может требоваться перезапуск браузера)</string>
+    <string name="oreo_autofill_no_support">Не поддерживается</string>
+    <string name="oreo_autofill_preference_directory_structure">Организация файла паролей</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Автозаполнение паролей в приложениях. Работает только в Android 4.3 и выше. Не использует буфер обмена в Android 5.0 и выше.</string>
@@ -184,5 +273,57 @@
     <string name="autofill_paste">Вставить</string>
     <string name="autofill_paste_username">Вставить имя пользователя?\n\n%s</string>
     <string name="autofill_toast_username">Выберите поле ввода для вставки имени пользователя.\nИмя пользователя можно вставить в течение %d секунд.</string>
+    <string name="ssh_key_does_not_exist">Невозможно открыть приватный ключ ssh, пожалуйста проверьте, что файл существует</string>
+    <string name="new_password_title">Новый пароль</string>
+    <string name="edit_password_title">Редактирование</string>
+    <string name="autofill_ins_1_hint">Снимок экрана сервисов доступности</string>
+    <string name="autofill_ins_2_hint">Снимок экрана переключателя в сервисах доступности</string>
+    <string name="autofill_ins_3_hint">Снимок экрана сервиса автозаполнения в действии</string>
+    <string name="git_pull_fail_error">Не удалось получить изменения, вы находитесь в состоянии \"оторванной головы\". Используйте \"настройки > утилиты git\", сохраните ваши изменения в новую удаленную ветку и разрешите конфликты на своем компьютере.</string>
+    <string name="git_push_nff_error">Запись изменений была отклонена удаленным репозиторием, сначала пполучите изменения перед повторной записью. Вы можете использовать Синхронизацию вместо получения/записи изменений, т.к. она реализует оба подхда.</string>
+    <string name="git_push_generic_error">Запись изменений была отклонена удаленным репозиторием, причина:</string>
+    <string name="git_push_other_error">Удаленный репозиторий отклонил запись изменений без быстрой перемотки вперед. Проверьте переменную receive.denyNonFastForwards в файле конфигурации репозитория назначения.</string>
+    <string name="jgit_error_push_dialog_text">В хоте операции записи изменений возникла ошибка:</string>
+    <string name="ssh_key_clear_passphrase">Очистить сохраненную парольную фразу ключа ssh</string>
+    <string name="hotp_remember_clear_choice">Очистить сохраненные настройки для увеличения HOTP</string>
+    <string name="remember_the_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
+    <string name="hackish_tools">Костыльные инструменты</string>
+    <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
+    <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
+    <string name="commit_hash">Хэш-сумма изменений</string>
+    <string name="crypto_extra_edit_hint">имя пользователя: какой-то другой дополнительный контент</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
+    <string name="hotp_pending">Нажмите скопировать чтобы расчитать HOTP</string>
+    <string name="openkeychain_ssh_api_connect_fail">Ошибка при подключении к сервису OpenKeychain SSH API</string>
+    <string name="no_ssh_api_provider">Не найдено SSH API провайдеров. OpenKeychain установлен?</string>
+    <string name="ssh_api_pending_intent_failed">Ожидаемое намерение SSH API не удалось</string>
+    <string name="ssh_api_unknown_error">Незвестная ошибка SSH API</string>
+    <string name="sdcard_root_warning_title">Выбран корень SD-Карты</string>
+    <string name="sdcard_root_warning_message">Вы выбрали корень вашей sd-карты для хранения. Это очень опасно и вы потеряете ваши данные, поскольку они будут в конечном итоге удалены</string>
+    <string name="git_abort_and_push_title">Прервать и записать изменения</string>
+    <string name="biometric_prompt_title">Запрос биометрии</string>
+    <string name="biometric_prompt_retry">Повторить</string>
+    <string name="biometric_prompt_cancelled">Аутентификация отменена</string>
+    <string name="biometric_prompt_no_hardware">Биометрические сенсоры не обнаружены</string>
+    <string name="biometric_auth_title">Включить биометрическую аутентификацию</string>
+    <string name="biometric_auth_summary">Когда ключено, Password Store будет запрашивать ваш опечаток пальца при каждом запуске приложения</string>
+    <string name="biometric_auth_summary_error">Сенсор отпечатка пальца не доступен или отсутствует</string>
+    <string name="ssh_openkeystore_clear_keyid">Очистить сохраненный SSH Key идентификатор OpenKystortore</string>
+    <string name="access_sdcard_text">Хранилище находится на sd-карте, но приложение не имеет прав доступа к ней. Пожалуйста, дайте приложению необходимые разрешения.</string>
+    <string name="your_public_key">Ваш публичный ключ</string>
+    <string name="error_generate_ssh_key">Возникла ошибка при попытке генерации ssh ключа</string>
+    <string name="pref_show_hidden_title">Показать скрытые папки</string>
+    <string name="pref_show_hidden_summary">Включить скрытые директории в список паролей</string>
+    <string name="title_create_folder">Создать папку</string>
+    <string name="button_create">Создать</string>
+    <string name="pref_search_on_start">Открыть поиск на старте</string>
+    <string name="pref_search_on_start_hint">Открыть панель поиска при запуске приложения</string>
+    <string name="password_generator_category_title">Генератор паролей</string>
+    <string name="tap_clear_clipboard">Нажмите здесь чтобы очистить буфер обмена</string>
+    <string name="clone_git_repo">Для синхронизации изменений клонируйте git репозиторий</string>
+    <string name="theme_title">Тема приложения</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+    <string name="theme_battery_saver">Задается экономией батареи</string>
+    <string name="theme_follow_system">Системная</string>
 </resources>

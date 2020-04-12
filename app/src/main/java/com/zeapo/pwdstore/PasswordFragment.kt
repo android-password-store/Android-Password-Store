@@ -6,70 +6,75 @@ package com.zeapo.pwdstore
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.GitActivity
-import com.zeapo.pwdstore.ui.adapters.PasswordRecyclerAdapter
+import com.zeapo.pwdstore.ui.OnOffItemAnimator
+import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getPasswords
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
-import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import java.io.File
 import java.util.Stack
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
-/**
- * A fragment representing a list of Items.
- *
- * Large screen devices (such as tablets) are supported by replacing the ListView with a
- * GridView.
- *
- */
-
 class PasswordFragment : Fragment() {
-    // store the pass files list in a stack
-    private var passListStack: Stack<ArrayList<PasswordItem>> = Stack()
-    private var pathStack: Stack<File> = Stack()
-    private var scrollPosition: Stack<Int> = Stack()
-    private lateinit var recyclerAdapter: PasswordRecyclerAdapter
+    private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var listener: OnFragmentInteractionListener
-    private lateinit var settings: SharedPreferences
     private lateinit var swipeRefresher: SwipeRefreshLayout
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val path = requireNotNull(requireArguments().getString("Path"))
-        settings = PreferenceManager.getDefaultSharedPreferences(requireActivity())
-        recyclerAdapter = PasswordRecyclerAdapter((requireActivity() as PasswordStore),
-                listener, getPasswords(File(path), getRepositoryDirectory(requireContext()), sortOrder))
-    }
+    private var recyclerViewStateToRestore: Parcelable? = null
+    private var actionMode: ActionMode? = null
+    private var _binding: PasswordRecyclerViewBinding? = null
+
+    private val model: SearchableRepositoryViewModel by activityViewModels()
+    private val binding get() = _binding!!
+
+    private fun requireStore() = requireActivity() as PasswordStore
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.password_recycler_view, container, false)
-        // use a linear layout manager
-        val layoutManager = LinearLayoutManager(requireContext())
-        swipeRefresher = view.findViewById(R.id.swipe_refresher)
+        _binding = PasswordRecyclerViewBinding.inflate(inflater, container, false)
+        initializePasswordList()
+        val fab = binding.fab
+        fab.setOnClickListener {
+            toggleFabExpand(fab)
+        }
+        binding.createFolder.setOnClickListener {
+            requireStore().createFolder()
+            toggleFabExpand(fab)
+        }
+        binding.createPassword.setOnClickListener {
+            requireStore().createPassword()
+            toggleFabExpand(fab)
+        }
+        return binding.root
+    }
+
+    private fun initializePasswordList() {
+        swipeRefresher = binding.swipeRefresher
         swipeRefresher.setOnRefreshListener {
             if (!PasswordRepository.isGitRepo()) {
-                Snackbar.make(view, getString(R.string.clone_git_repo), Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_SHORT)
+                    .show()
                 swipeRefresher.isRefreshing = false
             } else {
                 val intent = Intent(context, GitActivity::class.java)
@@ -77,30 +82,59 @@ class PasswordFragment : Fragment() {
                 startActivityForResult(intent, GitActivity.REQUEST_SYNC)
             }
         }
-        recyclerView = view.findViewById(R.id.pass_recycler)
-        recyclerView.layoutManager = layoutManager
-        // use divider
-        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        // Set the adapter
-        recyclerView.adapter = recyclerAdapter
-        // Setup fast scroller
+
+        recyclerAdapter = PasswordItemRecyclerAdapter()
+            .onItemClicked { _, item ->
+                listener.onFragmentInteraction(item)
+            }
+            .onSelectionChanged { selection ->
+                // In order to not interfere with drag selection, we disable the SwipeRefreshLayout
+                // once an item is selected.
+                swipeRefresher.isEnabled = selection.isEmpty
+
+                if (actionMode == null)
+                    actionMode = requireStore().startSupportActionMode(actionModeCallback)
+                        ?: return@onSelectionChanged
+
+                if (!selection.isEmpty) {
+                    actionMode!!.title = resources.getQuantityString(R.plurals.delete_title, selection.size(), selection.size())
+                    actionMode!!.invalidate()
+                } else {
+                    actionMode!!.finish()
+                }
+            }
+        recyclerView = binding.passRecycler
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            itemAnimator = OnOffItemAnimator()
+            adapter = recyclerAdapter
+        }
+
+        // FastScrollerBuilder.build() needs to be called *before* recyclerAdapter.makeSelectable(),
+        // as otherwise dragging the fast scroller will lead to items being selected.
+        // See https://github.com/zhanghai/AndroidFastScroll/issues/13
         FastScrollerBuilder(recyclerView).build()
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            toggleFabExpand(fab)
-        }
-
-        view.findViewById<FloatingActionButton>(R.id.create_folder).setOnClickListener {
-            (requireActivity() as PasswordStore).createFolder()
-            toggleFabExpand(fab)
-        }
-
-        view.findViewById<FloatingActionButton>(R.id.create_password).setOnClickListener {
-            (requireActivity() as PasswordStore).createPassword()
-            toggleFabExpand(fab)
-        }
+        recyclerAdapter.makeSelectable(recyclerView)
         registerForContextMenu(recyclerView)
-        return view
+
+        val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
+        model.navigateTo(File(path), pushPreviousLocation = false)
+        model.searchResult.observe(this) { result ->
+            // Only run animations when the new list is filtered, i.e., the user submitted a search,
+            // and not on folder navigations since the latter leads to too many removal animations.
+            (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
+            recyclerAdapter.submitList(result.passwordItems) {
+                recyclerViewStateToRestore?.let {
+                    recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                }
+                recyclerViewStateToRestore = null
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun toggleFabExpand(fab: FloatingActionButton) = with(fab) {
@@ -109,30 +143,80 @@ class PasswordFragment : Fragment() {
         animate().rotationBy(if (isExpanded) -45f else 45f).setDuration(100).start()
     }
 
+    private val actionModeCallback = object : ActionMode.Callback {
+
+        // Called when the action mode is created; startActionMode() was called
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            // Inflate a menu resource providing context menu items
+            mode.menuInflater.inflate(R.menu.context_pass, menu)
+            // hide the fab
+            binding.fab.visibility = View.GONE
+            return true
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            menu.findItem(R.id.menu_edit_password).isVisible =
+                recyclerAdapter.getSelectedItems(requireContext())
+                    .map { it.type == PasswordItem.TYPE_PASSWORD }
+                    .singleOrNull() == true
+            return true // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.menu_delete_password -> {
+                    requireStore().deletePasswords(
+                        Stack<PasswordItem>().apply {
+                            recyclerAdapter.getSelectedItems(requireContext()).forEach { push(it) }
+                        }
+                    )
+                    mode.finish() // Action picked, so close the CAB
+                    return true
+                }
+                R.id.menu_edit_password -> {
+                    requireStore().editPassword(
+                        recyclerAdapter.getSelectedItems(requireContext()).first()
+                    )
+                    mode.finish()
+                    return true
+                }
+                R.id.menu_move_password -> {
+                    requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    return false
+                }
+                else -> return false
+            }
+        }
+
+        // Called when the user exits the action mode
+        override fun onDestroyActionMode(mode: ActionMode) {
+            recyclerAdapter.requireSelectionTracker().clearSelection()
+            actionMode = null
+            // show the fab
+            binding.fab.visibility = View.VISIBLE
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
-                    if (item.type == PasswordItem.TYPE_CATEGORY) { // push the current password list (non filtered plz!)
-                        passListStack.push(
-                                if (pathStack.isEmpty())
-                                    getPasswords(getRepositoryDirectory(context), sortOrder)
-                                else
-                                    getPasswords(pathStack.peek(), getRepositoryDirectory(context), sortOrder)
+                    if (item.type == PasswordItem.TYPE_CATEGORY) {
+                        requireStore().clearSearch()
+                        model.navigateTo(
+                            item.file,
+                            recyclerViewState = recyclerView.layoutManager!!.onSaveInstanceState()
                         )
-                        // push the category were we're going
-                        pathStack.push(item.file)
-                        scrollPosition.push((recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition())
-                        recyclerView.scrollToPosition(0)
-                        recyclerAdapter.clear()
-                        recyclerAdapter.addAll(getPasswords(item.file, getRepositoryDirectory(context), sortOrder))
-                        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     } else {
                         if (requireArguments().getBoolean("matchWith", false)) {
-                            (requireActivity() as PasswordStore).matchPasswordWithApp(item)
+                            requireStore().matchPasswordWithApp(item)
                         } else {
-                            (requireActivity() as PasswordStore).decryptPassword(item)
+                            requireStore().decryptPassword(item)
                         }
                     }
                 }
@@ -146,118 +230,26 @@ class PasswordFragment : Fragment() {
         swipeRefresher.isRefreshing = false
     }
 
-    /** clears the adapter content and sets it back to the root view  */
-    fun updateAdapter() {
-        passListStack.clear()
-        pathStack.clear()
-        scrollPosition.clear()
-        recyclerAdapter.clear()
-        recyclerAdapter.addAll(getPasswords(getRepositoryDirectory(requireContext()), sortOrder))
-        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-    }
-
-    /** refreshes the adapter with the latest opened category  */
-    fun refreshAdapter() {
-        recyclerAdapter.clear()
-        recyclerAdapter.addAll(
-                if (pathStack.isEmpty())
-                    getPasswords(getRepositoryDirectory(requireContext()), sortOrder)
-                else
-                    getPasswords(pathStack.peek(), getRepositoryDirectory(requireContext()), sortOrder)
-        )
-    }
-
     /**
-     * filters the list adapter
-     *
-     * @param filter the filter to apply
+     * Returns true if the back press was handled by the [Fragment].
      */
-    fun filterAdapter(filter: String) {
-        if (filter.isEmpty()) {
-            refreshAdapter()
-        } else {
-            recursiveFilter(
-                    filter,
-                    if (pathStack.isEmpty() ||
-                            settings.getBoolean("search_from_root", false))
-                        null
-                    else pathStack.peek())
-        }
+    fun onBackPressedInActivity(): Boolean {
+        if (!model.canNavigateBack)
+            return false
+        // The RecyclerView state is restored when the asynchronous update operation on the
+        // adapter is completed.
+        recyclerViewStateToRestore = model.navigateBack()
+        if (!model.canNavigateBack)
+            requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        return true
     }
 
-    /**
-     * fuzzy matches the filter against the given string
-     *
-     * based on https://www.forrestthewoods.com/blog/reverse_engineering_sublime_texts_fuzzy_match/
-     *
-     * @param filter the filter to apply
-     * @param str the string to filter against
-     *
-     * @return true if the filter fuzzymatches the string
-     */
-    private fun fuzzyMatch(filter: String, str: String): Boolean {
-        var i = 0
-        var j = 0
-        while (i < filter.length && j < str.length) {
-            if (filter[i].isWhitespace() || filter[i].toLowerCase() == str[j].toLowerCase())
-                i++
-            j++
-        }
-        return i == filter.length
-    }
-
-    /**
-     * recursively filters a directory and extract all the matching items
-     *
-     * @param filter the filter to apply
-     * @param dir the directory to filter
-     */
-    private fun recursiveFilter(filter: String, dir: File?) { // on the root the pathStack is empty
-        val passwordItems = if (dir == null)
-            getPasswords(getRepositoryDirectory(requireContext()), sortOrder)
-        else
-            getPasswords(dir, getRepositoryDirectory(requireContext()), sortOrder)
-        val rec = settings.getBoolean("filter_recursively", true)
-        for (item in passwordItems) {
-            if (item.type == PasswordItem.TYPE_CATEGORY && rec) {
-                recursiveFilter(filter, item.file)
-            }
-            val matches = fuzzyMatch(filter, item.longName)
-            val inAdapter = recyclerAdapter.values.contains(item)
-            if (matches && !inAdapter) {
-                recyclerAdapter.add(item)
-            } else if (!matches && inAdapter) {
-                recyclerAdapter.remove(recyclerAdapter.values.indexOf(item))
-            }
-        }
-    }
-
-    /** Goes back one level back in the path  */
-    fun popBack() {
-        if (passListStack.isEmpty()) return
-        (recyclerView.layoutManager as LinearLayoutManager).scrollToPosition(scrollPosition.pop())
-        recyclerAdapter.clear()
-        recyclerAdapter.addAll(passListStack.pop())
-        pathStack.pop()
-    }
-
-    /**
-     * gets the current directory
-     *
-     * @return the current directory
-     */
-    val currentDir: File?
-        get() = if (pathStack.isEmpty()) getRepositoryDirectory(requireContext()) else pathStack.peek()
-
-    val isNotEmpty: Boolean
-        get() = !passListStack.isEmpty()
+    val currentDir: File
+        get() = model.currentDir.value!!
 
     fun dismissActionMode() {
-        recyclerAdapter.actionMode?.finish()
+        actionMode?.finish()
     }
-
-    private val sortOrder: PasswordRepository.PasswordSortOrder
-        get() = getSortOrder(settings)
 
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(item: PasswordItem)

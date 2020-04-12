@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
 
-class PasswordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class PasswordViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val title: TextView = itemView.findViewById(R.id.title)
     val subtitle: TextView = itemView.findViewById(R.id.subtitle)
 }
