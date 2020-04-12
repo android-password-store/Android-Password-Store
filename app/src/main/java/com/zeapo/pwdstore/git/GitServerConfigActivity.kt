@@ -93,6 +93,8 @@ class GitServerConfigActivity : BaseGitActivity() {
         }
 
         binding.saveButton.setOnClickListener {
+            if (isClone && PasswordRepository.getRepository(null) == null)
+                PasswordRepository.initialize(this)
             if (updateHostname()) {
                 settings.edit(true) {
                     putString("git_remote_protocol", protocol.toString())
@@ -104,11 +106,10 @@ class GitServerConfigActivity : BaseGitActivity() {
                 }
                 if (!isClone)
                     Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+                else
+                    cloneRepository()
             } else {
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_failure), Snackbar.LENGTH_LONG).show()
-            }
-            if (isClone) {
-                cloneRepository()
             }
         }
     }
@@ -117,9 +118,6 @@ class GitServerConfigActivity : BaseGitActivity() {
      * Clones the repository, the directory exists, deletes it
      */
     private fun cloneRepository() {
-        if (PasswordRepository.getRepository(null) == null) {
-            PasswordRepository.initialize(this)
-        }
         val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
 
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
