@@ -36,8 +36,8 @@
     <style name="NoBackgroundTheme" parent="@style/AppTheme">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
-        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowActionBar">false</item>
