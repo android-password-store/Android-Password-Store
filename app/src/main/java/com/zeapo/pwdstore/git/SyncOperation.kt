@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
+import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import java.io.File
@@ -48,7 +49,7 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
             this.pullCommand?.setCredentialsProvider(this.provider)
             this.pushCommand?.setCredentialsProvider(this.provider)
         }
-        GitAsyncTask(callingActivity, true, false, this).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
+        GitAsyncTask(callingActivity, false, this, Intent()).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
     }
 
     override fun onError(errorMessage: String) {

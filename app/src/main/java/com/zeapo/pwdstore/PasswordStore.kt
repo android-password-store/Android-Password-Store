@@ -796,12 +796,12 @@ class PasswordStore : AppCompatActivity() {
                     block != null && block !== UnicodeBlock.SPECIALS)
         }
 
-        fun commitChange(activity: Activity, message: String) {
+        fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
             object : GitOperation(getRepositoryDirectory(activity), activity) {
                 override fun execute() {
                     Timber.tag(TAG).d("Committing with message $message")
                     val git = Git(repository)
-                    val tasks = GitAsyncTask(activity, false, true, this)
+                    val tasks = GitAsyncTask(activity, true, this, finishWithResultOnEnd)
                     tasks.execute(
                         git.add().addFilepattern("."),
                         git.commit().setAll(true).setMessage(message)
