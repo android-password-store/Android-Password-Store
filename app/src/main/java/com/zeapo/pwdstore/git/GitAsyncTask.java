@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.git;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
@@ -22,20 +23,20 @@ import org.eclipse.jgit.transport.RemoteRefUpdate;
 
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private WeakReference<Activity> activityWeakReference;
-    private boolean finishOnEnd;
     private boolean refreshListOnEnd;
     private ProgressDialog dialog;
     private GitOperation operation;
+    private Intent finishWithResultOnEnd;
 
     public GitAsyncTask(
             Activity activity,
-            boolean finishOnEnd,
             boolean refreshListOnEnd,
-            GitOperation operation) {
+            GitOperation operation,
+            Intent finishWithResultOnEnd) {
         this.activityWeakReference = new WeakReference<>(activity);
-        this.finishOnEnd = finishOnEnd;
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
+        this.finishWithResultOnEnd = finishWithResultOnEnd;
 
         dialog = new ProgressDialog(getActivity());
     }
@@ -124,8 +125,8 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
         } else {
             this.operation.onSuccess();
 
-            if (finishOnEnd) {
-                this.getActivity().setResult(Activity.RESULT_OK);
+            if (finishWithResultOnEnd != null) {
+                this.getActivity().setResult(Activity.RESULT_OK, finishWithResultOnEnd);
                 this.getActivity().finish();
             }
 

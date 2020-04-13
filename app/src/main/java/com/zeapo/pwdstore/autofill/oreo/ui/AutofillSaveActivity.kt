@@ -120,31 +120,34 @@ class AutofillSaveActivity : Activity() {
                 AutofillMatcher.addMatchFor(this, it, File(createdPath))
             }
             val longName = data.getStringExtra("LONG_NAME")!!
-            // PgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
-            // is not involved in an AutofillScenario, we have to commit the file ourself.
-            PasswordStore.commitChange(this, getString(R.string.git_commit_add_text, longName))
-
-            val password = data.getStringExtra("PASSWORD")
+            val password = data.getStringExtra("PASSWORD")!!
             val username = data.getStringExtra("USERNAME")
-            if (password != null) {
-                val clientState =
-                    intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE) ?: run {
-                        e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
-                        finish()
-                        return
-                    }
-                val credentials = Credentials(username, password)
-                val fillInDataset = FillableForm.makeFillInDataset(
-                    this,
-                    credentials,
-                    clientState,
-                    AutofillAction.Generate
-                )
-                setResult(RESULT_OK, Intent().apply {
-                    putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
-                })
+            val clientState =
+                intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE) ?: run {
+                    e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
+                    finish()
+                    return
+                }
+            val credentials = Credentials(username, password)
+            val fillInDataset = FillableForm.makeFillInDataset(
+                this,
+                credentials,
+                clientState,
+                AutofillAction.Generate
+            )
+            val result = Intent().apply {
+                putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
             }
+            // PgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
+            // is not involved in an AutofillScenario, we have to commit the file ourselves.
+            PasswordStore.commitChange(
+                this,
+                getString(R.string.git_commit_add_text, longName),
+                finishWithResultOnEnd = result
+            )
+            // GitAsyncTask will finish the activity for us.
+        } else {
+            finish()
         }
-        finish()
     }
 }

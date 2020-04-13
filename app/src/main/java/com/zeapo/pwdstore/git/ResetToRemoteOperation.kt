@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.git
 
 import android.app.Activity
+import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import java.io.File
@@ -39,7 +40,7 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOper
 
     override fun execute() {
         this.fetchCommand?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, true, false, this)
+        GitAsyncTask(callingActivity, false, this, Intent())
                 .execute(this.addCommand, this.fetchCommand, this.resetCommand)
     }
 
