@@ -58,7 +58,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
                 }
             }
         }
-        GitAsyncTask(callingActivity, false, true, this)
+        GitAsyncTask(callingActivity, true, this, null)
                 .execute(*this.commands.toTypedArray())
     }
 
