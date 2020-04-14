@@ -293,7 +293,8 @@ class PasswordStore : AppCompatActivity() {
     }
 
     fun clearSearch() {
-        searchItem.collapseActionView()
+        if (searchItem.isActionViewExpanded)
+            searchItem.collapseActionView()
     }
 
     fun openSettings(view: View?) {
