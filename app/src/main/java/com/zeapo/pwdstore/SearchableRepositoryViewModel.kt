@@ -43,7 +43,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
@@ -197,7 +196,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
     data class SearchResult(val passwordItems: List<PasswordItem>, val isFiltered: Boolean)
 
-    private val newResultFlow = searchActionFlow
+    val searchResult = searchActionFlow
         .mapLatest { searchAction ->
             val listResultFlow = when (searchAction.searchMode) {
                 SearchMode.RecursivelyInSubdirectories -> listFilesRecursively(searchAction.baseDirectory)
@@ -251,7 +250,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 }
             }
             SearchResult(passwordList, isFiltered = searchAction.filterMode != FilterMode.NoFilter)
-        }
+        }.asLiveData(Dispatchers.IO)
 
     private fun shouldTake(file: File) = with(file) {
         if (isDirectory) {
@@ -276,18 +275,10 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             .filter { file -> shouldTake(file) }
     }
 
-    private val cachedResult = MutableLiveData<SearchResult>()
-    val searchResult =
-        listOf(newResultFlow, cachedResult.asFlow()).merge().asLiveData(Dispatchers.IO)
-
     private val _currentDir = MutableLiveData(root)
     val currentDir = _currentDir as LiveData<File>
 
-    data class NavigationStackEntry(
-        val dir: File,
-        val items: List<PasswordItem>?,
-        val recyclerViewState: Parcelable?
-    )
+    data class NavigationStackEntry(val dir: File, val recyclerViewState: Parcelable?)
 
     private val navigationStack = Stack<NavigationStackEntry>()
 
@@ -299,25 +290,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     ) {
         require(newDirectory.isDirectory) { "Can only navigate to a directory" }
         if (pushPreviousLocation) {
-            // We cache the current list entries only if the current list has not been filtered,
-            // otherwise it will be regenerated when moving back.
-            if (searchAction.value?.filterMode == FilterMode.NoFilter) {
-                navigationStack.push(
-                    NavigationStackEntry(
-                        _currentDir.value!!,
-                        searchResult.value?.passwordItems,
-                        recyclerViewState
-                    )
-                )
-            } else {
-                navigationStack.push(
-                    NavigationStackEntry(
-                        _currentDir.value!!,
-                        null,
-                        recyclerViewState
-                    )
-                )
-            }
+            navigationStack.push(NavigationStackEntry(_currentDir.value!!, recyclerViewState))
         }
         searchAction.postValue(
             makeSearchAction(
@@ -335,23 +308,16 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         get() = navigationStack.isNotEmpty()
 
     /**
-     * Navigate back to the last location on the [navigationStack] using a cached list of entries
-     * if possible.
+     * Navigate back to the last location on the [navigationStack] and restore a cached scroll
+     * position if possible.
      *
      * Returns the old RecyclerView's LinearLayoutManager state as a [Parcelable] if it was cached.
      */
     fun navigateBack(): Parcelable? {
         if (!canNavigateBack) return null
-        val (oldDir, oldPasswordItems, oldRecyclerViewState) = navigationStack.pop()
-        return if (oldPasswordItems != null) {
-            // We cached the contents of oldDir and restore them directly without file operations.
-            cachedResult.postValue(SearchResult(oldPasswordItems, isFiltered = false))
-            _currentDir.postValue(oldDir)
-            oldRecyclerViewState
-        } else {
-            navigateTo(oldDir, pushPreviousLocation = false)
-            null
-        }
+        val (oldDir, oldRecyclerViewState) = navigationStack.pop()
+        navigateTo(oldDir, pushPreviousLocation = false)
+        return oldRecyclerViewState
     }
 
     fun reset() {
