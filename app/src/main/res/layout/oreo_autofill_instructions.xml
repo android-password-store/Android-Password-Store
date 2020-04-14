@@ -16,19 +16,22 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password Store can offer to fill login forms and even save credentials you enter in apps or on websites."
+            android:text="@string/oreo_autofill_enable_dialog_description"
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="To enable this feature, tap OK to go to Autofill settings. There, select Password Store from the list."
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/oreo_autofill_enable_dialog_instructions"
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Autofill support with installed browsers:"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/oreo_autofill_enable_dialog_installed_browsers"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
