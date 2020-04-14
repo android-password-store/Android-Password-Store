@@ -154,7 +154,9 @@ class AutofillFilterView : AppCompatActivity() {
         }
         model.searchResult.observe(this) { result ->
             val list = result.passwordItems
-            recyclerAdapter.submitList(list)
+            recyclerAdapter.submitList(list) {
+                binding.rvPassword.scrollToPosition(0)
+            }
             // Switch RecyclerView out for a "no results" message if the new list is empty and
             // the message is not yet shown (and vice versa).
             if ((list.isEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPasswordEmpty.id) ||
