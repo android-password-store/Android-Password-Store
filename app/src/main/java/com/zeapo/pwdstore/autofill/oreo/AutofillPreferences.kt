@@ -19,32 +19,72 @@ enum class DirectoryStructure(val value: String) {
     FileBased("file"),
     DirectoryBased("directory");
 
-    fun getUsernameFor(file: File) = when (this) {
+    /**
+     * Returns the username associated to [file], following the convention of the current
+     * [DirectoryStructure].
+     *
+     * Examples:
+     *   - work/example.org/john@doe.org.gpg --> john@doe.org (FileBased)
+     *   - work/example.org/john@doe.org/password.gpg --> john@doe.org (DirectoryBased)
+     *   - Temporary PIN.gpg --> Temporary PIN (DirectoryBased, fallback)
+     */
+    fun getUsernameFor(file: File): String = when (this) {
         FileBased -> file.nameWithoutExtension
         DirectoryBased -> file.parentFile?.name ?: file.nameWithoutExtension
     }
 
-    fun getIdentifierFor(file: File) = when (this) {
-        FileBased -> file.parentFile.name
-        DirectoryBased -> file.parentFile.parentFile?.name
+    /**
+     * Returns the origin identifier associated to [file], following the convention of the current
+     * [DirectoryStructure].
+     *
+     * At least one of [DirectoryStructure.getIdentifierFor] and
+     * [DirectoryStructure.getAccountPartFor] will always return a non-null result.
+     *
+     * Examples:
+     *   - work/example.org/john@doe.org.gpg --> example.org (FileBased)
+     *   - example.org.gpg --> example.org (FileBased, fallback)
+     *   - work/example.org/john@doe.org/password.gpg --> example.org (DirectoryBased)
+     *   - Temporary PIN.gpg --> null (DirectoryBased)
+     */
+    fun getIdentifierFor(file: File): String? = when (this) {
+        FileBased -> file.parentFile?.name ?: file.nameWithoutExtension
+        DirectoryBased -> file.parentFile?.parent
     }
 
     /**
      * Returns the path components of [file] until right before the component that contains the
      * origin identifier according to the current [DirectoryStructure].
      *
+     * At least one of [DirectoryStructure.getIdentifierFor] and
+     * [DirectoryStructure.getAccountPartFor] will always return a non-null result.
+     *
      * Examples:
-     *   - /work/example.org/john@doe.org --> /work (FileBased)
-     *   - /work/example.org/john@doe.org/password --> /work (DirectoryBased)
+     *   - work/example.org/john@doe.org.gpg --> work (FileBased)
+     *   - example.org/john@doe.org.gpg --> null (FileBased)
+     *   - john@doe.org.gpg --> null (FileBased)
+     *   - work/example.org/john@doe.org/password.gpg --> work (DirectoryBased)
+     *   - example.org/john@doe.org/password.gpg --> null (DirectoryBased)
      */
-    fun getPathToIdentifierFor(file: File) = when (this) {
-        FileBased -> file.parentFile.parent
-        DirectoryBased -> file.parentFile.parentFile?.parent
+    fun getPathToIdentifierFor(file: File): String? = when (this) {
+        FileBased -> file.parentFile?.parent
+        DirectoryBased -> file.parentFile?.parentFile?.parent
     }
 
-    fun getAccountPartFor(file: File) = when (this) {
-        FileBased -> file.nameWithoutExtension
-        DirectoryBased -> "${file.parentFile.name}/${file.nameWithoutExtension}"
+    /**
+     * Returns the path component of [file] following the origin identifier according to the current
+     * [DirectoryStructure] (without file extension).
+     *
+     * Examples:
+     *   - work/example.org/john@doe.org.gpg --> john@doe.org (FileBased)
+     *   - example.org.gpg --> null (FileBased, fallback)
+     *   - work/example.org/john@doe.org/password.gpg --> john@doe.org/password (DirectoryBased)
+     *   - Temporary PIN.gpg --> Temporary PIN (DirectoryBased, fallback)
+     */
+    fun getAccountPartFor(file: File): String? = when (this) {
+        FileBased -> file.nameWithoutExtension.takeIf { file.parentFile != null }
+        DirectoryBased -> file.parentFile?.let { parentFile ->
+            "${parentFile.name}/${file.nameWithoutExtension}"
+        } ?: file.nameWithoutExtension
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

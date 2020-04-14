@@ -125,10 +125,18 @@ class PasswordFragment : Fragment() {
             // and not on folder navigations since the latter leads to too many removal animations.
             (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
             recyclerAdapter.submitList(result.passwordItems) {
-                recyclerViewStateToRestore?.let {
-                    recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                if (result.isFiltered) {
+                    // When the result is filtered, we always scroll to the top since that is where
+                    // the best fuzzy match appears.
+                    recyclerView.scrollToPosition(0)
+                } else {
+                    // When the result is not filtered and there is a saved scroll position for it,
+                    // we try to restore it.
+                    recyclerViewStateToRestore?.let {
+                        recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                    }
+                    recyclerViewStateToRestore = null
                 }
-                recyclerViewStateToRestore = null
             }
         }
     }

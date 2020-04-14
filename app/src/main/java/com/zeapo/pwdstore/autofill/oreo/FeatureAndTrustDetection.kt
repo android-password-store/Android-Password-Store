@@ -157,14 +157,18 @@ fun getBrowserAutofillSupportInfoIfTrusted(
 }
 
 private val FLAKY_BROWSERS = listOf(
-    "com.android.chrome"
+    "com.android.chrome",
+    "com.chrome.beta",
+    "com.chrome.canary",
+    "com.chrome.dev"
 )
 
 enum class BrowserAutofillSupportLevel {
     None,
     FlakyFill,
-    Fill,
-    FillAndSave
+    PasswordFill,
+    GeneralFill,
+    GeneralFillAndSave
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -175,9 +179,10 @@ private fun getBrowserAutofillSupportLevel(
     val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
     return when {
         browserInfo == null -> BrowserAutofillSupportLevel.None
-        browserInfo.saveFlags != null -> BrowserAutofillSupportLevel.FillAndSave
         appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
-        else -> BrowserAutofillSupportLevel.Fill
+        browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None -> BrowserAutofillSupportLevel.PasswordFill
+        browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
+        else -> BrowserAutofillSupportLevel.GeneralFillAndSave
     }
 }
 

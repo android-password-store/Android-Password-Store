@@ -395,8 +395,9 @@ class UserPreference : AppCompatActivity() {
                                 val supportDescription = when (it.second) {
                                     BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
                                     BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
-                                    BrowserAutofillSupportLevel.Fill -> getString(R.string.oreo_autofill_fill_support)
-                                    BrowserAutofillSupportLevel.FillAndSave -> getString(R.string.oreo_autofill_fill_and_save_support)
+                                    BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
+                                    BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
+                                    BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
                                 }
                                 "$appLabel: $supportDescription"
                             }
