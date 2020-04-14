@@ -221,7 +221,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 FilterMode.StrictDomain -> {
                     check(searchAction.listMode == ListMode.FilesOnly) { "Searches with StrictDomain search mode can only list files" }
                     prefilteredResultFlow
-                        .filter { file ->
+                        .filter { absoluteFile ->
+                            val file = absoluteFile.relativeTo(root)
                             val toMatch =
                                 directoryStructure.getIdentifierFor(file) ?: return@filter false
                             // In strict domain mode, we match
