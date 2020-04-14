@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.autofill.AutofillManager
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -119,13 +120,26 @@ class AutofillFilterView : AppCompatActivity() {
             ::PasswordViewHolder) { item ->
             val file = item.file.relativeTo(item.rootDir)
             val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
-            val identifier = directoryStructure.getIdentifierFor(file) ?: "INVALID"
+            val identifier = directoryStructure.getIdentifierFor(file)
             val accountPart = directoryStructure.getAccountPartFor(file)
-            title.text = buildSpannedString {
-                pathToIdentifier?.let { append("$it/") }
-                bold { underline { append(identifier) } }
+            check(identifier != null || accountPart != null) { "At least one of identifier and accountPart should always be non-null" }
+            title.text = if (identifier != null) {
+                buildSpannedString {
+                    if (pathToIdentifier != null)
+                        append("$pathToIdentifier/")
+                    bold { underline { append(identifier) } }
+                }
+            } else {
+                accountPart
             }
-            subtitle.text = accountPart
+            subtitle.apply {
+                if (identifier != null && accountPart != null) {
+                    text = accountPart
+                    visibility = View.VISIBLE
+                } else {
+                    visibility = View.GONE
+                }
+            }
         }.onItemClicked { _, item ->
             decryptAndFill(item)
         }

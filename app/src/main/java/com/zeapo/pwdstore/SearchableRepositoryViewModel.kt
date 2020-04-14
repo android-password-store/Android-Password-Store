@@ -96,11 +96,11 @@ private fun PasswordItem.Companion.makeComparator(
         PasswordRepository.PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
     }
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
-            directoryStructure.getIdentifierFor(
-                it.file
-            )
+            directoryStructure.getIdentifierFor(it.file)
         })
-        .then(compareBy(CaseInsensitiveComparator) { directoryStructure.getUsernameFor(it.file) })
+        .then(compareBy(CaseInsensitiveComparator) {
+            directoryStructure.getUsernameFor(it.file)
+        })
 }
 
 val PasswordItem.stableId: String
