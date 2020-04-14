@@ -39,6 +39,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -94,11 +95,11 @@ private fun PasswordItem.Companion.makeComparator(
         PasswordRepository.PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
     }
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
-            directoryStructure.getIdentifierFor(
-                it.file
-            )
+            directoryStructure.getIdentifierFor(it.file)
         })
-        .then(compareBy(CaseInsensitiveComparator) { directoryStructure.getUsernameFor(it.file) })
+        .then(compareBy(CaseInsensitiveComparator) {
+            directoryStructure.getUsernameFor(it.file)
+        })
 }
 
 val PasswordItem.stableId: String
@@ -219,7 +220,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 FilterMode.StrictDomain -> {
                     check(searchAction.listMode == ListMode.FilesOnly) { "Searches with StrictDomain search mode can only list files" }
                     prefilteredResultFlow
-                        .filter { file ->
+                        .filter { absoluteFile ->
+                            val file = absoluteFile.relativeTo(root)
                             val toMatch =
                                 directoryStructure.getIdentifierFor(file) ?: return@filter false
                             // In strict domain mode, we match
@@ -268,6 +270,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         return dir
             .walkTopDown().onEnter { file -> shouldTake(file) }
             .asFlow()
+            // Skip the root directory
+            .drop(1)
             .map {
                 yield()
                 it
