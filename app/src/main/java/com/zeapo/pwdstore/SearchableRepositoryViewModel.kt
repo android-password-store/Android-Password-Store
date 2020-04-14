@@ -39,6 +39,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -269,6 +270,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         return dir
             .walkTopDown().onEnter { file -> shouldTake(file) }
             .asFlow()
+            // Skip the root directory
+            .drop(1)
             .map {
                 yield()
                 it
