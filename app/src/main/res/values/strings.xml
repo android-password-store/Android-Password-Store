@@ -250,6 +250,7 @@
     <string name="folder_icon_hint">Folder icon</string>
 
     <!-- Oreo Autofill -->
+    <string name="oreo_autofill_strict_domain_search">Phishing-resistant search</string>
     <string name="oreo_autofill_match_with">Match with %1$s</string>
     <string name="oreo_autofill_matches_clear_existing">Clear existing matches</string>
     <string name="oreo_autofill_filter_no_results">No results.</string>
