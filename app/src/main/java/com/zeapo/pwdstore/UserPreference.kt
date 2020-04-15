@@ -8,11 +8,13 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ShortcutManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
@@ -519,7 +521,25 @@ class UserPreference : AppCompatActivity() {
 
     @Throws(IOException::class)
     private fun copySshKey(uri: Uri) {
-        // TODO: Check if valid SSH Key before import
+        //See metadata from document to validate SSH key
+        //cursor returns only 1 row
+        val cursor: Cursor? = contentResolver.query(
+                uri, null, null, null, null, null)
+
+        cursor?.use {
+
+            if (it.moveToFirst()) {
+                //see file's metadata
+                val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
+                val sizeFile : Int = it.getInt(sizeIndex)
+                val extensionFile = File(uri.path.toString()).extension
+
+                if (extensionFile.isNotEmpty()  //SSH key without file extension
+                        || sizeFile > 100000 ) //size < than 100KB
+                    throw IOException("Wrong file type selected")
+            }
+        }
+
         val sshKeyInputStream = contentResolver.openInputStream(uri)
         if (sshKeyInputStream != null) {
 
