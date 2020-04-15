@@ -521,21 +521,21 @@ class UserPreference : AppCompatActivity() {
 
     @Throws(IOException::class)
     private fun copySshKey(uri: Uri) {
-        //See metadata from document to validate SSH key
-        //cursor returns only 1 row
+        // See metadata from document to validate SSH key
+        // cursor returns only 1 row
         val cursor: Cursor? = contentResolver.query(
                 uri, null, null, null, null, null)
 
         cursor?.use {
 
             if (it.moveToFirst()) {
-                //see file's metadata
+                // see file's metadata
                 val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
-                val sizeFile : Int = it.getInt(sizeIndex)
+                val sizeFile: Int = it.getInt(sizeIndex)
                 val extensionFile = File(uri.path.toString()).extension
 
-                if (extensionFile.isNotEmpty()  //SSH key without file extension
-                        || sizeFile > 100000 ) //size < than 100KB
+                if (extensionFile.isNotEmpty() || // SSH key without file extension
+                        sizeFile > 100000) // size < than 100KB
                     throw IOException("Wrong file type selected")
             }
         }
