@@ -20,7 +20,7 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/dependencies.gradle') }}
 
     - name: Run unit tests
-      run: ./gradlew spotlessCheck assembleDebug testDebug lintDebug -Dpre-dex=false
+      run: ./gradlew spotlessCheck testDebug lintDebug -Dpre-dex=false
 
     - name: Run instrumentation tests
       uses: reactivecircus/android-emulator-runner@v2
@@ -28,8 +28,3 @@ jobs:
         api-level: ${{ matrix.api-level }}
         target: default
         script: ./gradlew connectedCheck
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: Debug APK
-        path: app/build/outputs/apk/debug/app-debug.apk
