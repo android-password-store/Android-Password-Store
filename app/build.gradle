@@ -122,6 +122,7 @@ dependencies {
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit
+    androidTestImplementation deps.testing.kotlin_test_junit
     androidTestImplementation deps.testing.androidx.runner
     androidTestImplementation deps.testing.androidx.rules
     androidTestImplementation deps.testing.androidx.junit

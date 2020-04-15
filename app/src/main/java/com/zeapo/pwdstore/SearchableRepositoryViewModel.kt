@@ -97,7 +97,7 @@ private fun PasswordItem.Companion.makeComparator(
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
             directoryStructure.getIdentifierFor(it.file)
         })
-        .then(compareBy(CaseInsensitiveComparator) {
+        .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
             directoryStructure.getUsernameFor(it.file)
         })
 }
@@ -219,22 +219,18 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 }
                 FilterMode.StrictDomain -> {
                     check(searchAction.listMode == ListMode.FilesOnly) { "Searches with StrictDomain search mode can only list files" }
-                    prefilteredResultFlow
-                        .filter { absoluteFile ->
-                            val file = absoluteFile.relativeTo(root)
-                            val toMatch =
-                                directoryStructure.getIdentifierFor(file) ?: return@filter false
-                            // In strict domain mode, we match
-                            // * the search term exactly,
-                            // * subdomains of the search term,
-                            // * or the search term plus an arbitrary protocol.
-                            toMatch == searchAction.filter ||
-                                toMatch.endsWith(".${searchAction.filter}") ||
-                                toMatch.endsWith("://${searchAction.filter}")
-                        }
-                        .map { it.toPasswordItem(root) }
-                        .toList()
-                        .sortedWith(itemComparator)
+                    val regex = generateStrictDomainRegex(searchAction.filter)
+                    if (regex != null) {
+                        prefilteredResultFlow
+                            .filter { absoluteFile ->
+                                regex.containsMatchIn(absoluteFile.relativeTo(root).path)
+                            }
+                            .map { it.toPasswordItem(root) }
+                            .toList()
+                            .sortedWith(itemComparator)
+                    } else {
+                        emptyList()
+                    }
                 }
                 FilterMode.Fuzzy -> {
                     prefilteredResultFlow
@@ -352,6 +348,28 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     fun forceRefresh() {
         forceUpdateOnNextSearchAction()
         searchAction.postValue(updateSearchAction(searchAction.value!!))
+    }
+
+    companion object {
+
+        fun generateStrictDomainRegex(domain: String): Regex? {
+            // Valid domains do not contain path separators.
+            if (domain.contains('/'))
+                return null
+            // Matches the start of a path component, which is either the start of the
+            // string or a path separator.
+            val prefix = """(?:^|/)"""
+            val escapedFilter = Regex.escape(domain.replace("/", ""))
+            // Matches either the filter literally or a strict subdomain of the filter term.
+            // We allow a lot of freedom in what a subdomain is, as long as it is not an
+            // email address.
+            val subdomain = """(?:(?:[^/@]+\.)?$escapedFilter)"""
+            // Matches the end of a path component, which is either the literal ".gpg" or a
+            // path separator.
+            val suffix = """(?:\.gpg|/)"""
+            // Match any relative path with a component that is a subdomain of the filter.
+            return Regex(prefix + subdomain + suffix)
+        }
     }
 }
 

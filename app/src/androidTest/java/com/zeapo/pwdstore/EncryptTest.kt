@@ -7,6 +7,8 @@ package com.zeapo.pwdstore
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.IBinder
+import android.os.ParcelFileDescriptor
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -25,6 +27,7 @@ import org.apache.commons.io.IOUtils
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.openintents.openpgp.IOpenPgpService2
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -67,7 +70,19 @@ class EncryptTest {
         init()
 
         onView(withId(R.id.crypto_password_category)).check(ViewAssertions.matches(withText(parentPath)))
-        activity.onBound(null)
+        activity.onBound(object : IOpenPgpService2 {
+            override fun createOutputPipe(p0: Int): ParcelFileDescriptor {
+                TODO("Not yet implemented")
+            }
+
+            override fun asBinder(): IBinder {
+                TODO("Not yet implemented")
+            }
+
+            override fun execute(p0: Intent?, p1: ParcelFileDescriptor?, p2: Int): Intent {
+                TODO("Not yet implemented")
+            }
+        })
         val clearPass = IOUtils.toString(testContext.assets.open("clear-store/category/sub"), Charsets.UTF_8.name())
         val passEntry = PasswordEntry(clearPass)
 
