@@ -161,7 +161,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                 val settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
                 val sshKeyPassphrase = settings.getString("ssh_key_passphrase", null)
                 if (showError) {
-                    passphrase.error = "Wrong passphrase"
+                    passphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
                 }
                 val jsch = JSch()
                 try {
