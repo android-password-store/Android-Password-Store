@@ -121,6 +121,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         identity: SshApiSessionFactory.ApiIdentity?,
         showError: Boolean
     ) {
+        val encryptedSettings = callingActivity.applicationContext.getEncryptedPrefs("git_operation")
         if (connectionMode == ConnectionMode.Ssh) {
             if (sshKey == null || !sshKey.exists()) {
                 MaterialAlertDialogBuilder(callingActivity)
@@ -156,8 +157,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
             } else {
                 val layoutInflater = LayoutInflater.from(callingActivity)
                 @SuppressLint("InflateParams") val dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null)
-                val passphrase = dialogView.findViewById<TextInputEditText>(R.id.sshkey_passphrase)
-                val encryptedSettings = callingActivity.applicationContext.getEncryptedPrefs("git_operation")
+                val passphrase = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
                 val sshKeyPassphrase = encryptedSettings.getString("ssh_key_passphrase", null)
                 if (showError) {
                     passphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
@@ -182,7 +182,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                     .setView(dialogView)
                                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                                         if (keyPair.decrypt(passphrase.text.toString())) {
-                                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.sshkey_remember_passphrase).isChecked
+                                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked
                                             if (rememberPassphrase) {
                                                 encryptedSettings.edit().putString("ssh_key_passphrase", passphrase.text.toString()).apply()
                                             }
@@ -226,32 +226,41 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         } else if (connectionMode == ConnectionMode.OpenKeychain) {
             setAuthentication(username, identity).execute()
         } else {
-            @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.https_password_layout, null)
-            val password = dialogView.findViewById<TextInputEditText>(R.id.https_password_text)
-            val dialog = MaterialAlertDialogBuilder(callingActivity)
-                    .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
-                    .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
-                    .setView(dialogView)
-                    .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                        // authenticate using the user/pwd and then execute the command
-                        setAuthentication(username, password.text.toString()).execute()
-                    }
-                    .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                        callingActivity.finish()
-                    }
-                    .create()
-            dialog.setOnShowListener {
-                password.apply {
-                    setOnFocusChangeListener { v, _ ->
-                        v.post {
-                            val imm = callingActivity.getSystemService<InputMethodManager>()
-                            imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+            @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.git_passphrase_layout, null)
+            val passwordView = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
+            val password = encryptedSettings.getString("https_password", null)
+            if (password != null && password.isNotEmpty()) {
+                setAuthentication(username, password).execute()
+            } else {
+                val dialog = MaterialAlertDialogBuilder(callingActivity)
+                        .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
+                        .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
+                        .setView(dialogView)
+                        .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
+                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked
+                            if (rememberPassphrase) {
+                                encryptedSettings.edit().putString("https_password", passwordView.text.toString()).apply()
+                            }
+                            // authenticate using the user/pwd and then execute the command
+                            setAuthentication(username, passwordView.text.toString()).execute()
                         }
+                        .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
+                            callingActivity.finish()
+                        }
+                        .create()
+                dialog.setOnShowListener {
+                    passwordView.apply {
+                        setOnFocusChangeListener { v, _ ->
+                            v.post {
+                                val imm = callingActivity.getSystemService<InputMethodManager>()
+                                imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                            }
+                        }
+                        requestFocus()
                     }
-                    requestFocus()
                 }
+                dialog.show()
             }
-            dialog.show()
         }
     }
 
