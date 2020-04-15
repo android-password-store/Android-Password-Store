@@ -609,10 +609,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                         AutofillPreferences.directoryStructure(applicationContext)
                                     val entry = PasswordEntry(content)
                                     returnIntent.putExtra("PASSWORD", entry.password)
-                                    returnIntent.putExtra(
-                                        "USERNAME",
-                                        directoryStructure.getUsernameFor(file)
-                                    )
+                                    val username = PasswordEntry(content).username
+                                        ?: directoryStructure.getUsernameFor(file)
+                                    returnIntent.putExtra("USERNAME", username)
                                 }
 
                                 setResult(RESULT_OK, returnIntent)
