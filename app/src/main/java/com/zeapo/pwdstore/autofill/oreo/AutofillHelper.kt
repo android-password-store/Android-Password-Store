@@ -19,6 +19,7 @@ import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
 import java.security.MessageDigest
 
@@ -100,7 +101,10 @@ private fun makeRemoteView(
 
 fun makeFillMatchRemoteView(context: Context, file: File, formOrigin: FormOrigin): RemoteViews {
     val title = formOrigin.getPrettyIdentifier(context, untrusted = false)
-    val summary = AutofillPreferences.directoryStructure(context).getUsernameFor(file)
+    val directoryStructure = AutofillPreferences.directoryStructure(context)
+    val relativeFile = file.relativeTo(PasswordRepository.getRepositoryDirectory(context))
+    val summary = directoryStructure.getUsernameFor(relativeFile)
+        ?: directoryStructure.getPathToIdentifierFor(relativeFile) ?: ""
     val iconRes = R.drawable.ic_person_black_24dp
     return makeRemoteView(context, title, summary, iconRes)
 }

@@ -97,7 +97,7 @@ private fun PasswordItem.Companion.makeComparator(
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
             directoryStructure.getIdentifierFor(it.file)
         })
-        .then(compareBy(CaseInsensitiveComparator) {
+        .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
             directoryStructure.getUsernameFor(it.file)
         })
 }

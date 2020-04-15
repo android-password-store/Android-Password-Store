@@ -60,7 +60,7 @@ class AutofillSaveActivity : Activity() {
                 sanitizedIdentifier = sanitizedIdentifier,
                 username = credentials?.username
             )
-            val fileName = directoryStructure.getSaveFileName(username = credentials?.username)
+            val fileName = directoryStructure.getSaveFileName(username = credentials?.username, identifier = identifier)
             val intent = Intent(context, AutofillSaveActivity::class.java).apply {
                 putExtras(
                     bundleOf(
