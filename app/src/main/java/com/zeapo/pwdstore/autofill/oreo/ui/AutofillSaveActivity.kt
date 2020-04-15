@@ -120,23 +120,29 @@ class AutofillSaveActivity : Activity() {
                 AutofillMatcher.addMatchFor(this, it, File(createdPath))
             }
             val longName = data.getStringExtra("LONG_NAME")!!
-            val password = data.getStringExtra("PASSWORD")!!
-            val username = data.getStringExtra("USERNAME")
-            val clientState =
-                intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE) ?: run {
-                    e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
-                    finish()
-                    return
+            val password = data.getStringExtra("PASSWORD")
+            val result = if (password != null) {
+                // Password was generated and should be filled into a form.
+                val username = data.getStringExtra("USERNAME")
+                val clientState =
+                    intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE) ?: run {
+                        e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
+                        finish()
+                        return
+                    }
+                val credentials = Credentials(username, password)
+                val fillInDataset = FillableForm.makeFillInDataset(
+                    this,
+                    credentials,
+                    clientState,
+                    AutofillAction.Generate
+                )
+                Intent().apply {
+                    putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
                 }
-            val credentials = Credentials(username, password)
-            val fillInDataset = FillableForm.makeFillInDataset(
-                this,
-                credentials,
-                clientState,
-                AutofillAction.Generate
-            )
-            val result = Intent().apply {
-                putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
+            } else {
+                // Password was extracted from a form, there is nothing to fill.
+                Intent()
             }
             // PgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
             // is not involved in an AutofillScenario, we have to commit the file ourselves.
