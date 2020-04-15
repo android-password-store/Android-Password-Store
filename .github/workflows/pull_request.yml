@@ -3,7 +3,10 @@ on: pull_request
 name: Check pull request
 jobs:
   test-pr:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [23, 25, 27, 29]
     steps:
 
     - uses: actions/checkout@master
@@ -16,7 +19,15 @@ jobs:
           path: ~/.gradle/caches
           key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/dependencies.gradle') }}
 
-    - run: ./gradlew spotlessCheck assembleDebug testDebug lintDebug -Dpre-dex=false
+    - name: Run unit tests
+      run: ./gradlew spotlessCheck assembleDebug testDebug lintDebug -Dpre-dex=false
+
+    - name: Run instrumentation tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: default
+        script: ./gradlew connectedCheck
 
     - uses: actions/upload-artifact@master
       with:
