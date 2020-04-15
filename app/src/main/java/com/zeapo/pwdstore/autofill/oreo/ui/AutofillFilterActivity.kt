@@ -111,77 +111,81 @@ class AutofillFilterView : AppCompatActivity() {
 
         supportActionBar?.hide()
         bindUI()
+        updateSearch()
         setResult(RESULT_CANCELED)
     }
 
     private fun bindUI() {
-        val recyclerAdapter = SearchableRepositoryAdapter(
-            R.layout.oreo_autofill_filter_row,
-            ::PasswordViewHolder) { item ->
-            val file = item.file.relativeTo(item.rootDir)
-            val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
-            val identifier = directoryStructure.getIdentifierFor(file)
-            val accountPart = directoryStructure.getAccountPartFor(file)
-            check(identifier != null || accountPart != null) { "At least one of identifier and accountPart should always be non-null" }
-            title.text = if (identifier != null) {
-                buildSpannedString {
-                    if (pathToIdentifier != null)
-                        append("$pathToIdentifier/")
-                    bold { underline { append(identifier) } }
+        with(binding) {
+            rvPassword.apply {
+                adapter = SearchableRepositoryAdapter(
+                    R.layout.oreo_autofill_filter_row,
+                    ::PasswordViewHolder
+                ) { item ->
+                    val file = item.file.relativeTo(item.rootDir)
+                    val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
+                    val identifier = directoryStructure.getIdentifierFor(file)
+                    val accountPart = directoryStructure.getAccountPartFor(file)
+                    check(identifier != null || accountPart != null) { "At least one of identifier and accountPart should always be non-null" }
+                    title.text = if (identifier != null) {
+                        buildSpannedString {
+                            if (pathToIdentifier != null)
+                                append("$pathToIdentifier/")
+                            bold { underline { append(identifier) } }
+                        }
+                    } else {
+                        accountPart
+                    }
+                    subtitle.apply {
+                        if (identifier != null && accountPart != null) {
+                            text = accountPart
+                            visibility = View.VISIBLE
+                        } else {
+                            visibility = View.GONE
+                        }
+                    }
+                }.onItemClicked { _, item ->
+                    decryptAndFill(item)
                 }
-            } else {
-                accountPart
+                layoutManager = LinearLayoutManager(context)
             }
-            subtitle.apply {
-                if (identifier != null && accountPart != null) {
-                    text = accountPart
-                    visibility = View.VISIBLE
-                } else {
-                    visibility = View.GONE
+            search.apply {
+                val initialSearch =
+                    formOrigin.getPrettyIdentifier(applicationContext, untrusted = false)
+                setText(initialSearch, TextView.BufferType.EDITABLE)
+                addTextChangedListener { updateSearch() }
+            }
+            strictDomainSearch.apply {
+                visibility = if (formOrigin is FormOrigin.Web) View.VISIBLE else View.GONE
+                isChecked = formOrigin is FormOrigin.Web
+                setOnCheckedChangeListener { _, _ -> updateSearch() }
+            }
+            shouldMatch.text = getString(
+                R.string.oreo_autofill_match_with,
+                formOrigin.getPrettyIdentifier(applicationContext)
+            )
+            model.searchResult.observe(this@AutofillFilterView) { result ->
+                val list = result.passwordItems
+                (rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) {
+                    rvPassword.scrollToPosition(0)
+                }
+                // Switch RecyclerView out for a "no results" message if the new list is empty and
+                // the message is not yet shown (and vice versa).
+                if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
+                    (list.isNotEmpty() && rvPasswordSwitcher.nextView.id == rvPassword.id)
+                ) {
+                    rvPasswordSwitcher.showNext()
                 }
             }
-        }.onItemClicked { _, item ->
-            decryptAndFill(item)
         }
-        binding.rvPassword.apply {
-            adapter = recyclerAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
+    }
 
-        val initialFilter = formOrigin.getPrettyIdentifier(applicationContext, untrusted = false)
-        binding.search.setText(initialFilter, TextView.BufferType.EDITABLE)
-        val filterMode =
-            if (formOrigin is FormOrigin.Web) FilterMode.StrictDomain else FilterMode.Fuzzy
+    private fun updateSearch() {
         model.search(
-            initialFilter,
-            filterMode = filterMode,
+            binding.search.text.toString().trim(),
+            filterMode = if (binding.strictDomainSearch.isChecked) FilterMode.StrictDomain else FilterMode.Fuzzy,
             searchMode = SearchMode.RecursivelyInSubdirectories,
             listMode = ListMode.FilesOnly
-        )
-        binding.search.addTextChangedListener {
-            model.search(
-                it.toString().trim(),
-                filterMode = FilterMode.Fuzzy,
-                searchMode = SearchMode.RecursivelyInSubdirectories,
-                listMode = ListMode.FilesOnly
-            )
-        }
-        model.searchResult.observe(this) { result ->
-            val list = result.passwordItems
-            recyclerAdapter.submitList(list) {
-                binding.rvPassword.scrollToPosition(0)
-            }
-            // Switch RecyclerView out for a "no results" message if the new list is empty and
-            // the message is not yet shown (and vice versa).
-            if ((list.isEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPasswordEmpty.id) ||
-                (list.isNotEmpty() && binding.rvPasswordSwitcher.nextView.id == binding.rvPassword.id)
-            )
-                binding.rvPasswordSwitcher.showNext()
-        }
-
-        binding.shouldMatch.text = getString(
-            R.string.oreo_autofill_match_with,
-            formOrigin.getPrettyIdentifier(applicationContext)
         )
     }
 

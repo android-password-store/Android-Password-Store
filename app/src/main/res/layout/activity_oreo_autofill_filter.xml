@@ -46,7 +46,7 @@
         android:id="@+id/rvPasswordSwitcher"
         android:layout_width="0dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:layout_constraintBottom_toTopOf="@id/shouldMatch"
+        app:layout_constraintBottom_toTopOf="@id/strictDomainSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchLayout"
@@ -72,6 +72,21 @@
     </ViewSwitcher>
 
     <Switch
+        android:id="@+id/strictDomainSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="@string/oreo_autofill_strict_domain_search"
+        app:layout_constraintBottom_toTopOf="@id/shouldMatch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvPasswordSwitcher"
+        app:layout_constraintVertical_bias="1.0"
+        tools:text="Phishing-resistant search"/>
+
+    <Switch
         android:id="@+id/shouldMatch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -82,7 +97,7 @@
         app:layout_constraintBottom_toTopOf="@id/shouldClear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvPasswordSwitcher"
+        app:layout_constraintTop_toBottomOf="@id/strictDomainSearch"
         app:layout_constraintVertical_bias="1.0"
         tools:text="Match with example.org" />
 
