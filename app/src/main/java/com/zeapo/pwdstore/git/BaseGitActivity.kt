@@ -95,16 +95,18 @@ abstract class BaseGitActivity : AppCompatActivity() {
             Protocol.Https -> {
                 val hostname = StringBuilder()
                 hostname.append(serverUrl.trim { it <= ' ' })
-                valid = if (serverPort == "443") {
-                    hostname.append(serverPath)
-                    false
-                } else {
+                if (serverPort == "443" || serverPort.isEmpty()) {
                     hostname.append("/")
-                            .append(serverPort)
                             .append(serverPath)
-                    true
+                } else if (serverPort.isNotEmpty()) {
+                    hostname.append(":")
+                            .append(serverPort)
+                            .append("/")
+                            .append(serverPath)
                 }
-                hostname.toString()
+                val result = hostname.toString()
+                valid = result != "@/"
+                result
             }
         }
         if (!valid)
