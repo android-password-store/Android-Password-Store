@@ -268,10 +268,21 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      * Action to execute on error
      */
     open fun onError(errorMessage: String) {
+        // Clear various auth related fields on failure
         if (SshSessionFactory.getInstance() is SshApiSessionFactory) {
-            // Clear stored key id from settings on auth failure
             PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
                     .edit().putString("ssh_openkeystore_keyid", null).apply()
+            callingActivity.applicationContext
+                    .getEncryptedPrefs("git_operation")
+                    .edit()
+                    .remove("ssh_key_passphrase")
+                    .apply()
+        } else if (SshSessionFactory.getInstance() is GitConfigSessionFactory) {
+            callingActivity.applicationContext
+                    .getEncryptedPrefs("git_operation")
+                    .edit()
+                    .remove("https_password")
+                    .apply()
         }
     }
 
