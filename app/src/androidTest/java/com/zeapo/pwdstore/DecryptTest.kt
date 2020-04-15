@@ -8,6 +8,8 @@ import android.annotation.SuppressLint
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.IBinder
+import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -31,6 +33,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.openintents.openpgp.IOpenPgpService2
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -109,7 +112,19 @@ class DecryptTest {
         // second set the new timer
         activity.settings.edit().putString("general_show_time", "2").commit()
 
-        activity.onBound(null)
+        activity.onBound(object : IOpenPgpService2 {
+            override fun createOutputPipe(p0: Int): ParcelFileDescriptor {
+                TODO("Not yet implemented")
+            }
+
+            override fun asBinder(): IBinder {
+                TODO("Not yet implemented")
+            }
+
+            override fun execute(p0: Intent?, p1: ParcelFileDescriptor?, p2: Int): Intent {
+                TODO("Not yet implemented")
+            }
+        })
 
         // have we decrypted things correctly?
         assertEquals(passEntry.password, activity.crypto_password_show.text)
@@ -118,14 +133,14 @@ class DecryptTest {
 
         // did we copy the password?
         val clipboard: ClipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        assertEquals(passEntry.password, clipboard.primaryClip.getItemAt(0).text)
+        assertEquals(passEntry.password, clipboard.primaryClip!!.getItemAt(0).text)
 
         // wait until the clipboard is cleared
         SystemClock.sleep(4000)
 
         // The clipboard should be cleared!!
-        for (i in 0..clipboard.primaryClip.itemCount) {
-            assertEquals("", clipboard.primaryClip.getItemAt(i).text)
+        for (i in 0..clipboard.primaryClip!!.itemCount) {
+            assertEquals("", clipboard.primaryClip!!.getItemAt(i).text)
         }
 
         // set back the timer
@@ -145,7 +160,7 @@ class DecryptTest {
                 val destPath = "$destination/$filename"
                 val sourcePath = "$source/$filename"
 
-                if (assetManager.list(sourcePath).isNotEmpty()) {
+                if (assetManager.list(sourcePath)!!.isNotEmpty()) {
                     FileUtils.forceMkdir(File(destination, filename))
                     copyAssets("$source/$filename", destPath)
                 } else {
