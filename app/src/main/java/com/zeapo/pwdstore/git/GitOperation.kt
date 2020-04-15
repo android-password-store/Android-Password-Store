@@ -7,14 +7,15 @@ package com.zeapo.pwdstore.git
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.LinearLayout
+import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
@@ -193,9 +194,9 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                             // call back the method
                                             executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                                         }
-                                    }.setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                                        // Do nothing.
-                                    }.show()
+                                    }
+                                    .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel), null)
+                                    .show()
                         }
                     } else {
                         setAuthentication(sshKey, username, "").execute()
@@ -203,24 +204,23 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                 } catch (e: JSchException) {
                     e.printStackTrace()
                     MaterialAlertDialogBuilder(callingActivity)
-                            .setTitle("Unable to open the ssh-key")
-                            .setMessage("Please check that it was imported.")
-                            .setPositiveButton("Ok") { _, _ -> callingActivity.finish() }
+                            .setTitle(callingActivity.resources.getString(R.string.git_operation_unable_to_open_ssh_key_title))
+                            .setMessage(callingActivity.resources.getString(R.string.git_operation_unable_to_open_ssh_key_message))
+                            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
+                                callingActivity.finish()
+                            }
                             .show()
                 }
             }
         } else if (connectionMode == ConnectionMode.OpenKeychain) {
             setAuthentication(username, identity).execute()
         } else {
-            val password = EditText(callingActivity)
-            password.hint = "Password"
-            password.width = LinearLayout.LayoutParams.MATCH_PARENT
-            password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-
-            MaterialAlertDialogBuilder(callingActivity)
+            @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.https_password_layout, null)
+            val password = dialogView.findViewById<TextInputEditText>(R.id.https_password_text)
+            val dialog = MaterialAlertDialogBuilder(callingActivity)
                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                     .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
-                    .setView(password)
+                    .setView(dialogView)
                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                         // authenticate using the user/pwd and then execute the command
                         setAuthentication(username, password.text.toString()).execute()
@@ -228,7 +228,19 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                     .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
                         callingActivity.finish()
                     }
-                    .show()
+                    .create()
+            dialog.setOnShowListener {
+                password.apply {
+                    setOnFocusChangeListener { v, _ ->
+                        v.post {
+                            val imm = callingActivity.getSystemService<InputMethodManager>()
+                            imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                        }
+                    }
+                    requestFocus()
+                }
+            }
+            dialog.show()
         }
     }
 

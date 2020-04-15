@@ -354,4 +354,6 @@
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
     <string name="git_server_config_save_success">Successfully saved configuration</string>
     <string name="git_server_config_save_failure">Configuration error: please verify your settings and try again</string>
+    <string name="git_operation_unable_to_open_ssh_key_title">Unable to open the ssh-key</string>
+    <string name="git_operation_unable_to_open_ssh_key_message">Please check that it was imported.</string>
 </resources>
