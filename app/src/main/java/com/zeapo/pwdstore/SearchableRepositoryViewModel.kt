@@ -126,28 +126,6 @@ enum class ListMode {
 @FlowPreview
 class SearchableRepositoryViewModel(application: Application) : AndroidViewModel(application) {
 
-    companion object {
-
-        fun generateStrictDomainRegex(domain: String): Regex? {
-            // Valid domains do not contain path separators.
-            if (domain.contains('/'))
-                return null
-            // Matches the start of a path component, which is either the start of the
-            // string or a path separator.
-            val prefix = """(?:^|/)"""
-            val escapedFilter = Regex.escape(domain.replace("/", ""))
-            // Matches either the filter literally or a strict subdomain of the filter term.
-            // We allow a lot of freedom in what a subdomain is, as long as it is not an
-            // email address.
-            val subdomain = """(?:(?:[^/@]+\.)?$escapedFilter)"""
-            // Matches the end of a path component, which is either the literal ".gpg" or a
-            // path separator.
-            val suffix = """(?:\.gpg|/)"""
-            // Match any relative path with a component that is a subdomain of the filter.
-            return Regex(prefix + subdomain + suffix)
-        }
-    }
-
     private var _updateCounter = 0
     private val updateCounter: Int
         get() = _updateCounter
@@ -370,6 +348,28 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     fun forceRefresh() {
         forceUpdateOnNextSearchAction()
         searchAction.postValue(updateSearchAction(searchAction.value!!))
+    }
+
+    companion object {
+
+        fun generateStrictDomainRegex(domain: String): Regex? {
+            // Valid domains do not contain path separators.
+            if (domain.contains('/'))
+                return null
+            // Matches the start of a path component, which is either the start of the
+            // string or a path separator.
+            val prefix = """(?:^|/)"""
+            val escapedFilter = Regex.escape(domain.replace("/", ""))
+            // Matches either the filter literally or a strict subdomain of the filter term.
+            // We allow a lot of freedom in what a subdomain is, as long as it is not an
+            // email address.
+            val subdomain = """(?:(?:[^/@]+\.)?$escapedFilter)"""
+            // Matches the end of a path component, which is either the literal ".gpg" or a
+            // path separator.
+            val suffix = """(?:\.gpg|/)"""
+            // Match any relative path with a component that is a subdomain of the filter.
+            return Regex(prefix + subdomain + suffix)
+        }
     }
 }
 
