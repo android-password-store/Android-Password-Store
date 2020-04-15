@@ -44,6 +44,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.auth.AuthenticationResult
 import com.zeapo.pwdstore.utils.auth.Authenticator
 import com.zeapo.pwdstore.utils.autofillManager
+import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -72,6 +73,7 @@ class UserPreference : AppCompatActivity() {
             callingActivity = requireActivity() as UserPreference
             val context = requireContext()
             val sharedPreferences = preferenceManager.sharedPreferences
+            val encryptedPreferences = requireActivity().applicationContext.getEncryptedPrefs("git_operation")
 
             addPreferencesFromResource(R.xml.preference)
 
@@ -120,7 +122,7 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
-            sshClearPassphrasePreference?.isVisible = sharedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty()
+            sshClearPassphrasePreference?.isVisible = encryptedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty()
                     ?: false
             clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
             clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
@@ -171,7 +173,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             sshClearPassphrasePreference?.onPreferenceClickListener = ClickListener {
-                sharedPreferences.edit().putString("ssh_key_passphrase", null).apply()
+                encryptedPreferences.edit().putString("ssh_key_passphrase", null).apply()
                 it.isVisible = false
                 true
             }

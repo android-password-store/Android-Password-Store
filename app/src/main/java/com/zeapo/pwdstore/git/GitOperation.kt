@@ -8,12 +8,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.CheckBox
-import android.widget.EditText
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.jcraft.jsch.JSch
@@ -26,6 +24,7 @@ import com.zeapo.pwdstore.git.config.GitConfigSessionFactory
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.lib.Repository
@@ -155,11 +154,11 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                             callingActivity.finish()
                         }.show()
             } else {
-                val layoutInflater = LayoutInflater.from(callingActivity.applicationContext)
+                val layoutInflater = LayoutInflater.from(callingActivity)
                 @SuppressLint("InflateParams") val dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null)
-                val passphrase = dialogView.findViewById<EditText>(R.id.sshkey_passphrase)
-                val settings = PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                val sshKeyPassphrase = settings.getString("ssh_key_passphrase", null)
+                val passphrase = dialogView.findViewById<TextInputEditText>(R.id.sshkey_passphrase)
+                val encryptedSettings = callingActivity.applicationContext.getEncryptedPrefs("git_operation")
+                val sshKeyPassphrase = encryptedSettings.getString("ssh_key_passphrase", null)
                 if (showError) {
                     passphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
                 }
@@ -177,26 +176,38 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                 executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                             }
                         } else {
-                            MaterialAlertDialogBuilder(callingActivity)
+                            val dialog = MaterialAlertDialogBuilder(callingActivity)
                                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                                     .setMessage(callingActivity.resources.getString(R.string.passphrase_dialog_text))
                                     .setView(dialogView)
                                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                                         if (keyPair.decrypt(passphrase.text.toString())) {
-                                            val rememberPassphrase = (dialogView.findViewById<View>(R.id.sshkey_remember_passphrase) as CheckBox).isChecked
+                                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.sshkey_remember_passphrase).isChecked
                                             if (rememberPassphrase) {
-                                                settings.edit().putString("ssh_key_passphrase", passphrase.text.toString()).apply()
+                                                encryptedSettings.edit().putString("ssh_key_passphrase", passphrase.text.toString()).apply()
                                             }
                                             // Authenticate using the ssh-key and then execute the command
                                             setAuthentication(sshKey, username, passphrase.text.toString()).execute()
                                         } else {
-                                            settings.edit().putString("ssh_key_passphrase", null).apply()
+                                            encryptedSettings.edit().putString("ssh_key_passphrase", null).apply()
                                             // call back the method
                                             executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                                         }
                                     }
                                     .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel), null)
-                                    .show()
+                                    .create()
+                            dialog.setOnShowListener {
+                                passphrase.apply {
+                                    setOnFocusChangeListener { v, _ ->
+                                        v.post {
+                                            val imm = callingActivity.getSystemService<InputMethodManager>()
+                                            imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                                        }
+                                    }
+                                    requestFocus()
+                                }
+                            }
+                            dialog.show()
                         }
                     } else {
                         setAuthentication(sshKey, username, "").execute()

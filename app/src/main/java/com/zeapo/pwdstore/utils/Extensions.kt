@@ -5,10 +5,13 @@
 package com.zeapo.pwdstore.utils
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.TypedValue
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 infix fun Int.hasFlag(flag: Int): Boolean {
     return this and flag == flag
@@ -22,6 +25,18 @@ fun Context.resolveAttribute(attr: Int): Int {
     val typedValue = TypedValue()
     this.theme.resolveAttribute(attr, typedValue, true)
     return typedValue.data
+}
+
+fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
+    val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
+    val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    return EncryptedSharedPreferences.create(
+            fileName,
+            masterKeyAlias,
+            this,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
 }
 
 val Context.autofillManager: AutofillManager?
