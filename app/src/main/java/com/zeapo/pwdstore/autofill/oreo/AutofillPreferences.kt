@@ -16,6 +16,7 @@ private val Context.defaultSharedPreferences: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(this)
 
 enum class DirectoryStructure(val value: String) {
+    EncryptedUsername("encrypted_username"),
     FileBased("file"),
     DirectoryBased("directory");
 
@@ -24,11 +25,13 @@ enum class DirectoryStructure(val value: String) {
      * [DirectoryStructure].
      *
      * Examples:
+     *   - * --> null (EncryptedUsername)
      *   - work/example.org/john@doe.org.gpg --> john@doe.org (FileBased)
      *   - work/example.org/john@doe.org/password.gpg --> john@doe.org (DirectoryBased)
      *   - Temporary PIN.gpg --> Temporary PIN (DirectoryBased, fallback)
      */
-    fun getUsernameFor(file: File): String = when (this) {
+    fun getUsernameFor(file: File): String? = when (this) {
+        EncryptedUsername -> null
         FileBased -> file.nameWithoutExtension
         DirectoryBased -> file.parentFile?.name ?: file.nameWithoutExtension
     }
@@ -41,12 +44,14 @@ enum class DirectoryStructure(val value: String) {
      * [DirectoryStructure.getAccountPartFor] will always return a non-null result.
      *
      * Examples:
+     *   - work/example.org.gpg --> example.org (EncryptedUsername)
      *   - work/example.org/john@doe.org.gpg --> example.org (FileBased)
      *   - example.org.gpg --> example.org (FileBased, fallback)
      *   - work/example.org/john@doe.org/password.gpg --> example.org (DirectoryBased)
      *   - Temporary PIN.gpg --> null (DirectoryBased)
      */
     fun getIdentifierFor(file: File): String? = when (this) {
+        EncryptedUsername -> file.nameWithoutExtension
         FileBased -> file.parentFile?.name ?: file.nameWithoutExtension
         DirectoryBased -> file.parentFile?.parent
     }
@@ -55,10 +60,8 @@ enum class DirectoryStructure(val value: String) {
      * Returns the path components of [file] until right before the component that contains the
      * origin identifier according to the current [DirectoryStructure].
      *
-     * At least one of [DirectoryStructure.getIdentifierFor] and
-     * [DirectoryStructure.getAccountPartFor] will always return a non-null result.
-     *
      * Examples:
+     *   - work/example.org.gpg --> work (EncryptedUsername)
      *   - work/example.org/john@doe.org.gpg --> work (FileBased)
      *   - example.org/john@doe.org.gpg --> null (FileBased)
      *   - john@doe.org.gpg --> null (FileBased)
@@ -66,6 +69,7 @@ enum class DirectoryStructure(val value: String) {
      *   - example.org/john@doe.org/password.gpg --> null (DirectoryBased)
      */
     fun getPathToIdentifierFor(file: File): String? = when (this) {
+        EncryptedUsername -> file.parent
         FileBased -> file.parentFile?.parent
         DirectoryBased -> file.parentFile?.parentFile?.parent
     }
@@ -74,13 +78,18 @@ enum class DirectoryStructure(val value: String) {
      * Returns the path component of [file] following the origin identifier according to the current
      * [DirectoryStructure] (without file extension).
      *
+     * At least one of [DirectoryStructure.getIdentifierFor] and
+     * [DirectoryStructure.getAccountPartFor] will always return a non-null result.
+     *
      * Examples:
+     *   - * --> null (EncryptedUsername)
      *   - work/example.org/john@doe.org.gpg --> john@doe.org (FileBased)
      *   - example.org.gpg --> null (FileBased, fallback)
      *   - work/example.org/john@doe.org/password.gpg --> john@doe.org/password (DirectoryBased)
      *   - Temporary PIN.gpg --> Temporary PIN (DirectoryBased, fallback)
      */
     fun getAccountPartFor(file: File): String? = when (this) {
+        EncryptedUsername -> null
         FileBased -> file.nameWithoutExtension.takeIf { file.parentFile != null }
         DirectoryBased -> file.parentFile?.let { parentFile ->
             "${parentFile.name}/${file.nameWithoutExtension}"
@@ -89,11 +98,13 @@ enum class DirectoryStructure(val value: String) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getSaveFolderName(sanitizedIdentifier: String, username: String?) = when (this) {
+        EncryptedUsername -> "/"
         FileBased -> sanitizedIdentifier
         DirectoryBased -> Paths.get(sanitizedIdentifier, username ?: "username").toString()
     }
 
-    fun getSaveFileName(username: String?) = when (this) {
+    fun getSaveFileName(username: String?, identifier: String) = when (this) {
+        EncryptedUsername -> identifier
         FileBased -> username
         DirectoryBased -> "password"
     }
