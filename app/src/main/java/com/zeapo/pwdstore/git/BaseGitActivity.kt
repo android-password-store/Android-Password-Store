@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import androidx.core.text.isDigitsOnly
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.git.config.ConnectionMode
@@ -27,8 +29,8 @@ import timber.log.Timber
 abstract class BaseGitActivity : AppCompatActivity() {
     lateinit var protocol: Protocol
     lateinit var connectionMode: ConnectionMode
-    lateinit var hostname: String
-    lateinit var serverUrl: String
+    lateinit var url: String
+    lateinit var serverHostname: String
     lateinit var serverPort: String
     lateinit var serverUser: String
     lateinit var serverPath: String
@@ -48,13 +50,13 @@ abstract class BaseGitActivity : AppCompatActivity() {
         encryptedSettings = getEncryptedPrefs("git_operation")
         protocol = Protocol.fromString(settings.getString("git_remote_protocol", null))
         connectionMode = ConnectionMode.fromString(settings.getString("git_remote_auth", null))
-        serverUrl = settings.getString("git_remote_server", null) ?: ""
+        serverHostname = settings.getString("git_remote_server", null) ?: ""
         serverPort = settings.getString("git_remote_port", null) ?: ""
         serverUser = settings.getString("git_remote_username", null) ?: ""
         serverPath = settings.getString("git_remote_location", null) ?: ""
         username = settings.getString("git_config_user_name", null) ?: ""
         email = settings.getString("git_config_user_email", null) ?: ""
-        updateHostname()
+        updateUrl()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -77,50 +79,37 @@ abstract class BaseGitActivity : AppCompatActivity() {
     }
 
     /**
-     * Update the [hostname] field with the values that build it up. This function returns a boolean
-     * indicating whether or not the values are valid or not, and only adds the `origin` remote when
-     * it is.
-     *
-     * TODO(URGENT): Rewrite this to make actual sense. This is legacy spaghetti nobody understands.
+     * Update the [url] field with the values that build it up. This function returns a boolean
+     * indicating whether or not the values are likely valid or not, and only adds the `origin`
+     * remote when it is. This check is not perfect, it is mostly meant to catch typos.
      */
-    fun updateHostname(): Boolean {
-        var valid = false
-        val previousHostname = if (::hostname.isInitialized) hostname else ""
-        hostname = when (protocol) {
+    fun updateUrl(): Boolean {
+        if (serverHostname.isEmpty() || !serverPort.isDigitsOnly())
+            return false
+
+        val previousUrl = if (::url.isInitialized) url else ""
+        val hostnamePart = serverHostname
+        val pathPart = if (serverPath.startsWith('/')) serverPath else "/$serverPath"
+        url = when (protocol) {
             Protocol.Ssh -> {
-                val hostname = StringBuilder()
-                hostname.append("$serverUser@${serverUrl.trim { it <= ' '}}:")
-                if (serverPort == "22") {
-                    hostname.append(serverPath)
-                } else {
-                    valid = !(!serverPath.matches("/.*".toRegex()) && serverPort.isNotEmpty())
-                    hostname.append(serverPort + serverPath)
-                }
-                hostname.toString()
+                val userPart = if (serverUser.isEmpty()) "" else "$serverUser@"
+                val portPart =
+                    if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
+                // We have to specify the ssh scheme as this is the only way to pass a custom port.
+                "ssh://$userPart$hostnamePart$portPart$pathPart"
             }
             Protocol.Https -> {
-                val hostname = StringBuilder()
-                hostname.append(serverUrl.trim { it <= ' ' })
-                if (serverPort == "443" || serverPort.isEmpty()) {
-                    hostname.append("/")
-                            .append(serverPath)
-                } else if (serverPort.isNotEmpty()) {
-                    hostname.append(":")
-                            .append(serverPort)
-                            .append("/")
-                            .append(serverPath)
-                }
-                val result = hostname.toString()
-                valid = result != "@/"
-                result
+                val portPart =
+                    if (serverPort == "443" || serverPort.isEmpty()) "" else ":$serverPort"
+                "https://$hostnamePart$portPart$pathPart"
             }
         }
-        if (hostname != previousHostname && protocol == Protocol.Https) {
-            encryptedSettings.edit().remove("https_password").apply()
-        }
-        if (!valid)
-            PasswordRepository.addRemote("origin", hostname, true)
-        return valid
+        PasswordRepository.addRemote("origin", url, true)
+        // HTTPS authentication sends the password to the server, so we must wipe the password when
+        // the server is changed.
+        if (url != previousUrl && protocol == Protocol.Https)
+            encryptedSettings.edit { remove("https_password") }
+        return true
     }
 
     /**
@@ -152,7 +141,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
             }
 
             op = when (operation) {
-                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, this).setCommand(hostname)
+                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, this).setCommand(url)
                 REQUEST_PULL -> PullOperation(localDir, this).setCommand()
                 REQUEST_PUSH -> PushOperation(localDir, this).setCommand()
                 REQUEST_SYNC -> SyncOperation(localDir, this).setCommands()

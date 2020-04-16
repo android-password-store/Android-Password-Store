@@ -67,41 +67,41 @@ class GitServerConfigActivity : BaseGitActivity() {
         }
 
         binding.serverUrl.apply {
-            setText(serverUrl)
+            setText(serverHostname)
             doOnTextChanged { text, _, _, _ ->
-                serverUrl = text.toString()
+                serverHostname = text.toString().trim()
             }
         }
 
         binding.serverPort.apply {
             setText(serverPort)
             doOnTextChanged { text, _, _, _ ->
-                serverPort = text.toString()
+                serverPort = text.toString().trim()
             }
         }
 
         binding.serverUser.apply {
             setText(serverUser)
             doOnTextChanged { text, _, _, _ ->
-                serverUser = text.toString()
+                serverUser = text.toString().trim()
             }
         }
 
         binding.serverPath.apply {
             setText(serverPath)
             doOnTextChanged { text, _, _, _ ->
-                serverPath = text.toString()
+                serverPath = text.toString().trim()
             }
         }
 
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize(this)
-            if (updateHostname()) {
+            if (updateUrl()) {
                 settings.edit {
                     putString("git_remote_protocol", protocol.pref)
                     putString("git_remote_auth", connectionMode.pref)
-                    putString("git_remote_server", serverUrl)
+                    putString("git_remote_server", serverHostname)
                     putString("git_remote_port", serverPort)
                     putString("git_remote_username", serverUser)
                     putString("git_remote_location", serverPath)

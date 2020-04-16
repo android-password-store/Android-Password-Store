@@ -42,8 +42,8 @@ class GitConfigActivity : BaseGitActivity() {
         binding.gitAbortRebase.setOnClickListener { launchGitOperation(BREAK_OUT_OF_DETACHED) }
         binding.gitResetToRemote.setOnClickListener { launchGitOperation(REQUEST_RESET) }
         binding.saveButton.setOnClickListener {
-            val email = binding.gitUserEmail.text.toString()
-            val name = binding.gitUserName.text.toString()
+            val email = binding.gitUserEmail.text.toString().trim()
+            val name = binding.gitUserName.text.toString().trim()
             if (!email.matches(Patterns.EMAIL_ADDRESS.toRegex())) {
                 MaterialAlertDialogBuilder(this)
                         .setMessage(getString(R.string.invalid_email_dialog_text))
