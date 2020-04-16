@@ -5,7 +5,9 @@
 package com.zeapo.pwdstore.git
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.core.content.edit
+import androidx.core.os.postDelayed
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -104,9 +106,10 @@ class GitServerConfigActivity : BaseGitActivity() {
                     putString("git_remote_username", serverUser)
                     putString("git_remote_location", serverPath)
                 }
-                if (!isClone)
+                if (!isClone) {
                     Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
-                else
+                    Handler().postDelayed(500) { finish() }
+                } else
                     cloneRepository()
             } else {
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_failure), Snackbar.LENGTH_LONG).show()
