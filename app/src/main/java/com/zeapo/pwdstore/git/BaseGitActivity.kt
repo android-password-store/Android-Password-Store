@@ -16,6 +16,7 @@ import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import timber.log.Timber
 
@@ -37,12 +38,15 @@ abstract class BaseGitActivity : AppCompatActivity() {
     var identity: SshApiSessionFactory.ApiIdentity? = null
     lateinit var settings: SharedPreferences
         private set
+    lateinit var encryptedSettings: SharedPreferences
+        private set
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         settings = PreferenceManager.getDefaultSharedPreferences(this)
+        encryptedSettings = getEncryptedPrefs("git_operation")
         protocol = Protocol.fromString(settings.getString("git_remote_protocol", null))
         connectionMode = ConnectionMode.fromString(settings.getString("git_remote_auth", null))
         serverUrl = settings.getString("git_remote_server", null) ?: ""
@@ -77,9 +81,12 @@ abstract class BaseGitActivity : AppCompatActivity() {
      * Update the [hostname] field with the values that build it up. This function returns a boolean
      * indicating whether or not the values are valid or not, and only adds the `origin` remote when
      * it is.
+     *
+     * TODO(URGENT): Rewrite this to make actual sense. This is legacy spaghetti nobody understands.
      */
     fun updateHostname(): Boolean {
         var valid = false
+        val previousHostname = if (::hostname.isInitialized) hostname else ""
         hostname = when (protocol) {
             Protocol.Ssh -> {
                 val hostname = StringBuilder()
@@ -108,6 +115,14 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 valid = result != "@/"
                 result
             }
+        }
+        if (hostname != previousHostname) {
+            encryptedSettings.edit().apply {
+                when (protocol) {
+                    Protocol.Ssh -> remove("ssh_key_passphrase")
+                    Protocol.Https -> remove("https_password")
+                }
+            }.apply()
         }
         if (!valid)
             PasswordRepository.addRemote("origin", hostname, true)
