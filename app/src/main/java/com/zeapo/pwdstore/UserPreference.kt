@@ -629,12 +629,18 @@ class UserPreference : AppCompatActivity() {
                             is IOException,
                             is IllegalArgumentException -> {
                                 MaterialAlertDialogBuilder(this)
-                                        .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
-                                        .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                                        .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
+                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                                        .setMessage(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
+                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
                                         .show()
                             }
-                            else -> throw e
+                            else -> {
+                                MaterialAlertDialogBuilder(this)
+                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                                        .setMessage(resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                                        .show()
+                            }
                         }
                     }
                 }

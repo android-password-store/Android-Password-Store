@@ -348,4 +348,5 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_battery_saver">Set by Battery Saver</string>
     <string name="theme_follow_system">System default</string>
+    <string name="ssh_key_import_error_not_an_ssh_key_message">Selected file does not appear to be an SSH key</string>
 </resources>
