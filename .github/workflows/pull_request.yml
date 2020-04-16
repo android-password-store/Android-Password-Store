@@ -3,7 +3,7 @@ on: pull_request
 name: Check pull request
 jobs:
   test-pr:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       matrix:
         api-level: [23, 25, 27, 29]
