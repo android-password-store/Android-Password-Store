@@ -134,7 +134,6 @@
     <string name="pref_copy_title">Автоматически копировать пароль</string>
     <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
     <string name="ssh_key_success_dialog_title">SSH ключ импортирован</string>
-    <string name="ssh_key_error_dialog_title">Ошибка импорта SSH ключа</string>
     <string name="ssh_key_error_dialog_text">Сообщение: \n</string>
     <string name="pref_recursive_filter">Рекурсивная фильтрация</string>
     <string name="pref_recursive_filter_hint">Рекурсивный поиск паролей в текущей директории</string>

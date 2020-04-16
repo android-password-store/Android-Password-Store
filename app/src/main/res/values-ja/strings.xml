@@ -80,7 +80,6 @@
     <string name="pref_copy_title">自動的にパスワードをコピー</string>
     <string name="pref_copy_dialog_title">復号化が成功した後、自動的にパスワードをクリップボードにコピーします。</string>
     <string name="ssh_key_success_dialog_title">SSH 鍵をインポートしました</string>
-    <string name="ssh_key_error_dialog_title">ssh 鍵のインポート時にエラー</string>
     <string name="ssh_key_error_dialog_text">メッセージ : \n</string>
     <string name="pref_recursive_filter">再帰的フィルタリング</string>
     <string name="pref_recursive_filter_hint">現在のディレクトリーのパスワードを再帰的に検索します。</string>
