@@ -530,7 +530,6 @@ class UserPreference : AppCompatActivity() {
             cursor.moveToFirst()
             // see file's metadata
             val sizeFile = cursor.getInt(sizeIndex)
-
             // SSH key size < than 100KB and different from 0
             if (sizeFile > 100000 || sizeFile == 0) {
                 throw IllegalArgumentException("Wrong file type selected")
