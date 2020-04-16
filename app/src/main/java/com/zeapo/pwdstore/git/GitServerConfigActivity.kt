@@ -119,10 +119,10 @@ class GitServerConfigActivity : BaseGitActivity() {
      */
     private fun cloneRepository() {
         val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
-
+        val localDirFiles = localDir.listFiles() ?: emptyArray()
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
-        if (localDir.exists() && localDir.listFiles()!!.isNotEmpty() &&
-                !(localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git")) {
+        if (localDir.exists() && localDirFiles.isNotEmpty() &&
+                !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")) {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_delete_title)
                     .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
@@ -146,7 +146,7 @@ class GitServerConfigActivity : BaseGitActivity() {
         } else {
             try {
                 // Silently delete & replace the lone .git folder if it exists
-                if (localDir.exists() && localDir.listFiles()!!.size == 1 && localDir.listFiles()!![0].name == ".git") {
+                if (localDir.exists() && localDirFiles.size == 1 && localDirFiles[0].name == ".git") {
                     try {
                         localDir.deleteRecursively()
                     } catch (e: IOException) {
