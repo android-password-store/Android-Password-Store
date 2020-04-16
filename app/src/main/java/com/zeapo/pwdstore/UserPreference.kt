@@ -525,21 +525,18 @@ class UserPreference : AppCompatActivity() {
         // See metadata from document to validate SSH key
         contentResolver.query(uri, null, null, null, null, null)?.use { cursor ->
             val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-
             // cursor returns only 1 row
             cursor.moveToFirst()
             // see file's metadata
-            val sizeFile = cursor.getInt(sizeIndex)
-            // SSH key size < than 100KB and different from 0
-            if (sizeFile > 100000 || sizeFile == 0) {
+            val fileSize = cursor.getInt(sizeIndex)
+            // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
+            if (fileSize > 100000 || fileSize == 0) {
                 throw IllegalArgumentException("Wrong file type selected")
             } else {
                 // Validate BEGIN and END markers
                 val lines = contentResolver.openInputStream(uri)?.bufferedReader()?.readLines()
-
-                // file must have more than 2 lines
-                // first line contains BEGIN
-                // last line contains END
+                // The file must have more than 2 lines, and the first and last line must have
+                // OpenSSH key markers.
                 if (lines != null &&
                     lines.size > 2 &&
                     !lines[0].contains("BEGIN OPENSSH PRIVATE KEY") &&
