@@ -24,9 +24,11 @@ import java.io.IOException
  */
 class GitServerConfigActivity : BaseGitActivity() {
 
+    lateinit var binding: ActivityGitCloneBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityGitCloneBinding.inflate(layoutInflater)
+        binding = ActivityGitCloneBinding.inflate(layoutInflater)
         val isClone = intent?.extras?.getInt(REQUEST_ARG_OP) ?: -1 == REQUEST_CLONE
         if (isClone) {
             binding.saveButton.text = getString(R.string.clone_button)
@@ -53,6 +55,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                     else -> protocol
                 }
             }
+            updateConnectionModeToggleGroup()
         }
 
         binding.connectionModeGroup.addOnButtonCheckedListener { _, checkedId, checked ->
@@ -94,6 +97,8 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
         }
 
+        updateConnectionModeToggleGroup()
+
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize(this)
@@ -115,6 +120,14 @@ class GitServerConfigActivity : BaseGitActivity() {
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_failure), Snackbar.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun updateConnectionModeToggleGroup() {
+        val isSsh = binding.cloneProtocolSsh.isChecked
+        binding.connectionModeSsh.isEnabled = isSsh
+        binding.connectionModeOpenkeychain.isEnabled = isSsh
+        if (isSsh)
+            binding.connectionModeUsername.isChecked = true
     }
 
     /**
