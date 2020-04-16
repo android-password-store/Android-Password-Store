@@ -522,49 +522,32 @@ class UserPreference : AppCompatActivity() {
 
     @Throws(IllegalArgumentException::class, IOException::class)
     private fun copySshKey(uri: Uri) {
-        // See metadata from document to validate SSH key
-        contentResolver.query(uri, null, null, null, null, null)?.use { cursor ->
-            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-            // cursor returns only 1 row
-            cursor.moveToFirst()
-            // see file's metadata
-            val fileSize = cursor.getInt(sizeIndex)
-            // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
-            if (fileSize > 100000 || fileSize == 0) {
-                throw IllegalArgumentException("Wrong file type selected")
-            } else {
-                // Validate BEGIN and END markers
-                val lines = contentResolver.openInputStream(uri)?.bufferedReader()?.readLines()
-                // The file must have more than 2 lines, and the first and last line must have
-                // OpenSSH key markers.
-                if (lines != null &&
-                    lines.size > 2 &&
-                    !lines[0].contains("BEGIN OPENSSH PRIVATE KEY") &&
-                    !lines[lines.size - 1].contains("END OPENSSH PRIVATE KEY")) {
-                    throw IllegalArgumentException("Wrong file type selected")
-                }
-            }
-        }
+        // First check whether the content at uri is likely an SSH private key.
+        val fileSize = contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
+            ?.use { cursor ->
+                // Cursor returns only a single row.
+                cursor.moveToFirst()
+                cursor.getInt(0)
+            } ?: throw IOException(getString(R.string.ssh_key_does_not_exist))
+
+        // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
+        if (fileSize > 100_000 || fileSize == 0)
+            throw IllegalArgumentException(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
 
         val sshKeyInputStream = contentResolver.openInputStream(uri)
-        if (sshKeyInputStream != null) {
+            ?: throw IOException(getString(R.string.ssh_key_does_not_exist))
+        val lines = sshKeyInputStream.bufferedReader().readLines()
 
-            val internalKeyFile = File("""$filesDir/.ssh_key""")
+        // The file must have more than 2 lines, and the first and last line must have private key
+        // markers.
+        if (lines.size < 2 ||
+            !Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) ||
+            !Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
+        )
+            throw IllegalArgumentException(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
 
-            if (internalKeyFile.exists()) {
-                internalKeyFile.delete()
-                internalKeyFile.createNewFile()
-            }
-
-            val sshKeyOutputSteam = internalKeyFile.outputStream()
-
-            sshKeyInputStream.copyTo(sshKeyOutputSteam, 1024)
-
-            sshKeyInputStream.close()
-            sshKeyOutputSteam.close()
-        } else {
-            Toast.makeText(this, getString(R.string.ssh_key_does_not_exist), Toast.LENGTH_LONG).show()
-        }
+        // Canonicalize line endings to '\n'.
+        File("$filesDir/.ssh_key").writeText(lines.joinToString("\n"))
     }
 
     private val isAccessibilityServiceEnabled: Boolean
@@ -622,23 +605,11 @@ class UserPreference : AppCompatActivity() {
 
                         finish()
                     } catch (e: Exception) {
-                        when (e) {
-                            is IOException,
-                            is IllegalArgumentException -> {
-                                MaterialAlertDialogBuilder(this)
-                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                                        .setMessage(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
-                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                                        .show()
-                            }
-                            else -> {
-                                MaterialAlertDialogBuilder(this)
-                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                                        .setMessage(resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                                        .show()
-                            }
-                        }
+                        MaterialAlertDialogBuilder(this)
+                            .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                            .setMessage(e.message)
+                            .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                            .show()
                     }
                 }
                 EDIT_GIT_INFO -> {
