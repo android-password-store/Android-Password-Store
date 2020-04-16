@@ -523,9 +523,7 @@ class UserPreference : AppCompatActivity() {
     @Throws(IllegalArgumentException::class, IOException::class)
     private fun copySshKey(uri: Uri) {
         // See metadata from document to validate SSH key
-        contentResolver.query(
-                uri, null, null, null, null, null
-        )?.use { cursor ->
+        contentResolver.query(uri, null, null, null, null, null)?.use { cursor ->
             val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
 
             // cursor returns only 1 row
@@ -534,10 +532,9 @@ class UserPreference : AppCompatActivity() {
             val sizeFile = cursor.getInt(sizeIndex)
 
             // SSH key size < than 100KB and different from 0
-            if (sizeFile > 100000 ||
-                    sizeFile == 0)
+            if (sizeFile > 100000 || sizeFile == 0) {
                 throw IllegalArgumentException("Wrong file type selected")
-            else {
+            } else {
                 // Validate BEGIN and END markers
                 val lines = contentResolver.openInputStream(uri)?.bufferedReader()?.readLines()
 
@@ -546,8 +543,8 @@ class UserPreference : AppCompatActivity() {
                 // last line contains END
                 if (lines != null &&
                     lines.size > 2 &&
-                    !lines[0].contains("BEGIN") &&
-                    !lines[lines.size - 1].contains("END")) {
+                    !lines[0].contains("BEGIN OPENSSH PRIVATE KEY") &&
+                    !lines[lines.size - 1].contains("END OPENSSH PRIVATE KEY")) {
                     throw IllegalArgumentException("Wrong file type selected")
                 }
             }
