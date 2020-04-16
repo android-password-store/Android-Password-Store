@@ -94,7 +94,6 @@
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
     <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
     <string name="ssh_key_success_dialog_title">SSH-Key importiert</string>
-    <string name="ssh_key_error_dialog_title">Fehler während des Imports des SSH-Keys</string>
     <string name="ssh_key_error_dialog_text">Nachricht : \n</string>
     <string name="pref_recursive_filter">Suche in Unterordnern</string>
     <string name="pref_recursive_filter_hint">Findet Passwörter auch in Unterordnern.</string>
