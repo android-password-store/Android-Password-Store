@@ -148,6 +148,7 @@
     <string name="pref_show_time_summary">Set the time (in seconds) you want the password to be in clipboard. 0 means forever. Current value: %1$s</string>
     <string name="pref_copy_title">Automatically copy password</string>
     <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
+    <string name="ssh_key_import_error_not_an_ssh_key_message">Selected file does not appear to be an SSH private key.</string>
     <string name="ssh_key_success_dialog_title">SSH-key imported</string>
     <string name="ssh_key_error_dialog_title">Key import error</string>
     <string name="ssh_key_error_dialog_text">Message : \n</string>
@@ -348,5 +349,4 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_battery_saver">Set by Battery Saver</string>
     <string name="theme_follow_system">System default</string>
-    <string name="ssh_key_import_error_not_an_ssh_key_message">Selected file does not appear to be an SSH key</string>
 </resources>
