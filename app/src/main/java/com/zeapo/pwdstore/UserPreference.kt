@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ShortcutManager
@@ -387,6 +388,7 @@ class UserPreference : AppCompatActivity() {
                 MaterialAlertDialogBuilder(callingActivity).run {
                     setTitle(R.string.pref_autofill_enable_title)
                     if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        @SuppressLint("InflateParams")
                         val layout =
                             layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
                         val supportedBrowsersTextView =
@@ -561,7 +563,7 @@ class UserPreference : AppCompatActivity() {
 
     private val isAccessibilityServiceEnabled: Boolean
         get() {
-            val am = getSystemService(AccessibilityManager::class.java)
+            val am = getSystemService(AccessibilityManager::class.java) ?: return false
             val runningServices = am
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices

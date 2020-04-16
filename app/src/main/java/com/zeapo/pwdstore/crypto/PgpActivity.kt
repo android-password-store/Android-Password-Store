@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.crypto
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ClipData
@@ -772,6 +773,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private inner class HoldToShowPasswordTransformation constructor(button: Button, private val onToggle: Runnable) :
             PasswordTransformationMethod(), View.OnTouchListener {
         private var shown = false
@@ -784,7 +786,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             return if (shown) charSequence else super.getTransformation("12345", view)
         }
 
-        @Suppress("ClickableViewAccessibility")
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {

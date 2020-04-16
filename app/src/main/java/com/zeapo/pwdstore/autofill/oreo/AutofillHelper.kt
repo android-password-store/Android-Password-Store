@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.autofill.oreo
 
+import android.annotation.SuppressLint
 import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.IntentSender
@@ -47,6 +48,12 @@ private fun stableHash(array: Collection<ByteArray>): String {
  * returns all of them in sorted order and separated with `;`.
  */
 fun computeCertificatesHash(context: Context, appPackage: String): String {
+    // The warning does not apply since 1) we are specifically hashing **all** signatures and 2) it
+    // no longer applies to Android 4.4+.
+    // Even though there is a new way to get the certificates as of Android Pie, we need to keep
+    // hashes comparable between versions and hence default to using the deprecated API.
+    @SuppressLint("PackageManagerGetSignatures")
+    @Suppress("DEPRECATION")
     val signaturesOld =
         context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNATURES).signatures
     val stableHashOld = stableHash(signaturesOld.map { it.toByteArray() })
