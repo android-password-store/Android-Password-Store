@@ -8,7 +8,6 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ShortcutManager
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +16,6 @@ import android.provider.DocumentsContract
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
-import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
@@ -534,7 +532,7 @@ class UserPreference : AppCompatActivity() {
             val sizeFile: Int = cursor.getInt(sizeIndex)
             val extensionFile = File(uri.path.toString()).extension
 
-            //SSH key without file extension and size < than 100KB
+            // SSH key without file extension and size < than 100KB
             if (extensionFile.isNotEmpty() || //
                     sizeFile > 100000) //
                 throw IllegalArgumentException("Wrong file type selected")
