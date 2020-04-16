@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -279,18 +280,14 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         // Clear various auth related fields on failure
         if (SshSessionFactory.getInstance() is SshApiSessionFactory) {
             PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                    .edit().putString("ssh_openkeystore_keyid", null).apply()
+                    .edit { putString("ssh_openkeystore_keyid", null) }
             callingActivity.applicationContext
                     .getEncryptedPrefs("git_operation")
-                    .edit()
-                    .remove("ssh_key_local_passphrase")
-                    .apply()
+                    .edit { remove("ssh_key_local_passphrase") }
         } else if (SshSessionFactory.getInstance() is GitConfigSessionFactory) {
             callingActivity.applicationContext
                     .getEncryptedPrefs("git_operation")
-                    .edit()
-                    .remove("https_password")
-                    .apply()
+                    .edit { remove("https_password") }
         }
     }
 
