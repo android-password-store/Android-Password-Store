@@ -4,23 +4,16 @@
  */
 package com.zeapo.pwdstore.git.config
 
-sealed class ConnectionMode {
-    object Ssh : ConnectionMode() {
-        override fun toString() = "ssh-key"
-    }
-    object Username : ConnectionMode() {
-        override fun toString() = "username/password"
-    }
-    object OpenKeychain : ConnectionMode() {
-        override fun toString() = "OpenKeychain"
-    }
+enum class ConnectionMode(val pref: String) {
+    Ssh("ssh-key"),
+    Username("username/password"),
+    OpenKeychain("OpenKeychain");
 
     companion object {
-        fun fromString(type: String?): ConnectionMode = when (type) {
-            "ssh-key", null -> Ssh
-            "username/password" -> Username
-            "OpenKeychain" -> OpenKeychain
-            else -> throw IllegalArgumentException("$type is not a valid ConnectionMode")
+        private val map = values().associateBy(ConnectionMode::pref)
+        fun fromString(type: String?): ConnectionMode {
+            return map[type ?: return Ssh]
+                ?: throw IllegalArgumentException("$type is not a valid ConnectionMode")
         }
     }
 }

@@ -122,9 +122,10 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         showError: Boolean
     ) {
         val encryptedSettings = callingActivity.applicationContext.getEncryptedPrefs("git_operation")
-        if (connectionMode == ConnectionMode.Ssh) {
-            if (sshKey == null || !sshKey.exists()) {
-                MaterialAlertDialogBuilder(callingActivity)
+        when (connectionMode) {
+            ConnectionMode.Ssh -> {
+                if (sshKey == null || !sshKey.exists()) {
+                    MaterialAlertDialogBuilder(callingActivity)
                         .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
                         .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
                         .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
@@ -154,29 +155,29 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                             // Finish the blank GitActivity so user doesn't have to press back
                             callingActivity.finish()
                         }.show()
-            } else {
-                val layoutInflater = LayoutInflater.from(callingActivity)
-                @SuppressLint("InflateParams") val dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null)
-                val passphrase = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
-                val sshKeyPassphrase = encryptedSettings.getString("ssh_key_passphrase", null)
-                if (showError) {
-                    passphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
-                }
-                val jsch = JSch()
-                try {
-                    val keyPair = KeyPair.load(jsch, callingActivity.filesDir.toString() + "/.ssh_key")
+                } else {
+                    val layoutInflater = LayoutInflater.from(callingActivity)
+                    @SuppressLint("InflateParams") val dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null)
+                    val passphrase = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
+                    val sshKeyPassphrase = encryptedSettings.getString("ssh_key_passphrase", null)
+                    if (showError) {
+                        passphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
+                    }
+                    val jsch = JSch()
+                    try {
+                        val keyPair = KeyPair.load(jsch, callingActivity.filesDir.toString() + "/.ssh_key")
 
-                    if (keyPair.isEncrypted) {
-                        if (sshKeyPassphrase != null && sshKeyPassphrase.isNotEmpty()) {
-                            if (keyPair.decrypt(sshKeyPassphrase)) {
-                                // Authenticate using the ssh-key and then execute the command
-                                setAuthentication(sshKey, username, sshKeyPassphrase).execute()
+                        if (keyPair.isEncrypted) {
+                            if (sshKeyPassphrase != null && sshKeyPassphrase.isNotEmpty()) {
+                                if (keyPair.decrypt(sshKeyPassphrase)) {
+                                    // Authenticate using the ssh-key and then execute the command
+                                    setAuthentication(sshKey, username, sshKeyPassphrase).execute()
+                                } else {
+                                    // call back the method
+                                    executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
+                                }
                             } else {
-                                // call back the method
-                                executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
-                            }
-                        } else {
-                            val dialog = MaterialAlertDialogBuilder(callingActivity)
+                                val dialog = MaterialAlertDialogBuilder(callingActivity)
                                     .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                                     .setMessage(callingActivity.resources.getString(R.string.passphrase_dialog_text))
                                     .setView(dialogView)
@@ -199,43 +200,45 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                     }
                                     .setOnCancelListener { callingActivity.finish() }
                                     .create()
-                            dialog.setOnShowListener {
-                                passphrase.apply {
-                                    setOnFocusChangeListener { v, _ ->
-                                        v.post {
-                                            val imm = callingActivity.getSystemService<InputMethodManager>()
-                                            imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                                dialog.setOnShowListener {
+                                    passphrase.apply {
+                                        setOnFocusChangeListener { v, _ ->
+                                            v.post {
+                                                val imm = callingActivity.getSystemService<InputMethodManager>()
+                                                imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                                            }
                                         }
+                                        requestFocus()
                                     }
-                                    requestFocus()
                                 }
+                                dialog.show()
                             }
-                            dialog.show()
+                        } else {
+                            setAuthentication(sshKey, username, "").execute()
                         }
-                    } else {
-                        setAuthentication(sshKey, username, "").execute()
-                    }
-                } catch (e: JSchException) {
-                    e.printStackTrace()
-                    MaterialAlertDialogBuilder(callingActivity)
+                    } catch (e: JSchException) {
+                        e.printStackTrace()
+                        MaterialAlertDialogBuilder(callingActivity)
                             .setTitle(callingActivity.resources.getString(R.string.git_operation_unable_to_open_ssh_key_title))
                             .setMessage(callingActivity.resources.getString(R.string.git_operation_unable_to_open_ssh_key_message))
                             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                                 callingActivity.finish()
                             }
                             .show()
+                    }
                 }
             }
-        } else if (connectionMode == ConnectionMode.OpenKeychain) {
-            setAuthentication(username, identity).execute()
-        } else {
-            @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.git_passphrase_layout, null)
-            val passwordView = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
-            val password = encryptedSettings.getString("https_password", null)
-            if (password != null && password.isNotEmpty()) {
-                setAuthentication(username, password).execute()
-            } else {
-                val dialog = MaterialAlertDialogBuilder(callingActivity)
+            ConnectionMode.OpenKeychain -> {
+                setAuthentication(username, identity).execute()
+            }
+            ConnectionMode.Username -> {
+                @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.git_passphrase_layout, null)
+                val passwordView = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
+                val password = encryptedSettings.getString("https_password", null)
+                if (password != null && password.isNotEmpty()) {
+                    setAuthentication(username, password).execute()
+                } else {
+                    val dialog = MaterialAlertDialogBuilder(callingActivity)
                         .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
                         .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
                         .setView(dialogView)
@@ -252,18 +255,19 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         }
                         .setOnCancelListener { callingActivity.finish() }
                         .create()
-                dialog.setOnShowListener {
-                    passwordView.apply {
-                        setOnFocusChangeListener { v, _ ->
-                            v.post {
-                                val imm = callingActivity.getSystemService<InputMethodManager>()
-                                imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                    dialog.setOnShowListener {
+                        passwordView.apply {
+                            setOnFocusChangeListener { v, _ ->
+                                v.post {
+                                    val imm = callingActivity.getSystemService<InputMethodManager>()
+                                    imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                                }
                             }
+                            requestFocus()
                         }
-                        requestFocus()
                     }
+                    dialog.show()
                 }
-                dialog.show()
             }
         }
     }

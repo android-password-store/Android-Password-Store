@@ -99,8 +99,8 @@ class GitServerConfigActivity : BaseGitActivity() {
                 PasswordRepository.initialize(this)
             if (updateHostname()) {
                 settings.edit {
-                    putString("git_remote_protocol", protocol.toString())
-                    putString("git_remote_auth", connectionMode.toString())
+                    putString("git_remote_protocol", protocol.pref)
+                    putString("git_remote_auth", connectionMode.pref)
                     putString("git_remote_server", serverUrl)
                     putString("git_remote_port", serverPort)
                     putString("git_remote_username", serverUser)
