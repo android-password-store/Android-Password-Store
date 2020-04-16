@@ -10,6 +10,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -122,8 +123,7 @@ enum class ListMode {
     AllEntries
 }
 
-@ExperimentalCoroutinesApi
-@FlowPreview
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class SearchableRepositoryViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _updateCounter = 0
@@ -141,10 +141,10 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         get() = settings.getBoolean("show_hidden_folders", false)
     private val defaultSearchMode
         get() = if (settings.getBoolean("filter_recursively", true)) {
-        SearchMode.RecursivelyInSubdirectories
-    } else {
-        SearchMode.InCurrentDirectoryOnly
-    }
+            SearchMode.RecursivelyInSubdirectories
+        } else {
+            SearchMode.InCurrentDirectoryOnly
+        }
 
     private val typeSortOrder
         get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
@@ -352,6 +352,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
     companion object {
 
+        @VisibleForTesting
         fun generateStrictDomainRegex(domain: String): Regex? {
             // Valid domains do not contain path separators.
             if (domain.contains('/'))
@@ -377,7 +378,8 @@ private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() 
     override fun areItemsTheSame(oldItem: PasswordItem, newItem: PasswordItem) =
         oldItem.file.absolutePath == newItem.file.absolutePath
 
-    override fun areContentsTheSame(oldItem: PasswordItem, newItem: PasswordItem) = oldItem == newItem
+    override fun areContentsTheSame(oldItem: PasswordItem, newItem: PasswordItem) =
+        oldItem == newItem
 }
 
 open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
@@ -434,6 +436,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
 
     private val selectedFiles
         get() = requireSelectionTracker().selection.map { File(it) }
+
     fun getSelectedItems(context: Context): List<PasswordItem> {
         val root = PasswordRepository.getRepositoryDirectory(context)
         return selectedFiles.map { it.toPasswordItem(root) }

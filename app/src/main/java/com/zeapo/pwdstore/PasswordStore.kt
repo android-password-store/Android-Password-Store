@@ -295,7 +295,7 @@ class PasswordStore : AppCompatActivity() {
             searchItem.collapseActionView()
     }
 
-    fun openSettings(view: View?) {
+    fun openSettings(@Suppress("UNUSED_PARAMETER") view: View?) {
         val intent: Intent
         try {
             intent = Intent(this, UserPreference::class.java)
@@ -305,11 +305,11 @@ class PasswordStore : AppCompatActivity() {
         }
     }
 
-    fun cloneExistingRepository(view: View?) {
+    fun cloneExistingRepository(@Suppress("UNUSED_PARAMETER") view: View?) {
         initRepository(CLONE_REPO_BUTTON)
     }
 
-    fun createNewRepository(view: View?) {
+    fun createNewRepository(@Suppress("UNUSED_PARAMETER") view: View?) {
         initRepository(NEW_REPO_BUTTON)
     }
 
@@ -473,7 +473,7 @@ class PasswordStore : AppCompatActivity() {
         val intent = Intent(this, PgpActivity::class.java)
         intent.putExtra("NAME", item.toString())
         intent.putExtra("FILE_PATH", item.file.absolutePath)
-        intent.putExtra("PARENT_PATH", item.file.parentFile.absolutePath)
+        intent.putExtra("PARENT_PATH", item.file.parentFile!!.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
         intent.putExtra("OPERATION", "EDIT")
         startActivityForResult(intent, REQUEST_CODE_EDIT)
