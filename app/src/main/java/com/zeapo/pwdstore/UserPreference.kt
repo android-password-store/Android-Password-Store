@@ -605,23 +605,11 @@ class UserPreference : AppCompatActivity() {
 
                         finish()
                     } catch (e: Exception) {
-                        when (e) {
-                            is IOException,
-                            is IllegalArgumentException -> {
-                                MaterialAlertDialogBuilder(this)
-                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                                        .setMessage(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
-                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                                        .show()
-                            }
-                            else -> {
-                                MaterialAlertDialogBuilder(this)
-                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                                        .setMessage(resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                                        .show()
-                            }
-                        }
+                        MaterialAlertDialogBuilder(this)
+                            .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                            .setMessage(e.message)
+                            .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                            .show()
                     }
                 }
                 EDIT_GIT_INFO -> {
