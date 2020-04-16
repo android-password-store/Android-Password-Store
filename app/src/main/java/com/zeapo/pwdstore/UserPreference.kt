@@ -17,6 +17,7 @@ import android.provider.DocumentsContract
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
@@ -522,22 +523,21 @@ class UserPreference : AppCompatActivity() {
     @Throws(IOException::class)
     private fun copySshKey(uri: Uri) {
         // See metadata from document to validate SSH key
-        // cursor returns only 1 row
-        val cursor: Cursor? = contentResolver.query(
-                uri, null, null, null, null, null)
+        contentResolver.query(
+                uri, null, null, null, null, null
+        )?.use { cursor ->
+            val sizeIndex: Int = cursor.getColumnIndex(OpenableColumns.SIZE)
 
-        cursor?.use {
+            // cursor returns only 1 row
+            cursor.moveToFirst()
+            // see file's metadata
+            val sizeFile: Int = cursor.getInt(sizeIndex)
+            val extensionFile = File(uri.path.toString()).extension
 
-            if (it.moveToFirst()) {
-                // see file's metadata
-                val sizeIndex: Int = it.getColumnIndex(OpenableColumns.SIZE)
-                val sizeFile: Int = it.getInt(sizeIndex)
-                val extensionFile = File(uri.path.toString()).extension
-
-                if (extensionFile.isNotEmpty() || // SSH key without file extension
-                        sizeFile > 100000) // size < than 100KB
-                    throw IOException("Wrong file type selected")
-            }
+            //SSH key without file extension and size < than 100KB
+            if (extensionFile.isNotEmpty() || //
+                    sizeFile > 100000) //
+                throw IllegalArgumentException("Wrong file type selected")
         }
 
         val sshKeyInputStream = contentResolver.openInputStream(uri)
