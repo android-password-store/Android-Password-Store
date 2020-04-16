@@ -615,12 +615,18 @@ class UserPreference : AppCompatActivity() {
                         setResult(Activity.RESULT_OK)
 
                         finish()
-                    } catch (e: IOException) {
-                        MaterialAlertDialogBuilder(this)
-                                .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
-                                .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                                .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
-                                .show()
+                    } catch (e: Exception) {
+                        when (e) {
+                            is IOException,
+                            is IllegalArgumentException -> {
+                                MaterialAlertDialogBuilder(this)
+                                        .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
+                                        .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                                        .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
+                                        .show()
+                            }
+                            else -> throw e
+                        }
                     }
                 }
                 EDIT_GIT_INFO -> {
