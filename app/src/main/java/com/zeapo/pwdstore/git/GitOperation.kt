@@ -194,7 +194,10 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                             executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                                         }
                                     }
-                                    .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel), null)
+                                    .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
+                                        callingActivity.finish()
+                                    }
+                                    .setOnCancelListener { callingActivity.finish() }
                                     .create()
                             dialog.setOnShowListener {
                                 passphrase.apply {
@@ -247,6 +250,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
                             callingActivity.finish()
                         }
+                        .setOnCancelListener { callingActivity.finish() }
                         .create()
                 dialog.setOnShowListener {
                     passwordView.apply {
