@@ -96,7 +96,7 @@ class GitServerConfigActivity : BaseGitActivity() {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize(this)
             if (updateHostname()) {
-                settings.edit(true) {
+                settings.edit {
                     putString("git_remote_protocol", protocol.toString())
                     putString("git_remote_auth", connectionMode.toString())
                     putString("git_remote_server", serverUrl)
