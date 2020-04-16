@@ -118,7 +118,6 @@
     <string name="pref_copy_title">Copiar contraseña automáticamente</string>
     <string name="pref_copy_dialog_title">Automáticamente copia la contraseña al portapapeles si el descifrado fue exitoso.</string>
     <string name="ssh_key_success_dialog_title">Llave SSH importada</string>
-    <string name="ssh_key_error_dialog_title">Error al intentar importar llave SSH</string>
     <string name="ssh_key_error_dialog_text">Mensaje: \n</string>
     <string name="pref_recursive_filter">Búsqueda recursiva</string>
     <string name="pref_recursive_filter_hint">Busca contraseñas recursivamente en el directorio actual.</string>

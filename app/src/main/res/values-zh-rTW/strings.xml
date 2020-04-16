@@ -75,7 +75,6 @@
     <string name="pref_copy_title">自動複製密碼</string>
     <string name="pref_copy_dialog_title">解密成功後自動將密碼複製到剪貼簿</string>
     <string name="ssh_key_success_dialog_title">成功匯入 SSH 金鑰</string>
-    <string name="ssh_key_error_dialog_title">嘗試匯入 SSH 金鑰時出錯</string>
     <string name="ssh_key_error_dialog_text">訊息:</string>
     <string name="pref_recursive_filter">搜尋子資料夾</string>
     <string name="pref_recursive_filter_hint">在目前目錄的子目錄中查詢密碼</string>

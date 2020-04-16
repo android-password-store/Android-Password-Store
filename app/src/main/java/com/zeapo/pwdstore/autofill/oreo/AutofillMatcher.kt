@@ -157,6 +157,9 @@ class AutofillMatcher {
             for (prefs in listOf(context.autofillAppMatches, context.autofillWebMatches)) {
                 for ((key, value) in prefs.all) {
                     if (!key.startsWith(PREFERENCE_PREFIX_MATCHES)) continue
+                    // We know that preferences starting with `PREFERENCE_PREFIX_MATCHES` were
+                    // created with `putStringSet`.
+                    @Suppress("UNCHECKED_CAST")
                     val oldMatches = value as? Set<String>
                     if (oldMatches == null) {
                         w { "Failed to read matches for $key" }

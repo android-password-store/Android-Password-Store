@@ -47,20 +47,23 @@ class AutofillActivity : AppCompatActivity() {
         finish() // go back to the password field app
         when (requestCode) {
             REQUEST_CODE_DECRYPT_AND_VERIFY -> if (resultCode == RESULT_OK) {
-                AutofillService.instance?.setResultData(data!!) // report the result to service
+                require(data != null)
+                AutofillService.instance?.setResultData(data) // report the result to service
             }
             REQUEST_CODE_PICK -> if (resultCode == RESULT_OK) {
-                AutofillService.instance?.setPickedPassword(data!!.getStringExtra("path"))
+                require(data != null)
+                AutofillService.instance?.setPickedPassword(data.getStringExtra("path")!!)
             }
             REQUEST_CODE_PICK_MATCH_WITH -> if (resultCode == RESULT_OK) {
+                require(data != null)
                 // need to not only decrypt the picked password, but also
                 // update the "match with" preference
                 val extras = intent.extras ?: return
                 val packageName = extras.getString("packageName")
                 val isWeb = extras.getBoolean("isWeb")
 
-                val path = data!!.getStringExtra("path")
-                AutofillService.instance?.setPickedPassword(data.getStringExtra("path"))
+                val path = data.getStringExtra("path")
+                AutofillService.instance?.setPickedPassword(data.getStringExtra("path")!!)
 
                 val prefs: SharedPreferences
                 prefs = if (!isWeb) {

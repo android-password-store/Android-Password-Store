@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ShortcutManager
@@ -13,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
@@ -385,6 +387,7 @@ class UserPreference : AppCompatActivity() {
                 MaterialAlertDialogBuilder(callingActivity).run {
                     setTitle(R.string.pref_autofill_enable_title)
                     if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        @SuppressLint("InflateParams")
                         val layout =
                             layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
                         val supportedBrowsersTextView =
@@ -516,9 +519,32 @@ class UserPreference : AppCompatActivity() {
         startActivityForResult(intent, SET_CUSTOM_XKPWD_DICT)
     }
 
-    @Throws(IOException::class)
+    @Throws(IllegalArgumentException::class, IOException::class)
     private fun copySshKey(uri: Uri) {
-        // TODO: Check if valid SSH Key before import
+        // See metadata from document to validate SSH key
+        contentResolver.query(uri, null, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+            // cursor returns only 1 row
+            cursor.moveToFirst()
+            // see file's metadata
+            val fileSize = cursor.getInt(sizeIndex)
+            // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
+            if (fileSize > 100000 || fileSize == 0) {
+                throw IllegalArgumentException("Wrong file type selected")
+            } else {
+                // Validate BEGIN and END markers
+                val lines = contentResolver.openInputStream(uri)?.bufferedReader()?.readLines()
+                // The file must have more than 2 lines, and the first and last line must have
+                // OpenSSH key markers.
+                if (lines != null &&
+                    lines.size > 2 &&
+                    !lines[0].contains("BEGIN OPENSSH PRIVATE KEY") &&
+                    !lines[lines.size - 1].contains("END OPENSSH PRIVATE KEY")) {
+                    throw IllegalArgumentException("Wrong file type selected")
+                }
+            }
+        }
+
         val sshKeyInputStream = contentResolver.openInputStream(uri)
         if (sshKeyInputStream != null) {
 
@@ -542,7 +568,7 @@ class UserPreference : AppCompatActivity() {
 
     private val isAccessibilityServiceEnabled: Boolean
         get() {
-            val am = getSystemService(AccessibilityManager::class.java)
+            val am = getSystemService(AccessibilityManager::class.java) ?: return false
             val runningServices = am
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
@@ -594,12 +620,24 @@ class UserPreference : AppCompatActivity() {
                         setResult(Activity.RESULT_OK)
 
                         finish()
-                    } catch (e: IOException) {
-                        MaterialAlertDialogBuilder(this)
-                                .setTitle(this.resources.getString(R.string.ssh_key_error_dialog_title))
-                                .setMessage(this.resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                                .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
-                                .show()
+                    } catch (e: Exception) {
+                        when (e) {
+                            is IOException,
+                            is IllegalArgumentException -> {
+                                MaterialAlertDialogBuilder(this)
+                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                                        .setMessage(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
+                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                                        .show()
+                            }
+                            else -> {
+                                MaterialAlertDialogBuilder(this)
+                                        .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                                        .setMessage(resources.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                                        .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                                        .show()
+                            }
+                        }
                     }
                 }
                 EDIT_GIT_INFO -> {
