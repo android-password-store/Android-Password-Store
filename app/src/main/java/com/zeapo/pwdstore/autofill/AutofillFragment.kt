@@ -66,7 +66,9 @@ class AutofillFragment : DialogFragment() {
                     ?: "com.android.browser")
         }
         try {
-            builder.setIcon(callingActivity.packageManager.getApplicationIcon(iconPackageName))
+            if (iconPackageName != null) {
+                builder.setIcon(callingActivity.packageManager.getApplicationIcon(iconPackageName))
+            }
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }

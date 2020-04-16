@@ -188,7 +188,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
             }
             OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
                 val pendingIntent: PendingIntent =
-                    result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)
+                    result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)!!
                 try {
                     val intentToResume = withContext(Dispatchers.Main) {
                         suspendCoroutine<Intent> { cont ->
