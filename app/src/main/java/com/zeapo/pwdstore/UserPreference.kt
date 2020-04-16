@@ -518,23 +518,23 @@ class UserPreference : AppCompatActivity() {
         startActivityForResult(intent, SET_CUSTOM_XKPWD_DICT)
     }
 
-    @Throws(IOException::class)
+    @Throws(IllegalArgumentException::class, IOException::class)
     private fun copySshKey(uri: Uri) {
         // See metadata from document to validate SSH key
         contentResolver.query(
                 uri, null, null, null, null, null
         )?.use { cursor ->
-            val sizeIndex: Int = cursor.getColumnIndex(OpenableColumns.SIZE)
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
 
             // cursor returns only 1 row
             cursor.moveToFirst()
             // see file's metadata
-            val sizeFile: Int = cursor.getInt(sizeIndex)
+            val sizeFile = cursor.getInt(sizeIndex)
             val extensionFile = File(uri.path.toString()).extension
 
             // SSH key without file extension and size < than 100KB
-            if (extensionFile.isNotEmpty() || //
-                    sizeFile > 100000) //
+            if (extensionFile.isNotEmpty() ||
+                    sizeFile > 100000)
                 throw IllegalArgumentException("Wrong file type selected")
         }
 
