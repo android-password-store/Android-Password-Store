@@ -38,8 +38,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
     var identity: SshApiSessionFactory.ApiIdentity? = null
     lateinit var settings: SharedPreferences
         private set
-    lateinit var encryptedSettings: SharedPreferences
-        private set
+    private lateinit var encryptedSettings: SharedPreferences
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,13 +115,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 result
             }
         }
-        if (hostname != previousHostname) {
-            encryptedSettings.edit().apply {
-                when (protocol) {
-                    Protocol.Ssh -> remove("ssh_key_passphrase")
-                    Protocol.Https -> remove("https_password")
-                }
-            }.apply()
+        if (hostname != previousHostname && protocol == Protocol.Https) {
+            encryptedSettings.edit().remove("https_password").apply()
         }
         if (!valid)
             PasswordRepository.addRemote("origin", hostname, true)

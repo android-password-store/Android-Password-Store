@@ -159,7 +159,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                     val layoutInflater = LayoutInflater.from(callingActivity)
                     @SuppressLint("InflateParams") val dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null)
                     val passphrase = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
-                    val sshKeyPassphrase = encryptedSettings.getString("ssh_key_passphrase", null)
+                    val sshKeyPassphrase = encryptedSettings.getString("ssh_key_local_passphrase", null)
                     if (showError) {
                         passphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
                     }
@@ -185,12 +185,12 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                         if (keyPair.decrypt(passphrase.text.toString())) {
                                             val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked
                                             if (rememberPassphrase) {
-                                                encryptedSettings.edit().putString("ssh_key_passphrase", passphrase.text.toString()).apply()
+                                                encryptedSettings.edit().putString("ssh_key_local_passphrase", passphrase.text.toString()).apply()
                                             }
                                             // Authenticate using the ssh-key and then execute the command
                                             setAuthentication(sshKey, username, passphrase.text.toString()).execute()
                                         } else {
-                                            encryptedSettings.edit().putString("ssh_key_passphrase", null).apply()
+                                            encryptedSettings.edit().putString("ssh_key_local_passphrase", null).apply()
                                             // call back the method
                                             executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                                         }
@@ -283,7 +283,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
             callingActivity.applicationContext
                     .getEncryptedPrefs("git_operation")
                     .edit()
-                    .remove("ssh_key_passphrase")
+                    .remove("ssh_key_local_passphrase")
                     .apply()
         } else if (SshSessionFactory.getInstance() is GitConfigSessionFactory) {
             callingActivity.applicationContext

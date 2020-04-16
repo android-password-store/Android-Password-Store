@@ -124,7 +124,7 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
-            sshClearPassphrasePreference?.isVisible = encryptedPreferences.getString("ssh_key_passphrase", null)?.isNotEmpty()
+            sshClearPassphrasePreference?.isVisible = encryptedPreferences.getString("ssh_key_local_passphrase", null)?.isNotEmpty()
                     ?: false
             clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
             clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
@@ -175,7 +175,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             sshClearPassphrasePreference?.onPreferenceClickListener = ClickListener {
-                encryptedPreferences.edit().putString("ssh_key_passphrase", null).apply()
+                encryptedPreferences.edit().putString("ssh_key_local_passphrase", null).apply()
                 it.isVisible = false
                 true
             }
