@@ -532,12 +532,25 @@ class UserPreference : AppCompatActivity() {
             cursor.moveToFirst()
             // see file's metadata
             val sizeFile = cursor.getInt(sizeIndex)
-            val extensionFile = File(uri.path.toString()).extension
 
-            // SSH key without file extension and size < than 100KB
-            if (extensionFile.isNotEmpty() ||
-                    sizeFile > 100000)
+            // SSH key size < than 100KB and different from 0
+            if (sizeFile > 100000 ||
+                    sizeFile == 0)
                 throw IllegalArgumentException("Wrong file type selected")
+            else {
+                // Validate BEGIN and END markers
+                val lines = contentResolver.openInputStream(uri)?.bufferedReader()?.readLines()
+
+                // file must have more than 2 lines
+                // first line contains BEGIN
+                // last line contains END
+                if (lines != null &&
+                    lines.size > 2 &&
+                    !lines[0].contains("BEGIN") &&
+                    !lines[lines.size - 1].contains("END")) {
+                    throw IllegalArgumentException("Wrong file type selected")
+                }
+            }
         }
 
         val sshKeyInputStream = contentResolver.openInputStream(uri)
