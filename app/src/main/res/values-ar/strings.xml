@@ -76,7 +76,6 @@
     <string name="pref_show_time_title">مدة الإبقاء على كلمة السر ظاهرة</string>
     <string name="pref_copy_title">نسخ كلمة السر تلقائيًا</string>
     <string name="ssh_key_success_dialog_title">تم استيراد مفتاح الـ SSH</string>
-    <string name="ssh_key_error_dialog_title">حدث هناك خطأ أثناء عملية إسترجاع مفتاح الـ SSH</string>
     <string name="ssh_key_error_dialog_text">نص الرسالة : \n</string>
     <string name="pref_autofill_title">الملئ التلقائي</string>
     <string name="pref_autofill_enable_title">تشغيل الملئ التلقائي</string>

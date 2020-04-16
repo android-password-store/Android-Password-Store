@@ -60,7 +60,7 @@ val autofillStrategy = strategy {
             }
         }
         currentPassword {
-            takeSingle { alreadyMatched ->
+            takeSingle { _ ->
                 hasAutocompleteHintCurrentPassword && isFocused
             }
         }
