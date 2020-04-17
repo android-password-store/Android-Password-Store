@@ -217,7 +217,6 @@
     <string name="git_push_generic_error">Poussée rejetée par le dépôt distant, raison:</string>
     <string name="git_push_other_error">Pousser au dépôt distant sans avance rapide rejetée. Vérifiez la variable receive.denyNonFastForwards dans le fichier de configuration du répertoire de destination.</string>
     <string name="jgit_error_push_dialog_text">Une erreur s\'est produite lors de l\'opération de poussée:</string>
-    <string name="ssh_key_clear_passphrase">Effacer la phrase secrète enregistrée par ssh-key</string>
     <string name="hotp_remember_clear_choice">Effacer les préférences enregistrées pour l’incrémentation HOTP</string>
     <string name="remember_the_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
     <string name="hackish_tools">Outils de hack</string>

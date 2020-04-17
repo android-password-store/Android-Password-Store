@@ -307,7 +307,8 @@
     <string name="git_push_generic_error">Push was rejected by remote, reason:</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
-    <string name="ssh_key_clear_passphrase">Clear ssh-key saved passphrase</string>
+    <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
+    <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
     <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
     <string name="remember_the_passphrase">Remember key passphrase</string>
     <string name="hackish_tools">Hackish tools</string>
