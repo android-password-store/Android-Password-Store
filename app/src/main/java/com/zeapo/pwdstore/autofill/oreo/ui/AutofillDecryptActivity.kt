@@ -212,11 +212,13 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
             OpenPgpApi.RESULT_CODE_ERROR -> {
                 val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
                 if (error != null) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Error from OpenKeyChain: ${error.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                                applicationContext,
+                                "Error from OpenKeyChain: ${error.message}",
+                                Toast.LENGTH_LONG
+                        ).show()
+                    }
                     e { "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}" }
                 }
                 null
