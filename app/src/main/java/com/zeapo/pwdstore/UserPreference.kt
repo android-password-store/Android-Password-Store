@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
@@ -177,8 +178,14 @@ class UserPreference : AppCompatActivity() {
             }
 
             clearSavedPassPreference?.onPreferenceClickListener = ClickListener {
-                encryptedPreferences.edit().putString("ssh_key_local_passphrase", null).apply()
+                encryptedPreferences.edit {
+                    if (encryptedPreferences.getString("ssh_key_local_passphrase", null) != null)
+                        remove("ssh_key_local_passphrase")
+                    else if (encryptedPreferences.getString("https_password", null) != null)
+                        remove("https_password")
+                }
                 it.isVisible = false
+                updateClearSavedPassphrasePrefs()
                 true
             }
 
@@ -385,8 +392,8 @@ class UserPreference : AppCompatActivity() {
                     return
                 }
                 title = when {
-                    sshPass != null -> getString(R.string.clear_saved_passphrase_ssh)
                     httpsPass != null -> getString(R.string.clear_saved_passphrase_https)
+                    sshPass != null -> getString(R.string.clear_saved_passphrase_ssh)
                     else -> null
                 }
             }
