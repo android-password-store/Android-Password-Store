@@ -105,7 +105,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 "https://$hostnamePart$portPart$pathPart"
             }
         }
-        PasswordRepository.addRemote("origin", url, true)
+        if (PasswordRepository.isInitialized)
+            PasswordRepository.addRemote("origin", url, true)
         // HTTPS authentication sends the password to the server, so we must wipe the password when
         // the server is changed.
         if (url != previousUrl && protocol == Protocol.Https)
