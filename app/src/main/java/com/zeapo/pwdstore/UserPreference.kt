@@ -184,7 +184,6 @@ class UserPreference : AppCompatActivity() {
                     else if (encryptedPreferences.getString("ssh_key_local_passphrase", null) != null)
                         remove("ssh_key_local_passphrase")
                 }
-                it.isVisible = false
                 updateClearSavedPassphrasePrefs()
                 true
             }
@@ -389,7 +388,7 @@ class UserPreference : AppCompatActivity() {
                 val httpsPass = encryptedPreferences.getString("https_password", null)
                 if (sshPass == null && httpsPass == null) {
                     isVisible = false
-                    return
+                    return@apply
                 }
                 title = when {
                     httpsPass != null -> getString(R.string.clear_saved_passphrase_https)
