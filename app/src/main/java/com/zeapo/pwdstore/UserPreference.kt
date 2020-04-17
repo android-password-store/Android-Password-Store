@@ -179,10 +179,10 @@ class UserPreference : AppCompatActivity() {
 
             clearSavedPassPreference?.onPreferenceClickListener = ClickListener {
                 encryptedPreferences.edit {
-                    if (encryptedPreferences.getString("ssh_key_local_passphrase", null) != null)
-                        remove("ssh_key_local_passphrase")
-                    else if (encryptedPreferences.getString("https_password", null) != null)
+                    if (encryptedPreferences.getString("https_password", null) != null)
                         remove("https_password")
+                    else if (encryptedPreferences.getString("ssh_key_local_passphrase", null) != null)
+                        remove("ssh_key_local_passphrase")
                 }
                 it.isVisible = false
                 updateClearSavedPassphrasePrefs()
