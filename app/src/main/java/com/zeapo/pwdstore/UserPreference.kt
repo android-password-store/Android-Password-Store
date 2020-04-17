@@ -396,6 +396,7 @@ class UserPreference : AppCompatActivity() {
                     sshPass != null -> getString(R.string.clear_saved_passphrase_ssh)
                     else -> null
                 }
+                isVisible = true
             }
         }
 
