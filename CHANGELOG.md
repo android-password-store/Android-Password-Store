@@ -5,10 +5,13 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Oreo Autofill support
+- Securely remember HTTPS password/SSH key passphrase
 
 ### Fixed
 - Text input box theming
 - Password repository held in non-hidden storage no longer fails
+- Remove ambiguous and confusing URL field in server config menu
+  and heavily improve UI for ease of use.
 
 ## [1.6.0] - 2020-03-20
 

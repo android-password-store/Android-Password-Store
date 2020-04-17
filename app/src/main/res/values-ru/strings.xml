@@ -9,7 +9,6 @@
     <string name="title_activity_git_clone">Информация о репозитории</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Пожалуйста, клонируйте или создайте новый репозиторий перед тем, как добавлять пароль или выполнять синхронизацию.</string>
-    <string name="key_dialog_text">Вы должны выбрать PGP ключ перед инициализацией хранилища</string>
     <string name="delete_dialog_text">Вы уверены что хотите удалить пароль %1$s</string>
     <string name="move">Переместить</string>
     <string name="edit">Редактировать</string>
@@ -47,7 +46,6 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">Вы забыли указать имя пользователя?</string>
-    <string name="set_information_dialog_text">Вы должны указать информацию о сервере до выполнения синхронизации</string>
     <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте новый SSH ключ в настройках</string>
     <string name="ssh_preferences_dialog_title">Нет SSH ключа</string>
     <string name="ssh_preferences_dialog_import">Импортировать</string>
@@ -211,8 +209,6 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Да</string>
     <string name="dialog_no">Нет</string>
-    <string name="dialog_positive">On my way…</string>
-    <string name="dialog_negative">Не … позже</string>
     <string name="dialog_oops">Упс…</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="git_sync">Синхронизировать репозиторий</string>

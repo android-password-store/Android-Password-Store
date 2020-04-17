@@ -38,9 +38,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
-import com.zeapo.pwdstore.git.GitActivity
+import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
+import com.zeapo.pwdstore.git.GitOperationActivity
+import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -249,9 +251,9 @@ class PasswordStore : AppCompatActivity() {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitActivity::class.java)
-                intent.putExtra("Operation", GitActivity.REQUEST_PUSH)
-                startActivityForResult(intent, GitActivity.REQUEST_PUSH)
+                intent = Intent(this, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PUSH)
+                startActivityForResult(intent, BaseGitActivity.REQUEST_PUSH)
                 return true
             }
             R.id.git_pull -> {
@@ -259,9 +261,9 @@ class PasswordStore : AppCompatActivity() {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitActivity::class.java)
-                intent.putExtra("Operation", GitActivity.REQUEST_PULL)
-                startActivityForResult(intent, GitActivity.REQUEST_PULL)
+                intent = Intent(this, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PULL)
+                startActivityForResult(intent, BaseGitActivity.REQUEST_PULL)
                 return true
             }
             R.id.git_sync -> {
@@ -269,9 +271,9 @@ class PasswordStore : AppCompatActivity() {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitActivity::class.java)
-                intent.putExtra("Operation", GitActivity.REQUEST_SYNC)
-                startActivityForResult(intent, GitActivity.REQUEST_SYNC)
+                intent = Intent(this, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
+                startActivityForResult(intent, BaseGitActivity.REQUEST_SYNC)
                 return true
             }
             R.id.refresh -> {
@@ -353,7 +355,7 @@ class PasswordStore : AppCompatActivity() {
                     .setMessage(this.resources.getString(R.string.key_dialog_text))
                     .setPositiveButton(this.resources.getString(R.string.dialog_positive)) { _, _ ->
                         val intent = Intent(activity, UserPreference::class.java)
-                        startActivityForResult(intent, GitActivity.REQUEST_INIT)
+                        startActivityForResult(intent, BaseGitActivity.REQUEST_INIT)
                     }
                     .setNegativeButton(this.resources.getString(R.string.dialog_negative), null)
                     .show()
@@ -550,7 +552,7 @@ class PasswordStore : AppCompatActivity() {
             fileLocations.add(file.absolutePath)
         }
         intent.putExtra("Files", fileLocations)
-        intent.putExtra("Operation", "SELECTFOLDER")
+        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
         startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
     }
 
@@ -586,7 +588,7 @@ class PasswordStore : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 // if we get here with a RESULT_OK then it's probably OK :)
-                GitActivity.REQUEST_CLONE -> settings.edit().putBoolean("repository_initialized", true).apply()
+                BaseGitActivity.REQUEST_CLONE -> settings.edit().putBoolean("repository_initialized", true).apply()
                 // if went from decrypt->edit and user saved changes or HOTP counter was
                 // incremented, we need to commitChange
                 REQUEST_CODE_DECRYPT_AND_VERIFY -> {
@@ -620,8 +622,8 @@ class PasswordStore : AppCompatActivity() {
                                             data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
-                GitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                GitActivity.REQUEST_SYNC, GitActivity.REQUEST_PULL -> resetPasswordList()
+                BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
+                BaseGitActivity.REQUEST_SYNC, BaseGitActivity.REQUEST_PULL -> resetPasswordList()
                 HOME -> checkLocalRepository()
                 // duplicate code
                 CLONE_REPO_BUTTON -> {
@@ -639,9 +641,9 @@ class PasswordStore : AppCompatActivity() {
                             return // if not empty, just show me the passwords!
                         }
                     }
-                    val intent = Intent(activity, GitActivity::class.java)
-                    intent.putExtra("Operation", GitActivity.REQUEST_CLONE)
-                    startActivityForResult(intent, GitActivity.REQUEST_CLONE)
+                    val intent = Intent(activity, GitOperationActivity::class.java)
+                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                    startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                 }
                 REQUEST_CODE_SELECT_FOLDER -> {
                     Timber.tag(TAG)
@@ -722,10 +724,9 @@ class PasswordStore : AppCompatActivity() {
                     when (operation) {
                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
                         CLONE_REPO_BUTTON -> {
-                            initialize(this@PasswordStore)
-                            val intent = Intent(activity, GitActivity::class.java)
-                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE)
-                            startActivityForResult(intent, GitActivity.REQUEST_CLONE)
+                            val intent = Intent(activity, GitServerConfigActivity::class.java)
+                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                         }
                     }
                 }
@@ -744,10 +745,9 @@ class PasswordStore : AppCompatActivity() {
                                     when (operation) {
                                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
                                         CLONE_REPO_BUTTON -> {
-                                            initialize(this@PasswordStore)
-                                            val intent = Intent(activity, GitActivity::class.java)
-                                            intent.putExtra("Operation", GitActivity.REQUEST_CLONE)
-                                            startActivityForResult(intent, GitActivity.REQUEST_CLONE)
+                                            val intent = Intent(activity, GitServerConfigActivity::class.java)
+                                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                                         }
                                     }
                                 }

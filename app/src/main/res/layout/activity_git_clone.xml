@@ -1,178 +1,216 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/activity_horizontal_margin"
-    tools:context="com.zeapo.pwdstore.git.GitActivity"
+    tools:context="com.zeapo.pwdstore.git.GitOperationActivity"
     android:background="?android:attr/windowBackground">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        style="@style/TextAppearance.MaterialComponents.Headline5"
-        android:id="@+id/server_label"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:text="@string/server_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/label_server_protocol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/server_protocol"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/server_label"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Spinner
-        android:id="@+id/clone_protocol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/server_label"
-        app:layout_constraintStart_toEndOf="@id/label_server_protocol" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/server_user_layout"
-        android:hint="@string/server_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/label_server_protocol">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/server_user"
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:id="@+id/server_label"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:text="@string/server_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textWebEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_margin="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/label_server_url"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:hint="@string/server_url"
-        app:layout_constraintTop_toBottomOf="@id/server_user_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/label_server_port">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:id="@+id/label_server_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_protocol"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/server_label"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <Spinner
+            android:id="@+id/clone_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/server_label"
+            app:layout_constraintStart_toEndOf="@id/label_server_protocol" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            style="@style/TextAppearance.MaterialComponents.Headline1"
+            android:id="@+id/clone_protocol_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/label_server_protocol"
+            app:layout_constraintStart_toStartOf="parent"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/clone_protocol_ssh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clone_protocol_ssh"
+                android:textColor="?android:attr/textColorPrimary"
+                app:rippleColor="@color/ripple_color"
+                app:strokeColor="?attr/colorSecondary"
+                app:backgroundTint="@color/toggle_button_selector" />
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/clone_protocol_https"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clone_protocol_https"
+                android:textColor="?android:attr/textColorPrimary"
+                app:rippleColor="@color/ripple_color"
+                app:strokeColor="?attr/colorSecondary"
+                app:backgroundTint="@color/toggle_button_selector" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/server_user_layout"
+            android:hint="@string/server_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/server_url"
-            android:inputType="textWebEmailAddress" />
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/clone_protocol_group">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/server_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textWebEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/label_server_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/server_url"
+            app:layout_constraintTop_toBottomOf="@id/server_user_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/label_server_port">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/label_server_port"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:hint="@string/server_port_hint"
-        app:layout_constraintStart_toEndOf="@id/label_server_url"
-        app:layout_constraintTop_toBottomOf="@id/server_user_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio="1:0.8">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/server_url"
+                android:inputType="textWebEmailAddress" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/server_port"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/label_server_port"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/server_port_hint"
+            app:layout_constraintStart_toEndOf="@id/label_server_url"
+            app:layout_constraintTop_toBottomOf="@id/server_user_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:0.8">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/server_port"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/label_server_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:layout_margin="8dp"
+            android:hint="@string/server_path"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_server_url">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/server_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textWebEmailAddress"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/label_server_path"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:hint="@string/server_path"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/label_server_url">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/server_path"
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:id="@+id/label_connection_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connection_mode"
+            android:layout_margin="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_server_path" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/connection_mode_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:selectionRequired="true"
+            app:singleSelection="true" >
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/connection_mode_ssh_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_mode_ssh_key"
+                android:textColor="?android:attr/textColorPrimary"
+                app:rippleColor="@color/ripple_color"
+                app:strokeColor="?attr/colorSecondary"
+                app:backgroundTint="@color/toggle_button_selector" />
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/connection_mode_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_mode_basic_authentication"
+                android:textColor="?android:attr/textColorPrimary"
+                app:rippleColor="@color/ripple_color"
+                app:strokeColor="?attr/colorSecondary"
+                app:backgroundTint="@color/toggle_button_selector" />
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/connection_mode_open_keychain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_mode_openkeychain"
+                android:textColor="?android:attr/textColorPrimary"
+                app:rippleColor="@color/ripple_color"
+                app:strokeColor="?attr/colorSecondary"
+                app:backgroundTint="@color/toggle_button_selector" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:id="@+id/save_button"
+            android:text="@string/crypto_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textWebEmailAddress"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/label_clone_uri"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/repository_uri"
-        android:editable="false"
-        android:layout_margin="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/label_server_path">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/clone_uri"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textWebEmailAddress"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/red_rectangle"
-        android:textColor="@android:color/white"
-        android:visibility="gone"
-        android:id="@+id/warn_url"
-        android:layout_margin="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/label_clone_uri"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/label_connection_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/connection_mode"
-        android:layout_margin="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/warn_url" />
-
-    <Spinner
-        android:id="@+id/connection_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/warn_url"
-        app:layout_constraintStart_toEndOf="@id/label_connection_mode" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/clone_button"
-        android:text="@string/clone_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="cloneRepository"
-        android:textColor="?android:attr/windowBackground"
-        android:layout_marginTop="8dp"
-        app:backgroundTint="?attr/colorSecondary"
-        app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/save_button"
-        android:text="@string/crypto_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="saveConfiguration"
-        android:textColor="?android:attr/windowBackground"
-        android:layout_marginTop="8dp"
-        app:backgroundTint="?attr/colorSecondary"
-        app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:textColor="?android:attr/windowBackground"
+            android:layout_marginTop="8dp"
+            app:backgroundTint="?attr/colorSecondary"
+            app:layout_constraintTop_toBottomOf="@id/connection_mode_group"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

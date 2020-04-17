@@ -19,7 +19,7 @@
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
-    <string name="key_dialog_text">You have to select your PGP key ID before initializing the repository</string>
+    <string name="key_dialog_text">A valid PGP key must be selected in Settings before initializing the repository</string>
     <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
@@ -57,7 +57,7 @@
 
     <!-- Git Handler -->
     <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
-    <string name="set_information_dialog_text">You have to set the information about the server before synchronizing with the server</string>
+    <string name="set_information_dialog_text">Please fix the remote server configuration in settings before proceeding</string>
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
     <string name="ssh_preferences_dialog_title">No SSH key</string>
     <string name="ssh_preferences_dialog_import">Import</string>
@@ -228,8 +228,8 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_positive">On my way…</string>
-    <string name="dialog_negative">Nah… later</string>
+    <string name="dialog_positive">Go to Settings</string>
+    <string name="dialog_negative">Go back</string>
     <string name="dialog_oops">Oops…</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="git_sync">Synchronize repository</string>
@@ -309,7 +309,7 @@
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="ssh_key_clear_passphrase">Clear ssh-key saved passphrase</string>
     <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
-    <string name="remember_the_passphrase">Remember the passphrase in the app configuration (insecure)</string>
+    <string name="remember_the_passphrase">Remember key passphrase</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>
     <string name="reset_to_remote">Hard reset to remote branch</string>
@@ -349,4 +349,14 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_battery_saver">Set by Battery Saver</string>
     <string name="theme_follow_system">System default</string>
+    <string name="clone_protocol_ssh" translatable="false">SSH</string>
+    <string name="clone_protocol_https" translatable="false">HTTPS</string>
+    <string name="connection_mode_ssh_key" translatable="false">SSH key</string>
+    <string name="connection_mode_basic_authentication" translatable="false">Password</string>
+    <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
+    <string name="git_server_config_save_success">Successfully saved configuration</string>
+    <string name="git_server_config_save_failure">Configuration error: please verify your settings and try again</string>
+    <string name="git_operation_unable_to_open_ssh_key_title">Unable to open the ssh-key</string>
+    <string name="git_operation_unable_to_open_ssh_key_message">Please check that it was imported.</string>
+    <string name="git_operation_wrong_passphrase">Wrong passphrase</string>
 </resources>

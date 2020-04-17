@@ -92,9 +92,10 @@ dependencies {
     implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material
     implementation deps.androidx.preference
-    implementation deps.androidx.swiperefreshlayout
     implementation deps.androidx.recycler_view
     implementation deps.androidx.recycler_view_selection
+    implementation deps.androidx.security
+    implementation deps.androidx.swiperefreshlayout
 
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core

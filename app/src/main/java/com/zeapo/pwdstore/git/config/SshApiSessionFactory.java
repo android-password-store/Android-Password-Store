@@ -18,7 +18,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.R;
-import com.zeapo.pwdstore.git.GitActivity;
+import com.zeapo.pwdstore.git.BaseGitActivity;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
@@ -107,7 +107,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         private SshAuthenticationApi api;
         private String keyId, description, alg;
         private byte[] publicKey;
-        private GitActivity callingActivity;
+        private BaseGitActivity callingActivity;
         private SharedPreferences settings;
 
         /**
@@ -116,7 +116,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
          * @param callingActivity Activity that will be used to launch pending intents and that will
          *     receive and handle the results.
          */
-        public IdentityBuilder(GitActivity callingActivity) {
+        public IdentityBuilder(BaseGitActivity callingActivity) {
             this.callingActivity = callingActivity;
 
             List<String> providers =
