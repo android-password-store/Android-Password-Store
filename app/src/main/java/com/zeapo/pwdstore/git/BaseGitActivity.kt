@@ -69,6 +69,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         }
     }
 
+    @CallSuper
     override fun onDestroy() {
         // Do not leak the service connection
         if (identityBuilder != null) {
