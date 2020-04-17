@@ -6,13 +6,13 @@ package com.zeapo.pwdstore.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import java.io.File
 
 class FolderCreationDialogFragment : DialogFragment() {
@@ -28,18 +28,7 @@ class FolderCreationDialogFragment : DialogFragment() {
             dismiss()
         }
         val dialog = alertDialogBuilder.create()
-        dialog.setOnShowListener {
-            // https://stackoverflow.com/a/13056259/297261
-            dialog.findViewById<TextInputEditText>(R.id.folder_name_text)!!.apply {
-                setOnFocusChangeListener { v, _ ->
-                    v.post {
-                        val imm = activity!!.getSystemService(InputMethodManager::class.java)
-                        imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
-                    }
-                }
-                requestFocus()
-            }
-        }
+        dialog.requestInputFocusOnView<TextInputEditText>(R.id.folder_name_text)
         return dialog
     }
 

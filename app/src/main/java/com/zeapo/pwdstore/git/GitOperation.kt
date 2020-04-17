@@ -8,9 +8,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.edit
-import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,6 +24,7 @@ import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshConfigSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import java.io.File
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.lib.Repository
@@ -201,17 +200,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                     }
                                     .setOnCancelListener { callingActivity.finish() }
                                     .create()
-                                dialog.setOnShowListener {
-                                    passphrase.apply {
-                                        setOnFocusChangeListener { v, _ ->
-                                            v.post {
-                                                val imm = callingActivity.getSystemService<InputMethodManager>()
-                                                imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
-                                            }
-                                        }
-                                        requestFocus()
-                                    }
-                                }
+                                dialog.requestInputFocusOnView<TextInputEditText>(R.id.git_auth_passphrase)
                                 dialog.show()
                             }
                         } else {
@@ -256,17 +245,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         }
                         .setOnCancelListener { callingActivity.finish() }
                         .create()
-                    dialog.setOnShowListener {
-                        passwordView.apply {
-                            setOnFocusChangeListener { v, _ ->
-                                v.post {
-                                    val imm = callingActivity.getSystemService<InputMethodManager>()
-                                    imm?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
-                                }
-                            }
-                            requestFocus()
-                        }
-                    }
+                    dialog.requestInputFocusOnView<TextInputEditText>(R.id.git_auth_passphrase)
                     dialog.show()
                 }
             }
