@@ -8,6 +8,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
@@ -23,6 +24,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
@@ -67,15 +69,17 @@ class UserPreference : AppCompatActivity() {
 
     class PrefsFragment : PreferenceFragmentCompat() {
         private var autoFillEnablePreference: SwitchPreferenceCompat? = null
+        private var clearSavedPassPreference: Preference? = null
         private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var callingActivity: UserPreference
+        private lateinit var encryptedPreferences: SharedPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             callingActivity = requireActivity() as UserPreference
             val context = requireContext()
             val sharedPreferences = preferenceManager.sharedPreferences
-            val encryptedPreferences = requireActivity().applicationContext.getEncryptedPrefs("git_operation")
+            encryptedPreferences = requireActivity().applicationContext.getEncryptedPrefs("git_operation")
 
             addPreferencesFromResource(R.xml.preference)
 
@@ -85,7 +89,7 @@ class UserPreference : AppCompatActivity() {
             val gitConfigPreference = findPreference<Preference>("git_config")
             val sshKeyPreference = findPreference<Preference>("ssh_key")
             val sshKeygenPreference = findPreference<Preference>("ssh_keygen")
-            val sshClearPassphrasePreference = findPreference<Preference>("ssh_key_clear_passphrase")
+            clearSavedPassPreference = findPreference("clear_saved_pass")
             val clearHotpIncrementPreference = findPreference<Preference>("hotp_remember_clear_choice")
             val viewSshKeyPreference = findPreference<Preference>("ssh_see_key")
             val deleteRepoPreference = findPreference<Preference>("git_delete_repo")
@@ -124,8 +128,6 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
-            sshClearPassphrasePreference?.isVisible = encryptedPreferences.getString("ssh_key_local_passphrase", null)?.isNotEmpty()
-                    ?: false
             clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
             clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
@@ -142,6 +144,7 @@ class UserPreference : AppCompatActivity() {
                     ?: false
 
             updateAutofillSettings()
+            updateClearSavedPassphrasePrefs()
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
@@ -174,9 +177,14 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
-            sshClearPassphrasePreference?.onPreferenceClickListener = ClickListener {
-                encryptedPreferences.edit().putString("ssh_key_local_passphrase", null).apply()
-                it.isVisible = false
+            clearSavedPassPreference?.onPreferenceClickListener = ClickListener {
+                encryptedPreferences.edit {
+                    if (encryptedPreferences.getString("https_password", null) != null)
+                        remove("https_password")
+                    else if (encryptedPreferences.getString("ssh_key_local_passphrase", null) != null)
+                        remove("ssh_key_local_passphrase")
+                }
+                updateClearSavedPassphrasePrefs()
                 true
             }
 
@@ -374,6 +382,23 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
+        private fun updateClearSavedPassphrasePrefs() {
+            clearSavedPassPreference?.apply {
+                val sshPass = encryptedPreferences.getString("ssh_key_local_passphrase", null)
+                val httpsPass = encryptedPreferences.getString("https_password", null)
+                if (sshPass == null && httpsPass == null) {
+                    isVisible = false
+                    return@apply
+                }
+                title = when {
+                    httpsPass != null -> getString(R.string.clear_saved_passphrase_https)
+                    sshPass != null -> getString(R.string.clear_saved_passphrase_ssh)
+                    else -> null
+                }
+                isVisible = true
+            }
+        }
+
         private fun onEnableAutofillClick() {
             if (callingActivity.isAccessibilityServiceEnabled) {
                 startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
@@ -431,6 +456,7 @@ class UserPreference : AppCompatActivity() {
         override fun onResume() {
             super.onResume()
             updateAutofillSettings()
+            updateClearSavedPassphrasePrefs()
         }
     }
 

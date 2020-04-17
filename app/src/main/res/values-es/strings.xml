@@ -216,7 +216,6 @@
     <string name="git_push_nff_error">La subida fue rechazada por el servidor, Ejecuta \'Descargar desde servidor\' antes de subir o pulsa \'Sincronizar con servidor\' para realizar ambas acciones.</string>
     <string name="git_push_generic_error">El envío fue rechazado por el servidor, la razón:</string>
     <string name="jgit_error_push_dialog_text">Ocurrió un error durante el envío:</string>
-    <string name="ssh_key_clear_passphrase">Limpiar contraseña guardada de llave SSH</string>
     <string name="hotp_remember_clear_choice">Limpiar preferencia para incremento HOTP</string>
     <string name="remember_the_passphrase">Recordar contraseñagit  (inseguro)</string>
     <string name="hackish_tools">Hackish tools</string>

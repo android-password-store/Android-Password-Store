@@ -45,9 +45,7 @@
         <androidx.preference.Preference
             app:key="ssh_keygen"
             app:title="@string/pref_ssh_keygen_title" />
-        <androidx.preference.Preference
-            app:key="ssh_key_clear_passphrase"
-            app:title="@string/ssh_key_clear_passphrase" />
+        <androidx.preference.Preference app:key="clear_saved_pass" />
         <androidx.preference.Preference
             app:key="hotp_remember_clear_choice"
             app:title="@string/hotp_remember_clear_choice" />
