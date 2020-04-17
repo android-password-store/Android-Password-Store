@@ -5,14 +5,14 @@
 package com.zeapo.pwdstore.git.config
 
 enum class ConnectionMode(val pref: String) {
-    Ssh("ssh-key"),
-    Username("username/password"),
+    SshKey("ssh-key"),
+    Password("username/password"),
     OpenKeychain("OpenKeychain");
 
     companion object {
         private val map = values().associateBy(ConnectionMode::pref)
         fun fromString(type: String?): ConnectionMode {
-            return map[type ?: return Ssh]
+            return map[type ?: return SshKey]
                 ?: throw IllegalArgumentException("$type is not a valid ConnectionMode")
         }
     }

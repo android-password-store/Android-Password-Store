@@ -36,38 +36,37 @@ class GitServerConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        when (protocol) {
-            Protocol.Ssh -> binding.cloneProtocolSsh.isChecked = true
-            Protocol.Https -> binding.cloneProtocolHttps.isChecked = true
+        val protocolIdToCheck = when (protocol) {
+            Protocol.Ssh -> R.id.clone_protocol_ssh
+            Protocol.Https -> R.id.clone_protocol_https
         }
-
-        when (connectionMode) {
-            ConnectionMode.Username -> binding.connectionModeUsername.isChecked = true
-            ConnectionMode.OpenKeychain -> binding.connectionModeOpenkeychain.isChecked = true
-            ConnectionMode.Ssh -> binding.connectionModeSsh.isChecked = true
-        }
-
+        binding.cloneProtocolGroup.check(protocolIdToCheck)
         binding.cloneProtocolGroup.addOnButtonCheckedListener { _, checkedId, checked ->
             if (checked) {
-                protocol = when (checkedId) {
-                    R.id.clone_protocol_https -> Protocol.Https
-                    R.id.clone_protocol_ssh -> Protocol.Ssh
-                    else -> protocol
+                when (checkedId) {
+                    R.id.clone_protocol_https -> protocol = Protocol.Https
+                    R.id.clone_protocol_ssh -> protocol = Protocol.Ssh
                 }
+                updateConnectionModeToggleGroup()
             }
-            updateConnectionModeToggleGroup()
         }
 
+        val connectionModeIdToCheck = when (connectionMode) {
+            ConnectionMode.SshKey -> R.id.connection_mode_ssh_key
+            ConnectionMode.Password -> R.id.connection_mode_password
+            ConnectionMode.OpenKeychain -> R.id.connection_mode_open_keychain
+        }
+        binding.connectionModeGroup.check(connectionModeIdToCheck)
         binding.connectionModeGroup.addOnButtonCheckedListener { _, checkedId, checked ->
             if (checked) {
-                connectionMode = when (checkedId) {
-                    R.id.connection_mode_ssh -> ConnectionMode.Ssh
-                    R.id.connection_mode_openkeychain -> ConnectionMode.OpenKeychain
-                    R.id.connection_mode_username -> ConnectionMode.Username
-                    else -> connectionMode
+                when (checkedId) {
+                    R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
+                    R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain
+                    R.id.connection_mode_password -> connectionMode = ConnectionMode.Password
                 }
             }
         }
+        updateConnectionModeToggleGroup()
 
         binding.serverUrl.apply {
             setText(serverHostname)
@@ -97,8 +96,6 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
         }
 
-        updateConnectionModeToggleGroup()
-
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize(this)
@@ -123,11 +120,17 @@ class GitServerConfigActivity : BaseGitActivity() {
     }
 
     private fun updateConnectionModeToggleGroup() {
-        val isSsh = binding.cloneProtocolSsh.isChecked
-        binding.connectionModeSsh.isEnabled = isSsh
-        binding.connectionModeOpenkeychain.isEnabled = isSsh
-        if (isSsh)
-            binding.connectionModeUsername.isChecked = true
+        if (protocol == Protocol.Ssh) {
+            binding.connectionModeSshKey.isEnabled = true
+            binding.connectionModeOpenKeychain.isEnabled = true
+        } else {
+            // Reset connection mode to the only one possible via HTTPS: password.
+            // Important note: This has to happen before disabling the other toggle buttons or they
+            // won't uncheck.
+            binding.connectionModeGroup.check(R.id.connection_mode_password)
+            binding.connectionModeSshKey.isEnabled = false
+            binding.connectionModeOpenKeychain.isEnabled = false
+        }
     }
 
     /**

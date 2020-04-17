@@ -168,7 +168,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/connection_mode_ssh"
+                android:id="@+id/connection_mode_ssh_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connection_mode_ssh_key"
@@ -179,7 +179,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/connection_mode_username"
+                android:id="@+id/connection_mode_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connection_mode_basic_authentication"
@@ -190,7 +190,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/connection_mode_openkeychain"
+                android:id="@+id/connection_mode_open_keychain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connection_mode_openkeychain"

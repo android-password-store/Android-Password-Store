@@ -123,7 +123,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
     ) {
         val encryptedSettings = callingActivity.applicationContext.getEncryptedPrefs("git_operation")
         when (connectionMode) {
-            ConnectionMode.Ssh -> {
+            ConnectionMode.SshKey -> {
                 if (sshKey == null || !sshKey.exists()) {
                     MaterialAlertDialogBuilder(callingActivity)
                         .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
@@ -221,7 +221,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
             ConnectionMode.OpenKeychain -> {
                 setAuthentication(username, identity).execute()
             }
-            ConnectionMode.Username -> {
+            ConnectionMode.Password -> {
                 @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.git_passphrase_layout, null)
                 val passwordView = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
                 val password = encryptedSettings.getString("https_password", null)
