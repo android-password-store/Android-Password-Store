@@ -70,37 +70,4 @@ open class GitOperationActivity : BaseGitActivity() {
             launchGitOperation(operation)
         }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // In addition to the pre-operation-launch series of intents for OpenKeychain auth
-        // that will pass through here and back to launchGitOperation, there is one
-        // synchronous operation that happens /after/ the operation has been launched in the
-        // background thread - the actual signing of the SSH challenge. We pass through the
-        // completed signature to the ApiIdentity, which will be blocked in the other thread
-        // waiting for it.
-        if (requestCode == SshApiSessionFactory.POST_SIGNATURE && identity != null) {
-            identity!!.postSignature(data)
-
-            // If the signature failed (usually because it was cancelled), reset state
-            if (data == null) {
-                identity = null
-                identityBuilder = null
-            }
-            return
-        }
-
-        if (resultCode == RESULT_CANCELED) {
-            setResult(RESULT_CANCELED)
-            finish()
-        } else if (resultCode == RESULT_OK) {
-            // If an operation has been re-queued via this mechanism, let the
-            // IdentityBuilder attempt to extract some updated state from the intent before
-            // trying to re-launch the operation.
-            if (identityBuilder != null) {
-                identityBuilder!!.consume(data)
-            }
-            launchGitOperation(requestCode)
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 }
