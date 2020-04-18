@@ -64,7 +64,7 @@ class KeyGenerateTask(activity: AppCompatActivity) : AsyncTask<String?, Void?, E
                 editor.putBoolean("use_generated_key", true)
                 editor.apply()
             } else {
-                MaterialAlertDialogBuilder(weakReference.get())
+                MaterialAlertDialogBuilder(activity)
                         .setTitle(activity.getString(R.string.error_generate_ssh_key))
                         .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
                         .setPositiveButton(activity.getString(R.string.dialog_ok), null)
