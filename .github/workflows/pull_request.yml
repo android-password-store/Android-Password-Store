@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         api-level: [23, 25, 27, 29]
+        variant: [Debug, Release]
     steps:
 
     - uses: actions/checkout@master
@@ -20,7 +21,7 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/dependencies.gradle') }}
 
     - name: Run unit tests
-      run: ./gradlew spotlessCheck testDebug lintDebug -Dpre-dex=false
+      run: ./gradlew spotlessCheck test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
 
     - name: Run instrumentation tests
       uses: reactivecircus/android-emulator-runner@v2
