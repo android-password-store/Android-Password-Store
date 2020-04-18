@@ -14,8 +14,8 @@ ext.versions = [
 
 ext.deps = [
     gradle_plugin: [
-        android: 'com.android.tools.build:gradle:3.6.2',
-        kotlin: 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71',
+        android: 'com.android.tools.build:gradle:3.6.3',
+        kotlin: 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72',
         spotless: 'com.diffplug.spotless:spotless-plugin-gradle:3.28.1'
     ],
 
@@ -29,22 +29,22 @@ ext.deps = [
 
     androidx: [
         annotation: 'androidx.annotation:annotation:1.1.0',
-        activity_ktx: 'androidx.activity:activity-ktx:1.1.0',
-        appcompat: 'androidx.appcompat:appcompat:1.2.0-alpha03',
+        activity_ktx: 'androidx.activity:activity-ktx:1.2.0-alpha03',
+        appcompat: 'androidx.appcompat:appcompat:1.2.0-beta01',
         biometric: 'androidx.biometric:biometric:1.0.1',
         constraint_layout: 'androidx.constraintlayout:constraintlayout:2.0.0-beta4',
-        core_ktx: 'androidx.core:core-ktx:1.3.0-alpha02',
+        core_ktx: 'androidx.core:core-ktx:1.3.0-rc01',
         documentfile: 'androidx.documentfile:documentfile:1.0.1',
-        fragment_ktx: 'androidx.fragment:fragment-ktx:1.1.0',
+        fragment_ktx: 'androidx.fragment:fragment-ktx:1.3.0-alpha03',
         lifecycle_livedata_ktx: 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha01',
         lifecycle_viewmodel_ktx: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01',
         local_broadcast_manager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01',
-        material: 'com.google.android.material:material:1.2.0-alpha05',
-        preference: 'androidx.preference:preference:1.1.0',
+        material: 'com.google.android.material:material:1.2.0-alpha06',
+        preference: 'androidx.preference:preference:1.1.1',
         recycler_view: 'androidx.recyclerview:recyclerview:1.2.0-alpha02',
         recycler_view_selection: 'androidx.recyclerview:recyclerview-selection:1.1.0-rc01',
         security: 'androidx.security:security-crypto:1.0.0-beta01',
-        swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-beta01'
+        swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-rc01'
     ],
 
     third_party: [
