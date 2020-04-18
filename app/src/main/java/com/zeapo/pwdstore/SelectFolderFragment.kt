@@ -57,7 +57,7 @@ class SelectFolderFragment : Fragment() {
 
         val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
         model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)
-        model.searchResult.observe(this) { result ->
+        model.searchResult.observe(viewLifecycleOwner) { result ->
             recyclerAdapter.submitList(result.passwordItems)
         }
     }
