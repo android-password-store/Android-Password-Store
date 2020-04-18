@@ -6,7 +6,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [23, 25, 27, 29]
+        api-level: [23, 29]
         variant: [Debug, Release]
     steps:
 
