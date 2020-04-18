@@ -53,6 +53,7 @@ ext.deps = [
         fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.2',
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
+        jgit_java7: 'org.eclipse.jgit:org.eclipse.jgit.java7:3.7.1.201504261725-r',
         leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.2',
         openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:1.2.0',
         // The library is updated every two weeks to include the most recent version of the Public
