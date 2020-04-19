@@ -183,9 +183,8 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                     .setView(dialogView)
                                     .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                                         if (keyPair.decrypt(passphrase.text.toString())) {
-                                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked
-                                            if (rememberPassphrase) {
-                                                encryptedSettings.edit().putString("ssh_key_local_passphrase", passphrase.text.toString()).apply()
+                                            if (dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked) {
+                                                encryptedSettings.edit { putString("ssh_key_local_passphrase", passphrase.text.toString()) }
                                             }
                                             // Authenticate using the ssh-key and then execute the command
                                             setAuthentication(sshKey, username, passphrase.text.toString()).execute()
@@ -233,9 +232,8 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                         .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
                         .setView(dialogView)
                         .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked
-                            if (rememberPassphrase) {
-                                encryptedSettings.edit().putString("https_password", passwordView.text.toString()).apply()
+                            if (dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked) {
+                                encryptedSettings.edit { putString("https_password", passwordView.text.toString()) }
                             }
                             // authenticate using the user/pwd and then execute the command
                             setAuthentication(username, passwordView.text.toString()).execute()
