@@ -13,6 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -156,7 +158,7 @@ class PasswordFragment : Fragment() {
             // Inflate a menu resource providing context menu items
             mode.menuInflater.inflate(R.menu.context_pass, menu)
             // hide the fab
-            binding.fab.visibility = View.GONE
+            animateFab(false)
             return true
         }
 
@@ -202,7 +204,30 @@ class PasswordFragment : Fragment() {
             recyclerAdapter.requireSelectionTracker().clearSelection()
             actionMode = null
             // show the fab
-            binding.fab.visibility = View.VISIBLE
+            animateFab(true)
+        }
+
+        private fun animateFab(show: Boolean) = with(binding.fab) {
+            val animation = AnimationUtils.loadAnimation(
+                    context, if (show) R.anim.scale_up else R.anim.scale_down
+            )
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    if (!show) visibility = View.GONE
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                    if (show) visibility = View.VISIBLE
+                }
+            })
+            animate().rotationBy(if (show) -90f else 90f)
+                    .setStartDelay(if (show) 100 else 0)
+                    .setDuration(100)
+                    .start()
+            startAnimation(animation)
         }
     }
 
