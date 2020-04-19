@@ -128,7 +128,7 @@ public class FixOnItemTouchDispatchRecyclerView extends RecyclerView implements 
         return false;
     }
 
-    class RecyclerViewHelper implements FastScroller.ViewHelper {
+    private static class RecyclerViewHelper implements FastScroller.ViewHelper {
 
         @NonNull
         private final RecyclerView mView;
