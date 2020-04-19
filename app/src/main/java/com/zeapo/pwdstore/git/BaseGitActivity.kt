@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.git
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
@@ -23,6 +25,7 @@ import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
 import timber.log.Timber
+import java.net.URI
 
 /**
  * Abstract AppCompatActivity that holds some information that is commonly shared across git-related
@@ -31,7 +34,7 @@ import timber.log.Timber
 abstract class BaseGitActivity : AppCompatActivity() {
     lateinit var protocol: Protocol
     lateinit var connectionMode: ConnectionMode
-    lateinit var url: String
+    var url: String? = null
     lateinit var serverHostname: String
     lateinit var serverPort: String
     lateinit var serverUser: String
@@ -90,48 +93,46 @@ abstract class BaseGitActivity : AppCompatActivity() {
         if (serverHostname.isEmpty() || !serverPort.isDigitsOnly())
             return false
 
-        val previousUrl = if (::url.isInitialized) url else ""
+        val previousUrl = url ?: ""
         val hostnamePart = serverHostname
         val pathPart = if (serverPath.startsWith('/')) serverPath else "/$serverPath"
-        url = when (protocol) {
+        val newUrl = when (protocol) {
             Protocol.Ssh -> {
                 val userPart = if (serverUser.isEmpty()) "" else "$serverUser@"
                 val portPart =
                     if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
                 // We have to specify the ssh scheme as this is the only way to pass a custom port.
                 val urlWithFreeEntryScheme = "$userPart$hostnamePart$portPart$pathPart"
-                val parsedUrl = try {
-                    URL(urlWithFreeEntryScheme)
-                } catch (_: MalformedURLException) {
-                    return false
-                }
-                if (parsedUrl.protocol == null)
-                    "ssh://$urlWithFreeEntryScheme"
-                else
+                if (urlWithFreeEntryScheme.startsWith("ssh://"))
                     urlWithFreeEntryScheme
+                else
+                    "ssh://$urlWithFreeEntryScheme"
             }
             Protocol.Https -> {
                 val portPart =
                     if (serverPort == "443" || serverPort.isEmpty()) "" else ":$serverPort"
                 val urlWithFreeEntryScheme = "$hostnamePart$portPart$pathPart"
-                val parsedUrl = try {
-                    URL(urlWithFreeEntryScheme)
-                } catch (_: MalformedURLException) {
-                    return false
-                }
-                when (parsedUrl.protocol) {
-                    null -> "https://$urlWithFreeEntryScheme"
-                    "http" -> urlWithFreeEntryScheme.replaceFirst("http:", "https:")
-                    else -> urlWithFreeEntryScheme
+                when {
+                    urlWithFreeEntryScheme.startsWith("https://") -> urlWithFreeEntryScheme
+                    urlWithFreeEntryScheme.startsWith("http://")-> urlWithFreeEntryScheme.replaceFirst("http", "https")
+                    else -> "https://$urlWithFreeEntryScheme"
                 }
             }
         }
+        try {
+            if (URI(newUrl).rawAuthority == null)
+                return false
+        } catch (ex: MalformedURLException) {
+            e(ex)
+            return false
+        }
         if (PasswordRepository.isInitialized)
-            PasswordRepository.addRemote("origin", url, true)
+            PasswordRepository.addRemote("origin", newUrl, true)
         // HTTPS authentication sends the password to the server, so we must wipe the password when
         // the server is changed.
-        if (url != previousUrl && protocol == Protocol.Https)
+        if (newUrl != previousUrl && protocol == Protocol.Https)
             encryptedSettings.edit { remove("https_password") }
+        url = newUrl
         return true
     }
 
@@ -145,8 +146,11 @@ abstract class BaseGitActivity : AppCompatActivity() {
      * @param operation The type of git operation to launch
      */
     fun launchGitOperation(operation: Int) {
-        val op: GitOperation
-        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
+        if (url == null) {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+            return
+        }
         try {
             // Before launching the operation with OpenKeychain auth, we need to issue several requests
             // to the OpenKeychain API. IdentityBuild will take care of launching the relevant intents,
@@ -163,8 +167,9 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     return
             }
 
-            op = when (operation) {
-                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, this).setCommand(url)
+            val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
+            val op = when (operation) {
+                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, this).setCommand(url!!)
                 REQUEST_PULL -> PullOperation(localDir, this).setCommand()
                 REQUEST_PUSH -> PushOperation(localDir, this).setCommand()
                 REQUEST_SYNC -> SyncOperation(localDir, this).setCommands()
