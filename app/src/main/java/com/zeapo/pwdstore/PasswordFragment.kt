@@ -17,8 +17,8 @@ import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.FixOnItemTouchDispatchRecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -35,7 +35,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment() {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: FixOnItemTouchDispatchRecyclerView
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var swipeRefresher: SwipeRefreshLayout
 
@@ -111,9 +111,6 @@ class PasswordFragment : Fragment() {
             adapter = recyclerAdapter
         }
 
-        // FastScrollerBuilder.build() needs to be called *before* recyclerAdapter.makeSelectable(),
-        // as otherwise dragging the fast scroller will lead to items being selected.
-        // See https://github.com/zhanghai/AndroidFastScroll/issues/13
         FastScrollerBuilder(recyclerView).build()
         recyclerAdapter.makeSelectable(recyclerView)
         registerForContextMenu(recyclerView)
