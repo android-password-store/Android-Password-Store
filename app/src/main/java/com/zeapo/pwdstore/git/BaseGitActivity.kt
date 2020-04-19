@@ -20,6 +20,8 @@ import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
+import java.net.MalformedURLException
+import java.net.URL
 import timber.log.Timber
 
 /**
@@ -36,8 +38,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
     lateinit var serverPath: String
     lateinit var username: String
     lateinit var email: String
-    var identityBuilder: SshApiSessionFactory.IdentityBuilder? = null
-    var identity: SshApiSessionFactory.ApiIdentity? = null
+    private var identityBuilder: SshApiSessionFactory.IdentityBuilder? = null
+    private var identity: SshApiSessionFactory.ApiIdentity? = null
     lateinit var settings: SharedPreferences
         private set
     private lateinit var encryptedSettings: SharedPreferences
@@ -97,12 +99,31 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 val portPart =
                     if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
                 // We have to specify the ssh scheme as this is the only way to pass a custom port.
-                "ssh://$userPart$hostnamePart$portPart$pathPart"
+                val urlWithFreeEntryScheme = "$userPart$hostnamePart$portPart$pathPart"
+                val parsedUrl = try {
+                    URL(urlWithFreeEntryScheme)
+                } catch (_: MalformedURLException) {
+                    return false
+                }
+                if (parsedUrl.protocol == null)
+                    "ssh://$urlWithFreeEntryScheme"
+                else
+                    urlWithFreeEntryScheme
             }
             Protocol.Https -> {
                 val portPart =
                     if (serverPort == "443" || serverPort.isEmpty()) "" else ":$serverPort"
-                "https://$hostnamePart$portPart$pathPart"
+                val urlWithFreeEntryScheme = "$hostnamePart$portPart$pathPart"
+                val parsedUrl = try {
+                    URL(urlWithFreeEntryScheme)
+                } catch (_: MalformedURLException) {
+                    return false
+                }
+                when (parsedUrl.protocol) {
+                    null -> "https://$urlWithFreeEntryScheme"
+                    "http" -> urlWithFreeEntryScheme.replaceFirst("http:", "https:")
+                    else -> urlWithFreeEntryScheme
+                }
             }
         }
         if (PasswordRepository.isInitialized)
