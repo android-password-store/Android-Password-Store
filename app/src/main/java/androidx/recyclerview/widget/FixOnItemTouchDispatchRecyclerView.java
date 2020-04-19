@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zeapo.pwdstore.ui;
+package androidx.recyclerview.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
