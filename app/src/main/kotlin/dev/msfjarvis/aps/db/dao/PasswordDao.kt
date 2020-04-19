@@ -48,11 +48,11 @@ interface PasswordDao {
   fun getPasswordsByUsername(username: String): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE id LIKE :id")
-  fun getPasswordById(id: Int?): Flow<PasswordEntity>
+  fun getPasswordById(id: Int): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE password_location LIKE :location")
   fun getPasswordsByLocation(location: String): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE store_id LIKE :storeId")
-  fun getPasswordsByStore(storeId: Int?): Flow<PasswordEntity>
+  fun getPasswordsByStore(storeId: Int): Flow<PasswordEntity>
 }

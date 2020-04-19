@@ -49,8 +49,8 @@ interface GitRemoteDao {
   fun getRemotesByAuthType(auth: GitAuth): Flow<GitRemoteEntity>
 
   @Query("SELECT * FROM GitRemote WHERE id LIKE :id")
-  fun getRemoteById(id: Int?): Flow<GitRemoteEntity>
+  fun getRemoteById(id: Int): Flow<GitRemoteEntity>
 
   @Query("SELECT * FROM GitRemote WHERE store_id LIKE :storeId")
-  fun getRemotesByStore(storeId: Int?): Flow<GitRemoteEntity>
+  fun getRemotesByStore(storeId: Int): Flow<GitRemoteEntity>
 }

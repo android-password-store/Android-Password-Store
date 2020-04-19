@@ -45,9 +45,9 @@ interface StoreDao {
   fun getStoreByName(storeName: String): Flow<StoreEntity>
 
   // This function can be useful when we save the current store id in shared prefs
-  // Since store names can be same in a db.
+  //  // Since store names can be same in a db.
   @Query("SELECT * FROM Store WHERE id LIKE :storeId")
-  fun getStoreById(storeId: Int?): Flow<StoreEntity>
+  fun getStoreById(storeId: Int): Flow<StoreEntity>
 
   @Query("SELECT * FROM Store WHERE external = 1")
   fun getAllExternalStores(): Flow<StoreEntity>
