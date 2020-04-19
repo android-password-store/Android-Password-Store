@@ -39,18 +39,18 @@ interface GitRemoteDao {
   @Delete
   fun deleteMultipleRemotes(RemoteEntities: List<GitRemoteEntity>)
 
-  @Query("SELECT * FROM Remote")
-  fun getAllRemotes(): Flow<List<GitRemoteEntity>>
+  @Query("SELECT * FROM GitRemote")
+  fun getAllRemotes(): Flow<GitRemoteEntity>
 
   @Query("SELECT * FROM GitRemote WHERE name LIKE :name")
-  fun getRemotesByName(name: String): Flow<List<GitRemoteEntity>>
+  fun getRemotesByName(name: String): Flow<GitRemoteEntity>
 
   @Query("SELECT * FROM GitRemote WHERE auth LIKE :auth")
-  fun getRemotesByAuthType(auth: GitAuth): Flow<List<GitRemoteEntity>>
+  fun getRemotesByAuthType(auth: GitAuth): Flow<GitRemoteEntity>
 
   @Query("SELECT * FROM GitRemote WHERE id LIKE :id")
   fun getRemoteById(id: Int?): Flow<GitRemoteEntity>
 
   @Query("SELECT * FROM GitRemote WHERE store_id LIKE :storeId")
-  fun getRemotesByStore(storeId: Int?): Flow<List<GitRemoteEntity>>
+  fun getRemotesByStore(storeId: Int?): Flow<GitRemoteEntity>
 }

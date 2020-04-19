@@ -39,10 +39,10 @@ interface StoreDao {
   fun deleteMultipleStore(storeEntities: List<StoreEntity>)
 
   @Query("SELECT * FROM Store")
-  fun getAllStores(): Flow<List<StoreEntity>>
+  fun getAllStores(): Flow<StoreEntity>
 
   @Query("SELECT * FROM Store WHERE name LIKE :storeName")
-  fun getStoreByName(storeName: String): Flow<List<StoreEntity>>
+  fun getStoreByName(storeName: String): Flow<StoreEntity>
 
   // This function can be useful when we save the current store id in shared prefs
   // Since store names can be same in a db.
@@ -50,8 +50,8 @@ interface StoreDao {
   fun getStoreById(storeId: Int?): Flow<StoreEntity>
 
   @Query("SELECT * FROM Store WHERE external = 1")
-  fun getAllExternalStores(): Flow<List<StoreEntity>>
+  fun getAllExternalStores(): Flow<StoreEntity>
 
   @Query("SELECT * FROM Store WHERE initialized = 1")
-  fun getAllInitializedStores(): Flow<List<StoreEntity>>
+  fun getAllInitializedStores(): Flow<StoreEntity>
 }

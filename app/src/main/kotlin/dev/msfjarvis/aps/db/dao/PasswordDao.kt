@@ -39,20 +39,20 @@ interface PasswordDao {
   fun deleteMultiplePasswords(passwordEntities: List<PasswordEntity>)
 
   @Query("SELECT * FROM Password")
-  fun getAllPasswords(): Flow<List<PasswordEntity>>
+  fun getAllPasswords(): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE name LIKE :name")
-  fun getPasswordsByName(name: String): Flow<List<PasswordEntity>>
+  fun getPasswordsByName(name: String): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE username LIKE :username")
-  fun getPasswordsByUsername(username: String): Flow<List<PasswordEntity>>
+  fun getPasswordsByUsername(username: String): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE id LIKE :id")
   fun getPasswordById(id: Int?): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE password_location LIKE :location")
-  fun getPasswordsByLocation(location: String): Flow<List<PasswordEntity>>
+  fun getPasswordsByLocation(location: String): Flow<PasswordEntity>
 
   @Query("SELECT * FROM Password WHERE store_id LIKE :storeId")
-  fun getPasswordsByStore(storeId: Int?): Flow<List<PasswordEntity>>
+  fun getPasswordsByStore(storeId: Int?): Flow<PasswordEntity>
 }
