@@ -36,8 +36,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
     lateinit var serverPath: String
     lateinit var username: String
     lateinit var email: String
-    var identityBuilder: SshApiSessionFactory.IdentityBuilder? = null
-    var identity: SshApiSessionFactory.ApiIdentity? = null
+    private var identityBuilder: SshApiSessionFactory.IdentityBuilder? = null
+    private var identity: SshApiSessionFactory.ApiIdentity? = null
     lateinit var settings: SharedPreferences
         private set
     private lateinit var encryptedSettings: SharedPreferences
@@ -102,7 +102,13 @@ abstract class BaseGitActivity : AppCompatActivity() {
             Protocol.Https -> {
                 val portPart =
                     if (serverPort == "443" || serverPort.isEmpty()) "" else ":$serverPort"
-                "https://$hostnamePart$portPart$pathPart"
+                var result = "$hostnamePart$portPart$pathPart"
+                result = when {
+                    result.startsWith("http://") -> result.replace("http:", "https:")
+                    !result.startsWith("http") -> "https://$result"
+                    else -> result
+                }
+                result
             }
         }
         if (PasswordRepository.isInitialized)
