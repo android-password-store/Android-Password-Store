@@ -360,4 +360,6 @@
     <string name="git_operation_unable_to_open_ssh_key_title">Unable to open the ssh-key</string>
     <string name="git_operation_unable_to_open_ssh_key_message">Please check that it was imported.</string>
     <string name="git_operation_wrong_passphrase">Wrong passphrase</string>
+    <string name="bottom_sheet_create_new_folder">Create new folder</string>
+    <string name="bottom_sheet_create_new_password">Create new password</string>
 </resources>

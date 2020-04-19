@@ -22,13 +22,13 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.FixOnItemTouchDispatchRecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
+import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
@@ -57,17 +57,10 @@ class PasswordFragment : Fragment() {
     ): View? {
         _binding = PasswordRecyclerViewBinding.inflate(inflater, container, false)
         initializePasswordList()
-        val fab = binding.fab
-        fab.setOnClickListener {
-            toggleFabExpand(fab)
-        }
-        binding.createFolder.setOnClickListener {
-            requireStore().createFolder()
-            toggleFabExpand(fab)
-        }
-        binding.createPassword.setOnClickListener {
-            requireStore().createPassword()
-            toggleFabExpand(fab)
+        binding.fab.setOnClickListener {
+            ItemCreationBottomSheet().apply {
+                setTargetFragment(this@PasswordFragment, 1000)
+            }.show(parentFragmentManager, "BOTTOM_SHEET")
         }
         return binding.root
     }
@@ -145,14 +138,7 @@ class PasswordFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun toggleFabExpand(fab: FloatingActionButton) = with(fab) {
-        isExpanded = !isExpanded
-        isActivated = isExpanded
-        animate().rotationBy(if (isExpanded) -45f else 45f).setDuration(100).start()
-    }
-
     private val actionModeCallback = object : ActionMode.Callback {
-
         // Called when the action mode is created; startActionMode() was called
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             // Inflate a menu resource providing context menu items
@@ -281,6 +267,10 @@ class PasswordFragment : Fragment() {
     fun dismissActionMode() {
         actionMode?.finish()
     }
+
+    fun createFolder() = requireStore().createFolder()
+
+    fun createPassword() = requireStore().createPassword()
 
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(item: PasswordItem)
