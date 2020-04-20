@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
 import androidx.preference.PreferenceManager
-import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
