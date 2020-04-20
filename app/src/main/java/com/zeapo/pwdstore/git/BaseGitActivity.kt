@@ -23,8 +23,8 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.net.MalformedURLException
-import timber.log.Timber
 import java.net.URI
+import timber.log.Timber
 
 /**
  * Abstract AppCompatActivity that holds some information that is commonly shared across git-related
@@ -111,7 +111,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 val urlWithFreeEntryScheme = "$hostnamePart$portPart$pathPart"
                 when {
                     urlWithFreeEntryScheme.startsWith("https://") -> urlWithFreeEntryScheme
-                    urlWithFreeEntryScheme.startsWith("http://")-> urlWithFreeEntryScheme.replaceFirst("http", "https")
+                    urlWithFreeEntryScheme.startsWith("http://") -> urlWithFreeEntryScheme.replaceFirst("http", "https")
                     else -> "https://$urlWithFreeEntryScheme"
                 }
             }
