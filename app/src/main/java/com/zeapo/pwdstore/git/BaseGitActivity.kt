@@ -119,8 +119,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         try {
             if (URI(newUrl).rawAuthority == null)
                 return false
-        } catch (ex: MalformedURLException) {
-            e(ex)
+        } catch (_: MalformedURLException) {
             return false
         }
         if (PasswordRepository.isInitialized)
