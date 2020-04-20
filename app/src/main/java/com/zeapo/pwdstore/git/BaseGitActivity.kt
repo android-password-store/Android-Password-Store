@@ -23,7 +23,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.net.MalformedURLException
-import java.net.URL
 import timber.log.Timber
 import java.net.URI
 
@@ -101,12 +100,10 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 val userPart = if (serverUser.isEmpty()) "" else "$serverUser@"
                 val portPart =
                     if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
+                if (hostnamePart.startsWith("ssh://"))
+                    hostnamePart.replace("ssh://", "")
                 // We have to specify the ssh scheme as this is the only way to pass a custom port.
-                val urlWithFreeEntryScheme = "$userPart$hostnamePart$portPart$pathPart"
-                if (urlWithFreeEntryScheme.startsWith("ssh://"))
-                    urlWithFreeEntryScheme
-                else
-                    "ssh://$urlWithFreeEntryScheme"
+                "ssh://$userPart$hostnamePart$portPart$pathPart"
             }
             Protocol.Https -> {
                 val portPart =
