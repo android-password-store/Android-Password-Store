@@ -50,7 +50,7 @@ open class GitOperationActivity : BaseGitActivity() {
      * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH
      */
     private fun syncRepository(operation: Int) {
-        if (serverUser.isEmpty() || serverHostname.isEmpty() || url.isEmpty())
+        if (serverUser.isEmpty() || serverHostname.isEmpty() || url.isNullOrEmpty())
             MaterialAlertDialogBuilder(this)
                     .setMessage(getString(R.string.set_information_dialog_text))
                     .setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
@@ -65,7 +65,7 @@ open class GitOperationActivity : BaseGitActivity() {
                     .show()
         else {
             // check that the remote origin is here, else add it
-            PasswordRepository.addRemote("origin", url, true)
+            PasswordRepository.addRemote("origin", url!!, true)
             launchGitOperation(operation)
         }
     }
