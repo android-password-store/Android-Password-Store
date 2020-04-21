@@ -8,11 +8,11 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
@@ -41,7 +41,7 @@ class ShowSshKeyFragment : DialogFragment() {
         ad.setOnShowListener {
             val b = ad.getButton(AlertDialog.BUTTON_NEUTRAL)
             b.setOnClickListener {
-                val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipboard = activity.getSystemService<ClipboardManager>() ?: return@setOnClickListener
                 val clip = ClipData.newPlainText("public key", publicKey.text.toString())
                 clipboard.setPrimaryClip(clip)
             }

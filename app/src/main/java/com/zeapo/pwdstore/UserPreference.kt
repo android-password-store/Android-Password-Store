@@ -578,7 +578,7 @@ class UserPreference : AppCompatActivity() {
 
     private val isAccessibilityServiceEnabled: Boolean
         get() {
-            val am = getSystemService(AccessibilityManager::class.java) ?: return false
+            val am = getSystemService<AccessibilityManager>() ?: return false
             val runningServices = am
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices

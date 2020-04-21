@@ -33,6 +33,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -73,9 +74,7 @@ import org.openintents.openpgp.OpenPgpError
 import timber.log.Timber
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
-    private val clipboard: ClipboardManager by lazy {
-        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    }
+    private val clipboard by lazy { getSystemService<ClipboardManager>() }
     private var passwordEntry: PasswordEntry? = null
     private var api: OpenPgpApi? = null
 
@@ -140,6 +139,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 crypto_password_category_decrypt.text = relativeParentPath
                 crypto_password_file.text = name
                 crypto_password_file.setOnLongClickListener {
+                    val clipboard = clipboard ?: return@setOnLongClickListener false
                     val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
                     clipboard.setPrimaryClip(clip)
                     showSnackbar(this.resources.getString(R.string.clipboard_username_toast_text))
@@ -808,6 +808,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun copyPasswordToClipBoard() {
+        val clipboard = clipboard ?: return
         var pass = passwordEntry?.password
 
         if (findViewById<TextView>(R.id.crypto_password_show) == null) {
@@ -837,12 +838,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun copyUsernameToClipBoard(username: String) {
+        val clipboard = clipboard ?: return
         val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
         clipboard.setPrimaryClip(clip)
         showSnackbar(resources.getString(R.string.clipboard_username_toast_text))
     }
 
     private fun copyOtpToClipBoard(code: String) {
+        val clipboard = clipboard ?: return
         val clip = ClipData.newPlainText("pgp_handler_result_pm", code)
         clipboard.setPrimaryClip(clip)
         showSnackbar(resources.getString(R.string.clipboard_otp_toast_text))

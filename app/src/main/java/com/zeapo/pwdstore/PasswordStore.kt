@@ -30,6 +30,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -102,7 +103,7 @@ class PasswordStore : AppCompatActivity() {
         activity = this
         settings = PreferenceManager.getDefaultSharedPreferences(this.applicationContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager = getSystemService(ShortcutManager::class.java)
+            shortcutManager = getSystemService()
         }
 
         // If user opens app with permission granted then revokes and returns,
