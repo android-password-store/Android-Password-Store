@@ -6,8 +6,6 @@ ext.versions = [
     minSdk: 23,
     targetSdk: 29,
     compileSdk: 29,
-    versionCode: 10601,
-    versionName: '1.7.0-SNAPSHOT',
     buildTools: '29.0.3',
     packageName: 'dev.msfjarvis.aps'
 ]
