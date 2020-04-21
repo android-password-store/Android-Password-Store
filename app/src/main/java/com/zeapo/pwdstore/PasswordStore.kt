@@ -14,8 +14,10 @@ import android.content.pm.ShortcutInfo.Builder
 import android.content.pm.ShortcutManager
 import android.graphics.Color
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.Menu
@@ -43,6 +45,8 @@ import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
+import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
+import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.BaseGitActivity
@@ -121,6 +125,43 @@ class PasswordStore : AppCompatActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
+
+        // If user is eligible for Oreo autofill, prompt them to switch.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                !settings.getBoolean("seen_autofill_onboarding", false)) {
+            MaterialAlertDialogBuilder(this).run {
+                @SuppressLint("InflateParams")
+                val layout =
+                        layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
+                layout.findViewById<AppCompatTextView>(R.id.intro_text).visibility = View.GONE
+                val supportedBrowsersTextView =
+                        layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
+                supportedBrowsersTextView.text =
+                        getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
+                                separator = "\n"
+                        ) {
+                            val appLabel = it.first
+                            val supportDescription = when (it.second) {
+                                BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
+                                BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
+                                BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
+                                BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
+                                BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
+                            }
+                            "$appLabel: $supportDescription"
+                        }
+                setView(layout)
+                setTitle(getString(R.string.autofill_onboarding_dialog_title))
+                setMessage(getString(R.string.autofill_onboarding_dialog_message))
+                setPositiveButton(R.string.dialog_ok) { _, _ ->
+                    settings.edit { putBoolean("seen_autofill_onboarding", true) }
+                    startActivity(Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
+                        data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                    })
+                }
+                show()
+            }
+        }
 
         model.currentDir.observe(this) { dir ->
             val basePath = getRepositoryDirectory(applicationContext).absoluteFile
