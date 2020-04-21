@@ -8,8 +8,9 @@ import android.os.Handler
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
+import com.github.ajalt.timberkt.Timber.tag
+import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.R
-import timber.log.Timber
 
 internal class Authenticator(
     private val fragmentActivity: FragmentActivity,
@@ -22,19 +23,19 @@ internal class Authenticator(
 
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
-            Timber.tag(TAG).d("Error: $errorCode: $errString")
+            tag(TAG).d { "Error: $errorCode: $errString" }
             callback(AuthenticationResult.UnrecoverableError(errorCode, errString))
         }
 
         override fun onAuthenticationFailed() {
             super.onAuthenticationFailed()
-            Timber.tag(TAG).d("Failed")
+            tag(TAG).d { "Failed" }
             callback(AuthenticationResult.Failure)
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
-            Timber.tag(TAG).d("Success")
+            tag(TAG).d { "Success" }
             callback(AuthenticationResult.Success(result.cryptoObject))
         }
     }

@@ -18,12 +18,12 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
+import com.github.ajalt.timberkt.Timber.tag
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.pwgen.PasswordGenerator
 import com.zeapo.pwdstore.pwgenxkpwd.CapsType
 import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
-import timber.log.Timber
 
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
@@ -66,7 +66,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         val previousStoredCapStyle: String = try {
             prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)!!
         } catch (e: Exception) {
-            Timber.tag("xkpw").e(e)
+            tag("xkpw").e(e)
             DEFAULT_CAPS_STYLE
         }
         spinnerCapsType = view.findViewById(R.id.xkCapType)
@@ -76,7 +76,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         lastCapitalsStyleIndex = try {
             CapsType.valueOf(previousStoredCapStyle).ordinal
         } catch (e: Exception) {
-            Timber.tag("xkpw").e(e)
+            tag("xkpw").e(e)
             DEFAULT_CAPS_INDEX
         }
         spinnerCapsType.setSelection(lastCapitalsStyleIndex)
@@ -126,7 +126,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                     .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
         } catch (e: PasswordGenerator.PasswordGeneratorExeption) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-            Timber.tag("xkpw").e(e, "failure generating xkpasswd")
+            tag("xkpw").e(e, "failure generating xkpasswd")
             passwordText.text = FALLBACK_ERROR_PASS
         }
     }

@@ -35,6 +35,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.Timber.tag
+import com.github.ajalt.timberkt.d
+import com.github.ajalt.timberkt.e
+import com.github.ajalt.timberkt.i
+import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
@@ -64,7 +69,6 @@ import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
-import timber.log.Timber
 
 class PasswordStore : AppCompatActivity() {
 
@@ -334,7 +338,7 @@ class PasswordStore : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
             if (!localDir.delete()) {
-                Timber.tag(TAG).d("Failed to delete local repository")
+                tag(TAG).d { "Failed to delete local repository" }
             }
             return
         }
@@ -381,7 +385,7 @@ class PasswordStore : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
-            Timber.tag(TAG).d("Check, dir: ${localDir.absolutePath}")
+            tag(TAG).d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null ||
                     settings.getBoolean("repo_changed", false)) {
@@ -424,7 +428,7 @@ class PasswordStore : AppCompatActivity() {
         val repoPath = getRepositoryDirectory(this)
         val repository = getRepository(repoPath)
         if (repository == null) {
-            Timber.tag(TAG).d("getLastChangedTimestamp: No git repository")
+            tag(TAG).d { "getLastChangedTimestamp: No git repository" }
             return File(fullPath).lastModified()
         }
         val git = Git(repository)
@@ -433,11 +437,11 @@ class PasswordStore : AppCompatActivity() {
         iterator = try {
             git.log().addPath(relativePath).call().iterator()
         } catch (e: GitAPIException) {
-            Timber.tag(TAG).e(e, "getLastChangedTimestamp: GITAPIException")
+            tag(TAG).e(e) { "getLastChangedTimestamp: GITAPIException" }
             return -1
         }
         if (!iterator.hasNext()) {
-            Timber.tag(TAG).w("getLastChangedTimestamp: No commits for file: $relativePath")
+            tag(TAG).w { "getLastChangedTimestamp: No commits for file: $relativePath" }
             return -1
         }
         return iterator.next().commitTime.toLong() * 1000
@@ -509,7 +513,7 @@ class PasswordStore : AppCompatActivity() {
     fun createPassword() {
         if (!validateState()) return
         val currentDir = currentDir
-        Timber.tag(TAG).i("Adding file to : ${currentDir.absolutePath}")
+        tag(TAG).i { "Adding file to : ${currentDir.absolutePath}" }
         val intent = Intent(this, PgpActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
@@ -649,24 +653,26 @@ class PasswordStore : AppCompatActivity() {
                     startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                 }
                 REQUEST_CODE_SELECT_FOLDER -> {
-                    Timber.tag(TAG)
-                            .d("Moving passwords to ${data!!.getStringExtra("SELECTED_FOLDER_PATH")}")
-                    Timber.tag(TAG).d(
-                            TextUtils.join(", ", requireNotNull(data.getStringArrayListExtra("Files")))
-                    )
+                    val intentData = data ?: return
+                    tag(TAG).d {
+                        "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}"
+                    }
+                    tag(TAG).d {
+                        TextUtils.join(", ", requireNotNull(intentData.getStringArrayListExtra("Files")))
+                    }
 
-                    val target = File(requireNotNull(data.getStringExtra("SELECTED_FOLDER_PATH")))
+                    val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
                     val repositoryPath = getRepositoryDirectory(applicationContext).absolutePath
                     if (!target.isDirectory) {
-                        Timber.tag(TAG).e("Tried moving passwords to a non-existing folder.")
+                        tag(TAG).e { "Tried moving passwords to a non-existing folder." }
                         return
                     }
 
                     // TODO move this to an async task
-                    for (fileString in requireNotNull(data.getStringArrayListExtra("Files"))) {
+                    for (fileString in requireNotNull(intentData.getStringArrayListExtra("Files"))) {
                         val source = File(fileString)
                         if (!source.exists()) {
-                            Timber.tag(TAG).e("Tried moving something that appears non-existent.")
+                            tag(TAG).e { "Tried moving something that appears non-existent." }
                             continue
                         }
                         val destinationFile = File(target.absolutePath + "/" + source.name)
@@ -674,7 +680,7 @@ class PasswordStore : AppCompatActivity() {
                         val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
                         val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
                         if (destinationFile.exists()) {
-                            Timber.tag(TAG).e("Trying to move a file that already exists.")
+                            tag(TAG).e { "Trying to move a file that already exists." }
                             // TODO: Add option to cancel overwrite. Will be easier once this is an async task.
                             MaterialAlertDialogBuilder(this)
                                     .setTitle(resources.getString(R.string.password_exists_title))
@@ -697,7 +703,7 @@ class PasswordStore : AppCompatActivity() {
                         }
                         if (!source.renameTo(destinationFile)) {
                             // TODO this should show a warning to the user
-                            Timber.tag(TAG).e("Something went wrong while moving.")
+                            tag(TAG).e { "Something went wrong while moving." }
                         } else {
                             AutofillMatcher.updateMatches(this, sourceDestinationMap)
                             commitChange(this.resources
@@ -803,7 +809,7 @@ class PasswordStore : AppCompatActivity() {
         fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
             object : GitOperation(getRepositoryDirectory(activity), activity) {
                 override fun execute() {
-                    Timber.tag(TAG).d("Committing with message $message")
+                    tag(TAG).d { "Committing with message $message" }
                     val git = Git(repository)
                     val tasks = GitAsyncTask(activity, true, this, finishWithResultOnEnd)
                     tasks.execute(

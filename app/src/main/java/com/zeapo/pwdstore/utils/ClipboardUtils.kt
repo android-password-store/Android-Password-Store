@@ -6,14 +6,14 @@ package com.zeapo.pwdstore.utils
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 object ClipboardUtils {
 
     suspend fun clearClipboard(clipboard: ClipboardManager, deepClear: Boolean = false) {
-        Timber.d("Clearing the clipboard")
+        d { "Clearing the clipboard" }
         val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
         clipboard.setPrimaryClip(clip)
         if (deepClear) {

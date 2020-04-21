@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.utils.ClipboardUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class ClipboardService : Service() {
 
@@ -92,7 +92,7 @@ class ClipboardService : Service() {
                 ClipboardUtils.clearClipboard(clipboardManager, deepClear)
             }
         } else {
-            Timber.tag("ClipboardService").d("Cannot get clipboard manager service")
+            d { "Cannot get clipboard manager service" }
         }
     }
 
@@ -144,7 +144,7 @@ class ClipboardService : Service() {
             if (manager != null) {
                 manager.createNotificationChannel(serviceChannel)
             } else {
-                Timber.tag("ClipboardService").d("Failed to create notification channel")
+                d { "Failed to create notification channel" }
             }
         }
     }

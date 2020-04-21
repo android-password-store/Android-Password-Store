@@ -33,6 +33,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
+import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -59,7 +60,6 @@ import java.util.HashSet
 import java.util.TimeZone
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.apache.commons.io.FileUtils
-import timber.log.Timber
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -643,7 +643,7 @@ class UserPreference : AppCompatActivity() {
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
 
-                    Timber.tag(TAG).d { "Selected repository URI is $uri" }
+                    tag(TAG).d { "Selected repository URI is $uri" }
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -651,7 +651,7 @@ class UserPreference : AppCompatActivity() {
                     val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-                    Timber.tag(TAG).d {"Selected repository path is $repoPath" }
+                    tag(TAG).d { "Selected repository path is $repoPath" }
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
                         MaterialAlertDialogBuilder(this)
@@ -714,7 +714,7 @@ class UserPreference : AppCompatActivity() {
         val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory(applicationContext))
         val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
 
-        Timber.tag(TAG).d { "Copying ${repositoryDirectory.path} to $targetDirectory" }
+        tag(TAG).d { "Copying ${repositoryDirectory.path} to $targetDirectory" }
 
         val dateString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime

@@ -24,6 +24,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.Timber.tag
+import com.github.ajalt.timberkt.e
+import com.github.ajalt.timberkt.i
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
@@ -48,7 +51,6 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
-import timber.log.Timber
 
 class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private var serviceConnection: OpenPgpServiceConnection? = null
@@ -522,11 +524,11 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
                         lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L
                     }
                 } catch (e: UnsupportedEncodingException) {
-                    Timber.tag(Constants.TAG).e(e)
+                    tag(Constants.TAG).e(e)
                 }
             }
             OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                Timber.tag("PgpHandler").i("RESULT_CODE_USER_INTERACTION_REQUIRED")
+                tag("PgpHandler").i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
                 val pi = result.getParcelableExtra<PendingIntent>(OpenPgpApi.RESULT_INTENT)
                 // need to start a blank activity to call startIntentSenderForResult
                 val intent = Intent(applicationContext, AutofillActivity::class.java)
@@ -538,8 +540,8 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
                 val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
                 if (error != null) {
                     withContext(Dispatchers.Main) { Toast.makeText(applicationContext, "Error from OpenKeyChain : ${error.message}", Toast.LENGTH_LONG).show() }
-                    Timber.tag(Constants.TAG).e("onError getErrorId: ${error.errorId}")
-                    Timber.tag(Constants.TAG).e("onError getMessage: ${error.message}")
+                    tag(Constants.TAG).e { "onError getErrorId: ${error.errorId}" }
+                    tag(Constants.TAG).e { "onError getMessage: ${error.message}" }
                 }
             }
         }

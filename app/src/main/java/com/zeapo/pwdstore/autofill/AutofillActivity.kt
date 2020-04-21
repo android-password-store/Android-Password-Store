@@ -12,10 +12,11 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import com.github.ajalt.timberkt.Timber.tag
+import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.utils.splitLines
 import org.eclipse.jgit.util.StringUtils
-import timber.log.Timber
 
 // blank activity started by service for calling startIntentSenderForResult
 class AutofillActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class AutofillActivity : AppCompatActivity() {
                 val pi = extras.getParcelable<PendingIntent>("pending_intent") ?: return
                 startIntentSenderForResult(pi.intentSender, REQUEST_CODE_DECRYPT_AND_VERIFY, null, 0, 0, 0)
             } catch (e: IntentSender.SendIntentException) {
-                Timber.tag(AutofillService.Constants.TAG).e(e, "SendIntentException")
+                tag(AutofillService.Constants.TAG).e(e) { "SendIntentException" }
             }
         } else if (extras != null && extras.containsKey("pick")) {
             val intent = Intent(applicationContext, PasswordStore::class.java)

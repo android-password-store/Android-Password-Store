@@ -11,8 +11,9 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.Timber.DebugTree
+import com.github.ajalt.timberkt.Timber.plant
 import com.haroldadmin.whatthestack.WhatTheStack
-import timber.log.Timber
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -20,7 +21,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+        plant(DebugTree())
         if (BuildConfig.ENABLE_DEBUG_FEATURES) {
             WhatTheStack(this).init()
         }

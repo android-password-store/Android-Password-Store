@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.Timber.tag
+import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
@@ -23,7 +25,6 @@ import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URI
-import timber.log.Timber
 
 /**
  * Abstract AppCompatActivity that holds some information that is commonly shared across git-related
@@ -172,7 +173,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 REQUEST_RESET -> ResetToRemoteOperation(localDir, this).setCommands()
                 SshApiSessionFactory.POST_SIGNATURE -> return
                 else -> {
-                    Timber.tag(TAG).e("Operation not recognized : $operation")
+                    tag(TAG).e { "Operation not recognized : $operation" }
                     setResult(RESULT_CANCELED)
                     finish()
                     return

@@ -38,6 +38,9 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.Timber.e
+import com.github.ajalt.timberkt.Timber.i
+import com.github.ajalt.timberkt.Timber.tag
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
@@ -71,7 +74,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
-import timber.log.Timber
 
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard by lazy { getSystemService<ClipboardManager>() }
@@ -116,7 +118,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-        Timber.tag(TAG)
+        tag(TAG)
 
         // some persistence
         _keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
@@ -318,7 +320,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * @param requestCode The code we'd like to use to identify the behaviour
      */
     private fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
-        Timber.i("RESULT_CODE_USER_INTERACTION_REQUIRED")
+        i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
 
         val pi: PendingIntent? = result.getParcelableExtra(RESULT_INTENT)
         try {
@@ -327,7 +329,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     null, 0, 0, 0
             )
         } catch (e: IntentSender.SendIntentException) {
-            Timber.e(e, "SendIntentException")
+            e(e) { "SendIntentException" }
         }
     }
 
@@ -346,8 +348,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val error: OpenPgpError? = result.getParcelableExtra(RESULT_ERROR)
         if (error != null) {
             showSnackbar("Error from OpenKeyChain : " + error.message)
-            Timber.e("onError getErrorId: ${error.errorId}")
-            Timber.e("onError getMessage: ${error.message}")
+            e { "onError getErrorId: ${error.errorId}" }
+            e { "onError getMessage: ${error.message}" }
         }
     }
 
@@ -524,7 +526,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                     copyPasswordToClipBoard()
                                 }
                             } catch (e: Exception) {
-                                Timber.e(e, "An Exception occurred")
+                                e(e) { "An Exception occurred" }
                             }
                         }
                         RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
@@ -624,7 +626,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 setResult(RESULT_OK, returnIntent)
                                 finish()
                             } catch (e: Exception) {
-                                Timber.e(e, "An Exception occurred")
+                                e(e) { "An Exception occurred" }
                             }
                         }
                         RESULT_CODE_ERROR -> handleError(result)
@@ -730,7 +732,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 setResult(RESULT_OK)
                                 finish()
                             } catch (e: Exception) {
-                                Timber.e(e, "An Exception occurred")
+                                e(e) { "An Exception occurred" }
                             }
                         }
                         RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_KEY_ID)
