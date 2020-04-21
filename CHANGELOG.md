@@ -1,7 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [Unreleased]
+
+## [1.7.0] - 2020-04-21
 
 ### Added
 - Oreo Autofill support
@@ -100,7 +102,8 @@ All notable changes to this project will be documented in this file.
 - Fix elements overlapping.
 
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.6.0..v1.7.0
 [1.6.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.5.0..v1.6.0
 [1.5.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.3.0...v1.4.0
