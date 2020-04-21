@@ -21,8 +21,8 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
 
     override fun onCreate() {
         super.onCreate()
-        plant(DebugTree())
         if (BuildConfig.ENABLE_DEBUG_FEATURES) {
+            plant(DebugTree())
             WhatTheStack(this).init()
         }
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
