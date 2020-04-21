@@ -126,7 +126,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
             PasswordRepository.addRemote("origin", newUrl, true)
         // HTTPS authentication sends the password to the server, so we must wipe the password when
         // the server is changed.
-        if (newUrl != previousUrl && protocol == Protocol.Https)
+        if (previousUrl.isNotEmpty() && newUrl != previousUrl && protocol == Protocol.Https)
             encryptedSettings.edit { remove("https_password") }
         url = newUrl
         return true
