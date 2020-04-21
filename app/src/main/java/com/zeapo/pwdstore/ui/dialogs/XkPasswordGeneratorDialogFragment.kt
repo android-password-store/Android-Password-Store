@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
@@ -48,17 +49,17 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
         prefs = callingActivity.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        cbNumbers = view.findViewById<CheckBox>(R.id.xknumerals)
+        cbNumbers = view.findViewById(R.id.xknumerals)
         cbNumbers.isChecked = prefs.getBoolean(PREF_KEY_USE_NUMERALS, false)
 
-        spinnerNumbersCount = view.findViewById<Spinner>(R.id.xk_numbers_count)
+        spinnerNumbersCount = view.findViewById(R.id.xk_numbers_count)
 
         val storedNumbersCount = prefs.getInt(PREF_KEY_NUMBERS_COUNT, 0)
         spinnerNumbersCount.setSelection(storedNumbersCount)
 
-        cbSymbols = view.findViewById<CheckBox>(R.id.xksymbols)
+        cbSymbols = view.findViewById(R.id.xksymbols)
         cbSymbols.isChecked = prefs.getBoolean(PREF_KEY_USE_SYMBOLS, false) != false
-        spinnerSymbolsCount = view.findViewById<Spinner>(R.id.xk_symbols_count)
+        spinnerSymbolsCount = view.findViewById(R.id.xk_symbols_count)
         val symbolsCount = prefs.getInt(PREF_KEY_SYMBOLS_COUNT, 0)
         spinnerSymbolsCount.setSelection(symbolsCount)
 
@@ -68,7 +69,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             Timber.tag("xkpw").e(e)
             DEFAULT_CAPS_STYLE
         }
-        spinnerCapsType = view.findViewById<Spinner>(R.id.xkCapType)
+        spinnerCapsType = view.findViewById(R.id.xkCapType)
 
         val lastCapitalsStyleIndex: Int
 
@@ -80,10 +81,10 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         }
         spinnerCapsType.setSelection(lastCapitalsStyleIndex)
 
-        editNumWords = view.findViewById<AppCompatEditText>(R.id.xk_num_words)
+        editNumWords = view.findViewById(R.id.xk_num_words)
         editNumWords.setText(prefs.getString(PREF_KEY_NUM_WORDS, DEFAULT_NUMBER_OF_WORDS))
 
-        editSeparator = view.findViewById<AppCompatEditText>(R.id.xk_separator)
+        editSeparator = view.findViewById(R.id.xk_separator)
         editSeparator.setText(prefs.getString(PREF_KEY_SEPARATOR, DEFAULT_WORD_SEPARATOR))
 
         val passwordText: AppCompatTextView = view.findViewById(R.id.xkPasswordText)
@@ -131,14 +132,15 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
     }
 
     private fun setPreferences() {
-        prefs.edit().putBoolean(PREF_KEY_USE_NUMERALS, cbNumbers.isChecked)
-                .putBoolean(PREF_KEY_USE_SYMBOLS, cbSymbols.isChecked)
-                .putString(PREF_KEY_CAPITALS_STYLE, spinnerCapsType.selectedItem.toString())
-                .putString(PREF_KEY_NUM_WORDS, editNumWords.text.toString())
-                .putString(PREF_KEY_SEPARATOR, editSeparator.text.toString())
-                .putInt(PREF_KEY_NUMBERS_COUNT, Integer.parseInt(spinnerNumbersCount.selectedItem as String) - 1)
-                .putInt(PREF_KEY_SYMBOLS_COUNT, Integer.parseInt(spinnerSymbolsCount.selectedItem as String) - 1)
-                .apply()
+        prefs.edit {
+            putBoolean(PREF_KEY_USE_NUMERALS, cbNumbers.isChecked)
+            putBoolean(PREF_KEY_USE_SYMBOLS, cbSymbols.isChecked)
+            putString(PREF_KEY_CAPITALS_STYLE, spinnerCapsType.selectedItem.toString())
+            putString(PREF_KEY_NUM_WORDS, editNumWords.text.toString())
+            putString(PREF_KEY_SEPARATOR, editSeparator.text.toString())
+            putInt(PREF_KEY_NUMBERS_COUNT, Integer.parseInt(spinnerNumbersCount.selectedItem as String) - 1)
+            putInt(PREF_KEY_SYMBOLS_COUNT, Integer.parseInt(spinnerSymbolsCount.selectedItem as String) - 1)
+        }
     }
 
     companion object {

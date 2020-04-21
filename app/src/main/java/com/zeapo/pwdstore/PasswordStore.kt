@@ -29,6 +29,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -325,7 +326,7 @@ class PasswordStore : AppCompatActivity() {
             check(localDir.mkdir()) { "Failed to create directory!" }
             createRepository(localDir)
             if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
-                settings.edit().putBoolean("repository_initialized", true).apply()
+                settings.edit { putBoolean("repository_initialized", true) }
             } else {
                 throw IllegalStateException("Failed to initialize repository state.")
             }
@@ -383,7 +384,7 @@ class PasswordStore : AppCompatActivity() {
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null ||
                     settings.getBoolean("repo_changed", false)) {
-                settings.edit().putBoolean("repo_changed", false).apply()
+                settings.edit { putBoolean("repo_changed", false) }
                 plist = PasswordFragment()
                 val args = Bundle()
                 args.putString(REQUEST_ARG_PATH, getRepositoryDirectory(applicationContext).absolutePath)
@@ -589,7 +590,7 @@ class PasswordStore : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 // if we get here with a RESULT_OK then it's probably OK :)
-                BaseGitActivity.REQUEST_CLONE -> settings.edit().putBoolean("repository_initialized", true).apply()
+                BaseGitActivity.REQUEST_CLONE -> settings.edit { putBoolean("repository_initialized", true) }
                 // if went from decrypt->edit and user saved changes or HOTP counter was
                 // incremented, we need to commitChange
                 REQUEST_CODE_DECRYPT_AND_VERIFY -> {
@@ -721,7 +722,7 @@ class PasswordStore : AppCompatActivity() {
                 .setTitle(this.resources.getString(R.string.location_dialog_title))
                 .setMessage(this.resources.getString(R.string.location_dialog_text))
                 .setPositiveButton(this.resources.getString(R.string.location_hidden)) { _, _ ->
-                    settings.edit().putBoolean("git_external", false).apply()
+                    settings.edit { putBoolean("git_external", false) }
                     when (operation) {
                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
                         CLONE_REPO_BUTTON -> {
@@ -732,7 +733,7 @@ class PasswordStore : AppCompatActivity() {
                     }
                 }
                 .setNegativeButton(this.resources.getString(R.string.location_sdcard)) { _, _ ->
-                    settings.edit().putBoolean("git_external", true).apply()
+                    settings.edit { putBoolean("git_external", true) }
                     val externalRepo = settings.getString("git_external_repo", null)
                     if (externalRepo == null) {
                         val intent = Intent(activity, UserPreference::class.java)

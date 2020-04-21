@@ -8,6 +8,7 @@ import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -60,9 +61,7 @@ class KeyGenerateTask(activity: AppCompatActivity) : AsyncTask<String?, Void?, E
                 val df: DialogFragment = ShowSshKeyFragment()
                 df.show(activity.supportFragmentManager, "public_key")
                 val prefs = PreferenceManager.getDefaultSharedPreferences(weakReference.get())
-                val editor = prefs.edit()
-                editor.putBoolean("use_generated_key", true)
-                editor.apply()
+                prefs.edit { putBoolean("use_generated_key", true) }
             } else {
                 MaterialAlertDialogBuilder(activity)
                         .setTitle(activity.getString(R.string.error_generate_ssh_key))

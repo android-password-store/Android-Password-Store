@@ -65,4 +65,4 @@ fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
 
 val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
-    get() = getSystemService(AutofillManager::class.java)
+    get() = getSystemService()

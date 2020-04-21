@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import java.io.File
 import java.io.FileFilter
@@ -170,10 +171,12 @@ open class PasswordRepository protected constructor() {
             }
             val dir = getRepositoryDirectory(context)
             // uninitialize the repo if the dir does not exist or is absolutely empty
-            if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
-                settings.edit().putBoolean("repository_initialized", false).apply()
-            } else {
-                settings.edit().putBoolean("repository_initialized", true).apply()
+            settings.edit {
+                if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
+                    putBoolean("repository_initialized", false)
+                } else {
+                    putBoolean("repository_initialized", true)
+                }
             }
 
             // create the repository static variable in PasswordRepository

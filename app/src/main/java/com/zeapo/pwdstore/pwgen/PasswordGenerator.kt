@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.pwgen
 
 import android.content.Context
+import androidx.core.content.edit
 import com.zeapo.pwdstore.R
 import java.util.ArrayList
 
@@ -50,28 +51,26 @@ object PasswordGenerator {
      */
     @JvmStatic
     fun setPrefs(ctx: Context, argv: ArrayList<String>, vararg numArgv: Int): Boolean {
-        val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-
-        for (option in pwOptions.toCharArray()) {
-            if (argv.contains(option.toString())) {
-                editor.putBoolean(option.toString(), true)
-                argv.remove(option.toString())
-            } else {
-                editor.putBoolean(option.toString(), false)
+        ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE).edit {
+            for (option in pwOptions.toCharArray()) {
+                if (argv.contains(option.toString())) {
+                    putBoolean(option.toString(), true)
+                    argv.remove(option.toString())
+                } else {
+                    putBoolean(option.toString(), false)
+                }
+            }
+            var i = 0
+            while (i < numArgv.size && i < 2) {
+                if (numArgv[i] <= 0) {
+                    // Invalid password length or number of passwords
+                    return false
+                }
+                val name = if (i == 0) "length" else "num"
+                putInt(name, numArgv[i])
+                i++
             }
         }
-        var i = 0
-        while (i < numArgv.size && i < 2) {
-            if (numArgv[i] <= 0) {
-                // Invalid password length or number of passwords
-                return false
-            }
-            val name = if (i == 0) "length" else "num"
-            editor.putInt(name, numArgv[i])
-            i++
-        }
-        editor.apply()
         return true
     }
 
@@ -84,7 +83,7 @@ object PasswordGenerator {
      * @return list of generated passwords
      */
     @JvmStatic
-    @Throws(PasswordGenerator.PasswordGeneratorExeption::class)
+    @Throws(PasswordGeneratorExeption::class)
     fun generate(ctx: Context): ArrayList<String> {
         val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 

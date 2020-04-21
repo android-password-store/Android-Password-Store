@@ -11,10 +11,9 @@ import android.content.IntentSender
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.utils.splitLines
-import java.util.ArrayList
-import java.util.Arrays
 import org.eclipse.jgit.util.StringUtils
 import timber.log.Timber
 
@@ -71,17 +70,17 @@ class AutofillActivity : AppCompatActivity() {
                 } else {
                     applicationContext.getSharedPreferences("autofill_web", Context.MODE_PRIVATE)
                 }
-                val editor = prefs.edit()
-                when (val preference = prefs.getString(packageName, "")) {
-                    "", "/first", "/never" -> editor.putString(packageName, path)
-                    else -> {
-                        val matches = ArrayList(Arrays.asList(*preference!!.trim { it <= ' ' }.splitLines()))
-                        matches.add(path)
-                        val paths = StringUtils.join(matches, "\n")
-                        editor.putString(packageName, paths)
+                prefs.edit {
+                    when (val preference = prefs.getString(packageName, "")) {
+                        "", "/first", "/never" -> putString(packageName, path)
+                        else -> {
+                            val matches = arrayListOf(*preference!!.trim { it <= ' ' }.splitLines())
+                            matches.add(path)
+                            val paths = StringUtils.join(matches, "\n")
+                            putString(packageName, paths)
+                        }
                     }
                 }
-                editor.apply()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

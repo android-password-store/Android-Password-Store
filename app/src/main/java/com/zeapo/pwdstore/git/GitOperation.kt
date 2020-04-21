@@ -189,7 +189,7 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                                             // Authenticate using the ssh-key and then execute the command
                                             setAuthentication(sshKey, username, passphrase.text.toString()).execute()
                                         } else {
-                                            encryptedSettings.edit().putString("ssh_key_local_passphrase", null).apply()
+                                            encryptedSettings.edit { putString("ssh_key_local_passphrase", null) }
                                             // call back the method
                                             executeAfterAuthentication(connectionMode, username, sshKey, identity, true)
                                         }

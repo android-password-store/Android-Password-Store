@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.git
 
 import android.os.Bundle
 import android.util.Patterns
+import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitConfigBinding
@@ -50,12 +51,12 @@ class GitConfigActivity : BaseGitActivity() {
                         .setPositiveButton(getString(R.string.dialog_ok), null)
                         .show()
             } else {
-                val editor = settings.edit()
-                editor.putString("git_config_user_email", email)
-                editor.putString("git_config_user_name", name)
-                PasswordRepository.setUserName(name)
-                PasswordRepository.setUserEmail(email)
-                editor.apply()
+                settings.edit {
+                    putString("git_config_user_email", email)
+                    putString("git_config_user_name", name)
+                }
+                    PasswordRepository.setUserName(name)
+                    PasswordRepository.setUserEmail(email)
             }
         }
     }

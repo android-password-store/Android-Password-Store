@@ -23,6 +23,7 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordStore
@@ -118,14 +119,14 @@ class AutofillFragment : DialogFragment() {
         // write to preferences when OK clicked
         builder.setPositiveButton(R.string.dialog_ok) { _, _ -> }
         builder.setNegativeButton(R.string.dialog_cancel, null)
-        val editor = prefs.edit()
         if (isWeb) {
             builder.setNeutralButton(R.string.autofill_apps_delete) { _, _ ->
                 if (callingActivity.recyclerAdapter != null &&
                         packageName != null && packageName != "") {
-                    editor.remove(packageName)
-                    callingActivity.recyclerAdapter?.removeWebsite(packageName)
-                    editor.apply()
+                    prefs.edit {
+                        remove(packageName)
+                        callingActivity.recyclerAdapter?.removeWebsite(packageName)
+                    }
                 }
             }
         }
@@ -148,7 +149,6 @@ class AutofillFragment : DialogFragment() {
                 } else {
                     callingActivity.applicationContext.getSharedPreferences("autofill_web", Context.MODE_PRIVATE)
                 }
-                val editor = prefs.edit()
 
                 var packageName = args.getString("packageName", "")
                 if (isWeb) {
@@ -169,27 +169,28 @@ class AutofillFragment : DialogFragment() {
                 }
 
                 // write to preferences accordingly
-                val radioGroup = dialog.findViewById<RadioGroup>(R.id.autofill_radiogroup)
-                when (radioGroup.checkedRadioButtonId) {
-                    R.id.use_default -> if (!isWeb) {
-                        editor.remove(packageName)
-                    } else {
-                        editor.putString(packageName, "")
-                    }
-                    R.id.first -> editor.putString(packageName, "/first")
-                    R.id.never -> editor.putString(packageName, "/never")
-                    else -> {
-                        val paths = StringBuilder()
-                        for (i in 0 until adapter!!.count) {
-                            paths.append(adapter!!.getItem(i))
-                            if (i != adapter!!.count) {
-                                paths.append("\n")
-                            }
+                prefs.edit {
+                    val radioGroup = dialog.findViewById<RadioGroup>(R.id.autofill_radiogroup)
+                    when (radioGroup.checkedRadioButtonId) {
+                        R.id.use_default -> if (!isWeb) {
+                            remove(packageName)
+                        } else {
+                            putString(packageName, "")
                         }
-                        editor.putString(packageName, paths.toString())
+                        R.id.first -> putString(packageName, "/first")
+                        R.id.never -> putString(packageName, "/never")
+                        else -> {
+                            val paths = StringBuilder()
+                            for (i in 0 until adapter!!.count) {
+                                paths.append(adapter!!.getItem(i))
+                                if (i != adapter!!.count) {
+                                    paths.append("\n")
+                                }
+                            }
+                            putString(packageName, paths.toString())
+                        }
                     }
                 }
-                editor.apply()
 
                 // notify the recycler adapter if it is loaded
                 callingActivity.recyclerAdapter?.apply {
@@ -204,7 +205,7 @@ class AutofillFragment : DialogFragment() {
                             packageName -> notifyItemChanged(position)
                             "" -> addWebsite(packageName)
                             else -> {
-                                editor.remove(oldPackageName)
+                                prefs.edit { remove(oldPackageName) }
                                 updateWebsite(oldPackageName, packageName)
                             }
                         }

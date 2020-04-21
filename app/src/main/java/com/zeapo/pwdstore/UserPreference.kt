@@ -33,6 +33,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
+import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
@@ -173,7 +174,7 @@ class UserPreference : AppCompatActivity() {
 
             viewSshKeyPreference?.onPreferenceClickListener = ClickListener {
                 val df = ShowSshKeyFragment()
-                df.show(requireFragmentManager(), "public_key")
+                df.show(parentFragmentManager, "public_key")
                 true
             }
 
@@ -189,13 +190,13 @@ class UserPreference : AppCompatActivity() {
             }
 
             clearHotpIncrementPreference?.onPreferenceClickListener = ClickListener {
-                sharedPreferences.edit().putBoolean("hotp_remember_check", false).apply()
+                sharedPreferences.edit { putBoolean("hotp_remember_check", false) }
                 it.isVisible = false
                 true
             }
 
             openkeystoreIdPreference?.onPreferenceClickListener = ClickListener {
-                sharedPreferences.edit().putString("ssh_openkeystore_keyid", null).apply()
+                sharedPreferences.edit { putString("ssh_openkeystore_keyid", null) }
                 it.isVisible = false
                 true
             }
@@ -224,7 +225,7 @@ class UserPreference : AppCompatActivity() {
                                 // TODO Handle the different cases of exceptions
                             }
 
-                            sharedPreferences.edit().putBoolean("repository_initialized", false).apply()
+                            sharedPreferences.edit { putBoolean("repository_initialized", false) }
                             dialogInterface.cancel()
                             callingActivity.finish()
                         }
@@ -244,7 +245,7 @@ class UserPreference : AppCompatActivity() {
             val resetRepo = Preference.OnPreferenceChangeListener { _, o ->
                 deleteRepoPreference?.isVisible = !(o as Boolean)
                 PasswordRepository.closeRepository()
-                sharedPreferences.edit().putBoolean("repo_changed", true).apply()
+                sharedPreferences.edit { putBoolean("repo_changed", true) }
                 true
             }
 
@@ -294,30 +295,30 @@ class UserPreference : AppCompatActivity() {
                 } else {
                     setOnPreferenceClickListener {
                         isEnabled = false
-                        val editor = sharedPreferences.edit()
-                        val checked = isChecked
-                        Authenticator(requireActivity()) { result ->
-                            when (result) {
-                                is AuthenticationResult.Success -> {
-                                    // Apply the changes
-                                    editor.putBoolean("biometric_auth", checked)
-                                    isEnabled = true
+                        sharedPreferences.edit {
+                            val checked = isChecked
+                            Authenticator(requireActivity()) { result ->
+                                when (result) {
+                                    is AuthenticationResult.Success -> {
+                                        // Apply the changes
+                                        putBoolean("biometric_auth", checked)
+                                        isEnabled = true
+                                    }
+                                    else -> {
+                                        // If any error occurs, revert back to the previous state. This
+                                        // catch-all clause includes the cancellation case.
+                                        putBoolean("biometric_auth", !checked)
+                                        isChecked = !checked
+                                        isEnabled = true
+                                    }
                                 }
-                                else -> {
-                                    // If any error occurs, revert back to the previous state. This
-                                    // catch-all clause includes the cancellation case.
-                                    editor.putBoolean("biometric_auth", !checked)
-                                    isChecked = !checked
-                                    isEnabled = true
+                            }.authenticate()
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                                requireContext().getSystemService<ShortcutManager>()?.apply {
+                                    removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
                                 }
-                            }
-                        }.authenticate()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                            requireContext().getSystemService<ShortcutManager>()?.apply {
-                                removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
                             }
                         }
-                        editor.apply()
                         true
                     }
                 }
@@ -622,7 +623,7 @@ class UserPreference : AppCompatActivity() {
                         ).show()
                         val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-                        prefs.edit().putBoolean("use_generated_key", false).apply()
+                        prefs.edit { putBoolean("use_generated_key", false) }
 
                         // Delete the public key from generation
                         File("""$filesDir/.ssh_key.pub""").delete()
@@ -642,33 +643,27 @@ class UserPreference : AppCompatActivity() {
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
 
-                    Timber.tag(TAG).d("Selected repository URI is $uri")
+                    Timber.tag(TAG).d { "Selected repository URI is $uri" }
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     val path = if (split.isNotEmpty()) split[1] else split[0]
                     val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-                    Timber.tag(TAG).d("Selected repository path is $repoPath")
+                    Timber.tag(TAG).d {"Selected repository path is $repoPath" }
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
                         MaterialAlertDialogBuilder(this)
                                 .setTitle(getString(R.string.sdcard_root_warning_title))
                                 .setMessage(getString(R.string.sdcard_root_warning_message))
                                 .setPositiveButton("Remove everything") { _, _ ->
-                                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                                            .edit()
-                                            .putString("git_external_repo", uri?.path)
-                                            .apply()
+                                    prefs.edit { putString("git_external_repo", uri?.path) }
                                 }
                                 .setNegativeButton(R.string.dialog_cancel, null)
                                 .show()
                     }
-
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                            .edit()
-                            .putString("git_external_repo", repoPath)
-                            .apply()
+                    prefs.edit { putString("git_external_repo", repoPath) }
                 }
                 EXPORT_PASSWORDS -> {
                     val uri = data.data
@@ -691,7 +686,7 @@ class UserPreference : AppCompatActivity() {
                     ).show()
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-                    prefs.edit().putString("pref_key_custom_dict", uri.toString()).apply()
+                    prefs.edit { putString("pref_key_custom_dict", uri.toString()) }
 
                     val customDictPref = prefsFragment.findPreference<Preference>("pref_key_custom_dict")
                     setCustomDictSummary(customDictPref, uri)
@@ -719,7 +714,7 @@ class UserPreference : AppCompatActivity() {
         val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory(applicationContext))
         val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
 
-        Timber.tag(TAG).d("Copying ${repositoryDirectory.path} to $targetDirectory")
+        Timber.tag(TAG).d { "Copying ${repositoryDirectory.path} to $targetDirectory" }
 
         val dateString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime

@@ -32,6 +32,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -228,7 +229,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
-    fun updateEncryptUsernameState() {
+    private fun updateEncryptUsernameState() {
         encrypt_username.apply {
             if (visibility != View.VISIBLE)
                 return
@@ -489,20 +490,20 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                                             run {
                                                                 calculateAndCommitHotp(entry)
                                                                 if (rememberCheck.isChecked) {
-                                                                    val editor = settings.edit()
-                                                                    editor.putBoolean("hotp_remember_check", true)
-                                                                    editor.putBoolean("hotp_remember_choice", true)
-                                                                    editor.apply()
+                                                                    settings.edit {
+                                                                        putBoolean("hotp_remember_check", true)
+                                                                        putBoolean("hotp_remember_choice", true)
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                         .setNegativeButton(R.string.dialog_update_negative) { _, _ ->
                                                             run {
                                                                 calculateHotp(entry)
-                                                                val editor = settings.edit()
-                                                                editor.putBoolean("hotp_remember_check", true)
-                                                                editor.putBoolean("hotp_remember_choice", false)
-                                                                editor.apply()
+                                                                settings.edit {
+                                                                    putBoolean("hotp_remember_check", true)
+                                                                    putBoolean("hotp_remember_choice", false)
+                                                                }
                                                             }
                                                         }
                                                 val updateDialog = dialogBuilder.create()
@@ -722,7 +723,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 val keys = ids.map { it.toString() }.toSet()
 
                                 // use Long
-                                settings.edit().putStringSet("openpgp_key_ids_set", keys).apply()
+                                settings.edit { putStringSet("openpgp_key_ids_set", keys) }
 
                                 showSnackbar("PGP keys selected")
 
