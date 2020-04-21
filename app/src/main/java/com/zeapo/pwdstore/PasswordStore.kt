@@ -133,7 +133,7 @@ class PasswordStore : AppCompatActivity() {
                 @SuppressLint("InflateParams")
                 val layout =
                         layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
-                layout.findViewById<AppCompatTextView>(R.id.intro_text).visibility = View.GONE
+                layout.findViewById<AppCompatTextView>(R.id.intro_text).setText(R.string.autofill_onboarding_dialog_message)
                 val supportedBrowsersTextView =
                         layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
                 supportedBrowsersTextView.text =
@@ -152,7 +152,6 @@ class PasswordStore : AppCompatActivity() {
                         }
                 setView(layout)
                 setTitle(getString(R.string.autofill_onboarding_dialog_title))
-                setMessage(getString(R.string.autofill_onboarding_dialog_message))
                 setPositiveButton(R.string.dialog_ok) { _, _ ->
                     settings.edit { putBoolean("seen_autofill_onboarding", true) }
                     startActivity(Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
