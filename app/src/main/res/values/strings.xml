@@ -333,7 +333,7 @@
     <string name="biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
     <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
     <string name="ssh_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
-    <string name="access_sdcard_text">The store is on the sdcard but the app does not have permission to access it. Please give permission.</string>
+    <string name="access_sdcard_text">The store location is in your SD Card/Internal Storage, but the app does not have permission to access it.</string>
     <string name="your_public_key">Your public key</string>
     <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
     <string name="pref_show_hidden_title">Show hidden folders</string>
@@ -364,4 +364,5 @@
     <string name="bottom_sheet_create_new_password">Create new password</string>
     <string name="autofill_onboarding_dialog_title">New, revamped Autofill!</string>
     <string name="autofill_onboarding_dialog_message">In this release, Autofill support has been massively improved with advanced features like anti-phishing protection and enhanced reliability. If you have been holding out on using it because of the shortcomings on the previous version, you\'ll likely love the new iteration. Give it a shot!</string>
+    <string name="snackbar_action_grant">Grant</string>
 </resources>

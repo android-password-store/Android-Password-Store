@@ -395,35 +395,21 @@ class PasswordStore : AppCompatActivity() {
      */
     private fun hasRequiredStoragePermissions(checkLocalRepo: Boolean = false): Boolean {
         return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            ) {
-                Snackbar.make(
+            != PackageManager.PERMISSION_GRANTED) {
+            Snackbar.make(
                     findViewById(R.id.main_layout),
                     getString(R.string.access_sdcard_text),
                     Snackbar.LENGTH_INDEFINITE
-                ).run {
-                    setAction(R.string.dialog_ok) {
-                        ActivityCompat.requestPermissions(
+            ).run {
+                setAction(getString(R.string.snackbar_action_grant)) {
+                    ActivityCompat.requestPermissions(
                             activity,
                             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                             REQUEST_EXTERNAL_STORAGE
-                        )
-                        dismiss()
-                    }
-                    show()
+                    )
+                    dismiss()
                 }
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST_EXTERNAL_STORAGE
-                )
+                show()
             }
             false
         } else {
