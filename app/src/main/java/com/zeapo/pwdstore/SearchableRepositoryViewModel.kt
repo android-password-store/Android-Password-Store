@@ -92,7 +92,9 @@ private fun PasswordItem.Companion.makeComparator(
 ): Comparator<PasswordItem> {
     return when (typeSortOrder) {
         PasswordRepository.PasswordSortOrder.FOLDER_FIRST -> compareBy { it.type }
-        PasswordRepository.PasswordSortOrder.INDEPENDENT -> compareBy<PasswordItem>()
+        // In order to let INDEPENDENT not distinguish between items based on their type, we simply
+        // declare them all equal at this stage.
+        PasswordRepository.PasswordSortOrder.INDEPENDENT -> Comparator<PasswordItem> { _, _ -> 0 }
         PasswordRepository.PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
     }
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
