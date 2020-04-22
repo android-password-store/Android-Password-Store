@@ -128,7 +128,7 @@ class PasswordStore : AppCompatActivity() {
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                !settings.getBoolean("seen_autofill_onboarding", false)) {
+                !settings.getBoolean(PREFERENCE_SEEN_AUTOFILL_ONBOARDING, false)) {
             MaterialAlertDialogBuilder(this).run {
                 @SuppressLint("InflateParams")
                 val layout =
@@ -151,12 +151,15 @@ class PasswordStore : AppCompatActivity() {
                             "$appLabel: $supportDescription"
                         }
                 setView(layout)
-                setTitle(getString(R.string.autofill_onboarding_dialog_title))
+                setTitle(R.string.autofill_onboarding_dialog_title)
                 setPositiveButton(R.string.dialog_ok) { _, _ ->
-                    settings.edit { putBoolean("seen_autofill_onboarding", true) }
                     startActivity(Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
                         data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
                     })
+                }
+                setNegativeButton(R.string.dialog_cancel) { _, _ -> }
+                setOnDismissListener {
+                    settings.edit { putBoolean(PREFERENCE_SEEN_AUTOFILL_ONBOARDING, true) }
                 }
                 show()
             }
@@ -845,6 +848,8 @@ class PasswordStore : AppCompatActivity() {
             return (!Character.isISOControl(c) &&
                     block != null && block !== UnicodeBlock.SPECIALS)
         }
+
+        private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
 
         fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
             object : GitOperation(getRepositoryDirectory(activity), activity) {
