@@ -303,7 +303,6 @@
     <string name="biometric_auth_summary">Когда ключено, Password Store будет запрашивать ваш опечаток пальца при каждом запуске приложения</string>
     <string name="biometric_auth_summary_error">Сенсор отпечатка пальца не доступен или отсутствует</string>
     <string name="ssh_openkeystore_clear_keyid">Очистить сохраненный SSH Key идентификатор OpenKystortore</string>
-    <string name="access_sdcard_text">Хранилище находится на sd-карте, но приложение не имеет прав доступа к ней. Пожалуйста, дайте приложению необходимые разрешения.</string>
     <string name="your_public_key">Ваш публичный ключ</string>
     <string name="error_generate_ssh_key">Возникла ошибка при попытке генерации ssh ключа</string>
     <string name="pref_show_hidden_title">Показать скрытые папки</string>
