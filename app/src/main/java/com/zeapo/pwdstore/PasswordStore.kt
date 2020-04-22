@@ -180,34 +180,7 @@ class PasswordStore : AppCompatActivity() {
         super.onResume()
         // do not attempt to checkLocalRepository() if no storage permission: immediate crash
         if (settings.getBoolean("git_external", false)) {
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    val snack = Snackbar.make(
-                                    findViewById(R.id.main_layout),
-                                    getString(R.string.access_sdcard_text),
-                                    Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.dialog_ok) {
-                                ActivityCompat.requestPermissions(
-                                        activity,
-                                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                        REQUEST_EXTERNAL_STORAGE)
-                            }
-                    snack.show()
-                    val view = snack.view
-                    val tv: AppCompatTextView = view.findViewById(com.google.android.material.R.id.snackbar_text)
-                    tv.setTextColor(Color.WHITE)
-                    tv.maxLines = 10
-                } else {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(
-                            activity,
-                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                            REQUEST_EXTERNAL_STORAGE)
-                }
-            } else {
-                checkLocalRepository()
-            }
+            checkStoragePermissions(true)
         } else {
             checkLocalRepository()
         }
@@ -389,8 +362,12 @@ class PasswordStore : AppCompatActivity() {
     }
 
     private fun initializeRepositoryInfo() {
+        val externalRepo = settings.getBoolean("git_external", false)
         val externalRepoPath = settings.getString("git_external_repo", null)
-        if (settings.getBoolean("git_external", false) && externalRepoPath != null) {
+        if (externalRepo && checkStoragePermissions()) {
+            return
+        }
+        if (externalRepo && externalRepoPath != null) {
             val dir = File(externalRepoPath)
             if (dir.exists() && dir.isDirectory &&
                     getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
@@ -411,6 +388,46 @@ class PasswordStore : AppCompatActivity() {
                     .show()
         }
         createRepository()
+    }
+
+    /**
+     * Validates if storage permission is granted, and requests for it if not. The return value
+     * indicates whether or not a permission request is being created.
+     */
+    private fun checkStoragePermissions(checkLocalRepo: Boolean = false): Boolean {
+        return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                val snack = Snackbar.make(
+                        findViewById(R.id.main_layout),
+                        getString(R.string.access_sdcard_text),
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.dialog_ok) {
+                            ActivityCompat.requestPermissions(
+                                    activity,
+                                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                    REQUEST_EXTERNAL_STORAGE)
+                        }
+                snack.show()
+                val view = snack.view
+                val tv: AppCompatTextView = view.findViewById(com.google.android.material.R.id.snackbar_text)
+                tv.setTextColor(Color.WHITE)
+                tv.maxLines = 10
+                true
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(
+                        activity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        REQUEST_EXTERNAL_STORAGE)
+                true
+            }
+        } else if (checkLocalRepo) {
+            checkLocalRepository()
+            false
+        } else {
+            false
+        }
     }
 
     private fun checkLocalRepository() {
@@ -631,7 +648,7 @@ class PasswordStore : AppCompatActivity() {
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
     private fun commitChange(message: String) {
-        Companion.commitChange(activity, message)
+        commitChange(activity, message)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

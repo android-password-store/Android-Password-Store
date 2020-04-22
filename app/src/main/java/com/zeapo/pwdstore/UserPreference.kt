@@ -461,6 +461,12 @@ class UserPreference : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         when (intent?.getStringExtra("operation")) {
