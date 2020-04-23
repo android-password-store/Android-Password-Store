@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.7.1] - 2020-04-23
+
+### Fixed
+- Autofill message does not show OK button when many browsers are installed
+- Autofill message does not get marked as shown when dismissed
+- App crashes when using type-independent sort
+- Storage permission not requested when using existing external repository
+
 ## [1.7.0] - 2020-04-21
 
 ### Added
@@ -102,7 +110,8 @@ All notable changes to this project will be documented in this file.
 - Fix elements overlapping.
 
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.7.1...HEAD
+[1.7.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.7.0..v1.7.1
 [1.7.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.6.0..v1.7.0
 [1.6.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.5.0..v1.6.0
 [1.5.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.4.0...v1.5.0

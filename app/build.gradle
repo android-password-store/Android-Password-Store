@@ -35,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId versions.packageName
-        versionCode 10701
-        versionName '1.8.0-SNAPSHOT'
+        versionCode 10710
+        versionName '1.7.1'
     }
 
     lintOptions {
