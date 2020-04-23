@@ -20,6 +20,10 @@ open class GitOperationActivity : BaseGitActivity() {
             REQUEST_PULL -> syncRepository(REQUEST_PULL)
             REQUEST_PUSH -> syncRepository(REQUEST_PUSH)
             REQUEST_SYNC -> syncRepository(REQUEST_SYNC)
+            else -> {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
         }
     }
 
