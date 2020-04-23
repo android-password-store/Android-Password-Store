@@ -7,6 +7,7 @@
 package dev.msfjarvis.aps.di.modules
 
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dev.msfjarvis.aps.StoreRepository
@@ -28,5 +29,5 @@ object RoomModule {
 
   @Provides
   @Singleton
-  fun storeRepository(storeDao: StoreDao): StoreRepository = StoreRepository(storeDao)
+  fun storeRepository(storeDao: StoreDao, prefs: SharedPreferences): StoreRepository = StoreRepository(storeDao, prefs)
 }

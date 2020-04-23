@@ -12,4 +12,6 @@ import dev.msfjarvis.aps.di.InjectorProvider
 
 class Application : android.app.Application(), InjectorProvider {
   override val component: AppComponent by lazy { DaggerAppComponent.factory().create(applicationContext) }
+
+  //TODO: Repository.onClear() after implementing app lifecycle
 }
