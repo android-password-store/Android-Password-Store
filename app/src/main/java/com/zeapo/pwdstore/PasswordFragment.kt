@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitOperationActivity
+import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
@@ -69,8 +70,13 @@ class PasswordFragment : Fragment() {
         swipeRefresher = binding.swipeRefresher
         swipeRefresher.setOnRefreshListener {
             if (!PasswordRepository.isGitRepo()) {
-                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_SHORT)
-                    .show()
+                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.clone_button) {
+                            val intent = Intent(context, GitServerConfigActivity::class.java)
+                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                        }
+                        .show()
                 swipeRefresher.isRefreshing = false
             } else {
                 val intent = Intent(context, GitOperationActivity::class.java)
