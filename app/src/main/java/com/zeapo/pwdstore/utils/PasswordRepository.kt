@@ -81,6 +81,8 @@ open class PasswordRepository protected constructor() {
             if (repository != null) {
                 // Check if remote exists
                 return repository!!.config.getSubsections("remote").isNotEmpty()
+                        && repository!!.objectDatabase.exists()
+                        && repository!!.allRefs.isNotEmpty()
             }
             return false
         }
