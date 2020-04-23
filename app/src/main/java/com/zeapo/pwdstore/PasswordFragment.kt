@@ -70,7 +70,7 @@ class PasswordFragment : Fragment() {
         swipeRefresher = binding.swipeRefresher
         swipeRefresher.setOnRefreshListener {
             if (!PasswordRepository.isGitRepo()) {
-                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.clone_button) {
                             val intent = Intent(context, GitServerConfigActivity::class.java)
                             intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
