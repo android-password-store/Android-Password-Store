@@ -28,10 +28,8 @@ class LaunchActivity : AppCompatActivity() {
                         prefs.edit { remove("biometric_auth") }
                         startTargetActivity(false)
                     }
-                    is BiometricAuthenticator.Result.Failure -> {
+                    is BiometricAuthenticator.Result.Failure, BiometricAuthenticator.Result.Cancelled -> {
                         finish()
-                    }
-                    else -> {
                     }
                 }
             }
