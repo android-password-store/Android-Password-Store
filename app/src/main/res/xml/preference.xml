@@ -131,7 +131,7 @@
             app:key="show_hidden_folders"
             app:defaultValue="false"
             app:persistent="true" />
-        <androidx.preference.SwitchPreferenceCompat
+        <androidx.preference.CheckBoxPreference
             app:key="biometric_auth"
             app:title="@string/biometric_auth_title"
             app:summary="@string/biometric_auth_summary" />
