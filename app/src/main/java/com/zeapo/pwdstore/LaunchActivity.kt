@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
@@ -21,6 +22,10 @@ class LaunchActivity : AppCompatActivity() {
             BiometricAuthenticator.authenticate(this) {
                 when (it) {
                     is BiometricAuthenticator.Result.Success -> {
+                        startTargetActivity(false)
+                    }
+                    is BiometricAuthenticator.Result.HardwareUnavailableOrDisabled -> {
+                        prefs.edit { remove("biometric_auth") }
                         startTargetActivity(false)
                     }
                     is BiometricAuthenticator.Result.Failure -> {
