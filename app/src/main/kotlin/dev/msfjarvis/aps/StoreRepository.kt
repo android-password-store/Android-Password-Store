@@ -45,7 +45,7 @@ class StoreRepository @Inject constructor(private val storeDao: StoreDao, privat
       storeDao.insertStore(storeEntity)
     }
     withContext(Dispatchers.Main) {
-      Timber.d { "Store added to DB" }
+      d { "Store added to DB" }
       if (setCurrent) setCurrentStore(storeEntity.id)
     }
   }
