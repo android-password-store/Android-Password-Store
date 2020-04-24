@@ -143,7 +143,8 @@
     <string name="pref_provider_title">Select OpenPGP provider</string>
     <string name="pref_key_title">Select OpenPGP key ID</string>
     <string name="pref_no_key_selected">No key selected</string>
-    <string name="pref_general_title">General</string>
+    <string name="pref_category_general_title">General</string>
+    <string name="pref_category_title_passwords">Passwords</string>
     <string name="pref_clipboard_timeout_title">Password copy timeout</string>
     <string name="pref_clipboard_timeout_summary">Set the time (in seconds) you want the password to be in clipboard. 0 means forever. Current value: %1$s</string>
     <string name="pref_copy_title">Automatically copy password</string>

@@ -113,7 +113,7 @@
     <string name="pref_provider_title">Selecciona un proveedor OpenPGP</string>
     <string name="pref_key_title">Selecciona la llave OpenPGP</string>
     <string name="pref_no_key_selected">Ninguna llave seleccionada</string>
-    <string name="pref_general_title">General</string>
+    <string name="pref_category_general_title">General</string>
     <string name="pref_copy_title">Copiar contraseña automáticamente</string>
     <string name="pref_copy_dialog_title">Automáticamente copia la contraseña al portapapeles si el descifrado fue exitoso.</string>
     <string name="ssh_key_success_dialog_title">Llave SSH importada</string>

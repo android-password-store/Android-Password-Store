@@ -126,7 +126,7 @@
     <string name="pref_provider_title">Выберите провайдера OpenPGP</string>
     <string name="pref_key_title">Выберите ключ OpenPGP</string>
     <string name="pref_no_key_selected">Ключи не выбраны</string>
-    <string name="pref_general_title">Общие</string>
+    <string name="pref_category_general_title">Общие</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
     <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
     <string name="ssh_key_success_dialog_title">SSH ключ импортирован</string>

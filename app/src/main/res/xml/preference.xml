@@ -99,7 +99,7 @@
             app:dependency="pref_key_is_custom_dict"/>
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory app:title="@string/pref_general_title">
+    <androidx.preference.PreferenceCategory app:title="@string/pref_category_general_title">
         <ListPreference
             android:defaultValue="@string/app_theme_def"
             android:key="app_theme"
@@ -115,6 +115,28 @@
             app:entryValues="@array/sort_order_values"
             app:persistent="true"
             app:summary="%s" />
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="true"
+            app:key="filter_recursively"
+            app:summary="@string/pref_recursive_filter_hint"
+            app:title="@string/pref_recursive_filter" />
+        <androidx.preference.CheckBoxPreference
+            app:defaultValue="false"
+            app:key="search_on_start"
+            app:summary="@string/pref_search_on_start_hint"
+            app:title="@string/pref_search_on_start" />
+        <androidx.preference.CheckBoxPreference
+            app:title="@string/pref_show_hidden_title"
+            app:summary="@string/pref_show_hidden_summary"
+            app:key="show_hidden_folders"
+            app:defaultValue="false"
+            app:persistent="true" />
+        <androidx.preference.SwitchPreferenceCompat
+            app:key="biometric_auth"
+            app:title="@string/biometric_auth_title"
+            app:summary="@string/biometric_auth_summary" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory app:title="@string/pref_category_title_passwords">
         <androidx.preference.EditTextPreference
             android:inputType="number"
             app:defaultValue="45"
@@ -137,26 +159,6 @@
             app:key="copy_on_decrypt"
             app:summary="@string/pref_copy_dialog_title"
             app:title="@string/pref_copy_title" />
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
-            app:key="filter_recursively"
-            app:summary="@string/pref_recursive_filter_hint"
-            app:title="@string/pref_recursive_filter" />
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="false"
-            app:key="search_on_start"
-            app:summary="@string/pref_search_on_start_hint"
-            app:title="@string/pref_search_on_start" />
-        <androidx.preference.CheckBoxPreference
-            app:title="@string/pref_show_hidden_title"
-            app:summary="@string/pref_show_hidden_summary"
-            app:key="show_hidden_folders"
-            app:defaultValue="false"
-            app:persistent="true" />
-        <androidx.preference.SwitchPreferenceCompat
-            app:key="biometric_auth"
-            app:title="@string/biometric_auth_title"
-            app:summary="@string/biometric_auth_summary" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory app:title="@string/pref_misc_title">

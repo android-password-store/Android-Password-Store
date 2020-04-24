@@ -72,7 +72,7 @@
     <string name="pref_dialog_delete_title">تنحية المستودع</string>
     <string name="pref_crypto_title">التشفير</string>
     <string name="pref_provider_title">إختيار مزود الأوبن بي جي بي OpenPGP</string>
-    <string name="pref_general_title">الإعدادات العامة</string>
+    <string name="pref_category_general_title">الإعدادات العامة</string>
     <string name="pref_copy_title">نسخ كلمة السر تلقائيًا</string>
     <string name="ssh_key_success_dialog_title">تم استيراد مفتاح الـ SSH</string>
     <string name="ssh_key_error_dialog_text">نص الرسالة : \n</string>
