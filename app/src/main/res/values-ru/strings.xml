@@ -296,9 +296,6 @@
     <string name="sdcard_root_warning_message">Вы выбрали корень вашей sd-карты для хранения. Это очень опасно и вы потеряете ваши данные, поскольку они будут в конечном итоге удалены</string>
     <string name="git_abort_and_push_title">Прервать и записать изменения</string>
     <string name="biometric_prompt_title">Запрос биометрии</string>
-    <string name="biometric_prompt_retry">Повторить</string>
-    <string name="biometric_prompt_cancelled">Аутентификация отменена</string>
-    <string name="biometric_prompt_no_hardware">Биометрические сенсоры не обнаружены</string>
     <string name="biometric_auth_title">Включить биометрическую аутентификацию</string>
     <string name="biometric_auth_summary">Когда ключено, Password Store будет запрашивать ваш опечаток пальца при каждом запуске приложения</string>
     <string name="biometric_auth_summary_error">Сенсор отпечатка пальца не доступен или отсутствует</string>

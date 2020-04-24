@@ -8,10 +8,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.crypto.PgpActivity
-import com.zeapo.pwdstore.utils.auth.AuthenticationResult
-import com.zeapo.pwdstore.utils.auth.Authenticator
+import com.zeapo.pwdstore.utils.BiometricAuthenticator
 
 class LaunchActivity : AppCompatActivity() {
 
@@ -19,18 +19,20 @@ class LaunchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (prefs.getBoolean("biometric_auth", false)) {
-            Authenticator(this) {
+            BiometricAuthenticator.authenticate(this) {
                 when (it) {
-                    is AuthenticationResult.Success -> {
+                    is BiometricAuthenticator.Result.Success -> {
                         startTargetActivity(false)
                     }
-                    is AuthenticationResult.UnrecoverableError -> {
+                    is BiometricAuthenticator.Result.HardwareUnavailableOrDisabled -> {
+                        prefs.edit { remove("biometric_auth") }
+                        startTargetActivity(false)
+                    }
+                    is BiometricAuthenticator.Result.Failure, BiometricAuthenticator.Result.Cancelled -> {
                         finish()
                     }
-                    else -> {
-                    }
                 }
-            }.authenticate()
+            }
         } else {
             startTargetActivity(true)
         }
