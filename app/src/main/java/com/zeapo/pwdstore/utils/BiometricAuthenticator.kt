@@ -65,7 +65,7 @@ object BiometricAuthenticator {
                 .setDeviceCredentialAllowed(true)
                 .build()
         if (BiometricManager.from(activity).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS ||
-                activity.getSystemService<KeyguardManager>()!!.isDeviceSecure) {
+                activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true) {
             biometricPrompt.authenticate(promptInfo)
         } else {
             callback(Result.HardwareUnavailableOrDisabled)
