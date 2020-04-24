@@ -26,7 +26,10 @@ class GitConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.gitUserName.setText(username)
+        if (username.isEmpty())
+            binding.gitUserName.requestFocus()
+        else
+            binding.gitUserName.setText(username)
         binding.gitUserEmail.setText(email)
         val repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(this))
         if (repo != null) {
