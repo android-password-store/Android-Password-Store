@@ -101,7 +101,6 @@ class UserPreference : AppCompatActivity() {
 
             // General preferences
             val showTimePreference = findPreference<Preference>("general_show_time")
-            val clearAfterCopyPreference = findPreference<CheckBoxPreference>("clear_after_copy")
             val clearClipboard20xPreference = findPreference<CheckBoxPreference>("clear_clipboard_20x")
 
             // Autofill preferences
@@ -129,7 +128,6 @@ class UserPreference : AppCompatActivity() {
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
             clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
-            clearAfterCopyPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
                     ?: HashSet()).toTypedArray()
@@ -273,7 +271,6 @@ class UserPreference : AppCompatActivity() {
             showTimePreference?.onPreferenceChangeListener = ChangeListener { _, newValue: Any? ->
                 try {
                     val isEnabled = newValue.toString().toInt() != 0
-                    clearAfterCopyPreference?.isVisible = isEnabled
                     clearClipboard20xPreference?.isVisible = isEnabled
                     true
                 } catch (e: NumberFormatException) {
@@ -282,7 +279,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             showTimePreference?.summaryProvider = Preference.SummaryProvider<Preference> {
-                getString(R.string.pref_show_time_summary, sharedPreferences.getString("general_show_time", "45"))
+                getString(R.string.pref_clipboard_timeout_summary, sharedPreferences.getString("general_show_time", "45"))
             }
 
             findPreference<SwitchPreferenceCompat>("biometric_auth")?.apply {
@@ -337,10 +334,10 @@ class UserPreference : AppCompatActivity() {
             val prefIsCustomDict = findPreference<CheckBoxPreference>("pref_key_is_custom_dict")
             val prefCustomDictPicker = findPreference<Preference>("pref_key_custom_dict")
             val prefPwgenType = findPreference<ListPreference>("pref_key_pwgen_type")
-            showHideDependentPrefs(prefPwgenType?.value, prefIsCustomDict, prefCustomDictPicker)
+            updateXkPasswdPrefsVisibility(prefPwgenType?.value, prefIsCustomDict, prefCustomDictPicker)
 
             prefPwgenType?.onPreferenceChangeListener = ChangeListener { _, newValue ->
-                showHideDependentPrefs(newValue, prefIsCustomDict, prefCustomDictPicker)
+                updateXkPasswdPrefsVisibility(newValue, prefIsCustomDict, prefCustomDictPicker)
                 true
             }
 
@@ -356,7 +353,7 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
-        private fun showHideDependentPrefs(newValue: Any?, prefIsCustomDict: CheckBoxPreference?, prefCustomDictPicker: Preference?) {
+        private fun updateXkPasswdPrefsVisibility(newValue: Any?, prefIsCustomDict: CheckBoxPreference?, prefCustomDictPicker: Preference?) {
             when (newValue as String) {
                 PgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
                     prefIsCustomDict?.isVisible = false

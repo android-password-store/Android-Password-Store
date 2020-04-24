@@ -88,7 +88,6 @@
     <string name="pref_provider_title">Wähle OpenPGP-Provider</string>
     <string name="pref_key_title">Wähle OpenPGP-Key ID</string>
     <string name="pref_general_title">Allgemein</string>
-    <string name="pref_show_time_title">Ablaufzeit des Passworts</string>
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
     <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
     <string name="ssh_key_success_dialog_title">SSH-Key importiert</string>
@@ -112,8 +111,6 @@
     <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
     <string name="pref_select_external_repository">Wähle ein externes Repository</string>
     <string name="prefs_use_default_file_picker">Benutze Standardauswahl für Dateien</string>
-    <string name="prefs_clear_after_copy_title">Zwischenablage automatisch leeren</string>
-    <string name="prefs_clear_after_copy_summary">Nach automatischen oder manuellen Kopieren des Passwords wird die Zwischenablage automatisch geleert</string>
     <string name="prefs_export_passwords_title">Passwörter exportieren</string>
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
     <string name="prefs_version">Version</string>

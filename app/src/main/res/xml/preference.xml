@@ -107,13 +107,20 @@
             android:entryValues="@array/app_theme_values"
             android:summary="%s"
             android:title="@string/theme_title" />
+        <androidx.preference.ListPreference
+            app:title="@string/pref_sort_order_title"
+            app:defaultValue="FOLDER_FIRST"
+            app:key="sort_order"
+            app:entries="@array/sort_order_entries"
+            app:entryValues="@array/sort_order_values"
+            app:persistent="true"
+            app:summary="%s" />
         <androidx.preference.EditTextPreference
-            app:defaultValue="45"
-            app:dialogTitle="@string/pref_show_time_summary"
             android:inputType="number"
+            app:defaultValue="45"
             app:key="general_show_time"
-            app:summary="@string/pref_show_time_summary"
-            app:title="@string/pref_show_time_title" />
+            app:summary="@string/pref_clipboard_timeout_summary"
+            app:title="@string/pref_clipboard_timeout_title" />
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
             app:title="@string/show_password_pref_title"
@@ -132,11 +139,6 @@
             app:title="@string/pref_copy_title" />
         <androidx.preference.CheckBoxPreference
             app:defaultValue="true"
-            app:key="clear_after_copy"
-            app:summary="@string/prefs_clear_after_copy_summary"
-            app:title="@string/prefs_clear_after_copy_title" />
-        <androidx.preference.CheckBoxPreference
-            app:defaultValue="true"
             app:key="filter_recursively"
             app:summary="@string/pref_recursive_filter_hint"
             app:title="@string/pref_recursive_filter" />
@@ -145,14 +147,6 @@
             app:key="search_on_start"
             app:summary="@string/pref_search_on_start_hint"
             app:title="@string/pref_search_on_start" />
-        <androidx.preference.ListPreference
-            app:title="@string/pref_sort_order_title"
-            app:defaultValue="FOLDER_FIRST"
-            app:key="sort_order"
-            app:entries="@array/sort_order_entries"
-            app:entryValues="@array/sort_order_values"
-            app:persistent="true"
-            app:summary="%s" />
         <androidx.preference.CheckBoxPreference
             app:title="@string/pref_show_hidden_title"
             app:summary="@string/pref_show_hidden_summary"

@@ -127,8 +127,6 @@
     <string name="pref_key_title">Выберите ключ OpenPGP</string>
     <string name="pref_no_key_selected">Ключи не выбраны</string>
     <string name="pref_general_title">Общие</string>
-    <string name="pref_show_time_title">Время в буфере</string>
-    <string name="pref_show_time_summary">Уставить время (в секундах) в течении которого пароль будет находиться в буфере обмена. 0 - останется навсегда. Текущее значение: %1$s</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
     <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
     <string name="ssh_key_success_dialog_title">SSH ключ импортирован</string>
@@ -158,8 +156,6 @@
     <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
     <string name="pref_select_external_repository">Выбрать внешний репозиторий</string>
     <string name="prefs_use_default_file_picker">Использовать стандартное окно выбора файлов</string>
-    <string name="prefs_clear_after_copy_title">Автоматически очищать буфер обмена после вставки</string>
-    <string name="prefs_clear_after_copy_summary">После автоматического или ручного копирования, буфер обмена будет автоматически очищен.</string>
     <string name="prefs_export_passwords_title">Экспортировать пароли</string>
     <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
     <string name="prefs_version">Версия</string>
