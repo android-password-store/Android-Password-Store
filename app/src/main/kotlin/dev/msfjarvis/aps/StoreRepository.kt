@@ -10,7 +10,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.ajalt.timberkt.Timber
+import com.github.ajalt.timberkt.d
 import dagger.Reusable
 import dev.msfjarvis.aps.db.dao.StoreDao
 import dev.msfjarvis.aps.db.entity.StoreEntity
@@ -59,7 +59,7 @@ class StoreRepository @Inject constructor(private val storeDao: StoreDao, privat
       storeDao.deleteStore(storeEntity)
     }
     withContext(Dispatchers.Main) {
-      Timber.d { "Store removed from DB" }
+      d { "Store removed from DB" }
     }
   }
 
