@@ -47,8 +47,7 @@ import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.auth.AuthenticationResult
-import com.zeapo.pwdstore.utils.auth.Authenticator
+import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
@@ -297,9 +296,9 @@ class UserPreference : AppCompatActivity() {
                         isEnabled = false
                         sharedPreferences.edit {
                             val checked = isChecked
-                            Authenticator(requireActivity()) { result ->
+                            BiometricAuthenticator.authenticate(requireActivity()) { result ->
                                 when (result) {
-                                    is AuthenticationResult.Success -> {
+                                    is BiometricAuthenticator.Result.Success -> {
                                         // Apply the changes
                                         putBoolean("biometric_auth", checked)
                                         isEnabled = true
@@ -312,7 +311,7 @@ class UserPreference : AppCompatActivity() {
                                         isEnabled = true
                                     }
                                 }
-                            }.authenticate()
+                            }
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                                 requireContext().getSystemService<ShortcutManager>()?.apply {
                                     removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
