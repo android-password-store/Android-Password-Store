@@ -10,10 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jcraft.jsch.JSch
@@ -22,15 +22,12 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentSshKeygenBinding
 import java.io.File
 import java.io.FileOutputStream
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SshKeyGenFragment : Fragment(), CoroutineScope {
+class SshKeyGenFragment : Fragment() {
 
-    override val coroutineContext get() = Dispatchers.IO + Job()
     private var keyLength = 4096
     private var _binding: FragmentSshKeygenBinding? = null
     private val binding get() = _binding!!
@@ -48,7 +45,7 @@ class SshKeyGenFragment : Fragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             generate.setOnClickListener {
-                launch { generate(passphrase.text.toString(), comment.text.toString()) }
+                lifecycleScope.launch { generate(passphrase.text.toString(), comment.text.toString()) }
             }
             showPassphrase.setOnCheckedChangeListener { _, isChecked: Boolean ->
                 val selection = passphrase.selectionEnd
@@ -84,43 +81,40 @@ class SshKeyGenFragment : Fragment(), CoroutineScope {
     // private and public key, then replaces the SshKeyGenFragment with a
     // ShowSshKeyFragment which displays the public key.
     private suspend fun generate(passphrase: String, comment: String) {
-        withContext(Dispatchers.Main) {
-            binding.generate.text = getString(R.string.ssh_key_gen_generating_progress)
-        }
+        binding.generate.text = getString(R.string.ssh_key_gen_generating_progress)
         val jsch = JSch()
         val e = try {
-            val kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, keyLength)
-            var file = File(requireActivity().filesDir, ".ssh_key")
-            var out = FileOutputStream(file, false)
-            if (passphrase.isNotEmpty()) {
-                kp?.writePrivateKey(out, passphrase.toByteArray())
-            } else {
-                kp?.writePrivateKey(out)
+            withContext(Dispatchers.IO) {
+                val kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, keyLength)
+                var file = File(requireActivity().filesDir, ".ssh_key")
+                var out = FileOutputStream(file, false)
+                if (passphrase.isNotEmpty()) {
+                    kp?.writePrivateKey(out, passphrase.toByteArray())
+                } else {
+                    kp?.writePrivateKey(out)
+                }
+                file = File(requireActivity().filesDir, ".ssh_key.pub")
+                out = FileOutputStream(file, false)
+                kp?.writePublicKey(out, comment)
             }
-            file = File(requireActivity().filesDir, ".ssh_key.pub")
-            out = FileOutputStream(file, false)
-            kp?.writePublicKey(out, comment)
             null
         } catch (e: Exception) {
             e.printStackTrace()
             e
         }
-        withContext(Dispatchers.Main) {
-            val activity = requireActivity()
-            binding.generate.text = getString(R.string.ssh_keygen_generating_done)
-            if (e == null) {
-                Toast.makeText(activity, "SSH-key generated", Toast.LENGTH_LONG).show()
-                val df = ShowSshKeyFragment()
-                df.show(requireActivity().supportFragmentManager, "public_key")
-                val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-                prefs.edit { putBoolean("use_generated_key", true) }
-            } else {
-                MaterialAlertDialogBuilder(activity)
-                        .setTitle(activity.getString(R.string.error_generate_ssh_key))
-                        .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                        .setPositiveButton(activity.getString(R.string.dialog_ok), null)
-                        .show()
-            }
+        val activity = requireActivity()
+        binding.generate.text = getString(R.string.ssh_keygen_generating_done)
+        if (e == null) {
+            val df = ShowSshKeyFragment()
+            df.show(requireActivity().supportFragmentManager, "public_key")
+            val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+            prefs.edit { putBoolean("use_generated_key", true) }
+        } else {
+            MaterialAlertDialogBuilder(activity)
+                    .setTitle(activity.getString(R.string.error_generate_ssh_key))
+                    .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                    .setPositiveButton(activity.getString(R.string.dialog_ok), null)
+                    .show()
         }
         hideKeyboard()
     }

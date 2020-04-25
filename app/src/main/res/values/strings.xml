@@ -224,6 +224,8 @@
     <string name="ssh_keygen_show_passphrase">Show passphrase</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
     <string name="ssh_keygen_generating_done">Done!</string>
+    <string name="key_length_2048" translatable="false">2048</string>
+    <string name="key_length_4096" translatable="false">4096</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
