@@ -113,7 +113,9 @@ class SshKeyGenFragment : Fragment() {
             MaterialAlertDialogBuilder(activity)
                     .setTitle(activity.getString(R.string.error_generate_ssh_key))
                     .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                    .setPositiveButton(activity.getString(R.string.dialog_ok), null)
+                    .setPositiveButton(activity.getString(R.string.dialog_ok)) { _, _ ->
+                        requireActivity().finish()
+                    }
                     .show()
         }
         hideKeyboard()
