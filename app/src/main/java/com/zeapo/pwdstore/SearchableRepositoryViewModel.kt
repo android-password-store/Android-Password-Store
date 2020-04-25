@@ -266,7 +266,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
     private fun listFilesRecursively(dir: File): Flow<File> {
         return dir
-            .walkTopDown().onEnter { file -> shouldTake(file) }
+            // Take top directory even if it is hidden.
+            .walkTopDown().onEnter { file -> file == dir || shouldTake(file) }
             .asFlow()
             // Skip the root directory
             .drop(1)
