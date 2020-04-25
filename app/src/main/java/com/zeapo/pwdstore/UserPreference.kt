@@ -282,6 +282,8 @@ class UserPreference : AppCompatActivity() {
                 getString(R.string.pref_clipboard_timeout_summary, sharedPreferences.getString("general_show_time", "45"))
             }
 
+            findPreference<CheckBoxPreference>("enable_debug_logging")?.isVisible = !BuildConfig.ENABLE_DEBUG_FEATURES
+
             findPreference<CheckBoxPreference>("biometric_auth")?.apply {
                 val isFingerprintSupported = BiometricManager.from(requireContext()).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
                 if (!isFingerprintSupported) {

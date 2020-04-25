@@ -172,6 +172,11 @@
             app:key="clear_clipboard_20x"
             app:summary="@string/pref_clear_clipboard_hint"
             app:title="@string/pref_clear_clipboard_title" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="enable_debug_logging"
+            app:summary="@string/pref_debug_logging_summary"
+            app:title="@string/pref_debug_logging_title" />
     </PreferenceCategory>
 
     <PreferenceCategory>

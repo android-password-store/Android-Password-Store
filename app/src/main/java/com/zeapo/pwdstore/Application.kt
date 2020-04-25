@@ -21,11 +21,11 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.ENABLE_DEBUG_FEATURES) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs?.getBoolean("enable_debug_logging", false) == true) {
             plant(DebugTree())
             WhatTheStack(this).init()
         }
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs?.registerOnSharedPreferenceChangeListener(this)
         setNightMode()
     }
