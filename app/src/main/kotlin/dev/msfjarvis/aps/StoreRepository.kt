@@ -66,7 +66,6 @@ class StoreRepository @Inject constructor(private val storeDao: StoreDao, privat
   private fun setCurrentStore(id: Int) {
     prefs.edit {
       putInt(PreferenceKeys.CURRENT_STORE_ID, id);
-      apply()
     }
   }
 
