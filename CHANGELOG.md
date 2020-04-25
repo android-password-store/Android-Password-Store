@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Settings option to enable debug logging
+
 ### Changed
 - SSH Keygen UI was improved
 - Default key length for SSH Keygen is now 4096 bits
