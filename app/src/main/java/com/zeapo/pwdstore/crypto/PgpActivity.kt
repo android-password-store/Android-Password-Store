@@ -831,7 +831,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             // ignore and keep default
         }
 
-        if (settings.getBoolean("clear_after_copy", true) && clearAfter != 0) {
+        if (clearAfter != 0) {
             setTimer()
             showSnackbar(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
         } else {

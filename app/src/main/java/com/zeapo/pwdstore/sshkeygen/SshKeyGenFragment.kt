@@ -10,81 +10,124 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Spinner
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputEditText
+import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jcraft.jsch.JSch
+import com.jcraft.jsch.KeyPair
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.databinding.FragmentSshKeygenBinding
+import java.io.File
+import java.io.FileOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SshKeyGenFragment : Fragment() {
 
-    private lateinit var checkBox: CheckBox
-    private lateinit var comment: EditText
-    private lateinit var generate: Button
-    private lateinit var passphrase: TextInputEditText
-    private lateinit var spinner: Spinner
-    private lateinit var activity: SshKeyGenActivity
+    private var keyLength = 4096
+    private var _binding: FragmentSshKeygenBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_ssh_keygen, container, false)
+        _binding = FragmentSshKeygenBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity = requireActivity() as SshKeyGenActivity
-        findViews(view)
-        val lengths = arrayOf(2048, 4096)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, lengths)
-        spinner.adapter = adapter
-        generate.setOnClickListener { generate() }
-        checkBox.setOnCheckedChangeListener { _, isChecked: Boolean ->
-            val selection = passphrase.selectionEnd
-            if (isChecked) {
-                passphrase.inputType = (
-                        InputType.TYPE_CLASS_TEXT
-                                or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
-            } else {
-                passphrase.inputType = (
-                        InputType.TYPE_CLASS_TEXT
-                                or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        with(binding) {
+            generate.setOnClickListener {
+                lifecycleScope.launch { generate(passphrase.text.toString(), comment.text.toString()) }
             }
-            passphrase.setSelection(selection)
+            showPassphrase.setOnCheckedChangeListener { _, isChecked: Boolean ->
+                val selection = passphrase.selectionEnd
+                if (isChecked) {
+                    passphrase.inputType = (
+                            InputType.TYPE_CLASS_TEXT
+                                    or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+                } else {
+                    passphrase.inputType = (
+                            InputType.TYPE_CLASS_TEXT
+                                    or InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                }
+                passphrase.setSelection(selection)
+            }
+            keyLengthGroup.check(R.id.key_length_4096)
+            keyLengthGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+                if (isChecked) {
+                    when (checkedId) {
+                        R.id.key_length_2048 -> keyLength = 2048
+                        R.id.key_length_4096 -> keyLength = 4096
+                    }
+                }
+            }
         }
     }
 
-    private fun findViews(view: View) {
-        checkBox = view.findViewById(R.id.show_passphrase)
-        comment = view.findViewById(R.id.comment)
-        generate = view.findViewById(R.id.generate)
-        passphrase = view.findViewById(R.id.passphrase)
-        spinner = view.findViewById(R.id.length)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
     // private and public key, then replaces the SshKeyGenFragment with a
     // ShowSshKeyFragment which displays the public key.
-    fun generate() {
-        val length = (spinner.selectedItem as Int).toString()
-        val passphrase = passphrase.text.toString()
-        val comment = comment.text.toString()
-        KeyGenerateTask(activity).execute(length, passphrase, comment)
+    private suspend fun generate(passphrase: String, comment: String) {
+        binding.generate.text = getString(R.string.ssh_key_gen_generating_progress)
+        val jsch = JSch()
+        val e = try {
+            withContext(Dispatchers.IO) {
+                val kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, keyLength)
+                var file = File(requireActivity().filesDir, ".ssh_key")
+                var out = FileOutputStream(file, false)
+                if (passphrase.isNotEmpty()) {
+                    kp?.writePrivateKey(out, passphrase.toByteArray())
+                } else {
+                    kp?.writePrivateKey(out)
+                }
+                file = File(requireActivity().filesDir, ".ssh_key.pub")
+                out = FileOutputStream(file, false)
+                kp?.writePublicKey(out, comment)
+            }
+            null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            e
+        }
+        val activity = requireActivity()
+        binding.generate.text = getString(R.string.ssh_keygen_generating_done)
+        if (e == null) {
+            val df = ShowSshKeyFragment()
+            df.show(requireActivity().supportFragmentManager, "public_key")
+            val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+            prefs.edit { putBoolean("use_generated_key", true) }
+        } else {
+            MaterialAlertDialogBuilder(activity)
+                    .setTitle(activity.getString(R.string.error_generate_ssh_key))
+                    .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                    .setPositiveButton(activity.getString(R.string.dialog_ok)) { _, _ ->
+                        requireActivity().finish()
+                    }
+                    .show()
+        }
         hideKeyboard()
     }
 
     private fun hideKeyboard() {
-        val imm = activity.getSystemService<InputMethodManager>()
+        val activity = activity ?: return
+        val imm = activity.getSystemService<InputMethodManager>() ?: return
         var view = activity.currentFocus
         if (view == null) {
             view = View(activity)
         }
-        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

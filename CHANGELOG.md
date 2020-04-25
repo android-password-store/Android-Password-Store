@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- SSH Keygen UI was improved
+- Default key length for SSH Keygen is now 4096 bits
+- Settings items were rearranged and cleaned up
+
+### Fixed
+- Failure to detect if repository was not cloned which broke Git operations
+- Search results were inaccurate if root directory's name started with a dot (.)
+- Saving git username and email did not provide user-facing confirmation
+
 ## [1.7.1] - 2020-04-23
 
 ### Fixed

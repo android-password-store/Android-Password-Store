@@ -13,7 +13,6 @@ class SshKeyGenActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = "Generate SSH Key"
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()

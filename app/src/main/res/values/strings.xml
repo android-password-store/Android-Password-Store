@@ -143,9 +143,10 @@
     <string name="pref_provider_title">Select OpenPGP provider</string>
     <string name="pref_key_title">Select OpenPGP key ID</string>
     <string name="pref_no_key_selected">No key selected</string>
-    <string name="pref_general_title">General</string>
-    <string name="pref_show_time_title">Password show time</string>
-    <string name="pref_show_time_summary">Set the time (in seconds) you want the password to be in clipboard. 0 means forever. Current value: %1$s</string>
+    <string name="pref_category_general_title">General</string>
+    <string name="pref_category_title_passwords">Passwords</string>
+    <string name="pref_clipboard_timeout_title">Password copy timeout</string>
+    <string name="pref_clipboard_timeout_summary">Set the time (in seconds) you want the password to be in clipboard. 0 means forever. Current value: %1$s</string>
     <string name="pref_copy_title">Automatically copy password</string>
     <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">Selected file does not appear to be an SSH private key.</string>
@@ -177,8 +178,6 @@
     <string name="pref_external_repository_summary">Use an external password repository</string>
     <string name="pref_select_external_repository">Select external repository</string>
     <string name="prefs_use_default_file_picker">Use default file picker</string>
-    <string name="prefs_clear_after_copy_title">Automatically clear the clipboard after copy</string>
-    <string name="prefs_clear_after_copy_summary">After an automatic copy or a manual copy of the password, the clipboard will be automatically cleared.</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
     <string name="prefs_version">Version</string>
@@ -223,6 +222,10 @@
     <string name="ssh_keygen_copy">Copy</string>
     <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
     <string name="ssh_keygen_show_passphrase">Show passphrase</string>
+    <string name="ssh_key_gen_generating_progress">Generating keys…</string>
+    <string name="ssh_keygen_generating_done">Done!</string>
+    <string name="key_length_2048" translatable="false">2048</string>
+    <string name="key_length_4096" translatable="false">4096</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
@@ -236,9 +239,9 @@
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
     <string name="show_password_pref_title">Show the password</string>
-    <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted, this does not disable the password copy</string>
+    <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted. This does not disable copying to clipboard.</string>
     <string name="show_extra_content_pref_title">Show extra content</string>
-    <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted</string>
+    <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted.</string>
     <string name="pwd_generate_button">Generate</string>
     <string name="refresh_list">Refresh list</string>
     <string name="no_repo_selected">No external repository selected</string>

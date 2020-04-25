@@ -121,8 +121,7 @@
     <string name="pref_provider_title">Sélection du prestataire OpenPGP</string>
     <string name="pref_key_title">Sélection de votre identifiant OpenPGP</string>
     <string name="pref_no_key_selected">Aucune clé sélectionnée</string>
-    <string name="pref_general_title">Général</string>
-    <string name="pref_show_time_title">Durée de disponibilité du mot de passe</string>
+    <string name="pref_category_general_title">Général</string>
     <string name="pref_copy_title">Copie automatique du mot de passe</string>
     <string name="pref_copy_dialog_title">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
     <string name="ssh_key_success_dialog_title">Clef SSH importée</string>
@@ -147,8 +146,6 @@
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
     <string name="pref_select_external_repository">Choisissez un dépôt externe</string>
     <string name="prefs_use_default_file_picker">Utiliser le selecteur de fichier par défaut</string>
-    <string name="prefs_clear_after_copy_title">Vider le presse-papier automatiquement après la copie</string>
-    <string name="prefs_clear_after_copy_summary">"Après une copie du mot de passe, le presse papier sera automatiquement vidé "</string>
     <string name="prefs_export_passwords_title">Exporter les mots de passe</string>
     <string name="prefs_export_passwords_summary">Exporter les mots de passe (chiffrés) vers un répertoire externe</string>
     <string name="prefs_version">Version</string>

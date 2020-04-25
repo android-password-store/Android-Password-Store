@@ -5,9 +5,12 @@
 package com.zeapo.pwdstore.git
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Patterns
 import androidx.core.content.edit
+import androidx.core.os.postDelayed
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitConfigBinding
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -23,7 +26,10 @@ class GitConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.gitUserName.setText(username)
+        if (username.isEmpty())
+            binding.gitUserName.requestFocus()
+        else
+            binding.gitUserName.setText(username)
         binding.gitUserEmail.setText(email)
         val repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(this))
         if (repo != null) {
@@ -55,8 +61,10 @@ class GitConfigActivity : BaseGitActivity() {
                     putString("git_config_user_email", email)
                     putString("git_config_user_name", name)
                 }
-                    PasswordRepository.setUserName(name)
-                    PasswordRepository.setUserEmail(email)
+                PasswordRepository.setUserName(name)
+                PasswordRepository.setUserEmail(email)
+                Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+                Handler().postDelayed(500) { finish() }
             }
         }
     }
