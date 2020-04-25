@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jcraft.jsch.JSch
@@ -19,7 +21,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.lang.ref.WeakReference
 
-class KeyGenerateTask(activity: AppCompatActivity) : AsyncTask<String?, Void?, Exception?>() {
+class KeyGenerateTask(activity: FragmentActivity) : AsyncTask<String?, Void?, Exception?>() {
     private var pd: ProgressDialog? = null
     private val weakReference = WeakReference(activity)
     override fun onPreExecute() {

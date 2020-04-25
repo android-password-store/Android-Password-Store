@@ -91,7 +91,10 @@
             android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".SelectFolderActivity" />
-        <activity android:name=".sshkeygen.SshKeyGenActivity" android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:label="@string/pref_ssh_keygen_title"
+            android:name=".sshkeygen.SshKeyGenActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".autofill.oreo.ui.AutofillDecryptActivity" />
         <activity
             android:name=".autofill.oreo.ui.AutofillFilterView"
