@@ -38,14 +38,6 @@ Ways to get in touch:
 
 Interested in helping to translate Password Store? Contribute [here](https://www.transifex.com/android-password-store/android-password-store/)!
 
-## Libraries
-
-Libraries that this project uses:
-
-* [OpenKeyChain](https://github.com/open-keychain/open-keychain) for encryption and decryption of passwords.
-* [JGit](http://www.eclipse.org/jgit/) git library.
-* [Apache's FileUtils](https://commons.apache.org/proper/commons-io/) for file manipulations.
-
 ## Contributors
 
 This project exists thanks to all the people who contribute. Want to contribute? See if you can [find an issue](https://github.com/android-password-store/Android-Password-Store/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) you wanna close, then send a PR!
