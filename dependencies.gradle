@@ -52,7 +52,7 @@ ext.deps = [
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
         leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.2',
-        openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:1.2.0',
+        openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:2.0.0',
         // The library is updated every two weeks to include the most recent version of the Public
         // suffix list. Its API is expected to remain stable for the foreseeable future, and thus
         // a reference to the latest version is warranted.

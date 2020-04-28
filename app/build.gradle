@@ -9,15 +9,6 @@ plugins {
 
 final def keystorePropertiesFile = rootProject.file 'keystore.properties'
 
-final def gitHash = { ->
-    final def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'describe', '--tags'
-        standardOutput = stdout
-    }
-    stdout.toString().trim()
-}
-
 static final def isSnapshot() {
     return System.env['GITHUB_WORKFLOW'] != null && System.env['SNAPSHOT'] != null
 }
