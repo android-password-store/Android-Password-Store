@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.7.2] - 2020-04-29
+
 ### Added
 - Settings option to enable debug logging
 
@@ -10,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - SSH Keygen UI was improved
 - Default key length for SSH Keygen is now 4096 bits
 - Settings items were rearranged and cleaned up
+- Autofill icons in dark mode are now more legible
 
 ### Fixed
 - Failure to detect if repository was not cloned which broke Git operations
