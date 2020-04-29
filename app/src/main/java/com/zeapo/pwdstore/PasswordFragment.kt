@@ -19,9 +19,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.FixOnItemTouchDispatchRecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
@@ -38,9 +36,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment() {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
-    private lateinit var recyclerView: FixOnItemTouchDispatchRecyclerView
     private lateinit var listener: OnFragmentInteractionListener
-    private lateinit var swipeRefresher: SwipeRefreshLayout
 
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
@@ -67,8 +63,7 @@ class PasswordFragment : Fragment() {
     }
 
     private fun initializePasswordList() {
-        swipeRefresher = binding.swipeRefresher
-        swipeRefresher.setOnRefreshListener {
+        binding.swipeRefresher.setOnRefreshListener {
             if (!PasswordRepository.isGitRepo()) {
                 Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.clone_button) {
@@ -77,7 +72,7 @@ class PasswordFragment : Fragment() {
                             startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                         }
                         .show()
-                swipeRefresher.isRefreshing = false
+                binding.swipeRefresher.isRefreshing = false
             } else {
                 val intent = Intent(context, GitOperationActivity::class.java)
                 intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
@@ -92,7 +87,7 @@ class PasswordFragment : Fragment() {
             .onSelectionChanged { selection ->
                 // In order to not interfere with drag selection, we disable the SwipeRefreshLayout
                 // once an item is selected.
-                swipeRefresher.isEnabled = selection.isEmpty
+                binding.swipeRefresher.isEnabled = selection.isEmpty
 
                 if (actionMode == null)
                     actionMode = requireStore().startSupportActionMode(actionModeCallback)
@@ -105,7 +100,7 @@ class PasswordFragment : Fragment() {
                     actionMode!!.finish()
                 }
             }
-        recyclerView = binding.passRecycler
+        val recyclerView = binding.passRecycler
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             itemAnimator = OnOffItemAnimator()
@@ -232,7 +227,7 @@ class PasswordFragment : Fragment() {
                         requireStore().clearSearch()
                         model.navigateTo(
                             item.file,
-                            recyclerViewState = recyclerView.layoutManager!!.onSaveInstanceState()
+                            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
                         )
                         requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     } else {
@@ -250,7 +245,7 @@ class PasswordFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        swipeRefresher.isRefreshing = false
+        binding.swipeRefresher.isRefreshing = false
     }
 
     /**
