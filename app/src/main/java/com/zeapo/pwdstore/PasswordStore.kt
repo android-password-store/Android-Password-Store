@@ -729,37 +729,21 @@ class PasswordStore : AppCompatActivity() {
                         val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
                         val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
                         if (destinationFile.exists()) {
-                            tag(TAG).e { "Trying to move a file that already exists." }
-                            // TODO: Add option to cancel overwrite. Will be easier once this is an async task.
+                            e { "Trying to move a file that already exists." }
                             MaterialAlertDialogBuilder(this)
                                     .setTitle(resources.getString(R.string.password_exists_title))
-                                    .setMessage(resources
-                                            .getString(
-                                                    R.string.password_exists_message,
-                                                    destinationLongName,
-                                                    sourceLongName))
-                                    .setPositiveButton("Okay", null)
+                                    .setMessage(resources.getString(
+                                            R.string.password_exists_message,
+                                            destinationLongName,
+                                            sourceLongName)
+                                    )
+                                    .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                        movePasswords(source, destinationFile, sourceLongName, destinationLongName)
+                                    }
+                                    .setNegativeButton(R.string.dialog_cancel, null)
                                     .show()
-                        }
-                        val sourceDestinationMap = if (source.isDirectory) {
-                            // Recursively list all files (not directories) below `source`, then
-                            // obtain the corresponding target file by resolving the relative path
-                            // starting at the destination folder.
-                            val sourceFiles = FileUtils.listFiles(source, null, true)
-                            sourceFiles.associateWith { destinationFile.resolve(it.relativeTo(source)) }
                         } else {
-                            mapOf(source to destinationFile)
-                        }
-                        if (!source.renameTo(destinationFile)) {
-                            // TODO this should show a warning to the user
-                            tag(TAG).e { "Something went wrong while moving." }
-                        } else {
-                            AutofillMatcher.updateMatches(this, sourceDestinationMap)
-                            commitChange(this.resources
-                                    .getString(
-                                            R.string.git_commit_move_text,
-                                            sourceLongName,
-                                            destinationLongName))
+                            movePasswords(source, destinationFile, sourceLongName, destinationLongName)
                         }
                     }
                     resetPasswordList()
@@ -770,6 +754,29 @@ class PasswordStore : AppCompatActivity() {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun movePasswords(source: File, destinationFile: File, sourceLongName: String, destinationLongName: String) {
+        val sourceDestinationMap = if (source.isDirectory) {
+            // Recursively list all files (not directories) below `source`, then
+            // obtain the corresponding target file by resolving the relative path
+            // starting at the destination folder.
+            val sourceFiles = FileUtils.listFiles(source, null, true)
+            sourceFiles.associateWith { destinationFile.resolve(it.relativeTo(source)) }
+        } else {
+            mapOf(source to destinationFile)
+        }
+        if (!source.renameTo(destinationFile)) {
+            // TODO this should show a warning to the user
+            e { "Something went wrong while moving." }
+        } else {
+            AutofillMatcher.updateMatches(this, sourceDestinationMap)
+            commitChange(this.resources
+                    .getString(
+                            R.string.git_commit_move_text,
+                            sourceLongName,
+                            destinationLongName))
+        }
     }
 
     private fun initRepository(operation: Int) {
