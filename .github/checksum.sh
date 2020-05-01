@@ -7,7 +7,7 @@ fi
 touch $RESULT_FILE
 
 checksum_file() {
-  echo $(openssl md5 $1 | awk '{print $2}')
+  echo $(sha256sum $1 | awk '{print $1}')
 }
 
 FILES=()
