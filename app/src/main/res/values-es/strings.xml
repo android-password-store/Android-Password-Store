@@ -101,7 +101,6 @@
     <string name="dialog_update_check">Recordar elección</string>
 
     <!-- Preferences -->
-    <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">Editar ajustes del servidor Git</string>
     <string name="pref_edit_git_config">Preferencias de Git</string>
     <string name="pref_ssh_title">Importar llave SSH</string>

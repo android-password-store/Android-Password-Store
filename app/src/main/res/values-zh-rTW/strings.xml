@@ -60,7 +60,6 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">搜尋</string>
     <!-- Preferences -->
-    <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">修改 Git 伺服器設定</string>
     <string name="pref_ssh_title">匯入 SSH 私鑰</string>
     <string name="pref_ssh_keygen_title">生成 SSH 金鑰</string>

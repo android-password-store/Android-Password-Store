@@ -63,7 +63,6 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">搜索</string>
     <!-- Preferences -->
-    <string name="pref_git_title">Git</string>
     <string name="pref_edit_server_info">修改 Git 服务器设置</string>
     <string name="pref_ssh_title">导入 SSH 密钥</string>
     <string name="pref_ssh_keygen_title">生成 SSH 密钥对</string>

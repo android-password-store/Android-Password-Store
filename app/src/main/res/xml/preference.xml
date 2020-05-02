@@ -32,7 +32,7 @@
             app:title="@string/pref_autofill_full_path_title"/>
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/pref_git_title">
+    <PreferenceCategory app:title="@string/pref_repository_title">
         <Preference
             app:key="git_server_info"
             app:title="@string/pref_edit_server_info" />

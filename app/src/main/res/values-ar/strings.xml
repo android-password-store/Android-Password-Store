@@ -63,7 +63,6 @@
     <string name="share_as_plaintext">شارك كنص مجرد</string>
     <string name="last_changed">آخِر تعديل %s</string>
     <!-- Preferences -->
-    <string name="pref_git_title">جيت</string>
     <string name="pref_edit_server_info">تعديل إعدادات خادوم جيت</string>
     <string name="pref_ssh_title">إستيراد مفتاح الـ SSH</string>
     <string name="pref_ssh_keygen_title">توليد مفتاحَي الـ SSH</string>
