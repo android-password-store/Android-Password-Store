@@ -201,11 +201,14 @@ class PasswordStore : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(if (PasswordRepository.isGitRepo()) R.menu.main_menu_git else R.menu.main_menu_non_git, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        // Invalidation forces onCreateOptionsMenu to be called again. This is cheap and quick so
+        // we can get by without any noticeable difference in performance.
+        invalidateOptionsMenu()
         searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(
