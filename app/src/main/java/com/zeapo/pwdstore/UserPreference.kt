@@ -96,6 +96,15 @@ class UserPreference : AppCompatActivity() {
             val externalGitRepositoryPreference = findPreference<Preference>("git_external")
             val selectExternalGitRepositoryPreference = findPreference<Preference>("pref_select_external")
 
+            if (!PasswordRepository.isGitRepo()) {
+                listOfNotNull(
+                        gitServerPreference, gitConfigPreference, sshKeyPreference,
+                        sshKeygenPreference, viewSshKeyPreference, clearSavedPassPreference
+                ).forEach {
+                    it.parent?.removePreference(it)
+                }
+            }
+
             // Crypto preferences
             val keyPreference = findPreference<Preference>("openpgp_key_id_pref")
 

@@ -201,11 +201,14 @@ class PasswordStore : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(if (PasswordRepository.isGitRepo()) R.menu.main_menu_git else R.menu.main_menu_non_git, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        // Invalidation forces onCreateOptionsMenu to be called again. This is cheap and quick so
+        // we can get by without any noticeable difference in performance.
+        invalidateOptionsMenu()
         searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(
@@ -256,8 +259,8 @@ class PasswordStore : AppCompatActivity() {
         val id = item.itemId
         val intent: Intent
         val initBefore = MaterialAlertDialogBuilder(this)
-                .setMessage(this.resources.getString(R.string.creation_dialog_text))
-                .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
+                .setMessage(resources.getString(R.string.creation_dialog_text))
+                .setPositiveButton(resources.getString(R.string.dialog_ok), null)
         when (id) {
             R.id.user_pref -> {
                 try {
@@ -378,12 +381,12 @@ class PasswordStore : AppCompatActivity() {
         val keyIds = settings.getStringSet("openpgp_key_ids_set", HashSet())
         if (keyIds != null && keyIds.isEmpty()) {
             MaterialAlertDialogBuilder(this)
-                    .setMessage(this.resources.getString(R.string.key_dialog_text))
-                    .setPositiveButton(this.resources.getString(R.string.dialog_positive)) { _, _ ->
+                    .setMessage(resources.getString(R.string.key_dialog_text))
+                    .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
                         val intent = Intent(activity, UserPreference::class.java)
                         startActivityForResult(intent, BaseGitActivity.REQUEST_INIT)
                     }
-                    .setNegativeButton(this.resources.getString(R.string.dialog_negative), null)
+                    .setNegativeButton(resources.getString(R.string.dialog_negative), null)
                     .show()
         }
         createRepository()
@@ -540,16 +543,16 @@ class PasswordStore : AppCompatActivity() {
     private fun validateState(): Boolean {
         if (!isInitialized) {
             MaterialAlertDialogBuilder(this)
-                    .setMessage(this.resources.getString(R.string.creation_dialog_text))
-                    .setPositiveButton(this.resources.getString(R.string.dialog_ok), null)
+                    .setMessage(resources.getString(R.string.creation_dialog_text))
+                    .setPositiveButton(resources.getString(R.string.dialog_ok), null)
                     .show()
             return false
         }
         if (settings.getStringSet("openpgp_key_ids_set", HashSet()).isNullOrEmpty()) {
             MaterialAlertDialogBuilder(this)
-                    .setTitle(this.resources.getString(R.string.no_key_selected_dialog_title))
-                    .setMessage(this.resources.getString(R.string.no_key_selected_dialog_text))
-                    .setPositiveButton(this.resources.getString(R.string.dialog_ok)) { _, _ ->
+                    .setTitle(resources.getString(R.string.no_key_selected_dialog_title))
+                    .setMessage(resources.getString(R.string.no_key_selected_dialog_text))
+                    .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
                         val intent = Intent(activity, UserPreference::class.java)
                         startActivity(intent)
                     }
@@ -595,7 +598,7 @@ class PasswordStore : AppCompatActivity() {
                     commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
                     deletePasswords(selectedItems)
                 }
-                .setNegativeButton(this.resources.getString(R.string.dialog_no)) { _, _ ->
+                .setNegativeButton(resources.getString(R.string.dialog_no)) { _, _ ->
                     deletePasswords(selectedItems)
                 }
                 .show()
@@ -637,7 +640,7 @@ class PasswordStore : AppCompatActivity() {
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
     private fun commitChange(message: String) {
-        commitChange(activity, message)
+        commitChange(this, message)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -650,32 +653,23 @@ class PasswordStore : AppCompatActivity() {
                 REQUEST_CODE_DECRYPT_AND_VERIFY -> {
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
                         if (data.getStringExtra("OPERATION") == "EDIT") {
-                            commitChange(this.resources
-                                    .getString(
-                                            R.string.git_commit_edit_text,
-                                            data.extras!!.getString("LONG_NAME")))
+                            commitChange(resources.getString(R.string.git_commit_edit_text,
+                                    data.extras!!.getString("LONG_NAME")))
                         } else {
-                            commitChange(this.resources
-                                    .getString(
-                                            R.string.git_commit_increment_text,
-                                            data.extras!!.getString("LONG_NAME")))
+                            commitChange(resources.getString(R.string.git_commit_increment_text,
+                                    data.extras!!.getString("LONG_NAME")))
                         }
                     }
                     refreshPasswordList()
                 }
                 REQUEST_CODE_ENCRYPT -> {
-                    commitChange(this.resources
-                            .getString(
-                                    R.string.git_commit_add_text,
-                                    data!!.extras!!.getString("LONG_NAME")))
+                    commitChange(resources.getString(R.string.git_commit_add_text,
+                            data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
                 REQUEST_CODE_EDIT -> {
-                    commitChange(
-                            this.resources
-                                    .getString(
-                                            R.string.git_commit_edit_text,
-                                            data!!.extras!!.getString("LONG_NAME")))
+                    commitChange(resources.getString(R.string.git_commit_edit_text,
+                            data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
                 BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
@@ -771,7 +765,7 @@ class PasswordStore : AppCompatActivity() {
             e { "Something went wrong while moving." }
         } else {
             AutofillMatcher.updateMatches(this, sourceDestinationMap)
-            commitChange(this.resources
+            commitChange(resources
                     .getString(
                             R.string.git_commit_move_text,
                             sourceLongName,
@@ -782,9 +776,9 @@ class PasswordStore : AppCompatActivity() {
     private fun initRepository(operation: Int) {
         closeRepository()
         MaterialAlertDialogBuilder(this)
-                .setTitle(this.resources.getString(R.string.location_dialog_title))
-                .setMessage(this.resources.getString(R.string.location_dialog_text))
-                .setPositiveButton(this.resources.getString(R.string.location_hidden)) { _, _ ->
+                .setTitle(resources.getString(R.string.location_dialog_title))
+                .setMessage(resources.getString(R.string.location_dialog_text))
+                .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
                     settings.edit { putBoolean("git_external", false) }
                     when (operation) {
                         NEW_REPO_BUTTON -> initializeRepositoryInfo()
@@ -795,7 +789,7 @@ class PasswordStore : AppCompatActivity() {
                         }
                     }
                 }
-                .setNegativeButton(this.resources.getString(R.string.location_sdcard)) { _, _ ->
+                .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
                     settings.edit { putBoolean("git_external", true) }
                     val externalRepo = settings.getString("git_external_repo", null)
                     if (externalRepo == null) {
@@ -865,6 +859,7 @@ class PasswordStore : AppCompatActivity() {
         private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
 
         fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
+            if (!PasswordRepository.isGitRepo()) return
             object : GitOperation(getRepositoryDirectory(activity), activity) {
                 override fun execute() {
                     tag(TAG).d { "Committing with message $message" }
