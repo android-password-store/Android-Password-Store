@@ -74,7 +74,6 @@ class UserPreference : AppCompatActivity() {
         private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var callingActivity: UserPreference
         private lateinit var encryptedPreferences: SharedPreferences
-        private lateinit var gitPreferences: List<Preference?>
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             callingActivity = requireActivity() as UserPreference
@@ -97,11 +96,13 @@ class UserPreference : AppCompatActivity() {
             val externalGitRepositoryPreference = findPreference<Preference>("git_external")
             val selectExternalGitRepositoryPreference = findPreference<Preference>("pref_select_external")
 
-            gitPreferences = listOf(gitServerPreference, gitConfigPreference, sshKeyPreference,
-                    sshKeygenPreference, viewSshKeyPreference, clearSavedPassPreference)
-
             if (!PasswordRepository.isGitRepo()) {
-                gitPreferences.filterNotNull().forEach { it.parent?.removePreference(it) }
+                listOfNotNull(
+                        gitServerPreference, gitConfigPreference, sshKeyPreference,
+                        sshKeygenPreference, viewSshKeyPreference, clearSavedPassPreference
+                ).forEach {
+                    it.parent?.removePreference(it)
+                }
             }
 
             // Crypto preferences
