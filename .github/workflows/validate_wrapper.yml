@@ -1,5 +1,9 @@
 name: "Validate Gradle Wrapper"
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+      - 'gradle/**'
 
 jobs:
   validation:

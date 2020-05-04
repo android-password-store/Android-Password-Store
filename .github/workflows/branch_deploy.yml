@@ -2,6 +2,12 @@ on:
   push:
     branches-ignore:
       - master
+    paths:
+      - '.github/**'
+      - 'app/**'
+      - 'gradle/**'
+      - '*.properties'
+      - '*.gradle'
 
 name: Build debug
 jobs:
