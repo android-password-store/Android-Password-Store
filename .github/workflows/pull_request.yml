@@ -1,4 +1,13 @@
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+      - 'app/**'
+      - 'gradle/**'
+      - '*.properties'
+      - '*.gradle'
+      - 'gradlew'
+      - 'gradlew.bat'
 
 name: Check pull request
 jobs:
