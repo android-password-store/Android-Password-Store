@@ -8,6 +8,8 @@ on:
       - 'gradle/**'
       - '*.properties'
       - '*.gradle'
+      - 'gradlew'
+      - 'gradlew.bat'
 
 name: Build debug
 jobs:

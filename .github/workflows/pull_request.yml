@@ -6,6 +6,8 @@ on:
       - 'gradle/**'
       - '*.properties'
       - '*.gradle'
+      - 'gradlew'
+      - 'gradlew.bat'
 
 name: Check pull request
 jobs:

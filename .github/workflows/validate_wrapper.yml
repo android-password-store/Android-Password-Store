@@ -4,6 +4,8 @@ on:
     paths:
       - '.github/**'
       - 'gradle/**'
+      - 'gradlew'
+      - 'gradlew.bat'
 
 jobs:
   validation:
