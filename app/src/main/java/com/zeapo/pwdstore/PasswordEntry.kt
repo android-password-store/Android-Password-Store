@@ -162,7 +162,15 @@ class PasswordEntry(private val content: String) {
     }
 
     companion object {
-
-        private val USERNAME_FIELDS = arrayOf("login:", "username:")
+        private val USERNAME_FIELDS = arrayOf(
+                "login:",
+                "username:",
+                "account:",
+                "email:",
+                "name:",
+                "handle:",
+                "id:",
+                "identity:"
+        )
     }
 }
