@@ -5,6 +5,8 @@
 package com.zeapo.pwdstore
 
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import java.io.ByteArrayOutputStream
 import java.io.UnsupportedEncodingException
 
@@ -162,7 +164,8 @@ class PasswordEntry(private val content: String) {
     }
 
     companion object {
-        private val USERNAME_FIELDS = arrayOf(
+        @VisibleForTesting(otherwise = PRIVATE)
+        val USERNAME_FIELDS = arrayOf(
                 "login:",
                 "username:",
                 "account:",

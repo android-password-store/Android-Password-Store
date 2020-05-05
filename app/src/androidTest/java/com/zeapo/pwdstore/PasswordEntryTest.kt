@@ -34,6 +34,10 @@ class PasswordEntryTest {
     }
 
     @Test fun testGetUsername() {
+        for (field in PasswordEntry.USERNAME_FIELDS) {
+            assertEquals("username", PasswordEntry("\n$field username").username)
+            assertEquals("username", PasswordEntry("\n${field.toUpperCase()} username").username)
+        }
         assertEquals(
                 "username",
                 PasswordEntry("secret\nextra\nlogin: username\ncontent\n").username)
