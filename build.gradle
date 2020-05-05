@@ -26,9 +26,6 @@ subprojects {
         maven {
             url 'https://jitpack.io'
         }
-        maven {
-            url 'https://maven.mozilla.org/maven2'
-        }
     }
     pluginManager.withPlugin('kotlin-android') {
         dependencies {
