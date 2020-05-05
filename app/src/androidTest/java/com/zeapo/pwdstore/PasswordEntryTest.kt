@@ -42,6 +42,9 @@ class PasswordEntryTest {
                 PasswordEntry("\nextra\nusername: username\ncontent\n").username)
         assertEquals(
                 "username", PasswordEntry("\nUSERNaMe:  username\ncontent\n").username)
+        assertEquals("username", PasswordEntry("\nlogin:    username").username)
+        assertEquals("foo@example.com", PasswordEntry("\nemail: foo@example.com").username)
+        assertEquals("username", PasswordEntry("\nidentity: username\nlogin: another_username").username)
         assertEquals("username", PasswordEntry("\nLOGiN:username").username)
         assertNull(PasswordEntry("secret\nextra\ncontent\n").username)
     }
