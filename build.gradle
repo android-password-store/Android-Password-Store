@@ -62,8 +62,7 @@ subprojects {
     }
 }
 
-tasks {
-    wrapper {
-        distributionType = Wrapper.DistributionType.ALL
-    }
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    distributionSha256Sum = "0f316a67b971b7b571dac7215dcf2591a30994b3450e0629925ffcfe2c68cc5c"
 }
