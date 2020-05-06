@@ -168,6 +168,7 @@ class PasswordEntry(private val content: String) {
         val USERNAME_FIELDS = arrayOf(
                 "login:",
                 "username:",
+                "user:",
                 "account:",
                 "email:",
                 "name:",
