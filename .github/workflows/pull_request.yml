@@ -52,7 +52,7 @@ jobs:
           ${{ runner.os }}-gradlebuildcache-
 
     - name: Run unit tests
-      run: ./gradlew spotlessCheck test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
+      run: ./gradlew test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
 
     - name: Run instrumentation tests
       uses: reactivecircus/android-emulator-runner@v2
