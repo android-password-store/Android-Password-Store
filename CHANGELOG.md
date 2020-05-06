@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Allow user to abort password move when it is replacing an existing file
 
+### Fixed
+- Add the following fields to encrypted username detection: user, account, email, name, handle, id, identity.
+
 ## [1.7.2] - 2020-04-29
 
 ### Added
