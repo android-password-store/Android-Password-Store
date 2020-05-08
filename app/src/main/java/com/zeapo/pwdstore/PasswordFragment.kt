@@ -6,6 +6,7 @@ package com.zeapo.pwdstore
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -19,12 +20,14 @@ import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
+import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
@@ -38,6 +41,7 @@ class PasswordFragment : Fragment() {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener
 
+    private var settings: SharedPreferences? = null
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
     private var _binding: PasswordRecyclerViewBinding? = null
@@ -53,6 +57,7 @@ class PasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = PasswordRecyclerViewBinding.inflate(inflater, container, false)
+        settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         initializePasswordList()
         binding.fab.setOnClickListener {
             ItemCreationBottomSheet().apply {
@@ -74,9 +79,15 @@ class PasswordFragment : Fragment() {
                         .show()
                 binding.swipeRefresher.isRefreshing = false
             } else {
+                // When authentication is set to ConnectionMode.None then the only git operation we
+                // can run is a pull, so automatically fallback to that.
+                val operationId = when (ConnectionMode.fromString(settings?.getString("git_remote_auth", null))) {
+                    ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
+                    else -> BaseGitActivity.REQUEST_SYNC
+                }
                 val intent = Intent(context, GitOperationActivity::class.java)
-                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
-                startActivityForResult(intent, BaseGitActivity.REQUEST_SYNC)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
+                startActivityForResult(intent, operationId)
             }
         }
 
