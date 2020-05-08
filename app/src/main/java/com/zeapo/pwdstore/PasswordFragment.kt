@@ -40,8 +40,8 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 class PasswordFragment : Fragment() {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener
+    private lateinit var settings: SharedPreferences
 
-    private var settings: SharedPreferences? = null
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
     private var _binding: PasswordRecyclerViewBinding? = null
@@ -70,7 +70,7 @@ class PasswordFragment : Fragment() {
     private fun initializePasswordList() {
         val gitDir = File(PasswordRepository.getRepositoryDirectory(requireContext()), ".git")
         val hasGitDir = gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
-        if (hasGitDir)
+        if (hasGitDir) {
             binding.swipeRefresher.setOnRefreshListener {
                 if (!PasswordRepository.isGitRepo()) {
                     Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
@@ -84,7 +84,7 @@ class PasswordFragment : Fragment() {
                 } else {
                     // When authentication is set to ConnectionMode.None then the only git operation we
                     // can run is a pull, so automatically fallback to that.
-                    val operationId = when (ConnectionMode.fromString(settings?.getString("git_remote_auth", null))) {
+                    val operationId = when (ConnectionMode.fromString(settings.getString("git_remote_auth", null))) {
                         ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
                         else -> BaseGitActivity.REQUEST_SYNC
                     }
@@ -93,6 +93,7 @@ class PasswordFragment : Fragment() {
                     startActivityForResult(intent, operationId)
                 }
             }
+        }
 
         recyclerAdapter = PasswordItemRecyclerAdapter()
             .onItemClicked { _, item ->
