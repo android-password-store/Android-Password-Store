@@ -24,7 +24,7 @@ import java.io.IOException
  */
 class GitServerConfigActivity : BaseGitActivity() {
 
-    lateinit var binding: ActivityGitCloneBinding
+    private lateinit var binding: ActivityGitCloneBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +36,10 @@ class GitServerConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val protocolIdToCheck = when (protocol) {
+        binding.cloneProtocolGroup.check(when (protocol) {
             Protocol.Ssh -> R.id.clone_protocol_ssh
             Protocol.Https -> R.id.clone_protocol_https
-        }
-        binding.cloneProtocolGroup.check(protocolIdToCheck)
+        })
         binding.cloneProtocolGroup.addOnButtonCheckedListener { _, checkedId, checked ->
             if (checked) {
                 when (checkedId) {
@@ -51,19 +50,18 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
         }
 
-        val connectionModeIdToCheck = when (connectionMode) {
+        binding.connectionModeGroup.check(when (connectionMode) {
             ConnectionMode.SshKey -> R.id.connection_mode_ssh_key
             ConnectionMode.Password -> R.id.connection_mode_password
             ConnectionMode.OpenKeychain -> R.id.connection_mode_open_keychain
-        }
-        binding.connectionModeGroup.check(connectionModeIdToCheck)
-        binding.connectionModeGroup.addOnButtonCheckedListener { _, checkedId, checked ->
-            if (checked) {
-                when (checkedId) {
-                    R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
-                    R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain
-                    R.id.connection_mode_password -> connectionMode = ConnectionMode.Password
-                }
+            ConnectionMode.None -> R.id.connection_mode_none
+        })
+        binding.connectionModeGroup.setOnCheckedChangeListener { group, _ ->
+            when (group.checkedRadioButtonId) {
+                R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
+                R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain
+                R.id.connection_mode_password -> connectionMode = ConnectionMode.Password
+                R.id.connection_mode_none -> connectionMode = ConnectionMode.None
             }
         }
         updateConnectionModeToggleGroup()
@@ -121,15 +119,20 @@ class GitServerConfigActivity : BaseGitActivity() {
 
     private fun updateConnectionModeToggleGroup() {
         if (protocol == Protocol.Ssh) {
+            if (binding.connectionModeNone.isChecked)
+                binding.connectionModeGroup.check(R.id.connection_mode_ssh_key)
             binding.connectionModeSshKey.isEnabled = true
             binding.connectionModeOpenKeychain.isEnabled = true
+            binding.connectionModeNone.isEnabled = false
         } else {
-            // Reset connection mode to the only one possible via HTTPS: password.
+            // Reset connection mode to password if the current value is not valid for HTTPS
             // Important note: This has to happen before disabling the other toggle buttons or they
             // won't uncheck.
-            binding.connectionModeGroup.check(R.id.connection_mode_password)
+            if (connectionMode !in listOf(ConnectionMode.None, ConnectionMode.Password))
+                binding.connectionModeGroup.check(R.id.connection_mode_password)
             binding.connectionModeSshKey.isEnabled = false
             binding.connectionModeOpenKeychain.isEnabled = false
+            binding.connectionModeNone.isEnabled = true
         }
     }
 

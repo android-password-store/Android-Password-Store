@@ -53,6 +53,7 @@ import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
+import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -201,7 +202,13 @@ class PasswordStore : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(if (PasswordRepository.isGitRepo()) R.menu.main_menu_git else R.menu.main_menu_non_git, menu)
+        val menuRes = when {
+            ConnectionMode.fromString(settings.getString("git_remote_auth", null))
+                    == ConnectionMode.None -> R.menu.main_menu_no_auth
+            PasswordRepository.isGitRepo() -> R.menu.main_menu_git
+            else -> R.menu.main_menu_non_git
+        }
+        menuInflater.inflate(menuRes, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

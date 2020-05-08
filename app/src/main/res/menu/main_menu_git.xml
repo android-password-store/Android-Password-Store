@@ -17,9 +17,7 @@
         android:title="@string/git_push"/>
 
     <item android:id="@+id/refresh"
-        android:title="@string/refresh_list"
-        android:icon="@drawable/ic_refresh_white_24dp"
-        app:showAsAction="never"/>
+        android:title="@string/refresh_list" />
 
     <item android:id="@+id/user_pref"
         android:title="@string/action_settings"

@@ -9,6 +9,9 @@
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
+    <item android:id="@+id/git_pull"
+        android:title="@string/git_pull"/>
+
     <item android:id="@+id/refresh"
         android:title="@string/refresh_list" />
 

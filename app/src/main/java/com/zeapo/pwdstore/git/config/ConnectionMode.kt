@@ -7,7 +7,9 @@ package com.zeapo.pwdstore.git.config
 enum class ConnectionMode(val pref: String) {
     SshKey("ssh-key"),
     Password("username/password"),
-    OpenKeychain("OpenKeychain");
+    OpenKeychain("OpenKeychain"),
+    None("None"),
+    ;
 
     companion object {
         private val map = values().associateBy(ConnectionMode::pref)

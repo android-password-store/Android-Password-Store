@@ -247,6 +247,9 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
                     dialog.show()
                 }
             }
+            ConnectionMode.None -> {
+                execute()
+            }
         }
     }
 
