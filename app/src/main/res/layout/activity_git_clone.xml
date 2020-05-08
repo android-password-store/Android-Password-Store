@@ -156,50 +156,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_server_path" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
+        <RadioGroup
             android:id="@+id/connection_mode_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
-            app:layout_constraintStart_toStartOf="parent"
-            app:selectionRequired="true"
-            app:singleSelection="true" >
+            app:layout_constraintStart_toStartOf="parent">
 
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
+            <RadioButton
                 android:id="@+id/connection_mode_ssh_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/connection_mode_ssh_key"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
+                android:text="@string/connection_mode_ssh_key" />
 
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
+            <RadioButton
                 android:id="@+id/connection_mode_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/connection_mode_basic_authentication"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
+                android:text="@string/connection_mode_basic_authentication" />
 
-            <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
+            <RadioButton
                 android:id="@+id/connection_mode_open_keychain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/connection_mode_openkeychain"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
+                android:text="@string/connection_mode_openkeychain" />
 
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+            <RadioButton
+                android:id="@+id/connection_mode_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_mode_none" />
+
+        </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button"

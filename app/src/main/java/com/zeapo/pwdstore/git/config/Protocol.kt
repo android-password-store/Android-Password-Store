@@ -6,7 +6,8 @@ package com.zeapo.pwdstore.git.config
 
 enum class Protocol(val pref: String) {
     Ssh("ssh://"),
-    Https("https://");
+    Https("https://"),
+    ;
 
     companion object {
         private val map = values().associateBy(Protocol::pref)
