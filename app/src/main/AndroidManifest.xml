@@ -95,7 +95,9 @@
             android:label="@string/pref_ssh_keygen_title"
             android:name=".sshkeygen.SshKeyGenActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".autofill.oreo.ui.AutofillDecryptActivity" />
+        <activity
+            android:name=".autofill.oreo.ui.AutofillDecryptActivity"
+            android:theme="@style/NoBackgroundTheme" />
         <activity
             android:name=".autofill.oreo.ui.AutofillFilterView"
             android:configChanges="orientation|keyboardHidden"
@@ -103,7 +105,7 @@
             android:theme="@style/DialogLikeTheme" />
         <activity
             android:name=".autofill.oreo.ui.AutofillSaveActivity"
-            android:theme="@style/DialogLikeTheme"/>
+            android:theme="@style/NoBackgroundTheme"/>
         <activity
             android:name=".autofill.oreo.ui.AutofillPublisherChangedActivity"
             android:configChanges="orientation|keyboardHidden"
