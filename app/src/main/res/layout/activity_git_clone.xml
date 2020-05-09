@@ -45,26 +45,18 @@
             app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
                 android:id="@+id/clone_protocol_ssh"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/clone_protocol_ssh"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
+                android:text="@string/clone_protocol_ssh" />
 
             <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
                 android:id="@+id/clone_protocol_https"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/clone_protocol_https"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
+                android:text="@string/clone_protocol_https" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.textfield.TextInputLayout
