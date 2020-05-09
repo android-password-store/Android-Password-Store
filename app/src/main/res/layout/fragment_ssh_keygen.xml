@@ -50,7 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="@string/ssh_keygen_passphrase">
+            android:hint="@string/ssh_keygen_passphrase"
+            app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passphrase"
@@ -60,14 +61,6 @@
                 android:fontFamily="@font/sourcecodepro"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/show_passphrase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:text="@string/ssh_keygen_show_passphrase" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
