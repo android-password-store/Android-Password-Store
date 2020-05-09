@@ -33,15 +33,6 @@
             app:layout_constraintTop_toBottomOf="@id/server_label"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Spinner
-            android:id="@+id/clone_protocol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/server_label"
-            app:layout_constraintStart_toEndOf="@id/label_server_protocol" />
-
         <com.google.android.material.button.MaterialButtonToggleGroup
             style="@style/TextAppearance.MaterialComponents.Headline1"
             android:id="@+id/clone_protocol_group"
@@ -160,7 +151,7 @@
             android:id="@+id/connection_mode_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -168,24 +159,28 @@
                 android:id="@+id/connection_mode_ssh_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:text="@string/connection_mode_ssh_key" />
 
             <RadioButton
                 android:id="@+id/connection_mode_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:text="@string/connection_mode_basic_authentication" />
 
             <RadioButton
                 android:id="@+id/connection_mode_open_keychain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:text="@string/connection_mode_openkeychain" />
 
             <RadioButton
                 android:id="@+id/connection_mode_none"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:text="@string/connection_mode_none" />
 
         </RadioGroup>
