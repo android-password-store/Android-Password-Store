@@ -53,14 +53,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/generate_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/pwd_generate_button"
-        android:textColor="?android:attr/windowBackground"
-        app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/password_input_layout"
         app:layout_constraintEnd_toEndOf="parent"/>
 

@@ -80,9 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/ssh_keygen_generate"
-            android:textColor="@android:color/white"
-            app:backgroundTint="?attr/colorSecondary" />
+            android:text="@string/ssh_keygen_generate" />
 
     </LinearLayout>
 </ScrollView>

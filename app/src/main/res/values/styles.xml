@@ -19,8 +19,15 @@
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
+        <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
         <item name="textInputStyle">@style/TextInputLayoutBase</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+    </style>
+
+    <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">?attr/colorSecondary</item>
+        <item name="rippleColor">?attr/colorControlHighlight</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">

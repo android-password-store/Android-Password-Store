@@ -186,14 +186,11 @@
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/save_button"
             android:text="@string/crypto_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:attr/windowBackground"
             android:layout_marginTop="8dp"
-            app:backgroundTint="?attr/colorSecondary"
             app:layout_constraintTop_toBottomOf="@id/connection_mode_group"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
