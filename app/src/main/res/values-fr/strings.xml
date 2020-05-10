@@ -220,4 +220,4 @@
     <string name="crypto_extra_edit_hint">nom d\'utilisateur: quelque chose d\'autre contenu supplémentaire</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="hotp_pending">Appuyez sur copie pour calculer le HOTP</string>
-    </resources>
+</resources>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/autofill_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        tools:listitem="@layout/autofill_row_layout"
-        tools:itemCount="20"/>
+        tools:itemCount="20"
+        tools:listitem="@layout/autofill_row_layout" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -24,16 +24,16 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:src="@drawable/ic_add_white_48dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_compat_margin"
+        android:src="@drawable/ic_add_white_48dp"
+        app:backgroundTint="?attr/colorSecondary"
+        app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
-        app:backgroundTint="?attr/colorSecondary"
-        app:rippleColor="?attr/colorSecondary"
-        app:borderWidth="0dp"
-        android:layout_margin="@dimen/fab_compat_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+        app:rippleColor="?attr/colorSecondary" />
 </RelativeLayout>

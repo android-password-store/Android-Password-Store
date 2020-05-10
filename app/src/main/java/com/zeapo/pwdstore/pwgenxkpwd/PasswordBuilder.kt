@@ -127,7 +127,8 @@ class PasswordBuilder(ctx: Context) {
                         CapsType.TitleCase -> {
                             s = capitalize(s)
                         }
-                        CapsType.lowercase, CapsType.As_iS -> {}
+                        CapsType.lowercase, CapsType.As_iS -> {
+                        }
                     }
                 }
                 password.append(s)

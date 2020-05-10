@@ -53,9 +53,9 @@ class GitConfigActivity : BaseGitActivity() {
             val name = binding.gitUserName.text.toString().trim()
             if (!email.matches(Patterns.EMAIL_ADDRESS.toRegex())) {
                 MaterialAlertDialogBuilder(this)
-                        .setMessage(getString(R.string.invalid_email_dialog_text))
-                        .setPositiveButton(getString(R.string.dialog_ok), null)
-                        .show()
+                    .setMessage(getString(R.string.invalid_email_dialog_text))
+                    .setPositiveButton(getString(R.string.dialog_ok), null)
+                    .show()
             } else {
                 settings.edit {
                     putString("git_config_user_email", email)

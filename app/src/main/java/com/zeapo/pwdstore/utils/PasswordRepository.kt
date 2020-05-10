@@ -8,9 +8,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import java.io.File
-import java.io.FileFilter
-import java.util.Comparator
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
@@ -18,6 +15,9 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
+import java.io.File
+import java.io.FileFilter
+import java.util.Comparator
 
 open class PasswordRepository protected constructor() {
 
@@ -26,7 +26,7 @@ open class PasswordRepository protected constructor() {
 
         FOLDER_FIRST(Comparator { p1: PasswordItem, p2: PasswordItem ->
             (p1.type + p1.name)
-                    .compareTo(p2.type + p2.name, ignoreCase = true)
+                .compareTo(p2.type + p2.name, ignoreCase = true)
         }),
 
         INDEPENDENT(Comparator { p1: PasswordItem, p2: PasswordItem ->
@@ -62,8 +62,8 @@ open class PasswordRepository protected constructor() {
                 val builder = FileRepositoryBuilder()
                 try {
                     repository = builder.setGitDir(localDir)
-                            .readEnvironment()
-                            .build()
+                        .readEnvironment()
+                        .build()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return null
@@ -81,8 +81,8 @@ open class PasswordRepository protected constructor() {
             if (repository != null) {
                 // Check if remote exists
                 return repository!!.config.getSubsections("remote").isNotEmpty() &&
-                        repository!!.objectDatabase.exists() &&
-                        repository!!.allRefs.isNotEmpty()
+                    repository!!.objectDatabase.exists() &&
+                    repository!!.allRefs.isNotEmpty()
             }
             return false
         }
@@ -196,9 +196,9 @@ open class PasswordRepository protected constructor() {
             if (path == null || !path.exists()) return ArrayList()
 
             val directories = (path.listFiles(FileFilterUtils.directoryFileFilter() as FileFilter)
-                    ?: emptyArray()).toList()
+                ?: emptyArray()).toList()
             val files = (path.listFiles(FileFilterUtils.suffixFileFilter(".gpg") as FileFilter)
-                    ?: emptyArray()).toList()
+                ?: emptyArray()).toList()
 
             val items = ArrayList<File>()
             items.addAll(directories)

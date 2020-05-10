@@ -65,14 +65,14 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import java.io.File
-import java.lang.Character.UnicodeBlock
-import java.util.Stack
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
+import java.io.File
+import java.lang.Character.UnicodeBlock
+import java.util.Stack
 
 class PasswordStore : AppCompatActivity() {
 
@@ -90,7 +90,7 @@ class PasswordStore : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         // open search view on search key, or Ctr+F
         if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) &&
-                !searchItem.isActionViewExpanded) {
+            !searchItem.isActionViewExpanded) {
             searchItem.expandActionView()
             return true
         }
@@ -118,9 +118,9 @@ class PasswordStore : AppCompatActivity() {
         // prevent attempt to create password list fragment
         var savedInstance = savedInstanceState
         if (savedInstanceState != null && (!settings.getBoolean("git_external", false) ||
-                        ContextCompat.checkSelfPermission(
-                                activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED)) {
+                ContextCompat.checkSelfPermission(
+                    activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)) {
             savedInstance = null
         }
         super.onCreate(savedInstance)
@@ -128,28 +128,28 @@ class PasswordStore : AppCompatActivity() {
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                !settings.getBoolean(PREFERENCE_SEEN_AUTOFILL_ONBOARDING, false)) {
+            !settings.getBoolean(PREFERENCE_SEEN_AUTOFILL_ONBOARDING, false)) {
             MaterialAlertDialogBuilder(this).run {
                 @SuppressLint("InflateParams")
                 val layout =
-                        layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
+                    layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
                 layout.findViewById<AppCompatTextView>(R.id.intro_text).setText(R.string.autofill_onboarding_dialog_message)
                 val supportedBrowsersTextView =
-                        layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
+                    layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
                 supportedBrowsersTextView.text =
-                        getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
-                                separator = "\n"
-                        ) {
-                            val appLabel = it.first
-                            val supportDescription = when (it.second) {
-                                BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
-                                BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
-                                BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
-                                BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
-                                BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
-                            }
-                            "$appLabel: $supportDescription"
+                    getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
+                        separator = "\n"
+                    ) {
+                        val appLabel = it.first
+                        val supportDescription = when (it.second) {
+                            BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
+                            BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
+                            BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
+                            BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
+                            BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
                         }
+                        "$appLabel: $supportDescription"
+                    }
                 setView(layout)
                 setTitle(R.string.autofill_onboarding_dialog_title)
                 setPositiveButton(R.string.dialog_ok) { _, _ ->
@@ -204,7 +204,7 @@ class PasswordStore : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuRes = when {
             ConnectionMode.fromString(settings.getString("git_remote_auth", null))
-                    == ConnectionMode.None -> R.menu.main_menu_no_auth
+                == ConnectionMode.None -> R.menu.main_menu_no_auth
             PasswordRepository.isGitRepo() -> R.menu.main_menu_git
             else -> R.menu.main_menu_non_git
         }
@@ -219,40 +219,40 @@ class PasswordStore : AppCompatActivity() {
         searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(
-                object : OnQueryTextListener {
-                    override fun onQueryTextSubmit(s: String): Boolean {
-                        searchView.clearFocus()
-                        return true
-                    }
+            object : OnQueryTextListener {
+                override fun onQueryTextSubmit(s: String): Boolean {
+                    searchView.clearFocus()
+                    return true
+                }
 
-                    override fun onQueryTextChange(s: String): Boolean {
-                        val filter = s.trim()
-                        // List the contents of the current directory if the user enters a blank
-                        // search term.
-                        if (filter.isEmpty())
-                            model.navigateTo(
-                                newDirectory = model.currentDir.value!!,
-                                pushPreviousLocation = false
-                            )
-                        else
-                            model.search(filter)
-                        return true
-                    }
-                })
+                override fun onQueryTextChange(s: String): Boolean {
+                    val filter = s.trim()
+                    // List the contents of the current directory if the user enters a blank
+                    // search term.
+                    if (filter.isEmpty())
+                        model.navigateTo(
+                            newDirectory = model.currentDir.value!!,
+                            pushPreviousLocation = false
+                        )
+                    else
+                        model.search(filter)
+                    return true
+                }
+            })
 
         // When using the support library, the setOnActionExpandListener() method is
         // static and accepts the MenuItem object as an argument
         searchItem.setOnActionExpandListener(
-                object : OnActionExpandListener {
-                    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                        refreshPasswordList()
-                        return true
-                    }
+            object : OnActionExpandListener {
+                override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                    refreshPasswordList()
+                    return true
+                }
 
-                    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                        return true
-                    }
-                })
+                override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                    return true
+                }
+            })
         if (settings.getBoolean("search_on_start", false)) {
             searchItem.expandActionView()
         }
@@ -266,8 +266,8 @@ class PasswordStore : AppCompatActivity() {
         val id = item.itemId
         val intent: Intent
         val initBefore = MaterialAlertDialogBuilder(this)
-                .setMessage(resources.getString(R.string.creation_dialog_text))
-                .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+            .setMessage(resources.getString(R.string.creation_dialog_text))
+            .setPositiveButton(resources.getString(R.string.dialog_ok), null)
         when (id) {
             R.id.user_pref -> {
                 try {
@@ -379,7 +379,7 @@ class PasswordStore : AppCompatActivity() {
         if (externalRepo && externalRepoPath != null) {
             val dir = File(externalRepoPath)
             if (dir.exists() && dir.isDirectory &&
-                    getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
+                getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
                 closeRepository()
                 checkLocalRepository()
                 return // if not empty, just show me the passwords!
@@ -388,13 +388,13 @@ class PasswordStore : AppCompatActivity() {
         val keyIds = settings.getStringSet("openpgp_key_ids_set", HashSet())
         if (keyIds != null && keyIds.isEmpty()) {
             MaterialAlertDialogBuilder(this)
-                    .setMessage(resources.getString(R.string.key_dialog_text))
-                    .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
-                        val intent = Intent(activity, UserPreference::class.java)
-                        startActivityForResult(intent, BaseGitActivity.REQUEST_INIT)
-                    }
-                    .setNegativeButton(resources.getString(R.string.dialog_negative), null)
-                    .show()
+                .setMessage(resources.getString(R.string.key_dialog_text))
+                .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
+                    val intent = Intent(activity, UserPreference::class.java)
+                    startActivityForResult(intent, BaseGitActivity.REQUEST_INIT)
+                }
+                .setNegativeButton(resources.getString(R.string.dialog_negative), null)
+                .show()
         }
         createRepository()
     }
@@ -407,15 +407,15 @@ class PasswordStore : AppCompatActivity() {
         return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED) {
             Snackbar.make(
-                    findViewById(R.id.main_layout),
-                    getString(R.string.access_sdcard_text),
-                    Snackbar.LENGTH_INDEFINITE
+                findViewById(R.id.main_layout),
+                getString(R.string.access_sdcard_text),
+                Snackbar.LENGTH_INDEFINITE
             ).run {
                 setAction(getString(R.string.snackbar_action_grant)) {
                     ActivityCompat.requestPermissions(
-                            activity,
-                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                            REQUEST_EXTERNAL_STORAGE
+                        activity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        REQUEST_EXTERNAL_STORAGE
                     )
                     dismiss()
                 }
@@ -447,7 +447,7 @@ class PasswordStore : AppCompatActivity() {
             tag(TAG).d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
             if (fragmentManager.findFragmentByTag("PasswordsList") == null ||
-                    settings.getBoolean("repo_changed", false)) {
+                settings.getBoolean("repo_changed", false)) {
                 settings.edit { putBoolean("repo_changed", false) }
                 plist = PasswordFragment()
                 val args = Bundle()
@@ -520,11 +520,11 @@ class PasswordStore : AppCompatActivity() {
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcut = Builder(this, item.fullPathToParent)
-                    .setShortLabel(item.toString())
-                    .setLongLabel(item.fullPathToParent + item.toString())
-                    .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                    .setIntent(authDecryptIntent.setAction("DECRYPT_PASS")) // Needs action
-                    .build()
+                .setShortLabel(item.toString())
+                .setLongLabel(item.fullPathToParent + item.toString())
+                .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                .setIntent(authDecryptIntent.setAction("DECRYPT_PASS")) // Needs action
+                .build()
             val shortcuts = shortcutManager!!.dynamicShortcuts
             if (shortcuts.size >= shortcutManager!!.maxShortcutCountPerActivity && shortcuts.size > 0) {
                 shortcuts.removeAt(shortcuts.size - 1)
@@ -550,20 +550,20 @@ class PasswordStore : AppCompatActivity() {
     private fun validateState(): Boolean {
         if (!isInitialized) {
             MaterialAlertDialogBuilder(this)
-                    .setMessage(resources.getString(R.string.creation_dialog_text))
-                    .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                    .show()
+                .setMessage(resources.getString(R.string.creation_dialog_text))
+                .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                .show()
             return false
         }
         if (settings.getStringSet("openpgp_key_ids_set", HashSet()).isNullOrEmpty()) {
             MaterialAlertDialogBuilder(this)
-                    .setTitle(resources.getString(R.string.no_key_selected_dialog_title))
-                    .setMessage(resources.getString(R.string.no_key_selected_dialog_text))
-                    .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
-                        val intent = Intent(activity, UserPreference::class.java)
-                        startActivity(intent)
-                    }
-                    .show()
+                .setTitle(resources.getString(R.string.no_key_selected_dialog_title))
+                .setMessage(resources.getString(R.string.no_key_selected_dialog_text))
+                .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
+                    val intent = Intent(activity, UserPreference::class.java)
+                    startActivity(intent)
+                }
+                .show()
             return false
         }
         return true
@@ -593,22 +593,22 @@ class PasswordStore : AppCompatActivity() {
         }
         val item = selectedItems.pop()
         MaterialAlertDialogBuilder(this)
-                .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
-                .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
-                    val filesToDelete = if (item.file.isDirectory) {
-                        FileUtils.listFiles(item.file, null, true)
-                    } else {
-                        listOf(item.file)
-                    }
-                    AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
-                    item.file.deleteRecursively()
-                    commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
-                    deletePasswords(selectedItems)
+            .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
+            .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
+                val filesToDelete = if (item.file.isDirectory) {
+                    FileUtils.listFiles(item.file, null, true)
+                } else {
+                    listOf(item.file)
                 }
-                .setNegativeButton(resources.getString(R.string.dialog_no)) { _, _ ->
-                    deletePasswords(selectedItems)
-                }
-                .show()
+                AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
+                item.file.deleteRecursively()
+                commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
+                deletePasswords(selectedItems)
+            }
+            .setNegativeButton(resources.getString(R.string.dialog_no)) { _, _ ->
+                deletePasswords(selectedItems)
+            }
+            .show()
     }
 
     fun movePasswords(values: List<PasswordItem>) {
@@ -661,22 +661,22 @@ class PasswordStore : AppCompatActivity() {
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
                         if (data.getStringExtra("OPERATION") == "EDIT") {
                             commitChange(resources.getString(R.string.git_commit_edit_text,
-                                    data.extras!!.getString("LONG_NAME")))
+                                data.extras!!.getString("LONG_NAME")))
                         } else {
                             commitChange(resources.getString(R.string.git_commit_increment_text,
-                                    data.extras!!.getString("LONG_NAME")))
+                                data.extras!!.getString("LONG_NAME")))
                         }
                     }
                     refreshPasswordList()
                 }
                 REQUEST_CODE_ENCRYPT -> {
                     commitChange(resources.getString(R.string.git_commit_add_text,
-                            data!!.extras!!.getString("LONG_NAME")))
+                        data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
                 REQUEST_CODE_EDIT -> {
                     commitChange(resources.getString(R.string.git_commit_edit_text,
-                            data!!.extras!!.getString("LONG_NAME")))
+                        data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
                 BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
@@ -685,14 +685,14 @@ class PasswordStore : AppCompatActivity() {
                 // duplicate code
                 CLONE_REPO_BUTTON -> {
                     if (settings.getBoolean("git_external", false) &&
-                            settings.getString("git_external_repo", null) != null) {
+                        settings.getString("git_external_repo", null) != null) {
                         val externalRepoPath = settings.getString("git_external_repo", null)
                         val dir = externalRepoPath?.let { File(it) }
                         if (dir != null &&
-                                dir.exists() &&
-                                dir.isDirectory &&
-                                !FileUtils.listFiles(dir, null, true).isEmpty() &&
-                                getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
+                            dir.exists() &&
+                            dir.isDirectory &&
+                            !FileUtils.listFiles(dir, null, true).isEmpty() &&
+                            getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
                             closeRepository()
                             checkLocalRepository()
                             return // if not empty, just show me the passwords!
@@ -732,17 +732,17 @@ class PasswordStore : AppCompatActivity() {
                         if (destinationFile.exists()) {
                             e { "Trying to move a file that already exists." }
                             MaterialAlertDialogBuilder(this)
-                                    .setTitle(resources.getString(R.string.password_exists_title))
-                                    .setMessage(resources.getString(
-                                            R.string.password_exists_message,
-                                            destinationLongName,
-                                            sourceLongName)
-                                    )
-                                    .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                        movePasswords(source, destinationFile, sourceLongName, destinationLongName)
-                                    }
-                                    .setNegativeButton(R.string.dialog_cancel, null)
-                                    .show()
+                                .setTitle(resources.getString(R.string.password_exists_title))
+                                .setMessage(resources.getString(
+                                    R.string.password_exists_message,
+                                    destinationLongName,
+                                    sourceLongName)
+                                )
+                                .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                    movePasswords(source, destinationFile, sourceLongName, destinationLongName)
+                                }
+                                .setNegativeButton(R.string.dialog_cancel, null)
+                                .show()
                         } else {
                             movePasswords(source, destinationFile, sourceLongName, destinationLongName)
                         }
@@ -773,66 +773,66 @@ class PasswordStore : AppCompatActivity() {
         } else {
             AutofillMatcher.updateMatches(this, sourceDestinationMap)
             commitChange(resources
-                    .getString(
-                            R.string.git_commit_move_text,
-                            sourceLongName,
-                            destinationLongName))
+                .getString(
+                    R.string.git_commit_move_text,
+                    sourceLongName,
+                    destinationLongName))
         }
     }
 
     private fun initRepository(operation: Int) {
         closeRepository()
         MaterialAlertDialogBuilder(this)
-                .setTitle(resources.getString(R.string.location_dialog_title))
-                .setMessage(resources.getString(R.string.location_dialog_text))
-                .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
-                    settings.edit { putBoolean("git_external", false) }
-                    when (operation) {
-                        NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                        CLONE_REPO_BUTTON -> {
-                            val intent = Intent(activity, GitServerConfigActivity::class.java)
-                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+            .setTitle(resources.getString(R.string.location_dialog_title))
+            .setMessage(resources.getString(R.string.location_dialog_text))
+            .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
+                settings.edit { putBoolean("git_external", false) }
+                when (operation) {
+                    NEW_REPO_BUTTON -> initializeRepositoryInfo()
+                    CLONE_REPO_BUTTON -> {
+                        val intent = Intent(activity, GitServerConfigActivity::class.java)
+                        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                        startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                    }
+                }
+            }
+            .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
+                settings.edit { putBoolean("git_external", true) }
+                val externalRepo = settings.getString("git_external_repo", null)
+                if (externalRepo == null) {
+                    val intent = Intent(activity, UserPreference::class.java)
+                    intent.putExtra("operation", "git_external")
+                    startActivityForResult(intent, operation)
+                } else {
+                    MaterialAlertDialogBuilder(activity)
+                        .setTitle(resources.getString(R.string.directory_selected_title))
+                        .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
+                        .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
+                            when (operation) {
+                                NEW_REPO_BUTTON -> initializeRepositoryInfo()
+                                CLONE_REPO_BUTTON -> {
+                                    val intent = Intent(activity, GitServerConfigActivity::class.java)
+                                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                                    startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                                }
+                            }
                         }
-                    }
+                        .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
+                            val intent = Intent(activity, UserPreference::class.java)
+                            intent.putExtra("operation", "git_external")
+                            startActivityForResult(intent, operation)
+                        }
+                        .show()
                 }
-                .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
-                    settings.edit { putBoolean("git_external", true) }
-                    val externalRepo = settings.getString("git_external_repo", null)
-                    if (externalRepo == null) {
-                        val intent = Intent(activity, UserPreference::class.java)
-                        intent.putExtra("operation", "git_external")
-                        startActivityForResult(intent, operation)
-                    } else {
-                        MaterialAlertDialogBuilder(activity)
-                                .setTitle(resources.getString(R.string.directory_selected_title))
-                                .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
-                                .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
-                                    when (operation) {
-                                        NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                                        CLONE_REPO_BUTTON -> {
-                                            val intent = Intent(activity, GitServerConfigActivity::class.java)
-                                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
-                                        }
-                                    }
-                                }
-                                .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
-                                    val intent = Intent(activity, UserPreference::class.java)
-                                    intent.putExtra("operation", "git_external")
-                                    startActivityForResult(intent, operation)
-                                }
-                                .show()
-                    }
-                }
-                .show()
+            }
+            .show()
     }
 
     fun matchPasswordWithApp(item: PasswordItem) {
         val path = item.file
-                .absolutePath
-                .replace(getRepositoryDirectory(applicationContext).toString() + "/", "")
-                .replace(".gpg", "")
+            .absolutePath
+            .replace(getRepositoryDirectory(applicationContext).toString() + "/", "")
+            .replace(".gpg", "")
         val data = Intent()
         data.putExtra("path", path)
         setResult(Activity.RESULT_OK, data)
@@ -860,7 +860,7 @@ class PasswordStore : AppCompatActivity() {
         private fun isPrintable(c: Char): Boolean {
             val block = UnicodeBlock.of(c)
             return (!Character.isISOControl(c) &&
-                    block != null && block !== UnicodeBlock.SPECIALS)
+                block != null && block !== UnicodeBlock.SPECIALS)
         }
 
         private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"

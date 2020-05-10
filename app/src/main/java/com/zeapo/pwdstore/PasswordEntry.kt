@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException
  * A single entry in password store.
  */
 class PasswordEntry(private val content: String) {
+
     val password: String
     val username: String?
     val digits: String
@@ -109,8 +110,8 @@ class PasswordEntry(private val content: String) {
     private fun findOtpDigits(decryptedContent: String): String {
         decryptedContent.split("\n".toRegex()).forEach { line ->
             if ((line.startsWith("otpauth://totp/") ||
-                            line.startsWith("otpauth://hotp/")) &&
-                    Uri.parse(line).getQueryParameter("digits") != null) {
+                    line.startsWith("otpauth://hotp/")) &&
+                Uri.parse(line).getQueryParameter("digits") != null) {
                 return Uri.parse(line).getQueryParameter("digits")!!
             }
         }
@@ -120,7 +121,7 @@ class PasswordEntry(private val content: String) {
     private fun findTotpPeriod(decryptedContent: String): Long {
         decryptedContent.split("\n".toRegex()).forEach { line ->
             if (line.startsWith("otpauth://totp/") &&
-                    Uri.parse(line).getQueryParameter("period") != null) {
+                Uri.parse(line).getQueryParameter("period") != null) {
                 return java.lang.Long.parseLong(Uri.parse(line).getQueryParameter("period")!!)
             }
         }
@@ -130,7 +131,7 @@ class PasswordEntry(private val content: String) {
     private fun findTotpAlgorithm(decryptedContent: String): String {
         decryptedContent.split("\n".toRegex()).forEach { line ->
             if (line.startsWith("otpauth://totp/") &&
-                    Uri.parse(line).getQueryParameter("algorithm") != null) {
+                Uri.parse(line).getQueryParameter("algorithm") != null) {
                 return Uri.parse(line).getQueryParameter("algorithm")!!
             }
         }
@@ -166,15 +167,15 @@ class PasswordEntry(private val content: String) {
     companion object {
         @VisibleForTesting(otherwise = PRIVATE)
         val USERNAME_FIELDS = arrayOf(
-                "login:",
-                "username:",
-                "user:",
-                "account:",
-                "email:",
-                "name:",
-                "handle:",
-                "id:",
-                "identity:"
+            "login:",
+            "username:",
+            "user:",
+            "account:",
+            "email:",
+            "name:",
+            "handle:",
+            "id:",
+            "identity:"
         )
     }
 }

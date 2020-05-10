@@ -33,9 +33,9 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.util.Stack
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment() {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
@@ -74,12 +74,12 @@ class PasswordFragment : Fragment() {
             binding.swipeRefresher.setOnRefreshListener {
                 if (!PasswordRepository.isGitRepo()) {
                     Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.clone_button) {
-                                val intent = Intent(context, GitServerConfigActivity::class.java)
-                                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                                startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
-                            }
-                            .show()
+                        .setAction(R.string.clone_button) {
+                            val intent = Intent(context, GitServerConfigActivity::class.java)
+                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                        }
+                        .show()
                     binding.swipeRefresher.isRefreshing = false
                 } else {
                     // When authentication is set to ConnectionMode.None then the only git operation we
@@ -211,7 +211,7 @@ class PasswordFragment : Fragment() {
 
         private fun animateFab(show: Boolean) = with(binding.fab) {
             val animation = AnimationUtils.loadAnimation(
-                    context, if (show) R.anim.scale_up else R.anim.scale_down
+                context, if (show) R.anim.scale_up else R.anim.scale_down
             )
             animation.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationRepeat(animation: Animation?) {
@@ -226,9 +226,9 @@ class PasswordFragment : Fragment() {
                 }
             })
             animate().rotationBy(if (show) -90f else 90f)
-                    .setStartDelay(if (show) 100 else 0)
-                    .setDuration(100)
-                    .start()
+                .setStartDelay(if (show) 100 else 0)
+                .setDuration(100)
+                .start()
             startAnimation(animation)
         }
     }

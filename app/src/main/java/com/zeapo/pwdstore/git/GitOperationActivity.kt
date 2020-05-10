@@ -56,17 +56,17 @@ open class GitOperationActivity : BaseGitActivity() {
     private fun syncRepository(operation: Int) {
         if (serverUser.isEmpty() || serverHostname.isEmpty() || url.isNullOrEmpty())
             MaterialAlertDialogBuilder(this)
-                    .setMessage(getString(R.string.set_information_dialog_text))
-                    .setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
-                        val intent = Intent(this, UserPreference::class.java)
-                        startActivityForResult(intent, REQUEST_PULL)
-                    }
-                    .setNegativeButton(getString(R.string.dialog_negative)) { _, _ ->
-                        // do nothing :(
-                        setResult(RESULT_OK)
-                        finish()
-                    }
-                    .show()
+                .setMessage(getString(R.string.set_information_dialog_text))
+                .setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
+                    val intent = Intent(this, UserPreference::class.java)
+                    startActivityForResult(intent, REQUEST_PULL)
+                }
+                .setNegativeButton(getString(R.string.dialog_negative)) { _, _ ->
+                    // do nothing :(
+                    setResult(RESULT_OK)
+                    finish()
+                }
+                .show()
         else {
             // check that the remote origin is here, else add it
             PasswordRepository.addRemote("origin", url!!, true)

@@ -11,7 +11,6 @@ buildscript {
     dependencies {
         classpath deps.gradle_plugin.android
         classpath deps.gradle_plugin.kotlin
-        classpath deps.gradle_plugin.spotless
     }
 }
 
@@ -21,7 +20,6 @@ plugins {
 
 subprojects {
     apply from: rootProject.file('dependencies.gradle')
-    apply from: rootProject.file('spotless.gradle')
     repositories {
         google()
         jcenter()
@@ -66,8 +64,6 @@ subprojects {
         }
     }
 }
-
-apply from: rootProject.file('spotless.root.gradle')
 
 tasks {
     wrapper {

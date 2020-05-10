@@ -16,9 +16,9 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.charset.StandardCharsets
-import org.apache.commons.io.FileUtils
 
 class ShowSshKeyFragment : DialogFragment() {
 
@@ -41,7 +41,8 @@ class ShowSshKeyFragment : DialogFragment() {
         ad.setOnShowListener {
             val b = ad.getButton(AlertDialog.BUTTON_NEUTRAL)
             b.setOnClickListener {
-                val clipboard = activity.getSystemService<ClipboardManager>() ?: return@setOnClickListener
+                val clipboard = activity.getSystemService<ClipboardManager>()
+                    ?: return@setOnClickListener
                 val clip = ClipData.newPlainText("public key", publicKey.text.toString())
                 clipboard.setPrimaryClip(clip)
             }

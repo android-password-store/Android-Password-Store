@@ -19,11 +19,11 @@ import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentSshKeygenBinding
-import java.io.File
-import java.io.FileOutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 class SshKeyGenFragment : Fragment() {
 
@@ -96,12 +96,12 @@ class SshKeyGenFragment : Fragment() {
             prefs.edit { putBoolean("use_generated_key", true) }
         } else {
             MaterialAlertDialogBuilder(activity)
-                    .setTitle(activity.getString(R.string.error_generate_ssh_key))
-                    .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                    .setPositiveButton(activity.getString(R.string.dialog_ok)) { _, _ ->
-                        requireActivity().finish()
-                    }
-                    .show()
+                .setTitle(activity.getString(R.string.error_generate_ssh_key))
+                .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
+                .setPositiveButton(activity.getString(R.string.dialog_ok)) { _, _ ->
+                    requireActivity().finish()
+                }
+                .show()
         }
         hideKeyboard()
     }

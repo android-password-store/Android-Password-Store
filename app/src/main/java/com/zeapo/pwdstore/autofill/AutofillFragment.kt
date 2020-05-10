@@ -60,11 +60,11 @@ class AutofillFragment : DialogFragment() {
         } else {
             val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("http://"))
             val resolveInfo = requireContext().packageManager
-                    .resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+                .resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
             iconPackageName = resolveInfo?.activityInfo?.packageName
             builder.setTitle("Website")
             (view.findViewById<View>(R.id.webURL) as EditText).setText(packageName
-                    ?: "com.android.browser")
+                ?: "com.android.browser")
         }
         try {
             if (iconPackageName != null) {
@@ -86,9 +86,9 @@ class AutofillFragment : DialogFragment() {
         (view.findViewById<View>(R.id.matched) as ListView).adapter = adapter
         // delete items by clicking them
         (view.findViewById<View>(R.id.matched) as ListView).onItemClickListener =
-                AdapterView.OnItemClickListener { _, _, position, _ ->
-                    adapter!!.remove(adapter!!.getItem(position))
-                }
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                adapter!!.remove(adapter!!.getItem(position))
+            }
 
         // set the existing preference, if any
         val prefs: SharedPreferences = if (!isWeb) {
@@ -122,7 +122,7 @@ class AutofillFragment : DialogFragment() {
         if (isWeb) {
             builder.setNeutralButton(R.string.autofill_apps_delete) { _, _ ->
                 if (callingActivity.recyclerAdapter != null &&
-                        packageName != null && packageName != "") {
+                    packageName != null && packageName != "") {
                     prefs.edit {
                         remove(packageName)
                         callingActivity.recyclerAdapter?.removeWebsite(packageName)

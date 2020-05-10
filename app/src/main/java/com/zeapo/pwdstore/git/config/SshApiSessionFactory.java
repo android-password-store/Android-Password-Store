@@ -9,8 +9,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jcraft.jsch.Identity;
 import com.jcraft.jsch.JSch;
@@ -19,8 +21,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.git.BaseGitActivity;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
+
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -38,6 +39,9 @@ import org.openintents.ssh.authentication.request.Request;
 import org.openintents.ssh.authentication.request.SigningRequest;
 import org.openintents.ssh.authentication.request.SshPublicKeyRequest;
 import org.openintents.ssh.authentication.util.SshAuthenticationApiUtils;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class SshApiSessionFactory extends GitConfigSessionFactory {
     /**
@@ -57,7 +61,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
     @NonNull
     @Override
     protected JSch getJSch(@NonNull final OpenSshConfig.Host hc, @NonNull FS fs)
-            throws JSchException {
+        throws JSchException {
         JSch jsch = super.getJSch(hc, fs);
         jsch.removeAllIdentity();
         jsch.addIdentity(identity, null);
@@ -70,28 +74,28 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         session.setConfig("PreferredAuthentications", "publickey");
 
         CredentialsProvider provider =
-                new CredentialsProvider() {
-                    @Override
-                    public boolean isInteractive() {
-                        return false;
-                    }
+            new CredentialsProvider() {
+                @Override
+                public boolean isInteractive() {
+                    return false;
+                }
 
-                    @Override
-                    public boolean supports(CredentialItem... items) {
-                        return true;
-                    }
+                @Override
+                public boolean supports(CredentialItem... items) {
+                    return true;
+                }
 
-                    @Override
-                    public boolean get(URIish uri, CredentialItem... items)
-                            throws UnsupportedCredentialItem {
-                        for (CredentialItem item : items) {
-                            if (item instanceof CredentialItem.Username) {
-                                ((CredentialItem.Username) item).setValue(username);
-                            }
+                @Override
+                public boolean get(URIish uri, CredentialItem... items)
+                    throws UnsupportedCredentialItem {
+                    for (CredentialItem item : items) {
+                        if (item instanceof CredentialItem.Username) {
+                            ((CredentialItem.Username) item).setValue(username);
                         }
-                        return true;
                     }
-                };
+                    return true;
+                }
+            };
         UserInfo userInfo = new CredentialsProviderUserInfo(session, provider);
         session.setUserInfo(userInfo);
     }
@@ -114,14 +118,14 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
          * Construct a new IdentityBuilder
          *
          * @param callingActivity Activity that will be used to launch pending intents and that will
-         *     receive and handle the results.
+         *                        receive and handle the results.
          */
         public IdentityBuilder(BaseGitActivity callingActivity) {
             this.callingActivity = callingActivity;
 
             List<String> providers =
-                    SshAuthenticationApiUtils.getAuthenticationProviderPackageNames(
-                            callingActivity);
+                SshAuthenticationApiUtils.getAuthenticationProviderPackageNames(
+                    callingActivity);
             if (providers.isEmpty())
                 throw new RuntimeException(callingActivity.getString(R.string.no_ssh_api_provider));
 
@@ -130,12 +134,14 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
             connection = new SshAuthenticationConnection(callingActivity, providers.get(0));
 
             settings =
-                    PreferenceManager.getDefaultSharedPreferences(
-                            callingActivity.getApplicationContext());
+                PreferenceManager.getDefaultSharedPreferences(
+                    callingActivity.getApplicationContext());
             keyId = settings.getString("ssh_openkeystore_keyid", null);
         }
 
-        /** Free any resources associated with this IdentityBuilder */
+        /**
+         * Free any resources associated with this IdentityBuilder
+         */
         public void close() {
             if (connection != null && connection.isConnected()) connection.disconnect();
         }
@@ -143,10 +149,10 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         /**
          * Helper to invoke an OpenKeyshain SSH API method and correctly interpret the result.
          *
-         * @param request The request intent to launch
+         * @param request     The request intent to launch
          * @param requestCode The request code to use if a pending intent needs to be sent
          * @return The resulting intent if the request completed immediately, or null if we had to
-         *     launch a pending intent to interact with the user
+         * launch a pending intent to interact with the user
          */
         private Intent executeApi(Request request, int requestCode) {
             Intent result = api.executeApi(request.toIntent());
@@ -154,13 +160,13 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
             switch (result.getIntExtra(SshAuthenticationApi.EXTRA_RESULT_CODE, -1)) {
                 case SshAuthenticationApi.RESULT_CODE_ERROR:
                     SshAuthenticationApiError error =
-                            result.getParcelableExtra(SshAuthenticationApi.EXTRA_ERROR);
+                        result.getParcelableExtra(SshAuthenticationApi.EXTRA_ERROR);
                     // On an OpenKeychain SSH API error, clear out the stored keyid
                     settings.edit().putString("ssh_openkeystore_keyid", null).apply();
 
                     switch (error.getError()) {
-                            // If the problem was just a bad keyid, reset to allow them to choose a
-                            // different one
+                        // If the problem was just a bad keyid, reset to allow them to choose a
+                        // different one
                         case (SshAuthenticationApiError.NO_SUCH_KEY):
                         case (SshAuthenticationApiError.NO_AUTH_KEY):
                             keyId = null;
@@ -169,7 +175,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
                             alg = null;
                             return executeApi(new KeySelectionRequest(), requestCode);
 
-                            // Other errors are fatal
+                        // Other errors are fatal
                         default:
                             throw new RuntimeException(error.getMessage());
                     }
@@ -177,19 +183,19 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
                     break;
                 case SshAuthenticationApi.RESULT_CODE_USER_INTERACTION_REQUIRED:
                     PendingIntent pendingIntent =
-                            result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT);
+                        result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT);
                     try {
                         callingActivity.startIntentSenderForResult(
-                                pendingIntent.getIntentSender(), requestCode, null, 0, 0, 0);
+                            pendingIntent.getIntentSender(), requestCode, null, 0, 0, 0);
                         return null;
                     } catch (IntentSender.SendIntentException e) {
                         e.printStackTrace();
                         throw new RuntimeException(
-                                callingActivity.getString(R.string.ssh_api_pending_intent_failed));
+                            callingActivity.getString(R.string.ssh_api_pending_intent_failed));
                     }
                 default:
                     throw new RuntimeException(
-                            callingActivity.getString(R.string.ssh_api_unknown_error));
+                        callingActivity.getString(R.string.ssh_api_unknown_error));
             }
 
             return result;
@@ -223,32 +229,32 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
          *
          * @param requestCode The request code to use if a pending intent needs to be sent
          * @return The built identity, or null of user interaction is still required (in which case
-         *     a pending intent will have already been launched)
+         * a pending intent will have already been launched)
          */
         public ApiIdentity tryBuild(int requestCode) {
             // First gate, need to initiate a connection to the service and wait for it to connect.
             if (api == null) {
                 connection.connect(
-                        new SshAuthenticationConnection.OnBound() {
-                            @Override
-                            public void onBound(ISshAuthenticationService sshAgent) {
-                                api = new SshAuthenticationApi(callingActivity, sshAgent);
-                                // We can immediately try the next phase without needing to post
-                                // back
-                                // though onActivityResult
-                                callingActivity.onActivityResult(
-                                        requestCode, Activity.RESULT_OK, null);
-                            }
+                    new SshAuthenticationConnection.OnBound() {
+                        @Override
+                        public void onBound(ISshAuthenticationService sshAgent) {
+                            api = new SshAuthenticationApi(callingActivity, sshAgent);
+                            // We can immediately try the next phase without needing to post
+                            // back
+                            // though onActivityResult
+                            callingActivity.onActivityResult(
+                                requestCode, Activity.RESULT_OK, null);
+                        }
 
-                            @Override
-                            public void onError() {
-                                new MaterialAlertDialogBuilder(callingActivity)
-                                        .setMessage(
-                                                callingActivity.getString(
-                                                        R.string.openkeychain_ssh_api_connect_fail))
-                                        .show();
-                            }
-                        });
+                        @Override
+                        public void onError() {
+                            new MaterialAlertDialogBuilder(callingActivity)
+                                .setMessage(
+                                    callingActivity.getString(
+                                        R.string.openkeychain_ssh_api_connect_fail))
+                                .show();
+                        }
+                    });
 
                 return null;
             }
@@ -273,7 +279,9 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         }
     }
 
-    /** A Jsch identity that delegates key operations via the OpenKeychain SSH API */
+    /**
+     * A Jsch identity that delegates key operations via the OpenKeychain SSH API
+     */
     public static class ApiIdentity implements Identity {
         private String keyId, description, alg;
         private byte[] publicKey;
@@ -283,12 +291,12 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         private byte[] signature;
 
         ApiIdentity(
-                String keyId,
-                String description,
-                byte[] publicKey,
-                String alg,
-                Activity callingActivity,
-                SshAuthenticationApi api) {
+            String keyId,
+            String description,
+            byte[] publicKey,
+            String alg,
+            Activity callingActivity,
+            SshAuthenticationApi api) {
             this.keyId = keyId;
             this.description = description;
             this.publicKey = publicKey;
@@ -313,35 +321,35 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
          *
          * @param result The result intent to handle
          * @return The signed challenge, or null if it was not immediately available, in which case
-         *     the latch has been initialized and the pending intent started
+         * the latch has been initialized and the pending intent started
          */
         private byte[] handleSignResult(Intent result) {
             switch (result.getIntExtra(SshAuthenticationApi.EXTRA_RESULT_CODE, -1)) {
                 case SshAuthenticationApi.RESULT_CODE_ERROR:
                     SshAuthenticationApiError error =
-                            result.getParcelableExtra(SshAuthenticationApi.EXTRA_ERROR);
+                        result.getParcelableExtra(SshAuthenticationApi.EXTRA_ERROR);
                     throw new RuntimeException(error.getMessage());
                 case SshAuthenticationApi.RESULT_CODE_SUCCESS:
                     return result.getByteArrayExtra(SshAuthenticationApi.EXTRA_SIGNATURE);
                 case SshAuthenticationApi.RESULT_CODE_USER_INTERACTION_REQUIRED:
                     PendingIntent pendingIntent =
-                            result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT);
+                        result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT);
                     try {
                         latch = new CountDownLatch(1);
                         callingActivity.startIntentSenderForResult(
-                                pendingIntent.getIntentSender(), POST_SIGNATURE, null, 0, 0, 0);
+                            pendingIntent.getIntentSender(), POST_SIGNATURE, null, 0, 0, 0);
                         return null;
 
                     } catch (Exception e) {
                         e.printStackTrace();
                         throw new RuntimeException(
-                                callingActivity.getString(R.string.ssh_api_pending_intent_failed));
+                            callingActivity.getString(R.string.ssh_api_pending_intent_failed));
                     }
                 default:
                     if (result.hasExtra(SshAuthenticationApi.EXTRA_CHALLENGE))
                         return handleSignResult(api.executeApi(result));
                     throw new RuntimeException(
-                            callingActivity.getString(R.string.ssh_api_unknown_error));
+                        callingActivity.getString(R.string.ssh_api_unknown_error));
             }
         }
 
@@ -399,6 +407,7 @@ public class SshApiSessionFactory extends GitConfigSessionFactory {
         }
 
         @Override
-        public void clear() {}
+        public void clear() {
+        }
     }
 }

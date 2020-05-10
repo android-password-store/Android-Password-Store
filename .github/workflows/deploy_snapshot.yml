@@ -28,9 +28,6 @@ jobs:
     - name: Download gradle dependencies
       run: ./gradlew dependencies
 
-    - name: Validate codestyle with Spotless
-      run: ./gradlew spotlessCheck
-
     - name: Build release app
       run: ./gradlew :app:assembleRelease
       env:

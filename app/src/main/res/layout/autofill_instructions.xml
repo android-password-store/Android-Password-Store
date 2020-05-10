@@ -7,10 +7,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
         android:paddingLeft="24dp"
+        android:paddingTop="20dp"
         android:paddingRight="24dp"
-        android:paddingTop="20dp">
+        android:paddingBottom="20dp">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -21,19 +21,19 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/autofill_ins_1"
-            android:contentDescription="@string/autofill_ins_1_hint" />
+            android:contentDescription="@string/autofill_ins_1_hint"
+            android:src="@drawable/autofill_ins_1" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/autofill_ins_2"
-            android:contentDescription="@string/autofill_ins_2_hint" />
+            android:contentDescription="@string/autofill_ins_2_hint"
+            android:src="@drawable/autofill_ins_2" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -44,10 +44,10 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="114dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/autofill_ins_3"
-            android:contentDescription="@string/autofill_ins_3_hint" />
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/autofill_ins_3_hint"
+            android:src="@drawable/autofill_ins_3" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"

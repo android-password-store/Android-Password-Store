@@ -78,19 +78,19 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
         try {
             with(binding) {
                 val packageInfo =
-                        packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
+                    packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
                 val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
                 warningAppInstallDate.text =
-                        getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
+                    getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
                 val appInfo =
-                        packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
+                    packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
                 warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
 
                 val currentHash = computeCertificatesHash(this@AutofillPublisherChangedActivity, appPackage)
                 warningAppAdvancedInfo.text = getString(
-                        R.string.oreo_autofill_warning_publisher_advanced_info_template,
-                        appPackage,
-                        currentHash
+                    R.string.oreo_autofill_warning_publisher_advanced_info_template,
+                    appPackage,
+                    currentHash
                 )
             }
         } catch (exception: Exception) {

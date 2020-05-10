@@ -11,46 +11,46 @@ internal object Phonemes {
     private const val NOT_FIRST = 0x0008
 
     private val elements = arrayOf(
-            Element("a", VOWEL),
-            Element("ae", VOWEL or DIPTHONG),
-            Element("ah", VOWEL or DIPTHONG),
-            Element("ai", VOWEL or DIPTHONG),
-            Element("b", CONSONANT),
-            Element("c", CONSONANT),
-            Element("ch", CONSONANT or DIPTHONG),
-            Element("d", CONSONANT),
-            Element("e", VOWEL),
-            Element("ee", VOWEL or DIPTHONG),
-            Element("ei", VOWEL or DIPTHONG),
-            Element("f", CONSONANT),
-            Element("g", CONSONANT),
-            Element("gh", CONSONANT or DIPTHONG or NOT_FIRST),
-            Element("h", CONSONANT),
-            Element("i", VOWEL),
-            Element("ie", VOWEL or DIPTHONG),
-            Element("j", CONSONANT),
-            Element("k", CONSONANT),
-            Element("l", CONSONANT),
-            Element("m", CONSONANT),
-            Element("n", CONSONANT),
-            Element("ng", CONSONANT or DIPTHONG or NOT_FIRST),
-            Element("o", VOWEL),
-            Element("oh", VOWEL or DIPTHONG),
-            Element("oo", VOWEL or DIPTHONG),
-            Element("p", CONSONANT),
-            Element("ph", CONSONANT or DIPTHONG),
-            Element("qu", CONSONANT or DIPTHONG),
-            Element("r", CONSONANT),
-            Element("s", CONSONANT),
-            Element("sh", CONSONANT or DIPTHONG),
-            Element("t", CONSONANT),
-            Element("th", CONSONANT or DIPTHONG),
-            Element("u", VOWEL),
-            Element("v", CONSONANT),
-            Element("w", CONSONANT),
-            Element("x", CONSONANT),
-            Element("y", CONSONANT),
-            Element("z", CONSONANT)
+        Element("a", VOWEL),
+        Element("ae", VOWEL or DIPTHONG),
+        Element("ah", VOWEL or DIPTHONG),
+        Element("ai", VOWEL or DIPTHONG),
+        Element("b", CONSONANT),
+        Element("c", CONSONANT),
+        Element("ch", CONSONANT or DIPTHONG),
+        Element("d", CONSONANT),
+        Element("e", VOWEL),
+        Element("ee", VOWEL or DIPTHONG),
+        Element("ei", VOWEL or DIPTHONG),
+        Element("f", CONSONANT),
+        Element("g", CONSONANT),
+        Element("gh", CONSONANT or DIPTHONG or NOT_FIRST),
+        Element("h", CONSONANT),
+        Element("i", VOWEL),
+        Element("ie", VOWEL or DIPTHONG),
+        Element("j", CONSONANT),
+        Element("k", CONSONANT),
+        Element("l", CONSONANT),
+        Element("m", CONSONANT),
+        Element("n", CONSONANT),
+        Element("ng", CONSONANT or DIPTHONG or NOT_FIRST),
+        Element("o", VOWEL),
+        Element("oh", VOWEL or DIPTHONG),
+        Element("oo", VOWEL or DIPTHONG),
+        Element("p", CONSONANT),
+        Element("ph", CONSONANT or DIPTHONG),
+        Element("qu", CONSONANT or DIPTHONG),
+        Element("r", CONSONANT),
+        Element("s", CONSONANT),
+        Element("sh", CONSONANT or DIPTHONG),
+        Element("t", CONSONANT),
+        Element("th", CONSONANT or DIPTHONG),
+        Element("u", VOWEL),
+        Element("v", CONSONANT),
+        Element("w", CONSONANT),
+        Element("x", CONSONANT),
+        Element("y", CONSONANT),
+        Element("z", CONSONANT)
     )
 
     private val NUM_ELEMENTS = elements.size
@@ -110,7 +110,7 @@ internal object Phonemes {
                 }
                 // Don't allow VOWEL followed a Vowel/Dipthong pair
                 if (prev and VOWEL > 0 && flags and VOWEL > 0 &&
-                        flags and DIPTHONG > 0
+                    flags and DIPTHONG > 0
                 ) {
                     continue
                 }
@@ -125,7 +125,7 @@ internal object Phonemes {
                 // Handle UPPERS
                 if (pwFlags and PasswordGenerator.UPPERS > 0) {
                     if ((pwFlags and PasswordGenerator.LOWERS == 0) ||
-                            (first || flags and CONSONANT > 0) && RandomNumberGenerator.number(10) < 2) {
+                        (first || flags and CONSONANT > 0) && RandomNumberGenerator.number(10) < 2) {
                         val index = password.length - length
                         password = password.substring(0, index) + str.toUpperCase()
                         featureFlags = featureFlags and PasswordGenerator.UPPERS.inv()
@@ -169,7 +169,7 @@ internal object Phonemes {
                             cha = Character.forDigit(RandomNumberGenerator.number(10), 10)
                             character = cha.toString()
                         } while (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
-                                PasswordGenerator.AMBIGUOUS_STR.contains(character))
+                            PasswordGenerator.AMBIGUOUS_STR.contains(character))
                         password += character
                         curSize++
 
@@ -192,7 +192,7 @@ internal object Phonemes {
                             cha = PasswordGenerator.SYMBOLS_STR.toCharArray()[num]
                             character = cha.toString()
                         } while (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
-                                PasswordGenerator.AMBIGUOUS_STR.contains(character))
+                            PasswordGenerator.AMBIGUOUS_STR.contains(character))
                         password += character
                         curSize++
 
@@ -205,7 +205,7 @@ internal object Phonemes {
                     VOWEL
                 } else {
                     if (prev and VOWEL > 0 || flags and DIPTHONG > 0 ||
-                            RandomNumberGenerator.number(10) > 3
+                        RandomNumberGenerator.number(10) > 3
                     ) {
                         CONSONANT
                     } else {

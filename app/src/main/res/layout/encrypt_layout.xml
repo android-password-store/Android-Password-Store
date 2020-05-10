@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/windowBackground"
     android:orientation="vertical"
     android:padding="@dimen/activity_horizontal_margin"
@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:textColor="?android:attr/textColor"
         android:enabled="false"
+        android:textColor="?android:attr/textColor"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,17 +23,18 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_input_layout"
-        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_margin="8dp"
         android:hint="@string/crypto_name_hint"
-        app:layout_constraintTop_toBottomOf="@id/crypto_password_category"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/crypto_password_category">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/crypto_password_file_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -43,13 +44,14 @@
         android:layout_margin="8dp"
         android:hint="@string/crypto_pass_label"
         app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@id/name_input_layout"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_input_layout">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/crypto_password_edit"
-            android:inputType="textVisiblePassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:inputType="textVisiblePassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -58,8 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/pwd_generate_button"
-        app:layout_constraintTop_toBottomOf="@id/password_input_layout"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_input_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/extra_input_layout"
@@ -67,14 +69,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/crypto_extra_label"
-        app:layout_constraintTop_toBottomOf="@id/generate_password"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/generate_password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/crypto_extra_edit"
-            android:inputType="textMultiLine|textVisiblePassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textVisiblePassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

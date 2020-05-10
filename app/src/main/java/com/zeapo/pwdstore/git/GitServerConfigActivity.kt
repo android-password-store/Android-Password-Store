@@ -144,27 +144,27 @@ class GitServerConfigActivity : BaseGitActivity() {
         val localDirFiles = localDir.listFiles() ?: emptyArray()
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
         if (localDir.exists() && localDirFiles.isNotEmpty() &&
-                !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")) {
+            !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")) {
             MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.dialog_delete_title)
-                    .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
-                        try {
-                            localDir.deleteRecursively()
-                            launchGitOperation(REQUEST_CLONE)
-                        } catch (e: IOException) {
-                            // TODO Handle the exception correctly if we are unable to delete the directory...
-                            e.printStackTrace()
-                            MaterialAlertDialogBuilder(this).setMessage(e.message).show()
-                        } finally {
-                            dialog.cancel()
-                        }
-                    }
-                    .setNegativeButton(R.string.dialog_do_not_delete) { dialog, _ ->
+                .setTitle(R.string.dialog_delete_title)
+                .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
+                .setCancelable(false)
+                .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
+                    try {
+                        localDir.deleteRecursively()
+                        launchGitOperation(REQUEST_CLONE)
+                    } catch (e: IOException) {
+                        // TODO Handle the exception correctly if we are unable to delete the directory...
+                        e.printStackTrace()
+                        MaterialAlertDialogBuilder(this).setMessage(e.message).show()
+                    } finally {
                         dialog.cancel()
                     }
-                    .show()
+                }
+                .setNegativeButton(R.string.dialog_do_not_delete) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .show()
         } else {
             try {
                 // Silently delete & replace the lone .git folder if it exists

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="20dp"
     android:paddingLeft="24dp"
+    android:paddingTop="20dp"
     android:paddingRight="24dp"
-    android:paddingTop="20dp">
+    android:paddingBottom="20dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="URL">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/webURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textUri"/>
+            android:inputType="textUri" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <RadioGroup
@@ -56,14 +56,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/matchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+"
-            android:id="@+id/matchButton"
             android:layout_gravity="center_horizontal"
+            android:text="+"
             tools:ignore="HardcodedText" />
 
         <RadioButton
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:checked="false"
-            android:text="@string/autofill_apps_never"/>
+            android:text="@string/autofill_apps_never" />
 
     </RadioGroup>
 

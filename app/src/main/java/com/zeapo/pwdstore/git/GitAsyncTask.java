@@ -8,9 +8,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+
 import com.zeapo.pwdstore.PasswordStore;
 import com.zeapo.pwdstore.R;
-import java.lang.ref.WeakReference;
+
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.api.PullCommand;
@@ -21,6 +22,8 @@ import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RemoteRefUpdate;
 
+import java.lang.ref.WeakReference;
+
 public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private WeakReference<Activity> activityWeakReference;
     private boolean refreshListOnEnd;
@@ -29,10 +32,10 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
     private Intent finishWithResultOnEnd;
 
     public GitAsyncTask(
-            Activity activity,
-            boolean refreshListOnEnd,
-            GitOperation operation,
-            Intent finishWithResultOnEnd) {
+        Activity activity,
+        boolean refreshListOnEnd,
+        GitOperation operation,
+        Intent finishWithResultOnEnd) {
         this.activityWeakReference = new WeakReference<>(activity);
         this.refreshListOnEnd = refreshListOnEnd;
         this.operation = operation;
@@ -47,7 +50,7 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
 
     protected void onPreExecute() {
         this.dialog.setMessage(
-                getActivity().getResources().getString(R.string.running_dialog_text));
+            getActivity().getResources().getString(R.string.running_dialog_text));
         this.dialog.setCancelable(false);
         this.dialog.show();
     }
@@ -85,13 +88,13 @@ public class GitAsyncTask extends AsyncTask<GitCommand, Integer, String> {
                                 case NON_EXISTING:
                                 case NOT_ATTEMPTED:
                                     return activity.getString(R.string.git_push_generic_error)
-                                            + rru.getStatus().name();
+                                        + rru.getStatus().name();
                                 case REJECTED_OTHER_REASON:
                                     if ("non-fast-forward".equals(rru.getMessage())) {
                                         return activity.getString(R.string.git_push_other_error);
                                     } else {
                                         return activity.getString(R.string.git_push_generic_error)
-                                                + rru.getMessage();
+                                            + rru.getMessage();
                                     }
                                 default:
                                     break;

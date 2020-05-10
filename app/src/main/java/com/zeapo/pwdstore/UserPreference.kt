@@ -50,6 +50,8 @@ import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
+import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -57,8 +59,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.HashSet
 import java.util.TimeZone
-import me.msfjarvis.openpgpktx.util.OpenPgpUtils
-import org.apache.commons.io.FileUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -98,8 +98,8 @@ class UserPreference : AppCompatActivity() {
 
             if (!PasswordRepository.isGitRepo()) {
                 listOfNotNull(
-                        gitServerPreference, gitConfigPreference, sshKeyPreference,
-                        sshKeygenPreference, viewSshKeyPreference, clearSavedPassPreference
+                    gitServerPreference, gitConfigPreference, sshKeyPreference,
+                    sshKeygenPreference, viewSshKeyPreference, clearSavedPassPreference
                 ).forEach {
                     it.parent?.removePreference(it)
                 }
@@ -121,10 +121,10 @@ class UserPreference : AppCompatActivity() {
             val autoFillShowFullNamePreference =
                 findPreference<CheckBoxPreference>("autofill_full_path")!!
             autofillDependencies = listOf(
-                    autoFillAppsPreference,
-                    autoFillDefaultPreference,
-                    autoFillAlwaysShowDialogPreference,
-                    autoFillShowFullNamePreference
+                autoFillAppsPreference,
+                autoFillDefaultPreference,
+                autoFillAlwaysShowDialogPreference,
+                autoFillShowFullNamePreference
             )
             val oreoAutofillDirectoryStructurePreference =
                 findPreference<ListPreference>("oreo_autofill_directory_structure")!!
@@ -139,7 +139,7 @@ class UserPreference : AppCompatActivity() {
             clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
-                    ?: HashSet()).toTypedArray()
+                ?: HashSet()).toTypedArray()
             keyPreference?.summary = if (selectedKeys.isEmpty()) {
                 this.resources.getString(R.string.pref_no_key_selected)
             } else {
@@ -148,7 +148,7 @@ class UserPreference : AppCompatActivity() {
                 }
             }
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
-                    ?: false
+                ?: false
 
             updateAutofillSettings()
             updateClearSavedPassphrasePrefs()
@@ -220,29 +220,29 @@ class UserPreference : AppCompatActivity() {
             deleteRepoPreference?.onPreferenceClickListener = ClickListener {
                 val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
                 MaterialAlertDialogBuilder(callingActivity)
-                        .setTitle(R.string.pref_dialog_delete_title)
-                        .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
-                            try {
-                                FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
-                                PasswordRepository.closeRepository()
-                            } catch (ignored: Exception) {
-                                // TODO Handle the different cases of exceptions
-                            }
-
-                            sharedPreferences.edit { putBoolean("repository_initialized", false) }
-                            dialogInterface.cancel()
-                            callingActivity.finish()
+                    .setTitle(R.string.pref_dialog_delete_title)
+                    .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
+                        try {
+                            FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
+                            PasswordRepository.closeRepository()
+                        } catch (ignored: Exception) {
+                            // TODO Handle the different cases of exceptions
                         }
-                        .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ -> run { dialogInterface.cancel() } }
-                        .show()
+
+                        sharedPreferences.edit { putBoolean("repository_initialized", false) }
+                        dialogInterface.cancel()
+                        callingActivity.finish()
+                    }
+                    .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ -> run { dialogInterface.cancel() } }
+                    .show()
 
                 true
             }
 
             selectExternalGitRepositoryPreference?.summary =
-                    sharedPreferences.getString("git_external_repo", context.getString(R.string.no_repo_selected))
+                sharedPreferences.getString("git_external_repo", context.getString(R.string.no_repo_selected))
             selectExternalGitRepositoryPreference?.onPreferenceClickListener = ClickListener {
                 callingActivity.selectExternalGitRepository()
                 true
@@ -484,23 +484,23 @@ class UserPreference : AppCompatActivity() {
         prefsFragment = PrefsFragment()
 
         supportFragmentManager
-                .beginTransaction()
-                .replace(android.R.id.content, prefsFragment)
-                .commit()
+            .beginTransaction()
+            .replace(android.R.id.content, prefsFragment)
+            .commit()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     fun selectExternalGitRepository() {
         MaterialAlertDialogBuilder(this)
-                .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
-                .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
-                .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                    val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    startActivityForResult(Intent.createChooser(i, "Choose Directory"), SELECT_GIT_DIRECTORY)
-                }
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .show()
+            .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
+            .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
+            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                startActivityForResult(Intent.createChooser(i, "Choose Directory"), SELECT_GIT_DIRECTORY)
+            }
+            .setNegativeButton(R.string.dialog_cancel, null)
+            .show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -630,9 +630,9 @@ class UserPreference : AppCompatActivity() {
                         copySshKey(uri)
 
                         Toast.makeText(
-                                this,
-                                this.resources.getString(R.string.ssh_key_success_dialog_title),
-                                Toast.LENGTH_LONG
+                            this,
+                            this.resources.getString(R.string.ssh_key_success_dialog_title),
+                            Toast.LENGTH_LONG
                         ).show()
                         val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
@@ -668,13 +668,13 @@ class UserPreference : AppCompatActivity() {
 
                     if (Environment.getExternalStorageDirectory().path == repoPath) {
                         MaterialAlertDialogBuilder(this)
-                                .setTitle(getString(R.string.sdcard_root_warning_title))
-                                .setMessage(getString(R.string.sdcard_root_warning_message))
-                                .setPositiveButton("Remove everything") { _, _ ->
-                                    prefs.edit { putString("git_external_repo", uri?.path) }
-                                }
-                                .setNegativeButton(R.string.dialog_cancel, null)
-                                .show()
+                            .setTitle(getString(R.string.sdcard_root_warning_title))
+                            .setMessage(getString(R.string.sdcard_root_warning_message))
+                            .setPositiveButton("Remove everything") { _, _ ->
+                                prefs.edit { putString("git_external_repo", uri?.path) }
+                            }
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .show()
                     }
                     prefs.edit { putString("git_external_repo", repoPath) }
                 }
@@ -693,9 +693,9 @@ class UserPreference : AppCompatActivity() {
                     val uri: Uri = data.data ?: throw IOException("Unable to open file")
 
                     Toast.makeText(
-                            this,
-                            this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
-                            Toast.LENGTH_SHORT
+                        this,
+                        this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
+                        Toast.LENGTH_SHORT
                     ).show()
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
@@ -731,8 +731,8 @@ class UserPreference : AppCompatActivity() {
 
         val dateString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime
-                    .now()
-                    .format(DateTimeFormatter.ISO_DATE_TIME)
+                .now()
+                .format(DateTimeFormatter.ISO_DATE_TIME)
         } else {
             String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")))
         }

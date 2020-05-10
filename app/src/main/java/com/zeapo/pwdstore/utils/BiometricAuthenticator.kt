@@ -61,11 +61,11 @@ object BiometricAuthenticator {
         }
         val biometricPrompt = BiometricPrompt(activity, { handler.post(it) }, authCallback)
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle(activity.getString(dialogTitleRes))
-                .setDeviceCredentialAllowed(true)
-                .build()
+            .setTitle(activity.getString(dialogTitleRes))
+            .setDeviceCredentialAllowed(true)
+            .build()
         if (BiometricManager.from(activity).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS ||
-                activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true) {
+            activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true) {
             biometricPrompt.authenticate(promptInfo)
         } else {
             callback(Result.HardwareUnavailableOrDisabled)

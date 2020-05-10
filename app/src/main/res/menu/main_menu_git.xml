@@ -1,26 +1,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_search"
-        android:title="@string/action_search"
+    <item
+        android:id="@+id/action_search"
         android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+        android:title="@string/action_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
 
-    <item android:id="@+id/git_sync"
+    <item
+        android:id="@+id/git_sync"
         android:title="@string/git_sync" />
 
-    <item android:id="@+id/git_pull"
+    <item
+        android:id="@+id/git_pull"
         android:title="@string/git_pull" />
 
-    <item android:id="@+id/git_push"
+    <item
+        android:id="@+id/git_push"
         android:title="@string/git_push" />
 
-    <item android:id="@+id/refresh"
+    <item
+        android:id="@+id/refresh"
         android:title="@string/refresh_list" />
 
-    <item android:id="@+id/user_pref"
-        android:title="@string/action_settings"
-        android:orderInCategory="100" />
+    <item
+        android:id="@+id/user_pref"
+        android:orderInCategory="100"
+        android:title="@string/action_settings" />
 </menu>

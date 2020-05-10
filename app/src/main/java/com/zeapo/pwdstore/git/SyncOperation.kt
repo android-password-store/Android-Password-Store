@@ -8,13 +8,13 @@ import android.app.Activity
 import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import java.io.File
 import org.eclipse.jgit.api.AddCommand
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.StatusCommand
+import java.io.File
 
 /**
  * Creates a new git operation
@@ -23,6 +23,7 @@ import org.eclipse.jgit.api.StatusCommand
  * @param callingActivity the calling activity
  */
 class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
+
     private var addCommand: AddCommand? = null
     private var statusCommand: StatusCommand? = null
     private var commitCommand: CommitCommand? = null
@@ -55,12 +56,12 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     override fun onError(errorMessage: String) {
         super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
-                .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage("Error occured during the sync operation, " +
-                        "\nPlease check the FAQ for possible reasons why this error might occur." +
-                        callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                        errorMessage)
-                .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
-                .show()
+            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
+            .setMessage("Error occured during the sync operation, " +
+                "\nPlease check the FAQ for possible reasons why this error might occur." +
+                callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
+                errorMessage)
+            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
+            .show()
     }
 }

@@ -4,10 +4,10 @@
  */
 package com.zeapo.pwdstore
 
+import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import org.junit.Test
 
 private infix fun String.matchedForDomain(domain: String) =
     SearchableRepositoryViewModel.generateStrictDomainRegex(domain)?.containsMatchIn(this) == true

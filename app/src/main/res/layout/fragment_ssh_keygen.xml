@@ -18,18 +18,20 @@
             android:text="@string/ssh_keygen_length" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            style="@style/TextAppearance.MaterialComponents.Headline1"
             android:id="@+id/key_length_group"
+            style="@style/TextAppearance.MaterialComponents.Headline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:selectionRequired="true"
             app:singleSelection="true">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_length_2048"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/key_length_2048" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_length_4096"
                 style="?attr/materialButtonOutlinedStyle"
@@ -49,8 +51,8 @@
                 android:id="@+id/passphrase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
                 android:fontFamily="@font/sourcecodepro"
+                android:importantForAccessibility="no"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 

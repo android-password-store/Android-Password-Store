@@ -7,10 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
         android:paddingLeft="24dp"
+        android:paddingTop="20dp"
         android:paddingRight="24dp"
-        android:paddingTop="20dp">
+        android:paddingBottom="20dp">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/public_key"

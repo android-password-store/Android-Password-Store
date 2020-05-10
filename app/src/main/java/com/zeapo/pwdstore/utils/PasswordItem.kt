@@ -14,14 +14,15 @@ data class PasswordItem(
     val file: File,
     val rootDir: File
 ) : Comparable<PasswordItem> {
+
     val fullPathToParent = file.absolutePath
-            .replace(rootDir.absolutePath, "")
-            .replace(file.name, "")
+        .replace(rootDir.absolutePath, "")
+        .replace(file.name, "")
 
     val longName = PgpActivity.getLongName(
-            fullPathToParent,
-            rootDir.absolutePath,
-            toString())
+        fullPathToParent,
+        rootDir.absolutePath,
+        toString())
 
     override fun equals(other: Any?): Boolean {
         return (other is PasswordItem) && (other.file == file)

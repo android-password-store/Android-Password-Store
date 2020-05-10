@@ -20,7 +20,7 @@
 
 ## :pencil: Checklist
 <!--- Put an `x` in the boxes that apply -->
-- [ ] I ran `./gradlew spotlessApply` before submitting the PR
+- [ ] I formatted the code with the IDE's reformat action (Ctrl + Shift + L/Cmd + Shift + L)
 - [ ] I reviewed submitted code
 
 

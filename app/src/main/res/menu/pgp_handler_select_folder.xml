@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:pwstore="http://schemas.android.com/apk/res-auto"
-    tools:context="com.zeapo.pwdstore.SelectFolderActivity" >
-    <item android:title="@string/crypto_select"
-        android:icon="@drawable/ic_done_white_24dp"
-        pwstore:showAsAction="ifRoom"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.zeapo.pwdstore.SelectFolderActivity">
+    <item
         android:id="@+id/crypto_select"
-        />
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/crypto_select"
+        pwstore:showAsAction="ifRoom" />
 </menu>

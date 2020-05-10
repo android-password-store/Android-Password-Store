@@ -22,16 +22,6 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.UnsupportedEncodingException
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -42,6 +32,16 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.InputStream
+import java.io.OutputStream
+import java.io.UnsupportedEncodingException
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillDecryptActivity : Activity(), CoroutineScope {
@@ -214,9 +214,9 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
                 if (error != null) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
-                                applicationContext,
-                                "Error from OpenKeyChain: ${error.message}",
-                                Toast.LENGTH_LONG
+                            applicationContext,
+                            "Error from OpenKeyChain: ${error.message}",
+                            Toast.LENGTH_LONG
                         ).show()
                     }
                     e { "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}" }

@@ -15,9 +15,9 @@ class SshKeyGenActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (savedInstanceState == null) {
             supportFragmentManager
-                    .beginTransaction()
-                    .replace(android.R.id.content, SshKeyGenFragment())
-                    .commit()
+                .beginTransaction()
+                .replace(android.R.id.content, SshKeyGenFragment())
+                .commit()
         }
     }
 

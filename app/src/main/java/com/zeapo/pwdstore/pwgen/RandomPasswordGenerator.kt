@@ -53,7 +53,7 @@ internal object RandomPasswordGenerator {
                 cha = bank.toCharArray()[num]
                 character = cha.toString()
                 if (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
-                        PasswordGenerator.AMBIGUOUS_STR.contains(character)) {
+                    PasswordGenerator.AMBIGUOUS_STR.contains(character)) {
                     continue
                 }
                 if (pwFlags and PasswordGenerator.NO_VOWELS > 0 && PasswordGenerator.VOWELS_STR.contains(character)) {

@@ -8,9 +8,9 @@ import android.app.Activity
 import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PullCommand
+import java.io.File
 
 /**
  * Creates a new git operation
@@ -27,9 +27,9 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
      */
     fun setCommand(): PullOperation {
         this.command = Git(repository)
-                .pull()
-                .setRebase(true)
-                .setRemote("origin")
+            .pull()
+            .setRebase(true)
+            .setRemote("origin")
         return this
     }
 
@@ -41,12 +41,12 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
     override fun onError(errorMessage: String) {
         super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
-                .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage("Error occured during the pull operation, " +
-                        callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                        errorMessage +
-                        "\nPlease check the FAQ for possible reasons why this error might occur.")
-                .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
-                .show()
+            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
+            .setMessage("Error occured during the pull operation, " +
+                callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
+                errorMessage +
+                "\nPlease check the FAQ for possible reasons why this error might occur.")
+            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
+            .show()
     }
 }

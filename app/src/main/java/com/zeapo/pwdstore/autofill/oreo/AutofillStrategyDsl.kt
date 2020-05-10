@@ -14,10 +14,12 @@ annotation class AutofillDsl
 
 @RequiresApi(Build.VERSION_CODES.O)
 interface FieldMatcher {
+
     fun match(fields: List<FormField>, alreadyMatched: List<FormField>): List<FormField>?
 
     @AutofillDsl
     class Builder {
+
         private var takeSingle: (FormField.(List<FormField>) -> Boolean)? = null
         private val tieBreakersSingle: MutableList<FormField.(List<FormField>) -> Boolean> =
             mutableListOf()
@@ -68,6 +70,7 @@ class SingleFieldMatcher(
 
     @AutofillDsl
     class Builder {
+
         private var takeSingle: (FormField.(List<FormField>) -> Boolean)? = null
         private val tieBreakersSingle: MutableList<FormField.(List<FormField>) -> Boolean> =
             mutableListOf()
@@ -169,6 +172,7 @@ class AutofillRule private constructor(
         private val applyInSingleOriginMode: Boolean,
         private val applyOnManualRequestOnly: Boolean
     ) {
+
         companion object {
             private var ruleId = 1
         }
@@ -304,6 +308,7 @@ class AutofillStrategy private constructor(private val rules: List<AutofillRule>
 
     @AutofillDsl
     class Builder {
+
         private val rules: MutableList<AutofillRule> = mutableListOf()
 
         fun rule(
