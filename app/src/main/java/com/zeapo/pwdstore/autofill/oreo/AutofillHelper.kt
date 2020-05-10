@@ -16,6 +16,7 @@ import android.view.autofill.AutofillId
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
@@ -33,6 +34,12 @@ private fun ByteArray.sha256(): ByteArray {
 
 private fun ByteArray.base64(): String {
     return Base64.encodeToString(this, Base64.NO_WRAP)
+}
+
+private fun Context.getDefaultUsername(): String? {
+    return PreferenceManager
+        .getDefaultSharedPreferences(this)
+        .getString("oreo_autofill_default_username", null)
 }
 
 private fun stableHash(array: Collection<ByteArray>): String {
@@ -82,12 +89,15 @@ val AssistStructure.ViewNode.webOrigin: String?
 data class Credentials(val username: String?, val password: String) {
     companion object {
         fun fromStoreEntry(
+            context: Context,
             file: File,
             entry: PasswordEntry,
             directoryStructure: DirectoryStructure
         ): Credentials {
             // Always give priority to a username stored in the encrypted extras
-            val username = entry.username ?: directoryStructure.getUsernameFor(file)
+            val username = entry.username
+                ?: directoryStructure.getUsernameFor(file)
+                ?: context.getDefaultUsername()
             return Credentials(username, entry.password)
         }
     }

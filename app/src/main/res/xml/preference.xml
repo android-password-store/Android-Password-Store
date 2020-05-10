@@ -13,6 +13,10 @@
             app:key="oreo_autofill_directory_structure"
             app:title="@string/oreo_autofill_preference_directory_structure"
             app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="oreo_autofill_default_username"
+            app:summary="@string/preference_default_username_summary"
+            app:title="@string/preference_default_username_title" />
         <Preference
             app:key="autofill_apps"
             app:title="@string/pref_autofill_apps_title" />

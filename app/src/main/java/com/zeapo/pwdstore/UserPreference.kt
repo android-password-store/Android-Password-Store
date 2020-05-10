@@ -28,6 +28,7 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.CheckBoxPreference
+import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -114,21 +115,22 @@ class UserPreference : AppCompatActivity() {
 
             // Autofill preferences
             autoFillEnablePreference = findPreference("autofill_enable")
-            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")!!
-            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")!!
-            val autoFillAlwaysShowDialogPreference =
-                findPreference<CheckBoxPreference>("autofill_always")!!
-            val autoFillShowFullNamePreference =
-                findPreference<CheckBoxPreference>("autofill_full_path")!!
-            autofillDependencies = listOf(
+            val oreoAutofillDirectoryStructurePreference = findPreference<ListPreference>("oreo_autofill_directory_structure")
+            val oreoAutofillDefaultUsername = findPreference<EditTextPreference>("oreo_autofill_default_username")
+            val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
+            val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
+            val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
+            val autoFillShowFullNamePreference = findPreference<CheckBoxPreference>("autofill_full_path")
+            autofillDependencies = listOfNotNull(
                 autoFillAppsPreference,
                 autoFillDefaultPreference,
                 autoFillAlwaysShowDialogPreference,
                 autoFillShowFullNamePreference
             )
-            val oreoAutofillDirectoryStructurePreference =
-                findPreference<ListPreference>("oreo_autofill_directory_structure")!!
-            oreoAutofillDependencies = listOf(oreoAutofillDirectoryStructurePreference)
+            oreoAutofillDependencies = listOfNotNull(
+                oreoAutofillDirectoryStructurePreference,
+                oreoAutofillDefaultUsername
+            )
 
             // Misc preferences
             val appVersionPreference = findPreference<Preference>("app_version")
@@ -258,7 +260,7 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
             externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
-            autoFillAppsPreference.onPreferenceClickListener = ClickListener {
+            autoFillAppsPreference?.onPreferenceClickListener = ClickListener {
                 val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
