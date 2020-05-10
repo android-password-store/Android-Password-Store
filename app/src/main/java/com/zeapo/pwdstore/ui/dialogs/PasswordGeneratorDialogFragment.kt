@@ -23,6 +23,7 @@ import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
 
 /** A placeholder fragment containing a simple view.  */
 class PasswordGeneratorDialogFragment : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity = requireActivity()
@@ -31,7 +32,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
         builder.setView(view)
         val prefs = requireActivity().applicationContext
-                .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
+            .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
         view.findViewById<CheckBox>(R.id.numerals)?.isChecked = !prefs.getBoolean("0", false)
         view.findViewById<CheckBox>(R.id.symbols)?.isChecked = prefs.getBoolean("y", false)

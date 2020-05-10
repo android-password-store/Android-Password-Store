@@ -21,9 +21,9 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
@@ -31,30 +31,35 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
 
-        <activity android:name=".LaunchActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|screenSize">
+        <activity
+            android:name=".LaunchActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".git.GitOperationActivity"
+        <activity
+            android:name=".git.GitOperationActivity"
             android:theme="@style/NoBackgroundTheme" />
 
-        <activity android:name=".git.GitServerConfigActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:label="@string/title_activity_git_clone" />
+        <activity
+            android:name=".git.GitServerConfigActivity"
+            android:label="@string/title_activity_git_clone"
+            android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".git.GitConfigActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:label="@string/title_activity_git_config" />
+        <activity
+            android:name=".git.GitConfigActivity"
+            android:label="@string/title_activity_git_config"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".UserPreference"
-            android:parentActivityName=".PasswordStore"
-            android:label="@string/action_settings" />
+            android:label="@string/action_settings"
+            android:parentActivityName=".PasswordStore" />
+
         <service
             android:name=".autofill.AutofillService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -66,14 +71,17 @@
                 android:resource="@xml/autofill_config" />
         </service>
         <service
-          android:name=".ClipboardService"
-          android:process=":clipboard_service_process"  />
-        <service android:name=".autofill.oreo.OreoAutofillService"
+            android:name=".ClipboardService"
+            android:process=":clipboard_service_process" />
+        <service
+            android:name=".autofill.oreo.OreoAutofillService"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>
-            <meta-data android:name="android.autofill" android:resource="@xml/oreo_autofill_service" />
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/oreo_autofill_service" />
         </service>
 
         <activity
@@ -87,13 +95,13 @@
 
         <activity
             android:name=".crypto.PgpActivity"
+            android:configChanges="orientation|screenSize"
             android:parentActivityName=".PasswordStore"
-            android:windowSoftInputMode="adjustResize"
-            android:configChanges="orientation|screenSize" />
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SelectFolderActivity" />
         <activity
-            android:label="@string/pref_ssh_keygen_title"
             android:name=".sshkeygen.SshKeyGenActivity"
+            android:label="@string/pref_ssh_keygen_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".autofill.oreo.ui.AutofillDecryptActivity"
@@ -101,16 +109,16 @@
         <activity
             android:name=".autofill.oreo.ui.AutofillFilterView"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/DialogLikeTheme" />
+            android:theme="@style/DialogLikeTheme"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".autofill.oreo.ui.AutofillSaveActivity"
-            android:theme="@style/NoBackgroundTheme"/>
+            android:theme="@style/NoBackgroundTheme" />
         <activity
             android:name=".autofill.oreo.ui.AutofillPublisherChangedActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/DialogLikeTheme" />
+            android:theme="@style/DialogLikeTheme"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

@@ -31,6 +31,7 @@ import java.io.File
  * A unique identifier for either an Android app (package name) or a website (origin minus port).
  */
 sealed class FormOrigin(open val identifier: String) {
+
     data class Web(override val identifier: String) : FormOrigin(identifier)
     data class App(override val identifier: String) : FormOrigin(identifier)
 
@@ -198,6 +199,7 @@ class FillableForm private constructor(
     private val ignoredIds: List<AutofillId>,
     private val saveFlags: Int?
 ) {
+
     companion object {
         fun makeFillInDataset(
             context: Context,

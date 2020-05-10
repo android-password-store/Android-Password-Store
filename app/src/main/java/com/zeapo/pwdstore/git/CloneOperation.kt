@@ -8,9 +8,9 @@ import android.app.Activity
 import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import java.io.File
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
+import java.io.File
 
 /**
  * Creates a new clone operation
@@ -28,9 +28,9 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
      */
     fun setCommand(uri: String): CloneOperation {
         this.command = Git.cloneRepository()
-                .setCloneAllBranches(true)
-                .setDirectory(repository?.workTree)
-                .setURI(uri)
+            .setCloneAllBranches(true)
+            .setDirectory(repository?.workTree)
+            .setURI(uri)
         return this
     }
 
@@ -67,12 +67,12 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
     override fun onError(errorMessage: String) {
         super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
-                .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage("Error occured during the clone operation, " +
-                        callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                        errorMessage +
-                        "\nPlease check the FAQ for possible reasons why this error might occur.")
-                .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
-                .show()
+            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
+            .setMessage("Error occured during the clone operation, " +
+                callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
+                errorMessage +
+                "\nPlease check the FAQ for possible reasons why this error might occur.")
+            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
+            .show()
     }
 }

@@ -5,7 +5,7 @@
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="autofill_enable"
-            app:title="@string/pref_autofill_enable_title"/>
+            app:title="@string/pref_autofill_enable_title" />
         <ListPreference
             app:defaultValue="file"
             app:entries="@array/oreo_autofill_directory_structure_entries"
@@ -15,21 +15,21 @@
             app:useSimpleSummaryProvider="true" />
         <Preference
             app:key="autofill_apps"
-            app:title="@string/pref_autofill_apps_title"/>
+            app:title="@string/pref_autofill_apps_title" />
         <CheckBoxPreference
             app:defaultValue="true"
             app:key="autofill_default"
             app:summary="@string/pref_autofill_default_hint"
-            app:title="@string/pref_autofill_default_title"/>
+            app:title="@string/pref_autofill_default_title" />
         <CheckBoxPreference
             app:defaultValue="false"
             app:key="autofill_always"
-            app:title="@string/pref_autofill_always_title"/>
+            app:title="@string/pref_autofill_always_title" />
         <CheckBoxPreference
             app:defaultValue="false"
             app:key="autofill_full_path"
             app:summary="@string/pref_autofill_full_path_hint"
-            app:title="@string/pref_autofill_full_path_title"/>
+            app:title="@string/pref_autofill_full_path_title" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_repository_title">
@@ -80,41 +80,41 @@
 
     <PreferenceCategory app:title="@string/password_generator_category_title">
         <ListPreference
-            app:key="pref_key_pwgen_type"
-            app:title="@string/xkpwgen_pref_gentype_title"
             app:defaultValue="classic"
             app:entries="@array/pwgen_provider_labels"
             app:entryValues="@array/pwgen_provider_values"
-            app:useSimpleSummaryProvider="true"
-            app:persistent="true" />
+            app:key="pref_key_pwgen_type"
+            app:persistent="true"
+            app:title="@string/xkpwgen_pref_gentype_title"
+            app:useSimpleSummaryProvider="true" />
         <CheckBoxPreference
             app:key="pref_key_is_custom_dict"
-            app:title="@string/xkpwgen_pref_custom_dict_title"
+            app:summaryOff="@string/xkpwgen_pref_custom_dict_summary_off"
             app:summaryOn="@string/xkpwgen_pref_custom_dict_summary_on"
-            app:summaryOff="@string/xkpwgen_pref_custom_dict_summary_off"/>
+            app:title="@string/xkpwgen_pref_custom_dict_title" />
         <Preference
+            app:dependency="pref_key_is_custom_dict"
             app:key="pref_key_custom_dict"
-            app:title="@string/xkpwgen_pref_custom_dict_picker_title"
             app:summary="@string/xkpwgen_pref_custom_dict_picker_summary"
-            app:dependency="pref_key_is_custom_dict"/>
+            app:title="@string/xkpwgen_pref_custom_dict_picker_title" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_category_general_title">
         <ListPreference
             android:defaultValue="@string/app_theme_def"
-            android:key="app_theme"
             android:entries="@array/app_theme_options"
             android:entryValues="@array/app_theme_values"
+            android:key="app_theme"
             android:summary="%s"
             android:title="@string/theme_title" />
         <ListPreference
-            app:title="@string/pref_sort_order_title"
             app:defaultValue="FOLDER_FIRST"
-            app:key="sort_order"
             app:entries="@array/sort_order_entries"
             app:entryValues="@array/sort_order_values"
+            app:key="sort_order"
             app:persistent="true"
-            app:summary="%s" />
+            app:summary="%s"
+            app:title="@string/pref_sort_order_title" />
         <CheckBoxPreference
             app:defaultValue="true"
             app:key="filter_recursively"
@@ -126,15 +126,15 @@
             app:summary="@string/pref_search_on_start_hint"
             app:title="@string/pref_search_on_start" />
         <CheckBoxPreference
-            app:title="@string/pref_show_hidden_title"
-            app:summary="@string/pref_show_hidden_summary"
-            app:key="show_hidden_folders"
             app:defaultValue="false"
-            app:persistent="true" />
+            app:key="show_hidden_folders"
+            app:persistent="true"
+            app:summary="@string/pref_show_hidden_summary"
+            app:title="@string/pref_show_hidden_title" />
         <CheckBoxPreference
             app:key="biometric_auth"
-            app:title="@string/biometric_auth_title"
-            app:summary="@string/biometric_auth_summary" />
+            app:summary="@string/biometric_auth_summary"
+            app:title="@string/biometric_auth_title" />
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/pref_category_title_passwords">
         <EditTextPreference
@@ -145,14 +145,14 @@
             app:title="@string/pref_clipboard_timeout_title" />
         <CheckBoxPreference
             app:defaultValue="true"
-            app:title="@string/show_password_pref_title"
+            app:key="show_password"
             app:summary="@string/show_password_pref_summary"
-            app:key="show_password" />
+            app:title="@string/show_password_pref_title" />
         <CheckBoxPreference
             app:defaultValue="true"
-            app:title="@string/show_extra_content_pref_title"
+            app:key="show_extra_content"
             app:summary="@string/show_extra_content_pref_summary"
-            app:key="show_extra_content" />
+            app:title="@string/show_extra_content_pref_title" />
         <CheckBoxPreference
             app:defaultValue="true"
             app:dialogTitle="@string/pref_copy_dialog_title"
@@ -164,8 +164,8 @@
     <PreferenceCategory app:title="@string/pref_misc_title">
         <Preference
             app:key="export_passwords"
-            app:title="@string/prefs_export_passwords_title"
-            app:summary="@string/prefs_export_passwords_summary"/>
+            app:summary="@string/prefs_export_passwords_summary"
+            app:title="@string/prefs_export_passwords_title" />
 
         <CheckBoxPreference
             app:defaultValue="false"

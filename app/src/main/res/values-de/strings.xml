@@ -171,4 +171,4 @@
     <string name="autofill_ins_2_hint">Bildschirmfoto des Schalters in Accessibility Services</string>
     <string name="autofill_ins_3_hint">Bildschirmfoto von Autofill in Aktion</string>
     <string name="get_last_changed_failed">Das Abrufen des letzten Änderungsdatums ist fehlgeschlagen.</string>
-    </resources>
+</resources>

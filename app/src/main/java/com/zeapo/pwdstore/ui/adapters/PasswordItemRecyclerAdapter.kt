@@ -80,6 +80,7 @@ open class PasswordItemRecyclerAdapter :
 
     class PasswordItemDetailsLookup(private val recyclerView: RecyclerView) :
         ItemDetailsLookup<String>() {
+
         override fun getItemDetails(event: MotionEvent): ItemDetails<String>? {
             val view = recyclerView.findChildViewUnder(event.x, event.y) ?: return null
             return (recyclerView.getChildViewHolder(view) as PasswordItemViewHolder).itemDetails

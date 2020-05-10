@@ -117,13 +117,13 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
     private fun makeAndSetPassword(passwordText: AppCompatTextView) {
         try {
             passwordText.text = PasswordBuilder(requireContext())
-                    .setNumberOfWords(Integer.valueOf(editNumWords.text.toString()))
-                    .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
-                    .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
-                    .setSeparator(editSeparator.text.toString())
-                    .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
-                    .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
-                    .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
+                .setNumberOfWords(Integer.valueOf(editNumWords.text.toString()))
+                .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
+                .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
+                .setSeparator(editSeparator.text.toString())
+                .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
+                .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
+                .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
         } catch (e: PasswordGenerator.PasswordGeneratorExeption) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
             tag("xkpw").e(e, "failure generating xkpasswd")

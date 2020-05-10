@@ -130,6 +130,7 @@ data class ClassifiedAutofillScenario<T : Any>(
     val currentPassword: List<T>,
     val newPassword: List<T>
 ) : AutofillScenario<T>() {
+
     override val allPasswordFields
         get() = currentPassword + newPassword
     override val passwordFieldsToFillOnMatch
@@ -148,6 +149,7 @@ data class GenericAutofillScenario<T : Any>(
     override val fillUsername: Boolean,
     val genericPassword: List<T>
 ) : AutofillScenario<T>() {
+
     override val allPasswordFields
         get() = genericPassword
     override val passwordFieldsToFillOnMatch

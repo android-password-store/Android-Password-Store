@@ -12,13 +12,13 @@
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
-        android:tint="@color/secondary_color"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
         android:maxWidth="20dp"
         android:maxHeight="20dp"
+        android:tint="@color/secondary_color"
         tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout

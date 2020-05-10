@@ -31,6 +31,7 @@ import java.net.URI
  * tasks and makes sense to be held here.
  */
 abstract class BaseGitActivity : AppCompatActivity() {
+
     lateinit var protocol: Protocol
     lateinit var connectionMode: ConnectionMode
     var url: String? = null
@@ -180,7 +181,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 }
             }
             op.executeAfterAuthentication(connectionMode, serverUser,
-                    File("$filesDir/.ssh_key"), identity)
+                File("$filesDir/.ssh_key"), identity)
         } catch (e: Exception) {
             e.printStackTrace()
             MaterialAlertDialogBuilder(this).setMessage(e.message).show()

@@ -49,19 +49,19 @@
                     <CheckBox
                         android:id="@+id/xknumerals"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="@string/xkpwgen_numbers"
-                        android:layout_height="wrap_content" />
+                        android:text="@string/xkpwgen_numbers" />
 
                     <Spinner
                         android:id="@+id/xk_numbers_count"
                         android:layout_width="fill_parent"
-                        android:minWidth="40dp"
-                        android:dropDownWidth="40dp"
-                        android:gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:dropDownWidth="40dp"
                         android:entries="@array/xk_range_1_10"
                         android:entryValues="@array/xk_range_1_10"
+                        android:gravity="center_vertical"
+                        android:minWidth="40dp"
                         android:spinnerMode="dropdown" />
                 </LinearLayout>
 
@@ -73,19 +73,19 @@
                     <CheckBox
                         android:id="@+id/xksymbols"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="@string/xkpwgen_symbols"
-                        android:layout_height="wrap_content"/>
+                        android:text="@string/xkpwgen_symbols" />
 
                     <Spinner
                         android:id="@+id/xk_symbols_count"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:minWidth="40dp"
                         android:dropDownWidth="40dp"
                         android:entries="@array/xk_range_1_10"
                         android:entryValues="@array/xk_range_1_10"
+                        android:gravity="center_vertical"
+                        android:minWidth="40dp"
                         android:spinnerMode="dropdown" />
                 </LinearLayout>
 
@@ -116,9 +116,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:maxLength="2"
                     android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="2" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
@@ -132,8 +132,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:ems="10"
                     android:autofillHints=""
+                    android:ems="10"
                     android:hint="@string/xkpwgen_separator_character"
                     android:inputType="text" />
             </LinearLayout>

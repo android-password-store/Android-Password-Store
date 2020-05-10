@@ -17,6 +17,7 @@ import com.haroldadmin.whatthestack.WhatTheStack
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
+
     private var prefs: SharedPreferences? = null
 
     override fun onCreate() {

@@ -83,7 +83,9 @@
         <item name="boxStrokeColor">@color/secondary_color</item>
         <item name="hintTextColor">@color/color_control_normal</item>
         <item name="hintEnabled">true</item>
-        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox</item>
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox
+        </item>
     </style>
 
     <style name="DialogLikeTheme" parent="AppTheme">

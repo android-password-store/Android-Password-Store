@@ -25,11 +25,11 @@ import com.zeapo.pwdstore.git.config.SshConfigSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
-import java.io.File
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
+import java.io.File
 
 /**
  * Creates a new git operation
@@ -260,14 +260,14 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         // Clear various auth related fields on failure
         if (SshSessionFactory.getInstance() is SshApiSessionFactory) {
             PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                    .edit { putString("ssh_openkeystore_keyid", null) }
+                .edit { putString("ssh_openkeystore_keyid", null) }
             callingActivity.applicationContext
-                    .getEncryptedPrefs("git_operation")
-                    .edit { remove("ssh_key_local_passphrase") }
+                .getEncryptedPrefs("git_operation")
+                .edit { remove("ssh_key_local_passphrase") }
         } else if (SshSessionFactory.getInstance() is GitConfigSessionFactory) {
             callingActivity.applicationContext
-                    .getEncryptedPrefs("git_operation")
-                    .edit { remove("https_password") }
+                .getEncryptedPrefs("git_operation")
+                .edit { remove("https_password") }
         }
     }
 

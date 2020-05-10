@@ -137,4 +137,4 @@
     <string name="autofill_apps_never">一致しない</string>
     <string name="autofill_apps_delete">削除</string>
     <string name="get_last_changed_failed">最終変更日の取得に失敗しました</string>
-    </resources>
+</resources>

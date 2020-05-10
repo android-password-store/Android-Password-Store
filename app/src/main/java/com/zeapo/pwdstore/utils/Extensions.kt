@@ -36,11 +36,11 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
     val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
     return EncryptedSharedPreferences.create(
-            fileName,
-            masterKeyAlias,
-            this,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        fileName,
+        masterKeyAlias,
+        this,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 }
 
@@ -55,7 +55,7 @@ fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
             setOnFocusChangeListener { v, _ ->
                 v.post {
                     context.getSystemService<InputMethodManager>()
-                            ?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+                        ?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
                 }
             }
             requestFocus()

@@ -32,15 +32,6 @@ import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.splitLines
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.UnsupportedEncodingException
-import java.net.MalformedURLException
-import java.net.URL
-import java.util.ArrayList
-import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -51,6 +42,15 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.UnsupportedEncodingException
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.ArrayList
+import java.util.Locale
 
 class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private var serviceConnection: OpenPgpServiceConnection? = null
@@ -103,16 +103,16 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
         // if returning to the source app from a successful AutofillActivity
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
-                event.packageName != null && event.packageName == packageName &&
-                resultData != null) {
+            event.packageName != null && event.packageName == packageName &&
+            resultData != null) {
             bindDecryptAndVerify()
         }
 
         // look for webView and trigger accessibility events if window changes
         // or if page changes in chrome
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED || (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED &&
-                        event.packageName != null &&
-                        (event.packageName == "com.android.chrome" || event.packageName == "com.android.browser"))) {
+                event.packageName != null &&
+                (event.packageName == "com.android.chrome" || event.packageName == "com.android.browser"))) {
             // there is a chance for getRootInActiveWindow() to return null at any time. save it.
             try {
                 val root = rootInActiveWindow
@@ -145,8 +145,8 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
         // nothing to do if field is keychain app or system ui
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED ||
-                event.packageName != null && event.packageName == "org.sufficientlysecure.keychain" ||
-                event.packageName != null && event.packageName == "com.android.systemui") {
+            event.packageName != null && event.packageName == "org.sufficientlysecure.keychain" ||
+            event.packageName != null && event.packageName == "com.android.systemui") {
             dismissDialog()
             return
         }
@@ -182,7 +182,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         // need to request permission before attempting to draw dialog
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()))
+                Uri.parse("package:" + getPackageName()))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             return
@@ -283,7 +283,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
                 val value = prefs.getString(key, null)
                 val keyLowerCase = key.toLowerCase(Locale.ROOT)
                 if (value != null && value != "" &&
-                        (webViewUrlLowerCase.contains(keyLowerCase) || keyLowerCase.contains(webViewUrlLowerCase))) {
+                    (webViewUrlLowerCase.contains(keyLowerCase) || keyLowerCase.contains(webViewUrlLowerCase))) {
                     preference = value
                     settingsURL = key
                 }
@@ -419,7 +419,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         for (i in items.indices) {
             if (autofillFullPath) {
                 itemNames[i] = items[i].path.replace(".gpg", "")
-                        .replace("$passwordDirectory/", "")
+                    .replace("$passwordDirectory/", "")
             } else {
                 itemNames[i] = items[i].name.replace(".gpg", "")
             }

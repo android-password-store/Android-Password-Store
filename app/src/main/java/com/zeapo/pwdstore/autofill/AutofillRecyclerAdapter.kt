@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.splitLines
+import me.zhanghai.android.fastscroll.PopupTextProvider
 import java.util.ArrayList
 import java.util.Locale
-import me.zhanghai.android.fastscroll.PopupTextProvider
 
 internal class AutofillRecyclerAdapter(
     allApps: List<AppInfo>,
@@ -63,7 +63,7 @@ internal class AutofillRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context)
-                .inflate(R.layout.autofill_row_layout, parent, false)
+            .inflate(R.layout.autofill_row_layout, parent, false)
         return ViewHolder(v)
     }
 
@@ -96,7 +96,7 @@ internal class AutofillRecyclerAdapter(
                 holder.secondary.append(" " + preference!!.splitLines()[0])
                 if (preference.trim { it <= ' ' }.splitLines().size - 1 > 0) {
                     holder.secondary.append(" and " +
-                            (preference.trim { it <= ' ' }.splitLines().size - 1) + " more")
+                        (preference.trim { it <= ' ' }.splitLines().size - 1) + " more")
                 }
             }
         }

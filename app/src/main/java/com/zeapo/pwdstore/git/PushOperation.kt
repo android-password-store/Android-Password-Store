@@ -8,9 +8,9 @@ import android.app.Activity
 import android.content.Intent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PushCommand
+import java.io.File
 
 /**
  * Creates a new git operation
@@ -27,9 +27,9 @@ class PushOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
      */
     fun setCommand(): PushOperation {
         this.command = Git(repository)
-                .push()
-                .setPushAll()
-                .setRemote("origin")
+            .push()
+            .setPushAll()
+            .setRemote("origin")
         return this
     }
 
@@ -42,9 +42,9 @@ class PushOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
         // TODO handle the "Nothing to push" case
         super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
-                .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage)
-                .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
-                .show()
+            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
+            .setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage)
+            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
+            .show()
     }
 }

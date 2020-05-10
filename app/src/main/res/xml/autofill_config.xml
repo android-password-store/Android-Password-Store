@@ -1,9 +1,8 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-                       android:description="@string/autofill_description"
-                       android:summary="@string/autofill_description"
-                       android:accessibilityEventTypes="typeViewFocused|typeViewClicked|typeWindowStateChanged|typeWindowContentChanged"
-                       android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagReportViewIds"
-                       android:accessibilityFeedbackType="feedbackGeneric"
-                       android:notificationTimeout="100"
-                       android:canRetrieveWindowContent="true"
-    />
+    android:accessibilityEventTypes="typeViewFocused|typeViewClicked|typeWindowStateChanged|typeWindowContentChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagReportViewIds"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/autofill_description"
+    android:notificationTimeout="100"
+    android:summary="@string/autofill_description" />

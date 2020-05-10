@@ -180,4 +180,4 @@
     <string name="autofill_apps_never">Nikdy nepárovat</string>
     <string name="autofill_apps_delete">Smazat</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
-    </resources>
+</resources>

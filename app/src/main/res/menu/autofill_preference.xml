@@ -1,12 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:pwstore="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".pwdstore.autofill.AutofillPreferenceActivity">
+    xmlns:pwstore="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".pwdstore.autofill.AutofillPreferenceActivity">
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/action_search"
         pwstore:actionViewClass="androidx.appcompat.widget.SearchView"
-        pwstore:showAsAction="ifRoom|collapseActionView"/>
+        pwstore:showAsAction="ifRoom|collapseActionView" />
 
 </menu>

@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
-import java.io.File
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
+import java.io.File
 
 class SelectFolderFragment : Fragment() {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
@@ -75,7 +75,7 @@ class SelectFolderFragment : Fragment() {
             }
         } catch (e: ClassCastException) {
             throw ClassCastException(
-                    "$context must implement OnFragmentInteractionListener")
+                "$context must implement OnFragmentInteractionListener")
         }
     }
 

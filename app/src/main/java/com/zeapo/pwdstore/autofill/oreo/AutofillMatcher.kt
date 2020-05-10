@@ -31,6 +31,7 @@ private fun Context.matchPreferences(formOrigin: FormOrigin): SharedPreferences 
 
 class AutofillPublisherChangedException(val formOrigin: FormOrigin) :
     Exception("The publisher of '${formOrigin.identifier}' changed since an entry was first matched with this app") {
+
     init {
         require(formOrigin is FormOrigin.App)
     }
@@ -40,6 +41,7 @@ class AutofillPublisherChangedException(val formOrigin: FormOrigin) :
  * Manages "matches", i.e., associations between apps or websites and Password Store entries.
  */
 class AutofillMatcher {
+
     companion object {
         private const val MAX_NUM_MATCHES = 10
 
@@ -172,10 +174,10 @@ class AutofillMatcher {
                             .minus(deletePathList)
                             .minus(oldNewPathMap.values)
                             .map { match ->
-                            val newPath = oldNewPathMap[match] ?: return@map match
-                            d { "Updating match for $key: $match --> $newPath" }
-                            newPath
-                        }.toSet()
+                                val newPath = oldNewPathMap[match] ?: return@map match
+                                d { "Updating match for $key: $match --> $newPath" }
+                                newPath
+                            }.toSet()
                     if (newMatches != oldMatches)
                         prefs.edit { putStringSet(key, newMatches) }
                 }
