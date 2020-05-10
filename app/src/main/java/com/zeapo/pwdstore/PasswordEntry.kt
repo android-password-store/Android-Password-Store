@@ -98,7 +98,7 @@ class PasswordEntry(private val content: String) {
             if (line.startsWith("otpauth://totp/")) {
                 return Uri.parse(line).getQueryParameter("secret")
             }
-            if (line.toLowerCase().startsWith("totp:")) {
+            if (line.startsWith("totp:", ignoreCase = true)) {
                 return line.split(": *".toRegex(), 2).toTypedArray()[1]
             }
         }
