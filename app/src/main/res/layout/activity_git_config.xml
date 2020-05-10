@@ -45,14 +45,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/crypto_save"
-        android:textColor="?android:attr/windowBackground"
-        app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/email_input_layout"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -88,25 +85,19 @@
         tools:text="HASH"/>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/git_abort_rebase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/abort_rebase"
-        android:textColor="?android:attr/windowBackground"
-        app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/commit_hash_label" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/git_reset_to_remote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/reset_to_remote"
-        android:textColor="?android:attr/windowBackground"
-        app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/git_abort_rebase" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

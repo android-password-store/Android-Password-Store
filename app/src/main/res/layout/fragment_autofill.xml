@@ -59,14 +59,11 @@
             android:layout_weight="1"/>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/matchButton"
             android:layout_gravity="center_horizontal"
-            android:textColor="?android:attr/windowBackground"
-            app:backgroundTint="?attr/colorSecondary"
             tools:ignore="HardcodedText" />
 
         <RadioButton

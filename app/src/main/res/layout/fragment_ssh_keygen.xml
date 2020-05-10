@@ -25,32 +25,25 @@
             app:selectionRequired="true"
             app:singleSelection="true">
             <com.google.android.material.button.MaterialButton
-                style="?attr/materialButtonOutlinedStyle"
                 android:id="@+id/key_length_2048"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/key_length_2048"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
-            <com.google.android.material.button.MaterialButton
                 style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/key_length_4096"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/key_length_4096"
-                android:textColor="?android:attr/textColorPrimary"
-                app:rippleColor="@color/ripple_color"
-                app:strokeColor="?attr/colorSecondary"
-                app:backgroundTint="@color/toggle_button_selector" />
+                android:text="@string/key_length_2048" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/key_length_4096"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/key_length_4096" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="@string/ssh_keygen_passphrase">
+            android:hint="@string/ssh_keygen_passphrase"
+            app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passphrase"
@@ -60,14 +53,6 @@
                 android:fontFamily="@font/sourcecodepro"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/show_passphrase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:checked="false"
-            android:text="@string/ssh_keygen_show_passphrase" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -84,12 +69,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/generate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginTop="8dp"
-            android:text="@string/ssh_keygen_generate"
-            android:textColor="@android:color/white"
-            app:backgroundTint="?attr/colorSecondary" />
-
+            android:text="@string/ssh_keygen_generate" />
     </LinearLayout>
 </ScrollView>

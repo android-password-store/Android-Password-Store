@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore.sshkeygen
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,19 +46,6 @@ class SshKeyGenFragment : Fragment() {
             generate.setOnClickListener {
                 lifecycleScope.launch { generate(passphrase.text.toString(), comment.text.toString()) }
             }
-            showPassphrase.setOnCheckedChangeListener { _, isChecked: Boolean ->
-                val selection = passphrase.selectionEnd
-                if (isChecked) {
-                    passphrase.inputType = (
-                            InputType.TYPE_CLASS_TEXT
-                                    or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
-                } else {
-                    passphrase.inputType = (
-                            InputType.TYPE_CLASS_TEXT
-                                    or InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                }
-                passphrase.setSelection(selection)
-            }
             keyLengthGroup.check(R.id.key_length_4096)
             keyLengthGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
                 if (isChecked) {
@@ -82,10 +68,9 @@ class SshKeyGenFragment : Fragment() {
     // ShowSshKeyFragment which displays the public key.
     private suspend fun generate(passphrase: String, comment: String) {
         binding.generate.text = getString(R.string.ssh_key_gen_generating_progress)
-        val jsch = JSch()
         val e = try {
             withContext(Dispatchers.IO) {
-                val kp = KeyPair.genKeyPair(jsch, KeyPair.RSA, keyLength)
+                val kp = KeyPair.genKeyPair(JSch(), KeyPair.RSA, keyLength)
                 var file = File(requireActivity().filesDir, ".ssh_key")
                 var out = FileOutputStream(file, false)
                 if (passphrase.isNotEmpty()) {
