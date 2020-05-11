@@ -370,4 +370,6 @@
     <string name="snackbar_action_grant">Grant</string>
     <string name="pref_debug_logging_summary">Enable debug logging (requires app restart)</string>
     <string name="pref_debug_logging_title">Debug logging</string>
+    <string name="preference_default_username_summary">If Autofill is unable to determine a username from your password file or directory structure, it will use the value specified here</string>
+    <string name="preference_default_username_title">Default username</string>
 </resources>

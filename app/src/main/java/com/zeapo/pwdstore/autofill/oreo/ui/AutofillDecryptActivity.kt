@@ -180,7 +180,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
                     val entry = withContext(Dispatchers.IO) {
                         PasswordEntry(decryptedOutput)
                     }
-                    Credentials.fromStoreEntry(file, entry, directoryStructure)
+                    Credentials.fromStoreEntry(this, file, entry, directoryStructure)
                 } catch (e: UnsupportedEncodingException) {
                     e(e) { "Failed to parse password entry" }
                     null
