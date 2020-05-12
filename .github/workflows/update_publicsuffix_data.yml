@@ -1,0 +1,29 @@
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update-publicsuffix-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download new publicsuffix data
+        run: curl -L https://github.com/mozilla-mobile/android-components/raw/master/components/lib/publicsuffixlist/src/main/assets/publicsuffixes -o app/src/main/assets/publicsuffixes
+      - name: Compare list changes
+        run: if [[ $(git diff --binary --stat) != '' ]]; then echo "::set-env name=UPDATED::true"; fi
+      - name: Create update PR
+        uses: peter-evans/create-pull-request@v2
+        if: env.UPDATED == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_PERSONAL_TOKEN }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Update Public Suffix List data'
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          title: 'Update Public Suffix List data'
+          body: 'Updates Public Suffix List from https://publicsuffix.org/list/'
+          assignees: msfjarvis
+          labels: PSL
+          branch: bot/update-psl

@@ -25,7 +25,7 @@ android {
     viewBinding.enabled = true
 
     defaultConfig {
-        applicationId versions.packageName
+        applicationId 'dev.msfjarvis.aps'
         versionCode 10721
         versionName '1.8.0-SNAPSHOT'
     }
@@ -101,7 +101,6 @@ dependencies {
     }
     implementation deps.third_party.jsch
     implementation deps.third_party.openpgp_ktx
-    implementation deps.third_party.publicsuffixlist
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.timberkt

@@ -5,6 +5,11 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true" />
     <option name="FORMATTER_TAGS_ENABLED" value="true" />
     <option name="SOFT_MARGINS" value="100" />
+    <option name="DO_NOT_FORMAT">
+      <list>
+        <fileSet type="namedScope" name="publicsuffixlist" pattern="src[app]:mozilla.components.lib.publicsuffixlist.PublicSuffixList||src[app]:mozilla.components.lib.publicsuffixlist.PublicSuffixListData||src[app]:mozilla.components.lib.publicsuffixlist.PublicSuffixListLoader||src[app]:mozilla.components.lib.publicsuffixlist.ext.ByteArray" />
+      </list>
+    </option>
     <JavaCodeStyleSettings>
       <option name="DO_NOT_WRAP_AFTER_SINGLE_ANNOTATION" value="true" />
     </JavaCodeStyleSettings>
