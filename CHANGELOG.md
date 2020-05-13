@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Allow user to abort password move when it is replacing an existing file
+- Allow setting a default username for Autofill
+- Add no authentication mode for working with public repositories
+
+### Changed
+- More UI related tweaks, changes and improvements
 
 ### Fixed
 - Add the following fields to encrypted username detection: user, account, email, name, handle, id, identity.
