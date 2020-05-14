@@ -95,24 +95,29 @@ abstract class BaseGitActivity : AppCompatActivity() {
         val previousUrl = url ?: ""
         // Whether we need the leading ssh:// depends on the use of a custom port.
         val hostnamePart = serverHostname.removePrefix("ssh://")
-        // We only support relative paths and trim everything scheme-specific.
-        val pathPart = serverPath.trimStart('/', ':')
         val newUrl = when (protocol) {
             Protocol.Ssh -> {
                 val userPart = if (serverUser.isEmpty()) "" else "${serverUser.trimEnd('@')}@"
                 val portPart =
                     if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
                 if (portPart.isEmpty()) {
+                    // We only support relative paths with the standard port.
+                    val pathPart = serverPath.trimStart('/', ':')
                     "$userPart$hostnamePart:$pathPart"
                 } else {
+                    // We only support absolute paths with custom ports.
+                    if (!serverPath.startsWith('/'))
+                        return false
+                    val pathPart = serverPath
                     // We have to specify the ssh scheme as this is the only way to pass a custom
                     // port.
-                    "ssh://$userPart$hostnamePart$portPart/$pathPart"
+                    "ssh://$userPart$hostnamePart$portPart$pathPart"
                 }
             }
             Protocol.Https -> {
                 val portPart =
                     if (serverPort == "443" || serverPort.isEmpty()) "" else ":$serverPort"
+                val pathPart = serverPath.trimStart('/', ':')
                 val urlWithFreeEntryScheme = "$hostnamePart$portPart/$pathPart"
                 val url = when {
                     urlWithFreeEntryScheme.startsWith("https://") -> urlWithFreeEntryScheme
