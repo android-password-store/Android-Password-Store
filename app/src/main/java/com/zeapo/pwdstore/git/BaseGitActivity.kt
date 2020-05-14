@@ -23,7 +23,6 @@ import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
-import java.net.MalformedURLException
 import java.net.URI
 
 /**
@@ -94,34 +93,41 @@ abstract class BaseGitActivity : AppCompatActivity() {
             return false
 
         val previousUrl = url ?: ""
-        val hostnamePart = serverHostname
-        val pathPart = if (serverPath.startsWith('/')) serverPath else "/$serverPath"
+        // Whether we need the leading ssh:// depends on the use of a custom port.
+        val hostnamePart = serverHostname.removePrefix("ssh://")
+        // We only support relative paths and trim everything scheme-specific.
+        val pathPart = serverPath.trimStart('/', ':')
         val newUrl = when (protocol) {
             Protocol.Ssh -> {
-                val userPart = if (serverUser.isEmpty()) "" else "$serverUser@"
+                val userPart = if (serverUser.isEmpty()) "" else "${serverUser.trimEnd('@')}@"
                 val portPart =
                     if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
-                if (hostnamePart.startsWith("ssh://"))
-                    hostnamePart.replace("ssh://", "")
-                // We have to specify the ssh scheme as this is the only way to pass a custom port.
-                "ssh://$userPart$hostnamePart$portPart$pathPart"
+                if (portPart.isEmpty()) {
+                    "$userPart$hostnamePart:$pathPart"
+                } else {
+                    // We have to specify the ssh scheme as this is the only way to pass a custom
+                    // port.
+                    "ssh://$userPart$hostnamePart$portPart/$pathPart"
+                }
             }
             Protocol.Https -> {
                 val portPart =
                     if (serverPort == "443" || serverPort.isEmpty()) "" else ":$serverPort"
-                val urlWithFreeEntryScheme = "$hostnamePart$portPart$pathPart"
-                when {
+                val urlWithFreeEntryScheme = "$hostnamePart$portPart/$pathPart"
+                val url = when {
                     urlWithFreeEntryScheme.startsWith("https://") -> urlWithFreeEntryScheme
                     urlWithFreeEntryScheme.startsWith("http://") -> urlWithFreeEntryScheme.replaceFirst("http", "https")
                     else -> "https://$urlWithFreeEntryScheme"
                 }
+                try {
+                    if (URI(url).rawAuthority != null)
+                        url
+                    else
+                        return false
+                } catch (_: Exception) {
+                    return false
+                }
             }
-        }
-        try {
-            if (URI(newUrl).rawAuthority == null)
-                return false
-        } catch (_: MalformedURLException) {
-            return false
         }
         if (PasswordRepository.isInitialized)
             PasswordRepository.addRemote("origin", newUrl, true)
