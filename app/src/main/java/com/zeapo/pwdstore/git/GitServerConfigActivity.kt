@@ -97,22 +97,23 @@ class GitServerConfigActivity : BaseGitActivity() {
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize(this)
-            if (updateUrl()) {
-                settings.edit {
-                    putString("git_remote_protocol", protocol.pref)
-                    putString("git_remote_auth", connectionMode.pref)
-                    putString("git_remote_server", serverHostname)
-                    putString("git_remote_port", serverPort)
-                    putString("git_remote_username", serverUser)
-                    putString("git_remote_location", serverPath)
+            when (val result = updateUrl()) {
+                GitUpdateUrlResult.Ok -> {
+                    settings.edit {
+                        putString("git_remote_protocol", protocol.pref)
+                        putString("git_remote_auth", connectionMode.pref)
+                        putString("git_remote_server", serverHostname)
+                        putString("git_remote_port", serverPort)
+                        putString("git_remote_username", serverUser)
+                        putString("git_remote_location", serverPath)
+                    }
+                    if (!isClone) {
+                        Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+                        Handler().postDelayed(500) { finish() }
+                    } else
+                        cloneRepository()
                 }
-                if (!isClone) {
-                    Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
-                    Handler().postDelayed(500) { finish() }
-                } else
-                    cloneRepository()
-            } else {
-                Snackbar.make(binding.root, getString(R.string.git_server_config_save_failure), Snackbar.LENGTH_LONG).show()
+                else -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_error_prefix, getString(result.textRes)), Snackbar.LENGTH_LONG).show()
             }
         }
     }

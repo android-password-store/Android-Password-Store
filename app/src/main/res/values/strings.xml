@@ -363,7 +363,11 @@
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
     <string name="connection_mode_none">None</string>
     <string name="git_server_config_save_success">Successfully saved configuration</string>
-    <string name="git_server_config_save_failure">Configuration error: please verify your settings and try again</string>
+    <string name="git_server_config_save_error_prefix">Configuration error: %s</string>
+    <string name="git_config_error_hostname_empty">empty hostname</string>
+    <string name="git_config_error_generic">please verify your settings and try again</string>
+    <string name="git_config_error_nonnumeric_port">port must be numeric</string>
+    <string name="git_config_error_custom_port_absolute">path must be absolute (start with \'/\') when using a custom port</string>
     <string name="git_operation_unable_to_open_ssh_key_title">Unable to open the ssh-key</string>
     <string name="git_operation_unable_to_open_ssh_key_message">Please check that it was imported.</string>
     <string name="git_operation_wrong_passphrase">Wrong passphrase</string>
