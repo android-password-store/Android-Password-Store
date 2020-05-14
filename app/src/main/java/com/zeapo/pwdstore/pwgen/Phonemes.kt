@@ -7,44 +7,44 @@ package com.zeapo.pwdstore.pwgen
 internal object Phonemes {
     private const val CONSONANT = 0x0001
     private const val VOWEL = 0x0002
-    private const val DIPTHONG = 0x0004
+    private const val DIPHTHONG = 0x0004
     private const val NOT_FIRST = 0x0008
 
     private val elements = arrayOf(
         Element("a", VOWEL),
-        Element("ae", VOWEL or DIPTHONG),
-        Element("ah", VOWEL or DIPTHONG),
-        Element("ai", VOWEL or DIPTHONG),
+        Element("ae", VOWEL or DIPHTHONG),
+        Element("ah", VOWEL or DIPHTHONG),
+        Element("ai", VOWEL or DIPHTHONG),
         Element("b", CONSONANT),
         Element("c", CONSONANT),
-        Element("ch", CONSONANT or DIPTHONG),
+        Element("ch", CONSONANT or DIPHTHONG),
         Element("d", CONSONANT),
         Element("e", VOWEL),
-        Element("ee", VOWEL or DIPTHONG),
-        Element("ei", VOWEL or DIPTHONG),
+        Element("ee", VOWEL or DIPHTHONG),
+        Element("ei", VOWEL or DIPHTHONG),
         Element("f", CONSONANT),
         Element("g", CONSONANT),
-        Element("gh", CONSONANT or DIPTHONG or NOT_FIRST),
+        Element("gh", CONSONANT or DIPHTHONG or NOT_FIRST),
         Element("h", CONSONANT),
         Element("i", VOWEL),
-        Element("ie", VOWEL or DIPTHONG),
+        Element("ie", VOWEL or DIPHTHONG),
         Element("j", CONSONANT),
         Element("k", CONSONANT),
         Element("l", CONSONANT),
         Element("m", CONSONANT),
         Element("n", CONSONANT),
-        Element("ng", CONSONANT or DIPTHONG or NOT_FIRST),
+        Element("ng", CONSONANT or DIPHTHONG or NOT_FIRST),
         Element("o", VOWEL),
-        Element("oh", VOWEL or DIPTHONG),
-        Element("oo", VOWEL or DIPTHONG),
+        Element("oh", VOWEL or DIPHTHONG),
+        Element("oo", VOWEL or DIPHTHONG),
         Element("p", CONSONANT),
-        Element("ph", CONSONANT or DIPTHONG),
-        Element("qu", CONSONANT or DIPTHONG),
+        Element("ph", CONSONANT or DIPHTHONG),
+        Element("qu", CONSONANT or DIPHTHONG),
         Element("r", CONSONANT),
         Element("s", CONSONANT),
-        Element("sh", CONSONANT or DIPTHONG),
+        Element("sh", CONSONANT or DIPHTHONG),
         Element("t", CONSONANT),
-        Element("th", CONSONANT or DIPTHONG),
+        Element("th", CONSONANT or DIPHTHONG),
         Element("u", VOWEL),
         Element("v", CONSONANT),
         Element("w", CONSONANT),
@@ -108,9 +108,9 @@ internal object Phonemes {
                 if (first && flags and NOT_FIRST > 0) {
                     continue
                 }
-                // Don't allow VOWEL followed a Vowel/Dipthong pair
+                // Don't allow VOWEL followed a Vowel/Diphthong pair
                 if (prev and VOWEL > 0 && flags and VOWEL > 0 &&
-                    flags and DIPTHONG > 0
+                    flags and DIPHTHONG > 0
                 ) {
                     continue
                 }
@@ -204,7 +204,7 @@ internal object Phonemes {
                 shouldBe = if (shouldBe == CONSONANT) {
                     VOWEL
                 } else {
-                    if (prev and VOWEL > 0 || flags and DIPTHONG > 0 ||
+                    if (prev and VOWEL > 0 || flags and DIPHTHONG > 0 ||
                         RandomNumberGenerator.number(10) > 3
                     ) {
                         CONSONANT

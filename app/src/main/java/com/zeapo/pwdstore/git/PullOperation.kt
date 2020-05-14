@@ -42,7 +42,7 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
         super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage("Error occured during the pull operation, " +
+            .setMessage("Error occurred during the pull operation, " +
                 callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
                 errorMessage +
                 "\nPlease check the FAQ for possible reasons why this error might occur.")
