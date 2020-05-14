@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
@@ -83,14 +84,25 @@ abstract class BaseGitActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    enum class GitUpdateUrlResult(val textRes: Int) {
+        Ok(0),
+        CustomPortRequiresAbsoluteUrlError(R.string.git_config_error_custom_port_absolute),
+        EmptyHostnameError(R.string.git_config_error_hostname_empty),
+        GenericError(R.string.git_config_error_generic),
+        NonNumericPortError(R.string.git_config_error_nonnumeric_port)
+    }
+
     /**
-     * Update the [url] field with the values that build it up. This function returns a boolean
-     * indicating whether or not the values are likely valid or not, and only adds the `origin`
-     * remote when it is. This check is not perfect, it is mostly meant to catch typos.
+     * Update the [url] field with the values that build it up. This function returns a
+     * [GitUpdateUrlResult] indicating whether the values could be used to build a URL and only adds
+     * the `origin` remote when they were. This check is not perfect, it is mostly meant to catch
+     * syntax-related typos.
      */
-    fun updateUrl(): Boolean {
-        if (serverHostname.isEmpty() || !serverPort.isDigitsOnly())
-            return false
+    fun updateUrl(): GitUpdateUrlResult {
+        if (serverHostname.isEmpty())
+            return GitUpdateUrlResult.EmptyHostnameError
+        if (!serverPort.isDigitsOnly())
+            return GitUpdateUrlResult.NonNumericPortError
 
         val previousUrl = url ?: ""
         // Whether we need the leading ssh:// depends on the use of a custom port.
@@ -105,9 +117,9 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     val pathPart = serverPath.trimStart('/', ':')
                     "$userPart$hostnamePart:$pathPart"
                 } else {
-                    // We only support absolute paths with custom ports.
+                    // Only absolute paths are supported with custom ports.
                     if (!serverPath.startsWith('/'))
-                        return false
+                        return GitUpdateUrlResult.CustomPortRequiresAbsoluteUrlError
                     val pathPart = serverPath
                     // We have to specify the ssh scheme as this is the only way to pass a custom
                     // port.
@@ -128,9 +140,9 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     if (URI(url).rawAuthority != null)
                         url
                     else
-                        return false
+                        return GitUpdateUrlResult.GenericError
                 } catch (_: Exception) {
-                    return false
+                    return GitUpdateUrlResult.GenericError
                 }
             }
         }
@@ -141,7 +153,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         if (previousUrl.isNotEmpty() && newUrl != previousUrl && protocol == Protocol.Https)
             encryptedSettings.edit { remove("https_password") }
         url = newUrl
-        return true
+        return GitUpdateUrlResult.Ok
     }
 
     /**
