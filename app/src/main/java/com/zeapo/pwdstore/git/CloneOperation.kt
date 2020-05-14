@@ -68,7 +68,7 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
         super.onError(errorMessage)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage("Error occured during the clone operation, " +
+            .setMessage("Error occurred during the clone operation, " +
                 callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
                 errorMessage +
                 "\nPlease check the FAQ for possible reasons why this error might occur.")
