@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.git
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import androidx.core.content.edit
 import androidx.core.os.postDelayed
 import androidx.core.widget.doOnTextChanged
@@ -50,18 +51,20 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
         }
 
-        binding.connectionModeGroup.check(when (connectionMode) {
-            ConnectionMode.SshKey -> R.id.connection_mode_ssh_key
-            ConnectionMode.Password -> R.id.connection_mode_password
-            ConnectionMode.OpenKeychain -> R.id.connection_mode_open_keychain
-            ConnectionMode.None -> R.id.connection_mode_none
-        })
-        binding.connectionModeGroup.setOnCheckedChangeListener { group, _ ->
-            when (group.checkedRadioButtonId) {
-                R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
-                R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain
-                R.id.connection_mode_password -> connectionMode = ConnectionMode.Password
-                R.id.connection_mode_none -> connectionMode = ConnectionMode.None
+        binding.connectionModeGroup.apply {
+            when (connectionMode) {
+                ConnectionMode.SshKey -> check(R.id.connection_mode_ssh_key)
+                ConnectionMode.Password -> check(R.id.connection_mode_password)
+                ConnectionMode.OpenKeychain -> check(R.id.connection_mode_open_keychain)
+                ConnectionMode.None -> uncheck(checkedButtonId)
+            }
+            addOnButtonCheckedListener { group, _, _ ->
+                when (checkedButtonId) {
+                    R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
+                    R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain
+                    R.id.connection_mode_password -> connectionMode = ConnectionMode.Password
+                    View.NO_ID -> connectionMode = ConnectionMode.None
+                }
             }
         }
         updateConnectionModeToggleGroup()
@@ -120,12 +123,14 @@ class GitServerConfigActivity : BaseGitActivity() {
 
     private fun updateConnectionModeToggleGroup() {
         if (protocol == Protocol.Ssh) {
-            if (binding.connectionModeNone.isChecked)
+            // Reset connection mode to SSH key if the current value (none) is not valid for SSH
+            if (binding.connectionModeGroup.checkedButtonIds.isEmpty())
                 binding.connectionModeGroup.check(R.id.connection_mode_ssh_key)
             binding.connectionModeSshKey.isEnabled = true
             binding.connectionModeOpenKeychain.isEnabled = true
-            binding.connectionModeNone.isEnabled = false
+            binding.connectionModeGroup.isSelectionRequired = true
         } else {
+            binding.connectionModeGroup.isSelectionRequired = false
             // Reset connection mode to password if the current value is not valid for HTTPS
             // Important note: This has to happen before disabling the other toggle buttons or they
             // won't uncheck.
@@ -133,7 +138,6 @@ class GitServerConfigActivity : BaseGitActivity() {
                 binding.connectionModeGroup.check(R.id.connection_mode_password)
             binding.connectionModeSshKey.isEnabled = false
             binding.connectionModeOpenKeychain.isEnabled = false
-            binding.connectionModeNone.isEnabled = true
         }
     }
 
