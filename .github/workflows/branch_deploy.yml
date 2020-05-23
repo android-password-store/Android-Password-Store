@@ -2,6 +2,14 @@ on:
   push:
     branches-ignore:
       - master
+    paths:
+      - '.github/**'
+      - 'app/**'
+      - 'gradle/**'
+      - '*.properties'
+      - '*.gradle'
+      - 'gradlew'
+      - 'gradlew.bat'
 
 name: Build debug
 jobs:
@@ -9,25 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-
-    - name: Check if relevant files have changed
-      uses: actions/github-script@0.9.0
-      id: service-changed
-      with:
-        result-encoding: string
-        script: |
-          const result = await github.pulls.listFiles({
-            owner: context.payload.repository.owner.login,
-            repo: context.payload.repository.name,
-            pull_number: context.payload.number,
-            per_page: 100
-          })
-          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.contains("gradle") || f.filename.startsWith(".github")).length > 0
-          console.log(serviceChanged)
-          return serviceChanged
-
     - name: Checkout repository
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/checkout@v1
 
     - name: Decrypt secrets
