@@ -31,12 +31,15 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Generate cache key
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: ./.github/checksum.sh checksum.txt
 
     - name: Cache gradle modules
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/modules-2
@@ -45,6 +48,7 @@ jobs:
           ${{ runner.os }}-gradlemodules-
 
     - name: Cache gradle jars
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/jars-3
@@ -53,6 +57,7 @@ jobs:
           ${{ runner.os }}-gradlejars-
 
     - name: Cache gradle build
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/build-cache-1
@@ -61,9 +66,11 @@ jobs:
           ${{ runner.os }}-gradlebuildcache-
 
     - name: Run unit tests
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: ./gradlew test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
 
     - name: Run instrumentation tests
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: ${{ matrix.api-level }}
