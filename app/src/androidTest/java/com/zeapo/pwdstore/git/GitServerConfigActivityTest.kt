@@ -6,7 +6,6 @@
 package com.zeapo.pwdstore.git
 
 import android.view.View
-import android.widget.RadioGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -103,7 +102,7 @@ class GitServerConfigActivityTest {
         onView(withId(R.id.clone_protocol_group)).perform(callMethod<MaterialButtonToggleGroup> {
             it.check(R.id.clone_protocol_https)
         })
-        onView(withId(R.id.connection_mode_group)).perform(callMethod<RadioGroup> {
+        onView(withId(R.id.connection_mode_group)).perform(callMethod<MaterialButtonToggleGroup> {
             it.check(R.id.connection_mode_password)
         })
         onView(withId(R.id.server_path)).perform(replaceText("john_doe/my_secret_repository"))
@@ -116,7 +115,7 @@ class GitServerConfigActivityTest {
         onView(withId(R.id.clone_protocol_group)).perform(callMethod<MaterialButtonToggleGroup> {
             it.check(R.id.clone_protocol_ssh)
         })
-        onView(withId(R.id.connection_mode_group)).perform(callMethod<RadioGroup> {
+        onView(withId(R.id.connection_mode_group)).perform(callMethod<MaterialButtonToggleGroup> {
             it.check(R.id.connection_mode_ssh_key)
         })
         onView(withId(R.id.server_path)).perform(replaceText("john_doe/my_secret_repository"))
