@@ -1,13 +1,4 @@
-on:
-  pull_request:
-    paths:
-      - '.github/**'
-      - 'app/**'
-      - 'gradle/**'
-      - '*.properties'
-      - '*.gradle'
-      - 'gradlew'
-      - 'gradlew.bat'
+on: [pull_request]
 
 name: Check pull request
 jobs:
@@ -19,15 +10,36 @@ jobs:
         variant: [Debug, Release]
     steps:
 
-    - uses: actions/checkout@master
+    - name: Check if relevant files have changed
+      uses: actions/github-script@0.9.0
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const result = await github.pulls.listFiles({
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            pull_number: context.payload.number,
+            per_page: 100
+          })
+          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.endsWith("gradle") || f.filename.startsWith(".github") || f.filename.startsWith("gradle") || f.filename.endsWith("properties")).length > 0
+          console.log(serviceChanged)
+          return serviceChanged
+
+    - name: Checkout repository
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: actions/checkout@v1
 
     - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Generate cache key
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: ./.github/checksum.sh checksum.txt
 
     - name: Cache gradle modules
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/modules-2
@@ -36,6 +48,7 @@ jobs:
           ${{ runner.os }}-gradlemodules-
 
     - name: Cache gradle jars
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/jars-3
@@ -44,6 +57,7 @@ jobs:
           ${{ runner.os }}-gradlejars-
 
     - name: Cache gradle build
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/build-cache-1
@@ -52,9 +66,11 @@ jobs:
           ${{ runner.os }}-gradlebuildcache-
 
     - name: Run unit tests
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: ./gradlew test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
 
     - name: Run instrumentation tests
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: ${{ matrix.api-level }}
