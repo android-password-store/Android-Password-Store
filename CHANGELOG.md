@@ -10,9 +10,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - More UI related tweaks, changes and improvements
+- Improved error messages and internal logic for server configuration
 
 ### Fixed
 - Add the following fields to encrypted username detection: user, account, email, name, handle, id, identity.
+- Improved detection of broken or incomplete git repositories
+- Better UX flow for storage permissions
 
 ## [1.7.2] - 2020-04-29
 
