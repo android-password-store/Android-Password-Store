@@ -113,9 +113,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 val portPart =
                     if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
                 if (portPart.isEmpty()) {
-                    // We only support relative paths with the standard port.
-                    val pathPart = serverPath.trimStart('/', ':')
-                    "$userPart$hostnamePart:$pathPart"
+                    "$userPart$hostnamePart:$serverPath"
                 } else {
                     // Only absolute paths are supported with custom ports.
                     if (!serverPath.startsWith('/'))
