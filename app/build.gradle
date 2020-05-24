@@ -27,7 +27,7 @@ android {
     defaultConfig {
         applicationId 'dev.msfjarvis.aps'
         versionCode 10801
-        versionName '1.9.0-SNAPSHOT'
+        versionName '1.8.1'
     }
 
     lintOptions {
