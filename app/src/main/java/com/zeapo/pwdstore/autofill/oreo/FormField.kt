@@ -83,7 +83,7 @@ class FormField(
             "pass", "pswd", "pwd"
         )
         private val USERNAME_HEURISTIC_TERMS = listOf(
-            "alias", "e-mail", "email", "login", "name", "user"
+            "alias", "e-mail", "email", "login", "user"
         )
     }
 
