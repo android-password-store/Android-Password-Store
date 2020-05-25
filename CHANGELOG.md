@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Reduce Autofill false positives on username fields by removing "name" from list of heuristic terms
+
 ## [1.8.1] - 2020-05-24
 
 ### Fixed
