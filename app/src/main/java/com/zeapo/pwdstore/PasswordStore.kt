@@ -22,7 +22,6 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -65,6 +64,9 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
+import kotlinx.android.synthetic.main.fragment_to_clone_or_not.clone_from_server_button
+import kotlinx.android.synthetic.main.fragment_to_clone_or_not.local_directory_button
+import kotlinx.android.synthetic.main.fragment_to_clone_or_not.settings_button
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
@@ -125,6 +127,10 @@ class PasswordStore : AppCompatActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
+
+        settings_button.setOnClickListener { startActivity(Intent(this, UserPreference::class.java)) }
+        local_directory_button.setOnClickListener { initRepository(NEW_REPO_BUTTON) }
+        clone_from_server_button.setOnClickListener { initRepository(CLONE_REPO_BUTTON) }
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -327,24 +333,6 @@ class PasswordStore : AppCompatActivity() {
     fun clearSearch() {
         if (searchItem.isActionViewExpanded)
             searchItem.collapseActionView()
-    }
-
-    fun openSettings(@Suppress("UNUSED_PARAMETER") view: View?) {
-        val intent: Intent
-        try {
-            intent = Intent(this, UserPreference::class.java)
-            startActivity(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    fun cloneExistingRepository(@Suppress("UNUSED_PARAMETER") view: View?) {
-        initRepository(CLONE_REPO_BUTTON)
-    }
-
-    fun createNewRepository(@Suppress("UNUSED_PARAMETER") view: View?) {
-        initRepository(NEW_REPO_BUTTON)
     }
 
     private fun createRepository() {
@@ -843,12 +831,8 @@ class PasswordStore : AppCompatActivity() {
         get() = getSortOrder(settings)
 
     companion object {
-        const val REQUEST_CODE_SIGN = 9910
         const val REQUEST_CODE_ENCRYPT = 9911
-        const val REQUEST_CODE_SIGN_AND_ENCRYPT = 9912
         const val REQUEST_CODE_DECRYPT_AND_VERIFY = 9913
-        const val REQUEST_CODE_GET_KEY = 9914
-        const val REQUEST_CODE_GET_KEY_IDS = 9915
         const val REQUEST_CODE_EDIT = 9916
         const val REQUEST_CODE_SELECT_FOLDER = 9917
         const val REQUEST_ARG_PATH = "PATH"
