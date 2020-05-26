@@ -17,6 +17,7 @@ import com.zeapo.pwdstore.databinding.ActivityGitCloneBinding
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.viewBinding
 import java.io.IOException
 
 /**
@@ -25,11 +26,10 @@ import java.io.IOException
  */
 class GitServerConfigActivity : BaseGitActivity() {
 
-    private lateinit var binding: ActivityGitCloneBinding
+    private val binding by viewBinding(ActivityGitCloneBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGitCloneBinding.inflate(layoutInflater)
         val isClone = intent?.extras?.getInt(REQUEST_ARG_OP) ?: -1 == REQUEST_CLONE
         if (isClone) {
             binding.saveButton.text = getString(R.string.clone_button)

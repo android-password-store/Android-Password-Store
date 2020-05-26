@@ -19,6 +19,7 @@ import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentSshKeygenBinding
+import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,17 +29,9 @@ import java.io.FileOutputStream
 class SshKeyGenFragment : Fragment() {
 
     private var keyLength = 4096
-    private var _binding: FragmentSshKeygenBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentSshKeygenBinding::bind)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSshKeygenBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +53,6 @@ class SshKeyGenFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
     }
 
     // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a

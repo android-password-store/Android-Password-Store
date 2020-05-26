@@ -33,6 +33,7 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.util.Stack
@@ -44,10 +45,9 @@ class PasswordFragment : Fragment() {
 
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
-    private var _binding: PasswordRecyclerViewBinding? = null
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
-    private val binding get() = _binding!!
+    private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
 
     private fun requireStore() = requireActivity() as PasswordStore
 
@@ -56,7 +56,6 @@ class PasswordFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = PasswordRecyclerViewBinding.inflate(inflater, container, false)
         settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         initializePasswordList()
         binding.fab.setOnClickListener {
@@ -147,11 +146,6 @@ class PasswordFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
     }
 
     private val actionModeCallback = object : ActionMode.Callback {

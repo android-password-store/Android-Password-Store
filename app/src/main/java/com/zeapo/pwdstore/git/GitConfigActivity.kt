@@ -14,15 +14,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitConfigBinding
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.viewBinding
 import org.eclipse.jgit.lib.Constants
 
 class GitConfigActivity : BaseGitActivity() {
 
-    private lateinit var binding: ActivityGitConfigBinding
+    private val binding by viewBinding(ActivityGitConfigBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGitConfigBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
