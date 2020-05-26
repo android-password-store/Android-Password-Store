@@ -44,7 +44,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:onClick="openSettings"
         android:text="@string/action_settings"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"

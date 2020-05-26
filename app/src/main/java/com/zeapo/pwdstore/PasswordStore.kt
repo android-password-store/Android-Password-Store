@@ -768,7 +768,7 @@ class PasswordStore : AppCompatActivity() {
         }
     }
 
-    private fun initRepository(operation: Int) {
+    fun initRepository(operation: Int) {
         closeRepository()
         MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.location_dialog_title))
@@ -837,8 +837,8 @@ class PasswordStore : AppCompatActivity() {
         const val REQUEST_CODE_SELECT_FOLDER = 9917
         const val REQUEST_ARG_PATH = "PATH"
         private val TAG = PasswordStore::class.java.name
-        private const val CLONE_REPO_BUTTON = 401
-        private const val NEW_REPO_BUTTON = 402
+        const val CLONE_REPO_BUTTON = 401
+        const val NEW_REPO_BUTTON = 402
         private const val HOME = 403
         private const val REQUEST_EXTERNAL_STORAGE = 50
         private fun isPrintable(c: Char): Boolean {
