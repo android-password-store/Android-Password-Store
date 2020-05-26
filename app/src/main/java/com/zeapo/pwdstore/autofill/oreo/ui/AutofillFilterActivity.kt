@@ -36,6 +36,7 @@ import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillFilterBinding
 import com.zeapo.pwdstore.utils.PasswordItem
+import com.zeapo.pwdstore.utils.viewBinding
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
@@ -72,7 +73,7 @@ class AutofillFilterView : AppCompatActivity() {
 
     private lateinit var formOrigin: FormOrigin
     private lateinit var directoryStructure: DirectoryStructure
-    private lateinit var binding: ActivityOreoAutofillFilterBinding
+    private val binding by viewBinding(ActivityOreoAutofillFilterBinding::inflate)
 
     private val model: SearchableRepositoryViewModel by viewModels {
         ViewModelProvider.AndroidViewModelFactory(application)
@@ -80,7 +81,6 @@ class AutofillFilterView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityOreoAutofillFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setFinishOnTouchOutside(true)
 

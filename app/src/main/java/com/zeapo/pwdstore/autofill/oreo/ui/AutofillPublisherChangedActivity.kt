@@ -22,6 +22,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPublisherChangedException
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.autofill.oreo.computeCertificatesHash
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillPublisherChangedBinding
+import com.zeapo.pwdstore.utils.viewBinding
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillPublisherChangedActivity : AppCompatActivity() {
@@ -45,11 +46,10 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
     }
 
     private lateinit var appPackage: String
-    private lateinit var binding: ActivityOreoAutofillPublisherChangedBinding
+    private val binding by viewBinding(ActivityOreoAutofillPublisherChangedBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityOreoAutofillPublisherChangedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setFinishOnTouchOutside(true)
 
