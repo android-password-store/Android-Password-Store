@@ -53,50 +53,56 @@ class GitAsyncTask(
         var nbChanges: Int? = null
         for (command in commands) {
             try {
-                if (command is StatusCommand) {
-                    // in case we have changes, we want to keep track of it
-                    val status = command.call()
-                    nbChanges = status.changed.size + status.missing.size
-                } else if (command is CommitCommand) {
-                    // the previous status will eventually be used to avoid a commit
-                    if (nbChanges == null || nbChanges > 0) command.call()
-                } else if (command is PullCommand) {
-                    val result = command.call()
-                    val rr = result.rebaseResult
-                    if (rr.status === RebaseResult.Status.STOPPED) {
-                        return Result.Err(IOException(context.getString(R.string
-                            .git_pull_fail_error)))
+                when (command) {
+                    is StatusCommand -> {
+                        // in case we have changes, we want to keep track of it
+                        val status = command.call()
+                        nbChanges = status.changed.size + status.missing.size
                     }
-                } else if (command is PushCommand) {
-                    for (result in command.call()) {
-                        // Code imported (modified) from Gerrit PushOp, license Apache v2
-                        for (rru in result.remoteUpdates) {
-                            val error = when (rru.status) {
-                                RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD ->
-                                    context.getString(R.string.git_push_nff_error)
-                                RemoteRefUpdate.Status.REJECTED_NODELETE,
-                                RemoteRefUpdate.Status.REJECTED_REMOTE_CHANGED,
-                                RemoteRefUpdate.Status.NON_EXISTING,
-                                RemoteRefUpdate.Status.NOT_ATTEMPTED ->
-                                    (activity!!.getString(R.string.git_push_generic_error) + rru.status.name)
-                                RemoteRefUpdate.Status.REJECTED_OTHER_REASON -> {
-                                    if
-                                        ("non-fast-forward" == rru.message) {
-                                        context.getString(R.string.git_push_other_error)
-                                    } else {
-                                        (context.getString(R.string.git_push_generic_error)
-                                            + rru.message)
-                                    }
-                                }
-                                else -> null
-
-                            }
-                            if (error != null)
-                                Result.Err(IOException(error))
+                    is CommitCommand -> {
+                        // the previous status will eventually be used to avoid a commit
+                        if (nbChanges == null || nbChanges > 0) command.call()
+                    }
+                    is PullCommand -> {
+                        val result = command.call()
+                        val rr = result.rebaseResult
+                        if (rr.status === RebaseResult.Status.STOPPED) {
+                            return Result.Err(IOException(context.getString(R.string
+                                .git_pull_fail_error)))
                         }
                     }
-                } else {
-                    command.call()
+                    is PushCommand -> {
+                        for (result in command.call()) {
+                            // Code imported (modified) from Gerrit PushOp, license Apache v2
+                            for (rru in result.remoteUpdates) {
+                                val error = when (rru.status) {
+                                    RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD ->
+                                        context.getString(R.string.git_push_nff_error)
+                                    RemoteRefUpdate.Status.REJECTED_NODELETE,
+                                    RemoteRefUpdate.Status.REJECTED_REMOTE_CHANGED,
+                                    RemoteRefUpdate.Status.NON_EXISTING,
+                                    RemoteRefUpdate.Status.NOT_ATTEMPTED ->
+                                        (activity!!.getString(R.string.git_push_generic_error) + rru.status.name)
+                                    RemoteRefUpdate.Status.REJECTED_OTHER_REASON -> {
+                                        if
+                                            ("non-fast-forward" == rru.message) {
+                                            context.getString(R.string.git_push_other_error)
+                                        } else {
+                                            (context.getString(R.string.git_push_generic_error)
+                                                + rru.message)
+                                        }
+                                    }
+                                    else -> null
+
+                                }
+                                if (error != null)
+                                    Result.Err(IOException(error))
+                            }
+                        }
+                    }
+                    else -> {
+                        command.call()
+                    }
                 }
             } catch (e: Exception) {
                 return Result.Err(e)
