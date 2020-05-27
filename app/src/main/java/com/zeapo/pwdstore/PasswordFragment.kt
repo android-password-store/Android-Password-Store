@@ -9,11 +9,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.view.ActionMode
@@ -51,11 +49,8 @@ class PasswordFragment : Fragment() {
 
     private fun requireStore() = requireActivity() as PasswordStore
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         initializePasswordList()
         binding.fab.setOnClickListener {
@@ -63,7 +58,6 @@ class PasswordFragment : Fragment() {
                 setTargetFragment(this@PasswordFragment, 1000)
             }.show(parentFragmentManager, "BOTTOM_SHEET")
         }
-        return binding.root
     }
 
     private fun initializePasswordList() {

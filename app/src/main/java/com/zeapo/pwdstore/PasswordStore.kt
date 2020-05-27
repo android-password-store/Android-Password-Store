@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
@@ -64,9 +65,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import kotlinx.android.synthetic.main.fragment_to_clone_or_not.clone_from_server_button
-import kotlinx.android.synthetic.main.fragment_to_clone_or_not.local_directory_button
-import kotlinx.android.synthetic.main.fragment_to_clone_or_not.settings_button
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
@@ -127,10 +125,6 @@ class PasswordStore : AppCompatActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
-
-        settings_button.setOnClickListener { startActivity(Intent(this, UserPreference::class.java)) }
-        local_directory_button.setOnClickListener { initRepository(NEW_REPO_BUTTON) }
-        clone_from_server_button.setOnClickListener { initRepository(CLONE_REPO_BUTTON) }
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -429,12 +423,10 @@ class PasswordStore : AppCompatActivity() {
     }
 
     private fun checkLocalRepository(localDir: File?) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
             tag(TAG).d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
-            if (fragmentManager.findFragmentByTag("PasswordsList") == null ||
+            if (supportFragmentManager.findFragmentByTag("PasswordsList") == null ||
                 settings.getBoolean("repo_changed", false)) {
                 settings.edit { putBoolean("repo_changed", false) }
                 plist = PasswordFragment()
@@ -449,16 +441,17 @@ class PasswordStore : AppCompatActivity() {
                 plist!!.arguments = args
                 supportActionBar!!.show()
                 supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                fragmentTransaction.replace(R.id.main_layout, plist!!, "PasswordsList")
-                fragmentTransaction.commit()
+                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.commit {
+                    replace(R.id.main_layout, plist!!, "PasswordsList")
+                }
             }
         } else {
             supportActionBar!!.hide()
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            val cloneFrag = ToCloneOrNot()
-            fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot")
-            fragmentTransaction.commit()
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.commit {
+                replace(R.id.main_layout, ToCloneOrNot())
+            }
         }
     }
 

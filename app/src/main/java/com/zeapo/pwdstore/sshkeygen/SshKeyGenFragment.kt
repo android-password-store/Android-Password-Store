@@ -5,9 +5,7 @@
 package com.zeapo.pwdstore.sshkeygen
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -30,8 +28,6 @@ class SshKeyGenFragment : Fragment() {
 
     private var keyLength = 4096
     private val binding by viewBinding(FragmentSshKeygenBinding::bind)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
