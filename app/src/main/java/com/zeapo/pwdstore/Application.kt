@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
-import com.haroldadmin.whatthestack.WhatTheStack
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.Security
 
@@ -27,7 +26,6 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs?.getBoolean("enable_debug_logging", false) == true) {
             plant(DebugTree())
-            WhatTheStack(this).init()
         }
         prefs?.registerOnSharedPreferenceChangeListener(this)
         setNightMode()
