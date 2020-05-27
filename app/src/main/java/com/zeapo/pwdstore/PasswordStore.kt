@@ -64,9 +64,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import kotlinx.android.synthetic.main.fragment_to_clone_or_not.clone_from_server_button
-import kotlinx.android.synthetic.main.fragment_to_clone_or_not.local_directory_button
-import kotlinx.android.synthetic.main.fragment_to_clone_or_not.settings_button
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
@@ -127,10 +124,6 @@ class PasswordStore : AppCompatActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
-
-        settings_button.setOnClickListener { startActivity(Intent(this, UserPreference::class.java)) }
-        local_directory_button.setOnClickListener { initRepository(NEW_REPO_BUTTON) }
-        clone_from_server_button.setOnClickListener { initRepository(CLONE_REPO_BUTTON) }
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
