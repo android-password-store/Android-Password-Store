@@ -19,7 +19,7 @@ import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 
-class SelectFolderFragment : Fragment() {
+class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
     private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener

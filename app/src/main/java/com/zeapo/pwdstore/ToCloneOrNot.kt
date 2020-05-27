@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.zeapo.pwdstore.databinding.FragmentToCloneOrNotBinding
 import com.zeapo.pwdstore.utils.viewBinding
 
-class ToCloneOrNot : Fragment() {
+class ToCloneOrNot : Fragment(R.layout.fragment_to_clone_or_not) {
 
     private val binding by viewBinding(FragmentToCloneOrNotBinding::bind)
 
