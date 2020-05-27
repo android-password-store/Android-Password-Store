@@ -6,54 +6,41 @@ package com.zeapo.pwdstore
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
+import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 
 class SelectFolderFragment : Fragment() {
+    private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
-    private lateinit var recyclerView: RecyclerView
     private lateinit var listener: OnFragmentInteractionListener
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.password_recycler_view, container, false)
-        initializePasswordList(view)
-        val fab: FloatingActionButton = view.findViewById(R.id.fab)
-        fab.hide()
-        return view
-    }
-
-    private fun initializePasswordList(rootView: View) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.fab.hide()
         recyclerAdapter = PasswordItemRecyclerAdapter()
             .onItemClicked { _, item ->
                 listener.onFragmentInteraction(item)
             }
-        recyclerView = rootView.findViewById(R.id.pass_recycler)
-        recyclerView.apply {
+        binding.passRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext())
             itemAnimator = null
             adapter = recyclerAdapter
         }
 
-        FastScrollerBuilder(recyclerView).build()
-        registerForContextMenu(recyclerView)
+        FastScrollerBuilder(binding.passRecycler).build()
+        registerForContextMenu(binding.passRecycler)
 
         val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
         model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)

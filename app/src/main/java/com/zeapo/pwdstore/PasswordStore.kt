@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
@@ -422,12 +423,10 @@ class PasswordStore : AppCompatActivity() {
     }
 
     private fun checkLocalRepository(localDir: File?) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
             tag(TAG).d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
-            if (fragmentManager.findFragmentByTag("PasswordsList") == null ||
+            if (supportFragmentManager.findFragmentByTag("PasswordsList") == null ||
                 settings.getBoolean("repo_changed", false)) {
                 settings.edit { putBoolean("repo_changed", false) }
                 plist = PasswordFragment()
@@ -442,16 +441,17 @@ class PasswordStore : AppCompatActivity() {
                 plist!!.arguments = args
                 supportActionBar!!.show()
                 supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                fragmentTransaction.replace(R.id.main_layout, plist!!, "PasswordsList")
-                fragmentTransaction.commit()
+                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.commit {
+                    replace(R.id.main_layout, plist!!, "PasswordsList")
+                }
             }
         } else {
             supportActionBar!!.hide()
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            val cloneFrag = ToCloneOrNot()
-            fragmentTransaction.replace(R.id.main_layout, cloneFrag, "ToCloneOrNot")
-            fragmentTransaction.commit()
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.commit {
+                replace(R.id.main_layout, ToCloneOrNot())
+            }
         }
     }
 
