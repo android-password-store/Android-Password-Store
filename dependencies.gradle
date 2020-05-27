@@ -40,7 +40,8 @@ ext.deps = [
         preference: 'androidx.preference:preference:1.1.1',
         recycler_view: 'androidx.recyclerview:recyclerview:1.2.0-alpha03',
         recycler_view_selection: 'androidx.recyclerview:recyclerview-selection:1.1.0-rc01',
-        security: 'androidx.security:security-crypto:1.0.0-rc02',
+        // Frozen at 1.0.0-beta01 for the foreseeable future due to Tink and R8 interacting badly
+        security: 'androidx.security:security-crypto:1.0.0-beta01',
         swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-rc01'
     ],
 
