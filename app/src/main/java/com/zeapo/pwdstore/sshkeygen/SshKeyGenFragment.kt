@@ -5,9 +5,7 @@
 package com.zeapo.pwdstore.sshkeygen
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
