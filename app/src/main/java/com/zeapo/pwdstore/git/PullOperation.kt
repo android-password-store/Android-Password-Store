@@ -38,13 +38,13 @@ class PullOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
         GitAsyncTask(callingActivity, false, this, Intent()).execute(this.command)
     }
 
-    override fun onError(errorMessage: String) {
-        super.onError(errorMessage)
+    override fun onError(err: Exception) {
+        super.onError(err)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage("Error occurred during the pull operation, " +
                 callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                errorMessage +
+                err.message +
                 "\nPlease check the FAQ for possible reasons why this error might occur.")
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
             .show()

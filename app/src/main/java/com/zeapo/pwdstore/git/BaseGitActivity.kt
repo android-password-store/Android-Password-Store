@@ -146,10 +146,11 @@ abstract class BaseGitActivity : AppCompatActivity() {
         }
         if (PasswordRepository.isInitialized)
             PasswordRepository.addRemote("origin", newUrl, true)
-        // HTTPS authentication sends the password to the server, so we must wipe the password when
-        // the server is changed.
-        if (previousUrl.isNotEmpty() && newUrl != previousUrl && protocol == Protocol.Https)
+        // When the server changes, remote password and host key file should be deleted.
+        if (previousUrl.isNotEmpty() && newUrl != previousUrl) {
             encryptedSettings.edit { remove("https_password") }
+            File("$filesDir/.host_key").delete()
+        }
         url = newUrl
         return GitUpdateUrlResult.Ok
     }
@@ -201,8 +202,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     return
                 }
             }
-            op.executeAfterAuthentication(connectionMode, serverUser,
-                File("$filesDir/.ssh_key"), identity)
+            op.executeAfterAuthentication(connectionMode, serverUser, identity)
         } catch (e: Exception) {
             e.printStackTrace()
             MaterialAlertDialogBuilder(this).setMessage(e.message).show()

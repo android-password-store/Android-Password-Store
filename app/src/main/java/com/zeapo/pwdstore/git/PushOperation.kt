@@ -38,12 +38,12 @@ class PushOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
         GitAsyncTask(callingActivity, false, this, Intent()).execute(this.command)
     }
 
-    override fun onError(errorMessage: String) {
+    override fun onError(err: Exception) {
         // TODO handle the "Nothing to push" case
-        super.onError(errorMessage)
+        super.onError(err)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + errorMessage)
+            .setMessage(callingActivity.getString(R.string.jgit_error_push_dialog_text) + err.message)
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
             .show()
     }

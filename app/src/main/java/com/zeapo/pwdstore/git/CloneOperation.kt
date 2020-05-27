@@ -34,43 +34,18 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
         return this
     }
 
-    /**
-     * sets the authentication for user/pwd scheme
-     *
-     * @param username the username
-     * @param password the password
-     * @return the current object
-     */
-    public override fun setAuthentication(username: String, password: String): CloneOperation {
-        super.setAuthentication(username, password)
-        return this
-    }
-
-    /**
-     * sets the authentication for the ssh-key scheme
-     *
-     * @param sshKey the ssh-key file
-     * @param username the username
-     * @param passphrase the passphrase
-     * @return the current object
-     */
-    public override fun setAuthentication(sshKey: File, username: String, passphrase: String): CloneOperation {
-        super.setAuthentication(sshKey, username, passphrase)
-        return this
-    }
-
     override fun execute() {
         (this.command as? CloneCommand)?.setCredentialsProvider(this.provider)
         GitAsyncTask(callingActivity, false, this, Intent()).execute(this.command)
     }
 
-    override fun onError(errorMessage: String) {
-        super.onError(errorMessage)
+    override fun onError(err: Exception) {
+        super.onError(err)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage("Error occurred during the clone operation, " +
                 callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                errorMessage +
+                err.message +
                 "\nPlease check the FAQ for possible reasons why this error might occur.")
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
             .show()
