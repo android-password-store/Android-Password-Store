@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class SshKeyGenFragment : Fragment() {
+class SshKeyGenFragment : Fragment(R.layout.fragment_ssh_keygen) {
 
     private var keyLength = 4096
     private val binding by viewBinding(FragmentSshKeygenBinding::bind)

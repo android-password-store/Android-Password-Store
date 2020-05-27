@@ -36,7 +36,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.util.Stack
 
-class PasswordFragment : Fragment() {
+class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var settings: SharedPreferences
