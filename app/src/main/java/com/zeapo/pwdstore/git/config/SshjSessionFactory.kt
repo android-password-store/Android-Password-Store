@@ -18,7 +18,6 @@ import net.schmizz.sshj.transport.verification.FingerprintVerifier
 import net.schmizz.sshj.transport.verification.HostKeyVerifier
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import net.schmizz.sshj.userauth.password.Resource
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.RemoteSession
 import org.eclipse.jgit.transport.SshSessionFactory
@@ -29,7 +28,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.security.GeneralSecurityException
-import java.security.Security
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
@@ -97,13 +95,6 @@ private class SshjSession(private val uri: URIish, private val username: String,
     private var currentCommand: Session? = null
 
     fun connect(): SshjSession {
-        // Replace the Android BC provider with the Java BouncyCastle provider since the former does
-        // not include all the required algorithms.
-        // TODO: Ideally, we would be able to use both - the fast Android implementation whenever it
-        //  provides the required algorithm and the Java implementation only as a fallback.
-        // Note: This may affect crypto operations in other parts of the application.
-        Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
-        Security.insertProviderAt(BouncyCastleProvider(), 1)
         ssh = SSHClient()
         ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
         ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
