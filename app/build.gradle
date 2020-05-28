@@ -101,7 +101,8 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     implementation deps.third_party.jsch
-    implementation deps.third_party.sshj
+    // FIXME
+    implementation files('../libs/sshj-0.29.1-SNAPSHOT.jar')
     implementation deps.third_party.bouncycastle
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth

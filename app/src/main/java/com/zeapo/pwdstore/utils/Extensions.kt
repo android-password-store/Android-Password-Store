@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.utils
 
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
@@ -65,4 +66,7 @@ fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
 
 val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
+    get() = getSystemService()
+
+val Context.keyguardManager: KeyguardManager?
     get() = getSystemService()

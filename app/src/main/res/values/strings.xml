@@ -218,9 +218,9 @@
     <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
     <string name="ssh_keygen_show_passphrase">Show passphrase</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
-    <string name="ssh_keygen_generating_done">Done!</string>
-    <string name="key_length_2048" translatable="false">2048</string>
-    <string name="key_length_4096" translatable="false">4096</string>
+    <string name="key_label_rsa_2048" translatable="false">RSA 2048</string>
+    <string name="key_label_rsa_3072" translatable="false">RSA 3072</string>
+    <string name="key_label_ecdsa_384" translatable="false">P-384</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
@@ -373,4 +373,8 @@
     <string name="preference_default_username_title">Default username</string>
     <string name="git_operation_remember_password">Remember password</string>
     <string name="git_operation_hint_password">Password</string>
+    <string name="ssh_keygen_require_authentication">Protect with screen lock credential</string>
+    <string name="biometric_auth_generic_failure">Screen lock authentication failed</string>
+    <string name="biometric_prompt_title_ssh_auth">Unlock SSH key</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generate SSH key</string>
 </resources>

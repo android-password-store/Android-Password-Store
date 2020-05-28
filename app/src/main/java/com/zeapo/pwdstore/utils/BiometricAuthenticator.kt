@@ -4,13 +4,12 @@
  */
 package com.zeapo.pwdstore.utils
 
-import android.app.KeyguardManager
 import android.os.Handler
 import androidx.annotation.StringRes
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.getSystemService
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
@@ -59,13 +58,18 @@ object BiometricAuthenticator {
                 callback(Result.Success(result.cryptoObject))
             }
         }
-        val biometricPrompt = BiometricPrompt(activity, { handler.post(it) }, authCallback)
+        // Use the applicationContext's mainExecutor to prevent leaking contexts through
+        // BiometricPrompt internals. The prompt itself still leaks through its callback though.
+        // Tracking bug: https://issuetracker.google.com/issues/144919472
+        val biometricPrompt = BiometricPrompt(activity,
+            ContextCompat.getMainExecutor(activity.applicationContext),
+            authCallback)
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(dialogTitleRes))
             .setDeviceCredentialAllowed(true)
             .build()
         if (BiometricManager.from(activity).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS ||
-            activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true) {
+            activity.keyguardManager?.isDeviceSecure == true) {
             biometricPrompt.authenticate(promptInfo)
         } else {
             callback(Result.HardwareUnavailableOrDisabled)

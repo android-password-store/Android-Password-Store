@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.autofill.oreo.ui
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -13,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
@@ -28,7 +28,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillSaveActivity : Activity() {
+class AutofillSaveActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_FOLDER_NAME =

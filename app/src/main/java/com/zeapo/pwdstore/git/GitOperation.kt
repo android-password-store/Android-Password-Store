@@ -5,22 +5,25 @@
 package com.zeapo.pwdstore.git
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
+import android.security.keystore.UserNotAuthenticatedException
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.git.config.AndroidKeystoreKeyProvider
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshAuthData
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
@@ -37,7 +40,9 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 
-private class GitOperationCredentialFinder(val callingActivity: Activity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
+const val ANDROID_KEYSTORE_ALIAS_SSH_KEY = "ssh_key"
+
+private class GitOperationCredentialFinder(val callingActivity: FragmentActivity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
         require(connectionMode == ConnectionMode.Password)
@@ -115,7 +120,7 @@ private class GitOperationCredentialFinder(val callingActivity: Activity, val co
  * @param gitDir the git working tree directory
  * @param callingActivity the calling activity
  */
-abstract class GitOperation(gitDir: File, internal val callingActivity: Activity) {
+abstract class GitOperation(gitDir: File, internal val callingActivity: FragmentActivity) {
 
     protected val repository: Repository? = PasswordRepository.getRepository(gitDir)
     internal var provider: CredentialsProvider? = null
@@ -157,6 +162,13 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Activity
         return this
     }
 
+    private fun withAndroidKeystoreAuthentication(username: String): GitOperation {
+        val sessionFactory = SshjSessionFactory(username, SshAuthData.AndroidKeystoreKey(ANDROID_KEYSTORE_ALIAS_SSH_KEY), hostKeyFile)
+        SshSessionFactory.setInstance(sessionFactory)
+        this.provider = null
+        return this
+    }
+
     private fun withOpenKeychainAuthentication(username: String, identity: SshApiSessionFactory.ApiIdentity?): GitOperation {
         SshSessionFactory.setInstance(SshApiSessionFactory(username, identity))
         this.provider = null
@@ -181,29 +193,100 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Activity
      */
     abstract fun execute()
 
+    private fun onMissingSshKeyFile() {
+        MaterialAlertDialogBuilder(callingActivity).run {
+            setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
+            setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
+            setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
+                try {
+                    // Ask the UserPreference to provide us with the ssh-key
+                    // onResult has to be handled by the callingActivity
+                    val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
+                    intent.putExtra("operation", "get_ssh_key")
+                    callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE)
+                } catch (e: Exception) {
+                    println("Exception caught :(")
+                    e.printStackTrace()
+                }
+            }
+            setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
+                try {
+                    // Duplicated code
+                    val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
+                    intent.putExtra("operation", "make_ssh_key")
+                    callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE)
+                } catch (e: Exception) {
+                    println("Exception caught :(")
+                    e.printStackTrace()
+                }
+            }
+            setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
+                // Finish the blank GitActivity so user doesn't have to press back
+                callingActivity.finish()
+            }
+            show()
+        }
+    }
+
+    /**
+     * Executes the GitCommand in an async task after creating the authentication
+     *
+     * @param connectionMode the server-connection mode
+     * @param username the username
+     * @param identity the api identity to use for auth in OpenKeychain connection mode
+     */
     fun executeAfterAuthentication(
         connectionMode: ConnectionMode,
         username: String,
         identity: SshApiSessionFactory.ApiIdentity?
     ) {
         when (connectionMode) {
-            ConnectionMode.SshKey -> if (!sshKeyFile.exists()) {
-                MaterialAlertDialogBuilder(callingActivity)
-                    .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
-                    .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
-                    .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
-                        getSshKey(false)
+            ConnectionMode.SshKey -> when {
+                !sshKeyFile.exists() -> {
+                    MaterialAlertDialogBuilder(callingActivity)
+                        .setMessage(R.string.ssh_preferences_dialog_text)
+                        .setTitle(R.string.ssh_preferences_dialog_title)
+                        .setPositiveButton(R.string.ssh_preferences_dialog_import) { _, _ ->
+                            getSshKey(false)
+                        }
+                        .setNegativeButton(R.string.ssh_preferences_dialog_generate) { _, _ ->
+                            getSshKey(true)
+                        }
+                        .setNeutralButton(R.string.dialog_cancel) { _, _ ->
+                            // Finish the blank GitActivity so user doesn't have to press back
+                            callingActivity.finish()
+                        }.show()
+                }
+                sshKeyFile.readText() == "keystore" -> {
+                    when (AndroidKeystoreKeyProvider.isUserAuthenticationRequired(ANDROID_KEYSTORE_ALIAS_SSH_KEY)) {
+                        true -> BiometricAuthenticator.authenticate(callingActivity, R.string.biometric_prompt_title_ssh_auth) {
+                            when (it) {
+                                is BiometricAuthenticator.Result.Success -> {
+                                    withAndroidKeystoreAuthentication(username).execute()
+                                }
+                                is BiometricAuthenticator.Result.Cancelled -> {
+                                    callingActivity.finish()
+                                }
+                                else -> {
+                                    // There is a chance we succeed if the user recently confirmed
+                                    // their screen lock. Doing so would have a potential to confuse
+                                    // users though, who might deduce that the screen lock
+                                    // protection is not effective. Hence, we fail with an error.
+                                    throw UserNotAuthenticatedException(callingActivity.resources.getString(R.string.biometric_auth_generic_failure))
+                                }
+                            }
+                        }
+                        false -> withAndroidKeystoreAuthentication(username).execute()
+                        else -> {
+                            // The key is no longer available or has been invalidated by screen lock
+                            // deactivation.
+                            sshKeyFile.delete()
+                            onMissingSshKeyFile()
+                        }
                     }
-                    .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
-                        getSshKey(true)
-                    }
-                    .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                        // Finish the blank GitActivity so user doesn't have to press back
-                        callingActivity.finish()
-                    }.show()
-            } else {
-                withPublicKeyAuthentication(username, GitOperationCredentialFinder(callingActivity,
-                    connectionMode)).execute()
+                }
+                else -> withPublicKeyAuthentication(username, GitOperationCredentialFinder(
+                    callingActivity, connectionMode)).execute()
             }
             ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(username, identity).execute()
             ConnectionMode.Password -> withPasswordAuthentication(

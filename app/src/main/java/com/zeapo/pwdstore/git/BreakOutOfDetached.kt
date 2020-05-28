@@ -4,7 +4,7 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.Git
@@ -13,7 +13,7 @@ import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseCommand
 import java.io.File
 
-class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
+class BreakOutOfDetached(fileDir: File, callingActivity: FragmentActivity) : GitOperation(fileDir, callingActivity) {
     private lateinit var commands: List<GitCommand<out Any>>
 
     /**

@@ -31,6 +31,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
@@ -838,7 +839,7 @@ class PasswordStore : AppCompatActivity() {
 
         private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
 
-        fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
+        fun commitChange(activity: FragmentActivity, message: String, finishWithResultOnEnd: Intent? = null) {
             if (!PasswordRepository.isGitRepo()) {
                 if (finishWithResultOnEnd != null) {
                     activity.setResult(Activity.RESULT_OK, finishWithResultOnEnd)

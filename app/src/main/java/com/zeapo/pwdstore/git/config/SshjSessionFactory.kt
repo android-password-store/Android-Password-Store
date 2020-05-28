@@ -9,8 +9,10 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import net.schmizz.sshj.DefaultConfig
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.Buffer.PlainBuffer
+import net.schmizz.sshj.common.KeyType
 import net.schmizz.sshj.common.SSHRuntimeException
 import net.schmizz.sshj.common.SecurityUtils
 import net.schmizz.sshj.connection.channel.direct.Session
@@ -33,6 +35,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 
 sealed class SshAuthData {
+    class AndroidKeystoreKey(val keyAlias: String) : SshAuthData()
     class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
     class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
 }
@@ -97,17 +100,42 @@ private class SshjSession(private val uri: URIish, private val username: String,
     private var currentCommand: Session? = null
 
     fun connect(): SshjSession {
-        ssh = SSHClient()
+        /*
+         * The SSHJ default factories explicitly specify the KeyStore provider as 'BC'. We replace
+         * them with factories that produce signature objects that choose the provider based on the
+         * key type provided to them in initVerify().
+         */
+        val config = DefaultConfig().apply {
+            val toPatch = mapOf(
+                KeyType.RSA.toString() to AndroidKeystoreCompatRsaSignatureFactory,
+                KeyType.ECDSA256.toString() to AndroidKeystoreCompatEcdsaSignatureFactory(KeyType.ECDSA256),
+                KeyType.ECDSA384.toString() to AndroidKeystoreCompatEcdsaSignatureFactory(KeyType.ECDSA384),
+                KeyType.ECDSA521.toString() to AndroidKeystoreCompatEcdsaSignatureFactory(KeyType.ECDSA521)
+            )
+            for ((name, factory) in toPatch) {
+                val index = signatureFactories.indexOfFirst { it.name == name }
+                if (index == -1)
+                    continue
+                signatureFactories.set(index, factory)
+            }
+        }
+        ssh = SSHClient(config)
         ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
         ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
         if (!ssh.isConnected)
             throw IOException()
         when (authData) {
+            is SshAuthData.AndroidKeystoreKey -> {
+                ssh.authPublickey(username, AndroidKeystoreKeyProvider(authData.keyAlias))
+                d { "Authenticated with an Android Keystore key" }
+            }
             is SshAuthData.Password -> {
                 ssh.authPassword(username, authData.passwordFinder)
+                d { "Authenticated with a password" }
             }
             is SshAuthData.PublicKeyFile -> {
                 ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
+                d { "Authenticated with an SSH key file" }
             }
         }
         return this

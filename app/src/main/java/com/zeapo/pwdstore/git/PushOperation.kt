@@ -4,8 +4,8 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
 import android.content.Intent
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.Git
@@ -18,7 +18,7 @@ import java.io.File
  * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
-class PushOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
+class PushOperation(fileDir: File, callingActivity: FragmentActivity) : GitOperation(fileDir, callingActivity) {
 
     /**
      * Sets the command
