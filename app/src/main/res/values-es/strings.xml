@@ -24,14 +24,12 @@
     <string name="git_commit_edit_text">"%1$s editada usando Android Password Store."</string>
     <string name="git_commit_remove_text">"%1$s eliminada del almacén usando Android Password Store."</string>
     <string name="git_commit_move_text">"Renombrado %1$s a %2$s usando Android Password Store.."</string>
-    <string name="git_commit_increment_text">"Contador de HOTP incrementado para %1$s."</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">¡No se ha seleccionado ningún proveedor OpenGPG!</string>
     <string name="clipboard_password_toast_text">Contraseña copiada al portapapeles, tienes %d segundos para pegarla.</string>
     <string name="clipboard_password_no_clear_toast_text">Contraseña copiada al portapapeles</string>
     <string name="clipboard_username_toast_text">Nombre de usuario copiado al portapapeles</string>
-    <string name="clipboard_otp_toast_text">Código OTP copiado al portapapeles</string>
     <string name="file_toast_text">Por favor selecciona un nombre de archivo</string>
     <string name="empty_toast_text">No puedes dejar la contraseña y el contenido extra ambos vacíos</string>
 
@@ -95,14 +93,8 @@
     <string name="edit_password">Editar contraseña</string>
     <string name="copy_password">Copiar contraseña</string>
     <string name="copy_username">Copiar nombre de usuario</string>
-    <string name="copy_otp">Copiar código OTP</string>
     <string name="share_as_plaintext">Compartir como texto plano</string>
     <string name="last_changed">Última modificación %s</string>
-    <string name="dialog_update_title">Atención</string>
-    <string name="dialog_update_positive">Actualizar registro</string>
-    <string name="dialog_update_negative">Dejar sin cambios</string>
-    <string name="dialog_update_body">El contador HOTP será incrementado. Este cambio será confirmado. Si presionas "Dejar sin cambios", el código HOTP será mostrado, pero el contador no se cambiará.</string>
-    <string name="dialog_update_check">Recordar elección</string>
 
     <!-- Preferences -->
     <string name="pref_edit_server_info">Editar ajustes del servidor Git</string>
@@ -216,12 +208,10 @@
     <string name="git_push_nff_error">La subida fue rechazada por el servidor, Ejecuta \'Descargar desde servidor\' antes de subir o pulsa \'Sincronizar con servidor\' para realizar ambas acciones.</string>
     <string name="git_push_generic_error">El envío fue rechazado por el servidor, la razón:</string>
     <string name="jgit_error_push_dialog_text">Ocurrió un error durante el envío:</string>
-    <string name="hotp_remember_clear_choice">Limpiar preferencia para incremento HOTP</string>
     <string name="remember_the_passphrase">Recordar contraseñagit  (inseguro)</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abortar rebase</string>
     <string name="commit_hash">Hash del commit</string>
     <string name="crypto_extra_edit_hint">Username: Nombre de usuario\n… o algún contenido extra</string>
     <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
-    <string name="hotp_pending">Presiona copiar para calcular el HOTP</string>
 </resources>

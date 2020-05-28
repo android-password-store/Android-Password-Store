@@ -60,45 +60,4 @@ class PasswordEntryTest {
         assertFalse(PasswordEntry("\n").hasUsername())
         assertFalse(PasswordEntry("").hasUsername())
     }
-
-    @Test fun testNoTotpUriPresent() {
-        val entry = PasswordEntry("secret\nextra\nlogin: username\ncontent")
-        assertFalse(entry.hasTotp())
-        assertNull(entry.totpSecret)
-    }
-
-    @Test fun testTotpUriInPassword() {
-        val entry = PasswordEntry("otpauth://totp/test?secret=JBSWY3DPEHPK3PXP")
-        assertTrue(entry.hasTotp())
-        assertEquals("JBSWY3DPEHPK3PXP", entry.totpSecret)
-    }
-
-    @Test fun testTotpUriInContent() {
-        val entry = PasswordEntry(
-            "secret\nusername: test\notpauth://totp/test?secret=JBSWY3DPEHPK3PXP")
-        assertTrue(entry.hasTotp())
-        assertEquals("JBSWY3DPEHPK3PXP", entry.totpSecret)
-    }
-
-    @Test fun testNoHotpUriPresent() {
-        val entry = PasswordEntry("secret\nextra\nlogin: username\ncontent")
-        assertFalse(entry.hasHotp())
-        assertNull(entry.hotpSecret)
-        assertNull(entry.hotpCounter)
-    }
-
-    @Test fun testHotpUriInPassword() {
-        val entry = PasswordEntry("otpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25")
-        assertTrue(entry.hasHotp())
-        assertEquals("JBSWY3DPEHPK3PXP", entry.hotpSecret)
-        assertEquals(25, entry.hotpCounter)
-    }
-
-    @Test fun testHotpUriInContent() {
-        val entry = PasswordEntry(
-            "secret\nusername: test\notpauth://hotp/test?secret=JBSWY3DPEHPK3PXP&counter=25")
-        assertTrue(entry.hasHotp())
-        assertEquals("JBSWY3DPEHPK3PXP", entry.hotpSecret)
-        assertEquals(25, entry.hotpCounter)
-    }
 }

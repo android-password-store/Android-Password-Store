@@ -91,7 +91,6 @@ class UserPreference : AppCompatActivity() {
             val sshKeyPreference = findPreference<Preference>("ssh_key")
             val sshKeygenPreference = findPreference<Preference>("ssh_keygen")
             clearSavedPassPreference = findPreference("clear_saved_pass")
-            val clearHotpIncrementPreference = findPreference<Preference>("hotp_remember_clear_choice")
             val viewSshKeyPreference = findPreference<Preference>("ssh_see_key")
             val deleteRepoPreference = findPreference<Preference>("git_delete_repo")
             val externalGitRepositoryPreference = findPreference<Preference>("git_external")
@@ -138,7 +137,6 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString("git_external_repo", getString(R.string.no_repo_selected))
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
-            clearHotpIncrementPreference?.isVisible = sharedPreferences.getBoolean("hotp_remember_check", false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
                 ?: HashSet()).toTypedArray()
@@ -194,12 +192,6 @@ class UserPreference : AppCompatActivity() {
                         remove("ssh_key_local_passphrase")
                 }
                 updateClearSavedPassphrasePrefs()
-                true
-            }
-
-            clearHotpIncrementPreference?.onPreferenceClickListener = ClickListener {
-                sharedPreferences.edit { putBoolean("hotp_remember_check", false) }
-                it.isVisible = false
                 true
             }
 

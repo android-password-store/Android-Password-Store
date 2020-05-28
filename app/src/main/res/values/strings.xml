@@ -42,14 +42,12 @@
     <string name="git_commit_edit_text">Edit password for %1$s using android password store.</string>
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
-    <string name="git_commit_increment_text">Increment HOTP counter for %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_username_toast_text">Username copied to clipboard</string>
-    <string name="clipboard_otp_toast_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="path_toast_text">Please provide a file path</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
@@ -121,18 +119,11 @@
     <string name="password">Password:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
-    <string name="otp" translatable="false">OTP:</string>
     <string name="edit_password">Edit password</string>
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
-    <string name="copy_otp">Copy OTP code</string>
     <string name="share_as_plaintext">Share as plaintext</string>
     <string name="last_changed">Last changed %s</string>
-    <string name="dialog_update_title">Attention</string>
-    <string name="dialog_update_positive">Update entry</string>
-    <string name="dialog_update_negative">Leave unchanged</string>
-    <string name="dialog_update_body">The HOTP counter is about to be incremented. This change will be committed. If you press "Leave unchanged", the HOTP code will be shown, but the counter will not be changed.</string>
-    <string name="dialog_update_check">Remember my choice</string>
 
     <!-- Preferences -->
     <string name="pref_repository_title">Repository</string>
@@ -316,7 +307,6 @@
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
     <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
-    <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
     <string name="remember_the_passphrase">Remember key passphrase</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>
@@ -324,7 +314,6 @@
     <string name="commit_hash">Commit hash</string>
     <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
-    <string name="hotp_pending">Tap copy to calculate HOTP</string>
     <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
     <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
     <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>
