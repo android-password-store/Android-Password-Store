@@ -811,16 +811,16 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         fun doOnPostExecute() {
-            if (skip)
+            if (skip) return
 
-                if (crypto_password_show != null) {
-                    passwordEntry = null
-                    crypto_password_show.text = ""
-                    crypto_extra_show.text = ""
-                    crypto_extra_show_layout.visibility = View.INVISIBLE
-                    crypto_container_decrypt.visibility = View.INVISIBLE
-                    finish()
-                }
+            if (crypto_password_show != null) {
+                passwordEntry = null
+                crypto_password_show.text = ""
+                crypto_extra_show.text = ""
+                crypto_extra_show_layout.visibility = View.INVISIBLE
+                crypto_container_decrypt.visibility = View.INVISIBLE
+                finish()
+            }
         }
     }
 
