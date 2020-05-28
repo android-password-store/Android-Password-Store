@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
+- **BREAKING**: Remove support for HOTP/TOTP secrets - Please use FIDO keys or a dedicated app
 - Reduce Autofill false positives on username fields by removing "name" from list of heuristic terms
 - Reduced app size
 - Improve IME experience with server config screen
