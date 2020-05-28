@@ -461,6 +461,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Encrypts the password and the extra content
      */
     private fun encrypt(copy: Boolean = false) {
+        editName = crypto_password_file_edit.text.toString().trim()
+        editPass = crypto_password_edit.text.toString()
+        editExtra = crypto_extra_edit.text.toString()
+
         if (editName?.isEmpty() == true) {
             showSnackbar(resources.getString(R.string.file_toast_text))
             return
