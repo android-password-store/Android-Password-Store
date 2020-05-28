@@ -53,14 +53,14 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
         GitAsyncTask(callingActivity, false, this, Intent()).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
     }
 
-    override fun onError(errorMessage: String) {
-        super.onError(errorMessage)
+    override fun onError(err: Exception) {
+        super.onError(err)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage("Error occurred during the sync operation, " +
                 "\nPlease check the FAQ for possible reasons why this error might occur." +
                 callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                errorMessage)
+                err)
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> callingActivity.finish() }
             .show()
     }

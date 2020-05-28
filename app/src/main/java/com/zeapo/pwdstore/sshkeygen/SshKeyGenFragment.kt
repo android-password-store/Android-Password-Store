@@ -17,6 +17,7 @@ import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentSshKeygenBinding
+import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,6 +75,10 @@ class SshKeyGenFragment : Fragment(R.layout.fragment_ssh_keygen) {
         } catch (e: Exception) {
             e.printStackTrace()
             e
+        } finally {
+            requireContext().getEncryptedPrefs("git_operation").edit {
+                remove("ssh_key_local_passphrase")
+            }
         }
         val activity = requireActivity()
         binding.generate.text = getString(R.string.ssh_keygen_generating_done)

@@ -62,10 +62,10 @@ class BreakOutOfDetached(fileDir: File, callingActivity: Activity) : GitOperatio
             .execute(*this.commands.toTypedArray())
     }
 
-    override fun onError(errorMessage: String) {
+    override fun onError(err: Exception) {
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage("Error occurred when checking out another branch operation $errorMessage")
+            .setMessage("Error occurred when checking out another branch operation ${err.message}")
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()
             }.show()
