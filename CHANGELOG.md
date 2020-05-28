@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Add support for ECDSA/ed25519 keys
+- Add support for modern key exchange protocols like diffie-hellman family
+- Move SSH keys from private files to Android Keystore
 - Completely revamped decypted password view
 
 ### Changed
