@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Reduce Autofill false positives on username fields by removing "name" from list of heuristic terms
 - Reduced app size
+- Improve IME experience with server config screen
 
 ## [1.8.1] - 2020-05-24
 
