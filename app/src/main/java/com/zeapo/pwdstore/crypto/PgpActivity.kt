@@ -377,11 +377,29 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         api = api ?: OpenPgpApi(this, mServiceConnection!!.service!!)
     }
 
+    private fun resolveSymlinks(file: File): File {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Only available with Java 8+
+            file.toPath().toRealPath().toFile()
+        } else {
+            // https://www.gnu.org/software/coreutils/manual/html_node/realpath-invocation.html
+            File(try {
+                val process = Runtime.getRuntime().exec(arrayOf("realpath", file.absolutePath))
+                process.inputStream.bufferedReader().useLines {
+                    it.firstOrNull()
+                } ?: return file
+            } catch (error: Exception) {
+                e(error) { "Failed to resolve symlink via 'realpath'" }
+                return file
+            })
+        }
+    }
+
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
         val data = receivedIntent ?: Intent()
         data.action = ACTION_DECRYPT_VERIFY
 
-        val iStream = FileUtils.openInputStream(File(fullPath))
+        val iStream = FileUtils.openInputStream(resolveSymlinks(File(fullPath)))
         val oStream = ByteArrayOutputStream()
 
         lifecycleScope.launch(IO) {
