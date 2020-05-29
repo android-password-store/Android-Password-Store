@@ -22,7 +22,7 @@ android {
         }
     }
 
-    viewBinding.enabled = true
+    buildFeatures.viewBinding = true
 
     defaultConfig {
         applicationId 'dev.msfjarvis.aps'
