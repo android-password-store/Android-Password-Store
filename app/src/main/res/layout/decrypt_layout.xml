@@ -160,56 +160,17 @@
                 app:layout_constraintTop_toBottomOf="@id/crypto_username_show_label"
                 tools:visibility="visible" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/crypto_copy_otp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/crypto_username_show"
-                android:layout_alignParentEnd="true"
-                android:background="?android:attr/windowBackground"
-                android:contentDescription="@string/copy_otp"
-                android:src="@drawable/ic_content_copy"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/crypto_otp_show_label"
-                tools:visibility="visible" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/crypto_otp_show_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/crypto_username_show"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/crypto_copy_otp"
-                android:text="@string/otp"
-                android:textColor="?android:attr/textColor"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/crypto_username_show" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/crypto_otp_show"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/crypto_otp_show_label"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/crypto_copy_otp"
-                android:textColor="?android:attr/textColor"
-                android:textIsSelectable="true"
-                android:typeface="monospace"
-                app:layout_constraintTop_toBottomOf="@id/crypto_otp_show_label" />
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/crypto_extra_show_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/crypto_otp_show"
+                android:layout_below="@id/crypto_username_show"
                 android:layout_alignParentStart="true"
                 android:text="@string/extra_content"
                 android:textColor="?android:attr/textColor"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/crypto_otp_show" />
+                app:layout_constraintTop_toBottomOf="@id/crypto_username_show" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/crypto_extra_show"

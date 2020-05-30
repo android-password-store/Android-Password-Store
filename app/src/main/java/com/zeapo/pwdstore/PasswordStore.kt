@@ -636,15 +636,11 @@ class PasswordStore : AppCompatActivity() {
             when (requestCode) {
                 // if we get here with a RESULT_OK then it's probably OK :)
                 BaseGitActivity.REQUEST_CLONE -> settings.edit { putBoolean("repository_initialized", true) }
-                // if went from decrypt->edit and user saved changes or HOTP counter was
-                // incremented, we need to commitChange
+                // if went from decrypt->edit and user saved changes, we need to commitChange
                 REQUEST_CODE_DECRYPT_AND_VERIFY -> {
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
                         if (data.getStringExtra("OPERATION") == "EDIT") {
                             commitChange(resources.getString(R.string.git_commit_edit_text,
-                                data.extras!!.getString("LONG_NAME")))
-                        } else {
-                            commitChange(resources.getString(R.string.git_commit_increment_text,
                                 data.extras!!.getString("LONG_NAME")))
                         }
                     }

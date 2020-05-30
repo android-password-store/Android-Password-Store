@@ -31,13 +31,11 @@
     <string name="git_commit_edit_text">Editer %1$s depuis le dépôt.</string>
     <string name="git_commit_remove_text">Retirer %1$s de la mémoire.</string>
     <string name="git_commit_move_text">Renommer %1$sà %2$s. </string>
-    <string name="git_commit_increment_text">Incrémenter le compteur HOTP pour %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Aucun prestataire OpenPGP sélectionné !</string>
     <string name="clipboard_password_toast_text">Mot de passe copié dans le presse papier, vous avez %d secondes pour coller celui-ci.</string>
     <string name="clipboard_username_toast_text">Nom d\'utilisateur copié</string>
-    <string name="clipboard_otp_toast_text">Code OTP copié dans le presse-papier</string>
     <string name="file_toast_text">Renseignez un nom de fichier</string>
     <string name="empty_toast_text">Vous ne pouvez pas utiliser un mot de passe vide ou des données supplémentaires vide</string>
 
@@ -47,13 +45,13 @@
     <string name="jgit_error_dialog_text">Message de jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Avez-vous oublié to renseigner votre nom d\'utilisateur ?</string>
+    <string name="forget_username_dialog_text">Avez-vous oublié de renseigner votre nom d\'utilisateur ?</string>
     <string name="ssh_preferences_dialog_text">Vous devez importer ou générer votre fichier de clef SSH dans les préférences</string>
-    <string name="ssh_preferences_dialog_title">Absence de cled SSH</string>
+    <string name="ssh_preferences_dialog_title">Absence de clef SSH</string>
     <string name="ssh_preferences_dialog_import">Importer</string>
     <string name="ssh_preferences_dialog_generate">Générer</string>
     <string name="passphrase_dialog_title">Authentification</string>
-    <string name="passphrase_dialog_text">Saisissez le mot de passe associé à pour votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
+    <string name="passphrase_dialog_text">Saisissez le mot de passe associé à votre clef SSH. Laisser vide si il n\'y a pas de mot de passe.</string>
     <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
 
     <!-- Clone fragment -->
@@ -92,7 +90,7 @@
     <string name="crypto_name_hint">nom</string>
     <string name="crypto_pass_label">Mot de passe</string>
     <string name="crypto_extra_label">Extra</string>
-    <string name="crypto_select">Selectionner</string>
+    <string name="crypto_select">Sélectionner</string>
     <string name="crypto_cancel">Annuler</string>
     <string name="crypto_save">Sauvegarder</string>
     <!-- DECRYPT Layout -->
@@ -103,17 +101,11 @@
     <string name="edit_password">Éditer le mot de passe</string>
     <string name="copy_password">Copier le mot de passe</string>
     <string name="copy_username">Copier le nom d\'utilisateur</string>
-    <string name="copy_otp">Copier le code OTP</string>
     <string name="share_as_plaintext">Partager en clair</string>
     <string name="last_changed">Dernière modification le %s</string>
-    <string name="dialog_update_title">Attention</string>
-    <string name="dialog_update_positive">Mettre à jour l\'entrée</string>
-    <string name="dialog_update_negative">Laisser inchangé</string>
-    <string name="dialog_update_body">Le compteur HOTP est sur le point d’être incrémenté. Ce changement sera engagé. Si vous appuyez sur \"Laisser inchangé\", le code HOTP sera affiché mais le compteur ne sera pas modifié</string>
-    <string name="dialog_update_check">Se souvenir de mon choix</string>
 
     <!-- Preferences -->
-    <string name="pref_edit_server_info">Editer les paramètres du serveur Git</string>
+    <string name="pref_edit_server_info">Éditer les paramètres du serveur Git</string>
     <string name="pref_edit_git_config">Éditer la configuration</string>
     <string name="pref_ssh_title">Importer une clef SSH</string>
     <string name="pref_ssh_keygen_title">Générer une paire de clefs SSH</string>
@@ -218,10 +210,9 @@
     <string name="git_push_other_error">Pousser au dépôt distant sans avance rapide rejetée. Vérifiez la variable receive.denyNonFastForwards dans le fichier de configuration du répertoire de destination.</string>
     <string name="jgit_error_push_dialog_text">Une erreur s\'est produite lors de l\'opération de poussée:</string>
     <string name="hotp_remember_clear_choice">Effacer les préférences enregistrées pour l’incrémentation HOTP</string>
-    <string name="remember_the_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
+    <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
     <string name="hackish_tools">Outils de hack</string>
     <string name="commit_hash">Commettre la clé</string>
     <string name="crypto_extra_edit_hint">nom d\'utilisateur: quelque chose d\'autre contenu supplémentaire</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
-    <string name="hotp_pending">Appuyez sur copie pour calculer le HOTP</string>
 </resources>
