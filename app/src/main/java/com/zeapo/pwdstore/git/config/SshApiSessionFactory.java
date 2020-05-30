@@ -26,6 +26,7 @@ import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.CredentialsProviderUserInfo;
+import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.util.Base64;
@@ -43,7 +44,7 @@ import org.openintents.ssh.authentication.util.SshAuthenticationApiUtils;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class SshApiSessionFactory extends GitConfigSessionFactory {
+public class SshApiSessionFactory extends JschConfigSessionFactory {
     /**
      * Intent request code indicating a completed signature that should be posted to an outstanding
      * ApiIdentity
