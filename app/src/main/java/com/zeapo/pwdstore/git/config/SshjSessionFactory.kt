@@ -37,12 +37,14 @@ sealed class SshAuthData {
     class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
 }
 
-class InteractivePasswordFinder(val askForPassword: (cont: Continuation<String?>, isRetry: Boolean) -> Unit) : PasswordFinder {
+abstract class InteractivePasswordFinder : PasswordFinder {
 
     private var isRetry = false
     private var shouldRetry = true
 
-    override fun reqPassword(resource: Resource<*>?): CharArray {
+    abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
+
+    final override fun reqPassword(resource: Resource<*>?): CharArray {
         val password = runBlocking(Dispatchers.Main) {
             suspendCoroutine<String?> { cont ->
                 askForPassword(cont, isRetry)
@@ -57,7 +59,7 @@ class InteractivePasswordFinder(val askForPassword: (cont: Continuation<String?>
         }
     }
 
-    override fun shouldRetry(resource: Resource<*>?) = shouldRetry
+    final override fun shouldRetry(resource: Resource<*>?) = shouldRetry
 }
 
 class SshjSessionFactory(private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
