@@ -839,7 +839,13 @@ class PasswordStore : AppCompatActivity() {
         private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
 
         fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
-            if (!PasswordRepository.isGitRepo()) return
+            if (!PasswordRepository.isGitRepo()) {
+                if (finishWithResultOnEnd != null) {
+                    activity.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
+                    activity.finish()
+                }
+                return
+            }
             object : GitOperation(getRepositoryDirectory(activity), activity) {
                 override fun execute() {
                     tag(TAG).d { "Committing with message $message" }
