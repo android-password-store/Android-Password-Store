@@ -131,6 +131,10 @@ class GitAsyncTask(
             is Result.Err -> {
                 e(result.err)
                 operation.onError(rootCauseException(result.err))
+                if (finishWithResultOnEnd != null) {
+                    activity?.setResult(Activity.RESULT_CANCELED)
+                    activity?.finish()
+                }
             }
             is Result.Ok -> {
                 operation.onSuccess()
@@ -138,10 +142,10 @@ class GitAsyncTask(
                     activity?.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
                     activity?.finish()
                 }
-                if (refreshListOnEnd) {
-                    (activity as? PasswordStore)?.resetPasswordList()
-                }
             }
+        }
+        if (refreshListOnEnd) {
+            (activity as? PasswordStore)?.resetPasswordList()
         }
     }
 
