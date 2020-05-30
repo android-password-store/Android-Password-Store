@@ -103,6 +103,7 @@ dependencies {
     implementation deps.third_party.jsch
     // FIXME
     implementation files('../libs/sshj-0.29.1-SNAPSHOT.jar')
+    implementation deps.third_party.eddsa
     implementation deps.third_party.bouncycastle
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
