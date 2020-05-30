@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
+import androidx.annotation.StringRes
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -16,7 +17,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.config.ConnectionMode
-import com.zeapo.pwdstore.git.config.GitConfigSessionFactory
 import com.zeapo.pwdstore.git.config.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshAuthData
@@ -24,37 +24,129 @@ import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
+import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.GitCommand
+import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.transport.CredentialItem
+import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
+import org.eclipse.jgit.transport.URIish
 import java.io.File
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+
+
+private class GitOperationCredentialFinder(val callingActivity: Activity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
+
+    override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
+        require(connectionMode == ConnectionMode.Password)
+        val gitOperationPrefs = callingActivity.getEncryptedPrefs("git_operation")
+        val credentialPref: String
+        @StringRes val messageRes: Int
+        @StringRes val hintRes: Int
+        @StringRes val rememberRes: Int
+        @StringRes val errorRes: Int
+        when (connectionMode) {
+            ConnectionMode.SshKey -> {
+                credentialPref = "ssh_key_local_passphrase"
+                messageRes = R.string.passphrase_dialog_text
+                hintRes = R.string.ssh_keygen_passphrase
+                rememberRes = R.string.git_operation_remember_passphrase
+                errorRes = R.string.git_operation_wrong_passphrase
+            }
+            ConnectionMode.Password -> {
+                // Could be either an SSH or an HTTPS password
+                credentialPref = "https_password"
+                messageRes = R.string.password_dialog_text
+                hintRes = R.string.git_operation_hint_password
+                rememberRes = R.string.git_operation_remember_password
+                errorRes = R.string.git_operation_wrong_password
+            }
+            else -> throw IllegalStateException("Only SshKey and Password connection mode ask for passwords")
+        }
+        val storedCredential = gitOperationPrefs.getString(credentialPref, null)
+        if (isRetry)
+            gitOperationPrefs.edit { remove(credentialPref) }
+        if (storedCredential.isNullOrEmpty()) {
+            val layoutInflater = LayoutInflater.from(callingActivity)
+
+            @SuppressLint("InflateParams")
+            val dialogView = layoutInflater.inflate(R.layout.git_credential_layout, null)
+            val editCredential = dialogView.findViewById<TextInputEditText>(R.id.git_auth_credential)
+            editCredential.setHint(hintRes)
+            val rememberCredential = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
+            rememberCredential.setText(rememberRes)
+            if (isRetry)
+                editCredential.error = callingActivity.resources.getString(errorRes)
+            MaterialAlertDialogBuilder(callingActivity).run {
+                setTitle(R.string.passphrase_dialog_title)
+                setMessage(messageRes)
+                setView(dialogView)
+                setPositiveButton(R.string.dialog_ok) { _, _ ->
+                    val credential = editCredential.text.toString()
+                    if (rememberCredential.isChecked) {
+                        gitOperationPrefs.edit {
+                            putString(credentialPref, credential)
+                        }
+                    }
+                    cont.resume(credential)
+                }
+                setNegativeButton(R.string.dialog_cancel) { _, _ ->
+                    cont.resume(null)
+                }
+                setOnCancelListener {
+                    cont.resume(null)
+                }
+                create()
+            }.run {
+                requestInputFocusOnView<TextInputEditText>(R.id.git_auth_credential)
+                show()
+            }
+        } else {
+            cont.resume(storedCredential)
+        }
+    }
+}
 
 /**
  * Creates a new git operation
  *
- * @param fileDir the git working tree directory
+ * @param gitDir the git working tree directory
  * @param callingActivity the calling activity
  */
-abstract class GitOperation(fileDir: File, internal val callingActivity: Activity) {
+abstract class GitOperation(gitDir: File, internal val callingActivity: Activity) {
 
-    protected val repository: Repository? = PasswordRepository.getRepository(fileDir)
-    internal var provider: UsernamePasswordCredentialsProvider? = null
+    protected val repository: Repository? = PasswordRepository.getRepository(gitDir)
+    internal var provider: CredentialsProvider? = null
     internal var command: GitCommand<*>? = null
     private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
 
-    /**
-     * Sets the authentication using user/pwd scheme
-     *
-     * @param username the username
-     * @param password the password
-     * @return the current object
-     */
-    internal open fun setAuthentication(username: String, password: String): GitOperation {
-        SshSessionFactory.setInstance(GitConfigSessionFactory())
-        this.provider = UsernamePasswordCredentialsProvider(username, password)
+    private class PasswordFinderCredentialsProvider(private val username: String, private val passwordFinder: PasswordFinder) : CredentialsProvider() {
+
+        override fun isInteractive() = true
+
+        override fun get(uri: URIish?, vararg items: CredentialItem): Boolean {
+            for (item in items) {
+                when (item) {
+                    is CredentialItem.Username -> item.value = username
+                    is CredentialItem.Password -> item.value = passwordFinder.reqPassword(null)
+                    else -> UnsupportedCredentialItem(uri, item.javaClass.name)
+                }
+            }
+            return true
+        }
+
+        override fun supports(vararg items: CredentialItem) = items.all {
+            it is CredentialItem.Username || it is CredentialItem.Password
+        }
+    }
+
+    private fun withPasswordAuthentication(username: String, passwordFinder: InteractivePasswordFinder): GitOperation {
+        val sessionFactory = SshjSessionFactory(username, SshAuthData.Password(passwordFinder), hostKeyFile)
+        SshSessionFactory.setInstance(sessionFactory)
+        this.provider = PasswordFinderCredentialsProvider(username, passwordFinder)
         return this
     }
 
@@ -65,16 +157,23 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         return this
     }
 
-    /**
-     * Sets the authentication using OpenKeystore scheme
-     *
-     * @param identity The identiy to use
-     * @return the current object
-     */
-    private fun setAuthentication(username: String, identity: SshApiSessionFactory.ApiIdentity?): GitOperation {
+    private fun withOpenKeychainAuthentication(username: String, identity: SshApiSessionFactory.ApiIdentity?): GitOperation {
         SshSessionFactory.setInstance(SshApiSessionFactory(username, identity))
         this.provider = null
         return this
+    }
+
+    private fun getSshKey(make: Boolean) {
+        try {
+            // Ask the UserPreference to provide us with the ssh-key
+            // onResult has to be handled by the callingActivity
+            val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
+            intent.putExtra("operation", if (make) "make_ssh_key" else "get_ssh_key")
+            callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE)
+        } catch (e: Exception) {
+            println("Exception caught :(")
+            e.printStackTrace()
+        }
     }
 
     /**
@@ -82,129 +181,34 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
      */
     abstract fun execute()
 
-    /**
-     * Executes the GitCommand in an async task after creating the authentication
-     *
-     * @param connectionMode the server-connection mode
-     * @param username the username
-     * @param identity the api identity to use for auth in OpenKeychain connection mode
-     */
     fun executeAfterAuthentication(
         connectionMode: ConnectionMode,
         username: String,
         identity: SshApiSessionFactory.ApiIdentity?
     ) {
-        val encryptedSettings = callingActivity.applicationContext.getEncryptedPrefs("git_operation")
         when (connectionMode) {
-            ConnectionMode.SshKey -> {
-                if (!sshKeyFile.exists()) {
-                    MaterialAlertDialogBuilder(callingActivity)
-                        .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
-                        .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
-                        .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
-                            try {
-                                // Ask the UserPreference to provide us with the ssh-key
-                                // onResult has to be handled by the callingActivity
-                                val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
-                                intent.putExtra("operation", "get_ssh_key")
-                                callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE)
-                            } catch (e: Exception) {
-                                println("Exception caught :(")
-                                e.printStackTrace()
-                            }
-                        }
-                        .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
-                            try {
-                                // Duplicated code
-                                val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
-                                intent.putExtra("operation", "make_ssh_key")
-                                callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE)
-                            } catch (e: Exception) {
-                                println("Exception caught :(")
-                                e.printStackTrace()
-                            }
-                        }
-                        .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                            // Finish the blank GitActivity so user doesn't have to press back
-                            callingActivity.finish()
-                        }.show()
-                } else {
-                    withPublicKeyAuthentication(username, InteractivePasswordFinder { cont, isRetry ->
-                        val storedPassphrase = encryptedSettings.getString("ssh_key_local_passphrase", null)
-                        if (isRetry)
-                            encryptedSettings.edit { putString("ssh_key_local_passphrase", null) }
-                        if (storedPassphrase.isNullOrEmpty()) {
-                            val layoutInflater = LayoutInflater.from(callingActivity)
-
-                            @SuppressLint("InflateParams")
-                            val dialogView = layoutInflater.inflate(R.layout.git_passphrase_layout, null)
-                            val editPassphrase = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
-                            val rememberPassphrase = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase)
-                            if (isRetry)
-                                editPassphrase.error = callingActivity.resources.getString(R.string.git_operation_wrong_passphrase)
-                            MaterialAlertDialogBuilder(callingActivity).run {
-                                setTitle(R.string.passphrase_dialog_title)
-                                setMessage(R.string.passphrase_dialog_text)
-                                setView(dialogView)
-                                setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                    val passphrase = editPassphrase.text.toString()
-                                    if (rememberPassphrase.isChecked) {
-                                        encryptedSettings.edit {
-                                            putString("ssh_key_local_passphrase", passphrase)
-                                        }
-                                    }
-                                    cont.resume(passphrase)
-                                }
-                                setNegativeButton(R.string.dialog_cancel) { _, _ ->
-                                    cont.resume(null)
-                                }
-                                setOnCancelListener {
-                                    cont.resume(null)
-                                }
-                                create()
-                            }.run {
-                                requestInputFocusOnView<TextInputEditText>(R.id.git_auth_passphrase)
-                                show()
-                            }
-                        } else {
-                            cont.resume(storedPassphrase)
-                        }
-                    }).execute()
-                }
+            ConnectionMode.SshKey -> if (!sshKeyFile.exists()) {
+                MaterialAlertDialogBuilder(callingActivity)
+                    .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
+                    .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
+                    .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
+                        getSshKey(false)
+                    }
+                    .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
+                        getSshKey(true)
+                    }
+                    .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
+                        // Finish the blank GitActivity so user doesn't have to press back
+                        callingActivity.finish()
+                    }.show()
+            } else {
+                withPublicKeyAuthentication(username, GitOperationCredentialFinder(callingActivity,
+                    connectionMode)).execute()
             }
-            ConnectionMode.OpenKeychain -> {
-                setAuthentication(username, identity).execute()
-            }
-            ConnectionMode.Password -> {
-                @SuppressLint("InflateParams") val dialogView = callingActivity.layoutInflater.inflate(R.layout.git_passphrase_layout, null)
-                val passwordView = dialogView.findViewById<TextInputEditText>(R.id.git_auth_passphrase)
-                val password = encryptedSettings.getString("https_password", null)
-                if (password != null && password.isNotEmpty()) {
-                    setAuthentication(username, password).execute()
-                } else {
-                    val dialog = MaterialAlertDialogBuilder(callingActivity)
-                        .setTitle(callingActivity.resources.getString(R.string.passphrase_dialog_title))
-                        .setMessage(callingActivity.resources.getString(R.string.password_dialog_text))
-                        .setView(dialogView)
-                        .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                            if (dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_passphrase).isChecked) {
-                                encryptedSettings.edit { putString("https_password", passwordView.text.toString()) }
-                            }
-                            // authenticate using the user/pwd and then execute the command
-                            setAuthentication(username, passwordView.text.toString()).execute()
-                        }
-                        .setNegativeButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                            callingActivity.finish()
-                        }
-                        .setOnCancelListener { callingActivity.finish() }
-                        .create()
-                    dialog.requestInputFocusOnView<TextInputEditText>(R.id.git_auth_passphrase)
-                    dialog.show()
-                }
-            }
-            ConnectionMode.None -> {
-                execute()
-            }
+            ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(username, identity).execute()
+            ConnectionMode.Password -> withPasswordAuthentication(
+                username, GitOperationCredentialFinder(callingActivity, connectionMode)).execute()
+            ConnectionMode.None -> execute()
         }
     }
 
@@ -216,17 +220,15 @@ abstract class GitOperation(fileDir: File, internal val callingActivity: Activit
         when (SshSessionFactory.getInstance()) {
             is SshApiSessionFactory -> {
                 PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                    .edit { putString("ssh_openkeystore_keyid", null) }
+                    .edit { remove("ssh_openkeystore_keyid") }
             }
             is SshjSessionFactory -> {
                 callingActivity.applicationContext
                     .getEncryptedPrefs("git_operation")
-                    .edit { remove("ssh_key_local_passphrase") }
-            }
-            is GitConfigSessionFactory -> {
-                callingActivity.applicationContext
-                    .getEncryptedPrefs("git_operation")
-                    .edit { remove("https_password") }
+                    .edit {
+                        remove("ssh_key_local_passphrase")
+                        remove("https_password")
+                    }
             }
         }
     }

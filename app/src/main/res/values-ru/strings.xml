@@ -270,7 +270,8 @@
     <string name="git_push_generic_error">Запись изменений была отклонена удаленным репозиторием, причина:</string>
     <string name="git_push_other_error">Удаленный репозиторий отклонил запись изменений без быстрой перемотки вперед. Проверьте переменную receive.denyNonFastForwards в файле конфигурации репозитория назначения.</string>
     <string name="jgit_error_push_dialog_text">В хоте операции записи изменений возникла ошибка:</string>
-    <string name="remember_the_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
+    <string name="hotp_remember_clear_choice">Очистить сохраненные настройки для увеличения HOTP</string>
+    <string name="git_operation_remember_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
     <string name="hackish_tools">Костыльные инструменты</string>
     <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
     <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
