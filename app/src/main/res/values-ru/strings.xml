@@ -31,14 +31,12 @@
     <string name="git_commit_edit_text">Отредактирован %1$s из хранилища.</string>
     <string name="git_commit_remove_text">Удалить %1$sиз хранилища.</string>
     <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
-    <string name="git_commit_increment_text">Увеличить значение HOTP счетчика для %1$s</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
     <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
     <string name="clipboard_username_toast_text">Имя пользователя скопировано в буфер обмена</string>
-    <string name="clipboard_otp_toast_text">OTP код скопирован в буфер обмена</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
     <string name="path_toast_text">Пожалуйста, задайте путь к файлу</string>
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
@@ -108,14 +106,8 @@
     <string name="edit_password">Редактировать пароль</string>
     <string name="copy_password">Скопировать пароль</string>
     <string name="copy_username">Скопировать имя пользователя</string>
-    <string name="copy_otp">Скопировать OTP код</string>
     <string name="share_as_plaintext">Поделиться в открытом виде</string>
     <string name="last_changed">Последние изменение %s</string>
-    <string name="dialog_update_title">Внимание</string>
-    <string name="dialog_update_positive">Обновить запись</string>
-    <string name="dialog_update_negative">Оставить без изменений</string>
-    <string name="dialog_update_body">HOTP счетчик будет увеличен. Это изменение будет сохранено. Если вы нажмете \"Оставить без изменений\", тогда HOTP код будет показан, но счетчик не изменится.</string>
-    <string name="dialog_update_check">Запомнить мой выбор</string>
 
     <!-- Preferences -->
     <string name="pref_edit_server_info">Изменить настройки сервера git</string>
@@ -286,7 +278,6 @@
     <string name="commit_hash">Хэш-сумма изменений</string>
     <string name="crypto_extra_edit_hint">имя пользователя: какой-то другой дополнительный контент</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
-    <string name="hotp_pending">Нажмите скопировать чтобы расчитать HOTP</string>
     <string name="openkeychain_ssh_api_connect_fail">Ошибка при подключении к сервису OpenKeychain SSH API</string>
     <string name="no_ssh_api_provider">Не найдено SSH API провайдеров. OpenKeychain установлен?</string>
     <string name="ssh_api_pending_intent_failed">Ожидаемое намерение SSH API не удалось</string>

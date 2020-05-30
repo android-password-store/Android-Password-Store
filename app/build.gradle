@@ -123,4 +123,7 @@ dependencies {
     androidTestImplementation deps.testing.androidx.junit
     androidTestImplementation deps.testing.androidx.espresso_core
     androidTestImplementation deps.testing.androidx.espresso_intents
+
+    testImplementation deps.testing.junit
+    testImplementation deps.testing.kotlin_test_junit
 }
