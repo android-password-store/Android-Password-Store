@@ -47,7 +47,7 @@
     <string name="provider_toast_text">No OpenPGP provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
-    <string name="clipboard_username_toast_text">Username copied to clipboard</string>
+    <string name="clipboard_copied_text">Copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="path_toast_text">Please provide a file path</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>

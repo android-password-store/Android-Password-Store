@@ -33,7 +33,6 @@
     <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>
     <string name="clipboard_password_toast_text">Heslo zkopírováno do schránky, máte %d sekund na jeho zkopírování.</string>
     <string name="clipboard_password_no_clear_toast_text">Heslo zkopírováno do schránky</string>
-    <string name="clipboard_username_toast_text">Jméno zkopírováno do schránky</string>
     <string name="file_toast_text">Zadejte prosím jméno souboru</string>
     <string name="path_toast_text">Prosím zadejte cestu k souboru</string>
     <string name="empty_toast_text">Nelze zadat prázdné heslo nebo další obsah</string>

@@ -16,7 +16,6 @@
     <string name="delete">حذف</string>
     <!-- PGPHandler -->
     <string name="provider_toast_text">لم يتم إختيار مزود الأوبن بي جي بي بعد !</string>
-    <string name="clipboard_username_toast_text">تم نسخ إسم المستخدم إلى الحافظة</string>
     <string name="file_toast_text">الرجاء إدخال إسم ملف</string>
     <!-- Git Async Task -->
     <string name="running_dialog_text">جاري تنفيذ الأمر ...</string>

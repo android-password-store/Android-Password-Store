@@ -36,7 +36,6 @@
     <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
     <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
-    <string name="clipboard_username_toast_text">Имя пользователя скопировано в буфер обмена</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
     <string name="path_toast_text">Пожалуйста, задайте путь к файлу</string>
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
