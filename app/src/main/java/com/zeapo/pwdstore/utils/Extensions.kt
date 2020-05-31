@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.utils
 
 import android.app.KeyguardManager
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
@@ -69,4 +70,7 @@ val Context.autofillManager: AutofillManager?
     get() = getSystemService()
 
 val Context.keyguardManager: KeyguardManager?
+    get() = getSystemService()
+
+val Context.clipboardManager: ClipboardManager?
     get() = getSystemService()
