@@ -35,7 +35,6 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Aucun prestataire OpenPGP sélectionné !</string>
     <string name="clipboard_password_toast_text">Mot de passe copié dans le presse papier, vous avez %d secondes pour coller celui-ci.</string>
-    <string name="clipboard_username_toast_text">Nom d\'utilisateur copié</string>
     <string name="file_toast_text">Renseignez un nom de fichier</string>
     <string name="empty_toast_text">Vous ne pouvez pas utiliser un mot de passe vide ou des données supplémentaires vide</string>
 

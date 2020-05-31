@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.crypto
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ClipData
@@ -23,13 +22,9 @@ import android.text.format.DateUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.widget.doOnTextChanged
@@ -48,19 +43,15 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_container_decrypt
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_copy_username
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_show_layout
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_extra_toggle_show
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_last_changed
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_show_label
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_toggle_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_username_show
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_username_show_label
+import kotlinx.android.synthetic.main.decrypt_layout.extra_content
+import kotlinx.android.synthetic.main.decrypt_layout.extra_content_container
+import kotlinx.android.synthetic.main.decrypt_layout.password_text
+import kotlinx.android.synthetic.main.decrypt_layout.password_text_container
+import kotlinx.android.synthetic.main.decrypt_layout.username_text
+import kotlinx.android.synthetic.main.decrypt_layout.username_text_container
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
 import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
@@ -119,7 +110,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val keyIDs get() = _keyIDs
     private var _keyIDs = emptySet<String>()
-    private var mServiceConnection: OpenPgpServiceConnection? = null
+    private var serviceConnection: OpenPgpServiceConnection? = null
     private var delayTask: DelayShow? = null
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -142,8 +133,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             startActivityForResult(intent, OPEN_PGP_BOUND)
         } else {
             // bind to service
-            mServiceConnection = OpenPgpServiceConnection(this, providerPackageName, this)
-            mServiceConnection?.bindToService()
+            serviceConnection = OpenPgpServiceConnection(this, providerPackageName, this)
+            serviceConnection?.bindToService()
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
@@ -156,12 +147,12 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     val clipboard = clipboard ?: return@setOnLongClickListener false
                     val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
                     clipboard.setPrimaryClip(clip)
-                    showSnackbar(this.resources.getString(R.string.clipboard_username_toast_text))
+                    showSnackbar(resources.getString(R.string.clipboard_copied_text))
                     true
                 }
 
                 crypto_password_last_changed.text = try {
-                    this.resources.getString(R.string.last_changed, lastChangedString)
+                    resources.getString(R.string.last_changed, lastChangedString)
                 } catch (e: RuntimeException) {
                     showSnackbar(getString(R.string.get_last_changed_failed))
                     ""
@@ -277,7 +268,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     override fun onDestroy() {
         super.onDestroy()
-        mServiceConnection?.unbindFromService()
+        serviceConnection?.unbindFromService()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -354,7 +345,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun initOpenPgpApi() {
-        api = api ?: OpenPgpApi(this, mServiceConnection!!.service!!)
+        api = api ?: OpenPgpApi(this, serviceConnection!!.service!!)
     }
 
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
@@ -372,7 +363,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             val showPassword = settings.getBoolean("show_password", true)
                             val showExtraContent = settings.getBoolean("show_extra_content", true)
 
-                            crypto_container_decrypt.visibility = View.VISIBLE
+                            password_text_container.visibility = View.VISIBLE
 
                             val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
                             val entry = PasswordEntry(oStream)
@@ -385,61 +376,34 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             }
 
                             if (entry.password.isEmpty()) {
-                                crypto_password_show.visibility = View.GONE
-                                crypto_password_show_label.visibility = View.GONE
+                                password_text_container.visibility = View.GONE
                             } else {
-                                crypto_password_show.visibility = View.VISIBLE
-                                crypto_password_show_label.visibility = View.VISIBLE
-                                crypto_password_show.typeface = monoTypeface
-                                crypto_password_show.text = entry.password
-                            }
-                            crypto_password_show.typeface = monoTypeface
-                            crypto_password_show.text = entry.password
-
-                            crypto_password_toggle_show.visibility = if (showPassword) View.GONE else View.VISIBLE
-                            crypto_password_show.transformationMethod = if (showPassword) {
-                                null
-                            } else {
-                                HoldToShowPasswordTransformation(
-                                    crypto_password_toggle_show,
-                                    Runnable { crypto_password_show.text = entry.password }
-                                )
+                                password_text_container.visibility = View.VISIBLE
+                                password_text.setText(entry.password)
+                                if (!showPassword) {
+                                    password_text.transformationMethod = PasswordTransformationMethod.getInstance()
+                                }
+                                password_text_container.setOnClickListener { copyPasswordToClipBoard() }
+                                password_text.setOnClickListener { copyPasswordToClipBoard() }
                             }
 
                             if (entry.hasExtraContent()) {
-                                crypto_extra_show.typeface = monoTypeface
-                                crypto_extra_show.text = entry.extraContent
-
-                                if (showExtraContent) {
-                                    crypto_extra_show_layout.visibility = View.VISIBLE
-                                    crypto_extra_toggle_show.visibility = View.GONE
-                                    crypto_extra_show.transformationMethod = null
-                                } else {
-                                    crypto_extra_show_layout.visibility = View.GONE
-                                    crypto_extra_toggle_show.visibility = View.VISIBLE
-                                    crypto_extra_toggle_show.setOnCheckedChangeListener { _, _ ->
-                                        crypto_extra_show.text = entry.extraContent
-                                    }
-
-                                    crypto_extra_show.transformationMethod = object : PasswordTransformationMethod() {
-                                        override fun getTransformation(source: CharSequence, view: View): CharSequence {
-                                            return if (crypto_extra_toggle_show.isChecked) source else super.getTransformation(source, view)
-                                        }
-                                    }
+                                extra_content_container.visibility = View.VISIBLE
+                                extra_content.typeface = monoTypeface
+                                extra_content.setText(entry.extraContentWithoutUsername)
+                                if (!showExtraContent) {
+                                    extra_content.transformationMethod = PasswordTransformationMethod.getInstance()
                                 }
+                                extra_content_container.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutUsername) }
+                                extra_content.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutUsername) }
 
                                 if (entry.hasUsername()) {
-                                    crypto_username_show.visibility = View.VISIBLE
-                                    crypto_username_show_label.visibility = View.VISIBLE
-                                    crypto_copy_username.visibility = View.VISIBLE
-
-                                    crypto_copy_username.setOnClickListener { copyUsernameToClipBoard(entry.username!!) }
-                                    crypto_username_show.typeface = monoTypeface
-                                    crypto_username_show.text = entry.username
+                                    username_text.typeface = monoTypeface
+                                    username_text.setText(entry.username)
+                                    username_text_container.setEndIconOnClickListener { copyTextToClipboard(entry.username!!) }
+                                    username_text_container.visibility = View.VISIBLE
                                 } else {
-                                    crypto_username_show.visibility = View.GONE
-                                    crypto_username_show_label.visibility = View.GONE
-                                    crypto_copy_username.visibility = View.GONE
+                                    username_text_container.visibility = View.GONE
                                 }
                             }
 
@@ -657,47 +621,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private inner class HoldToShowPasswordTransformation constructor(button: Button, private val onToggle: Runnable) :
-        PasswordTransformationMethod(), View.OnTouchListener {
-
-        private var shown = false
-
-        init {
-            button.setOnTouchListener(this)
-        }
-
-        override fun getTransformation(charSequence: CharSequence, view: View): CharSequence {
-            return if (shown) charSequence else super.getTransformation("12345", view)
-        }
-
-        override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    shown = true
-                    onToggle.run()
-                }
-                MotionEvent.ACTION_UP -> {
-                    shown = false
-                    onToggle.run()
-                }
-            }
-            return false
-        }
-    }
-
     private fun copyPasswordToClipBoard() {
         val clipboard = clipboard ?: return
-        var pass = passwordEntry?.password
-
-        if (findViewById<TextView>(R.id.crypto_password_show) == null) {
-            if (editPass == null) {
-                return
-            } else {
-                pass = editPass
-            }
-        }
-
+        val pass = passwordEntry?.password
         val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
         clipboard.setPrimaryClip(clip)
 
@@ -710,23 +636,20 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
         if (clearAfter != 0) {
             setTimer()
-            showSnackbar(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
+            showSnackbar(resources.getString(R.string.clipboard_password_toast_text, clearAfter))
         } else {
-            showSnackbar(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
+            showSnackbar(resources.getString(R.string.clipboard_password_no_clear_toast_text))
         }
     }
 
-    private fun copyUsernameToClipBoard(username: String) {
+    private fun copyTextToClipboard(text: String) {
         val clipboard = clipboard ?: return
-        val clip = ClipData.newPlainText("pgp_handler_result_pm", username)
+        val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
         clipboard.setPrimaryClip(clip)
-        showSnackbar(resources.getString(R.string.clipboard_username_toast_text))
+        showSnackbar(resources.getString(R.string.clipboard_copied_text))
     }
 
     private fun shareAsPlaintext() {
-        if (findViewById<View>(R.id.share_password_as_plaintext) == null)
-            return
-
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, passwordEntry?.password)
@@ -800,25 +723,18 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             } catch (e: NumberFormatException) {
                 45
             }
-
-            val container = findViewById<ConstraintLayout>(R.id.crypto_container_decrypt)
-            container?.visibility = View.VISIBLE
-
-            val extraText = findViewById<TextView>(R.id.crypto_extra_show)
-
-            if (extraText?.text?.isNotEmpty() == true)
-                findViewById<View>(R.id.crypto_extra_show_layout)?.visibility = View.VISIBLE
+            password_text_container?.visibility = View.VISIBLE
+            if (extra_content?.text?.isNotEmpty() == true)
+                extra_content_container?.visibility = View.VISIBLE
         }
 
         fun doOnPostExecute() {
             if (skip) return
 
-            if (crypto_password_show != null) {
+            if (password_text != null) {
                 passwordEntry = null
-                crypto_password_show.text = ""
-                crypto_extra_show.text = ""
-                crypto_extra_show_layout.visibility = View.INVISIBLE
-                crypto_container_decrypt.visibility = View.INVISIBLE
+                extra_content_container.visibility = View.INVISIBLE
+                password_text_container.visibility = View.INVISIBLE
                 finish()
             }
         }

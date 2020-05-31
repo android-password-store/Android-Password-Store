@@ -29,7 +29,6 @@
     <string name="provider_toast_text">¡No se ha seleccionado ningún proveedor OpenGPG!</string>
     <string name="clipboard_password_toast_text">Contraseña copiada al portapapeles, tienes %d segundos para pegarla.</string>
     <string name="clipboard_password_no_clear_toast_text">Contraseña copiada al portapapeles</string>
-    <string name="clipboard_username_toast_text">Nombre de usuario copiado al portapapeles</string>
     <string name="file_toast_text">Por favor selecciona un nombre de archivo</string>
     <string name="empty_toast_text">No puedes dejar la contraseña y el contenido extra ambos vacíos</string>
 

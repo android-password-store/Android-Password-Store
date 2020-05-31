@@ -20,7 +20,6 @@
     <!-- PGPHandler -->
     <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
     <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
-    <string name="clipboard_username_toast_text">Benutzername ist in der Zwischenablage</string>
     <string name="file_toast_text">Bitte setze einen Pfad</string>
     <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
 
