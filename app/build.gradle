@@ -22,7 +22,7 @@ android {
         }
     }
 
-    viewBinding.enabled = true
+    buildFeatures.viewBinding = true
 
     defaultConfig {
         applicationId 'dev.msfjarvis.aps'
@@ -107,12 +107,13 @@ dependencies {
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.timberkt
-    implementation deps.third_party.whatthestack
 
     if (isSnapshot()) {
         implementation deps.third_party.leakcanary
+        implementation deps.third_party.whatthestack
     } else {
         debugImplementation deps.third_party.leakcanary
+        debugImplementation deps.third_party.whatthestack
     }
 
     // Testing-only dependencies
