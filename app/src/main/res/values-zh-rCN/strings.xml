@@ -105,7 +105,6 @@
     <string name="pwgen_uppercase">大写</string>
     <string name="pwgen_ambiguous">混淆</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">长度</string>
     <string name="ssh_keygen_passphrase">口令</string>
     <string name="ssh_keygen_comment">备注</string>
     <string name="ssh_keygen_generate">生成</string>

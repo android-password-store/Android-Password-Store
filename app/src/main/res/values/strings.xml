@@ -210,7 +210,7 @@
     <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
 
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Length</string>
+    <string name="ssh_keygen_type">Key type</string>
     <string name="ssh_keygen_passphrase">Passphrase</string>
     <string name="ssh_keygen_comment">Comment</string>
     <string name="ssh_keygen_generate">Generate</string>
@@ -218,8 +218,9 @@
     <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
     <string name="ssh_keygen_show_passphrase">Show passphrase</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
-    <string name="key_label_rsa_2048" translatable="false">RSA 2048</string>
-    <string name="key_label_rsa_3072" translatable="false">RSA 3072</string>
+    <string name="key_label_rsa_2048" translatable="false">RSA-2K</string>
+    <string name="key_label_rsa_3072" translatable="false">RSA-3K</string>
+    <string name="key_label_ecdsa_256" translatable="false">P-256</string>
     <string name="key_label_ecdsa_384" translatable="false">P-384</string>
 
     <!-- Misc -->

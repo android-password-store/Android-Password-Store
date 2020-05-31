@@ -148,7 +148,6 @@
     <string name="pwgen_uppercase">Velká písmena</string>
     <string name="pwgen_ambiguous">Dvouznačné</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Délka</string>
     <string name="ssh_keygen_passphrase">Bezpečnostní fráze</string>
     <string name="ssh_keygen_comment">Komentář</string>
     <string name="ssh_keygen_generate">Generovat</string>

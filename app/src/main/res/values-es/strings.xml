@@ -154,7 +154,6 @@
     <string name="pwgen_length_too_short_error">Longitud demasiado corta para el criterio seleccionado</string>
 
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Longitud</string>
     <string name="ssh_keygen_passphrase">Contraseña</string>
     <string name="ssh_keygen_comment">Comentario</string>
     <string name="ssh_keygen_generate">Generar</string>

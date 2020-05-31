@@ -100,7 +100,6 @@
     <string name="pwgen_ambiguous">مبهمة</string>
     <string name="pwgen_pronounceable">منطوقة</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">الطول</string>
     <string name="ssh_keygen_passphrase">العبارة السرية</string>
     <string name="ssh_keygen_comment">تعليق</string>
     <string name="ssh_keygen_generate">توليد</string>

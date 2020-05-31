@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:gravity="center_vertical"
-            android:text="@string/ssh_keygen_length" />
+            android:text="@string/ssh_keygen_type" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/key_length_group"
@@ -42,6 +42,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/key_label_rsa_3072" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/key_type_ecdsa_256"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/key_label_ecdsa_256" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/key_type_ecdsa_384"

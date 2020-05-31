@@ -155,7 +155,6 @@
     <string name="pwgen_ambiguous">Ambigus</string>
     <string name="pwgen_pronounceable">Prononçable</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Taille</string>
     <string name="ssh_keygen_passphrase">Mot de passe</string>
     <string name="ssh_keygen_comment">Commentaire</string>
     <string name="ssh_keygen_generate">Générer</string>

@@ -108,7 +108,6 @@
     <string name="pwgen_ambiguous">あいまい</string>
     <string name="pwgen_pronounceable">発音可能</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">長さ</string>
     <string name="ssh_keygen_passphrase">パスフレーズ</string>
     <string name="ssh_keygen_comment">コメント</string>
     <string name="ssh_keygen_generate">生成</string>
