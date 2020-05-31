@@ -215,6 +215,7 @@
     <string name="ssh_keygen_comment">Comment</string>
     <string name="ssh_keygen_generate">Generate</string>
     <string name="ssh_keygen_copy">Copy</string>
+    <string name="ssh_keygen_copied_key">Public key copied to clipboard</string>
     <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
     <string name="ssh_keygen_show_passphrase">Show passphrase</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
