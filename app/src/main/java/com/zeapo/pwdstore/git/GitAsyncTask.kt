@@ -133,7 +133,6 @@ class GitAsyncTask(
                 operation.onError(rootCauseException(result.err))
                 if (finishWithResultOnEnd != null) {
                     activity?.setResult(Activity.RESULT_CANCELED)
-                    activity?.finish()
                 }
             }
             is Result.Ok -> {
