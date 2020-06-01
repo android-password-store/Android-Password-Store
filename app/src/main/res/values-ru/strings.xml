@@ -46,7 +46,6 @@
     <string name="jgit_error_dialog_text">Сообщение от jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Вы забыли указать имя пользователя?</string>
     <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте новый SSH ключ в настройках</string>
     <string name="ssh_preferences_dialog_title">Нет SSH ключа</string>
     <string name="ssh_preferences_dialog_import">Импортировать</string>
@@ -69,21 +68,13 @@
     <string name="server_protocol">Протокол</string>
     <string name="server_url">URL сервера</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Путь к репозиторию</string>
-    <string name="server_path_hint">путь/до/пароля</string>
     <string name="server_user">Имя пользователя</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">Получившийся URL</string>
     <string name="connection_mode">Тип авторизации</string>
-
-    <string name="warn_malformed_url_port">При использовании нестандартных портов, укажите полный путь (начинается с "/")</string>
 
     <string name="git_user_name_hint">Имя пользователя</string>
     <string name="git_user_email">Электронная почта</string>
-    <string name="git_user_email_hint">электронная почта</string>
     <string name="invalid_email_dialog_text">Введите корректный email</string>
     <string name="clone_button">Клонировать</string>
 
@@ -149,7 +140,6 @@
     <string name="pref_external_repository">Внешний репозиторий</string>
     <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
     <string name="pref_select_external_repository">Выбрать внешний репозиторий</string>
-    <string name="prefs_use_default_file_picker">Использовать стандартное окно выбора файлов</string>
     <string name="prefs_export_passwords_title">Экспортировать пароли</string>
     <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
     <string name="prefs_version">Версия</string>
@@ -193,13 +183,11 @@
     <string name="ssh_keygen_generate">Сгенерировать</string>
     <string name="ssh_keygen_copy">Скоприровать</string>
     <string name="ssh_keygen_tip">Поместите публичный ключ на сервер Git</string>
-    <string name="ssh_keygen_show_passphrase">Показать пароль</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Да</string>
     <string name="dialog_no">Нет</string>
-    <string name="dialog_oops">Упс…</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="git_sync">Синхронизировать репозиторий</string>
     <string name="git_pull">Пулл с удаленного сервера</string>
@@ -215,7 +203,6 @@
     <string name="show_password">Показать пароль</string>
     <string name="show_extra">Показать дополнительную информацию</string>
     <string name="hide_extra">Скрыть расширенный контекст</string>
-    <string name="repository_uri">URI репозитория</string>
     <string name="app_icon_hint">Иконка приложения</string>
     <string name="folder_icon_hint">Иконка папки</string>
 
@@ -226,9 +213,7 @@
     <string name="oreo_autofill_save_internal_error">Сохранение не удалось из-за внутренней ошибки</string>
     <string name="oreo_autofill_save_app_not_supported">Это приложение в настоящее время не поддерживается</string>
     <string name="oreo_autofill_save_passwords_dont_match">Пароли не совпадают</string>
-    <string name="oreo_autofill_save_invalid_password">Невозможно извлечь пароль, пожалуйста, используйте другой браузер</string>
     <string name="oreo_autofill_generate_password">Сгенерировать пароль...</string>
-    <string name="oreo_autofill_publisher_changed">Издатель приложения изменился; это может быть попытка фишинга.</string>
     <string name="oreo_autofill_max_matches_reached">Достигнуто максимальное количество совпадений (%1$d); очистите совпадения перед тем как добавите новые.</string>
     <string name="oreo_autofill_warning_publisher_header">Издатель приложения изменился с тех пор как вы первый раз связали с ним запись хранилища паролей:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>Установленное приложение может попытаться украсть ваши учетные данные, выдавая себя за доверенное приложение</b>\n\nПопробуйте удалить или переустановить  приложение из доверенного источника, такого как Play Store, Amazon Appstore, F-Droid или магазин приложений производителя вашего смартфона.</string>
@@ -275,7 +260,6 @@
     <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
     <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
     <string name="commit_hash">Хэш-сумма изменений</string>
-    <string name="crypto_extra_edit_hint">имя пользователя: какой-то другой дополнительный контент</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="openkeychain_ssh_api_connect_fail">Ошибка при подключении к сервису OpenKeychain SSH API</string>
     <string name="no_ssh_api_provider">Не найдено SSH API провайдеров. OpenKeychain установлен?</string>

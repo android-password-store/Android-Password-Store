@@ -58,7 +58,6 @@
     <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Did you forget to specify a username?</string>
     <string name="set_information_dialog_text">Please fix the remote server configuration in settings before proceeding</string>
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
     <string name="ssh_preferences_dialog_title">No SSH key</string>
@@ -81,26 +80,15 @@
     <string name="server_name">Server</string>
     <string name="server_protocol">Protocol</string>
     <string name="server_url">Server URL</string>
-    <string name="server_url_hint" translatable="false">server.com</string>
     <string name="server_port_hint">Port</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Repo path</string>
-    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">Username</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">Resulting URL</string>
     <string name="connection_mode">Authentication Mode</string>
 
-    <string name="warn_malformed_url_port">When using custom ports, provide an absolute path (starts with "/")</string>
-
     <!-- Git Config fragment -->
-    <string name="git_config" translatable="false">Git config</string>
-    <string name="git_user_name" translatable="false">Username</string>
     <string name="git_user_name_hint">Username</string>
     <string name="git_user_email">Email</string>
-    <string name="git_user_email_hint">email</string>
     <string name="invalid_email_dialog_text">Please enter a valid email address</string>
     <string name="clone_button">Clone</string>
 
@@ -172,7 +160,6 @@
     <string name="pref_external_repository">External repository</string>
     <string name="pref_external_repository_summary">Use an external password repository</string>
     <string name="pref_select_external_repository">Select external repository</string>
-    <string name="prefs_use_default_file_picker">Use default file picker</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
     <string name="prefs_version">Version</string>
@@ -216,7 +203,6 @@
     <string name="ssh_keygen_generate">Generate</string>
     <string name="ssh_keygen_copy">Copy</string>
     <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
-    <string name="ssh_keygen_show_passphrase">Show passphrase</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
     <string name="ssh_keygen_generating_done">Done!</string>
     <string name="key_length_2048" translatable="false">2048</string>
@@ -228,7 +214,6 @@
     <string name="dialog_no">No</string>
     <string name="dialog_positive">Go to Settings</string>
     <string name="dialog_negative">Go back</string>
-    <string name="dialog_oops">Oops…</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
@@ -244,7 +229,6 @@
     <string name="show_password">Show password</string>
     <string name="show_extra">Show extra content</string>
     <string name="hide_extra">Hide extra content</string>
-    <string name="repository_uri">Repository URI</string>
     <string name="app_icon_hint">App icon</string>
     <string name="folder_icon_hint">Folder icon</string>
 
@@ -257,9 +241,7 @@
     <string name="oreo_autofill_save_internal_error">Save failed due to an internal error</string>
     <string name="oreo_autofill_save_app_not_supported">This app is currently not supported</string>
     <string name="oreo_autofill_save_passwords_dont_match">Passwords don\'t match</string>
-    <string name="oreo_autofill_save_invalid_password">Couldn\'t extract password, please use a different browser for now</string>
     <string name="oreo_autofill_generate_password">Generate password…</string>
-    <string name="oreo_autofill_publisher_changed">The app\'s publisher has changed; this may be a phishing attempt.</string>
     <string name="oreo_autofill_max_matches_reached">Maximum number of matches (%1$d) reached; clear matches before adding new ones.</string>
     <string name="oreo_autofill_warning_publisher_header">This app\'s publisher has changed since you first associated a Password Store entry with it:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>The currently installed app may be trying to steal your credentials by pretending to be a trusted app.</b>\n\nTry to uninstall and reinstall the app from a trusted source, such as the Play Store, Amazon Appstore, F-Droid, or your phone manufacturer\'s store.</string>
@@ -313,7 +295,6 @@
     <string name="abort_rebase">Abort rebase and push new branch</string>
     <string name="reset_to_remote">Hard reset to remote branch</string>
     <string name="commit_hash">Commit hash</string>
-    <string name="crypto_extra_edit_hint">username: something other extra content</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
     <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
@@ -373,4 +354,9 @@
     <string name="preference_default_username_title">Default username</string>
     <string name="git_operation_remember_password">Remember password</string>
     <string name="git_operation_hint_password">Password</string>
+
+    <!-- OpenKeychain errors -->
+    <string name="openpgp_error_wrong_passphrase">Incorrect passphrase</string>
+    <string name="openpgp_error_no_user_ids">No matching PGP keys found</string>
+    <string name="openpgp_error_unknown">Error from OpenKeyChain : %s</string>
 </resources>

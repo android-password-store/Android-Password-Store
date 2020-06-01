@@ -43,21 +43,20 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
-import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_last_changed
 import kotlinx.android.synthetic.main.decrypt_layout.extra_content
 import kotlinx.android.synthetic.main.decrypt_layout.extra_content_container
+import kotlinx.android.synthetic.main.decrypt_layout.password_category
+import kotlinx.android.synthetic.main.decrypt_layout.password_file
+import kotlinx.android.synthetic.main.decrypt_layout.password_last_changed
 import kotlinx.android.synthetic.main.decrypt_layout.password_text
 import kotlinx.android.synthetic.main.decrypt_layout.password_text_container
 import kotlinx.android.synthetic.main.decrypt_layout.username_text
 import kotlinx.android.synthetic.main.decrypt_layout.username_text_container
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_extra_edit
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_category
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_edit
-import kotlinx.android.synthetic.main.encrypt_layout.crypto_password_file_edit
-import kotlinx.android.synthetic.main.encrypt_layout.encrypt_username
-import kotlinx.android.synthetic.main.encrypt_layout.generate_password
+import kotlinx.android.synthetic.main.password_creation_activity.crypto_extra_edit
+import kotlinx.android.synthetic.main.password_creation_activity.crypto_password_category
+import kotlinx.android.synthetic.main.password_creation_activity.crypto_password_edit
+import kotlinx.android.synthetic.main.password_creation_activity.encrypt_username
+import kotlinx.android.synthetic.main.password_creation_activity.generate_password
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -141,9 +140,9 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         when (operation) {
             "DECRYPT", "EDIT" -> {
                 setContentView(R.layout.decrypt_layout)
-                crypto_password_category_decrypt.text = relativeParentPath
-                crypto_password_file.text = name
-                crypto_password_file.setOnLongClickListener {
+                password_category.text = relativeParentPath
+                password_file.text = name
+                password_file.setOnLongClickListener {
                     val clipboard = clipboard ?: return@setOnLongClickListener false
                     val clip = ClipData.newPlainText("pgp_handler_result_pm", name)
                     clipboard.setPrimaryClip(clip)
@@ -151,7 +150,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     true
                 }
 
-                crypto_password_last_changed.text = try {
+                password_last_changed.text = try {
                     resources.getString(R.string.last_changed, lastChangedString)
                 } catch (e: RuntimeException) {
                     showSnackbar(getString(R.string.get_last_changed_failed))
@@ -159,7 +158,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 }
             }
             "ENCRYPT" -> {
-                setContentView(R.layout.encrypt_layout)
+                setContentView(R.layout.password_creation_activity)
 
                 generate_password?.setOnClickListener {
                     generatePassword()
@@ -182,7 +181,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                     else
                         setText(path)
                 }
-                suggestedName?.let { crypto_password_file_edit.setText(it) }
+                suggestedName?.let { crypto_password_edit.setText(it) }
                 // Allow the user to quickly switch between storing the username as the filename or
                 // in the encrypted extras. This only makes sense if the directory structure is
                 // FileBased.
@@ -195,10 +194,10 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             if (isChecked) {
                                 // User wants to enable username encryption, so we add it to the
                                 // encrypted extras as the first line.
-                                val username = crypto_password_file_edit.text!!.toString()
+                                val username = crypto_password_edit.text!!.toString()
                                 val extras = "username:$username\n${crypto_extra_edit.text!!}"
 
-                                crypto_password_file_edit.setText("")
+                                crypto_password_edit.setText("")
                                 crypto_extra_edit.setText(extras)
                             } else {
                                 // User wants to disable username encryption, so we extract the
@@ -210,14 +209,14 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                                 // updateEncryptUsernameState, but it could still happen due to
                                 // input lag.
                                 if (username != null) {
-                                    crypto_password_file_edit.setText(username)
+                                    crypto_password_edit.setText(username)
                                     crypto_extra_edit.setText(entry.extraContentWithoutUsername)
                                 }
                             }
                             updateEncryptUsernameState()
                         }
                     }
-                    crypto_password_file_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    crypto_password_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
                     crypto_extra_edit.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
                     updateEncryptUsernameState()
                 }
@@ -238,7 +237,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         encrypt_username.apply {
             if (visibility != View.VISIBLE)
                 return
-            val hasUsernameInFileName = crypto_password_file_edit.text!!.toString().isNotBlank()
+            val hasUsernameInFileName = crypto_password_edit.text!!.toString().isNotBlank()
             // Use PasswordEntry to parse extras for username
             val entry = PasswordEntry("PLACEHOLDER\n${crypto_extra_edit.text!!}")
             val hasUsernameInExtras = entry.hasUsername()
@@ -362,9 +361,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         try {
                             val showPassword = settings.getBoolean("show_password", true)
                             val showExtraContent = settings.getBoolean("show_extra_content", true)
-
-                            password_text_container.visibility = View.VISIBLE
-
                             val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
                             val entry = PasswordEntry(oStream)
 
@@ -425,7 +421,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Encrypts the password and the extra content
      */
     private fun encrypt(copy: Boolean = false) {
-        editName = crypto_password_file_edit.text.toString().trim()
+        editName = crypto_password_edit.text.toString().trim()
         editPass = crypto_password_edit.text.toString()
         editExtra = crypto_extra_edit.text.toString()
 
@@ -519,7 +515,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
      * Opens EncryptActivity with the information for this file to be edited
      */
     private fun editPassword() {
-        setContentView(R.layout.encrypt_layout)
+        setContentView(R.layout.password_creation_activity)
         generate_password?.setOnClickListener {
             when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
                 KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
@@ -538,8 +534,8 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         crypto_extra_edit.typeface = monoTypeface
 
         crypto_password_category.setText(relativeParentPath)
-        crypto_password_file_edit.setText(name)
-        crypto_password_file_edit.isEnabled = false
+        crypto_password_edit.setText(name)
+        crypto_password_edit.isEnabled = false
 
         delayTask?.cancelAndSignal(true)
 

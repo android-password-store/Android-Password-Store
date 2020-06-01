@@ -44,7 +44,6 @@
     <string name="jgit_error_dialog_text">Message de jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Avez-vous oublié de renseigner votre nom d\'utilisateur ?</string>
     <string name="ssh_preferences_dialog_text">Vous devez importer ou générer votre fichier de clef SSH dans les préférences</string>
     <string name="ssh_preferences_dialog_title">Absence de clef SSH</string>
     <string name="ssh_preferences_dialog_import">Importer</string>
@@ -67,21 +66,13 @@
     <string name="server_protocol">Protocole</string>
     <string name="server_url">URL du serveur</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Chemin du dépôt</string>
-    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">Nom d\'utilisateur</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">URL finale</string>
     <string name="connection_mode">Méthode d\'authentification</string>
-
-    <string name="warn_malformed_url_port">Lors de l\'utilisation d\'un numéro de port personnalisé, fournissez un chemin absolu  (commençant par "/")</string>
 
     <string name="git_user_name_hint">Nom d\'utilisateur</string>
     <string name="git_user_email">Email</string>
-    <string name="git_user_email_hint">email</string>
     <string name="invalid_email_dialog_text">Merci de saisir une adresse mail valide</string>
     <string name="clone_button">Cloner !</string>
 
@@ -139,7 +130,6 @@
     <string name="pref_external_repository">Dépôt externe</string>
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
     <string name="pref_select_external_repository">Choisissez un dépôt externe</string>
-    <string name="prefs_use_default_file_picker">Utiliser le selecteur de fichier par défaut</string>
     <string name="prefs_export_passwords_title">Exporter les mots de passe</string>
     <string name="prefs_export_passwords_summary">Exporter les mots de passe (chiffrés) vers un répertoire externe</string>
     <string name="prefs_version">Version</string>
@@ -161,13 +151,11 @@
     <string name="ssh_keygen_generate">Générer</string>
     <string name="ssh_keygen_copy">Copier</string>
     <string name="ssh_keygen_tip">Enregistrez cette clef publique sur votre serveur Git.</string>
-    <string name="ssh_keygen_show_passphrase">Afficher le mot de passe</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Oui</string>
     <string name="dialog_no">Non</string>
-    <string name="dialog_oops">Oups…</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="git_sync">Synchronisation du dépôt</string>
     <string name="git_pull">Importer du serveur</string>
@@ -182,7 +170,6 @@
     <string name="send_plaintext_password_to">Envoyer le mot de passe en clair via…</string>
     <string name="show_password">Montrer le mot de passe</string>
     <string name="show_extra">Afficher le contenu supplémentaire</string>
-    <string name="repository_uri">Adresse du dépot</string>
     <string name="app_icon_hint">Icône de l\'application</string>
     <string name="folder_icon_hint">Icône du dossier</string>
 
@@ -212,6 +199,5 @@
     <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
     <string name="hackish_tools">Outils de hack</string>
     <string name="commit_hash">Commettre la clé</string>
-    <string name="crypto_extra_edit_hint">nom d\'utilisateur: quelque chose d\'autre contenu supplémentaire</string>
     <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>

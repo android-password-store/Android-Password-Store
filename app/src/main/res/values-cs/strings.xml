@@ -43,7 +43,6 @@
     <string name="jgit_error_dialog_text">Zpráva od jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Zapomněli jste uvést přihlašovací jméno?</string>
     <string name="ssh_preferences_dialog_text">Importujte nebo si prosím vygenerujte svůj SSH klíč v nastavení aplikace</string>
     <string name="ssh_preferences_dialog_title">Žádný SSH klíč</string>
     <string name="ssh_preferences_dialog_import">Import</string>
@@ -64,21 +63,13 @@
     <string name="server_protocol">Protokol</string>
     <string name="server_url">URL serveru</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Cesta k repozitáři</string>
-    <string name="server_path_hint">cesta/k/heslům</string>
     <string name="server_user">Jméno</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">Výsledná URL</string>
     <string name="connection_mode">Mód ověření</string>
-
-    <string name="warn_malformed_url_port">Při použití vlastního portu, zadejte absolutní cestu (začíná "/")</string>
 
     <string name="git_user_name_hint">Jméno</string>
     <string name="git_user_email">Email</string>
-    <string name="git_user_email_hint">email</string>
     <string name="invalid_email_dialog_text">Zadejte prosím platnou emailovou adresu</string>
     <string name="clone_button">Klonovat!</string>
 
@@ -154,13 +145,11 @@
     <string name="ssh_keygen_generate">Generovat</string>
     <string name="ssh_keygen_copy">Kopírovat</string>
     <string name="ssh_keygen_tip">Přidat tento veřejný klíč na Git server.</string>
-    <string name="ssh_keygen_show_passphrase">Zobrazit bezpečnostní frázi</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Ano</string>
     <string name="dialog_no">Ne</string>
-    <string name="dialog_oops">Ajaj…</string>
     <string name="dialog_cancel">Zrušit</string>
     <string name="git_sync">Synchronizovat repozitář</string>
     <string name="git_pull">Stáhnout ze serveru</string>

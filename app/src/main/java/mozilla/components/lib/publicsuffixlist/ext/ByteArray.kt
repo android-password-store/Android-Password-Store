@@ -15,7 +15,7 @@ private const val BITMASK = 0xff.toByte()
  * Performs a binary search for the provided [labels] on the [ByteArray]'s data.
  *
  * This algorithm is based on OkHttp's PublicSuffixDatabase class:
- * https://github.com/square/okhttp/blob/master/okhttp/src/main/java/okhttp3/internal/publicsuffix/PublicSuffixDatabase.java
+ * https://github.com/square/okhttp/blob/1977136/okhttp/src/main/kotlin/okhttp3/internal/publicsuffix/PublicSuffixDatabase.kt
  */
 @Suppress("ComplexMethod", "NestedBlockDepth")
 internal fun ByteArray.binarySearch(labels: List<ByteArray>, labelIndex: Int): String? {

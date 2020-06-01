@@ -64,6 +64,17 @@
             android:label="@string/action_settings"
             android:parentActivityName=".PasswordStore" />
 
+        <activity
+            android:name=".crypto.PasswordCreationActivity"
+            android:label="@string/new_password_title"
+            android:parentActivityName=".PasswordStore"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".crypto.DecryptActivity"
+            android:parentActivityName=".PasswordStore"
+            android:windowSoftInputMode="adjustResize" />
+
         <service
             android:name=".autofill.AutofillService"
             android:enabled="@bool/enable_accessibility_autofill"

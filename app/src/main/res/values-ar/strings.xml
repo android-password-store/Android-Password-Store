@@ -22,7 +22,6 @@
     <string name="jgit_error_dialog_text">رسالة مِن jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">هل نسيت إدخال إسم المستخدم ؟</string>
     <string name="ssh_preferences_dialog_title">خال من مفاتيح الـ SSH</string>
     <string name="ssh_preferences_dialog_import">إستيراد</string>
     <string name="ssh_preferences_dialog_generate">توليد</string>
@@ -34,14 +33,9 @@
     <string name="server_protocol">البروتوكول</string>
     <string name="server_url">عنوان الخادوم</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">مسار المستودع</string>
-    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">إسم المستخدم</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">عنوان الرابط الناتج</string>
     <string name="connection_mode">نوع المصادقة</string>
 
     <string name="git_user_name_hint">إسم المستخدم</string>
@@ -87,7 +81,6 @@
     <string name="pref_external_repository">مستودع تخزين خارجي</string>
     <string name="pref_external_repository_summary">إستخدم كلمة مرور المستودع الخارجي</string>
     <string name="pref_select_external_repository">إختيار مستودع التخزين الخارجي</string>
-    <string name="prefs_use_default_file_picker">إستخدم أداة إختيار الملفات الإفتراضي</string>
     <string name="prefs_export_passwords_title">تصدير كلمات السر</string>
     <string name="prefs_version">النسخة</string>
 
@@ -105,7 +98,6 @@
     <string name="ssh_keygen_comment">تعليق</string>
     <string name="ssh_keygen_generate">توليد</string>
     <string name="ssh_keygen_copy">نسخ</string>
-    <string name="ssh_keygen_show_passphrase">إظهار العبارة السرية</string>
 
     <!-- Misc -->
     <string name="dialog_ok">حسناً</string>
@@ -119,7 +111,6 @@
     <string name="refresh_list">تحديث القائمة</string>
     <string name="show_password">إظهار كلمة السر</string>
     <string name="show_extra">إظهار المزيد من المحتوى</string>
-    <string name="repository_uri">عنوان المستودع</string>
     <string name="app_icon_hint">أيقونة التطبيق</string>
     <string name="folder_icon_hint">أيقونة المجلد</string>
 
