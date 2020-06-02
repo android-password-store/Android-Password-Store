@@ -40,7 +40,6 @@ import kotlin.coroutines.resume
 private class GitOperationCredentialFinder(val callingActivity: Activity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
-        require(connectionMode == ConnectionMode.Password)
         val gitOperationPrefs = callingActivity.getEncryptedPrefs("git_operation")
         val credentialPref: String
         @StringRes val messageRes: Int
