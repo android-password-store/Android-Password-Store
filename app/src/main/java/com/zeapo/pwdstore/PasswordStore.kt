@@ -76,7 +76,7 @@ import java.io.File
 import java.lang.Character.UnicodeBlock
 import java.util.Stack
 
-class PasswordStore : AppCompatActivity() {
+class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     private lateinit var activity: PasswordStore
     private lateinit var searchItem: MenuItem
@@ -126,7 +126,6 @@ class PasswordStore : AppCompatActivity() {
             savedInstance = null
         }
         super.onCreate(savedInstance)
-        setContentView(R.layout.activity_pwdstore)
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&

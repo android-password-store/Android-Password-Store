@@ -15,7 +15,6 @@ import android.text.format.DateUtils
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
@@ -32,7 +31,7 @@ import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
 @Suppress("Registered")
-open class BasePgpActivity(@LayoutRes layoutRes: Int) : AppCompatActivity(layoutRes), OpenPgpServiceConnection.OnBound {
+open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
     val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
     val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }

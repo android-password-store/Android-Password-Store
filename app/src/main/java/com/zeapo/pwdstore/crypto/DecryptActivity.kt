@@ -27,7 +27,7 @@ import org.openintents.openpgp.IOpenPgpService2
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class DecryptActivity : BasePgpActivity(R.layout.decrypt_layout), OpenPgpServiceConnection.OnBound {
+class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     private val binding by viewBinding(DecryptLayoutBinding::inflate)
 
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }

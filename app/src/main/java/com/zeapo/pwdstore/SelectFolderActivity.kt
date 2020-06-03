@@ -10,20 +10,16 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import com.zeapo.pwdstore.utils.PasswordRepository
 
 // TODO more work needed, this is just an extraction from PgpHandler
 
-class SelectFolderActivity : AppCompatActivity() {
+class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
     private lateinit var passwordList: SelectFolderFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.select_folder_layout)
-
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
 
         passwordList = SelectFolderFragment()
         val args = Bundle()
@@ -33,10 +29,11 @@ class SelectFolderActivity : AppCompatActivity() {
 
         supportActionBar?.show()
 
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-        fragmentTransaction.replace(R.id.pgp_handler_linearlayout, passwordList, "PasswordsList")
-        fragmentTransaction.commit()
+        supportFragmentManager.commit {
+            replace(R.id.pgp_handler_linearlayout, passwordList, "PasswordsList")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,8 +42,7 @@ class SelectFolderActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
+        when (item.itemId) {
             android.R.id.home -> {
                 setResult(Activity.RESULT_CANCELED)
                 finish()

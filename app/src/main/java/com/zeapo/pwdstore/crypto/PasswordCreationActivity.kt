@@ -31,7 +31,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.Charset
 
-class PasswordCreationActivity : BasePgpActivity(R.layout.password_creation_activity), OpenPgpServiceConnection.OnBound {
+class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
 
@@ -44,6 +44,7 @@ class PasswordCreationActivity : BasePgpActivity(R.layout.password_creation_acti
         super.onCreate(savedInstanceState)
         bindToOpenKeychain(this)
         with(binding) {
+            setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
 
             cryptoPasswordCategory.apply {
