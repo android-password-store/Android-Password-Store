@@ -160,6 +160,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     passwordTextContainer.visibility = View.GONE
                                 } else {
                                     passwordTextContainer.visibility = View.VISIBLE
+                                    passwordText.typeface = monoTypeface
+                                    passwordText.setText(entry.password)
                                     if (!showPassword) {
                                         passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
                                     }
