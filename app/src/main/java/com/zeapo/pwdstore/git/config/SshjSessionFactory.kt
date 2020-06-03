@@ -39,10 +39,15 @@ sealed class SshAuthData {
 
 abstract class InteractivePasswordFinder : PasswordFinder {
 
+    abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
+
     private var isRetry = false
     private var shouldRetry = true
 
-    abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
+    fun reset() {
+        isRetry = false
+        shouldRetry = true
+    }
 
     final override fun reqPassword(resource: Resource<*>?): CharArray {
         val password = runBlocking(Dispatchers.Main) {
@@ -105,9 +110,11 @@ private class SshjSession(private val uri: URIish, private val username: String,
         when (authData) {
             is SshAuthData.Password -> {
                 ssh.authPassword(username, authData.passwordFinder)
+                authData.passwordFinder.reset()
             }
             is SshAuthData.PublicKeyFile -> {
                 ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
+                authData.passphraseFinder.reset()
             }
         }
         return this
