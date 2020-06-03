@@ -4,7 +4,7 @@
  */
 package com.zeapo.pwdstore.utils
 
-import com.zeapo.pwdstore.crypto.PgpActivity
+import com.zeapo.pwdstore.crypto.BasePgpActivity
 import java.io.File
 
 data class PasswordItem(
@@ -19,7 +19,7 @@ data class PasswordItem(
         .replace(rootDir.absolutePath, "")
         .replace(file.name, "")
 
-    val longName = PgpActivity.getLongName(
+    val longName = BasePgpActivity.getLongName(
         fullPathToParent,
         rootDir.absolutePath,
         toString())

@@ -143,7 +143,7 @@ class AutofillSaveActivity : Activity() {
                 // Password was extracted from a form, there is nothing to fill.
                 Intent()
             }
-            // PgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
+            // BasePgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
             // is not involved in an AutofillScenario, we have to commit the file ourselves.
             PasswordStore.commitChange(
                 this,

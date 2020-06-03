@@ -53,7 +53,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 } else {
                     setBackgroundColor(getColor(android.R.color.transparent))
                 }
-                val path = PgpActivity.getRelativePath(fullPath, repoPath)
+                val path = getRelativePath(fullPath, repoPath)
                 // Keep empty path field visible if it is editable.
                 if (path.isEmpty() && !isEnabled)
                     visibility = View.GONE

@@ -46,8 +46,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
-import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.crypto.DecryptActivity
+import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.crypto.PgpActivity
 import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.BaseGitActivity
@@ -496,8 +496,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             intent.putExtra("FILE_PATH", item.file.absolutePath)
             intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
             intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.file.absolutePath))
-            intent.putExtra("OPERATION", "DECRYPT")
         }
+        // Needs an action to be a shortcut intent
+        authDecryptIntent.action = "DECRYPT_PASS"
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -505,7 +506,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 .setShortLabel(item.toString())
                 .setLongLabel(item.fullPathToParent + item.toString())
                 .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                .setIntent(authDecryptIntent.setAction("DECRYPT_PASS")) // Needs action
+                .setIntent(authDecryptIntent) // Needs action
                 .build()
             val shortcuts = shortcutManager!!.dynamicShortcuts
             if (shortcuts.size >= shortcutManager!!.maxShortcutCountPerActivity && shortcuts.size > 0) {
