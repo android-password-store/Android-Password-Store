@@ -12,6 +12,7 @@ import android.os.AsyncTask
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import net.schmizz.sshj.userauth.UserAuthException
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.GitCommand
@@ -147,6 +148,7 @@ class GitAsyncTask(
         if (refreshListOnEnd) {
             (activity as? PasswordStore)?.resetPasswordList()
         }
+        (SshSessionFactory.getInstance() as? SshjSessionFactory)?.clearCredentials()
         SshSessionFactory.setInstance(null)
     }
 

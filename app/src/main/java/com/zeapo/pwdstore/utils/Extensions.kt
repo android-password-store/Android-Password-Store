@@ -26,6 +26,12 @@ fun String.splitLines(): Array<String> {
     return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 }
 
+fun CharArray.clear() {
+    forEachIndexed { i, _ ->
+        this[i] = 0.toChar()
+    }
+}
+
 fun Context.resolveAttribute(attr: Int): Int {
     val typedValue = TypedValue()
     this.theme.resolveAttribute(attr, typedValue, true)

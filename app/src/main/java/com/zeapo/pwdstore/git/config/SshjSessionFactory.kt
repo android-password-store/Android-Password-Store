@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.git.config
 import android.util.Base64
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
+import com.zeapo.pwdstore.utils.clear
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.SSHClient
@@ -33,8 +34,19 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 
 sealed class SshAuthData {
-    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
-    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
+    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData() {
+        override fun clearCredentials() {
+            passwordFinder.clearPassword()
+        }
+    }
+
+    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData() {
+        override fun clearCredentials() {
+            passphraseFinder.clearPassword()
+        }
+    }
+
+    abstract fun clearCredentials()
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
@@ -43,13 +55,27 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 
     private var isRetry = false
     private var shouldRetry = true
+    private var lastPassword: CharArray? = null
 
-    fun reset() {
+    fun resetForReuse() {
         isRetry = false
         shouldRetry = true
     }
 
+    fun clearPassword() {
+        lastPassword?.clear()
+        lastPassword = null
+    }
+
     final override fun reqPassword(resource: Resource<*>?): CharArray {
+        if (lastPassword != null && !isRetry) {
+            // This instance successfully authenticated in a previous authentication step and is
+            // now being reused for a new one. We try the previous password so that the user
+            // does not have to type it again.
+            isRetry = true
+            return lastPassword!!
+        }
+        clearPassword()
         val password = runBlocking(Dispatchers.Main) {
             suspendCoroutine<String?> { cont ->
                 askForPassword(cont, isRetry)
@@ -57,7 +83,7 @@ abstract class InteractivePasswordFinder : PasswordFinder {
         }
         isRetry = true
         return if (password != null) {
-            password.toCharArray()
+            password.toCharArray().also { lastPassword = it }
         } else {
             shouldRetry = false
             CharArray(0)
@@ -71,6 +97,10 @@ class SshjSessionFactory(private val username: String, private val authData: Ssh
 
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
         return SshjSession(uri, username, authData, hostKeyFile).connect()
+    }
+
+    fun clearCredentials() {
+        authData.clearCredentials()
     }
 }
 
@@ -110,11 +140,11 @@ private class SshjSession(private val uri: URIish, private val username: String,
         when (authData) {
             is SshAuthData.Password -> {
                 ssh.authPassword(username, authData.passwordFinder)
-                authData.passwordFinder.reset()
+                authData.passwordFinder.resetForReuse()
             }
             is SshAuthData.PublicKeyFile -> {
                 ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
-                authData.passphraseFinder.reset()
+                authData.passphraseFinder.resetForReuse()
             }
         }
         return this
