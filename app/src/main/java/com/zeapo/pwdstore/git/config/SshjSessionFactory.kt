@@ -12,6 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.Buffer.PlainBuffer
+import net.schmizz.sshj.common.DisconnectReason
+import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.common.SSHRuntimeException
 import net.schmizz.sshj.common.SecurityUtils
 import net.schmizz.sshj.connection.channel.direct.Session
@@ -54,12 +56,10 @@ abstract class InteractivePasswordFinder : PasswordFinder {
     abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
 
     private var isRetry = false
-    private var shouldRetry = true
     private var lastPassword: CharArray? = null
 
     fun resetForReuse() {
         isRetry = false
-        shouldRetry = true
     }
 
     fun clearPassword() {
@@ -82,15 +82,11 @@ abstract class InteractivePasswordFinder : PasswordFinder {
             }
         }
         isRetry = true
-        return if (password != null) {
-            password.toCharArray().also { lastPassword = it }
-        } else {
-            shouldRetry = false
-            CharArray(0)
-        }
+        return password?.toCharArray()?.also { lastPassword = it }
+            ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
     }
 
-    final override fun shouldRetry(resource: Resource<*>?) = shouldRetry
+    final override fun shouldRetry(resource: Resource<*>?) = true
 }
 
 class SshjSessionFactory(private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
