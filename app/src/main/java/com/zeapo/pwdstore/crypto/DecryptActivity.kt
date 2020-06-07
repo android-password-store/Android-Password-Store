@@ -142,7 +142,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         }
 
         if (clearAfter != 0) {
-            val service = Intent(this, ClipboardService::class.java)
+            val service = Intent(this, ClipboardService::class.java).apply {
+                action = ClipboardService.ACTION_START
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(service)
             } else {
