@@ -83,7 +83,6 @@ dependencies {
     implementation deps.androidx.lifecycle_common
     implementation deps.androidx.lifecycle_livedata_ktx
     implementation deps.androidx.lifecycle_viewmodel_ktx
-    implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material
     implementation deps.androidx.preference
     implementation deps.androidx.recycler_view

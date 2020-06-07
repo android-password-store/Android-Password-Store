@@ -5,12 +5,9 @@
 package com.zeapo.pwdstore.crypto
 
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.graphics.Typeface
@@ -29,7 +26,6 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.e
 import com.github.ajalt.timberkt.Timber.i
@@ -112,11 +108,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private var _keyIDs = emptySet<String>()
     private var serviceConnection: OpenPgpServiceConnection? = null
     private var delayTask: DelayShow? = null
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            delayTask?.doOnPostExecute()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -247,11 +238,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, IntentFilter(ACTION_CLEAR))
-    }
-
     private fun generatePassword() {
         when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
             KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
@@ -259,11 +245,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
                 .show(supportFragmentManager, "xkpwgenerator")
         }
-    }
-
-    override fun onStop() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
-        super.onStop()
     }
 
     override fun onDestroy() {

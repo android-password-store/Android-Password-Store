@@ -15,7 +15,6 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.utils.ClipboardUtils
@@ -60,7 +59,6 @@ class ClipboardService : Service() {
                             startTimer(time)
                         }
                         withContext(Dispatchers.Main) {
-                            emitBroadcast()
                             clearClipboard()
                             stopForeground(true)
                             stopSelf()
@@ -103,12 +101,6 @@ class ClipboardService : Service() {
             current++
             delay(1000)
         }
-    }
-
-    private fun emitBroadcast() {
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        val clearIntent = Intent(ACTION_CLEAR)
-        localBroadcastManager.sendBroadcast(clearIntent)
     }
 
     private fun createNotification() {
