@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -78,17 +79,14 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         throw e
     }
 
-    fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
+    fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound, activityResult: ActivityResultLauncher<Intent>) {
         val providerPackageName = settings.getString("openpgp_provider_list", "")
-
         if (providerPackageName.isNullOrEmpty()) {
             Toast.makeText(this, resources.getString(R.string.provider_toast_text), Toast.LENGTH_LONG).show()
-            val intent = Intent(this, UserPreference::class.java)
-            startActivity(intent)
+            activityResult.launch(Intent(this, UserPreference::class.java))
         } else {
             serviceConnection = OpenPgpServiceConnection(this, providerPackageName, onBoundListener)
             serviceConnection?.bindToService()
-
         }
     }
 
@@ -99,8 +97,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      */
     fun getUserInteractionRequestIntent(result: Intent): IntentSender {
         i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
-        val pi: PendingIntent = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)
-        return pi.intentSender
+        return (result.getParcelableExtra(OpenPgpApi.RESULT_INTENT) as PendingIntent).intentSender
     }
 
     /**
@@ -146,7 +143,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
     companion object {
         private const val TAG = "APS/BasePgpActivity"
-        const val REQUEST_DECRYPT = 101
         const val REQUEST_KEY_ID = 102
 
         /**

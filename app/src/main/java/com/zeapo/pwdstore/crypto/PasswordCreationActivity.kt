@@ -11,6 +11,7 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.Timber
@@ -39,10 +40,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedPass by lazy { intent.getStringExtra("SUGGESTED_PASS") }
     private val suggestedExtra by lazy { intent.getStringExtra("SUGGESTED_EXTRA") }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra("GENERATE_PASSWORD", false) }
+    private val encrypt = registerForActivityResult(StartActivityForResult()) { encrypt() }
+    private val encryptAndCopy = registerForActivityResult(StartActivityForResult()) { encrypt(true) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindToOpenKeychain(this)
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
@@ -122,8 +124,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             android.R.id.home, R.id.crypto_cancel_add -> {
                 finish()
             }
-            R.id.crypto_confirm_add -> encrypt()
-            R.id.crypto_confirm_add_and_copy -> encrypt(true)
+            R.id.crypto_confirm_add -> {
+                api ?: bindToOpenKeychain(this@PasswordCreationActivity, encrypt)
+                encrypt()
+            }
+            R.id.crypto_confirm_add_and_copy -> {
+                api ?: bindToOpenKeychain(this@PasswordCreationActivity, encryptAndCopy)
+                encrypt(true)
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true

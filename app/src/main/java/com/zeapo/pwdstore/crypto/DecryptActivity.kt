@@ -8,6 +8,7 @@ package com.zeapo.pwdstore.crypto
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.Menu
@@ -18,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
@@ -56,9 +58,13 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
+    private val openKeychainResult = registerForActivityResult(StartActivityForResult()) {
+        decryptAndVerify()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindToOpenKeychain(this)
+        bindToOpenKeychain(this, openKeychainResult)
         with(binding) {
             setContentView(root)
             passwordCategory.text = relativeParentPath
@@ -132,12 +138,16 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         var clearAfter = 45
         try {
             clearAfter = Integer.parseInt(settings.getString("general_show_time", "45") as String)
-        } catch (e: NumberFormatException) {
-            // ignore and keep default
+        } catch (_: NumberFormatException) {
         }
 
         if (clearAfter != 0) {
-            //setTimer()
+            val service = Intent(this, ClipboardService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(service)
+            } else {
+                startService(service)
+            }
             showSnackbar(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
         } else {
             showSnackbar(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
@@ -155,6 +165,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
+        api ?: bindToOpenKeychain(this, openKeychainResult)
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_DECRYPT_VERIFY
 
