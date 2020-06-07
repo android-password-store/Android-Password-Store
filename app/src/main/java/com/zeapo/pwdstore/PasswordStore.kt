@@ -46,10 +46,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
+import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
-import com.zeapo.pwdstore.crypto.PgpActivity
-import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
@@ -520,14 +519,16 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         startActivityForResult(decryptIntent, REQUEST_CODE_DECRYPT_AND_VERIFY)
     }
 
+    // TODO(msfjarvis): This is hard to support with the current setup, should we retire it?
     fun editPassword(item: PasswordItem) {
-        val intent = Intent(this, PgpActivity::class.java)
-        intent.putExtra("NAME", item.toString())
+        /*
+        val intent = Intent(this, PasswordCreationActivity::class.java)
+        intent.putExtra("SUGGESTED_NAME", item.name)
         intent.putExtra("FILE_PATH", item.file.absolutePath)
         intent.putExtra("PARENT_PATH", item.file.parentFile!!.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
-        intent.putExtra("OPERATION", "EDIT")
         startActivityForResult(intent, REQUEST_CODE_EDIT)
+         */
     }
 
     private fun validateState(): Boolean {

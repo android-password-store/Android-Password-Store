@@ -96,20 +96,11 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * Handle the case where OpenKeychain returns that it needs to interact with the user
      *
      * @param result The intent returned by OpenKeychain
-     * @param requestCode The code we'd like to use to identify the behaviour
      */
-    fun handleUserInteractionRequest(result: Intent, requestCode: Int) {
+    fun getUserInteractionRequestIntent(result: Intent): IntentSender {
         i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
-
-        val pi: PendingIntent? = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)
-        try {
-            startIntentSenderFromChild(
-                this, pi?.intentSender, requestCode,
-                null, 0, 0, 0
-            )
-        } catch (e: IntentSender.SendIntentException) {
-            e(e) { "SendIntentException" }
-        }
+        val pi: PendingIntent = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)
+        return pi.intentSender
     }
 
     /**

@@ -13,6 +13,9 @@ import android.text.method.PasswordTransformationMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
@@ -32,6 +35,26 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }
     private var passwordEntry: PasswordEntry? = null
+
+    private val passwordEditResult = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) decryptAndVerify()
+    }
+
+    private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
+        if (result.data == null) {
+            setResult(RESULT_CANCELED, null)
+            finish()
+            return@registerForActivityResult
+        }
+
+        when (result.resultCode) {
+            RESULT_OK -> decryptAndVerify(result.data)
+            RESULT_CANCELED -> {
+                setResult(RESULT_CANCELED, result.data)
+                finish()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,34 +83,11 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> onBackPressed()
+            R.id.edit_password -> editPassword()
             R.id.share_password_as_plaintext -> shareAsPlaintext()
             R.id.copy_password -> copyPasswordToClipboard()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (data == null) {
-            setResult(RESULT_CANCELED, null)
-            finish()
-            return
-        }
-
-        // try again after user interaction
-        if (resultCode == RESULT_OK) {
-            when (requestCode) {
-                REQUEST_DECRYPT -> decryptAndVerify(data)
-                else -> {
-                    setResult(RESULT_OK)
-                    finish()
-                }
-            }
-        } else if (resultCode == RESULT_CANCELED) {
-            setResult(RESULT_CANCELED, data)
-            finish()
-        }
     }
 
     override fun onBound(service: IOpenPgpService2) {
@@ -97,6 +97,24 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     override fun onError(e: Exception) {
         e(e)
+    }
+
+    /**
+     * Edit the current password and hide all the fields populated by encrypted data so that when
+     * the result triggers they can be repopulated with new data.
+     */
+    private fun editPassword() {
+        val intent = Intent(this, PasswordCreationActivity::class.java)
+        intent.putExtra("FILE_PATH", relativeParentPath)
+        intent.putExtra("REPO_PATH", repoPath)
+        intent.putExtra("SUGGESTED_NAME", name)
+        intent.putExtra("SUGGESTED_PASS", passwordEntry?.password)
+        passwordEditResult.launch(intent)
+        with(binding) {
+            passwordTextContainer.visibility = View.GONE
+            extraContentContainer.visibility = View.GONE
+            usernameTextContainer.visibility = View.GONE
+        }
     }
 
     private fun copyTextToClipboard(text: String?, showSnackbar: Boolean = true) {
@@ -197,7 +215,10 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                             e(e)
                         }
                     }
-                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> handleUserInteractionRequest(result, REQUEST_DECRYPT)
+                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+                        val sender = getUserInteractionRequestIntent(result)
+                        userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
+                    }
                     OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
                 }
             }

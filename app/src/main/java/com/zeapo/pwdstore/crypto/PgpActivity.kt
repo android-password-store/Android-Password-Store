@@ -77,6 +77,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.Charset
 
+@Deprecated("Use the subclasses of BasePgpActivity")
 class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val clipboard by lazy { getSystemService<ClipboardManager>() }
     private var passwordEntry: PasswordEntry? = null
@@ -288,7 +289,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             R.id.crypto_cancel_add, android.R.id.home -> finish()
             R.id.copy_password -> copyPasswordToClipBoard()
             R.id.share_password_as_plaintext -> shareAsPlaintext()
-            R.id.edit_password -> editPassword()
             R.id.crypto_confirm_add -> encrypt()
             R.id.crypto_confirm_add_and_copy -> encrypt(true)
             else -> return super.onOptionsItemSelected(item)
@@ -367,7 +367,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                             passwordEntry = entry
 
                             if (intent.getStringExtra("OPERATION") == "EDIT") {
-                                editPassword()
                                 return@executeApiAsync
                             }
 
@@ -509,41 +508,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                 }
             }
         }
-    }
-
-    /**
-     * Opens EncryptActivity with the information for this file to be edited
-     */
-    private fun editPassword() {
-        setContentView(R.layout.password_creation_activity)
-        generate_password?.setOnClickListener {
-            when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
-                KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
-                    .show(supportFragmentManager, "generator")
-                KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
-                    .show(supportFragmentManager, "xkpwgenerator")
-            }
-        }
-
-        title = getString(R.string.edit_password_title)
-
-        val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
-        crypto_password_edit.setText(passwordEntry?.password)
-        crypto_password_edit.typeface = monoTypeface
-        crypto_extra_edit.setText(passwordEntry?.extraContent)
-        crypto_extra_edit.typeface = monoTypeface
-
-        crypto_password_category.setText(relativeParentPath)
-        crypto_password_edit.setText(name)
-        crypto_password_edit.isEnabled = false
-
-        delayTask?.cancelAndSignal(true)
-
-        val data = Intent(this, PgpActivity::class.java)
-        data.putExtra("OPERATION", "EDIT")
-        data.putExtra("fromDecrypt", true)
-        intent = data
-        invalidateOptionsMenu()
     }
 
     /**
