@@ -1,6 +1,7 @@
 package com.zeapo.pwdstore.utils
 
 import java.io.File
+import java.nio.charset.Charset
 
 class FileUtils {
     companion object{
@@ -29,5 +30,9 @@ class FileUtils {
             return res;
         }
 
+        @JvmStatic
+        fun readFileToString(file : File, charset: Charset) : String {
+            return file.readText(charset)
+        }
     }
 }
