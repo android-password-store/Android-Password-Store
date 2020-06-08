@@ -141,7 +141,6 @@ class UserPreference : AppCompatActivity() {
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            keyPreference?.summary = updatePgpKeyPreference()
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
                 ?: false
 
@@ -150,18 +149,21 @@ class UserPreference : AppCompatActivity() {
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
-            keyPreference?.onPreferenceClickListener = ClickListener {
-                val providerPackageName = requireNotNull(sharedPreferences.getString("openpgp_provider_list", ""))
-                if (providerPackageName.isEmpty()) {
-                    Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
-                    false
-                } else {
-                    val intent = Intent(callingActivity, GetKeyIdsActivity::class.java)
-                    val keySelectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                        keyPreference?.summary = updatePgpKeyPreference()
+            keyPreference?.let { pref ->
+                updateKeyIDsSummary(pref)
+                pref.onPreferenceClickListener = ClickListener {
+                    val providerPackageName = requireNotNull(sharedPreferences.getString("openpgp_provider_list", ""))
+                    if (providerPackageName.isEmpty()) {
+                        Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
+                        false
+                    } else {
+                        val intent = Intent(callingActivity, GetKeyIdsActivity::class.java)
+                        val keySelectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                            updateKeyIDsSummary(pref)
+                        }
+                        keySelectResult.launch(intent)
+                        true
                     }
-                    keySelectResult.launch(intent)
-                    true
                 }
             }
 
@@ -355,9 +357,9 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
-        private fun updatePgpKeyPreference(): String = with(findPreference<Preference>("")) {
+        private fun updateKeyIDsSummary(preference: Preference) {
             val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null) ?: HashSet()).toTypedArray()
-            if (selectedKeys.isEmpty()) {
+            preference.summary = if (selectedKeys.isEmpty()) {
                 resources.getString(R.string.pref_no_key_selected)
             } else {
                 selectedKeys.joinToString(separator = ";") { s ->
