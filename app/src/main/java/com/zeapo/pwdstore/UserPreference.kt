@@ -48,11 +48,11 @@ import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
+import com.zeapo.pwdstore.utils.FileUtils
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
-import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime

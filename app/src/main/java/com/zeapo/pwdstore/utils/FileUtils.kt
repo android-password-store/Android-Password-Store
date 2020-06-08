@@ -79,9 +79,35 @@ class FileUtils {
         }
 
         @Throws(IOException::class)
-        fun copyInputStreamToFile(source: InputStream, destination: File) {
+        fun copyInputStreamToFile(source: InputStream?, destination: File) {
             val output = openOutputStream(destination)
-            source.copyTo(output!!, 1024)
+            source!!.copyTo(output!!, 1024)
+        }
+
+        @Throws(IOException::class)
+        fun cleanDirectory(directory:File) {
+            val files = directory.listFiles()
+
+            files!!.forEach { file ->
+                //remove files inside directory
+                if (file.isDirectory)
+                    cleanDirectory(file)
+
+                //remove file or directory
+                if (!file.delete())
+                    throw IOException("Can't delete file ${file}")
+            }
+        }
+
+        fun deleteQuietly(file: File?): Boolean {
+            return if (file != null ){
+                //remove files inside directory
+                if (file.isDirectory)
+                    cleanDirectory(file)
+
+                //remove file or directory
+                file.delete()
+            }else false
         }
 
     }
