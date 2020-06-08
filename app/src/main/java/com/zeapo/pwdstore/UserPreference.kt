@@ -358,7 +358,8 @@ class UserPreference : AppCompatActivity() {
         }
 
         private fun updateKeyIDsSummary(preference: Preference) {
-            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null) ?: HashSet()).toTypedArray()
+            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
+                ?: HashSet()).toTypedArray()
             preference.summary = if (selectedKeys.isEmpty()) {
                 resources.getString(R.string.pref_no_key_selected)
             } else {

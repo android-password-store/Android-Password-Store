@@ -8,12 +8,12 @@ package com.zeapo.pwdstore.crypto
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.IntentSenderRequest
-import com.github.ajalt.timberkt.e
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.Timber
+import com.github.ajalt.timberkt.e
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
