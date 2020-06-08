@@ -34,9 +34,26 @@ import org.openintents.openpgp.OpenPgpError
 @Suppress("Registered")
 open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
+    /**
+     * Full path to the repository
+     */
     val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
+
+    /**
+     * Full path to the password file being worked on
+     */
     val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
+
+    /**
+     * Name of the password file
+     *
+     * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org.gpg
+     */
     val name: String by lazy { getName(fullPath) }
+
+    /**
+     * Get the timestamp for when this file was last modified.
+     */
     val lastChangedString: CharSequence by lazy {
         getLastChangedString(
             intent.getLongExtra(
@@ -46,15 +63,34 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         )
     }
 
+    /**
+     * [SharedPreferences] instance used by subclasses to persist settings
+     */
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
+    /**
+     * [ClipboardManager] instance used by subclasses. Most direct subclasses do not use it so we lazily
+     * init this.
+     */
     val clipboard by lazy { getSystemService<ClipboardManager>() }
 
+    /**
+     * Backing property and public read-only field for getting the list of OpenPGP key IDs that we
+     * have access to.
+     */
     private var _keyIDs = emptySet<String>()
     val keyIDs get() = _keyIDs
 
+    /**
+     * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.
+     */
     private var serviceConnection: OpenPgpServiceConnection? = null
     var api: OpenPgpApi? = null
 
+    /**
+     * [onCreate] sets the window up with the right flags to prevent auth leaks through screenshots
+     * or recent apps screen and fills in [_keyIDs] from [settings]
+     */
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,22 +100,41 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         _keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
     }
 
+    /**
+     * [onDestroy] handles unbinding from the OpenPgp service linked with [serviceConnection]. This
+     * is annotated with [CallSuper] because it's critical to unbind the service to ensure we're not
+     * leaking things.
+     */
     @CallSuper
     override fun onDestroy() {
         super.onDestroy()
         serviceConnection?.unbindFromService()
     }
 
+    /**
+     * Sets up [api] once the service is bound. Downstream consumers must call super this to
+     * initialize [api]
+     */
     @CallSuper
     override fun onBound(service: IOpenPgpService2) {
         api = OpenPgpApi(this, service)
     }
 
+    /**
+     * Mandatory error handling from [OpenPgpServiceConnection.OnBound]. All subclasses must handle
+     * their own errors, and hence this class simply logs and rethrows. Subclasses Must NOT call super.
+     */
     override fun onError(e: Exception) {
         e { "Callers must handle their own exceptions" }
         throw e
     }
 
+    /**
+     * Method for subclasses to initiate binding with [OpenPgpServiceConnection]. The design choices
+     * here are a bit dubious at first glance. We require passing a [ActivityResultLauncher] because
+     * it lets us react to having a OpenPgp provider selected without relying on the now deprecated
+     * [startActivityForResult].
+     */
     fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound, activityResult: ActivityResultLauncher<Intent>) {
         val providerPackageName = settings.getString("openpgp_provider_list", "")
         if (providerPackageName.isNullOrEmpty()) {
@@ -121,7 +176,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     }
 
     /**
-     * Base handling of OpenKeychain errors based on the error contained in [result]
+     * Base handling of OpenKeychain errors based on the error contained in [result]. Subclasses
+     * can use this when they want to default to sane error handling.
      */
     fun handleError(result: Intent) {
         val error: OpenPgpError? = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR)
