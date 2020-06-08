@@ -143,8 +143,8 @@ class AutofillSaveActivity : Activity() {
                 // Password was extracted from a form, there is nothing to fill.
                 Intent()
             }
-            // BasePgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
-            // is not involved in an AutofillScenario, we have to commit the file ourselves.
+            // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
+            // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
             PasswordStore.commitChange(
                 this,
                 getString(R.string.git_commit_add_text, longName),
