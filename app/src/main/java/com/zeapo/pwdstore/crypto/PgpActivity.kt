@@ -70,7 +70,6 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE_USER_INTERA
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_ERROR
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_INTENT
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 import java.io.ByteArrayInputStream
@@ -772,7 +771,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
          * Gets the name of the password (excluding .gpg)
          */
         fun getName(fullPath: String): String {
-            return FilenameUtils.getBaseName(fullPath)
+            return FileUtils.getBaseName(fullPath)
         }
 
         /**
