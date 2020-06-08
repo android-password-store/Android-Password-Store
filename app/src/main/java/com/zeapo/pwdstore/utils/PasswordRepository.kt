@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import org.apache.commons.io.filefilter.FileFilterUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
