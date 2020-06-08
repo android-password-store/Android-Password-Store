@@ -114,11 +114,6 @@
 
         <activity android:name=".autofill.AutofillPreferenceActivity" />
 
-        <activity
-            android:name=".crypto.PgpActivity"
-            android:configChanges="orientation|screenSize"
-            android:parentActivityName=".PasswordStore"
-            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SelectFolderActivity" />
         <activity
             android:name=".sshkeygen.SshKeyGenActivity"
