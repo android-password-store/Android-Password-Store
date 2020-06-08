@@ -5,6 +5,7 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 import java.nio.charset.Charset
 
 class FileUtils {
@@ -32,7 +33,7 @@ class FileUtils {
                 }
             }
 
-            return res;
+            return res
         }
 
         @JvmStatic
@@ -76,5 +77,12 @@ class FileUtils {
             }
             return FileOutputStream(file, false)
         }
+
+        @Throws(IOException::class)
+        fun copyInputStreamToFile(source: InputStream, destination: File) {
+            val output = openOutputStream(destination)
+            source.copyTo(output!!, 1024)
+        }
+
     }
 }
