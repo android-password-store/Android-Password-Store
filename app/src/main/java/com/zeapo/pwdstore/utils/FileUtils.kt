@@ -110,5 +110,15 @@ class FileUtils {
             }else false
         }
 
+        fun getBaseName(filename: String): String {
+            //take file's name with extension
+            val indexName = filename.lastIndexOf('/')
+            val nameWithExtension = filename.substring(indexName + 1)
+
+            //only send file's name
+            val indexExt = nameWithExtension.lastIndexOf('.')
+            return nameWithExtension.substring(0, indexExt)
+        }
+
     }
 }

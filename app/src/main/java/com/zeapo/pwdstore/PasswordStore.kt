@@ -66,7 +66,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
@@ -703,7 +702,7 @@ class PasswordStore : AppCompatActivity() {
                             continue
                         }
                         val destinationFile = File(target.absolutePath + "/" + source.name)
-                        val basename = FilenameUtils.getBaseName(source.absolutePath)
+                        val basename = FileUtils.getBaseName(source.absolutePath)
                         val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
                         val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
                         if (destinationFile.exists()) {
