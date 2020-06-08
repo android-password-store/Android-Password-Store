@@ -43,6 +43,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
+import com.zeapo.pwdstore.utils.FileUtils
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_last_changed
@@ -69,7 +70,6 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_CODE_USER_INTERA
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_ERROR
 import me.msfjarvis.openpgpktx.util.OpenPgpApi.Companion.RESULT_INTENT
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
@@ -478,7 +478,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         try {
                             // TODO This might fail, we should check that the write is successful
                             val file = File(path)
-                            val outputStream = FileUtils.openOutputStream(file)
+                            val outputStream = FileUtils.openOutputStream(file)!!
                             outputStream.write(oStream.toByteArray())
                             outputStream.close()
 
