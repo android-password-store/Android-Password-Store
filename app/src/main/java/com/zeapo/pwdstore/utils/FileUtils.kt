@@ -121,7 +121,12 @@ class FileUtils {
 
             //only send file's name
             val indexExt = nameWithExtension.lastIndexOf('.')
-            return nameWithExtension.substring(0, indexExt)
+
+            //if file doesn't have extension (i.e it's a folder)
+            return if (indexExt == -1 )
+                nameWithExtension
+            else
+                nameWithExtension.substring(0, indexExt)
         }
 
     }
