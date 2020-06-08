@@ -78,12 +78,14 @@ class FileUtils {
             return FileOutputStream(file, false)
         }
 
+        @JvmStatic
         @Throws(IOException::class)
         fun copyInputStreamToFile(source: InputStream?, destination: File) {
             val output = openOutputStream(destination)
             source!!.copyTo(output!!, 1024)
         }
 
+        @JvmStatic
         @Throws(IOException::class)
         fun cleanDirectory(directory:File) {
             val files = directory.listFiles()
@@ -99,6 +101,7 @@ class FileUtils {
             }
         }
 
+        @JvmStatic
         fun deleteQuietly(file: File?): Boolean {
             return if (file != null ){
                 //remove files inside directory
@@ -110,6 +113,7 @@ class FileUtils {
             }else false
         }
 
+        @JvmStatic
         fun getBaseName(filename: String): String {
             //take file's name with extension
             val indexName = filename.lastIndexOf('/')
