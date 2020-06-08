@@ -9,10 +9,8 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import net.schmizz.sshj.DefaultConfig
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.Buffer.PlainBuffer
-import net.schmizz.sshj.common.KeyType
 import net.schmizz.sshj.common.SSHRuntimeException
 import net.schmizz.sshj.common.SecurityUtils
 import net.schmizz.sshj.connection.channel.direct.Session
@@ -100,26 +98,7 @@ private class SshjSession(private val uri: URIish, private val username: String,
     private var currentCommand: Session? = null
 
     fun connect(): SshjSession {
-        /*
-         * The SSHJ default factories explicitly specify the KeyStore provider as 'BC'. We replace
-         * them with factories that produce signature objects that choose the provider based on the
-         * key type provided to them in initVerify().
-         */
-        val config = DefaultConfig().apply {
-            val toPatch = mapOf(
-                KeyType.RSA.toString() to AndroidKeystoreCompatRsaSignatureFactory,
-                KeyType.ECDSA256.toString() to AndroidKeystoreCompatEcdsaSignatureFactory(KeyType.ECDSA256),
-                KeyType.ECDSA384.toString() to AndroidKeystoreCompatEcdsaSignatureFactory(KeyType.ECDSA384),
-                KeyType.ECDSA521.toString() to AndroidKeystoreCompatEcdsaSignatureFactory(KeyType.ECDSA521)
-            )
-            for ((name, factory) in toPatch) {
-                val index = signatureFactories.indexOfFirst { it.name == name }
-                if (index == -1)
-                    continue
-                signatureFactories.set(index, factory)
-            }
-        }
-        ssh = SSHClient(config)
+        ssh = SSHClient(SshjConfig())
         ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
         ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
         if (!ssh.isConnected)

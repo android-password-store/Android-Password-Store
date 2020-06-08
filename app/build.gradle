@@ -105,6 +105,7 @@ dependencies {
     implementation files('../libs/sshj-0.29.1-SNAPSHOT.jar')
     implementation deps.third_party.eddsa
     implementation deps.third_party.bouncycastle
+    implementation deps.third_party.bouncycastle_pkix
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
