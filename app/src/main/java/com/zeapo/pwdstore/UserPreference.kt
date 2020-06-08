@@ -21,6 +21,7 @@ import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
@@ -41,7 +42,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
-import com.zeapo.pwdstore.crypto.PgpActivity
+import com.zeapo.pwdstore.crypto.BasePgpActivity
+import com.zeapo.pwdstore.crypto.GetKeyIdsActivity
 import com.zeapo.pwdstore.git.GitConfigActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
@@ -74,12 +76,13 @@ class UserPreference : AppCompatActivity() {
         private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var callingActivity: UserPreference
+        private lateinit var sharedPreferences: SharedPreferences
         private lateinit var encryptedPreferences: SharedPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             callingActivity = requireActivity() as UserPreference
             val context = requireContext()
-            val sharedPreferences = preferenceManager.sharedPreferences
+            sharedPreferences = preferenceManager.sharedPreferences
             encryptedPreferences = requireActivity().applicationContext.getEncryptedPrefs("git_operation")
 
             addPreferencesFromResource(R.xml.preference)
@@ -138,15 +141,7 @@ class UserPreference : AppCompatActivity() {
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
-                ?: HashSet()).toTypedArray()
-            keyPreference?.summary = if (selectedKeys.isEmpty()) {
-                this.resources.getString(R.string.pref_no_key_selected)
-            } else {
-                selectedKeys.joinToString(separator = ";") { s ->
-                    OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
-                }
-            }
+            keyPreference?.summary = updatePgpKeyPreference()
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
                 ?: false
 
@@ -161,9 +156,11 @@ class UserPreference : AppCompatActivity() {
                     Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
                     false
                 } else {
-                    val intent = Intent(callingActivity, PgpActivity::class.java)
-                    intent.putExtra("OPERATION", "GET_KEY_ID")
-                    startActivityForResult(intent, IMPORT_PGP_KEY)
+                    val intent = Intent(callingActivity, GetKeyIdsActivity::class.java)
+                    val keySelectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                        keyPreference?.summary = updatePgpKeyPreference()
+                    }
+                    keySelectResult.launch(intent)
                     true
                 }
             }
@@ -358,13 +355,24 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
+        private fun updatePgpKeyPreference(): String = with(findPreference<Preference>("")) {
+            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null) ?: HashSet()).toTypedArray()
+            if (selectedKeys.isEmpty()) {
+                resources.getString(R.string.pref_no_key_selected)
+            } else {
+                selectedKeys.joinToString(separator = ";") { s ->
+                    OpenPgpUtils.convertKeyIdToHex(s.toLong())
+                }
+            }
+        }
+
         private fun updateXkPasswdPrefsVisibility(newValue: Any?, prefIsCustomDict: CheckBoxPreference?, prefCustomDictPicker: Preference?) {
             when (newValue as String) {
-                PgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
+                BasePgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
                     prefIsCustomDict?.isVisible = false
                     prefCustomDictPicker?.isVisible = false
                 }
-                PgpActivity.KEY_PWGEN_TYPE_XKPASSWD -> {
+                BasePgpActivity.KEY_PWGEN_TYPE_XKPASSWD -> {
                     prefIsCustomDict?.isVisible = true
                     prefCustomDictPicker?.isVisible = true
                 }

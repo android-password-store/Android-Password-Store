@@ -75,6 +75,11 @@
             android:parentActivityName=".PasswordStore"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".crypto.GetKeyIdsActivity"
+            android:parentActivityName=".PasswordStore"
+            android:theme="@style/NoBackgroundTheme" />
+
         <service
             android:name=".autofill.AutofillService"
             android:enabled="@bool/enable_accessibility_autofill"

@@ -70,12 +70,13 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         serviceConnection?.unbindFromService()
     }
 
+    @CallSuper
     override fun onBound(service: IOpenPgpService2) {
         api = OpenPgpApi(this, service)
     }
 
     override fun onError(e: Exception) {
-        e(e) { "Callers must handle their own exceptions" }
+        e { "Callers must handle their own exceptions" }
         throw e
     }
 
@@ -143,7 +144,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
     companion object {
         private const val TAG = "APS/BasePgpActivity"
-        const val REQUEST_KEY_ID = 102
+        const val KEY_PWGEN_TYPE_CLASSIC = "classic"
+        const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
 
         /**
          * Gets the relative path to the repository
