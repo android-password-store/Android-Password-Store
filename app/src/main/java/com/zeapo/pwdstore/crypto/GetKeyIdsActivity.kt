@@ -22,7 +22,7 @@ import org.openintents.openpgp.IOpenPgpService2
 class GetKeyIdsActivity : BasePgpActivity() {
 
     private val getKeyIds = registerForActivityResult(StartActivityForResult()) {
-
+        getKeyIds()
     }
 
     private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
