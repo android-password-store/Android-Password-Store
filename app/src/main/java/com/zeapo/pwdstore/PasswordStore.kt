@@ -55,6 +55,7 @@ import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
+import com.zeapo.pwdstore.utils.FileUtils
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
@@ -65,7 +66,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
