@@ -119,6 +119,7 @@ class UserPreference : AppCompatActivity() {
             autoFillEnablePreference = findPreference("autofill_enable")
             val oreoAutofillDirectoryStructurePreference = findPreference<ListPreference>("oreo_autofill_directory_structure")
             val oreoAutofillDefaultUsername = findPreference<EditTextPreference>("oreo_autofill_default_username")
+            val oreoAutofillCustomPublixSuffixes = findPreference<EditTextPreference>("oreo_autofill_custom_public_suffixes")
             val autoFillAppsPreference = findPreference<Preference>("autofill_apps")
             val autoFillDefaultPreference = findPreference<CheckBoxPreference>("autofill_default")
             val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>("autofill_always")
@@ -131,8 +132,15 @@ class UserPreference : AppCompatActivity() {
             )
             oreoAutofillDependencies = listOfNotNull(
                 oreoAutofillDirectoryStructurePreference,
-                oreoAutofillDefaultUsername
+                oreoAutofillDefaultUsername,
+                oreoAutofillCustomPublixSuffixes
             )
+            oreoAutofillCustomPublixSuffixes?.apply {
+                setOnBindEditTextListener {
+                    it.isSingleLine = false
+                    it.setHint(R.string.preference_custom_public_suffixes_hint)
+                }
+            }
 
             // Misc preferences
             val appVersionPreference = findPreference<Preference>("app_version")

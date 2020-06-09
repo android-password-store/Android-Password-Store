@@ -354,6 +354,9 @@
     <string name="preference_default_username_title">Default username</string>
     <string name="git_operation_remember_password">Remember password</string>
     <string name="git_operation_hint_password">Password</string>
+    <string name="preference_custom_public_suffixes_title">Custom domains</string>
+    <string name="preference_custom_public_suffixes_summary">Autofill will distinguish subdomains of these domains</string>
+    <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
 
     <!-- OpenKeychain errors -->
     <string name="openpgp_error_wrong_passphrase">Incorrect passphrase</string>
