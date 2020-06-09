@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.autofill.oreo
 
 import android.content.Context
 import android.util.Patterns
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.runBlocking
 import mozilla.components.lib.publicsuffixlist.PublicSuffixList
 
@@ -44,7 +45,43 @@ fun getPublicSuffixPlusOne(context: Context, domain: String) = runBlocking {
     ) {
         domain
     } else {
-        PublicSuffixListCache.getOrCachePublicSuffixList(context).getPublicSuffixPlusOne(domain)
-            .await() ?: domain
+        getCanonicalSuffix(context, domain)
     }
+}
+
+/**
+ * Returns:
+ * - [domain], if [domain] equals [suffix];
+ * - null, if [domain] does not have [suffix] as a domain suffix or only with an empty prefix;
+ * - the direct subdomain of [suffix] of which [domain] is a subdomain.
+ */
+fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
+    if (domain == suffix)
+        return domain
+    val prefix = domain.removeSuffix(".$suffix")
+    if (prefix == domain || prefix.isEmpty())
+        return null
+    val lastPrefixPart = prefix.takeLastWhile { it != '.' }
+    return "$lastPrefixPart.$suffix"
+}
+
+fun getCustomSuffixes(context: Context): Sequence<String> {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    return prefs.getString("oreo_autofill_custom_public_suffixes", "")!!
+        .splitToSequence('\n')
+        .filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
+}
+
+suspend fun getCanonicalSuffix(context: Context, domain: String): String {
+    val publicSuffixList = PublicSuffixListCache.getOrCachePublicSuffixList(context)
+    val publicSuffixPlusOne = publicSuffixList.getPublicSuffixPlusOne(domain).await()
+        ?: return domain
+    var longestSuffix = publicSuffixPlusOne
+    for (customSuffix in getCustomSuffixes(context)) {
+        val suffixPlusUpToOne = getSuffixPlusUpToOne(domain, customSuffix) ?: continue
+        // A shorter suffix is automatically a substring.
+        if (suffixPlusUpToOne.length > longestSuffix.length)
+            longestSuffix = suffixPlusUpToOne
+    }
+    return longestSuffix
 }
