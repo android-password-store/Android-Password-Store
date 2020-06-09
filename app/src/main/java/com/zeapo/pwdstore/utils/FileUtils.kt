@@ -6,7 +6,7 @@ import java.io.InputStream
 
 object FileUtils {
     @JvmStatic
-    fun listFiles(dir: File, extensions: Array<String>?, recursive: Boolean): Collection<File> {
+    fun listFiles(dir: File, recursive: Boolean): Collection<File> {
         val res = ArrayList<File>()
         val files = dir.listFiles()
 
@@ -15,18 +15,12 @@ object FileUtils {
             files.forEach { file ->
                 // Check if the file is a directory and recursive add
                 if (file.isDirectory && recursive) {
-                    res.addAll(listFiles(file, extensions, recursive))
+                    res.addAll(listFiles(file, recursive))
                 } else if (!file.isDirectory) {
-                    if (extensions == null) {
-                        //not check extension
-                        res.add(file)
-                    } else if (extensions.contains(file.extension)) {
-                        res.add(file)
-                    }
+                    res.add(file)
                 }
             }
         }
-
         return res
     }
 
