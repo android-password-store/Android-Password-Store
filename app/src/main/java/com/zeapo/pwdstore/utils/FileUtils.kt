@@ -29,14 +29,16 @@ object FileUtils {
 
     @JvmStatic
     fun getBaseName(filename: String): String {
-        //take file's name with extension
+        // Take the file name along with its extension
         val indexName = filename.lastIndexOf('/')
         val nameWithExtension = filename.substring(indexName + 1)
 
-        //only send file's name
+        // Find the final '.' character in the previously calculated nameWithExtension
         val indexExt = nameWithExtension.lastIndexOf('.')
 
-        //if file doesn't have extension (i.e it's a folder)
+        // If no '.' is found in the name, we assume this is a directory and return the previously
+        // derived nameWithExtensions as-is, otherwise we slice out a substring from the first character
+        // to the last occurrence of '.' which we found earlier.
         return if (indexExt == -1)
             nameWithExtension
         else
