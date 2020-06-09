@@ -1,8 +1,6 @@
 package com.zeapo.pwdstore.utils
 
 import java.io.File
-import java.io.IOException
-import java.io.InputStream
 
 object FileUtils {
     @JvmStatic
@@ -22,13 +20,6 @@ object FileUtils {
             }
         }
         return res
-    }
-
-    @JvmStatic
-    @Throws(IOException::class)
-    fun copyInputStreamToFile(source: InputStream?, destination: File) {
-        val output = destination.outputStream()
-        source!!.copyTo(output, 1024)
     }
 
     @JvmStatic

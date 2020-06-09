@@ -49,7 +49,6 @@ import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
-import com.zeapo.pwdstore.utils.FileUtils
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
@@ -707,9 +706,11 @@ class UserPreference : AppCompatActivity() {
                     val customDictPref = prefsFragment.findPreference<Preference>("pref_key_custom_dict")
                     setCustomDictSummary(customDictPref, uri)
                     // copy user selected file to internal storage
-                    val inputStream = this.contentResolver.openInputStream(uri)
-                    val customDictFile = File(this.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
-                    FileUtils.copyInputStreamToFile(inputStream, customDictFile)
+                    val inputStream = contentResolver.openInputStream(uri)
+                    val customDictFile = File(filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
+                    inputStream?.copyTo(customDictFile, 1024)
+                    inputStream?.close()
+                    customDictFile.close()
 
                     setResult(Activity.RESULT_OK)
                 }
