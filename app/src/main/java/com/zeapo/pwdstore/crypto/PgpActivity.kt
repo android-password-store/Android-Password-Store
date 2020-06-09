@@ -351,7 +351,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
         val data = receivedIntent ?: Intent()
         data.action = ACTION_DECRYPT_VERIFY
 
-        val iStream = FileUtils.openInputStream(File(fullPath))
+        val iStream = File(fullPath).inputStream()
         val oStream = ByteArrayOutputStream()
 
         lifecycleScope.launch(IO) {
@@ -477,7 +477,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
                         try {
                             // TODO This might fail, we should check that the write is successful
                             val file = File(path)
-                            val outputStream = FileUtils.openOutputStream(file)!!
+                            val outputStream = file.outputStream()
                             outputStream.write(oStream.toByteArray())
                             outputStream.close()
 

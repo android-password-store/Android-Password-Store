@@ -30,7 +30,6 @@ import com.github.ajalt.timberkt.i
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.utils.FileUtils
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.splitLines
 import kotlinx.coroutines.CoroutineScope
@@ -497,7 +496,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         var inputStream: InputStream? = null
         withContext(Dispatchers.IO) {
             try {
-                inputStream = FileUtils.openInputStream(items[lastWhichItem])
+                inputStream = items[lastWhichItem].inputStream()
             } catch (e: IOException) {
                 e.printStackTrace()
                 cancel("", e)

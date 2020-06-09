@@ -36,6 +36,7 @@ import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
+import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
@@ -227,7 +228,7 @@ class UserPreference : AppCompatActivity() {
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
                         try {
-                            FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
+                            PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext).deleteRecursively()
                             PasswordRepository.closeRepository()
                         } catch (ignored: Exception) {
                             // TODO Handle the different cases of exceptions
@@ -357,8 +358,8 @@ class UserPreference : AppCompatActivity() {
             prefIsCustomDict?.onPreferenceChangeListener = ChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     val customDictFile = File(context.filesDir, XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
-                    if (customDictFile.exists()) {
-                        FileUtils.deleteQuietly(customDictFile)
+                    if (customDictFile.exists() && !customDictFile.delete()) {
+                        w { "Failed to delete custom XkPassword dictionary: $customDictFile" }
                     }
                     prefCustomDictPicker?.setSummary(R.string.xkpwgen_pref_custom_dict_picker_summary)
                 }

@@ -1,12 +1,8 @@
 package com.zeapo.pwdstore.utils
 
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.nio.charset.Charset
 
 object FileUtils {
     @JvmStatic
@@ -35,80 +31,10 @@ object FileUtils {
     }
 
     @JvmStatic
-    fun readFileToString(file: File, charset: Charset): String {
-        return file.readText(charset)
-    }
-
-    @JvmStatic
-    @Throws(IOException::class)
-    fun openInputStream(file: File): FileInputStream {
-        if (file.exists()) {
-            if (file.isDirectory) {
-                throw IOException("File '$file' exists but is a directory")
-            }
-            if (!file.canRead()) {
-                throw IOException("File '$file' cannot be read")
-            }
-        } else {
-            throw FileNotFoundException("File '$file' does not exist")
-        }
-        return FileInputStream(file)
-    }
-
-    @JvmStatic
-    @Throws(IOException::class)
-    fun openOutputStream(file: File): FileOutputStream? {
-        if (file.exists()) {
-            if (file.isDirectory) {
-                throw IOException("File '$file' exists but is a directory")
-            }
-            if (!file.canWrite()) {
-                throw IOException("File '$file' cannot be written to")
-            }
-        } else {
-            val parent = file.parentFile
-            if (parent != null) {
-                if (!parent.mkdirs() && !parent.isDirectory) {
-                    throw IOException("Directory '$parent' could not be created")
-                }
-            }
-        }
-        return FileOutputStream(file, false)
-    }
-
-    @JvmStatic
     @Throws(IOException::class)
     fun copyInputStreamToFile(source: InputStream?, destination: File) {
-        val output = openOutputStream(destination)
-        source!!.copyTo(output!!, 1024)
-    }
-
-    @JvmStatic
-    @Throws(IOException::class)
-    fun cleanDirectory(directory: File) {
-        val files = directory.listFiles()
-
-        files!!.forEach { file ->
-            //remove files inside directory
-            if (file.isDirectory)
-                cleanDirectory(file)
-
-            //remove file or directory
-            if (!file.delete())
-                throw IOException("Can't delete file $file")
-        }
-    }
-
-    @JvmStatic
-    fun deleteQuietly(file: File?): Boolean {
-        return if (file != null) {
-            //remove files inside directory
-            if (file.isDirectory)
-                cleanDirectory(file)
-
-            //remove file or directory
-            file.delete()
-        } else false
+        val output = destination.outputStream()
+        source!!.copyTo(output, 1024)
     }
 
     @JvmStatic

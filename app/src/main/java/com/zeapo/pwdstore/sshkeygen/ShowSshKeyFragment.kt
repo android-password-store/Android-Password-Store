@@ -61,7 +61,7 @@ class ShowSshKeyFragment : DialogFragment() {
     private fun readKeyFromFile() {
         val file = File(requireActivity().filesDir.toString() + "/.ssh_key.pub")
         try {
-            publicKey.text = FileUtils.readFileToString(file, StandardCharsets.UTF_8)
+            publicKey.text = file.readText()
         } catch (e: Exception) {
             e.printStackTrace()
         }
