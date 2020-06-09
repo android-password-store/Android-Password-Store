@@ -13,6 +13,8 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import net.schmizz.sshj.common.DisconnectReason
+import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.UserAuthException
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.GitCommand
@@ -127,14 +129,34 @@ class GitAsyncTask(
         return rootCause
     }
 
+    private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
+        var cause: Exception? = e
+        while (cause != null) {
+            if (cause is SSHException &&
+                cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
+                return true
+            cause = cause.cause as? Exception
+        }
+        return false
+    }
+
     override fun onPostExecute(maybeResult: Result?) {
         dialog.dismiss()
         when (val result = maybeResult ?: Result.Err(IOException("Unexpected error"))) {
             is Result.Err -> {
-                e(result.err)
-                operation.onError(rootCauseException(result.err))
-                if (finishWithResultOnEnd != null) {
-                    activity?.setResult(Activity.RESULT_CANCELED)
+                if (isExplicitlyUserInitiatedError(result.err)) {
+                    // Currently, this is only executed when the user cancels a password prompt
+                    // during authentication.
+                    if (finishWithResultOnEnd != null) {
+                        activity?.setResult(Activity.RESULT_CANCELED)
+                        activity?.finish()
+                    }
+                } else {
+                    e(result.err)
+                    operation.onError(rootCauseException(result.err))
+                    if (finishWithResultOnEnd != null) {
+                        activity?.setResult(Activity.RESULT_CANCELED)
+                    }
                 }
             }
             is Result.Ok -> {
