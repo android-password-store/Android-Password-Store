@@ -4,7 +4,7 @@
 - [ ] New feature
 - [ ] Enhancement
 - [ ] Refactoring
-
+- [ ] Dependency updates
 
 ## :scroll: Description
 <!--- Describe your changes in detail -->
@@ -22,14 +22,10 @@
 <!--- Put an `x` in the boxes that apply -->
 - [ ] I formatted the code with the IDE's reformat action (Ctrl + Shift + L/Cmd + Shift + L)
 - [ ] I reviewed submitted code
-
+- [ ] I added a [CHANGELOG](CHANGELOG.md) entry if applicable
 
 ## :crystal_ball: Next steps
-
+<!-- If this change unblocks further improvements or needs some changes down the line, note them here -->
 
 ## :camera_flash: Screenshots / GIFs
 <!--- Mandatory for UI changes -->
-<!-- Uncomment the next line and replace it with links to your screenshots. -->
-<!--
-<img src="https://placekitten.com/260/260" width="260">&emsp;<img src="https://placekitten.com/300/300" width="260">
--->
