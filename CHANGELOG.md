@@ -3,11 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- 'Draw over other apps' permission dialog opens when attempting to use Oreo Autofill
+
 ### Added
 - Completely revamped decypted password view
+- Add support for better, more secure Keyex's and MACs with a brand new SSH backend
+- Allow manually marking domains for subdomain-level association. This will allow you to keep separate passwords for `site1.example.com` and `site2.example.com` and have them show as such in Autofill.
 
 ### Changed
-- **BREAKING**: Remove support for HOTP/TOTP secrets - Please use FIDO keys or a dedicated app like [Aegis](https://github.com/beemdevelopment/Aegis) or [andOTP](https://github.com/andOTP/andOTP).
+- **BREAKING**: Remove support for HOTP/TOTP secrets - Please use FIDO keys or a dedicated app like [Aegis](https://github.com/beemdevelopment/Aegis) or [andOTP](https://github.com/andOTP/andOTP)
 - Reduce Autofill false positives on username fields by removing "name" from list of heuristic terms
 - Reduced app size
 - Improve IME experience with server config screen
