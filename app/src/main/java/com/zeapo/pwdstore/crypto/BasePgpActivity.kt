@@ -28,11 +28,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
-import com.zeapo.pwdstore.utils.FileUtils
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
+import java.io.File
 
 @Suppress("Registered")
 open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
@@ -52,7 +52,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      *
      * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org.gpg
      */
-    val name: String by lazy { getName(fullPath) }
+    val name: String by lazy { File(fullPath).nameWithoutExtension }
 
     /**
      * Get the timestamp for when this file was last modified.
@@ -261,13 +261,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
             val relativePath = getRelativePath(fullPath, repositoryPath)
             val index = relativePath.lastIndexOf("/")
             return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("/+".toRegex(), "/")
-        }
-
-        /**
-         * Gets the name of the password (excluding .gpg)
-         */
-        fun getName(fullPath: String): String {
-            return FileUtils.getBaseName(fullPath)
         }
 
         /**
