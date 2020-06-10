@@ -120,18 +120,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home, R.id.crypto_cancel_add -> {
+            android.R.id.home, R.id.cancel_password_add -> {
                 setResult(RESULT_CANCELED)
                 finish()
             }
-            R.id.crypto_confirm_add -> {
+            R.id.save_password -> {
                 if (api == null) {
                     bindToOpenKeychain(this@PasswordCreationActivity, encrypt)
                 } else {
                     encrypt()
                 }
             }
-            R.id.crypto_confirm_add_and_copy -> {
+            R.id.save_and_copy_password -> {
                 if (api == null) {
                     bindToOpenKeychain(this@PasswordCreationActivity, encryptAndCopy)
                 } else {
@@ -236,12 +236,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             returnIntent.putExtra("CREATED_FILE", path)
                             returnIntent.putExtra("NAME", editName)
                             returnIntent.putExtra("LONG_NAME", getLongName(fullPath, repoPath, editName))
-
-                            // if coming from decrypt screen->edit button
-                            if (intent.getBooleanExtra("fromDecrypt", false)) {
-                                returnIntent.putExtra("OPERATION", "EDIT")
-                                returnIntent.putExtra("needCommit", true)
-                            }
 
                             if (shouldGeneratePassword) {
                                 val directoryStructure =
