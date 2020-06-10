@@ -55,6 +55,7 @@ import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
+import com.zeapo.pwdstore.utils.FileUtils
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
@@ -65,8 +66,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
@@ -577,7 +576,7 @@ class PasswordStore : AppCompatActivity() {
             .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
             .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
                 val filesToDelete = if (item.file.isDirectory) {
-                    FileUtils.listFiles(item.file, null, true)
+                    FileUtils.listFiles(item.file, true)
                 } else {
                     listOf(item.file)
                 }
@@ -668,7 +667,7 @@ class PasswordStore : AppCompatActivity() {
                         if (dir != null &&
                             dir.exists() &&
                             dir.isDirectory &&
-                            !FileUtils.listFiles(dir, null, true).isEmpty() &&
+                            !FileUtils.listFiles(dir, true).isEmpty() &&
                             getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
                             closeRepository()
                             checkLocalRepository()
@@ -703,7 +702,7 @@ class PasswordStore : AppCompatActivity() {
                             continue
                         }
                         val destinationFile = File(target.absolutePath + "/" + source.name)
-                        val basename = FilenameUtils.getBaseName(source.absolutePath)
+                        val basename = FileUtils.getBaseName(source.absolutePath)
                         val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
                         val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
                         if (destinationFile.exists()) {
@@ -739,7 +738,7 @@ class PasswordStore : AppCompatActivity() {
             // Recursively list all files (not directories) below `source`, then
             // obtain the corresponding target file by resolving the relative path
             // starting at the destination folder.
-            val sourceFiles = FileUtils.listFiles(source, null, true)
+            val sourceFiles = FileUtils.listFiles(source, true)
             sourceFiles.associateWith { destinationFile.resolve(it.relativeTo(source)) }
         } else {
             mapOf(source to destinationFile)

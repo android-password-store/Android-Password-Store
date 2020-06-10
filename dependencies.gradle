@@ -47,8 +47,6 @@ ext.deps = [
 
     third_party: [
         bouncycastle: 'org.bouncycastle:bcprov-jdk15on:1.65',
-        commons_io: 'commons-io:commons-io:2.5',
-        commons_codec: 'commons-codec:commons-codec:1.13',
         fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.4',
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
