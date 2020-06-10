@@ -43,7 +43,6 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
-import com.zeapo.pwdstore.utils.FileUtils
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_category_decrypt
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_file
 import kotlinx.android.synthetic.main.decrypt_layout.crypto_password_last_changed
@@ -95,7 +94,7 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
     private val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
 
     private val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
-    private val name: String by lazy { getName(fullPath) }
+    private val name: String by lazy { File(fullPath).nameWithoutExtension }
     private val lastChangedString: CharSequence by lazy {
         getLastChangedString(
             intent.getLongExtra(
@@ -765,13 +764,6 @@ class PgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
             val relativePath = getRelativePath(fullPath, repositoryPath)
             val index = relativePath.lastIndexOf("/")
             return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("/+".toRegex(), "/")
-        }
-
-        /**
-         * Gets the name of the password (excluding .gpg)
-         */
-        fun getName(fullPath: String): String {
-            return FileUtils.getBaseName(fullPath)
         }
 
         /**

@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import java.io.File
 
 infix fun Int.hasFlag(flag: Int): Boolean {
     return this and flag == flag
@@ -31,6 +32,8 @@ fun CharArray.clear() {
         this[i] = 0.toChar()
     }
 }
+
+fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
 
 fun Context.resolveAttribute(attr: Int): Int {
     val typedValue = TypedValue()
