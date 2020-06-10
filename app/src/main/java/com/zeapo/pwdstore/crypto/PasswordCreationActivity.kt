@@ -49,7 +49,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
 
-            cryptoPasswordCategory.apply {
+            category.apply {
                 if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
                     isEnabled = true
                 } else {
@@ -62,7 +62,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 else
                     setText(path)
             }
-            suggestedName?.let { passwordFileEdit.setText(it) }
+            suggestedName?.let { filename.setText(it) }
             // Allow the user to quickly switch between storing the username as the filename or
             // in the encrypted extras. This only makes sense if the directory structure is
             // FileBased.
@@ -76,40 +76,40 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         if (isChecked) {
                             // User wants to enable username encryption, so we add it to the
                             // encrypted extras as the first line.
-                            val username = passwordFileEdit.text.toString()
-                            val extras = "username:$username\n${cryptoExtraEdit.text}"
+                            val username = filename.text.toString()
+                            val extras = "username:$username\n${extraContent.text}"
 
-                            passwordFileEdit.setText("")
-                            cryptoExtraEdit.setText(extras)
+                            filename.setText("")
+                            extraContent.setText(extras)
                         } else {
                             // User wants to disable username encryption, so we extract the
                             // username from the encrypted extras and use it as the filename.
-                            val entry = PasswordEntry("PASSWORD\n${cryptoExtraEdit.text}")
+                            val entry = PasswordEntry("PASSWORD\n${extraContent.text}")
                             val username = entry.username
 
                             // username should not be null here by the logic in
                             // updateEncryptUsernameState, but it could still happen due to
                             // input lag.
                             if (username != null) {
-                                passwordFileEdit.setText(username)
-                                cryptoExtraEdit.setText(entry.extraContentWithoutUsername)
+                                filename.setText(username)
+                                extraContent.setText(entry.extraContentWithoutUsername)
                             }
                         }
                         updateEncryptUsernameState()
                     }
                 }
-                listOf(passwordFileEdit, cryptoExtraEdit).forEach {
+                listOf(filename, extraContent).forEach {
                     it.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
                 }
             }
             suggestedPass?.let {
-                cryptoPasswordEdit.setText(it)
-                cryptoPasswordEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                password.setText(it)
+                password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
-            suggestedExtra?.let { cryptoExtraEdit.setText(it) }
+            suggestedExtra?.let { extraContent.setText(it) }
             if (shouldGeneratePassword) {
                 generatePassword()
-                cryptoPasswordEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
         }
     }
@@ -150,9 +150,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         encryptUsername.apply {
             if (visibility != View.VISIBLE)
                 return@with
-            val hasUsernameInFileName = passwordFileEdit.text.toString().isNotBlank()
+            val hasUsernameInFileName = filename.text.toString().isNotBlank()
             // Use PasswordEntry to parse extras for username
-            val entry = PasswordEntry("PLACEHOLDER\n${cryptoExtraEdit.text}")
+            val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
             val hasUsernameInExtras = entry.hasUsername()
             isEnabled = hasUsernameInFileName xor hasUsernameInExtras
             isChecked = hasUsernameInExtras
@@ -163,9 +163,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
      * Encrypts the password and the extra content
      */
     private fun encrypt(copy: Boolean = false) = with(binding) {
-        val editName = passwordFileEdit.text.toString().trim()
-        val editPass = cryptoPasswordEdit.text.toString()
-        val editExtra = cryptoExtraEdit.text.toString()
+        val editName = filename.text.toString().trim()
+        val editPass = password.text.toString()
+        val editExtra = extraContent.text.toString()
 
         if (editName.isEmpty()) {
             showSnackbar(resources.getString(R.string.file_toast_text))
@@ -178,7 +178,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         }
 
         if (copy) {
-            copyPasswordToClipBoard()
+            copyPasswordToClipboard(editPass)
         }
 
         val data = Intent()
@@ -198,8 +198,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             intent.getBooleanExtra("fromDecrypt", false) -> fullPath
             // If we allowed the user to edit the relative path, we have to consider it here instead
             // of fullPath.
-            cryptoPasswordCategory.isEnabled -> {
-                val editRelativePath = cryptoPasswordCategory.text.toString().trim()
+            category.isEnabled -> {
+                val editRelativePath = category.text.toString().trim()
                 if (editRelativePath.isEmpty()) {
                     showSnackbar(resources.getString(R.string.path_toast_text))
                     return
@@ -257,38 +257,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 }
             }
         }
-    }
-
-    private fun copyPasswordToClipBoard() {
-        /*
-        val clipboard = clipboard ?: return
-        var pass = passwordEntry?.password
-
-        if (findViewById<TextView>(R.id.crypto_password_show) == null) {
-            if (editPass == null) {
-                return
-            } else {
-                pass = editPass
-            }
-        }
-
-        val clip = ClipData.newPlainText("pgp_handler_result_pm", pass)
-        clipboard.setPrimaryClip(clip)
-
-        var clearAfter = 45
-        try {
-            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45") as String)
-        } catch (e: NumberFormatException) {
-            // ignore and keep default
-        }
-
-        if (clearAfter != 0) {
-            setTimer()
-            showSnackbar(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
-        } else {
-            showSnackbar(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
-        }
-         */
     }
 
     companion object {

@@ -5,10 +5,8 @@
 
 package com.zeapo.pwdstore.crypto
 
-import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.Menu
@@ -19,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
@@ -91,7 +88,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             android.R.id.home -> onBackPressed()
             R.id.edit_password -> editPassword()
             R.id.share_password_as_plaintext -> shareAsPlaintext()
-            R.id.copy_password -> copyPasswordToClipboard()
+            R.id.copy_password -> copyPasswordToClipboard(passwordEntry?.password)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -120,40 +117,6 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             passwordTextContainer.visibility = View.GONE
             extraContentContainer.visibility = View.GONE
             usernameTextContainer.visibility = View.GONE
-        }
-    }
-
-    private fun copyTextToClipboard(text: String?, showSnackbar: Boolean = true) {
-        val clipboard = clipboard ?: return
-        val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
-        clipboard.setPrimaryClip(clip)
-        if (showSnackbar) {
-            showSnackbar(resources.getString(R.string.clipboard_copied_text))
-        }
-    }
-
-    private fun copyPasswordToClipboard() {
-        copyTextToClipboard(passwordEntry?.password, showSnackbar = false)
-
-        var clearAfter = 45
-        try {
-            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45") as String)
-        } catch (_: NumberFormatException) {
-        }
-
-        if (clearAfter != 0) {
-
-            val service = Intent(this, ClipboardService::class.java).apply {
-                action = ClipboardService.ACTION_START
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(service)
-            } else {
-                startService(service)
-            }
-            showSnackbar(this.resources.getString(R.string.clipboard_password_toast_text, clearAfter))
-        } else {
-            showSnackbar(this.resources.getString(R.string.clipboard_password_no_clear_toast_text))
         }
     }
 
@@ -197,8 +160,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     if (!showPassword) {
                                         passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
                                     }
-                                    passwordTextContainer.setOnClickListener { copyPasswordToClipboard() }
-                                    passwordText.setOnClickListener { copyPasswordToClipboard() }
+                                    passwordTextContainer.setOnClickListener { copyPasswordToClipboard(entry.password) }
+                                    passwordText.setOnClickListener { copyPasswordToClipboard(entry.password) }
                                 }
 
                                 if (entry.hasExtraContent()) {
@@ -223,7 +186,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                             }
 
                             if (settings.getBoolean("copy_on_decrypt", true)) {
-                                copyPasswordToClipboard()
+                                copyPasswordToClipboard(entry.password)
                             }
                         } catch (e: Exception) {
                             e(e)

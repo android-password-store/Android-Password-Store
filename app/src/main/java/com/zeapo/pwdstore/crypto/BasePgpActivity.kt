@@ -6,10 +6,12 @@
 package com.zeapo.pwdstore.crypto
 
 import android.app.PendingIntent
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.WindowManager
@@ -23,6 +25,7 @@ import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -69,10 +72,10 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
     /**
-     * [ClipboardManager] instance used by subclasses. Most direct subclasses do not use it so we lazily
-     * init this.
+     * [ClipboardManager] instance used by [copyTextToClipboard]. Subclasses should not be using it
+     * directly, and instead calling [copyTextToClipboard] or [copyPasswordToClipboard] as required.
      */
-    val clipboard by lazy { getSystemService<ClipboardManager>() }
+    private val clipboard by lazy { getSystemService<ClipboardManager>() }
 
     /**
      * Backing property and public read-only field for getting the list of OpenPGP key IDs that we
@@ -195,6 +198,48 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
                     e { "onError getMessage: ${error.message}" }
                 }
             }
+        }
+    }
+
+    /**
+     * Copies provided [text] to the clipboard. Shows a [Snackbar] which can be disabled by passing
+     * [showSnackbar] as false.
+     */
+    fun copyTextToClipboard(text: String?, showSnackbar: Boolean = true) {
+        val clipboard = clipboard ?: return
+        val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
+        clipboard.setPrimaryClip(clip)
+        if (showSnackbar) {
+            showSnackbar(resources.getString(R.string.clipboard_copied_text))
+        }
+    }
+
+    /**
+     * Copies a provided [password] string to the clipboard. This wraps [copyTextToClipboard] to
+     * hide the default [Snackbar] and starts off an instance of [ClipboardService] to provide a
+     * way of clearing the clipboard.
+     */
+    fun copyPasswordToClipboard(password: String?) {
+        copyTextToClipboard(password, showSnackbar = false)
+
+        var clearAfter = 45
+        try {
+            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45") as String)
+        } catch (_: NumberFormatException) {
+        }
+
+        if (clearAfter != 0) {
+            val service = Intent(this, ClipboardService::class.java).apply {
+                action = ClipboardService.ACTION_START
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(service)
+            } else {
+                startService(service)
+            }
+            showSnackbar(resources.getString(R.string.clipboard_password_toast_text, clearAfter))
+        } else {
+            showSnackbar(resources.getString(R.string.clipboard_password_no_clear_toast_text))
         }
     }
 
