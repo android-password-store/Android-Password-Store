@@ -640,11 +640,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
-                REQUEST_CODE_EDIT -> {
-                    commitChange(resources.getString(R.string.git_commit_edit_text,
-                        data!!.extras!!.getString("LONG_NAME")))
-                    refreshPasswordList()
-                }
                 BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
                 BaseGitActivity.REQUEST_SYNC, BaseGitActivity.REQUEST_PULL -> resetPasswordList()
                 HOME -> checkLocalRepository()
@@ -811,7 +806,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     companion object {
         const val REQUEST_CODE_ENCRYPT = 9911
         const val REQUEST_CODE_DECRYPT_AND_VERIFY = 9913
-        const val REQUEST_CODE_EDIT = 9916
         const val REQUEST_CODE_SELECT_FOLDER = 9917
         const val REQUEST_ARG_PATH = "PATH"
         private val TAG = PasswordStore::class.java.name
