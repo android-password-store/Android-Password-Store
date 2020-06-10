@@ -39,7 +39,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.apache.commons.io.FileUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 import java.io.ByteArrayOutputStream
@@ -497,7 +496,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         var inputStream: InputStream? = null
         withContext(Dispatchers.IO) {
             try {
-                inputStream = FileUtils.openInputStream(items[lastWhichItem])
+                inputStream = items[lastWhichItem].inputStream()
             } catch (e: IOException) {
                 e.printStackTrace()
                 cancel("", e)

@@ -28,9 +28,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.utils.FileUtils
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.apache.commons.io.FilenameUtils
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
@@ -267,7 +267,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
          * Gets the name of the password (excluding .gpg)
          */
         fun getName(fullPath: String): String {
-            return FilenameUtils.getBaseName(fullPath)
+            return FileUtils.getBaseName(fullPath)
         }
 
         /**

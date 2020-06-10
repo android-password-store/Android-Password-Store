@@ -37,6 +37,7 @@ import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
+import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
@@ -54,7 +55,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
-import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -226,7 +226,7 @@ class UserPreference : AppCompatActivity() {
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
                         try {
-                            FileUtils.cleanDirectory(PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext))
+                            PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext).deleteRecursively()
                             PasswordRepository.closeRepository()
                         } catch (ignored: Exception) {
                             // TODO Handle the different cases of exceptions
@@ -356,8 +356,8 @@ class UserPreference : AppCompatActivity() {
             prefIsCustomDict?.onPreferenceChangeListener = ChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     val customDictFile = File(context.filesDir, XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
-                    if (customDictFile.exists()) {
-                        FileUtils.deleteQuietly(customDictFile)
+                    if (customDictFile.exists() && !customDictFile.delete()) {
+                        w { "Failed to delete custom XkPassword dictionary: $customDictFile" }
                     }
                     prefCustomDictPicker?.setSummary(R.string.xkpwgen_pref_custom_dict_picker_summary)
                 }
@@ -717,9 +717,11 @@ class UserPreference : AppCompatActivity() {
                     val customDictPref = prefsFragment.findPreference<Preference>("pref_key_custom_dict")
                     setCustomDictSummary(customDictPref, uri)
                     // copy user selected file to internal storage
-                    val inputStream = this.contentResolver.openInputStream(uri)
-                    val customDictFile = File(this.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE)
-                    FileUtils.copyInputStreamToFile(inputStream, customDictFile)
+                    val inputStream = contentResolver.openInputStream(uri)
+                    val customDictFile = File(filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
+                    inputStream?.copyTo(customDictFile, 1024)
+                    inputStream?.close()
+                    customDictFile.close()
 
                     setResult(Activity.RESULT_OK)
                 }

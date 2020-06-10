@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import org.apache.commons.io.filefilter.FileFilterUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
@@ -195,9 +194,9 @@ open class PasswordRepository protected constructor() {
         fun getFilesList(path: File?): ArrayList<File> {
             if (path == null || !path.exists()) return ArrayList()
 
-            val directories = (path.listFiles(FileFilterUtils.directoryFileFilter() as FileFilter)
+            val directories = (path.listFiles(FileFilter { pathname -> pathname.isDirectory })
                 ?: emptyArray()).toList()
-            val files = (path.listFiles(FileFilterUtils.suffixFileFilter(".gpg") as FileFilter)
+            val files = (path.listFiles(FileFilter { pathname -> pathname.extension == "gpg" })
                 ?: emptyArray()).toList()
 
             val items = ArrayList<File>()

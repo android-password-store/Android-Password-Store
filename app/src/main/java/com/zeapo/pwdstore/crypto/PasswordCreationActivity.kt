@@ -30,7 +30,6 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.nio.charset.Charset
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -198,7 +197,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
         // TODO Check if we could use PasswordEntry to generate the file
         val content = "$editPass\n$editExtra"
-        val inputStream = ByteArrayInputStream(content.toByteArray(Charset.forName("UTF-8")))
+        val inputStream = ByteArrayInputStream(content.toByteArray())
         val outputStream = ByteArrayOutputStream()
 
         val path = when {
