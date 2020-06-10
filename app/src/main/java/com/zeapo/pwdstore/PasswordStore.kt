@@ -519,18 +519,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         startActivityForResult(decryptIntent, REQUEST_CODE_DECRYPT_AND_VERIFY)
     }
 
-    // TODO(msfjarvis): This is hard to support with the current setup, should we retire it?
-    fun editPassword(item: PasswordItem) {
-        /*
-        val intent = Intent(this, PasswordCreationActivity::class.java)
-        intent.putExtra("SUGGESTED_NAME", item.name)
-        intent.putExtra("FILE_PATH", item.file.absolutePath)
-        intent.putExtra("PARENT_PATH", item.file.parentFile!!.absolutePath)
-        intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
-        startActivityForResult(intent, REQUEST_CODE_EDIT)
-         */
-    }
-
     private fun validateState(): Boolean {
         if (!isInitialized) {
             MaterialAlertDialogBuilder(this)
