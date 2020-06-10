@@ -110,8 +110,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", relativeParentPath)
         intent.putExtra("REPO_PATH", repoPath)
-        intent.putExtra("SUGGESTED_NAME", name)
-        intent.putExtra("SUGGESTED_PASS", passwordEntry?.password)
+        intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
+        intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
         passwordEditResult.launch(intent)
         with(binding) {
             passwordTextContainer.visibility = View.GONE

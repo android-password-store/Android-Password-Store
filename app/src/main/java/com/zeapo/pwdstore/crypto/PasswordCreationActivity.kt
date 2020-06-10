@@ -36,10 +36,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
 
-    private val suggestedName by lazy { intent.getStringExtra("SUGGESTED_NAME") }
-    private val suggestedPass by lazy { intent.getStringExtra("SUGGESTED_PASS") }
-    private val suggestedExtra by lazy { intent.getStringExtra("SUGGESTED_EXTRA") }
-    private val shouldGeneratePassword by lazy { intent.getBooleanExtra("GENERATE_PASSWORD", false) }
+    private val suggestedName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
+    private val suggestedPass by lazy { intent.getStringExtra(EXTRA_PASSWORD) }
+    private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
+    private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val encrypt = registerForActivityResult(StartActivityForResult()) { encrypt() }
     private val encryptAndCopy = registerForActivityResult(StartActivityForResult()) { encrypt(true) }
 
@@ -262,5 +262,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     companion object {
         private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
+        const val EXTRA_FILE_NAME = "FILENAME"
+        const val EXTRA_PASSWORD = "PASSWORD"
+        const val EXTRA_EXTRA_CONTENT = "EXTRA_CONTENT"
+        const val EXTRA_GENERATE_PASSWORD = "GENERATE_PASSWORD"
     }
 }

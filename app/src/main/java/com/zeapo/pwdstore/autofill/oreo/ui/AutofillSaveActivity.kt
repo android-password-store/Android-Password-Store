@@ -102,9 +102,9 @@ class AutofillSaveActivity : Activity() {
                 bundleOf(
                     "REPO_PATH" to repo.absolutePath,
                     "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)!!).absolutePath,
-                    "SUGGESTED_NAME" to intent.getStringExtra(EXTRA_NAME),
-                    "SUGGESTED_PASS" to intent.getStringExtra(EXTRA_PASSWORD),
-                    "GENERATE_PASSWORD" to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
+                    PasswordCreationActivity.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
+                    PasswordCreationActivity.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
+                    PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
                 )
             )
         }
