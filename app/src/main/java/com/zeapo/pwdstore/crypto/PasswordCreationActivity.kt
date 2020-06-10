@@ -125,12 +125,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 finish()
             }
             R.id.crypto_confirm_add -> {
-                api ?: bindToOpenKeychain(this@PasswordCreationActivity, encrypt)
-                encrypt()
+                if (api == null) {
+                    bindToOpenKeychain(this@PasswordCreationActivity, encrypt)
+                } else {
+                    encrypt()
+                }
             }
             R.id.crypto_confirm_add_and_copy -> {
-                api ?: bindToOpenKeychain(this@PasswordCreationActivity, encryptAndCopy)
-                encrypt(true)
+                if (api == null) {
+                    bindToOpenKeychain(this@PasswordCreationActivity, encryptAndCopy)
+                } else {
+                    encrypt(copy = true)
+                }
             }
             else -> return super.onOptionsItemSelected(item)
         }
