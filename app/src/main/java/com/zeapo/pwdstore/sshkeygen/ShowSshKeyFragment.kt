@@ -16,9 +16,7 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.utils.FileUtils
 import java.io.File
-import java.nio.charset.StandardCharsets
 
 class ShowSshKeyFragment : DialogFragment() {
 
