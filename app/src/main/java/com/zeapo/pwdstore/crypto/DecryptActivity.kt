@@ -35,8 +35,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }
     private var passwordEntry: PasswordEntry? = null
 
-    private val passwordEditResult = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) decryptAndVerify()
+    private val passwordEditResult = registerForActivityResult(StartActivityForResult()) {
+        decryptAndVerify()
     }
 
     private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
