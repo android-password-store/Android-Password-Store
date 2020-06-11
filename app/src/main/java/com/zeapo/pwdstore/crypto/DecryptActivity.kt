@@ -124,6 +124,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         intent.putExtra("REPO_PATH", repoPath)
         intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
         intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
+        intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContent)
         passwordEditResult.launch(intent)
         with(binding) {
             passwordTextContainer.visibility = View.GONE
