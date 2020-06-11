@@ -38,13 +38,13 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }
     private var passwordEntry: PasswordEntry? = null
 
-    private val passwordEditResult = registerForActivityResult(StartActivityForResult()) {
+    private val passwordEditResult = registerForActivityResult(StartActivityForResult()) { result ->
         lifecycleScope.launch {
             val repo = PasswordRepository.getRepository(null)
             if (repo != null) {
                 val status = Git(repo).status().call()
                 if (status.modified.isNotEmpty()) {
-                    commitChange(getString(R.string.git_commit_edit_text, it.data?.getStringExtra("NAME")))
+                    commitChange(getString(R.string.git_commit_edit_text, result.data?.getStringExtra("LONG_NAME")))
                 }
             }
         }
