@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 -   OTP codes can be automatically filled from SMS (requires Android P+ and Google Play Services)
 -   Importing TOTP secrets using QR codes
 -   Navigate into newly created folders and scroll to newly created passwords
+-   Allow configuring pull behavior. Head to the Git utils screen to choose from Merge or Rebase strategies.
 
 ## [1.9.2] - 2020-06-30
 
