@@ -58,16 +58,50 @@
         app:layout_constraintTop_toBottomOf="@id/email_input_layout" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/pull_strategy_heading"
+        style="@style/AppTheme.HeaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/pull_strategy_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/save_button" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/pull_strategy_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pull_strategy_heading"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pull_strategy_rebase"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pull_strategy_merge" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pull_strategy_merge"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pull_strategy_rebase" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/git_tools_title"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
+        style="@style/AppTheme.HeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="@string/hackish_tools"
-        android:textSize="24sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/save_button" />
+        app:layout_constraintTop_toBottomOf="@id/pull_strategy_group" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/commit_hash_label"

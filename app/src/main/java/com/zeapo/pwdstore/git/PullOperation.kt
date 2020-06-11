@@ -21,14 +21,15 @@ import org.eclipse.jgit.api.PullCommand
 class PullOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     /**
-     * Sets the command
+     * Sets the commands required to do a git pull on the repository. The [rebase] parameter decides
+     * whether the pull will be of type `git pull origin --rebase` or `git pull origin --no-rebase`.
      *
-     * @return the current object
+     * @return An instance of [PullOperation]
      */
-    fun setCommand(): PullOperation {
+    fun setCommand(rebase: Boolean): PullOperation {
         this.command = Git(repository)
             .pull()
-            .setRebase(true)
+            .setRebase(rebase)
             .setRemote("origin")
         return this
     }

@@ -390,6 +390,11 @@
     <string name="openpgp_error_no_user_ids">No matching PGP keys found</string>
     <string name="openpgp_error_unknown">Error from OpenKeyChain : %s</string>
 
+    <!-- Pull strategy -->
+    <string name="pull_strategy_title">Pull Strategy</string>
+    <string name="pull_strategy_merge">MERGE</string>
+    <string name="pull_strategy_rebase">REBASE</string>
+
     <!-- Password creation failure -->
     <string name="password_creation_file_fail_title">Error</string>
     <string name="password_creation_file_write_fail_message">Failed to write password file to the store, please try again.</string>

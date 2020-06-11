@@ -187,9 +187,10 @@ abstract class BaseGitActivity : AppCompatActivity() {
             }
 
             val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
+            val rebase = settings.getBoolean("rebase_on_pull", true)
             val op = when (operation) {
                 REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, this).setCommand(url!!)
-                REQUEST_PULL -> PullOperation(localDir, this).setCommand()
+                REQUEST_PULL -> PullOperation(localDir, this).setCommand(rebase)
                 REQUEST_PUSH -> PushOperation(localDir, this).setCommand()
                 REQUEST_SYNC -> SyncOperation(localDir, this).setCommands()
                 BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(localDir, this).setCommands()

@@ -68,5 +68,19 @@ class GitConfigActivity : BaseGitActivity() {
                 Handler().postDelayed(500) { finish() }
             }
         }
+        binding.pullStrategyGroup.apply {
+            check(if (settings.getBoolean("rebase_on_pull", true)) {
+                R.id.pull_strategy_rebase
+            } else {
+                R.id.pull_strategy_merge
+            })
+            addOnButtonCheckedListener { _, checkedId, checked ->
+                if (checked) {
+                    settings.edit {
+                        putBoolean("rebase_on_pull", checkedId != R.id.pull_strategy_merge)
+                    }
+                }
+            }
+        }
     }
 }
