@@ -50,8 +50,6 @@ import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitAsyncTask
-import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
@@ -66,6 +64,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
+import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
@@ -616,10 +615,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private val currentDir: File
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
-    private fun commitChange(message: String) {
-        commitChange(this, message)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
@@ -820,26 +815,5 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }
 
         private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
-
-        fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
-            if (!PasswordRepository.isGitRepo()) {
-                if (finishWithResultOnEnd != null) {
-                    activity.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
-                    activity.finish()
-                }
-                return
-            }
-            object : GitOperation(getRepositoryDirectory(activity), activity) {
-                override fun execute() {
-                    tag(TAG).d { "Committing with message $message" }
-                    val git = Git(repository)
-                    val tasks = GitAsyncTask(activity, true, this, finishWithResultOnEnd)
-                    tasks.execute(
-                        git.add().addFilepattern("."),
-                        git.commit().setAll(true).setMessage(message)
-                    )
-                }
-            }.execute()
-        }
     }
 }

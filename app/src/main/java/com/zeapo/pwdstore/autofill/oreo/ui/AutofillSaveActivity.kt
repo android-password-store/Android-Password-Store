@@ -25,6 +25,7 @@ import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.commitChange
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -145,8 +146,7 @@ class AutofillSaveActivity : Activity() {
             }
             // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
             // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
-            PasswordStore.commitChange(
-                this,
+            commitChange(
                 getString(R.string.git_commit_add_text, longName),
                 finishWithResultOnEnd = result
             )

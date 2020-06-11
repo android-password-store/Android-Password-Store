@@ -4,7 +4,9 @@
  */
 package com.zeapo.pwdstore.utils
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.util.TypedValue
@@ -17,6 +19,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.github.ajalt.timberkt.d
+import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitOperation
+import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
+import org.eclipse.jgit.api.Git
 import java.io.File
 
 infix fun Int.hasFlag(flag: Int): Boolean {
@@ -51,6 +58,27 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
+}
+
+fun Activity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
+    if (!PasswordRepository.isGitRepo()) {
+        if (finishWithResultOnEnd != null) {
+            setResult(Activity.RESULT_OK, finishWithResultOnEnd)
+            finish()
+        }
+        return
+    }
+    object : GitOperation(getRepositoryDirectory(this@commitChange), this@commitChange) {
+        override fun execute() {
+            d { "Comitting with message: '$message'" }
+            val git = Git(repository)
+            val task = GitAsyncTask(this@commitChange, true, this, finishWithResultOnEnd)
+            task.execute(
+                git.add().addFilepattern("."),
+                git.commit().setAll(true).setMessage(message)
+            )
+        }
+    }.execute()
 }
 
 /**
