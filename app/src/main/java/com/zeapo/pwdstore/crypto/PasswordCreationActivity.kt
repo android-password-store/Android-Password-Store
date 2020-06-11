@@ -233,18 +233,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             }
 
                             val returnIntent = Intent()
-                            returnIntent.putExtra("CREATED_FILE", path)
-                            returnIntent.putExtra("NAME", editName)
-                            returnIntent.putExtra("LONG_NAME", getLongName(fullPath, repoPath, editName))
+                            returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
+                            returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
+                            returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
 
                             if (shouldGeneratePassword) {
                                 val directoryStructure =
                                     AutofillPreferences.directoryStructure(applicationContext)
                                 val entry = PasswordEntry(content)
-                                returnIntent.putExtra("PASSWORD", entry.password)
+                                returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
                                 val username = PasswordEntry(content).username
                                     ?: directoryStructure.getUsernameFor(file)
-                                returnIntent.putExtra("USERNAME", username)
+                                returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                             }
 
                             setResult(RESULT_OK, returnIntent)
@@ -262,6 +262,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     companion object {
         private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
+        const val RETURN_EXTRA_CREATED_FILE = "CREATED_FILE"
+        const val RETURN_EXTRA_NAME = "NAME"
+        const val RETURN_EXTRA_LONG_NAME = "LONG_NAME"
+        const val RETURN_EXTRA_USERNAME = "USERNAME"
+        const val RETURN_EXTRA_PASSWORD = "PASSWORD"
         const val EXTRA_FILE_NAME = "FILENAME"
         const val EXTRA_PASSWORD = "PASSWORD"
         const val EXTRA_EXTRA_CONTENT = "EXTRA_CONTENT"

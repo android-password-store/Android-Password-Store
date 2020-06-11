@@ -44,7 +44,12 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             if (repo != null) {
                 val status = Git(repo).status().call()
                 if (status.modified.isNotEmpty()) {
-                    commitChange(getString(R.string.git_commit_edit_text, result.data?.getStringExtra("LONG_NAME")))
+                    commitChange(
+                        getString(
+                            R.string.git_commit_edit_text,
+                            result.data?.getStringExtra(PasswordCreationActivity.RETURN_EXTRA_LONG_NAME)
+                        )
+                    )
                 }
             }
         }
