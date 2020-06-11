@@ -2,12 +2,14 @@
 
 ENCRYPT_KEY=$1
 
-if [[ -n "$ENCRYPT_KEY" ]]; then
-    # Decrypt Release key
-    openssl enc -aes-256-cbc -md sha256 -pbkdf2 -d -in release/keystore.cipher -out keystore.jks -k "${ENCRYPT_KEY}"
+declare -A SECRETS
+SECRETS[release/keystore.cipher]=keystore.jks
+SECRETS[release/props.cipher]=keystore.properties
 
-    # Decrypt signing config
-    openssl enc -aes-256-cbc -md sha256 -pbkdf2 -d -in release/props.cipher -out keystore.properties -k "${ENCRYPT_KEY}"
+if [[ -n "$ENCRYPT_KEY" ]]; then
+    for src in "${!SECRETS[@]}"; do
+      openssl enc -aes-256-cbc -md sha256 -pbkdf2 -d -in "${src}" -out "${SECRETS[${src}]}" -k "${ENCRYPT_KEY}"
+    done
 else
     echo "ENCRYPT_KEY is empty"
 fi
