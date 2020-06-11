@@ -20,11 +20,14 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
+import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import org.eclipse.jgit.api.Git
 import org.openintents.openpgp.IOpenPgpService2
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -36,6 +39,15 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     private var passwordEntry: PasswordEntry? = null
 
     private val passwordEditResult = registerForActivityResult(StartActivityForResult()) {
+        lifecycleScope.launch {
+            val repo = PasswordRepository.getRepository(null)
+            if (repo != null) {
+                val status = Git(repo).status().call()
+                if (status.modified.isNotEmpty()) {
+                    commitChange(getString(R.string.git_commit_edit_text, it.data?.getStringExtra("NAME")))
+                }
+            }
+        }
         decryptAndVerify()
     }
 
