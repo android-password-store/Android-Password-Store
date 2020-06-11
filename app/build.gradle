@@ -101,6 +101,7 @@ dependencies {
     implementation deps.third_party.jsch
     implementation deps.third_party.sshj
     implementation deps.third_party.bouncycastle
+    implementation deps.third_party.plumber
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
