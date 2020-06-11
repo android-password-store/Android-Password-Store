@@ -14,7 +14,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.Timber
+import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
@@ -201,7 +201,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val outputStream = ByteArrayOutputStream()
 
         val path = when {
-            intent.getBooleanExtra("fromDecrypt", false) -> fullPath
             // If we allowed the user to edit the relative path, we have to consider it here instead
             // of fullPath.
             category.isEnabled -> {
@@ -250,7 +249,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             setResult(RESULT_OK, returnIntent)
                             finish()
                         } catch (e: Exception) {
-                            Timber.e(e) { "An Exception occurred" }
+                            e(e) { "An Exception occurred" }
                         }
                     }
                     OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
