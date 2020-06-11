@@ -39,11 +39,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedPass by lazy { intent.getStringExtra(EXTRA_PASSWORD) }
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
-    private val encrypt = registerForActivityResult(StartActivityForResult()) { encrypt() }
-    private val encryptAndCopy = registerForActivityResult(StartActivityForResult()) { encrypt(true) }
+    private val doNothing = registerForActivityResult(StartActivityForResult()) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bindToOpenKeychain(this, doNothing)
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
@@ -124,20 +124,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 setResult(RESULT_CANCELED)
                 finish()
             }
-            R.id.save_password -> {
-                if (api == null) {
-                    bindToOpenKeychain(this@PasswordCreationActivity, encrypt)
-                } else {
-                    encrypt()
-                }
-            }
-            R.id.save_and_copy_password -> {
-                if (api == null) {
-                    bindToOpenKeychain(this@PasswordCreationActivity, encryptAndCopy)
-                } else {
-                    encrypt(copy = true)
-                }
-            }
+            R.id.save_password -> encrypt()
+            R.id.save_and_copy_password -> encrypt(copy = true)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
