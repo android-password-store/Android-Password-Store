@@ -25,18 +25,18 @@ ext.deps = [
 
     androidx: [
         annotation: 'androidx.annotation:annotation:1.2.0-alpha01',
-        activity_ktx: 'androidx.activity:activity-ktx:1.2.0-alpha05',
+        activity_ktx: 'androidx.activity:activity-ktx:1.2.0-alpha06',
         appcompat: 'androidx.appcompat:appcompat:1.3.0-alpha01',
         biometric: 'androidx.biometric:biometric:1.0.1',
         constraint_layout: 'androidx.constraintlayout:constraintlayout:2.0.0-beta6',
-        core_ktx: 'androidx.core:core-ktx:1.4.0-alpha01',
+        core_ktx: 'androidx.core:core-ktx:1.5.0-alpha01',
         documentfile: 'androidx.documentfile:documentfile:1.0.1',
-        fragment_ktx: 'androidx.fragment:fragment-ktx:1.3.0-alpha05',
-        lifecycle_common: 'androidx.lifecycle:lifecycle-common-java8:2.3.0-alpha03',
-        lifecycle_livedata_ktx: 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha03',
-        lifecycle_viewmodel_ktx: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha03',
+        fragment_ktx: 'androidx.fragment:fragment-ktx:1.3.0-alpha06',
+        lifecycle_common: 'androidx.lifecycle:lifecycle-common-java8:2.3.0-alpha04',
+        lifecycle_livedata_ktx: 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha04',
+        lifecycle_viewmodel_ktx: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha04',
         local_broadcast_manager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01',
-        material: 'com.google.android.material:material:1.2.0-alpha06',
+        material: 'com.google.android.material:material:1.3.0-alpha01',
         preference: 'androidx.preference:preference:1.1.1',
         recycler_view: 'androidx.recyclerview:recyclerview:1.2.0-alpha03',
         recycler_view_selection: 'androidx.recyclerview:recyclerview-selection:1.1.0-rc01',
@@ -50,7 +50,8 @@ ext.deps = [
         fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.4',
         jsch: 'com.jcraft:jsch:0.1.55',
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
-        leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.3',
+        leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.4',
+        plumber: 'com.squareup.leakcanary:leakcanary-android:2.4',
         openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:2.0.0',
         sshj: 'com.hierynomus:sshj:0.29.0',
         ssh_auth: 'org.sufficientlysecure:sshauthentication-api:1.0',
@@ -63,11 +64,11 @@ ext.deps = [
         junit: 'junit:junit:4.13',
         kotlin_test_junit: 'org.jetbrains.kotlin:kotlin-test-junit:1.3.72',
         androidx: [
-            runner: 'androidx.test:runner:1.3.0-beta02',
-            rules: 'androidx.test:rules:1.3.0-beta02',
-            junit: 'androidx.test.ext:junit:1.1.2-beta02',
-            espresso_core: 'androidx.test.espresso:espresso-core:3.3.0-beta02',
-            espresso_intents: 'androidx.test.espresso:espresso-intents:3.3.0-beta02'
+            runner: 'androidx.test:runner:1.3.0-rc01',
+            rules: 'androidx.test:rules:1.3.0-rc01',
+            junit: 'androidx.test.ext:junit:1.1.2-rc01',
+            espresso_core: 'androidx.test.espresso:espresso-core:3.3.0-rc01',
+            espresso_intents: 'androidx.test.espresso:espresso-intents:3.3.0-rc01'
         ]
     ]
 ]
