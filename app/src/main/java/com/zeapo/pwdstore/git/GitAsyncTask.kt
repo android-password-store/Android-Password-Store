@@ -32,7 +32,9 @@ class GitAsyncTask(
     activity: Activity,
     private val refreshListOnEnd: Boolean,
     private val operation: GitOperation,
-    private val finishWithResultOnEnd: Intent?) : AsyncTask<GitCommand<*>, Int, GitAsyncTask.Result>() {
+    private val finishWithResultOnEnd: Intent?,
+    private val silentlyExecute: Boolean = false
+) : AsyncTask<GitCommand<*>, Int, GitAsyncTask.Result>() {
 
     private val activityWeakReference: WeakReference<Activity> = WeakReference(activity)
     private val activity: Activity?
@@ -46,6 +48,7 @@ class GitAsyncTask(
     }
 
     override fun onPreExecute() {
+        if (silentlyExecute) return
         dialog.run {
             setMessage(activity!!.resources.getString(R.string.running_dialog_text))
             setCancelable(false)
@@ -141,7 +144,7 @@ class GitAsyncTask(
     }
 
     override fun onPostExecute(maybeResult: Result?) {
-        dialog.dismiss()
+        if (!silentlyExecute) dialog.dismiss()
         when (val result = maybeResult ?: Result.Err(IOException("Unexpected error"))) {
             is Result.Err -> {
                 if (isExplicitlyUserInitiatedError(result.err)) {
