@@ -26,8 +26,8 @@
     <string name="password_exists_message">Toto přepíše%1$s %2$s .</string>
 
     <!-- git commits -->
-    <string name="git_commit_add_text">Přídat generované heslo pro %1$s s použítím android password store.</string>
-    <string name="git_commit_edit_text">Upravit heslo %1$s s použítím android password store.</string>
+    <string name="git_commit_add_text">Přídat generované heslo pro %1$s s použítím Android Password Store.</string>
+    <string name="git_commit_edit_text">Upravit heslo %1$s s použítím Android Password Store.</string>
     <string name="git_commit_remove_text">Odstranit %1$s ze store. </string>
     <!-- PGPHandler -->
     <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>

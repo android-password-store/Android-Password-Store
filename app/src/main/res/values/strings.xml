@@ -38,8 +38,8 @@
     <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
 
     <!-- git commits -->
-    <string name="git_commit_add_text">Add generated password for %1$s using android password store.</string>
-    <string name="git_commit_edit_text">Edit password for %1$s using android password store.</string>
+    <string name="git_commit_add_text">Add generated password for %1$s using Android Password Store.</string>
+    <string name="git_commit_edit_text">Edit password for %1$s using Android Password Store.</string>
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
 
