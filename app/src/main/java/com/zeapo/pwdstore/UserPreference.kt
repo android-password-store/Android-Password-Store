@@ -664,8 +664,6 @@ class UserPreference : AppCompatActivity() {
                             .show()
                     }
                 }
-                EDIT_GIT_INFO -> {
-                }
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
 
@@ -803,12 +801,10 @@ class UserPreference : AppCompatActivity() {
 
     companion object {
         private const val IMPORT_SSH_KEY = 1
-        private const val IMPORT_PGP_KEY = 2
-        private const val EDIT_GIT_INFO = 3
-        private const val SELECT_GIT_DIRECTORY = 4
-        private const val EXPORT_PASSWORDS = 5
-        private const val EDIT_GIT_CONFIG = 6
-        private const val SET_CUSTOM_XKPWD_DICT = 7
+        private const val SELECT_GIT_DIRECTORY = 2
+        private const val EXPORT_PASSWORDS = 3
+        private const val EDIT_GIT_CONFIG = 4
+        private const val SET_CUSTOM_XKPWD_DICT = 5
         private const val TAG = "UserPreference"
 
         /**
