@@ -23,10 +23,13 @@ import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.databinding.PasswordCreationActivityBinding
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
+import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.eclipse.jgit.api.Git
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import java.io.ByteArrayInputStream
@@ -47,6 +50,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindToOpenKeychain(this, doNothing)
+        title = if (intent.getBooleanExtra(EXTRA_EDITING, false))
+            getString(R.string.edit_password)
+        else
+            getString(R.string.new_password_title)
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
@@ -248,6 +255,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                             }
 
+				            val repo = PasswordRepository.getRepository(null)
+				            if (repo != null) {
+				                val status = Git(repo).status().call()
+				                if (status.modified.isNotEmpty()) {
+				                    commitChange(
+				                        getString(
+				                            R.string.git_commit_edit_text,
+				                            getLongName(fullPath, repoPath, editName)
+				                        )
+				                    )
+				                }
+				            }
                             setResult(RESULT_OK, returnIntent)
                             finish()
                         } catch (e: Exception) {

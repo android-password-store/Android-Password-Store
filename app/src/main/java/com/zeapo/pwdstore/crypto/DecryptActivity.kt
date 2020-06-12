@@ -20,14 +20,11 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
-import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.eclipse.jgit.api.Git
 import org.openintents.openpgp.IOpenPgpService2
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -37,24 +34,6 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }
     private var passwordEntry: PasswordEntry? = null
-
-    private val passwordEditResult = registerForActivityResult(StartActivityForResult()) { result ->
-        lifecycleScope.launch {
-            val repo = PasswordRepository.getRepository(null)
-            if (repo != null) {
-                val status = Git(repo).status().call()
-                if (status.modified.isNotEmpty()) {
-                    commitChange(
-                        getString(
-                            R.string.git_commit_edit_text,
-                            result.data?.getStringExtra(PasswordCreationActivity.RETURN_EXTRA_LONG_NAME)
-                        )
-                    )
-                }
-            }
-        }
-        decryptAndVerify()
-    }
 
     private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
         if (result.data == null) {
@@ -131,12 +110,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
         intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
         intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContent)
-        passwordEditResult.launch(intent)
-        with(binding) {
-            passwordTextContainer.visibility = View.GONE
-            extraContentContainer.visibility = View.GONE
-            usernameTextContainer.visibility = View.GONE
-        }
+        startActivity(intent)
+        finish()
     }
 
     private fun shareAsPlaintext() {
