@@ -30,7 +30,6 @@
     <string name="jgit_error_dialog_text">Message from jgit:</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">你忘了提供用户名了吗？</string>
     <string name="ssh_preferences_dialog_text">请在设置中导入或生成你的SSH密钥文件</string>
     <string name="ssh_preferences_dialog_title">无SSH密钥</string>
     <string name="ssh_preferences_dialog_import">导入</string>
@@ -46,17 +45,10 @@
     <string name="server_protocol">接口</string>
     <string name="server_url">服务器 URL</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Repo 路径</string>
-    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">用户名</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">生成的 URL</string>
     <string name="connection_mode">认证模式</string>
-
-    <string name="warn_malformed_url_port">如果使用自定义端口, 请提供绝对路径 (从根目录开始)</string>
 
     <string name="git_user_name_hint">用户名</string>
     <!-- PGP Handler -->
@@ -111,13 +103,11 @@
     <string name="ssh_keygen_generate">生成</string>
     <string name="ssh_keygen_copy">复制</string>
     <string name="ssh_keygen_tip">在你的Git服务器上提供此公钥</string>
-    <string name="ssh_keygen_show_passphrase">显示口令</string>
 
     <!-- Misc -->
     <string name="dialog_ok">确定</string>
     <string name="dialog_yes">确定</string>
     <string name="dialog_no">否</string>
-    <string name="dialog_oops">糟糕…</string>
     <string name="dialog_cancel">取消</string>
     <string name="git_sync">同步 Repo</string>
     <string name="git_pull">Git Pull</string>

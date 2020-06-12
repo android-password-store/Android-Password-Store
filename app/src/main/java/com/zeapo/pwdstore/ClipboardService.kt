@@ -8,17 +8,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ClipboardManager
+import android.content.ClipData
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
-import com.zeapo.pwdstore.utils.ClipboardUtils
+import com.zeapo.pwdstore.utils.clipboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -60,7 +59,6 @@ class ClipboardService : Service() {
                             startTimer(time)
                         }
                         withContext(Dispatchers.Main) {
-                            emitBroadcast()
                             clearClipboard()
                             stopForeground(true)
                             stopSelf()
@@ -85,11 +83,21 @@ class ClipboardService : Service() {
 
     private fun clearClipboard() {
         val deepClear = settings.getBoolean("clear_clipboard_20x", false)
-        val clipboardManager = getSystemService<ClipboardManager>()
+        val clipboard = clipboard
 
-        if (clipboardManager is ClipboardManager) {
+        if (clipboard != null) {
             scope.launch {
-                ClipboardUtils.clearClipboard(clipboardManager, deepClear)
+                d { "Clearing the clipboard" }
+                val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
+                clipboard.setPrimaryClip(clip)
+                if (deepClear) {
+                    withContext(Dispatchers.IO) {
+                        repeat(20) {
+                            val count = (it * 500).toString()
+                            clipboard.setPrimaryClip(ClipData.newPlainText(count, count))
+                        }
+                    }
+                }
             }
         } else {
             d { "Cannot get clipboard manager service" }
@@ -103,12 +111,6 @@ class ClipboardService : Service() {
             current++
             delay(1000)
         }
-    }
-
-    private fun emitBroadcast() {
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        val clearIntent = Intent(ACTION_CLEAR)
-        localBroadcastManager.sendBroadcast(clearIntent)
     }
 
     private fun createNotification() {
@@ -151,7 +153,7 @@ class ClipboardService : Service() {
 
     companion object {
         private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
-        private const val ACTION_START = "ACTION_START_CLIPBOARD_TIMER"
+        const val ACTION_START = "ACTION_START_CLIPBOARD_TIMER"
         private const val CHANNEL_ID = "NotificationService"
     }
 }

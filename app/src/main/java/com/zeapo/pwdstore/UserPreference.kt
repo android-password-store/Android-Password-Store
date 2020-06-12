@@ -21,6 +21,7 @@ import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
@@ -42,7 +43,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
-import com.zeapo.pwdstore.crypto.PgpActivity
+import com.zeapo.pwdstore.crypto.BasePgpActivity
+import com.zeapo.pwdstore.crypto.GetKeyIdsActivity
 import com.zeapo.pwdstore.git.GitConfigActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
@@ -74,12 +76,13 @@ class UserPreference : AppCompatActivity() {
         private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var callingActivity: UserPreference
+        private lateinit var sharedPreferences: SharedPreferences
         private lateinit var encryptedPreferences: SharedPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             callingActivity = requireActivity() as UserPreference
             val context = requireContext()
-            val sharedPreferences = preferenceManager.sharedPreferences
+            sharedPreferences = preferenceManager.sharedPreferences
             encryptedPreferences = requireActivity().applicationContext.getEncryptedPrefs("git_operation")
 
             addPreferencesFromResource(R.xml.preference)
@@ -146,15 +149,6 @@ class UserPreference : AppCompatActivity() {
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean("use_generated_key", false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean("git_external", false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString("general_show_time", "45")?.toInt() != 0
-            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
-                ?: HashSet()).toTypedArray()
-            keyPreference?.summary = if (selectedKeys.isEmpty()) {
-                this.resources.getString(R.string.pref_no_key_selected)
-            } else {
-                selectedKeys.joinToString(separator = ";") { s ->
-                    OpenPgpUtils.convertKeyIdToHex(java.lang.Long.valueOf(s))
-                }
-            }
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString("ssh_openkeystore_keyid", null)?.isNotEmpty()
                 ?: false
 
@@ -163,16 +157,21 @@ class UserPreference : AppCompatActivity() {
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
-            keyPreference?.onPreferenceClickListener = ClickListener {
-                val providerPackageName = requireNotNull(sharedPreferences.getString("openpgp_provider_list", ""))
-                if (providerPackageName.isEmpty()) {
-                    Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
-                    false
-                } else {
-                    val intent = Intent(callingActivity, PgpActivity::class.java)
-                    intent.putExtra("OPERATION", "GET_KEY_ID")
-                    startActivityForResult(intent, IMPORT_PGP_KEY)
-                    true
+            keyPreference?.let { pref ->
+                updateKeyIDsSummary(pref)
+                pref.onPreferenceClickListener = ClickListener {
+                    val providerPackageName = requireNotNull(sharedPreferences.getString("openpgp_provider_list", ""))
+                    if (providerPackageName.isEmpty()) {
+                        Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
+                        false
+                    } else {
+                        val intent = Intent(callingActivity, GetKeyIdsActivity::class.java)
+                        val keySelectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                            updateKeyIDsSummary(pref)
+                        }
+                        keySelectResult.launch(intent)
+                        true
+                    }
                 }
             }
 
@@ -366,13 +365,25 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
+        private fun updateKeyIDsSummary(preference: Preference) {
+            val selectedKeys = (sharedPreferences.getStringSet("openpgp_key_ids_set", null)
+                ?: HashSet()).toTypedArray()
+            preference.summary = if (selectedKeys.isEmpty()) {
+                resources.getString(R.string.pref_no_key_selected)
+            } else {
+                selectedKeys.joinToString(separator = ";") { s ->
+                    OpenPgpUtils.convertKeyIdToHex(s.toLong())
+                }
+            }
+        }
+
         private fun updateXkPasswdPrefsVisibility(newValue: Any?, prefIsCustomDict: CheckBoxPreference?, prefCustomDictPicker: Preference?) {
             when (newValue as String) {
-                PgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
+                BasePgpActivity.KEY_PWGEN_TYPE_CLASSIC -> {
                     prefIsCustomDict?.isVisible = false
                     prefCustomDictPicker?.isVisible = false
                 }
-                PgpActivity.KEY_PWGEN_TYPE_XKPASSWD -> {
+                BasePgpActivity.KEY_PWGEN_TYPE_XKPASSWD -> {
                     prefIsCustomDict?.isVisible = true
                     prefCustomDictPicker?.isVisible = true
                 }
@@ -653,8 +664,6 @@ class UserPreference : AppCompatActivity() {
                             .show()
                     }
                 }
-                EDIT_GIT_INFO -> {
-                }
                 SELECT_GIT_DIRECTORY -> {
                     val uri = data.data
 
@@ -792,12 +801,10 @@ class UserPreference : AppCompatActivity() {
 
     companion object {
         private const val IMPORT_SSH_KEY = 1
-        private const val IMPORT_PGP_KEY = 2
-        private const val EDIT_GIT_INFO = 3
-        private const val SELECT_GIT_DIRECTORY = 4
-        private const val EXPORT_PASSWORDS = 5
-        private const val EDIT_GIT_CONFIG = 6
-        private const val SET_CUSTOM_XKPWD_DICT = 7
+        private const val SELECT_GIT_DIRECTORY = 2
+        private const val EXPORT_PASSWORDS = 3
+        private const val EDIT_GIT_CONFIG = 4
+        private const val SET_CUSTOM_XKPWD_DICT = 5
         private const val TAG = "UserPreference"
 
         /**

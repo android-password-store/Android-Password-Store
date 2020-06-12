@@ -19,7 +19,7 @@
         android:padding="16dp">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/crypto_password_category_decrypt"
+            android:id="@+id/password_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -32,7 +32,7 @@
             tools:text="CATEGORY HERE" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/crypto_password_file"
+            android:id="@+id/password_file"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -41,11 +41,11 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/crypto_password_category_decrypt"
+            app:layout_constraintTop_toBottomOf="@id/password_category"
             tools:text="PASSWORD FILE NAME HERE" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/crypto_password_last_changed"
+            android:id="@+id/password_last_changed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -54,7 +54,7 @@
             android:textIsSelectable="false"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/crypto_password_file"
+            app:layout_constraintTop_toBottomOf="@id/password_file"
             tools:text="LAST CHANGED HERE" />
 
 
@@ -65,7 +65,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/divider"
-            app:layout_constraintTop_toBottomOf="@id/crypto_password_last_changed"
+            app:layout_constraintTop_toBottomOf="@id/password_last_changed"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout

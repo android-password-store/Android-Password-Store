@@ -46,11 +46,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
-import com.zeapo.pwdstore.crypto.PgpActivity
-import com.zeapo.pwdstore.crypto.PgpActivity.Companion.getLongName
+import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
+import com.zeapo.pwdstore.crypto.DecryptActivity
+import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitAsyncTask
-import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
@@ -65,6 +64,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
+import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
@@ -73,7 +73,7 @@ import java.io.File
 import java.lang.Character.UnicodeBlock
 import java.util.Stack
 
-class PasswordStore : AppCompatActivity() {
+class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     private lateinit var activity: PasswordStore
     private lateinit var searchItem: MenuItem
@@ -123,7 +123,6 @@ class PasswordStore : AppCompatActivity() {
             savedInstance = null
         }
         super.onCreate(savedInstance)
-        setContentView(R.layout.activity_pwdstore)
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -487,15 +486,16 @@ class PasswordStore : AppCompatActivity() {
     }
 
     fun decryptPassword(item: PasswordItem) {
-        val decryptIntent = Intent(this, PgpActivity::class.java)
+        val decryptIntent = Intent(this, DecryptActivity::class.java)
         val authDecryptIntent = Intent(this, LaunchActivity::class.java)
         for (intent in arrayOf(decryptIntent, authDecryptIntent)) {
             intent.putExtra("NAME", item.toString())
             intent.putExtra("FILE_PATH", item.file.absolutePath)
             intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
             intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.file.absolutePath))
-            intent.putExtra("OPERATION", "DECRYPT")
         }
+        // Needs an action to be a shortcut intent
+        authDecryptIntent.action = LaunchActivity.ACTION_DECRYPT_PASS
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -503,7 +503,7 @@ class PasswordStore : AppCompatActivity() {
                 .setShortLabel(item.toString())
                 .setLongLabel(item.fullPathToParent + item.toString())
                 .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                .setIntent(authDecryptIntent.setAction("DECRYPT_PASS")) // Needs action
+                .setIntent(authDecryptIntent)
                 .build()
             val shortcuts = shortcutManager!!.dynamicShortcuts
             if (shortcuts.size >= shortcutManager!!.maxShortcutCountPerActivity && shortcuts.size > 0) {
@@ -515,16 +515,6 @@ class PasswordStore : AppCompatActivity() {
             }
         }
         startActivityForResult(decryptIntent, REQUEST_CODE_DECRYPT_AND_VERIFY)
-    }
-
-    fun editPassword(item: PasswordItem) {
-        val intent = Intent(this, PgpActivity::class.java)
-        intent.putExtra("NAME", item.toString())
-        intent.putExtra("FILE_PATH", item.file.absolutePath)
-        intent.putExtra("PARENT_PATH", item.file.parentFile!!.absolutePath)
-        intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
-        intent.putExtra("OPERATION", "EDIT")
-        startActivityForResult(intent, REQUEST_CODE_EDIT)
     }
 
     private fun validateState(): Boolean {
@@ -553,10 +543,9 @@ class PasswordStore : AppCompatActivity() {
         if (!validateState()) return
         val currentDir = currentDir
         tag(TAG).i { "Adding file to : ${currentDir.absolutePath}" }
-        val intent = Intent(this, PgpActivity::class.java)
+        val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
-        intent.putExtra("OPERATION", "ENCRYPT")
         startActivityForResult(intent, REQUEST_CODE_ENCRYPT)
     }
 
@@ -626,10 +615,6 @@ class PasswordStore : AppCompatActivity() {
     private val currentDir: File
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
-    private fun commitChange(message: String) {
-        commitChange(this, message)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
@@ -647,11 +632,6 @@ class PasswordStore : AppCompatActivity() {
                 }
                 REQUEST_CODE_ENCRYPT -> {
                     commitChange(resources.getString(R.string.git_commit_add_text,
-                        data!!.extras!!.getString("LONG_NAME")))
-                    refreshPasswordList()
-                }
-                REQUEST_CODE_EDIT -> {
-                    commitChange(resources.getString(R.string.git_commit_edit_text,
                         data!!.extras!!.getString("LONG_NAME")))
                     refreshPasswordList()
                 }
@@ -821,7 +801,6 @@ class PasswordStore : AppCompatActivity() {
     companion object {
         const val REQUEST_CODE_ENCRYPT = 9911
         const val REQUEST_CODE_DECRYPT_AND_VERIFY = 9913
-        const val REQUEST_CODE_EDIT = 9916
         const val REQUEST_CODE_SELECT_FOLDER = 9917
         const val REQUEST_ARG_PATH = "PATH"
         private val TAG = PasswordStore::class.java.name
@@ -836,26 +815,5 @@ class PasswordStore : AppCompatActivity() {
         }
 
         private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
-
-        fun commitChange(activity: Activity, message: String, finishWithResultOnEnd: Intent? = null) {
-            if (!PasswordRepository.isGitRepo()) {
-                if (finishWithResultOnEnd != null) {
-                    activity.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
-                    activity.finish()
-                }
-                return
-            }
-            object : GitOperation(getRepositoryDirectory(activity), activity) {
-                override fun execute() {
-                    tag(TAG).d { "Committing with message $message" }
-                    val git = Git(repository)
-                    val tasks = GitAsyncTask(activity, true, this, finishWithResultOnEnd)
-                    tasks.execute(
-                        git.add().addFilepattern("."),
-                        git.commit().setAll(true).setMessage(message)
-                    )
-                }
-            }.execute()
-        }
     }
 }

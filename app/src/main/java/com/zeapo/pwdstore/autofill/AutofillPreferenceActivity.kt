@@ -16,31 +16,32 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.databinding.AutofillRecyclerViewBinding
+import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.lang.ref.WeakReference
 import java.util.ArrayList
 
 class AutofillPreferenceActivity : AppCompatActivity() {
 
+    private val binding by viewBinding(AutofillRecyclerViewBinding::inflate)
     internal var recyclerAdapter: AutofillRecyclerAdapter? = null // let fragment have access
-    private var recyclerView: RecyclerView? = null
     private var pm: PackageManager? = null
 
     private var recreate: Boolean = false // flag for action on up press; origin autofill dialog? different act
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.autofill_recycler_view)
-        recyclerView = findViewById(R.id.autofill_recycler)
+        setContentView(binding.root)
 
         val layoutManager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = layoutManager
-        recyclerView!!.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        FastScrollerBuilder(recyclerView!!).build()
+        with(binding) {
+            autofillRecycler.layoutManager = layoutManager
+            autofillRecycler.addItemDecoration(DividerItemDecoration(this@AutofillPreferenceActivity, DividerItemDecoration.VERTICAL))
+            FastScrollerBuilder(autofillRecycler).build()
+        }
 
         pm = packageManager
 
@@ -105,7 +106,7 @@ class AutofillPreferenceActivity : AppCompatActivity() {
     companion object {
         private class PopulateTask(activity: AutofillPreferenceActivity) : AsyncTask<Void, Void, Void>() {
 
-            val weakReference = WeakReference<AutofillPreferenceActivity>(activity)
+            val weakReference = WeakReference(activity)
 
             override fun onPreExecute() {
                 weakReference.get()?.apply {
@@ -140,11 +141,13 @@ class AutofillPreferenceActivity : AppCompatActivity() {
             override fun onPostExecute(ignored: Void?) {
                 weakReference.get()?.apply {
                     runOnUiThread {
-                        findViewById<View>(R.id.progress_bar).visibility = View.GONE
-                        recyclerView!!.adapter = recyclerAdapter
-                        val extras = intent.extras
-                        if (extras != null) {
-                            recyclerView!!.scrollToPosition(recyclerAdapter!!.getPosition(extras.getString("appName")!!))
+                        with(binding) {
+                            progressBar.visibility = View.GONE
+                            autofillRecycler.adapter = recyclerAdapter
+                            val extras = intent.extras
+                            if (extras != null) {
+                                autofillRecycler.scrollToPosition(recyclerAdapter!!.getPosition(extras.getString("appName")!!))
+                            }
                         }
                     }
                 }

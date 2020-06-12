@@ -4,15 +4,6 @@
   -->
 
 <resources>
-    <string-array name="connection_modes" translatable="false">
-        <item>ssh-key</item>
-        <item>username/password</item>
-        <item>OpenKeychain</item>
-    </string-array>
-    <string-array name="clone_protocols" translatable="false">
-        <item>ssh://</item>
-        <item>https://</item>
-    </string-array>
     <string-array name="sort_order_entries">
         <item>@string/pref_folder_first_sort_order</item>
         <item>@string/pref_file_first_sort_order</item>
@@ -22,12 +13,6 @@
         <item>FOLDER_FIRST</item>
         <item>FILE_FIRST</item>
         <item>INDEPENDENT</item>
-    </string-array>
-    <string-array name="capitalization_type_entries">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
     </string-array>
     <string-array name="capitalization_type_values">
         <item>lowercase</item>

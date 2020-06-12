@@ -35,7 +35,6 @@ ext.deps = [
         lifecycle_common: 'androidx.lifecycle:lifecycle-common-java8:2.3.0-alpha04',
         lifecycle_livedata_ktx: 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha04',
         lifecycle_viewmodel_ktx: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha04',
-        local_broadcast_manager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01',
         material: 'com.google.android.material:material:1.3.0-alpha01',
         preference: 'androidx.preference:preference:1.1.1',
         recycler_view: 'androidx.recyclerview:recyclerview:1.2.0-alpha03',

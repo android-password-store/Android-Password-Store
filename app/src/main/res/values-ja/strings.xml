@@ -30,7 +30,6 @@
     <string name="jgit_error_dialog_text">jgit からのメッセージ: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">ユーザー名の指定を忘れましたか?</string>
     <string name="ssh_preferences_dialog_text">プリファレンスで SSH 鍵ファイルをインポートまたは生成してください</string>
     <string name="ssh_preferences_dialog_title">SSH 鍵がありませんkey</string>
     <string name="ssh_preferences_dialog_import">インポート</string>
@@ -46,17 +45,10 @@
     <string name="server_protocol">プロトコル</string>
     <string name="server_url">サーバー URL</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">リポジトリのパス</string>
-    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">ユーザー名</string>
-    <string name="server_user_hint">git_username</string>
 
-    <string name="server_resulting_url">結果 URL</string>
     <string name="connection_mode">認証モード</string>
-
-    <string name="warn_malformed_url_port">カスタムポートを使用する場合は、絶対パスを入力 ("/" で始まる)</string>
 
     <string name="git_user_name_hint">ユーザー名</string>
     <!-- PGP Handler -->
@@ -114,13 +106,11 @@
     <string name="ssh_keygen_generate">生成</string>
     <string name="ssh_keygen_copy">コピー</string>
     <string name="ssh_keygen_tip">この公開鍵を Git サーバーに提供してください。</string>
-    <string name="ssh_keygen_show_passphrase">パスフレーズを表示</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
-    <string name="dialog_oops">おっと…</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="git_sync">リポジトリを同期</string>
     <string name="git_pull">リモートからプル</string>

@@ -38,7 +38,6 @@
     <string name="jgit_error_dialog_text">Mensaje de jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Olvidaste especificar un nombre de usuario?</string>
     <string name="ssh_preferences_dialog_text">Por favor importa o genera tu llave SSH en los ajustes</string>
     <string name="ssh_preferences_dialog_title">No hay llave SSH</string>
     <string name="ssh_preferences_dialog_import">Importar</string>
@@ -61,17 +60,10 @@
     <string name="server_protocol">Protocolo</string>
     <string name="server_url">URL de servidor</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Ruta del repositorio</string>
-    <string name="server_path_hint">ruta/a/claves</string>
     <string name="server_user">Nombre de usuario</string>
-    <string name="server_user_hint">nombre_usuario</string>
 
-    <string name="server_resulting_url">URL resultante</string>
     <string name="connection_mode">Modo de autenticación</string>
-
-    <string name="warn_malformed_url_port">Al usar puertos personalizados, ingresa una ruta absoluta (empieza con "/")</string>
 
     <string name="git_user_name_hint">Nombre de usuario</string>
     <string name="invalid_email_dialog_text">Por favor ingresa una dirección de correo</string>
@@ -134,7 +126,6 @@
     <string name="pref_external_repository">Repositorio externo</string>
     <string name="pref_external_repository_summary">Usar un repositorio externo para contraseñas</string>
     <string name="pref_select_external_repository">Seleccionar repositorio externo</string>
-    <string name="prefs_use_default_file_picker">Usar seleccionador de archivos por defecto</string>
     <string name="prefs_export_passwords_title">Exportar contraseñas</string>
     <string name="prefs_export_passwords_summary">Exporta las contraseñas cifradas a un directorio externo.</string>
     <string name="prefs_version">Versión</string>
@@ -160,13 +151,11 @@
     <string name="ssh_keygen_generate">Generar</string>
     <string name="ssh_keygen_copy">Copiar</string>
     <string name="ssh_keygen_tip">Registra esta llave pública en tu servidor Git.</string>
-    <string name="ssh_keygen_show_passphrase">Mostrar contraseña</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Sí</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_oops">Ups…</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="git_sync">Sincronizar con servidor</string>
     <string name="git_pull">Descargar del servidor</string>
@@ -181,7 +170,6 @@
     <string name="send_plaintext_password_to">Enviar contraseña en texto plano usando…</string>
     <string name="show_password">Mostrar contraseña</string>
     <string name="show_extra">Mostrar contenido extra</string>
-    <string name="repository_uri">URI del repositorio</string>
     <string name="app_icon_hint">Ícono de app</string>
     <string name="folder_icon_hint">Ícono de directorio</string>
 
@@ -212,6 +200,5 @@
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abortar rebase</string>
     <string name="commit_hash">Hash del commit</string>
-    <string name="crypto_extra_edit_hint">Username: Nombre de usuario\n… o algún contenido extra</string>
     <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
 </resources>

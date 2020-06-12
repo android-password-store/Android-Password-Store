@@ -29,7 +29,6 @@
     <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="forget_username_dialog_text">Hast du vergessen einen Nutzernamen zu vergeben?</string>
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
     <string name="ssh_preferences_dialog_title">Kein SSH-Key angegeben</string>
     <string name="ssh_preferences_dialog_import">Import</string>
@@ -45,17 +44,10 @@
     <string name="server_protocol">Protokoll</string>
     <string name="server_url">Server URL</string>
     <string name="server_port_hint">22</string>
-    <string name="default_ssh_port">22</string>
-    <string name="default_https_port">443</string>
     <string name="server_path">Repo-Pfad</string>
-    <string name="server_path_hint">path/to/pass</string>
     <string name="server_user">Nutzername</string>
-    <string name="server_user_hint">Git-Nutzername</string>
 
-    <string name="server_resulting_url">Erzeugte URL</string>
     <string name="connection_mode">Authentifizierungsmethode</string>
-
-    <string name="warn_malformed_url_port">Wenn du einen anderen Port nutzt, setze den absoluten Pfad (startet mit "/")</string>
 
     <string name="git_user_name_hint">Nutzername</string>
     <string name="invalid_email_dialog_text">Bitte valide Email eingeben</string>
@@ -112,7 +104,6 @@
     <string name="pref_external_repository">Externes Repository</string>
     <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
     <string name="pref_select_external_repository">Wähle ein externes Repository</string>
-    <string name="prefs_use_default_file_picker">Benutze Standardauswahl für Dateien</string>
     <string name="prefs_export_passwords_title">Passwörter exportieren</string>
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
     <string name="prefs_version">Version</string>
@@ -132,13 +123,11 @@
     <string name="ssh_keygen_generate">Generieren</string>
     <string name="ssh_keygen_copy">Kopieren</string>
     <string name="ssh_keygen_tip">Füge den Public-Key zu deinem Git-Server hinzu.</string>
-    <string name="ssh_keygen_show_passphrase">Zeige Passwort</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nein</string>
-    <string name="dialog_oops">Oops…</string>
     <string name="dialog_cancel">Abbruch</string>
     <string name="git_sync">Synchronisiere Repository</string>
     <string name="git_pull">Git Pull</string>
@@ -153,7 +142,6 @@
     <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
     <string name="show_password">Password wiedergeben</string>
     <string name="show_extra">Zeige weiteren Inhalt</string>
-    <string name="repository_uri">Repository URI</string>
     <string name="app_icon_hint">App Icon</string>
     <string name="folder_icon_hint">Verzeichnis Icon</string>
 

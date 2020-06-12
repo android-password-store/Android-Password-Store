@@ -92,7 +92,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
         builder.setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
             setPreferences()
-            val edit = callingActivity.findViewById<EditText>(R.id.crypto_password_edit)
+            val edit = callingActivity.findViewById<EditText>(R.id.password)
             edit.setText(passwordText.text)
         }
 
