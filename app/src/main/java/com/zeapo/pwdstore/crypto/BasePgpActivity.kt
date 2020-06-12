@@ -237,7 +237,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
          * Gets the relative path to the repository
          */
         fun getRelativePath(fullPath: String, repositoryPath: String): String =
-            File(fullPath).relativeTo(File(repositoryPath)).path
+            fullPath.replace(repositoryPath, "").replace("/+".toRegex(), "/")
 
         /**
          * Gets the Parent path, relative to the repository
