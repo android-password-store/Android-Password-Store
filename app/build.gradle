@@ -4,7 +4,6 @@
  */
 plugins {
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
 }
 
 final def keystorePropertiesFile = rootProject.file 'keystore.properties'
