@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
@@ -22,6 +23,7 @@ import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.databinding.PasswordCreationActivityBinding
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
+import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +32,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -162,12 +165,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val editExtra = extraContent.text.toString()
 
         if (editName.isEmpty()) {
-            showSnackbar(resources.getString(R.string.file_toast_text))
+            snackbar(message = resources.getString(R.string.file_toast_text))
             return@with
         }
 
         if (editPass.isEmpty() && editExtra.isEmpty()) {
-            showSnackbar(resources.getString(R.string.empty_toast_text))
+            snackbar(message = resources.getString(R.string.empty_toast_text))
             return@with
         }
 
@@ -183,7 +186,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, longKeys.toLongArray())
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
-        // TODO Check if we could use PasswordEntry to generate the file
         val content = "$editPass\n$editExtra"
         val inputStream = ByteArrayInputStream(content.toByteArray())
         val outputStream = ByteArrayOutputStream()
@@ -194,12 +196,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             category.isEnabled -> {
                 val editRelativePath = category.text.toString().trim()
                 if (editRelativePath.isEmpty()) {
-                    showSnackbar(resources.getString(R.string.path_toast_text))
+                    snackbar(message = resources.getString(R.string.path_toast_text))
                     return
                 }
                 val passwordDirectory = File("$repoPath/${editRelativePath.trim('/')}")
                 if (!passwordDirectory.exists() && !passwordDirectory.mkdir()) {
-                    showSnackbar("Failed to create directory ${editRelativePath.trim('/')}")
+                    snackbar(message = "Failed to create directory ${editRelativePath.trim('/')}")
                     return
                 }
 
@@ -213,10 +215,22 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
                         try {
-                            // TODO This might fail, we should check that the write is successful
                             val file = File(path)
-                            file.outputStream().use {
-                                it.write(outputStream.toByteArray())
+                            try {
+                                file.outputStream().use {
+                                    it.write(outputStream.toByteArray())
+                                }
+                            } catch (e: IOException) {
+                                e(e) { "Failed to write password file" }
+                                setResult(RESULT_CANCELED)
+                                MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                    .setTitle(getString(R.string.password_creation_file_write_fail_title))
+                                    .setMessage(getString(R.string.password_creation_file_write_fail_message))
+                                    .setCancelable(false)
+                                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                                        finish()
+                                    }
+                                    .show()
                             }
 
                             val returnIntent = Intent()

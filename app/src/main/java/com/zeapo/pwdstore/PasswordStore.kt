@@ -495,7 +495,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.file.absolutePath))
         }
         // Needs an action to be a shortcut intent
-        authDecryptIntent.action = "DECRYPT_PASS"
+        authDecryptIntent.action = LaunchActivity.ACTION_DECRYPT_PASS
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -503,7 +503,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 .setShortLabel(item.toString())
                 .setLongLabel(item.fullPathToParent + item.toString())
                 .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                .setIntent(authDecryptIntent) // Needs action
+                .setIntent(authDecryptIntent)
                 .build()
             val shortcuts = shortcutManager!!.dynamicShortcuts
             if (shortcuts.size >= shortcutManager!!.maxShortcutCountPerActivity && shortcuts.size > 0) {

@@ -149,7 +149,10 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
-        api ?: bindToOpenKeychain(this, openKeychainResult)
+        if (api == null) {
+            bindToOpenKeychain(this, openKeychainResult)
+            return
+        }
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_DECRYPT_VERIFY
 

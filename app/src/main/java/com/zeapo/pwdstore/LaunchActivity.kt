@@ -39,7 +39,7 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     private fun startTargetActivity(noAuth: Boolean) {
-        if (intent.action == "DECRYPT_PASS") {
+        if (intent.action == ACTION_DECRYPT_PASS) {
             val decryptIntent = Intent(this, DecryptActivity::class.java)
             decryptIntent.putExtra("NAME", intent.getStringExtra("NAME"))
             decryptIntent.putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
@@ -51,5 +51,9 @@ class LaunchActivity : AppCompatActivity() {
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         Handler().postDelayed({ finish() }, if (noAuth) 0L else 500L)
+    }
+
+    companion object {
+        const val ACTION_DECRYPT_PASS = "DECRYPT_PASS"
     }
 }

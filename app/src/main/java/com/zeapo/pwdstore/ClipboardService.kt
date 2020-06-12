@@ -9,7 +9,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -18,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
+import com.zeapo.pwdstore.utils.clipboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,9 +83,9 @@ class ClipboardService : Service() {
 
     private fun clearClipboard() {
         val deepClear = settings.getBoolean("clear_clipboard_20x", false)
-        val clipboard = getSystemService<ClipboardManager>()
+        val clipboard = clipboard
 
-        if (clipboard is ClipboardManager) {
+        if (clipboard != null) {
             scope.launch {
                 d { "Clearing the clipboard" }
                 val clip = ClipData.newPlainText("pgp_handler_result_pm", "")

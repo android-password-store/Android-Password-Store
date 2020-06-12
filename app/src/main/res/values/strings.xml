@@ -362,4 +362,8 @@
     <string name="openpgp_error_wrong_passphrase">Incorrect passphrase</string>
     <string name="openpgp_error_no_user_ids">No matching PGP keys found</string>
     <string name="openpgp_error_unknown">Error from OpenKeyChain : %s</string>
+
+    <!-- Password creation failure -->
+    <string name="password_creation_file_write_fail_title">Error</string>
+    <string name="password_creation_file_write_fail_message">Failed to write password file to the store, please try again.</string>
 </resources>

@@ -7,7 +7,6 @@ package com.zeapo.pwdstore.crypto
 
 import android.app.PendingIntent
 import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
@@ -19,7 +18,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
@@ -28,6 +26,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.utils.clipboard
+import com.zeapo.pwdstore.utils.snackbar
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
@@ -50,7 +50,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     /**
      * Name of the password file
      *
-     * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org.gpg
+     * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org
      */
     val name: String by lazy { File(fullPath).nameWithoutExtension }
 
@@ -72,17 +72,10 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
     /**
-     * [ClipboardManager] instance used by [copyTextToClipboard]. Subclasses should not be using it
-     * directly, and instead calling [copyTextToClipboard] or [copyPasswordToClipboard] as required.
+     * Read-only field for getting the list of OpenPGP key IDs that we have access to.
      */
-    private val clipboard by lazy { getSystemService<ClipboardManager>() }
-
-    /**
-     * Backing property and public read-only field for getting the list of OpenPGP key IDs that we
-     * have access to.
-     */
-    private var _keyIDs = emptySet<String>()
-    val keyIDs get() = _keyIDs
+    var keyIDs = emptySet<String>()
+        private set
 
     /**
      * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.
@@ -92,7 +85,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
     /**
      * [onCreate] sets the window up with the right flags to prevent auth leaks through screenshots
-     * or recent apps screen and fills in [_keyIDs] from [settings]
+     * or recent apps screen and fills in [keyIDs] from [settings]
      */
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +93,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         tag(TAG)
 
-        _keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
+        keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
     }
 
     /**
@@ -128,7 +121,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * their own errors, and hence this class simply logs and rethrows. Subclasses Must NOT call super.
      */
     override fun onError(e: Exception) {
-        e { "Callers must handle their own exceptions" }
+        e(e) { "Callers must handle their own exceptions" }
         throw e
     }
 
@@ -170,14 +163,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         return DateUtils.getRelativeTimeSpanString(this, timeStamp, true)
     }
-
-    /**
-     * Shows a [Snackbar] with the provided [message] and [length]
-     */
-    fun showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT) {
-        runOnUiThread { Snackbar.make(findViewById(android.R.id.content), message, length).show() }
-    }
-
     /**
      * Base handling of OpenKeychain errors based on the error contained in [result]. Subclasses
      * can use this when they want to default to sane error handling.
@@ -187,13 +172,13 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         if (error != null) {
             when (error.errorId) {
                 OpenPgpError.NO_OR_WRONG_PASSPHRASE -> {
-                    showSnackbar(getString(R.string.openpgp_error_wrong_passphrase))
+                    snackbar(message = getString(R.string.openpgp_error_wrong_passphrase))
                 }
                 OpenPgpError.NO_USER_IDS -> {
-                    showSnackbar(getString(R.string.openpgp_error_no_user_ids))
+                    snackbar(message = getString(R.string.openpgp_error_no_user_ids))
                 }
                 else -> {
-                    showSnackbar(getString(R.string.openpgp_error_unknown, error.message))
+                    snackbar(message = getString(R.string.openpgp_error_unknown, error.message))
                     e { "onError getErrorId: ${error.errorId}" }
                     e { "onError getMessage: ${error.message}" }
                 }
@@ -210,7 +195,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
         clipboard.setPrimaryClip(clip)
         if (showSnackbar) {
-            showSnackbar(resources.getString(R.string.clipboard_copied_text))
+            snackbar(message = resources.getString(R.string.clipboard_copied_text))
         }
     }
 
@@ -224,7 +209,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         var clearAfter = 45
         try {
-            clearAfter = Integer.parseInt(settings.getString("general_show_time", "45") as String)
+            clearAfter = (settings.getString("general_show_time", "45") ?: "45").toInt()
         } catch (_: NumberFormatException) {
         }
 
@@ -237,9 +222,9 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
             } else {
                 startService(service)
             }
-            showSnackbar(resources.getString(R.string.clipboard_password_toast_text, clearAfter))
+            snackbar(message = resources.getString(R.string.clipboard_password_toast_text, clearAfter))
         } else {
-            showSnackbar(resources.getString(R.string.clipboard_password_no_clear_toast_text))
+            snackbar(message = resources.getString(R.string.clipboard_password_no_clear_toast_text))
         }
     }
 

@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.utils
 
 import android.app.Activity
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -20,6 +21,7 @@ import androidx.core.content.getSystemService
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.github.ajalt.timberkt.d
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
@@ -38,6 +40,16 @@ fun CharArray.clear() {
     forEachIndexed { i, _ ->
         this[i] = 0.toChar()
     }
+}
+
+val Context.clipboard get() = getSystemService<ClipboardManager>()
+
+fun Activity.snackbar(
+    view: View = findViewById(android.R.id.content),
+    message: String,
+    length: Int = Snackbar.LENGTH_SHORT
+) {
+    Snackbar.make(view, message, length).show()
 }
 
 fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
