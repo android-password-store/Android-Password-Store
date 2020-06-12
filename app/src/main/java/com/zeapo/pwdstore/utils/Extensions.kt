@@ -19,7 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitAsyncTask
@@ -61,12 +61,13 @@ fun Context.resolveAttribute(attr: Int): Int {
 }
 
 fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
-    val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-    val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    val masterKeyAlias = MasterKey.Builder(applicationContext)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
     return EncryptedSharedPreferences.create(
+        applicationContext,
         fileName,
         masterKeyAlias,
-        this,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
