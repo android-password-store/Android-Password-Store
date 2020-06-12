@@ -110,6 +110,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
         intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
         intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContent)
+        intent.putExtra(PasswordCreationActivity.EXTRA_EDITING, true)
         startActivity(intent)
         finish()
     }

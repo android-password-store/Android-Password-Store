@@ -291,5 +291,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         const val EXTRA_PASSWORD = "PASSWORD"
         const val EXTRA_EXTRA_CONTENT = "EXTRA_CONTENT"
         const val EXTRA_GENERATE_PASSWORD = "GENERATE_PASSWORD"
+        const val EXTRA_EDITING = "EDITING"
     }
 }
