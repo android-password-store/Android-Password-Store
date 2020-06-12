@@ -79,6 +79,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindToOpenKeychain(this, openKeychainResult)
+        title = name
         with(binding) {
             setContentView(root)
             passwordCategory.text = relativeParentPath
