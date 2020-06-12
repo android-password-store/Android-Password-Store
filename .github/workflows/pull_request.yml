@@ -74,7 +74,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2.10.0
       with:
         api-level: ${{ matrix.api-level }}
-        target: default
+        target: google_apis
         script: |
           adb shell settings put global animator_duration_scale 0
           adb shell settings put global transition_animation_scale 0
