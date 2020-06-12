@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.zeapo.pwdstore.utils.PasswordRepository
 
-// TODO more work needed, this is just an extraction from PgpHandler
 
 class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
     private lateinit var passwordList: SelectFolderFragment
