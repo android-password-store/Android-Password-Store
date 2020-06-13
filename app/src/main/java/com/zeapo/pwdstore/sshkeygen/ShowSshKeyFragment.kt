@@ -14,9 +14,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.clipboardManager
-import org.apache.commons.io.FileUtils
 import java.io.File
-import java.nio.charset.StandardCharsets
 
 class ShowSshKeyFragment : DialogFragment() {
 
@@ -50,7 +48,7 @@ class ShowSshKeyFragment : DialogFragment() {
     private fun readKeyFromFile() {
         val file = File(requireActivity().filesDir.toString() + "/.ssh_key.pub")
         try {
-            publicKey.text = FileUtils.readFileToString(file, StandardCharsets.UTF_8)
+            publicKey.text = file.readText()
         } catch (e: Exception) {
             e.printStackTrace()
         }

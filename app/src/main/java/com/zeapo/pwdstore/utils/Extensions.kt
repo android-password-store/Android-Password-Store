@@ -4,9 +4,11 @@
  */
 package com.zeapo.pwdstore.utils
 
+import android.app.Activity
 import android.app.KeyguardManager
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.util.TypedValue
@@ -17,8 +19,16 @@ import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
+import com.github.ajalt.timberkt.d
+import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitOperation
+import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
+import org.eclipse.jgit.api.Git
+import java.io.File
 
 infix fun Int.hasFlag(flag: Int): Boolean {
     return this and flag == flag
@@ -28,6 +38,24 @@ fun String.splitLines(): Array<String> {
     return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 }
 
+fun CharArray.clear() {
+    forEachIndexed { i, _ ->
+        this[i] = 0.toChar()
+    }
+}
+
+val Context.clipboard get() = getSystemService<ClipboardManager>()
+
+fun Activity.snackbar(
+    view: View = findViewById(android.R.id.content),
+    message: String,
+    length: Int = Snackbar.LENGTH_SHORT
+) {
+    Snackbar.make(view, message, length).show()
+}
+
+fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
+
 fun Context.resolveAttribute(attr: Int): Int {
     val typedValue = TypedValue()
     this.theme.resolveAttribute(attr, typedValue, true)
@@ -35,15 +63,37 @@ fun Context.resolveAttribute(attr: Int): Int {
 }
 
 fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
-    val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-    val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    val masterKeyAlias = MasterKey.Builder(applicationContext)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
     return EncryptedSharedPreferences.create(
+        applicationContext,
         fileName,
         masterKeyAlias,
-        this,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
+}
+
+fun FragmentActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
+    if (!PasswordRepository.isGitRepo()) {
+        if (finishWithResultOnEnd != null) {
+            setResult(Activity.RESULT_OK, finishWithResultOnEnd)
+            finish()
+        }
+        return
+    }
+    object : GitOperation(getRepositoryDirectory(this@commitChange), this@commitChange) {
+        override fun execute() {
+            d { "Comitting with message: '$message'" }
+            val git = Git(repository)
+            val task = GitAsyncTask(this@commitChange, true, this, finishWithResultOnEnd, silentlyExecute = true)
+            task.execute(
+                git.add().addFilepattern("."),
+                git.commit().setAll(true).setMessage(message)
+            )
+        }
+    }.execute()
 }
 
 /**

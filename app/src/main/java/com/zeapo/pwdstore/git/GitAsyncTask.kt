@@ -12,6 +12,9 @@ import android.os.AsyncTask
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import net.schmizz.sshj.common.DisconnectReason
+import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.UserAuthException
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.GitCommand
@@ -20,6 +23,7 @@ import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
 import org.eclipse.jgit.transport.RemoteRefUpdate
+import org.eclipse.jgit.transport.SshSessionFactory
 import java.io.IOException
 import java.lang.ref.WeakReference
 
@@ -28,7 +32,9 @@ class GitAsyncTask(
     activity: Activity,
     private val refreshListOnEnd: Boolean,
     private val operation: GitOperation,
-    private val finishWithResultOnEnd: Intent?) : AsyncTask<GitCommand<*>, Int, GitAsyncTask.Result>() {
+    private val finishWithResultOnEnd: Intent?,
+    private val silentlyExecute: Boolean = false
+) : AsyncTask<GitCommand<*>, Int, GitAsyncTask.Result>() {
 
     private val activityWeakReference: WeakReference<Activity> = WeakReference(activity)
     private val activity: Activity?
@@ -42,6 +48,7 @@ class GitAsyncTask(
     }
 
     override fun onPreExecute() {
+        if (silentlyExecute) return
         dialog.run {
             setMessage(activity!!.resources.getString(R.string.running_dialog_text))
             setCancelable(false)
@@ -125,15 +132,34 @@ class GitAsyncTask(
         return rootCause
     }
 
+    private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
+        var cause: Exception? = e
+        while (cause != null) {
+            if (cause is SSHException &&
+                cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
+                return true
+            cause = cause.cause as? Exception
+        }
+        return false
+    }
+
     override fun onPostExecute(maybeResult: Result?) {
-        dialog.dismiss()
+        if (!silentlyExecute) dialog.dismiss()
         when (val result = maybeResult ?: Result.Err(IOException("Unexpected error"))) {
             is Result.Err -> {
-                e(result.err)
-                operation.onError(rootCauseException(result.err))
-                if (finishWithResultOnEnd != null) {
-                    activity?.setResult(Activity.RESULT_CANCELED)
-                    activity?.finish()
+                if (isExplicitlyUserInitiatedError(result.err)) {
+                    // Currently, this is only executed when the user cancels a password prompt
+                    // during authentication.
+                    if (finishWithResultOnEnd != null) {
+                        activity?.setResult(Activity.RESULT_CANCELED)
+                        activity?.finish()
+                    }
+                } else {
+                    e(result.err)
+                    operation.onError(rootCauseException(result.err))
+                    if (finishWithResultOnEnd != null) {
+                        activity?.setResult(Activity.RESULT_CANCELED)
+                    }
                 }
             }
             is Result.Ok -> {
@@ -147,6 +173,8 @@ class GitAsyncTask(
         if (refreshListOnEnd) {
             (activity as? PasswordStore)?.resetPasswordList()
         }
+        (SshSessionFactory.getInstance() as? SshjSessionFactory)?.clearCredentials()
+        SshSessionFactory.setInstance(null)
     }
 
 }

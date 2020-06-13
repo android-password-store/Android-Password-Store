@@ -66,3 +66,16 @@ jobs:
         SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
         SERVER_DESTINATION: ${{ secrets.SERVER_DESTINATION }}
         SSH_PORT: ${{ secrets.SSH_PORT }}
+
+    - name: Install NodeJS
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '12'
+
+    - name: Install cfcli
+      run: npm install -g cloudflare-cli
+
+    - name: Purge Cloudflare cache
+      run: cfcli --token ${CF_TOKEN} purge "https://dl.msfjarvis.dev/APS/$(cd ./app/build/outputs/apk/release/; ls *.apk)"
+      env:
+        CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

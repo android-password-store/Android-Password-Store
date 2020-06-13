@@ -45,7 +45,6 @@ const val ANDROID_KEYSTORE_ALIAS_SSH_KEY = "ssh_key"
 private class GitOperationCredentialFinder(val callingActivity: FragmentActivity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
-        require(connectionMode == ConnectionMode.Password)
         val gitOperationPrefs = callingActivity.getEncryptedPrefs("git_operation")
         val credentialPref: String
         @StringRes val messageRes: Int

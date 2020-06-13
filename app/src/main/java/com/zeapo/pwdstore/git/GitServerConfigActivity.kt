@@ -58,7 +58,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                 ConnectionMode.OpenKeychain -> check(R.id.connection_mode_open_keychain)
                 ConnectionMode.None -> uncheck(checkedButtonId)
             }
-            addOnButtonCheckedListener { group, _, _ ->
+            addOnButtonCheckedListener { _, _, _ ->
                 when (checkedButtonId) {
                     R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
                     R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain

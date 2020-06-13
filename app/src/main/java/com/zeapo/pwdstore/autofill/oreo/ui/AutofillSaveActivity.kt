@@ -23,8 +23,9 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
-import com.zeapo.pwdstore.crypto.PgpActivity
+import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.commitChange
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -97,15 +98,14 @@ class AutofillSaveActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val repo = PasswordRepository.getRepositoryDirectory(applicationContext)
-        val saveIntent = Intent(this, PgpActivity::class.java).apply {
+        val saveIntent = Intent(this, PasswordCreationActivity::class.java).apply {
             putExtras(
                 bundleOf(
                     "REPO_PATH" to repo.absolutePath,
                     "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)!!).absolutePath,
-                    "OPERATION" to "ENCRYPT",
-                    "SUGGESTED_NAME" to intent.getStringExtra(EXTRA_NAME),
-                    "SUGGESTED_PASS" to intent.getStringExtra(EXTRA_PASSWORD),
-                    "GENERATE_PASSWORD" to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
+                    PasswordCreationActivity.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
+                    PasswordCreationActivity.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
+                    PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
                 )
             )
         }
@@ -144,10 +144,9 @@ class AutofillSaveActivity : AppCompatActivity() {
                 // Password was extracted from a form, there is nothing to fill.
                 Intent()
             }
-            // PgpActivity delegates committing the added file to PasswordStore. Since PasswordStore
-            // is not involved in an AutofillScenario, we have to commit the file ourselves.
-            PasswordStore.commitChange(
-                this,
+            // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
+            // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
+            commitChange(
                 getString(R.string.git_commit_add_text, longName),
                 finishWithResultOnEnd = result
             )

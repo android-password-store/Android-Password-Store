@@ -4,7 +4,6 @@
  */
 plugins {
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
 }
 
 final def keystorePropertiesFile = rootProject.file 'keystore.properties'
@@ -83,7 +82,6 @@ dependencies {
     implementation deps.androidx.lifecycle_common
     implementation deps.androidx.lifecycle_livedata_ktx
     implementation deps.androidx.lifecycle_viewmodel_ktx
-    implementation deps.androidx.local_broadcast_manager
     implementation deps.androidx.material
     implementation deps.androidx.preference
     implementation deps.androidx.recycler_view
@@ -94,8 +92,6 @@ dependencies {
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core
 
-    implementation deps.third_party.commons_io
-    implementation deps.third_party.commons_codec
     implementation deps.third_party.fastscroll
     implementation(deps.third_party.jgit) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
@@ -106,6 +102,7 @@ dependencies {
     implementation deps.third_party.eddsa
     implementation deps.third_party.bouncycastle
     implementation deps.third_party.bouncycastle_pkix
+    implementation deps.third_party.plumber
     implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber

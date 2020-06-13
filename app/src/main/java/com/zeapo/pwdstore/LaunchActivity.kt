@@ -10,7 +10,7 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import com.zeapo.pwdstore.crypto.PgpActivity
+import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 
 class LaunchActivity : AppCompatActivity() {
@@ -39,18 +39,21 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     private fun startTargetActivity(noAuth: Boolean) {
-        if (intent?.getStringExtra("OPERATION") == "DECRYPT") {
-            val decryptIntent = Intent(this, PgpActivity::class.java)
+        if (intent.action == ACTION_DECRYPT_PASS) {
+            val decryptIntent = Intent(this, DecryptActivity::class.java)
             decryptIntent.putExtra("NAME", intent.getStringExtra("NAME"))
             decryptIntent.putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
             decryptIntent.putExtra("REPO_PATH", intent.getStringExtra("REPO_PATH"))
             decryptIntent.putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
-            decryptIntent.putExtra("OPERATION", "DECRYPT")
             startActivity(decryptIntent)
         } else {
             startActivity(Intent(this, PasswordStore::class.java))
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         Handler().postDelayed({ finish() }, if (noAuth) 0L else 500L)
+    }
+
+    companion object {
+        const val ACTION_DECRYPT_PASS = "DECRYPT_PASS"
     }
 }

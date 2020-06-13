@@ -46,7 +46,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         val passwordText: AppCompatTextView = view.findViewById(R.id.passwordText)
         passwordText.typeface = monoTypeface
         builder.setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
-            val edit = callingActivity.findViewById<EditText>(R.id.crypto_password_edit)
+            val edit = callingActivity.findViewById<EditText>(R.id.password)
             edit.setText(passwordText.text)
         }
         builder.setNeutralButton(resources.getString(R.string.dialog_cancel)) { _, _ -> }

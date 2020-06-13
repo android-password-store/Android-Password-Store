@@ -155,11 +155,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         // Called each time the action mode is shown. Always called after onCreateActionMode, but
         // may be called multiple times if the mode is invalidated.
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            menu.findItem(R.id.menu_edit_password).isVisible =
-                recyclerAdapter.getSelectedItems(requireContext())
-                    .map { it.type == PasswordItem.TYPE_PASSWORD }
-                    .singleOrNull() == true
-            return true // Return false if nothing is done
+            return true
         }
 
         // Called when the user selects a contextual menu item
@@ -172,13 +168,6 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                         }
                     )
                     mode.finish() // Action picked, so close the CAB
-                    return true
-                }
-                R.id.menu_edit_password -> {
-                    requireStore().editPassword(
-                        recyclerAdapter.getSelectedItems(requireContext()).first()
-                    )
-                    mode.finish()
                     return true
                 }
                 R.id.menu_move_password -> {
