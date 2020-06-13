@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.security.keystore.UserNotAuthenticatedException
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
@@ -266,12 +267,16 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                                 is BiometricAuthenticator.Result.Cancelled -> {
                                     callingActivity.finish()
                                 }
+                                is BiometricAuthenticator.Result.Failure -> {
+                                    // Do nothing to allow retries.
+                                }
                                 else -> {
                                     // There is a chance we succeed if the user recently confirmed
                                     // their screen lock. Doing so would have a potential to confuse
                                     // users though, who might deduce that the screen lock
                                     // protection is not effective. Hence, we fail with an error.
-                                    throw UserNotAuthenticatedException(callingActivity.resources.getString(R.string.biometric_auth_generic_failure))
+                                    Toast.makeText(callingActivity.applicationContext, R.string.biometric_auth_generic_failure, Toast.LENGTH_LONG).show()
+                                    callingActivity.finish()
                                 }
                             }
                         }
