@@ -48,6 +48,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val doNothing = registerForActivityResult(StartActivityForResult()) {}
     private var oldCategory : String? = null
+    private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -246,7 +247,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
                             if (category.isVisible && category.isEnabled){
                                 val oldPasswordDirectory = File("$repoPath/${oldCategory!!.trim('/')}")
-                                val oldFile = File("${oldPasswordDirectory.path}/$editName.gpg")
+                                val oldFile = File("${oldPasswordDirectory.path}/$oldFileName.gpg")
                                 val fileDiff = oldFile.path != file.path
 
                                 if(fileDiff){
