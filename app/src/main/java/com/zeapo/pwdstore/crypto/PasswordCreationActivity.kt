@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
@@ -46,6 +47,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val doNothing = registerForActivityResult(StartActivityForResult()) {}
+    private var oldCategory : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +70,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 // Keep empty path field visible if it is editable.
                 if (path.isEmpty() && !isEnabled)
                     visibility = View.GONE
-                else
+                else{
                     setText(path)
+                    oldCategory = path
+                }
             }
             suggestedName?.let { filename.setText(it) }
             // Allow the user to quickly switch between storing the username as the filename or
@@ -231,7 +235,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 e(e) { "Failed to write password file" }
                                 setResult(RESULT_CANCELED)
                                 MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                    .setTitle(getString(R.string.password_creation_file_write_fail_title))
+                                    .setTitle(getString(R.string.password_creation_file_fail_title))
                                     .setMessage(getString(R.string.password_creation_file_write_fail_message))
                                     .setCancelable(false)
                                     .setPositiveButton(android.R.string.ok) { _, _ ->
@@ -240,6 +244,25 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     .show()
                             }
 
+                            if (category.isVisible && category.isEnabled){
+                                val oldPasswordDirectory = File("$repoPath/${oldCategory!!.trim('/')}")
+                                val oldFile = File("${oldPasswordDirectory.path}/$editName.gpg")
+                                val fileDiff = oldFile.path != file.path
+
+                                if(fileDiff){
+                                    if (!oldFile.delete()){
+                                        setResult(RESULT_CANCELED)
+                                        MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                            .setTitle(R.string.password_creation_file_fail_title)
+                                            .setMessage(R.string.password_creation_file_delete_fail_message)
+                                            .setCancelable(false)
+                                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                                finish()
+                                            }
+                                            .show()
+                                    }
+                                }
+                            }
                             val returnIntent = Intent()
                             returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
                             returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
