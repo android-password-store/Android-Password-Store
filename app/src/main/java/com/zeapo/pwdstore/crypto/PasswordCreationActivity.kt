@@ -245,21 +245,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     .show()
                             }
 
-                            if (category.isVisible && category.isEnabled) {
-                                val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
-
-                                if (oldFile.path != file.path && !oldFile.delete()) {
-                                    setResult(RESULT_CANCELED)
-                                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                        .setTitle(R.string.password_creation_file_fail_title)
-                                        .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
-                                        .setCancelable(false)
-                                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                                            finish()
-                                        }
-                                        .show()
-                                }
-                            }
                             val returnIntent = Intent()
                             returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
                             returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
@@ -287,8 +272,25 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     )
                                 }
                             }
-                            setResult(RESULT_OK, returnIntent)
-                            finish()
+
+                            if (category.isVisible && category.isEnabled) {
+                                val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
+                                if (oldFile.path != file.path && !oldFile.delete()) {
+                                    setResult(RESULT_CANCELED)
+                                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                        .setTitle(R.string.password_creation_file_fail_title)
+                                        .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                                        .setCancelable(false)
+                                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                                            finish()
+                                        }
+                                        .show()
+                                }
+                            } else {
+                                setResult(RESULT_OK, returnIntent)
+                                finish()
+                            }
+
                         } catch (e: Exception) {
                             e(e) { "An Exception occurred" }
                         }
