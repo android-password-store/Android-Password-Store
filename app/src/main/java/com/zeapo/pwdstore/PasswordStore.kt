@@ -586,10 +586,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     fun movePasswords(values: List<PasswordItem>) {
         val intent = Intent(this, SelectFolderActivity::class.java)
-        val fileLocations = ArrayList<String>()
-        for ((_, _, _, file) in values) {
-            fileLocations.add(file.absolutePath)
-        }
+        val fileLocations = values.map { it.file.absolutePath }.toTypedArray()
         intent.putExtra("Files", fileLocations)
         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
         startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
@@ -668,7 +665,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}"
                     }
                     tag(TAG).d {
-                        TextUtils.join(", ", requireNotNull(intentData.getStringArrayListExtra("Files")))
+                        TextUtils.join(", ", requireNotNull(intentData.getStringArrayExtra("Files")))
                     }
 
                     val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
@@ -679,7 +676,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     }
 
                     // TODO move this to an async task
-                    for (fileString in requireNotNull(intentData.getStringArrayListExtra("Files"))) {
+                    for (fileString in requireNotNull(intentData.getStringArrayExtra("Files"))) {
                         val source = File(fileString)
                         if (!source.exists()) {
                             tag(TAG).e { "Tried moving something that appears non-existent." }
