@@ -174,6 +174,15 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
                     return false
                 }
+                R.id.menu_edit_password -> {
+                    requireStore().renameCategory(
+                        Stack<PasswordItem>().apply {
+                        recyclerAdapter.getSelectedItems(requireContext()).forEach { push(it) }
+                    })
+                    mode.finish()
+                    //TODO : what is this return used for?
+                    return false
+                }
                 else -> return false
             }
         }

@@ -43,6 +43,7 @@ import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
@@ -589,6 +590,32 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         intent.putExtra("Files", fileLocations)
         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
         startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
+    }
+
+    fun renameCategory(values : Stack<PasswordItem>){
+        if (values.isNotEmpty()){
+            val value = values.pop()
+            if (value.type == PasswordItem.TYPE_CATEGORY) {
+                val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
+                val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
+
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.title_rename_folder)
+                    .setView(view)
+                    .setMessage(getString(R.string.message_rename_folder, value.name))
+                    .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                        val newCategory = File("${value.file.parent}/${newCategoryEditText.text}")
+                        value.file.renameTo(newCategory)
+                        commitChange(resources.getString(R.string.git_commit_move_text, value.name, newCategory.name))
+                        renameCategory(values)
+                    }
+                    .setNegativeButton(R.string.dialog_cancel) { _, _ ->
+                        renameCategory(values)
+                    }
+                    .show()
+            }
+        }else
+            refreshPasswordList()
     }
 
     /**

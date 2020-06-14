@@ -316,6 +316,8 @@
     <string name="pref_show_hidden_title">Show hidden folders</string>
     <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
     <string name="title_create_folder">Create folder</string>
+    <string name="title_rename_folder">Rename folder</string>
+    <string name="message_rename_folder">New name for current category %1$s</string>
     <string name="button_create">Create</string>
     <string name="pref_search_on_start">Open search on start</string>
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
