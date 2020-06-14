@@ -255,7 +255,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         setResult(RESULT_CANCELED)
                                         MaterialAlertDialogBuilder(this@PasswordCreationActivity)
                                             .setTitle(R.string.password_creation_file_fail_title)
-                                            .setMessage(R.string.password_creation_file_delete_fail_message)
+                                            .setMessage(getString(R.string.password_creation_file_delete_fail_message, file.name))
                                             .setCancelable(false)
                                             .setPositiveButton(android.R.string.ok) { _, _ ->
                                                 finish()

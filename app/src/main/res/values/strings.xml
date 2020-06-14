@@ -366,5 +366,5 @@
     <!-- Password creation failure -->
     <string name="password_creation_file_fail_title">Error</string>
     <string name="password_creation_file_write_fail_message">Failed to write password file to the store, please try again.</string>
-    <string name="password_creation_file_delete_fail_message">Failed to delete password file %s to the store, please delete it manually.</string>
+    <string name="password_creation_file_delete_fail_message">Failed to delete password file %1$s to the store, please delete it manually.</string>
 </resources>
