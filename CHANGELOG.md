@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 - Reduced app size
 - Improve IME experience with server config screen
 - Removed edit password option from long-press menu.
+- Batch deletion now does not require manually confirming for each password
+- Better commit messages on password deletion
 
 ## [1.8.1] - 2020-05-24
 
