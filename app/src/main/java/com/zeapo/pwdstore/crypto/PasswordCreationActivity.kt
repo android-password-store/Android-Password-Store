@@ -291,11 +291,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                             finish()
                                         }
                                         .show()
+                                } else {
+                                    setResult(RESULT_OK, returnIntent)
+                                    finish()
                                 }
+                            } else {
+                                setResult(RESULT_OK, returnIntent)
+                                finish()
                             }
-
-                            setResult(RESULT_OK, returnIntent)
-                            finish()
 
                         } catch (e: Exception) {
                             e(e) { "An Exception occurred" }
