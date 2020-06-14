@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
@@ -29,9 +30,9 @@ import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.eclipse.jgit.api.Git
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import org.eclipse.jgit.api.Git
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -45,12 +46,15 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedPass by lazy { intent.getStringExtra(EXTRA_PASSWORD) }
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
+    private val editing by lazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
     private val doNothing = registerForActivityResult(StartActivityForResult()) {}
+    private var oldCategory: String? = null
+    private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindToOpenKeychain(this, doNothing)
-        title = if (intent.getBooleanExtra(EXTRA_EDITING, false))
+        title = if (editing)
             getString(R.string.edit_password)
         else
             getString(R.string.new_password_title)
@@ -68,8 +72,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 // Keep empty path field visible if it is editable.
                 if (path.isEmpty() && !isEnabled)
                     visibility = View.GONE
-                else
+                else {
                     setText(path)
+                    oldCategory = path
+                }
             }
             suggestedName?.let { filename.setText(it) }
             // Allow the user to quickly switch between storing the username as the filename or
@@ -223,6 +229,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
                         try {
                             val file = File(path)
+                            // If we're not editing, this file should not already exist!
+                            if (!editing && file.exists()) {
+                                snackbar(message = getString(R.string.password_creation_duplicate_error))
+                                return@executeApiAsync
+                            }
                             try {
                                 file.outputStream().use {
                                     it.write(outputStream.toByteArray())
@@ -231,7 +242,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 e(e) { "Failed to write password file" }
                                 setResult(RESULT_CANCELED)
                                 MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                    .setTitle(getString(R.string.password_creation_file_write_fail_title))
+                                    .setTitle(getString(R.string.password_creation_file_fail_title))
                                     .setMessage(getString(R.string.password_creation_file_write_fail_message))
                                     .setCancelable(false)
                                     .setPositiveButton(android.R.string.ok) { _, _ ->
@@ -255,20 +266,40 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                             }
 
-				            val repo = PasswordRepository.getRepository(null)
-				            if (repo != null) {
-				                val status = Git(repo).status().call()
-				                if (status.modified.isNotEmpty()) {
-				                    commitChange(
-				                        getString(
-				                            R.string.git_commit_edit_text,
-				                            getLongName(fullPath, repoPath, editName)
-				                        )
-				                    )
-				                }
-				            }
-                            setResult(RESULT_OK, returnIntent)
-                            finish()
+                            val repo = PasswordRepository.getRepository(null)
+                            if (repo != null) {
+                                val status = Git(repo).status().call()
+                                if (status.modified.isNotEmpty()) {
+                                    commitChange(
+                                        getString(
+                                            R.string.git_commit_edit_text,
+                                            getLongName(fullPath, repoPath, editName)
+                                        )
+                                    )
+                                }
+                            }
+
+                            if (category.isVisible && category.isEnabled) {
+                                val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
+                                if (oldFile.path != file.path && !oldFile.delete()) {
+                                    setResult(RESULT_CANCELED)
+                                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                        .setTitle(R.string.password_creation_file_fail_title)
+                                        .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                                        .setCancelable(false)
+                                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                                            finish()
+                                        }
+                                        .show()
+                                } else {
+                                    setResult(RESULT_OK, returnIntent)
+                                    finish()
+                                }
+                            } else {
+                                setResult(RESULT_OK, returnIntent)
+                                finish()
+                            }
+
                         } catch (e: Exception) {
                             e(e) { "An Exception occurred" }
                         }
