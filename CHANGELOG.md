@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - 'Draw over other apps' permission dialog opens when attempting to use Oreo Autofill
+- Old app shortcuts are now removed when the local repository is deleted
 
 ### Added
 - Completely revamped decypted password view

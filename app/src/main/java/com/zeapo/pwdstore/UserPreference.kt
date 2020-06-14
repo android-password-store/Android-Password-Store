@@ -232,6 +232,11 @@ class UserPreference : AppCompatActivity() {
                             // TODO Handle the different cases of exceptions
                         }
 
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                            requireContext().getSystemService<ShortcutManager>()?.apply {
+                                removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
+                            }
+                        }
                         sharedPreferences.edit { putBoolean("repository_initialized", false) }
                         dialogInterface.cancel()
                         callingActivity.finish()
