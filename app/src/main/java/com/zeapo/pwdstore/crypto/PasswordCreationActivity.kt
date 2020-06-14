@@ -46,6 +46,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedPass by lazy { intent.getStringExtra(EXTRA_PASSWORD) }
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
+    private val editing by lazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
     private val doNothing = registerForActivityResult(StartActivityForResult()) {}
     private var oldCategory: String? = null
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
@@ -53,7 +54,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindToOpenKeychain(this, doNothing)
-        title = if (intent.getBooleanExtra(EXTRA_EDITING, false))
+        title = if (editing)
             getString(R.string.edit_password)
         else
             getString(R.string.new_password_title)
@@ -228,6 +229,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
                         try {
                             val file = File(path)
+                            // If we're not editing, this file should not already exist!
+                            if (!editing && file.exists()) {
+                                snackbar(message = getString(R.string.password_creation_duplicate_error))
+                                return@executeApiAsync
+                            }
                             try {
                                 file.outputStream().use {
                                     it.write(outputStream.toByteArray())
