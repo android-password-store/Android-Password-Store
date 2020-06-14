@@ -246,22 +246,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             }
 
                             if (category.isVisible && category.isEnabled){
-                                val oldPasswordDirectory = File("$repoPath/${oldCategory!!.trim('/')}")
-                                val oldFile = File("${oldPasswordDirectory.path}/$oldFileName.gpg")
-                                val fileDiff = oldFile.path != file.path
+                                val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
 
-                                if(fileDiff){
-                                    if (!oldFile.delete()){
-                                        setResult(RESULT_CANCELED)
-                                        MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                            .setTitle(R.string.password_creation_file_fail_title)
-                                            .setMessage(getString(R.string.password_creation_file_delete_fail_message, file.name))
-                                            .setCancelable(false)
-                                            .setPositiveButton(android.R.string.ok) { _, _ ->
-                                                finish()
-                                            }
-                                            .show()
-                                    }
+                                if(oldFile.path != file.path && !oldFile.delete()){
+                                    setResult(RESULT_CANCELED)
+                                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                        .setTitle(R.string.password_creation_file_fail_title)
+                                        .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                                        .setCancelable(false)
+                                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                                            finish()
+                                        }
+                                        .show()
                                 }
                             }
                             val returnIntent = Intent()
