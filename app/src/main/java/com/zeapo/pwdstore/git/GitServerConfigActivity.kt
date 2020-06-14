@@ -84,7 +84,11 @@ class GitServerConfigActivity : BaseGitActivity() {
         }
 
         binding.serverUser.apply {
-            setText(serverUser)
+            if (serverUser.isEmpty()) {
+                requestFocus()
+            } else {
+                setText(serverUser)
+            }
             doOnTextChanged { text, _, _, _ ->
                 serverUser = text.toString().trim()
             }

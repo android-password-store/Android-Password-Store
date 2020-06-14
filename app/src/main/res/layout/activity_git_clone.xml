@@ -79,10 +79,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:inputType="textWebEmailAddress"
-                android:nextFocusForward="@id/server_url">
-
-                <requestFocus />
-            </com.google.android.material.textfield.TextInputEditText>
+                android:nextFocusForward="@id/server_url" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
