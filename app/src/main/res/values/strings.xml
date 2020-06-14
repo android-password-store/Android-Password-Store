@@ -24,7 +24,10 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
     <string name="key_dialog_text">A valid PGP key must be selected in Settings before initializing the repository</string>
-    <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
+    <plurals name="delete_dialog_text">
+        <item quantity="one">Are you sure you want to delete %d password?</item>
+        <item quantity="other">Are you sure you want to delete %d passwords?</item>
+    </plurals>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>

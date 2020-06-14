@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">Information sur le dépôt Git</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de pass ou d\'effectuer une opération de synchornisation.</string>
-    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe %1$s?</string>
     <string name="move">Déplacer</string>
     <string name="edit">Éditer</string>
     <string name="delete">Supprimer</string>

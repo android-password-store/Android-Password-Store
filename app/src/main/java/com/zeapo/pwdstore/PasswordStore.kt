@@ -71,7 +71,6 @@ import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
 import java.io.File
 import java.lang.Character.UnicodeBlock
-import java.util.Stack
 
 class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
@@ -554,29 +553,34 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         FolderCreationDialogFragment.newInstance(currentDir.path).show(supportFragmentManager, null)
     }
 
-    // deletes passwords in order from top to bottom
-    fun deletePasswords(selectedItems: Stack<PasswordItem>) {
-        if (selectedItems.isEmpty()) {
-            refreshPasswordList()
-            return
+    fun deletePasswords(selectedItems: List<PasswordItem>) {
+        var size = 0
+        selectedItems.forEach {
+            if (it.file.isFile)
+                size++
+            else
+                repeat(it.file.listFilesRecursively().size) { size++ }
         }
-        val item = selectedItems.pop()
         MaterialAlertDialogBuilder(this)
-            .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
+            .setMessage(resources.getQuantityString(R.plurals.delete_dialog_text, size, size))
             .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
-                val filesToDelete = if (item.file.isDirectory) {
-                    item.file.listFilesRecursively()
-                } else {
-                    listOf(item.file)
+                val filesToDelete = arrayListOf<File>()
+                selectedItems.forEach { item ->
+                    if (item.file.isDirectory)
+                        filesToDelete.addAll(item.file.listFilesRecursively())
+                    else
+                        filesToDelete.add(item.file)
                 }
+                selectedItems.map { item -> item.file.deleteRecursively() }
                 AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
-                item.file.deleteRecursively()
-                commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
-                deletePasswords(selectedItems)
+                commitChange(resources.getString(R.string.git_commit_remove_text,
+                    selectedItems.joinToString(separator = ", ") { item ->
+                        item.file.toRelativeString(getRepositoryDirectory(this))
+                    }
+                ))
+                refreshPasswordList()
             }
-            .setNegativeButton(resources.getString(R.string.dialog_no)) { _, _ ->
-                deletePasswords(selectedItems)
-            }
+            .setNegativeButton(resources.getString(R.string.dialog_no), null)
             .show()
     }
 
