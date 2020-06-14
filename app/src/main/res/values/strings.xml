@@ -39,6 +39,8 @@
     <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
     <string name="password_exists_title">Password already exists!</string>
     <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
+    <string name="password_move_error_title">Error while moving passwords</string>
+    <string name="password_move_error_message">Failed to move %1$s to %2$s</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Add generated password for %1$s using Android Password Store.</string>
