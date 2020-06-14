@@ -30,9 +30,9 @@ import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.eclipse.jgit.api.Git
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import org.eclipse.jgit.api.Git
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -47,7 +47,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val doNothing = registerForActivityResult(StartActivityForResult()) {}
-    private var oldCategory : String? = null
+    private var oldCategory: String? = null
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 // Keep empty path field visible if it is editable.
                 if (path.isEmpty() && !isEnabled)
                     visibility = View.GONE
-                else{
+                else {
                     setText(path)
                     oldCategory = path
                 }
@@ -245,10 +245,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     .show()
                             }
 
-                            if (category.isVisible && category.isEnabled){
+                            if (category.isVisible && category.isEnabled) {
                                 val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
 
-                                if(oldFile.path != file.path && !oldFile.delete()){
+                                if (oldFile.path != file.path && !oldFile.delete()) {
                                     setResult(RESULT_CANCELED)
                                     MaterialAlertDialogBuilder(this@PasswordCreationActivity)
                                         .setTitle(R.string.password_creation_file_fail_title)
@@ -275,18 +275,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                             }
 
-				            val repo = PasswordRepository.getRepository(null)
-				            if (repo != null) {
-				                val status = Git(repo).status().call()
-				                if (status.modified.isNotEmpty()) {
-				                    commitChange(
-				                        getString(
-				                            R.string.git_commit_edit_text,
-				                            getLongName(fullPath, repoPath, editName)
-				                        )
-				                    )
-				                }
-				            }
+                            val repo = PasswordRepository.getRepository(null)
+                            if (repo != null) {
+                                val status = Git(repo).status().call()
+                                if (status.modified.isNotEmpty()) {
+                                    commitChange(
+                                        getString(
+                                            R.string.git_commit_edit_text,
+                                            getLongName(fullPath, repoPath, editName)
+                                        )
+                                    )
+                                }
+                            }
                             setResult(RESULT_OK, returnIntent)
                             finish()
                         } catch (e: Exception) {
