@@ -592,8 +592,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
     }
 
-    fun renameCategory(values : Stack<PasswordItem>){
-        if (values.isNotEmpty()){
+    fun renameCategory(values: Stack<PasswordItem>) {
+        if (values.isNotEmpty()) {
             val value = values.pop()
             if (value.type == PasswordItem.TYPE_CATEGORY) {
                 val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
@@ -614,7 +614,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     }
                     .show()
             }
-        }else
+        } else
             refreshPasswordList()
     }
 
