@@ -563,7 +563,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             if (it.file.isFile)
                 size++
             else
-                repeat(it.file.listFilesRecursively().size) { size++ }
+                size += it.file.listFilesRecursively().size
         }
         MaterialAlertDialogBuilder(this)
             .setMessage(resources.getQuantityString(R.plurals.delete_dialog_text, size, size))
