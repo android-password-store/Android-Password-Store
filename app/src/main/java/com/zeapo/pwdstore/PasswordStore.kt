@@ -17,7 +17,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -596,7 +595,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         registerForActivityResult(StartActivityForResult()) { result ->
             val intentData = result.data ?: return@registerForActivityResult
             d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
-            d { TextUtils.join(", ", requireNotNull(intentData.getStringArrayExtra("Files"))) }
+            d { requireNotNull(intentData.getStringArrayExtra("Files")).joinToString(", ") }
 
             val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
             val repositoryPath = getRepositoryDirectory(applicationContext).absolutePath
