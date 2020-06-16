@@ -594,9 +594,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
         registerForActivityResult(StartActivityForResult()) { result ->
             val intentData = result.data ?: return@registerForActivityResult
-            d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
-            d { requireNotNull(intentData.getStringArrayExtra("Files")).joinToString(", ") }
-
+            val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
             val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
             val repositoryPath = getRepositoryDirectory(applicationContext).absolutePath
             if (!target.isDirectory) {
@@ -604,9 +602,12 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 return@registerForActivityResult
             }
 
+            d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
+            d { filesToMove.joinToString(", ") }
+
             lifecycleScope.launch(Dispatchers.IO) {
-                for (fileString in requireNotNull(intentData.getStringArrayExtra("Files"))) {
-                    val source = File(fileString)
+                for (file in filesToMove) {
+                    val source = File(file)
                     if (!source.exists()) {
                         e { "Tried moving something that appears non-existent." }
                         continue
@@ -627,14 +628,34 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 )
                                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
                                     launch(Dispatchers.IO) {
-                                        movePasswords(source, destinationFile, sourceLongName, destinationLongName)
+                                        movePassword(source, destinationFile)
                                     }
                                 }
                                 .setNegativeButton(R.string.dialog_cancel, null)
                                 .show()
                         }
                     } else {
-                        movePasswords(source, destinationFile, sourceLongName, destinationLongName)
+                        launch(Dispatchers.IO) {
+                            movePassword(source, destinationFile)
+                        }
+                    }
+                }
+                when (filesToMove.size) {
+                    1 -> {
+                        val source = File(filesToMove[0])
+                        val basename = source.nameWithoutExtension
+                        val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+                        val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+                        withContext(Dispatchers.Main) {
+                            commitChange(resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName))
+                        }
+                    }
+                    else -> {
+                        withContext(Dispatchers.Main) {
+                            commitChange(resources.getString(R.string.git_commit_move_multiple_text,
+                                getRelativePath("${target.absolutePath}/", getRepositoryDirectory(applicationContext).absolutePath)
+                            ))
+                        }
                     }
                 }
             }
@@ -715,7 +736,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private suspend fun movePasswords(source: File, destinationFile: File, sourceLongName: String, destinationLongName: String) {
+    private suspend fun movePassword(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
             // Recursively list all files (not directories) below `source`, then
             // obtain the corresponding target file by resolving the relative path
@@ -736,9 +757,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             }
         } else {
             AutofillMatcher.updateMatches(this, sourceDestinationMap)
-            withContext(Dispatchers.Main) {
-                commitChange(resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName))
-            }
         }
     }
 

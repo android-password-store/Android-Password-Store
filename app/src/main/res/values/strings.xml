@@ -47,6 +47,7 @@
     <string name="git_commit_edit_text">Edit password for %1$s using Android Password Store.</string>
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
+    <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP provider selected!</string>
