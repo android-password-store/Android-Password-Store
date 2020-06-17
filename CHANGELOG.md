@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - 'Draw over other apps' permission dialog opens when attempting to use Oreo Autofill
+- Old app shortcuts are now removed when the local repository is deleted
 
 ### Added
 - Add support for ECDSA/ed25519 keys
@@ -14,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Add support for better, more secure Keyex's and MACs with a brand new SSH backend
 - Allow manually marking domains for subdomain-level association. This will allow you to keep separate passwords for `site1.example.com` and `site2.example.com` and have them show as such in Autofill.
 - Provide better messages for OpenKeychain errors
+- Rename passwords
 
 ### Changed
 - **BREAKING**: Remove support for HOTP/TOTP secrets - Please use FIDO keys or a dedicated app like [Aegis](https://github.com/beemdevelopment/Aegis) or [andOTP](https://github.com/andOTP/andOTP)
