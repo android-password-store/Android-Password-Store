@@ -682,6 +682,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     newCategoryEditText.text.isNullOrBlank() ||
                         newCategory.exists() -> renameCategoryAux(oldCategory, true)
                     else -> {
+                        newCategory.mkdirs()
                         oldCategory.file.renameTo(newCategory)
                         AutofillMatcher.updateMatches(this, mapOf(oldCategory.file to newCategory))
                         commitChange(resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name))
