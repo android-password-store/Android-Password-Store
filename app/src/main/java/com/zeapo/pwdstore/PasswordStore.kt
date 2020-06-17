@@ -67,6 +67,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.listFilesRecursively
+import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -665,14 +666,23 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }.launch(intent)
     }
 
-    private fun renameCategoryAux(oldCategory: PasswordItem, error: Boolean) {
+    /**
+     * Prompt the user with a new category name to assign,
+     * if the new category forms/leads a path (i.e. contains "/"), intermediate directories will be created
+     * and new category will be placed inside.
+     *
+     * @param oldCategory The category to change its name
+     * @param error Determines whether to show an error to the user in the alert dialog, this error
+     * may be due to the new category the user entered already exists or the field was empty
+     */
+    private fun renameCategory(oldCategory: PasswordItem, error: Boolean = false) {
         val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
         val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
         if (error) {
             newCategoryEditText.error = getString(R.string.message_error_rename_folder)
         }
 
-        MaterialAlertDialogBuilder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setTitle(R.string.title_rename_folder)
             .setView(view)
             .setMessage(getString(R.string.message_rename_folder, oldCategory.name))
@@ -680,7 +690,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
                 when {
                     newCategoryEditText.text.isNullOrBlank() ||
-                        newCategory.exists() -> renameCategoryAux(oldCategory, true)
+                        newCategory.exists() -> renameCategory(oldCategory, true)
                     else -> {
                         newCategory.mkdirs()
                         oldCategory.file.renameTo(newCategory)
@@ -690,12 +700,15 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
             }
             .setNegativeButton(R.string.dialog_cancel, null)
-            .show()
+            .create()
+
+        dialog.requestInputFocusOnView<TextInputEditText>(R.id.folder_name_text)
+        dialog.show()
     }
 
     fun renameCategory(categories: List<PasswordItem>) {
         for (oldCategory in categories) {
-            renameCategoryAux(oldCategory, false)
+            renameCategory(oldCategory)
         }
     }
 

@@ -34,7 +34,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
-import java.util.Stack
 
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
