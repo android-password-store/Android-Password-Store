@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">Informace repozitáře</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Naklonujte nebo vytvořte nový repozitář před pokusem přidat heslo nebo spustit synchronizaci.</string>
-    <string name="delete_dialog_text">Opravdu chcete smazat heslo %1$s?</string>
     <string name="move">Přesunout</string>
     <string name="edit">Editovat</string>
     <string name="delete">Smazat</string>
