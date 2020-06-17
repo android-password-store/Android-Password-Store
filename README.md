@@ -37,7 +37,7 @@ Ways to get in touch:
 
 ## Contributing Translations
 
-Interested in helping to translate Password Store? Contribute [here](https://www.transifex.com/android-password-store/android-password-store/)!
+Interested in helping to translate Password Store? Contribute [here](https://crowdin.com/project/android-password-store)!
 
 ## Contributors
 
