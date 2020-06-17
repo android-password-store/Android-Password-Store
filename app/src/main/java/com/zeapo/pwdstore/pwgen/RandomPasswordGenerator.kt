@@ -4,77 +4,43 @@
  */
 package com.zeapo.pwdstore.pwgen
 
-internal object RandomPasswordGenerator {
+import com.zeapo.pwdstore.utils.hasFlag
+
+object RandomPasswordGenerator {
 
     /**
-     * Generates a completely random password.
+     * Generates a random password of length [targetLength], taking the following flags in [pwFlags]
+     * into account, or fails to do so and returns null:
      *
-     * @param size length of password to generate
-     * @param pwFlags flag field where set bits indicate conditions the
-     * generated password must meet
-     * <table summary ="bits of flag field">
-     * <tr><td>Bit</td><td>Condition</td></tr>
-     * <tr><td>0</td><td>include at least one number</td></tr>
-     * <tr><td>1</td><td>include at least one uppercase letter</td></tr>
-     * <tr><td>2</td><td>include at least one symbol</td></tr>
-     * <tr><td>3</td><td>don't include ambiguous characters</td></tr>
-     * <tr><td>4</td><td>don't include vowels</td></tr>
-     * <tr><td>5</td><td>include at least one lowercase</td></tr>
-    </table> *
-     * @return the generated password
+     * - [PasswordGenerator.DIGITS]: If set, the password will contain at least one digit; if not
+     *   set, the password will not contain any digits.
+     * - [PasswordGenerator.UPPERS]: If set, the password will contain at least one uppercase
+     *   letter; if not set, the password will not contain any uppercase letters.
+     * - [PasswordGenerator.LOWERS]: If set, the password will contain at least one lowercase
+     *   letter; if not set, the password will not contain any lowercase letters.
+     * - [PasswordGenerator.SYMBOLS]: If set, the password will contain at least one symbol; if not
+     *   set, the password will not contain any symbols.
+     * - [PasswordGenerator.NO_AMBIGUOUS]: If set, the password will not contain any ambiguous
+     *   characters.
+     * - [PasswordGenerator.NO_VOWELS]: If set, the password will not contain any vowels.
      */
-    fun rand(size: Int, pwFlags: Int): String {
-        var password: String
-        var cha: Char
-        var i: Int
-        var featureFlags: Int
-        var num: Int
-        var character: String
+    fun generate(targetLength: Int, pwFlags: Int): String? {
+        val bank = listOfNotNull(
+            PasswordGenerator.DIGITS_STR.takeIf { pwFlags hasFlag PasswordGenerator.DIGITS },
+            PasswordGenerator.UPPERS_STR.takeIf { pwFlags hasFlag PasswordGenerator.UPPERS },
+            PasswordGenerator.LOWERS_STR.takeIf { pwFlags hasFlag PasswordGenerator.LOWERS },
+            PasswordGenerator.SYMBOLS_STR.takeIf { pwFlags hasFlag PasswordGenerator.SYMBOLS }
+        ).joinToString("")
 
-        var bank = ""
-        if (pwFlags and PasswordGenerator.DIGITS > 0) {
-            bank += PasswordGenerator.DIGITS_STR
-        }
-        if (pwFlags and PasswordGenerator.UPPERS > 0) {
-            bank += PasswordGenerator.UPPERS_STR
-        }
-        if (pwFlags and PasswordGenerator.LOWERS > 0) {
-            bank += PasswordGenerator.LOWERS_STR
-        }
-        if (pwFlags and PasswordGenerator.SYMBOLS > 0) {
-            bank += PasswordGenerator.SYMBOLS_STR
-        }
-        do {
-            password = ""
-            featureFlags = pwFlags
-            i = 0
-            while (i < size) {
-                num = RandomNumberGenerator.number(bank.length)
-                cha = bank.toCharArray()[num]
-                character = cha.toString()
-                if (pwFlags and PasswordGenerator.AMBIGUOUS > 0 &&
-                    PasswordGenerator.AMBIGUOUS_STR.contains(character)) {
-                    continue
-                }
-                if (pwFlags and PasswordGenerator.NO_VOWELS > 0 && PasswordGenerator.VOWELS_STR.contains(character)) {
-                    continue
-                }
-                password += character
-                i++
-                if (PasswordGenerator.DIGITS_STR.contains(character)) {
-                    featureFlags = featureFlags and PasswordGenerator.DIGITS.inv()
-                }
-                if (PasswordGenerator.UPPERS_STR.contains(character)) {
-                    featureFlags = featureFlags and PasswordGenerator.UPPERS.inv()
-                }
-                if (PasswordGenerator.SYMBOLS_STR.contains(character)) {
-                    featureFlags = featureFlags and PasswordGenerator.SYMBOLS.inv()
-                }
-                if (PasswordGenerator.LOWERS_STR.contains(character)) {
-                    featureFlags = featureFlags and PasswordGenerator.LOWERS.inv()
-                }
+        var password = ""
+        while (password.length < targetLength) {
+            val candidate = bank.secureRandomCharacter()
+            if (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS &&
+                candidate in PasswordGenerator.AMBIGUOUS_STR) {
+                continue
             }
-        } while (featureFlags and (PasswordGenerator.UPPERS or PasswordGenerator.DIGITS or PasswordGenerator.SYMBOLS or PasswordGenerator.LOWERS) > 0)
-        return password
+            password += candidate
+        }
+        return password.takeIf { PasswordGenerator.isValidPassword(it, pwFlags) }
     }
 }

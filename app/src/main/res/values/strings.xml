@@ -368,4 +368,5 @@
     <string name="password_creation_file_write_fail_message">Failed to write password file to the store, please try again.</string>
     <string name="password_creation_file_delete_fail_message">Failed to delete password file %1$s from the store, please delete it manually.</string>
     <string name="password_creation_duplicate_error">File already exists, please use a different name</string>
+    <string name="pwgen_max_iterations_exceeded">Failed to generate a password satisfying the constraints. Try to increase the length.</string>
 </resources>

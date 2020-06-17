@@ -4,6 +4,8 @@
  */
 package com.zeapo.pwdstore.ui.dialogs
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Typeface
@@ -11,94 +13,87 @@ import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorExeption
+import com.zeapo.pwdstore.pwgen.PasswordGenerator
+import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorException
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.generate
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
+import com.zeapo.pwdstore.pwgen.PasswordOption
 
-/** A placeholder fragment containing a simple view.  */
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity = requireActivity()
         val inflater = callingActivity.layoutInflater
+
+        @SuppressLint("InflateParams")
         val view = inflater.inflate(R.layout.fragment_pwgen, null)
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
-        builder.setView(view)
         val prefs = requireActivity().applicationContext
             .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        view.findViewById<CheckBox>(R.id.numerals)?.isChecked = !prefs.getBoolean("0", false)
-        view.findViewById<CheckBox>(R.id.symbols)?.isChecked = prefs.getBoolean("y", false)
-        view.findViewById<CheckBox>(R.id.uppercase)?.isChecked = !prefs.getBoolean("A", false)
-        view.findViewById<CheckBox>(R.id.lowercase)?.isChecked = !prefs.getBoolean("L", false)
-        view.findViewById<CheckBox>(R.id.ambiguous)?.isChecked = !prefs.getBoolean("B", false)
-        view.findViewById<CheckBox>(R.id.pronounceable)?.isChecked = !prefs.getBoolean("s", true)
+        view.findViewById<CheckBox>(R.id.numerals)?.isChecked = !prefs.getBoolean(PasswordOption.NoDigits.key, false)
+        view.findViewById<CheckBox>(R.id.symbols)?.isChecked = prefs.getBoolean(PasswordOption.AtLeastOneSymbol.key, false)
+        view.findViewById<CheckBox>(R.id.uppercase)?.isChecked = !prefs.getBoolean(PasswordOption.NoUppercaseLetters.key, false)
+        view.findViewById<CheckBox>(R.id.lowercase)?.isChecked = !prefs.getBoolean(PasswordOption.NoLowercaseLetters.key, false)
+        view.findViewById<CheckBox>(R.id.ambiguous)?.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
+        view.findViewById<CheckBox>(R.id.pronounceable)?.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
 
         val textView: AppCompatEditText = view.findViewById(R.id.lengthNumber)
         textView.setText(prefs.getInt("length", 20).toString())
         val passwordText: AppCompatTextView = view.findViewById(R.id.passwordText)
         passwordText.typeface = monoTypeface
-        builder.setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
-            val edit = callingActivity.findViewById<EditText>(R.id.password)
-            edit.setText(passwordText.text)
-        }
-        builder.setNeutralButton(resources.getString(R.string.dialog_cancel)) { _, _ -> }
-        builder.setNegativeButton(resources.getString(R.string.pwgen_generate), null)
-        val dialog = builder.setTitle(this.resources.getString(R.string.pwgen_title)).create()
-        dialog.setOnShowListener {
-            setPreferences()
-            try {
-                passwordText.text = generate(requireActivity().applicationContext)[0]
-            } catch (e: PasswordGeneratorExeption) {
-                Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-                passwordText.text = ""
+        return MaterialAlertDialogBuilder(requireContext()).run {
+            setTitle(R.string.pwgen_title)
+            setView(view)
+            setPositiveButton(R.string.dialog_ok) { _, _ ->
+                val edit = callingActivity.findViewById<EditText>(R.id.password)
+                edit.setText(passwordText.text)
             }
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                setPreferences()
-                try {
-                    passwordText.text = generate(callingActivity.applicationContext)[0]
-                } catch (e: PasswordGeneratorExeption) {
-                    Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-                    passwordText.text = ""
+            setNeutralButton(R.string.dialog_cancel) { _, _ -> }
+            setNegativeButton(R.string.pwgen_generate, null)
+            create()
+        }.apply {
+            setOnShowListener {
+                generate(passwordText)
+                getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                    generate(passwordText)
                 }
             }
         }
-        return dialog
+    }
+
+    private fun generate(passwordField: AppCompatTextView) {
+        setPreferences()
+        try {
+            passwordField.text = generate(requireContext().applicationContext)
+        } catch (e: PasswordGeneratorException) {
+            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+            passwordField.text = ""
+        }
+    }
+
+    private fun isChecked(@IdRes id: Int): Boolean {
+        return dialog!!.findViewById<CheckBox>(id).isChecked
     }
 
     private fun setPreferences() {
-        val preferences = ArrayList<String>()
-        if (!(dialog!!.findViewById<CheckBox>(R.id.numerals)).isChecked) {
-            preferences.add("0")
-        }
-        if ((dialog!!.findViewById<CheckBox>(R.id.symbols)).isChecked) {
-            preferences.add("y")
-        }
-        if (!(dialog!!.findViewById<CheckBox>(R.id.uppercase)).isChecked) {
-            preferences.add("A")
-        }
-        if (!(dialog!!.findViewById<CheckBox>(R.id.ambiguous)).isChecked) {
-            preferences.add("B")
-        }
-        if (!(dialog!!.findViewById<CheckBox>(R.id.pronounceable)).isChecked) {
-            preferences.add("s")
-        }
-        if (!(dialog!!.findViewById<CheckBox>(R.id.lowercase)).isChecked) {
-            preferences.add("L")
-        }
-        val editText = dialog!!.findViewById<EditText>(R.id.lengthNumber)
-        try {
-            val length = Integer.valueOf(editText.text.toString())
-            setPrefs(requireActivity().applicationContext, preferences, length)
-        } catch (e: NumberFormatException) {
-            setPrefs(requireActivity().applicationContext, preferences)
-        }
+        val preferences = listOfNotNull(
+            PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
+            PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
+            PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
+            PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
+            PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
+            PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
+        )
+        val lengthText = dialog!!.findViewById<EditText>(R.id.lengthNumber).text.toString()
+        val length = lengthText.toIntOrNull()?.takeIf { it >= 0 }
+            ?: PasswordGenerator.DEFAULT_LENGTH
+        setPrefs(requireActivity().applicationContext, preferences, length)
     }
 }
