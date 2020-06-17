@@ -592,30 +592,30 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
     }
 
-    fun renameCategory(values: Stack<PasswordItem>) {
-        if (values.isNotEmpty()) {
-            val value = values.pop()
-            if (value.type == PasswordItem.TYPE_CATEGORY) {
-                val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
-                val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
+    fun renameCategory(categories: Stack<PasswordItem>) {
+        if (categories.isNotEmpty()) {
+            val oldCategory = categories.pop()
+            val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
+            val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
 
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.title_rename_folder)
-                    .setView(view)
-                    .setMessage(getString(R.string.message_rename_folder, value.name))
-                    .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                        val newCategory = File("${value.file.parent}/${newCategoryEditText.text}")
-                        value.file.renameTo(newCategory)
-                        commitChange(resources.getString(R.string.git_commit_move_text, value.name, newCategory.name))
-                        renameCategory(values)
-                    }
-                    .setNegativeButton(R.string.dialog_cancel) { _, _ ->
-                        renameCategory(values)
-                    }
-                    .show()
-            }
-        } else
+            MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.title_rename_folder)
+                .setView(view)
+                .setMessage(getString(R.string.message_rename_folder, oldCategory.name))
+                .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                    val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
+                    oldCategory.file.renameTo(newCategory)
+                    AutofillMatcher.updateMatches(this, mapOf(oldCategory.file to newCategory))
+                    commitChange(resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name))
+                    renameCategory(categories)
+                }
+                .setNegativeButton(R.string.dialog_cancel) { _, _ ->
+                    renameCategory(categories)
+                }
+                .show()
+        } else {
             refreshPasswordList()
+        }
     }
 
     /**
