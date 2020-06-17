@@ -175,10 +175,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     false
                 }
                 R.id.menu_edit_password -> {
-                    requireStore().renameCategory(
-                        Stack<PasswordItem>().apply {
-                            recyclerAdapter.getSelectedItems(requireContext()).forEach { push(it) }
-                        })
+                    requireStore().renameCategory(recyclerAdapter.getSelectedItems(requireContext()))
                     mode.finish()
                     false
                 }
