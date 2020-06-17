@@ -17,11 +17,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -34,9 +34,9 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
-import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
@@ -66,12 +66,14 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.listFilesRecursively
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
 import java.io.File
 import java.lang.Character.UnicodeBlock
-import java.util.Stack
 
 class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
@@ -343,7 +345,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         } catch (e: Exception) {
             e.printStackTrace()
             if (!localDir.delete()) {
-                tag(TAG).d { "Failed to delete local repository" }
+                d { "Failed to delete local repository" }
             }
             return
         }
@@ -422,7 +424,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     private fun checkLocalRepository(localDir: File?) {
         if (localDir != null && settings.getBoolean("repository_initialized", false)) {
-            tag(TAG).d { "Check, dir: ${localDir.absolutePath}" }
+            d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
             if (supportFragmentManager.findFragmentByTag("PasswordsList") == null ||
                 settings.getBoolean("repo_changed", false)) {
@@ -466,7 +468,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         val repoPath = getRepositoryDirectory(this)
         val repository = getRepository(repoPath)
         if (repository == null) {
-            tag(TAG).d { "getLastChangedTimestamp: No git repository" }
+            d { "getLastChangedTimestamp: No git repository" }
             return File(fullPath).lastModified()
         }
         val git = Git(repository)
@@ -475,11 +477,11 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         iterator = try {
             git.log().addPath(relativePath).call().iterator()
         } catch (e: GitAPIException) {
-            tag(TAG).e(e) { "getLastChangedTimestamp: GITAPIException" }
+            e(e) { "getLastChangedTimestamp: GITAPIException" }
             return -1
         }
         if (!iterator.hasNext()) {
-            tag(TAG).w { "getLastChangedTimestamp: No commits for file: $relativePath" }
+            w { "getLastChangedTimestamp: No commits for file: $relativePath" }
             return -1
         }
         return iterator.next().commitTime.toLong() * 1000
@@ -542,7 +544,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     fun createPassword() {
         if (!validateState()) return
         val currentDir = currentDir
-        tag(TAG).i { "Adding file to : ${currentDir.absolutePath}" }
+        i { "Adding file to : ${currentDir.absolutePath}" }
         val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
@@ -554,41 +556,112 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         FolderCreationDialogFragment.newInstance(currentDir.path).show(supportFragmentManager, null)
     }
 
-    // deletes passwords in order from top to bottom
-    fun deletePasswords(selectedItems: Stack<PasswordItem>) {
-        if (selectedItems.isEmpty()) {
-            refreshPasswordList()
-            return
+    fun deletePasswords(selectedItems: List<PasswordItem>) {
+        var size = 0
+        selectedItems.forEach {
+            if (it.file.isFile)
+                size++
+            else
+                size += it.file.listFilesRecursively().size
         }
-        val item = selectedItems.pop()
         MaterialAlertDialogBuilder(this)
-            .setMessage(resources.getString(R.string.delete_dialog_text, item.longName))
+            .setMessage(resources.getQuantityString(R.plurals.delete_dialog_text, size, size))
             .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
-                val filesToDelete = if (item.file.isDirectory) {
-                    item.file.listFilesRecursively()
-                } else {
-                    listOf(item.file)
+                val filesToDelete = arrayListOf<File>()
+                selectedItems.forEach { item ->
+                    if (item.file.isDirectory)
+                        filesToDelete.addAll(item.file.listFilesRecursively())
+                    else
+                        filesToDelete.add(item.file)
                 }
+                selectedItems.map { item -> item.file.deleteRecursively() }
                 AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
-                item.file.deleteRecursively()
-                commitChange(resources.getString(R.string.git_commit_remove_text, item.longName))
-                deletePasswords(selectedItems)
+                commitChange(resources.getString(R.string.git_commit_remove_text,
+                    selectedItems.joinToString(separator = ", ") { item ->
+                        item.file.toRelativeString(getRepositoryDirectory(this))
+                    }
+                ))
+                refreshPasswordList()
             }
-            .setNegativeButton(resources.getString(R.string.dialog_no)) { _, _ ->
-                deletePasswords(selectedItems)
-            }
+            .setNegativeButton(resources.getString(R.string.dialog_no), null)
             .show()
     }
 
     fun movePasswords(values: List<PasswordItem>) {
         val intent = Intent(this, SelectFolderActivity::class.java)
-        val fileLocations = ArrayList<String>()
-        for ((_, _, _, file) in values) {
-            fileLocations.add(file.absolutePath)
-        }
+        val fileLocations = values.map { it.file.absolutePath }.toTypedArray()
         intent.putExtra("Files", fileLocations)
         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
-        startActivityForResult(intent, REQUEST_CODE_SELECT_FOLDER)
+        registerForActivityResult(StartActivityForResult()) { result ->
+            val intentData = result.data ?: return@registerForActivityResult
+            val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
+            val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
+            val repositoryPath = getRepositoryDirectory(applicationContext).absolutePath
+            if (!target.isDirectory) {
+                e { "Tried moving passwords to a non-existing folder." }
+                return@registerForActivityResult
+            }
+
+            d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
+            d { filesToMove.joinToString(", ") }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                for (file in filesToMove) {
+                    val source = File(file)
+                    if (!source.exists()) {
+                        e { "Tried moving something that appears non-existent." }
+                        continue
+                    }
+                    val destinationFile = File(target.absolutePath + "/" + source.name)
+                    val basename = source.nameWithoutExtension
+                    val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+                    val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+                    if (destinationFile.exists()) {
+                        e { "Trying to move a file that already exists." }
+                        withContext(Dispatchers.Main) {
+                            MaterialAlertDialogBuilder(this@PasswordStore)
+                                .setTitle(resources.getString(R.string.password_exists_title))
+                                .setMessage(resources.getString(
+                                    R.string.password_exists_message,
+                                    destinationLongName,
+                                    sourceLongName)
+                                )
+                                .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                    launch(Dispatchers.IO) {
+                                        movePassword(source, destinationFile)
+                                    }
+                                }
+                                .setNegativeButton(R.string.dialog_cancel, null)
+                                .show()
+                        }
+                    } else {
+                        launch(Dispatchers.IO) {
+                            movePassword(source, destinationFile)
+                        }
+                    }
+                }
+                when (filesToMove.size) {
+                    1 -> {
+                        val source = File(filesToMove[0])
+                        val basename = source.nameWithoutExtension
+                        val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+                        val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+                        withContext(Dispatchers.Main) {
+                            commitChange(resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName))
+                        }
+                    }
+                    else -> {
+                        withContext(Dispatchers.Main) {
+                            commitChange(resources.getString(R.string.git_commit_move_multiple_text,
+                                getRelativePath("${target.absolutePath}/", getRepositoryDirectory(applicationContext).absolutePath)
+                            ))
+                        }
+                    }
+                }
+            }
+            resetPasswordList()
+            plist?.dismissActionMode()
+        }.launch(intent)
     }
 
     /**
@@ -658,81 +731,32 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
                     startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                 }
-                REQUEST_CODE_SELECT_FOLDER -> {
-                    val intentData = data ?: return
-                    tag(TAG).d {
-                        "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}"
-                    }
-                    tag(TAG).d {
-                        TextUtils.join(", ", requireNotNull(intentData.getStringArrayListExtra("Files")))
-                    }
-
-                    val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
-                    val repositoryPath = getRepositoryDirectory(applicationContext).absolutePath
-                    if (!target.isDirectory) {
-                        tag(TAG).e { "Tried moving passwords to a non-existing folder." }
-                        return
-                    }
-
-                    // TODO move this to an async task
-                    for (fileString in requireNotNull(intentData.getStringArrayListExtra("Files"))) {
-                        val source = File(fileString)
-                        if (!source.exists()) {
-                            tag(TAG).e { "Tried moving something that appears non-existent." }
-                            continue
-                        }
-                        val destinationFile = File(target.absolutePath + "/" + source.name)
-                        val basename = source.nameWithoutExtension
-                        val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
-                        val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
-                        if (destinationFile.exists()) {
-                            e { "Trying to move a file that already exists." }
-                            MaterialAlertDialogBuilder(this)
-                                .setTitle(resources.getString(R.string.password_exists_title))
-                                .setMessage(resources.getString(
-                                    R.string.password_exists_message,
-                                    destinationLongName,
-                                    sourceLongName)
-                                )
-                                .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                    movePasswords(source, destinationFile, sourceLongName, destinationLongName)
-                                }
-                                .setNegativeButton(R.string.dialog_cancel, null)
-                                .show()
-                        } else {
-                            movePasswords(source, destinationFile, sourceLongName, destinationLongName)
-                        }
-                    }
-                    resetPasswordList()
-                    if (plist != null) {
-                        plist!!.dismissActionMode()
-                    }
-                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun movePasswords(source: File, destinationFile: File, sourceLongName: String, destinationLongName: String) {
+    private suspend fun movePassword(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
             // Recursively list all files (not directories) below `source`, then
             // obtain the corresponding target file by resolving the relative path
             // starting at the destination folder.
-            val sourceFiles = source.listFilesRecursively()
-            sourceFiles.associateWith { destinationFile.resolve(it.relativeTo(source)) }
+            source.listFilesRecursively().associateWith { destinationFile.resolve(it.relativeTo(source)) }
         } else {
             mapOf(source to destinationFile)
         }
         if (!source.renameTo(destinationFile)) {
-            // TODO this should show a warning to the user
             e { "Something went wrong while moving." }
+            withContext(Dispatchers.Main) {
+                MaterialAlertDialogBuilder(this@PasswordStore)
+                    .setTitle(R.string.password_move_error_title)
+                    .setMessage(getString(R.string.password_move_error_message, source, destinationFile))
+                    .setCancelable(true)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
         } else {
             AutofillMatcher.updateMatches(this, sourceDestinationMap)
-            commitChange(resources
-                .getString(
-                    R.string.git_commit_move_text,
-                    sourceLongName,
-                    destinationLongName))
         }
     }
 
@@ -801,7 +825,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     companion object {
         const val REQUEST_CODE_ENCRYPT = 9911
         const val REQUEST_CODE_DECRYPT_AND_VERIFY = 9913
-        const val REQUEST_CODE_SELECT_FOLDER = 9917
         const val REQUEST_ARG_PATH = "PATH"
         private val TAG = PasswordStore::class.java.name
         const val CLONE_REPO_BUTTON = 401

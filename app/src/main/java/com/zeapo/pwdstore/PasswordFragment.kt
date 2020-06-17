@@ -34,7 +34,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
-import java.util.Stack
 
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
@@ -160,21 +159,18 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
         // Called when the user selects a contextual menu item
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            when (item.itemId) {
+            return when (item.itemId) {
                 R.id.menu_delete_password -> {
-                    requireStore().deletePasswords(
-                        Stack<PasswordItem>().apply {
-                            recyclerAdapter.getSelectedItems(requireContext()).forEach { push(it) }
-                        }
-                    )
-                    mode.finish() // Action picked, so close the CAB
-                    return true
+                    requireStore().deletePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    // Action picked, so close the CAB
+                    mode.finish()
+                    true
                 }
                 R.id.menu_move_password -> {
                     requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
-                    return false
+                    false
                 }
-                else -> return false
+                else -> false
             }
         }
 
