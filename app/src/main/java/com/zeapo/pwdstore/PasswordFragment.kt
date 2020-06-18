@@ -62,28 +62,29 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     private fun initializePasswordList() {
         val gitDir = File(PasswordRepository.getRepositoryDirectory(requireContext()), ".git")
         val hasGitDir = gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
-        if (hasGitDir) {
-            binding.swipeRefresher.setOnRefreshListener {
-                if (!PasswordRepository.isGitRepo()) {
-                    Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.clone_button) {
-                            val intent = Intent(context, GitServerConfigActivity::class.java)
-                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
-                        }
-                        .show()
-                    binding.swipeRefresher.isRefreshing = false
-                } else {
-                    // When authentication is set to ConnectionMode.None then the only git operation we
-                    // can run is a pull, so automatically fallback to that.
-                    val operationId = when (ConnectionMode.fromString(settings.getString("git_remote_auth", null))) {
-                        ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
-                        else -> BaseGitActivity.REQUEST_SYNC
+        binding.swipeRefresher.setOnRefreshListener {
+            if (!hasGitDir) {
+                requireStore().refreshPasswordList()
+                binding.swipeRefresher.isRefreshing = false
+            } else if (!PasswordRepository.isGitRepo()) {
+                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.clone_button) {
+                        val intent = Intent(context, GitServerConfigActivity::class.java)
+                        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                        startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                     }
-                    val intent = Intent(context, GitOperationActivity::class.java)
-                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
-                    startActivityForResult(intent, operationId)
+                    .show()
+                binding.swipeRefresher.isRefreshing = false
+            } else {
+                // When authentication is set to ConnectionMode.None then the only git operation we
+                // can run is a pull, so automatically fallback to that.
+                val operationId = when (ConnectionMode.fromString(settings.getString("git_remote_auth", null))) {
+                    ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
+                    else -> BaseGitActivity.REQUEST_SYNC
                 }
+                val intent = Intent(context, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
+                startActivityForResult(intent, operationId)
             }
         }
 
