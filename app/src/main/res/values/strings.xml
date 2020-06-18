@@ -24,7 +24,10 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
     <string name="key_dialog_text">A valid PGP key must be selected in Settings before initializing the repository</string>
-    <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
+    <plurals name="delete_dialog_text">
+        <item quantity="one">Are you sure you want to delete the password?</item>
+        <item quantity="other">Are you sure you want to delete %d passwords?</item>
+    </plurals>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -36,12 +39,15 @@
     <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
     <string name="password_exists_title">Password already exists!</string>
     <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
+    <string name="password_move_error_title">Error while moving passwords</string>
+    <string name="password_move_error_message">Failed to move %1$s to %2$s</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Add generated password for %1$s using Android Password Store.</string>
     <string name="git_commit_edit_text">Edit password for %1$s using Android Password Store.</string>
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
+    <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP provider selected!</string>
