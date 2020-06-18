@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
+import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
@@ -37,7 +38,6 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.net.URI
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -237,7 +237,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 return@executeApiAsync
                             }
 
-                            if (!URI(path).normalize().path.contains(repoPath)) {
+                            if (!isInsideRepository(file)) {
                                 snackbar(message = getString(R.string.message_error_destination_outside_repo))
                                 return@executeApiAsync
                             }

@@ -66,6 +66,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.commitChange
+import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import kotlinx.coroutines.Dispatchers
@@ -664,10 +665,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             resetPasswordList()
             plist?.dismissActionMode()
         }.launch(intent)
-    }
-
-    private fun isInsideRepository(file: File): Boolean {
-        return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
     }
 
     enum class CategoryRenameError(val resource: Int) {
