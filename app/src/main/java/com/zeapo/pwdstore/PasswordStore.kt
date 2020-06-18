@@ -674,7 +674,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         None(0),
         EmptyField(R.string.message_category_error_empty_field),
         CategoryExists(R.string.message_category_error_category_exists),
-        DestinationOutsideRepo(R.string.message_category_error_destination_outside_repo),
+        DestinationOutsideRepo(R.string.message_error_destination_outside_repo),
     }
 
     /**

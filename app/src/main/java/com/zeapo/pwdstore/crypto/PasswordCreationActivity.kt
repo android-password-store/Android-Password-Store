@@ -37,6 +37,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.net.URI
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -233,6 +234,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             // If we're not editing, this file should not already exist!
                             if (!editing && file.exists()) {
                                 snackbar(message = getString(R.string.password_creation_duplicate_error))
+                                return@executeApiAsync
+                            }
+
+                            if (!URI(path).normalize().path.contains(repoPath)) {
+                                snackbar(message = getString(R.string.message_error_destination_outside_repo))
                                 return@executeApiAsync
                             }
                             try {
