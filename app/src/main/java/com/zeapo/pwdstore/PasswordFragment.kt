@@ -85,6 +85,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     startActivityForResult(intent, operationId)
                 }
             }
+        } else {
+            binding.swipeRefresher.setOnRefreshListener {
+                requireStore().refreshPasswordList()
+                binding.swipeRefresher.isRefreshing = false
+            }
         }
 
         recyclerAdapter = PasswordItemRecyclerAdapter()
