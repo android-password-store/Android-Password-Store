@@ -154,6 +154,9 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         // Called each time the action mode is shown. Always called after onCreateActionMode, but
         // may be called multiple times if the mode is invalidated.
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            menu.findItem(R.id.menu_edit_password).isVisible =
+                recyclerAdapter.getSelectedItems(requireContext())
+                    .all { it.type == PasswordItem.TYPE_CATEGORY }
             return true
         }
 
@@ -168,6 +171,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 }
                 R.id.menu_move_password -> {
                     requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    false
+                }
+                R.id.menu_edit_password -> {
+                    requireStore().renameCategory(recyclerAdapter.getSelectedItems(requireContext()))
+                    mode.finish()
                     false
                 }
                 else -> false

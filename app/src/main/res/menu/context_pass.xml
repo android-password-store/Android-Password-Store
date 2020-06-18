@@ -20,4 +20,9 @@
         android:title="@string/delete"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/menu_edit_password"
+        android:icon="@drawable/ic_edit_white_24dp"
+        android:title="@string/edit"
+        app:showAsAction="ifRoom" />
 </menu>

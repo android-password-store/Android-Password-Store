@@ -43,6 +43,7 @@ import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
@@ -66,6 +67,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.listFilesRecursively
+import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -628,7 +630,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 )
                                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
                                     launch(Dispatchers.IO) {
-                                        movePassword(source, destinationFile)
+                                        moveFile(source, destinationFile)
                                     }
                                 }
                                 .setNegativeButton(R.string.dialog_cancel, null)
@@ -636,7 +638,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         }
                     } else {
                         launch(Dispatchers.IO) {
-                            movePassword(source, destinationFile)
+                            moveFile(source, destinationFile)
                         }
                     }
                 }
@@ -662,6 +664,69 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             resetPasswordList()
             plist?.dismissActionMode()
         }.launch(intent)
+    }
+
+    private fun isInsideRepository(file: File): Boolean {
+        return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
+    }
+
+    enum class CategoryRenameError(val resource: Int) {
+        None(0),
+        EmptyField(R.string.message_category_error_empty_field),
+        CategoryExists(R.string.message_category_error_category_exists),
+        DestinationOutsideRepo(R.string.message_category_error_destination_outside_repo),
+    }
+
+    /**
+     * Prompt the user with a new category name to assign,
+     * if the new category forms/leads a path (i.e. contains "/"), intermediate directories will be created
+     * and new category will be placed inside.
+     *
+     * @param oldCategory The category to change its name
+     * @param error Determines whether to show an error to the user in the alert dialog,
+     * this error may be due to the new category the user entered already exists or the field was empty or the
+     * destination path is outside the repository
+     *
+     * @see [CategoryRenameError]
+     * @see [isInsideRepository]
+     */
+    private fun renameCategory(oldCategory: PasswordItem, error: CategoryRenameError = CategoryRenameError.None) {
+        val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
+        val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
+
+        if (error != CategoryRenameError.None) {
+            newCategoryEditText.error = getString(error.resource)
+        }
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.title_rename_folder)
+            .setView(view)
+            .setMessage(getString(R.string.message_rename_folder, oldCategory.name))
+            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
+                when {
+                    newCategoryEditText.text.isNullOrBlank() -> renameCategory(oldCategory, CategoryRenameError.EmptyField)
+                    newCategory.exists() -> renameCategory(oldCategory, CategoryRenameError.CategoryExists)
+                    !isInsideRepository(newCategory) -> renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
+                    else -> lifecycleScope.launch(Dispatchers.IO) {
+                        moveFile(oldCategory.file, newCategory)
+                        withContext(Dispatchers.Main) {
+                            commitChange(resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name))
+                        }
+                    }
+                }
+            }
+            .setNegativeButton(R.string.dialog_skip, null)
+            .create()
+
+        dialog.requestInputFocusOnView<TextInputEditText>(R.id.folder_name_text)
+        dialog.show()
+    }
+
+    fun renameCategory(categories: List<PasswordItem>) {
+        for (oldCategory in categories) {
+            renameCategory(oldCategory)
+        }
     }
 
     /**
@@ -736,8 +801,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private suspend fun movePassword(source: File, destinationFile: File) {
+    private suspend fun moveFile(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
+            destinationFile.mkdirs()
             // Recursively list all files (not directories) below `source`, then
             // obtain the corresponding target file by resolving the relative path
             // starting at the destination folder.
@@ -746,7 +812,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             mapOf(source to destinationFile)
         }
         if (!source.renameTo(destinationFile)) {
-            e { "Something went wrong while moving." }
+            e { "Something went wrong while moving $source to $destinationFile." }
             withContext(Dispatchers.Main) {
                 MaterialAlertDialogBuilder(this@PasswordStore)
                     .setTitle(R.string.password_move_error_title)

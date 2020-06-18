@@ -222,6 +222,7 @@
     <string name="dialog_positive">Go to Settings</string>
     <string name="dialog_negative">Go back</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_skip">Skip</string>
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
@@ -323,6 +324,11 @@
     <string name="pref_show_hidden_title">Show hidden folders</string>
     <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
     <string name="title_create_folder">Create folder</string>
+    <string name="title_rename_folder">Rename folder</string>
+    <string name="message_category_error_empty_field">Category name can\'t be empty</string>
+    <string name="message_category_error_category_exists">Category name already exists</string>
+    <string name="message_category_error_destination_outside_repo">Destination must be within the repository</string>
+    <string name="message_rename_folder">Enter destination for %1$s</string>
     <string name="button_create">Create</string>
     <string name="pref_search_on_start">Open search on start</string>
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
