@@ -183,6 +183,7 @@
     <string name="pwgen_pronounceable">Pronounceable</string>
     <string name="pwgen_no_chars_error">No characters included</string>
     <string name="pwgen_length_too_short_error">Length too short for selected criteria</string>
+    <string name="pwgen_max_iterations_exceeded">Failed to generate a password satisfying the constraints. Try to increase the length.</string>
 
     <!-- XKPWD password generator -->
     <string name="xkpwgen_title">Xkpasswd Generator</string>
