@@ -677,7 +677,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
      *
      * @param oldCategory The category to change its name
      * @param error Determines whether to show an error to the user in the alert dialog, this error
-     * may be due to the new category the user entered already exists or the field was empty
+     * may be due to the new category the user entered already exists or the field was empty or the
+     * destination path is outside the repository,  @see [isInsideRepository]
      */
     private fun renameCategory(oldCategory: PasswordItem, error: Boolean = false) {
         val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
