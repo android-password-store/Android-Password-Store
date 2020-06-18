@@ -14,9 +14,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,17 +49,25 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
     private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
+    private val swipeResult = registerForActivityResult(StartActivityForResult()) {
+        binding.swipeRefresher.isRefreshing = false
+    }
 
-    private fun requireStore() = requireActivity() as PasswordStore
+    val currentDir: File
+        get() = model.currentDir.value!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         initializePasswordList()
         binding.fab.setOnClickListener {
-            ItemCreationBottomSheet().apply {
-                setTargetFragment(this@PasswordFragment, 1000)
-            }.show(parentFragmentManager, "BOTTOM_SHEET")
+            ItemCreationBottomSheet().show(childFragmentManager, "BOTTOM_SHEET")
+        }
+        childFragmentManager.setFragmentResultListener(ITEM_CREATION_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+            when (bundle.getString(ACTION_KEY)) {
+                ACTION_FOLDER -> requireStore().createFolder()
+                ACTION_PASSWORD -> requireStore().createPassword()
+            }
         }
     }
 
@@ -73,7 +83,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     .setAction(R.string.clone_button) {
                         val intent = Intent(context, GitServerConfigActivity::class.java)
                         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                        startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                        swipeResult.launch(intent)
                     }
                     .show()
                 binding.swipeRefresher.isRefreshing = false
@@ -87,7 +97,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 }
                 val intent = Intent(context, GitOperationActivity::class.java)
                 intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
-                startActivityForResult(intent, operationId)
+                swipeResult.launch(intent)
             }
         }
 
@@ -244,9 +254,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        binding.swipeRefresher.isRefreshing = false
-    }
+    private fun requireStore() = requireActivity() as PasswordStore
 
     /**
      * Returns true if the back press was handled by the [Fragment].
@@ -262,16 +270,17 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         return true
     }
 
-    val currentDir: File
-        get() = model.currentDir.value!!
-
     fun dismissActionMode() {
         actionMode?.finish()
     }
 
-    fun createFolder() = requireStore().createFolder()
+    companion object {
+        const val ITEM_CREATION_REQUEST_KEY = "creation_key"
+        const val ACTION_KEY = "action"
+        const val ACTION_FOLDER = "folder"
+        const val ACTION_PASSWORD = "password"
+    }
 
-    fun createPassword() = requireStore().createPassword()
 
     fun navigateTo(file: File) {
         requireStore().clearSearch()
