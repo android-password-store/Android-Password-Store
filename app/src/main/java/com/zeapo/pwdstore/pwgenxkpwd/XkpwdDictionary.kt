@@ -5,51 +5,29 @@
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
-import android.text.TextUtils
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
 import java.io.File
-import java.util.ArrayList
-import java.util.HashMap
 
 class XkpwdDictionary(context: Context) {
-    val words: HashMap<Int, ArrayList<String>> = HashMap()
+    val words: Map<Int, List<String>>
 
     init {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val uri = prefs.getString("pref_key_custom_dict", "")!!
+        val customDictFile = File(context.filesDir, XKPWD_CUSTOM_DICT_FILE)
 
-        var lines: List<String> = listOf()
-
-        if (prefs.getBoolean("pref_key_is_custom_dict", false)) {
-
-            val uri = prefs.getString("pref_key_custom_dict", "")
-
-            if (!TextUtils.isEmpty(uri)) {
-                val customDictFile = File(context.filesDir, XKPWD_CUSTOM_DICT_FILE)
-
-                if (customDictFile.exists() && customDictFile.canRead()) {
-                    lines = customDictFile.inputStream().bufferedReader().readLines()
-                }
-            }
+        val lines = if (prefs.getBoolean("pref_key_is_custom_dict", false) &&
+            uri.isNotEmpty() && customDictFile.canRead()) {
+            customDictFile.readLines()
+        } else {
+            context.resources.openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
         }
 
-        if (lines.isEmpty()) {
-            lines = context.resources.openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
-        }
-
-        for (word in lines) {
-            if (!word.trim { it <= ' ' }.contains(" ")) {
-                val length = word.trim { it <= ' ' }.length
-
-                if (length > 0) {
-                    if (!words.containsKey(length)) {
-                        words[length] = ArrayList()
-                    }
-                    val strings = words[length]!!
-                    strings.add(word.trim { it <= ' ' })
-                }
-            }
-        }
+        words = lines.asSequence()
+            .map { it.trim() }
+            .filter { it.isNotEmpty() && !it.contains(' ') }
+            .groupBy { it.length }
     }
 
     companion object {

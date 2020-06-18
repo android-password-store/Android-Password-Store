@@ -124,7 +124,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
                 .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
                 .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
-        } catch (e: PasswordGenerator.PasswordGeneratorExeption) {
+        } catch (e: PasswordGenerator.PasswordGeneratorException) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
             tag("xkpw").e(e, "failure generating xkpasswd")
             passwordText.text = FALLBACK_ERROR_PASS
