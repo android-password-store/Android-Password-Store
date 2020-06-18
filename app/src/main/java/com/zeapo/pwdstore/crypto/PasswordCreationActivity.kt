@@ -116,6 +116,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 listOf(filename, extraContent).forEach {
                     it.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
                 }
+                updateEncryptUsernameState()
             }
             suggestedPass?.let {
                 password.setText(it)
