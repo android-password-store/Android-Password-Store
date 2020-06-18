@@ -62,7 +62,7 @@ object PasswordGenerator {
     }
 
     /**
-     * Generates a password using the preferences set by [.setPrefs].
+     * Generates a password using the preferences set by [setPrefs].
      */
     @Throws(PasswordGeneratorException::class)
     fun generate(ctx: Context): String {
