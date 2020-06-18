@@ -670,21 +670,32 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
     }
 
+    enum class CategoryRenameError(val resource: Int) {
+        None(0),
+        EmptyField(R.string.message_category_error_empty_field),
+        CategoryExists(R.string.message_category_error_category_exists),
+        DestinationOutsideRepo(R.string.message_category_error_destination_outside_repo),
+    }
+
     /**
      * Prompt the user with a new category name to assign,
      * if the new category forms/leads a path (i.e. contains "/"), intermediate directories will be created
      * and new category will be placed inside.
      *
      * @param oldCategory The category to change its name
-     * @param error Determines whether to show an error to the user in the alert dialog, this error
-     * may be due to the new category the user entered already exists or the field was empty or the
-     * destination path is outside the repository,  @see [isInsideRepository]
+     * @param error Determines whether to show an error to the user in the alert dialog,
+     * this error may be due to the new category the user entered already exists or the field was empty or the
+     * destination path is outside the repository
+     *
+     * @see [CategoryRenameError]
+     * @see [isInsideRepository]
      */
-    private fun renameCategory(oldCategory: PasswordItem, error: Boolean = false) {
+    private fun renameCategory(oldCategory: PasswordItem, error: CategoryRenameError = CategoryRenameError.None) {
         val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
         val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
-        if (error) {
-            newCategoryEditText.error = getString(R.string.message_error_rename_folder)
+
+        if (error != CategoryRenameError.None) {
+            newCategoryEditText.error = getString(error.resource)
         }
 
         val dialog = MaterialAlertDialogBuilder(this)
@@ -694,9 +705,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
                 val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
                 when {
-                    newCategoryEditText.text.isNullOrBlank() ||
-                        newCategory.exists() ||
-                        !isInsideRepository(newCategory) -> renameCategory(oldCategory, true)
+                    newCategoryEditText.text.isNullOrBlank() -> renameCategory(oldCategory, CategoryRenameError.EmptyField)
+                    newCategory.exists() -> renameCategory(oldCategory, CategoryRenameError.CategoryExists)
+                    !isInsideRepository(newCategory) -> renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
                     else -> lifecycleScope.launch(Dispatchers.IO) {
                         moveFile(oldCategory.file, newCategory)
                         withContext(Dispatchers.Main) {
