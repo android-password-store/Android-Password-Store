@@ -630,7 +630,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 )
                                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
                                     launch(Dispatchers.IO) {
-                                        movePassword(source, destinationFile)
+                                        moveFile(source, destinationFile)
                                     }
                                 }
                                 .setNegativeButton(R.string.dialog_cancel, null)
@@ -638,7 +638,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         }
                     } else {
                         launch(Dispatchers.IO) {
-                            movePassword(source, destinationFile)
+                            moveFile(source, destinationFile)
                         }
                     }
                 }
@@ -691,11 +691,11 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 when {
                     newCategoryEditText.text.isNullOrBlank() ||
                         newCategory.exists() -> renameCategory(oldCategory, true)
-                    else -> {
-                        newCategory.mkdirs()
-                        oldCategory.file.renameTo(newCategory)
-                        AutofillMatcher.updateMatches(this, mapOf(oldCategory.file to newCategory))
-                        commitChange(resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name))
+                    else -> lifecycleScope.launch(Dispatchers.IO) {
+                        moveFile(oldCategory.file, newCategory)
+                        withContext(Dispatchers.Main) {
+                            commitChange(resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name))
+                        }
                     }
                 }
             }
@@ -784,8 +784,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private suspend fun movePassword(source: File, destinationFile: File) {
+    private suspend fun moveFile(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
+            destinationFile.mkdirs()
             // Recursively list all files (not directories) below `source`, then
             // obtain the corresponding target file by resolving the relative path
             // starting at the destination folder.
@@ -794,7 +795,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             mapOf(source to destinationFile)
         }
         if (!source.renameTo(destinationFile)) {
-            e { "Something went wrong while moving." }
+            e { "Something went wrong while moving $source to $destinationFile." }
             withContext(Dispatchers.Main) {
                 MaterialAlertDialogBuilder(this@PasswordStore)
                     .setTitle(R.string.password_move_error_title)
