@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.PasswordEntry
+import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
@@ -233,6 +234,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             // If we're not editing, this file should not already exist!
                             if (!editing && file.exists()) {
                                 snackbar(message = getString(R.string.password_creation_duplicate_error))
+                                return@executeApiAsync
+                            }
+
+                            if (!isInsideRepository(file)) {
+                                snackbar(message = getString(R.string.message_error_destination_outside_repo))
                                 return@executeApiAsync
                             }
                             try {
