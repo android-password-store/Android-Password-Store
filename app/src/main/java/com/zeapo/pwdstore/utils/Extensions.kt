@@ -23,6 +23,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
@@ -123,3 +124,7 @@ fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
 val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
     get() = getSystemService()
+
+fun Activity.isInsideRepository(file: File): Boolean {
+    return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
+}
