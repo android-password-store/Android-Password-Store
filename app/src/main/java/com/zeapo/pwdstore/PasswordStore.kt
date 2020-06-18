@@ -666,6 +666,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }.launch(intent)
     }
 
+    private fun isInsideRepository(file: File): Boolean {
+        return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
+    }
+
     /**
      * Prompt the user with a new category name to assign,
      * if the new category forms/leads a path (i.e. contains "/"), intermediate directories will be created
@@ -690,7 +694,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
                 when {
                     newCategoryEditText.text.isNullOrBlank() ||
-                        newCategory.exists() -> renameCategory(oldCategory, true)
+                        newCategory.exists() ||
+                        !isInsideRepository(newCategory) -> renameCategory(oldCategory, true)
                     else -> lifecycleScope.launch(Dispatchers.IO) {
                         moveFile(oldCategory.file, newCategory)
                         withContext(Dispatchers.Main) {
