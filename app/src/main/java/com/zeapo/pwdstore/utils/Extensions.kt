@@ -33,7 +33,6 @@ fun Int.clearFlag(flag: Int): Int {
     return this and flag.inv()
 }
 
-
 infix fun Int.hasFlag(flag: Int): Boolean {
     return this and flag == flag
 }
