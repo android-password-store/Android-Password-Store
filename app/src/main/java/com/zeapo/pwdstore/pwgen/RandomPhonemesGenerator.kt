@@ -56,7 +56,7 @@ object RandomPhonemesGenerator {
         Element("z", CONSONANT)
     )
 
-    private class Element constructor(str: String, val flags: Int) {
+    private class Element(str: String, val flags: Int) {
         val upperCase = str.toUpperCase(Locale.ROOT)
         val lowerCase = str.toLowerCase(Locale.ROOT)
         val length = str.length

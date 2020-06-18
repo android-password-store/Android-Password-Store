@@ -79,7 +79,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     }
 
     private fun isChecked(@IdRes id: Int): Boolean {
-        return dialog!!.findViewById<CheckBox>(id).isChecked
+        return requireDialog().findViewById<CheckBox>(id).isChecked
     }
 
     private fun setPreferences() {
@@ -91,7 +91,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
             PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
             PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
         )
-        val lengthText = dialog!!.findViewById<EditText>(R.id.lengthNumber).text.toString()
+        val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
         val length = lengthText.toIntOrNull()?.takeIf { it >= 0 }
             ?: PasswordGenerator.DEFAULT_LENGTH
         setPrefs(requireActivity().applicationContext, preferences, length)

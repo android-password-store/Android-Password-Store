@@ -82,6 +82,7 @@ class PasswordBuilder(ctx: Context) {
         return numbers.toString()
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     @Throws(PasswordGeneratorException::class)
     fun create(): String {
         val wordBank = mutableListOf<String>()
@@ -108,8 +109,8 @@ class PasswordBuilder(ctx: Context) {
                 val candidate = wordBank.secureRandomElement()
                 val s = when (capsType) {
                     CapsType.UPPERCASE -> candidate.toUpperCase(Locale.getDefault())
-                    CapsType.Sentencecase -> if (i == 0) capitalize(candidate) else candidate
-                    CapsType.TitleCase -> capitalize(candidate)
+                    CapsType.Sentencecase -> if (i == 0) candidate.capitalize(Locale.getDefault()) else candidate
+                    CapsType.TitleCase -> candidate.capitalize(Locale.getDefault())
                     CapsType.lowercase -> candidate.toLowerCase(Locale.getDefault())
                     CapsType.As_iS -> candidate
                 }
@@ -135,11 +136,6 @@ class PasswordBuilder(ctx: Context) {
         }
         return password.toString()
     }
-
-    private fun capitalize(s: String) =
-    // We use `s.first().toString()` instead of `s.first()` since single-character Unicode
-        // strings can expand to multiple characters (`ß` --> `SS`).
-        s.first().toString().toUpperCase(Locale.getDefault()) + s.substring(1)
 
     companion object {
         private const val SYMBOLS = "!@\$%^&*-_+=:|~?/.;#"
