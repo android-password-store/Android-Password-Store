@@ -699,7 +699,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     }
                 }
             }
-            .setNegativeButton(R.string.dialog_cancel, null)
+            .setNegativeButton(R.string.dialog_skip, null)
             .create()
 
         dialog.requestInputFocusOnView<TextInputEditText>(R.id.folder_name_text)

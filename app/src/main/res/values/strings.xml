@@ -222,6 +222,7 @@
     <string name="dialog_positive">Go to Settings</string>
     <string name="dialog_negative">Go back</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_skip">Skip</string>
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
