@@ -676,7 +676,7 @@ class UserPreference : AppCompatActivity() {
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
                     val docId = DocumentsContract.getTreeDocumentId(uri)
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val path = if (split.isNotEmpty()) split[1] else split[0]
+                    val path = if (split.size > 1) split[1] else split[0]
                     val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
                     val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
