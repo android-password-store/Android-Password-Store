@@ -286,7 +286,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 }
                             }
 
-                            if (category.isVisible && category.isEnabled) {
+                            if (category.isVisible && category.isEnabled && oldFileName != null) {
                                 val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
                                 if (oldFile.path != file.path && !oldFile.delete()) {
                                     setResult(RESULT_CANCELED)
