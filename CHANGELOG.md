@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   Add GNU IceCatMobile to the list of supported browsers for Autofill
+
 ## [1.9.0] - 2020-06-21
 
 ### Fixed
