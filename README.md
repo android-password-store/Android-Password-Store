@@ -9,7 +9,7 @@ This application tries to be 100% compatible with [pass](http://www.passwordstor
 
 You can install the application from:
 
-<!--* [F-Droid](https://f-droid.org/repository/browse/?fdid=com.zeapo.pwdstore)-->
+* [F-Droid](https://f-droid.org/packages/dev.msfjarvis.aps/)
 * [Play Store](https://play.google.com/store/apps/details?id=dev.msfjarvis.aps)
 * [Snapshot builds](https://dl.msfjarvis.dev/APS/)
 
