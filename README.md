@@ -14,6 +14,18 @@ You can install the application from:
 
 Pull requests are more than welcome (see [TODO](https://github.com/android-password-store/Android-Password-Store/projects/1#column-228844)).
 
+<a href="https://play.google.com/store/apps/details?id=dev.msfjarvis.aps">
+  <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" 
+       alt="Get it on Google Play"
+       height="80" />
+</a>
+<a href="https://f-droid.org/packages/dev.msfjarvis.aps">
+  <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+       alt="Get it on F-Droid"
+       height="80" />
+</a>
+
+
 ## Features
 
 * Clone an existing pass repository (ssh-key and user/pass support)
@@ -58,3 +70,5 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [![Applicative GmbH](https://opencollective.com/Android-Password-Store/sponsor/1/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/1/website)
 [![ScrapingBee](https://opencollective.com/Android-Password-Store/sponsor/2/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/2/website)
 [![Become a Sponsor](https://opencollective.com/Android-Password-Store/sponsor/3/avatar.svg)](https://opencollective.com/Android-Password-Store/sponsor/3/website)
+
+<sub>Google Play and the Google Play logo are trademarks of Google LLC.</sub>
