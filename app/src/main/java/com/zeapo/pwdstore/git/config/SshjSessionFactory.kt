@@ -128,7 +128,7 @@ private class SshjSession(private val uri: URIish, private val username: String,
     private var currentCommand: Session? = null
 
     fun connect(): SshjSession {
-        ssh = SSHClient()
+        ssh = SSHClient(SshjConfig())
         ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
         ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
         if (!ssh.isConnected)
