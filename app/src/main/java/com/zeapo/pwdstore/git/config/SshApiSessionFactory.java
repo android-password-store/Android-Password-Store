@@ -4,13 +4,13 @@
  */
 package com.zeapo.pwdstore.git.config;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -245,7 +245,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
                             // back
                             // though onActivityResult
                             callingActivity.onActivityResult(
-                                requestCode, Activity.RESULT_OK, null);
+                                requestCode, AppCompatActivity.RESULT_OK, null);
                         }
 
                         @Override
@@ -289,7 +289,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
         private final String description;
         private final String alg;
         private final byte[] publicKey;
-        private final Activity callingActivity;
+        private final AppCompatActivity callingActivity;
         private final SshAuthenticationApi api;
         private CountDownLatch latch;
         private byte[] signature;
@@ -299,7 +299,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
             String description,
             byte[] publicKey,
             String alg,
-            Activity callingActivity,
+            AppCompatActivity callingActivity,
             SshAuthenticationApi api) {
             this.keyId = keyId;
             this.description = description;
@@ -310,7 +310,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
         }
 
         @Override
-        public boolean setPassphrase(byte[] passphrase) throws JSchException {
+        public boolean setPassphrase(byte[] passphrase) {
             // We are not encrypted with a passphrase
             return true;
         }

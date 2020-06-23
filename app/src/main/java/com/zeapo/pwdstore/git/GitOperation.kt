@@ -5,10 +5,10 @@
 package com.zeapo.pwdstore.git
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -40,7 +40,10 @@ import kotlin.coroutines.resume
 import com.google.android.material.R as materialR
 
 
-private class GitOperationCredentialFinder(val callingActivity: Activity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
+private class GitOperationCredentialFinder(
+    val callingActivity: AppCompatActivity,
+    val connectionMode: ConnectionMode
+) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
         val gitOperationPrefs = callingActivity.getEncryptedPrefs("git_operation")
@@ -118,7 +121,7 @@ private class GitOperationCredentialFinder(val callingActivity: Activity, val co
  * @param gitDir the git working tree directory
  * @param callingActivity the calling activity
  */
-abstract class GitOperation(gitDir: File, internal val callingActivity: Activity) {
+abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompatActivity) {
 
     protected val repository: Repository? = PasswordRepository.getRepository(gitDir)
     internal var provider: CredentialsProvider? = null

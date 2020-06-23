@@ -6,7 +6,6 @@ package com.zeapo.pwdstore
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
@@ -490,7 +489,7 @@ class UserPreference : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        setResult(Activity.RESULT_OK)
+        setResult(RESULT_OK)
         finish()
     }
 
@@ -554,7 +553,7 @@ class UserPreference : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             android.R.id.home -> {
-                setResult(Activity.RESULT_OK)
+                setResult(RESULT_OK)
                 finish()
                 true
             }
@@ -588,7 +587,7 @@ class UserPreference : AppCompatActivity() {
         val intent = Intent(applicationContext, SshKeyGenActivity::class.java)
         startActivity(intent)
         if (!fromPreferences) {
-            setResult(Activity.RESULT_OK)
+            setResult(RESULT_OK)
             finish()
         }
     }
@@ -661,9 +660,9 @@ class UserPreference : AppCompatActivity() {
         resultCode: Int,
         data: Intent?
     ) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (data == null) {
-                setResult(Activity.RESULT_CANCELED)
+                setResult(RESULT_CANCELED)
                 return
             }
 
@@ -686,7 +685,7 @@ class UserPreference : AppCompatActivity() {
 
                         // Delete the public key from generation
                         File("""$filesDir/.ssh_key.pub""").delete()
-                        setResult(Activity.RESULT_OK)
+                        setResult(RESULT_OK)
 
                         finish()
                     } catch (e: Exception) {
@@ -729,7 +728,7 @@ class UserPreference : AppCompatActivity() {
                     inputStream?.close()
                     customDictFile.close()
 
-                    setResult(Activity.RESULT_OK)
+                    setResult(RESULT_OK)
                 }
             }
         }

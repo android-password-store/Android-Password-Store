@@ -6,7 +6,6 @@ package com.zeapo.pwdstore
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -757,7 +756,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 // if we get here with a RESULT_OK then it's probably OK :)
                 BaseGitActivity.REQUEST_CLONE -> settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
@@ -891,7 +890,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             .replace(".gpg", "")
         val data = Intent()
         data.putExtra("path", path)
-        setResult(Activity.RESULT_OK, data)
+        setResult(RESULT_OK, data)
         finish()
     }
 

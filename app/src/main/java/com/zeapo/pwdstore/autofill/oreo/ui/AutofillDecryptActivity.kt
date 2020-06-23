@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.autofill.oreo.ui
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -14,6 +13,7 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
@@ -44,7 +44,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillDecryptActivity : Activity(), CoroutineScope {
+class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
 
     companion object {
         private const val EXTRA_FILE_PATH = "com.zeapo.pwdstore.autofill.oreo.EXTRA_FILE_PATH"
