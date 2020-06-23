@@ -10,7 +10,6 @@ import com.github.ajalt.timberkt.w
 import com.zeapo.pwdstore.utils.clear
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import net.schmizz.sshj.DefaultConfig
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.Buffer.PlainBuffer
 import net.schmizz.sshj.common.DisconnectReason

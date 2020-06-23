@@ -12,7 +12,6 @@ import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
 import net.schmizz.keepalive.KeepAliveProvider
 import net.schmizz.sshj.ConfigImpl
-import net.schmizz.sshj.common.Factory
 import net.schmizz.sshj.common.LoggerFactory
 import net.schmizz.sshj.signature.SignatureECDSA
 import net.schmizz.sshj.signature.SignatureRSA
@@ -23,7 +22,6 @@ import net.schmizz.sshj.transport.kex.Curve25519SHA256.FactoryLibSsh
 import net.schmizz.sshj.transport.kex.DHGexSHA256
 import net.schmizz.sshj.transport.kex.ECDHNistP
 import net.schmizz.sshj.transport.random.JCERandom
-import net.schmizz.sshj.transport.random.Random
 import net.schmizz.sshj.transport.random.SingletonRandomFactory
 import net.schmizz.sshj.userauth.keyprovider.OpenSSHKeyFile
 import net.schmizz.sshj.userauth.keyprovider.PKCS5KeyFile
@@ -32,7 +30,6 @@ import net.schmizz.sshj.userauth.keyprovider.PuTTYKeyFile
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.slf4j.Logger
 import org.slf4j.Marker
-import java.security.SecureRandom
 import java.security.Security
 
 
@@ -59,13 +56,13 @@ fun setUpBouncyCastleForSshj() {
     d { "JCE providers: ${Security.getProviders().joinToString { "${it.name} (${it.version})" }}" }
 }
 
-private abstract class AbstractLogger(private val name: String): Logger {
+private abstract class AbstractLogger(private val name: String) : Logger {
 
-    abstract fun t(message: String, t: Throwable? = null,  vararg args: Any?)
-    abstract fun d(message: String, t: Throwable? = null,  vararg args: Any?)
-    abstract fun i(message: String, t: Throwable? = null,  vararg args: Any?)
-    abstract fun w(message: String, t: Throwable? = null,  vararg args: Any?)
-    abstract fun e(message: String, t: Throwable? = null,  vararg args: Any?)
+    abstract fun t(message: String, t: Throwable? = null, vararg args: Any?)
+    abstract fun d(message: String, t: Throwable? = null, vararg args: Any?)
+    abstract fun i(message: String, t: Throwable? = null, vararg args: Any?)
+    abstract fun w(message: String, t: Throwable? = null, vararg args: Any?)
+    abstract fun e(message: String, t: Throwable? = null, vararg args: Any?)
 
     override fun getName() = name
 
@@ -84,10 +81,12 @@ private abstract class AbstractLogger(private val name: String): Logger {
     override fun trace(marker: Marker?, format: String, arg: Any?) = trace(format, arg)
     override fun trace(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
         trace(format, arg1, arg2)
+
     override fun trace(marker: Marker?, format: String, vararg arguments: Any?) =
         trace(format, *arguments)
+
     override fun trace(marker: Marker?, msg: String, t: Throwable?) = trace(msg, t)
-    
+
     override fun debug(msg: String) = d(msg)
     override fun debug(format: String, arg: Any?) = d(format, null, arg)
     override fun debug(format: String, arg1: Any?, arg2: Any?) = d(format, null, arg1, arg2)
@@ -97,8 +96,10 @@ private abstract class AbstractLogger(private val name: String): Logger {
     override fun debug(marker: Marker?, format: String, arg: Any?) = debug(format, arg)
     override fun debug(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
         debug(format, arg1, arg2)
+
     override fun debug(marker: Marker?, format: String, vararg arguments: Any?) =
         debug(format, *arguments)
+
     override fun debug(marker: Marker?, msg: String, t: Throwable?) = debug(msg, t)
 
     override fun info(msg: String) = i(msg)
@@ -110,10 +111,12 @@ private abstract class AbstractLogger(private val name: String): Logger {
     override fun info(marker: Marker?, format: String, arg: Any?) = info(format, arg)
     override fun info(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
         info(format, arg1, arg2)
+
     override fun info(marker: Marker?, format: String, vararg arguments: Any?) =
         info(format, *arguments)
+
     override fun info(marker: Marker?, msg: String, t: Throwable?) = info(msg, t)
-    
+
     override fun warn(msg: String) = w(msg)
     override fun warn(format: String, arg: Any?) = w(format, null, arg)
     override fun warn(format: String, arg1: Any?, arg2: Any?) = w(format, null, arg1, arg2)
@@ -123,10 +126,12 @@ private abstract class AbstractLogger(private val name: String): Logger {
     override fun warn(marker: Marker?, format: String, arg: Any?) = warn(format, arg)
     override fun warn(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
         warn(format, arg1, arg2)
+
     override fun warn(marker: Marker?, format: String, vararg arguments: Any?) =
         warn(format, *arguments)
+
     override fun warn(marker: Marker?, msg: String, t: Throwable?) = warn(msg, t)
-    
+
     override fun error(msg: String) = e(msg)
     override fun error(format: String, arg: Any?) = e(format, null, arg)
     override fun error(format: String, arg1: Any?, arg2: Any?) = e(format, null, arg1, arg2)
@@ -136,13 +141,15 @@ private abstract class AbstractLogger(private val name: String): Logger {
     override fun error(marker: Marker?, format: String, arg: Any?) = error(format, arg)
     override fun error(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
         error(format, arg1, arg2)
+
     override fun error(marker: Marker?, format: String, vararg arguments: Any?) =
         error(format, *arguments)
+
     override fun error(marker: Marker?, msg: String, t: Throwable?) = error(msg, t)
 }
 
-object TimberLoggerFactory: LoggerFactory {
-    private class TimberLogger(name: String): AbstractLogger(name) {
+object TimberLoggerFactory : LoggerFactory {
+    private class TimberLogger(name: String) : AbstractLogger(name) {
 
         // We defer the log level checks to Timber.
         override fun isTraceEnabled() = true
