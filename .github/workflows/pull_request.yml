@@ -6,7 +6,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [23, 29, 30]
+        api-level: [23, 29]
         variant: [Debug, Release]
     steps:
 
@@ -71,10 +71,10 @@ jobs:
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@v2.10.0
+      uses: reactivecircus/android-emulator-runner@v2.11.0
       with:
         api-level: ${{ matrix.api-level }}
-        target: google_apis
+        target: default
         script: |
           adb shell settings put global animator_duration_scale 0
           adb shell settings put global transition_animation_scale 0
