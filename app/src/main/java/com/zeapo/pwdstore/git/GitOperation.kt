@@ -67,7 +67,7 @@ private class GitOperationCredentialFinder(val callingActivity: Activity, val co
         val storedCredential = gitOperationPrefs.getString(credentialPref, null)
         if (isRetry)
             gitOperationPrefs.edit { remove(credentialPref) }
-        if (storedCredential.isNull()) {
+        if (storedCredential == null) {
             val layoutInflater = LayoutInflater.from(callingActivity)
 
             @SuppressLint("InflateParams")
