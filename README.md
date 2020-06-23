@@ -1,6 +1,5 @@
 # Password Store
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--Password--Store-blue.svg?style=flat)](https://android-arsenal.com/details/1/1208)
 [![GitHub workflow](https://github.com/android-password-store/Android-Password-Store/workflows/Deploy%20snapshot%20builds/badge.svg)](https://github.com/android-password-store/Android-Password-Store/actions)
 [![Backers on Open Collective](https://opencollective.com/Android-Password-Store/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Android-Password-Store/sponsors/badge.svg)](#sponsors)
 [![Join the chat at https://gitter.im/android-password-store/public](https://badges.gitter.im/android-password-store/public.svg)](https://gitter.im/android-password-store/public?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
