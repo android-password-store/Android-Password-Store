@@ -10,6 +10,7 @@ import com.github.ajalt.timberkt.w
 import com.zeapo.pwdstore.utils.clear
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import net.schmizz.sshj.DefaultConfig
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.Buffer.PlainBuffer
 import net.schmizz.sshj.common.DisconnectReason
@@ -128,7 +129,7 @@ private class SshjSession(private val uri: URIish, private val username: String,
     private var currentCommand: Session? = null
 
     fun connect(): SshjSession {
-        ssh = SSHClient()
+        ssh = SSHClient(SshjConfig())
         ssh.addHostKeyVerifier(makeTofuHostKeyVerifier(hostKeyFile))
         ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
         if (!ssh.isConnected)

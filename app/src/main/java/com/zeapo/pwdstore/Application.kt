@@ -13,8 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import java.security.Security
+import com.zeapo.pwdstore.git.config.setUpBouncyCastleForSshj
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -29,7 +28,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         }
         prefs?.registerOnSharedPreferenceChangeListener(this)
         setNightMode()
-        setUpBouncyCastle()
+        setUpBouncyCastleForSshj()
     }
 
     override fun onTerminate() {
@@ -40,25 +39,6 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
         if (key == "app_theme") {
             setNightMode()
-        }
-    }
-
-    private fun setUpBouncyCastle() {
-        // Replace the Android BC provider with the Java BouncyCastle provider since the former does
-        // not include all the required algorithms.
-        // TODO: Verify that we are indeed using the fast Android-native implementation whenever
-        //  possible.
-        // Note: This may affect crypto operations in other parts of the application.
-        val bcIndex = Security.getProviders().indexOfFirst {
-            it.name == BouncyCastleProvider.PROVIDER_NAME
-        }
-        if (bcIndex == -1) {
-            // No Android BC found, install Java BC at lowest priority.
-            Security.addProvider(BouncyCastleProvider())
-        } else {
-            // Replace Android BC with Java BC, inserted at the same position.
-            Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
-            Security.insertProviderAt(BouncyCastleProvider(), bcIndex + 1)
         }
     }
 
