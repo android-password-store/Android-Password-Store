@@ -158,24 +158,29 @@ object TimberLoggerFactory : LoggerFactory {
         override fun isWarnEnabled() = true
         override fun isErrorEnabled() = true
 
+        // Replace slf4j's "{}" format string style with standard Java's "%s".
+        // The supposedly redundant escape on the } is not redundant.
+        @Suppress("RegExpRedundantEscape")
+        private fun String.fix() = replace("""(?!<\\)\{\}""".toRegex(), "%s")
+
         override fun t(message: String, t: Throwable?, vararg args: Any?) {
-            Timber.tag(name).v(t, message, *args)
+            Timber.tag(name).v(t, message.fix(), *args)
         }
 
         override fun d(message: String, t: Throwable?, vararg args: Any?) {
-            Timber.tag(name).d(t, message, *args)
+            Timber.tag(name).d(t, message.fix(), *args)
         }
 
         override fun i(message: String, t: Throwable?, vararg args: Any?) {
-            Timber.tag(name).i(t, message, *args)
+            Timber.tag(name).i(t, message.fix(), *args)
         }
 
         override fun w(message: String, t: Throwable?, vararg args: Any?) {
-            Timber.tag(name).w(t, message, *args)
+            Timber.tag(name).w(t, message.fix(), *args)
         }
 
         override fun e(message: String, t: Throwable?, vararg args: Any?) {
-            Timber.tag(name).e(t, message, *args)
+            Timber.tag(name).e(t, message.fix(), *args)
         }
     }
 
