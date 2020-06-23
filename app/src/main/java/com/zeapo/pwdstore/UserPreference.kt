@@ -21,7 +21,7 @@ import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
@@ -167,7 +167,7 @@ class UserPreference : AppCompatActivity() {
                         false
                     } else {
                         val intent = Intent(callingActivity, GetKeyIdsActivity::class.java)
-                        val keySelectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                        val keySelectResult = registerForActivityResult(StartActivityForResult()) {
                             updateKeyIDsSummary(pref)
                         }
                         keySelectResult.launch(intent)
@@ -517,7 +517,32 @@ class UserPreference : AppCompatActivity() {
             .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
                 val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                startActivityForResult(Intent.createChooser(i, "Choose Directory"), SELECT_GIT_DIRECTORY)
+                registerForActivityResult(StartActivityForResult()) { result ->
+                    val uri = result.data?.data
+
+                    tag(TAG).d { "Selected repository URI is $uri" }
+                    // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
+                    val docId = DocumentsContract.getTreeDocumentId(uri)
+                    val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    val path = if (split.size > 1) split[1] else split[0]
+                    val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+                    tag(TAG).d { "Selected repository path is $repoPath" }
+
+                    if (Environment.getExternalStorageDirectory().path == repoPath) {
+                        MaterialAlertDialogBuilder(this)
+                            .setTitle(getString(R.string.sdcard_root_warning_title))
+                            .setMessage(getString(R.string.sdcard_root_warning_message))
+                            .setPositiveButton("Remove everything") { _, _ ->
+                                prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri?.path) }
+                            }
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .show()
+                    }
+                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
+
+                }.launch(Intent.createChooser(i, "Choose Directory"))
             }
             .setNegativeButton(R.string.dialog_cancel, null)
             .show()
@@ -672,31 +697,6 @@ class UserPreference : AppCompatActivity() {
                             .show()
                     }
                 }
-                SELECT_GIT_DIRECTORY -> {
-                    val uri = data.data
-
-                    tag(TAG).d { "Selected repository URI is $uri" }
-                    // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
-                    val docId = DocumentsContract.getTreeDocumentId(uri)
-                    val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val path = if (split.size > 1) split[1] else split[0]
-                    val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
-                    tag(TAG).d { "Selected repository path is $repoPath" }
-
-                    if (Environment.getExternalStorageDirectory().path == repoPath) {
-                        MaterialAlertDialogBuilder(this)
-                            .setTitle(getString(R.string.sdcard_root_warning_title))
-                            .setMessage(getString(R.string.sdcard_root_warning_message))
-                            .setPositiveButton("Remove everything") { _, _ ->
-                                prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri?.path) }
-                            }
-                            .setNegativeButton(R.string.dialog_cancel, null)
-                            .show()
-                    }
-                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
-                }
                 EXPORT_PASSWORDS -> {
                     val uri = data.data
 
@@ -809,10 +809,8 @@ class UserPreference : AppCompatActivity() {
 
     companion object {
         private const val IMPORT_SSH_KEY = 1
-        private const val SELECT_GIT_DIRECTORY = 2
-        private const val EXPORT_PASSWORDS = 3
-        private const val EDIT_GIT_CONFIG = 4
-        private const val SET_CUSTOM_XKPWD_DICT = 5
+        private const val EXPORT_PASSWORDS = 2
+        private const val SET_CUSTOM_XKPWD_DICT = 3
         private const val TAG = "UserPreference"
 
         /**
