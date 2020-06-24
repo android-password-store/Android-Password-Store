@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
--   Remember passphrase option did not work with keys generated before 2018 that had empty passphrases
+-   Remember passphrase option did not work with keys that had empty passphrases and were generated before 2018
 
 ### Added
 
