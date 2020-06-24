@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'release'
       - name: Extract version from milestone
         run: |
           VERSION="${{ github.event.milestone.title }}"
@@ -41,5 +43,5 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           head: release/${{ env.RELEASE_VERSION }}
-          base: master
+          base: release
           title: Release ${{ env.RELEASE_VERSION }}
