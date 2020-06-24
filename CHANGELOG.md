@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Remember passphrase option did not work with keys generated before 2018 that had empty passphrases
+
 ### Added
 
 -   Add GNU IceCatMobile to the list of supported browsers for Autofill
