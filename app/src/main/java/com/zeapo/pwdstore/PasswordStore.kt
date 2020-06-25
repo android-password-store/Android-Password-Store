@@ -92,6 +92,46 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
+    private val cloneResult = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
+        }
+    }
+
+    private val listRefreshAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            refreshPasswordList()
+        }
+    }
+
+    private val repositoryInitAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            initializeRepositoryInfo()
+        }
+    }
+
+    private val directoryChangeAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) &&
+                settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null) != null) {
+                val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
+                val dir = externalRepoPath?.let { File(it) }
+                if (dir != null &&
+                    dir.exists() &&
+                    dir.isDirectory &&
+                    dir.listFilesRecursively().isNotEmpty() &&
+                    getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
+                    closeRepository()
+                    checkLocalRepository()
+                    return@registerForActivityResult
+                }
+            }
+            val intent = Intent(activity, GitOperationActivity::class.java)
+            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+            cloneResult.launch(intent)
+        }
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         // open search view on search key, or Ctr+F
         if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) &&
@@ -294,7 +334,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
                 intent = Intent(this, GitOperationActivity::class.java)
                 intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PUSH)
-                startActivityForResult(intent, BaseGitActivity.REQUEST_PUSH)
+                startActivity(intent)
                 return true
             }
             R.id.git_pull -> {
@@ -304,7 +344,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
                 intent = Intent(this, GitOperationActivity::class.java)
                 intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PULL)
-                startActivityForResult(intent, BaseGitActivity.REQUEST_PULL)
+                listRefreshAction.launch(intent)
                 return true
             }
             R.id.git_sync -> {
@@ -314,7 +354,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
                 intent = Intent(this, GitOperationActivity::class.java)
                 intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
-                startActivityForResult(intent, BaseGitActivity.REQUEST_SYNC)
+                listRefreshAction.launch(intent)
                 return true
             }
             R.id.refresh -> {
@@ -382,7 +422,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 .setMessage(resources.getString(R.string.key_dialog_text))
                 .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
                     val intent = Intent(activity, UserPreference::class.java)
-                    startActivityForResult(intent, BaseGitActivity.REQUEST_INIT)
+                    repositoryInitAction.launch(intent)
                 }
                 .setNegativeButton(resources.getString(R.string.dialog_negative), null)
                 .show()
@@ -425,7 +465,11 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         if (repo == null) {
             val intent = Intent(activity, UserPreference::class.java)
             intent.putExtra("operation", "git_external")
-            startActivityForResult(intent, HOME)
+            registerForActivityResult(StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    checkLocalRepository()
+                }
+            }.launch(intent)
         } else {
             checkLocalRepository(getRepositoryDirectory(applicationContext))
         }
@@ -525,7 +569,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 shortcutManager!!.addDynamicShortcuts(listOf(shortcut))
             }
         }
-        startActivityForResult(decryptIntent, REQUEST_CODE_DECRYPT_AND_VERIFY)
+        startActivity(decryptIntent)
     }
 
     private fun validateState(): Boolean {
@@ -557,7 +601,12 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
-        startActivityForResult(intent, REQUEST_CODE_ENCRYPT)
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                commitChange(resources.getString(R.string.git_commit_add_text, result.data?.extras?.getString("LONG_NAME")))
+                refreshPasswordList()
+            }
+        }.launch(intent)
     }
 
     fun createFolder() {
@@ -758,52 +807,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                // if we get here with a RESULT_OK then it's probably OK :)
-                BaseGitActivity.REQUEST_CLONE -> settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-                // if went from decrypt->edit and user saved changes, we need to commitChange
-                REQUEST_CODE_DECRYPT_AND_VERIFY -> {
-                    if (data != null && data.getBooleanExtra("needCommit", false)) {
-                        if (data.getStringExtra("OPERATION") == "EDIT") {
-                            commitChange(resources.getString(R.string.git_commit_edit_text,
-                                data.extras!!.getString("LONG_NAME")))
-                        }
-                    }
-                }
                 REQUEST_CODE_ENCRYPT -> {
                     commitChange(resources.getString(R.string.git_commit_add_text,
                         data!!.extras!!.getString(PasswordCreationActivity.RETURN_EXTRA_LONG_NAME)))
                     refreshPasswordList(File(data.extras!!.getString(PasswordCreationActivity.RETURN_EXTRA_CREATED_FILE)!!))
-                }
-                BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                BaseGitActivity.REQUEST_SYNC, BaseGitActivity.REQUEST_PULL -> refreshPasswordList()
-                HOME -> checkLocalRepository()
-                // duplicate code
-                CLONE_REPO_BUTTON -> {
-                    if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) &&
-                        settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null) != null) {
-                        val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
-                        val dir = externalRepoPath?.let { File(it) }
-                        if (dir != null &&
-                            dir.exists() &&
-                            dir.isDirectory &&
-                            dir.listFilesRecursively().isNotEmpty() &&
-                            getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
-                            closeRepository()
-                            checkLocalRepository()
-                            return // if not empty, just show me the passwords!
-                        }
-                    }
-                    val intent = Intent(activity, GitOperationActivity::class.java)
-                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                    startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
-                }
-                else -> {
-                    d { "Unexpected request code: $requestCode" }
-                    // FIXME: The sync operation returns with a requestCode of 65535 instead of the
-                    // expected 105. It is completely unclear why, but the issue might be resolved
-                    // by switching to ActivityResultContracts. For now, we run the post-sync code
-                    // also when encountering an unexpected request code.
-                    refreshPasswordList()
                 }
             }
         }
@@ -847,7 +854,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     CLONE_REPO_BUTTON -> {
                         val intent = Intent(activity, GitServerConfigActivity::class.java)
                         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                        startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                        cloneResult.launch(intent)
                     }
                 }
             }
@@ -857,7 +864,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 if (externalRepo == null) {
                     val intent = Intent(activity, UserPreference::class.java)
                     intent.putExtra("operation", "git_external")
-                    startActivityForResult(intent, operation)
+                    when (operation) {
+                        NEW_REPO_BUTTON -> repositoryInitAction.launch(intent)
+                        CLONE_REPO_BUTTON -> directoryChangeAction.launch(intent)
+                    }
                 } else {
                     MaterialAlertDialogBuilder(activity)
                         .setTitle(resources.getString(R.string.directory_selected_title))
@@ -868,14 +878,17 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 CLONE_REPO_BUTTON -> {
                                     val intent = Intent(activity, GitServerConfigActivity::class.java)
                                     intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                                    startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
+                                    cloneResult.launch(intent)
                                 }
                             }
                         }
                         .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
                             val intent = Intent(activity, UserPreference::class.java)
                             intent.putExtra("operation", "git_external")
-                            startActivityForResult(intent, operation)
+                            when (operation) {
+                                NEW_REPO_BUTTON -> repositoryInitAction.launch(intent)
+                                CLONE_REPO_BUTTON -> directoryChangeAction.launch(intent)
+                            }
                         }
                         .show()
                 }
@@ -899,12 +912,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     companion object {
         const val REQUEST_CODE_ENCRYPT = 9911
-        const val REQUEST_CODE_DECRYPT_AND_VERIFY = 9913
         const val REQUEST_ARG_PATH = "PATH"
-        private val TAG = PasswordStore::class.java.name
         const val CLONE_REPO_BUTTON = 401
         const val NEW_REPO_BUTTON = 402
-        private const val HOME = 403
         private const val REQUEST_EXTERNAL_STORAGE = 50
         private fun isPrintable(c: Char): Boolean {
             val block = UnicodeBlock.of(c)
