@@ -23,7 +23,6 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
-import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
@@ -92,7 +91,7 @@ fun Activity.commitChange(message: String, finishWithResultOnEnd: Intent? = null
         override fun execute() {
             d { "Comitting with message: '$message'" }
             val git = Git(repository)
-            val task = GitAsyncTask(this@commitChange, true, this, finishWithResultOnEnd, silentlyExecute = true)
+            val task = GitAsyncTask(this@commitChange, this, finishWithResultOnEnd, silentlyExecute = true)
             task.execute(
                 git.add().addFilepattern("."),
                 git.commit().setAll(true).setMessage(message)

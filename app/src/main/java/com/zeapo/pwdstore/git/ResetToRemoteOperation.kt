@@ -41,7 +41,7 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOper
 
     override fun execute() {
         this.fetchCommand?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, false, this, Intent())
+        GitAsyncTask(callingActivity, this, Intent())
             .execute(this.addCommand, this.fetchCommand, this.resetCommand)
     }
 

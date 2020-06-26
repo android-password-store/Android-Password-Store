@@ -179,6 +179,11 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }
     }
 
+    public override fun onStart() {
+        super.onStart()
+        refreshPasswordList()
+    }
+
     public override fun onResume() {
         super.onResume()
         // do not attempt to checkLocalRepository() if no storage permission: immediate crash
@@ -584,7 +589,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         item.file.toRelativeString(getRepositoryDirectory(this))
                     }
                 ))
-                refreshPasswordList()
             }
             .setNegativeButton(resources.getString(R.string.dialog_no), null)
             .show()
@@ -662,7 +666,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     }
                 }
             }
-            resetPasswordList()
+            refreshPasswordList()
             plist?.dismissActionMode()
         }.launch(intent)
     }
@@ -727,24 +731,17 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     }
 
     /**
-     * Resets navigation to the repository root and refreshes the password list accordingly.
-     *
-     * Use this rather than [refreshPasswordList] after major file system operations that may remove
-     * the current directory and thus require a full reset of the navigation stack.
-     */
-    fun resetPasswordList() {
-        model.reset()
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-    }
-
-    /**
-     * Refreshes the password list by re-executing the last navigation or search action.
-     *
-     * Use this rather than [resetPasswordList] after file system operations limited to the current
-     * folder since it preserves the scroll position and navigation stack.
+     * Refreshes the password list by re-executing the last navigation or search action, preserving
+     * the navigation stack and scroll position. If the current directory no longer exists,
+     * navigation is reset to the repository root.
      */
     fun refreshPasswordList() {
-        model.forceRefresh()
+        if (model.currentDir.value?.isDirectory == true) {
+            model.forceRefresh()
+        } else {
+            model.reset()
+            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        }
     }
 
     private val currentDir: File
@@ -763,15 +760,13 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 data.extras!!.getString("LONG_NAME")))
                         }
                     }
-                    refreshPasswordList()
                 }
                 REQUEST_CODE_ENCRYPT -> {
                     commitChange(resources.getString(R.string.git_commit_add_text,
                         data!!.extras!!.getString("LONG_NAME")))
-                    refreshPasswordList()
                 }
                 BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                BaseGitActivity.REQUEST_SYNC, BaseGitActivity.REQUEST_PULL -> resetPasswordList()
+                BaseGitActivity.REQUEST_SYNC, BaseGitActivity.REQUEST_PULL -> refreshPasswordList()
                 HOME -> checkLocalRepository()
                 // duplicate code
                 CLONE_REPO_BUTTON -> {
