@@ -655,6 +655,7 @@ class UserPreference : AppCompatActivity() {
                         val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
                         prefs.edit { putBoolean("use_generated_key", false) }
+                        getEncryptedPrefs("git_operation").edit { remove("ssh_key_local_passphrase") }
 
                         // Delete the public key from generation
                         File("""$filesDir/.ssh_key.pub""").delete()
