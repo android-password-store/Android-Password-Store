@@ -22,8 +22,7 @@ class UriTotpFinder : TotpFinder {
 
     override fun findDigits(content: String): String {
         content.split("\n".toRegex()).forEach { line ->
-            if ((line.startsWith("otpauth://totp/") ||
-                    line.startsWith("otpauth://hotp/")) &&
+            if (line.startsWith("otpauth://totp/") &&
                 Uri.parse(line).getQueryParameter("digits") != null) {
                 return Uri.parse(line).getQueryParameter("digits")!!
             }
