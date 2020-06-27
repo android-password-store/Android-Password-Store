@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   Add GNU IceCatMobile to the list of supported browsers for Autofill
+-   TOTP support is reintroduced by popular demand. HOTP continues to be unsupported and heavily discouraged.
 
 ## [1.9.0] - 2020-06-21
 
