@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -35,6 +36,7 @@ import org.eclipse.jgit.transport.URIish
 import java.io.File
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import com.google.android.material.R as materialR
 
 
 private class GitOperationCredentialFinder(val callingActivity: Activity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
@@ -77,7 +79,8 @@ private class GitOperationCredentialFinder(val callingActivity: Activity, val co
             val rememberCredential = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
             rememberCredential.setText(rememberRes)
             if (isRetry)
-                editCredential.error = callingActivity.resources.getString(errorRes)
+                editCredential.setError(callingActivity.resources.getString(errorRes),
+                    ContextCompat.getDrawable(callingActivity, materialR.drawable.mtrl_ic_error))
             MaterialAlertDialogBuilder(callingActivity).run {
                 setTitle(R.string.passphrase_dialog_title)
                 setMessage(messageRes)
