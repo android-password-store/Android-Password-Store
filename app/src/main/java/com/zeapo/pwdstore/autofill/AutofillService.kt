@@ -519,10 +519,9 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
                     // save password entry for pasting the username as well
                     if (entry?.hasUsername() == true) {
                         lastPassword = entry
-                        val ttl = Integer.parseInt(settings!!.getString(PreferenceKeys.GENERAL_SHOW_TIME, " +
-                            ""45")!!)
-                            withContext (Dispatchers.Main) { Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show() }
-                            lastPasswordMaxDate = System . currentTimeMillis () + ttl * 1000L
+                        val ttl = Integer.parseInt(settings!!.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")!!)
+                        withContext(Dispatchers.Main) { Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show() }
+                        lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L
                     }
                 } catch (e: UnsupportedEncodingException) {
                     tag(Constants.TAG).e(e)
