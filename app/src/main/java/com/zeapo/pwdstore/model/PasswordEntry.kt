@@ -25,7 +25,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         private set
 
     @Throws(UnsupportedEncodingException::class)
-    constructor(os: ByteArrayOutputStream, totpFinder: TotpFinder = UriTotpFinder()) : this(os.toString("UTF-8"), totpFinder)
+    constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
 
     init {
         val passContent = content.split("\n".toRegex(), 2).toTypedArray()
@@ -77,13 +77,21 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return if (passContent.size > 1) passContent[1] else ""
     }
 
-    private fun findTotpSecret(decryptedContent: String) = totpFinder.findSecret(decryptedContent)
+    private fun findTotpSecret(decryptedContent: String): String? {
+        return totpFinder.findSecret(decryptedContent)
+    }
 
-    private fun findOtpDigits(decryptedContent: String) = totpFinder.findDigits(decryptedContent)
+    private fun findOtpDigits(decryptedContent: String): String {
+        return totpFinder.findDigits(decryptedContent)
+    }
 
-    private fun findTotpPeriod(decryptedContent: String) = totpFinder.findPeriod(decryptedContent)
+    private fun findTotpPeriod(decryptedContent: String): Long {
+        return totpFinder.findPeriod(decryptedContent)
+    }
 
-    private fun findTotpAlgorithm(decryptedContent: String) = totpFinder.findAlgorithm(decryptedContent)
+    private fun findTotpAlgorithm(decryptedContent: String): String {
+        return totpFinder.findAlgorithm(decryptedContent)
+    }
 
     companion object {
         val USERNAME_FIELDS = arrayOf(
