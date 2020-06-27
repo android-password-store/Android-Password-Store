@@ -4,10 +4,13 @@
  */
 package com.zeapo.pwdstore.model
 
+import com.zeapo.pwdstore.utils.Otp
 import com.zeapo.pwdstore.utils.TotpFinder
 import org.junit.Test
+import java.util.Date
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -64,11 +67,28 @@ class PasswordEntryTest {
         assertFalse(makeEntry("").hasUsername())
     }
 
+    @Test fun testGeneratesOtpFromTotpUri() {
+        val entry = makeEntry("secret\nextra\n$TOTP_URI")
+        assertTrue(entry.hasTotp())
+        val code = Otp.calculateCode(
+            entry.totpSecret!!,
+            // The hardcoded date value allows this test to stay reproducible.
+            Date(8640000).time / (1000 * entry.totpPeriod),
+            entry.totpAlgorithm,
+            entry.digits
+        )
+        assertNotNull(code) { "Generated OTP cannot be null" }
+        assertEquals(entry.digits.toInt(), code.length)
+        assertEquals("545293", code)
+    }
+
     companion object {
-        // This implementation just sends back defaults for now.
+        const val TOTP_URI = "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
+
+        // This implementation is hardcoded for the URI above.
         val testFinder = object : TotpFinder {
             override fun findSecret(content: String): String? {
-                return ""
+                return "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"
             }
 
             override fun findDigits(content: String): String {
@@ -80,7 +100,7 @@ class PasswordEntryTest {
             }
 
             override fun findAlgorithm(content: String): String {
-                return "HmacSHA1"
+                return "SHA1"
             }
         }
     }
