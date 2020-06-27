@@ -17,6 +17,7 @@ import com.zeapo.pwdstore.databinding.ActivityGitCloneBinding
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.IOException
 
@@ -107,12 +108,12 @@ class GitServerConfigActivity : BaseGitActivity() {
             when (val result = updateUrl()) {
                 GitUpdateUrlResult.Ok -> {
                     settings.edit {
-                        putString("git_remote_protocol", protocol.pref)
-                        putString("git_remote_auth", connectionMode.pref)
-                        putString("git_remote_server", serverHostname)
-                        putString("git_remote_port", serverPort)
-                        putString("git_remote_username", serverUser)
-                        putString("git_remote_location", serverPath)
+                        putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, protocol.pref)
+                        putString(PreferenceKeys.GIT_REMOTE_AUTH, connectionMode.pref)
+                        putString(PreferenceKeys.GIT_REMOTE_SERVER, serverHostname)
+                        putString(PreferenceKeys.GIT_REMOTE_PORT, serverPort)
+                        putString(PreferenceKeys.GIT_REMOTE_USERNAME, serverUser)
+                        putString(PreferenceKeys.GIT_REMOTE_LOCATION, serverPath)
                     }
                     if (!isClone) {
                         Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()

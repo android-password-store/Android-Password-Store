@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +45,7 @@ class ClipboardService : Service() {
 
                 ACTION_START -> {
                     val time = try {
-                        Integer.parseInt(settings.getString("general_show_time", "45") as String)
+                        Integer.parseInt(settings.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45") as String)
                     } catch (e: NumberFormatException) {
                         45
                     }
@@ -82,7 +83,7 @@ class ClipboardService : Service() {
     }
 
     private fun clearClipboard() {
-        val deepClear = settings.getBoolean("clear_clipboard_20x", false)
+        val deepClear = settings.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
         val clipboard = clipboard
 
         if (clipboard != null) {

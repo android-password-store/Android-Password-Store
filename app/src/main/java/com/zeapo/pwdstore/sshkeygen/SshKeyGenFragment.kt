@@ -78,7 +78,7 @@ class SshKeyGenFragment : Fragment(R.layout.fragment_ssh_keygen) {
             e
         } finally {
             requireContext().getEncryptedPrefs("git_operation").edit {
-                remove("ssh_key_local_passphrase")
+                remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
             }
         }
         val activity = requireActivity()

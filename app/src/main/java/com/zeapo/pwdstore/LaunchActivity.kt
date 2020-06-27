@@ -19,7 +19,7 @@ class LaunchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (prefs.getBoolean("biometric_auth", false)) {
+        if (prefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)) {
             BiometricAuthenticator.authenticate(this) {
                 when (it) {
                     is BiometricAuthenticator.Result.Success -> {

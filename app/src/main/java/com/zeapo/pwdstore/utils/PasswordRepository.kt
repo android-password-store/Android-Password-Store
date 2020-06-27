@@ -154,8 +154,8 @@ open class PasswordRepository protected constructor() {
             if (!::settings.isInitialized) {
                 settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
             }
-            return if (settings.getBoolean("git_external", false)) {
-                val externalRepo = settings.getString("git_external_repo", null)
+            return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
+                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
                 if (externalRepo != null)
                     File(externalRepo)
                 else
@@ -174,9 +174,9 @@ open class PasswordRepository protected constructor() {
             // uninitialize the repo if the dir does not exist or is absolutely empty
             settings.edit {
                 if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
-                    putBoolean("repository_initialized", false)
+                    putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
                 } else {
-                    putBoolean("repository_initialized", true)
+                    putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)
                 }
             }
 
@@ -217,7 +217,7 @@ open class PasswordRepository protected constructor() {
             // We need to recover the passwords then parse the files
             val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
             val passwordList = ArrayList<PasswordItem>()
-            val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
+            val showHiddenDirs = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
 
             if (passList.size == 0) return passwordList
             if (showHiddenDirs) {

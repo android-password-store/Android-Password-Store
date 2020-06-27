@@ -30,6 +30,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -140,9 +141,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         get() = PasswordRepository.getRepositoryDirectory(getApplication())
     private val settings = PreferenceManager.getDefaultSharedPreferences(getApplication())
     private val showHiddenDirs
-        get() = settings.getBoolean("show_hidden_folders", false)
+        get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
     private val defaultSearchMode
-        get() = if (settings.getBoolean("filter_recursively", true)) {
+        get() = if (settings.getBoolean(PreferenceKeys.FILTER_RECURSIVELY, true)) {
             SearchMode.RecursivelyInSubdirectories
         } else {
             SearchMode.InCurrentDirectoryOnly

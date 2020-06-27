@@ -65,6 +65,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.listFilesRecursively
@@ -121,7 +122,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
         var savedInstance = savedInstanceState
-        if (savedInstanceState != null && (!settings.getBoolean("git_external", false) ||
+        if (savedInstanceState != null && (!settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) ||
                 ContextCompat.checkSelfPermission(
                     activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED)) {
@@ -187,12 +188,12 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     public override fun onResume() {
         super.onResume()
         // do not attempt to checkLocalRepository() if no storage permission: immediate crash
-        if (settings.getBoolean("git_external", false)) {
+        if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
             hasRequiredStoragePermissions(true)
         } else {
             checkLocalRepository()
         }
-        if (settings.getBoolean("search_on_start", false) && ::searchItem.isInitialized) {
+        if (settings.getBoolean(PreferenceKeys.SEARCH_ON_START, false) && ::searchItem.isInitialized) {
             if (!searchItem.isActionViewExpanded) {
                 searchItem.expandActionView()
             }
@@ -211,7 +212,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuRes = when {
-            ConnectionMode.fromString(settings.getString("git_remote_auth", null))
+            ConnectionMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH, null))
                 == ConnectionMode.None -> R.menu.main_menu_no_auth
             PasswordRepository.isGitRepo() -> R.menu.main_menu_git
             else -> R.menu.main_menu_non_git
@@ -261,7 +262,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     return true
                 }
             })
-        if (settings.getBoolean("search_on_start", false)) {
+        if (settings.getBoolean(PreferenceKeys.SEARCH_ON_START, false)) {
             searchItem.expandActionView()
         }
         return super.onPrepareOptionsMenu(menu)
@@ -346,7 +347,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             check(localDir.mkdir()) { "Failed to create directory!" }
             createRepository(localDir)
             if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
-                settings.edit { putBoolean("repository_initialized", true) }
+                settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
             } else {
                 throw IllegalStateException("Failed to initialize repository state.")
             }
@@ -361,8 +362,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     }
 
     private fun initializeRepositoryInfo() {
-        val externalRepo = settings.getBoolean("git_external", false)
-        val externalRepoPath = settings.getString("git_external_repo", null)
+        val externalRepo = settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
+        val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
         if (externalRepo && !hasRequiredStoragePermissions()) {
             return
         }
@@ -375,7 +376,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 return // if not empty, just show me the passwords!
             }
         }
-        val keyIds = settings.getStringSet("openpgp_key_ids_set", HashSet())
+        val keyIds = settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, HashSet())
         if (keyIds != null && keyIds.isEmpty()) {
             MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.key_dialog_text))
@@ -431,12 +432,12 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     }
 
     private fun checkLocalRepository(localDir: File?) {
-        if (localDir != null && settings.getBoolean("repository_initialized", false)) {
+        if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
             d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
             if (supportFragmentManager.findFragmentByTag("PasswordsList") == null ||
-                settings.getBoolean("repo_changed", false)) {
-                settings.edit { putBoolean("repo_changed", false) }
+                settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)) {
+                settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
                 plist = PasswordFragment()
                 val args = Bundle()
                 args.putString(REQUEST_ARG_PATH, getRepositoryDirectory(applicationContext).absolutePath)
@@ -535,7 +536,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 .show()
             return false
         }
-        if (settings.getStringSet("openpgp_key_ids_set", HashSet()).isNullOrEmpty()) {
+        if (settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, HashSet()).isNullOrEmpty()) {
             MaterialAlertDialogBuilder(this)
                 .setTitle(resources.getString(R.string.no_key_selected_dialog_title))
                 .setMessage(resources.getString(R.string.no_key_selected_dialog_text))
@@ -751,7 +752,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 // if we get here with a RESULT_OK then it's probably OK :)
-                BaseGitActivity.REQUEST_CLONE -> settings.edit { putBoolean("repository_initialized", true) }
+                BaseGitActivity.REQUEST_CLONE -> settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
                 // if went from decrypt->edit and user saved changes, we need to commitChange
                 REQUEST_CODE_DECRYPT_AND_VERIFY -> {
                     if (data != null && data.getBooleanExtra("needCommit", false)) {
@@ -770,9 +771,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 HOME -> checkLocalRepository()
                 // duplicate code
                 CLONE_REPO_BUTTON -> {
-                    if (settings.getBoolean("git_external", false) &&
-                        settings.getString("git_external_repo", null) != null) {
-                        val externalRepoPath = settings.getString("git_external_repo", null)
+                    if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) &&
+                        settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null) != null) {
+                        val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
                         val dir = externalRepoPath?.let { File(it) }
                         if (dir != null &&
                             dir.exists() &&
@@ -832,7 +833,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             .setTitle(resources.getString(R.string.location_dialog_title))
             .setMessage(resources.getString(R.string.location_dialog_text))
             .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
-                settings.edit { putBoolean("git_external", false) }
+                settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
                 when (operation) {
                     NEW_REPO_BUTTON -> initializeRepositoryInfo()
                     CLONE_REPO_BUTTON -> {
@@ -843,8 +844,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
             }
             .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
-                settings.edit { putBoolean("git_external", true) }
-                val externalRepo = settings.getString("git_external_repo", null)
+                settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, true) }
+                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
                 if (externalRepo == null) {
                     val intent = Intent(activity, UserPreference::class.java)
                     intent.putExtra("operation", "git_external")

@@ -150,7 +150,7 @@ class UserPreference : AppCompatActivity() {
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean(PreferenceKeys.USE_GENERATED_KEY, false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")?.toInt() != 0
-            openkeystoreIdPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_ID, null)?.isNotEmpty()
+            openkeystoreIdPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null)?.isNotEmpty()
                 ?: false
 
             updateAutofillSettings()
@@ -161,7 +161,7 @@ class UserPreference : AppCompatActivity() {
             keyPreference?.let { pref ->
                 updateKeyIDsSummary(pref)
                 pref.onPreferenceClickListener = ClickListener {
-                    val providerPackageName = requireNotNull(sharedPreferences.getString(PreferenceKeys.OPENPGP_LIST_PROVIDER, ""))
+                    val providerPackageName = requireNotNull(sharedPreferences.getString(PreferenceKeys.OPENPGP_PROVIDER_LIST, ""))
                     if (providerPackageName.isEmpty()) {
                         Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
                         false
@@ -295,7 +295,8 @@ class UserPreference : AppCompatActivity() {
             }
 
             showTimePreference?.summaryProvider = Preference.SummaryProvider<Preference> {
-                getString(R.string.pref_clipboard_timeout_summary, sharedPreferences.getString("general_show_time", "45"))
+                getString(R.string.pref_clipboard_timeout_summary, sharedPreferences.getString
+                (PreferenceKeys.GENERAL_SHOW_TIME, "45"))
             }
 
             findPreference<CheckBoxPreference>(PreferenceKeys.ENABLE_DEBUG_LOGGING)?.isVisible = !BuildConfig.ENABLE_DEBUG_FEATURES
