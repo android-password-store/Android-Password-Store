@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 -   Remember passphrase option did not work with keys that had empty passphrases and were generated before 2019
+-   Folder names that were very long did not look right
+-   Error message for wrong SSH/HTTPS password now looks cleaner
 
 ### Added
 
