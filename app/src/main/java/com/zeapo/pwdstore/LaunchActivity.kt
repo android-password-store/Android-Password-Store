@@ -12,6 +12,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
+import com.zeapo.pwdstore.utils.PreferenceKeys
 
 class LaunchActivity : AppCompatActivity() {
 
@@ -25,7 +26,7 @@ class LaunchActivity : AppCompatActivity() {
                         startTargetActivity(false)
                     }
                     is BiometricAuthenticator.Result.HardwareUnavailableOrDisabled -> {
-                        prefs.edit { remove("biometric_auth") }
+                        prefs.edit { remove(PreferenceKeys.BIOMETRIC_AUTH) }
                         startTargetActivity(false)
                     }
                     is BiometricAuthenticator.Result.Failure, BiometricAuthenticator.Result.Cancelled -> {
