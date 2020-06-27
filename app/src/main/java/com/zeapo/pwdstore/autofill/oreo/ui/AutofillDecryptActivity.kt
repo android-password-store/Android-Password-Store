@@ -16,12 +16,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
+import com.zeapo.pwdstore.model.PasswordEntry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

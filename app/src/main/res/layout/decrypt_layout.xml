@@ -131,6 +131,15 @@
                 tools:text="lots of extra content that will surely fill this \n up well" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/copy_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Copy OTP"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/extra_content_container" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

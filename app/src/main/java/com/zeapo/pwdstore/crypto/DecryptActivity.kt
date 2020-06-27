@@ -17,9 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
+import com.zeapo.pwdstore.model.PasswordEntry
+import com.zeapo.pwdstore.utils.Otp
+import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +30,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.Date
 
 class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     private val binding by viewBinding(DecryptLayoutBinding::inflate)
@@ -179,6 +182,19 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                         usernameTextContainer.visibility = View.VISIBLE
                                     } else {
                                         usernameTextContainer.visibility = View.GONE
+                                    }
+
+                                    if (entry.hasTotp()) {
+                                        copyOtp.visibility = View.VISIBLE
+                                        copyOtp.setOnClickListener {
+                                            copyTextToClipboard(Otp.calculateCode(
+                                                entry.totpSecret!!,
+                                                Date().time / (1000 * entry.totpPeriod),
+                                                entry.totpAlgorithm,
+                                                entry.digits
+                                            ), false)
+                                            snackbar(message = getString(R.string.clipboard_otp_copied_text))
+                                        }
                                     }
                                 }
                             }

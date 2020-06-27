@@ -48,10 +48,6 @@ class SshKeyGenFragment : Fragment(R.layout.fragment_ssh_keygen) {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     // Invoked when 'Generate' button of SshKeyGenFragment clicked. Generates a
     // private and public key, then replaces the SshKeyGenFragment with a
     // ShowSshKeyFragment which displays the public key.
