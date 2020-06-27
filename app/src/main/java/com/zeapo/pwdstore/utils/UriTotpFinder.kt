@@ -7,6 +7,9 @@ package com.zeapo.pwdstore.utils
 
 import android.net.Uri
 
+/**
+ * [Uri] backed TOTP URL parser.
+ */
 class UriTotpFinder : TotpFinder {
     override fun findSecret(content: String): String? {
         content.split("\n".toRegex()).forEach { line ->

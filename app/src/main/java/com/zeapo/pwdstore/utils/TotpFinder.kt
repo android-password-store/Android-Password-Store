@@ -11,22 +11,22 @@ package com.zeapo.pwdstore.utils
 interface TotpFinder {
 
     /**
-     * Get the TOTP secret from the given extra content
+     * Get the TOTP secret from the given extra content.
      */
     fun findSecret(content: String): String?
 
     /**
-     * Get the number of digits required in the final OTP from the TOTP URL
+     * Get the number of digits required in the final OTP.
      */
     fun findDigits(content: String): String
 
     /**
-     * Get the TOTP timeout period
+     * Get the TOTP timeout period.
      */
     fun findPeriod(content: String): Long
 
     /**
-     * Get the algorithm for the TOTP secret
+     * Get the algorithm for the TOTP secret.
      */
     fun findAlgorithm(content: String): String
 }
