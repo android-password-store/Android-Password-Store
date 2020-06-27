@@ -51,8 +51,8 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      */
     public static final int POST_SIGNATURE = 301;
 
-    private final String username;
-    private final Identity identity;
+    private String username;
+    private Identity identity;
 
     public SshApiSessionFactory(String username, Identity identity) {
         this.username = username;
@@ -108,12 +108,12 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      * build.
      */
     public static class IdentityBuilder {
-        private final SshAuthenticationConnection connection;
+        private SshAuthenticationConnection connection;
         private SshAuthenticationApi api;
         private String keyId, description, alg;
         private byte[] publicKey;
-        private final BaseGitActivity callingActivity;
-        private final SharedPreferences settings;
+        private BaseGitActivity callingActivity;
+        private SharedPreferences settings;
 
         /**
          * Construct a new IdentityBuilder
@@ -284,12 +284,10 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      * A Jsch identity that delegates key operations via the OpenKeychain SSH API
      */
     public static class ApiIdentity implements Identity {
-        private final String keyId;
-        private final String description;
-        private final String alg;
-        private final byte[] publicKey;
-        private final Activity callingActivity;
-        private final SshAuthenticationApi api;
+        private String keyId, description, alg;
+        private byte[] publicKey;
+        private Activity callingActivity;
+        private SshAuthenticationApi api;
         private CountDownLatch latch;
         private byte[] signature;
 

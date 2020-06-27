@@ -163,7 +163,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         return DateUtils.getRelativeTimeSpanString(this, timeStamp, true)
     }
-
     /**
      * Base handling of OpenKeychain errors based on the error contained in [result]. Subclasses
      * can use this when they want to default to sane error handling.

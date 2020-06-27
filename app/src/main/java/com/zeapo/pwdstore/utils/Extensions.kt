@@ -23,6 +23,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
