@@ -193,7 +193,10 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     if (entry.hasTotp()) {
                                         otpTextContainer.visibility = View.VISIBLE
                                         otpTextContainer.setEndIconOnClickListener {
-                                            copyTextToClipboard(otpText.text.toString())
+                                            copyTextToClipboard(
+                                                otpText.text.toString(),
+                                                snackbarTextRes = R.string.clipboard_otp_copied_text
+                                            )
                                         }
                                         launch(Dispatchers.IO) {
                                             repeat(Int.MAX_VALUE) {
