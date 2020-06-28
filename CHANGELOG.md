@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.9.1] - 2020-06-28
+
 ### Fixed
 
 -   Remember passphrase option did not work with old-style keys (generated either before 2019 or by passing `-m PEM` to new versions of OpenSSH)
@@ -207,7 +209,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.0...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.1...HEAD
+
+[1.9.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.0...1.9.1
 
 [1.9.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.8.1...1.9.0
 
