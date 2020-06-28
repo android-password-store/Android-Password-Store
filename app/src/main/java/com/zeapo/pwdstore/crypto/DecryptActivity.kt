@@ -170,14 +170,16 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                 }
 
                                 if (entry.hasExtraContent()) {
-                                    extraContentContainer.visibility = View.VISIBLE
-                                    extraContent.typeface = monoTypeface
-                                    extraContent.setText(entry.extraContentWithoutUsername)
-                                    if (!showExtraContent) {
-                                        extraContent.transformationMethod = PasswordTransformationMethod.getInstance()
+                                    if (entry.extraContentWithoutAuthData.isNotEmpty()) {
+                                        extraContentContainer.visibility = View.VISIBLE
+                                        extraContent.typeface = monoTypeface
+                                        extraContent.setText(entry.extraContentWithoutAuthData)
+                                        if (!showExtraContent) {
+                                            extraContent.transformationMethod = PasswordTransformationMethod.getInstance()
+                                        }
+                                        extraContentContainer.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutAuthData) }
+                                        extraContent.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutAuthData) }
                                     }
-                                    extraContentContainer.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutUsername) }
-                                    extraContent.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutUsername) }
 
                                     if (entry.hasUsername()) {
                                         usernameText.typeface = monoTypeface

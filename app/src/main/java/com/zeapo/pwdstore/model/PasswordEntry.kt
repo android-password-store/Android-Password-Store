@@ -50,16 +50,19 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return username != null
     }
 
-    val extraContentWithoutUsername by lazy {
-        var usernameFound = false
+    val extraContentWithoutAuthData by lazy {
         extraContent.splitToSequence("\n").filter { line ->
-            if (usernameFound)
-                return@filter true
-            if (USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) }) {
-                usernameFound = true
-                return@filter false
+            return@filter when {
+                USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } -> {
+                    false
+                }
+                line.startsWith("otpauth://", ignoreCase = true) -> {
+                    false
+                }
+                else -> {
+                    true
+                }
             }
-            true
         }.joinToString(separator = "\n")
     }
 

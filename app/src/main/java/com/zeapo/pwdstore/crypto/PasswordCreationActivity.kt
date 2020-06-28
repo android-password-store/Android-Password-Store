@@ -108,7 +108,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             // input lag.
                             if (username != null) {
                                 filename.setText(username)
-                                extraContent.setText(entry.extraContentWithoutUsername)
+                                extraContent.setText(entry.extraContentWithoutAuthData)
                             }
                         }
                         updateEncryptUsernameState()
