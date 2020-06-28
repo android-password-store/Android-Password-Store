@@ -37,7 +37,9 @@ class UriTotpFinder : TotpFinder {
         content.split("\n".toRegex()).forEach { line ->
             if (line.startsWith("otpauth://totp/") &&
                 Uri.parse(line).getQueryParameter("period") != null) {
-                return java.lang.Long.parseLong(Uri.parse(line).getQueryParameter("period")!!)
+                val period = Uri.parse(line).getQueryParameter("period")!!.toLongOrNull()
+                if (period != null && period > 0)
+                    return period
             }
         }
         return 30
