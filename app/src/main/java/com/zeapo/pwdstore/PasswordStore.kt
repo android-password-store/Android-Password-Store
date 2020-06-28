@@ -788,6 +788,14 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
                     startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
                 }
+                else -> {
+                    d { "Unexpected request code: $requestCode" }
+                    // FIXME: The sync operation returns with a requestCode of 65535 instead of the
+                    // expected 105. It is completely unclear why, but the issue might be resolved
+                    // by switching to ActivityResultContracts. For now, we run the post-sync code
+                    // also when encountering an unexpected request code.
+                    refreshPasswordList()
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
