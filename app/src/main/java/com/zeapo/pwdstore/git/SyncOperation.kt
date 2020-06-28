@@ -50,7 +50,7 @@ class SyncOperation(fileDir: File, callingActivity: Activity) : GitOperation(fil
             this.pullCommand?.setCredentialsProvider(this.provider)
             this.pushCommand?.setCredentialsProvider(this.provider)
         }
-        GitAsyncTask(callingActivity, false, this, Intent()).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
+        GitAsyncTask(callingActivity, this, Intent()).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
     }
 
     override fun onError(err: Exception) {

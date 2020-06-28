@@ -10,7 +10,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import net.schmizz.sshj.common.DisconnectReason
@@ -30,7 +29,6 @@ import java.lang.ref.WeakReference
 
 class GitAsyncTask(
     activity: Activity,
-    private val refreshListOnEnd: Boolean,
     private val operation: GitOperation,
     private val finishWithResultOnEnd: Intent?,
     private val silentlyExecute: Boolean = false
@@ -169,9 +167,6 @@ class GitAsyncTask(
                     activity?.finish()
                 }
             }
-        }
-        if (refreshListOnEnd) {
-            (activity as? PasswordStore)?.resetPasswordList()
         }
         (SshSessionFactory.getInstance() as? SshjSessionFactory)?.clearCredentials()
         SshSessionFactory.setInstance(null)
