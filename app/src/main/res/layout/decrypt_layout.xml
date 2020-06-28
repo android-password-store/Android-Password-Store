@@ -91,6 +91,29 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/otp_text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/otp"
+            android:visibility="gone"
+            app:endIconDrawable="@drawable/ic_content_copy"
+            app:endIconMode="custom"
+            app:layout_constraintTop_toBottomOf="@id/password_text_container"
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/otp_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:fontFamily="@font/sourcecodepro"
+                android:textIsSelectable="true"
+                tools:text="123456" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/username_text_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +122,7 @@
             android:visibility="gone"
             app:endIconDrawable="@drawable/ic_content_copy"
             app:endIconMode="custom"
-            app:layout_constraintTop_toBottomOf="@id/password_text_container"
+            app:layout_constraintTop_toBottomOf="@id/otp_text_container"
             tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -130,15 +153,6 @@
                 android:textIsSelectable="true"
                 tools:text="lots of extra content that will surely fill this \n up well" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/view_otp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/view_otp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/extra_content_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

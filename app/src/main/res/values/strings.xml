@@ -112,6 +112,7 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">Search</string>
     <string name="password">Password:</string>
+    <string name="otp">OTP:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
     <string name="edit_password">Edit password</string>

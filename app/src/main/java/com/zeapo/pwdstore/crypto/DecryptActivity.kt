@@ -25,13 +25,18 @@ import com.zeapo.pwdstore.utils.Otp
 import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Date
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 
 class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     private val binding by viewBinding(DecryptLayoutBinding::inflate)
@@ -129,6 +134,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_plaintext_password_to)))
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
         if (api == null) {
             bindToOpenKeychain(this, openKeychainResult)
@@ -186,22 +192,23 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     }
 
                                     if (entry.hasTotp()) {
-                                        viewOtp.visibility = View.VISIBLE
-                                        viewOtp.setOnClickListener {
-                                            val code = Otp.calculateCode(
-                                                entry.totpSecret!!,
-                                                Date().time / (1000 * entry.totpPeriod),
-                                                entry.totpAlgorithm,
-                                                entry.digits
-                                            )
-                                            MaterialAlertDialogBuilder(this@DecryptActivity)
-                                                .setTitle(R.string.view_otp)
-                                                .setMessage(code)
-                                                .setPositiveButton(R.string.ssh_keygen_copy) { _, _ ->
-                                                    copyTextToClipboard(code, false)
-                                                    snackbar(message = getString(R.string.clipboard_otp_copied_text))
+                                        otpTextContainer.visibility = View.VISIBLE
+                                        otpTextContainer.setEndIconOnClickListener {
+                                            copyTextToClipboard(otpText.text.toString())
+                                        }
+                                        launch(Dispatchers.IO) {
+                                            repeat(Int.MAX_VALUE) {
+                                                val code = Otp.calculateCode(
+                                                    entry.totpSecret!!,
+                                                    Date().time / (1000 * entry.totpPeriod),
+                                                    entry.totpAlgorithm,
+                                                    entry.digits
+                                                ) ?: "Error"
+                                                withContext(Dispatchers.Main) {
+                                                    otpText.setText(code)
                                                 }
-                                                .show()
+                                                delay(30.seconds)
+                                            }
                                         }
                                     }
                                 }
