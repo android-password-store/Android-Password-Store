@@ -2,6 +2,7 @@ package com.zeapo.pwdstore.utils
 
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class OtpTest {
@@ -33,5 +34,17 @@ class OtpTest {
     fun testOtpGenerationUnusualSecrets() {
         assertEquals("127764", Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAAAAA", 1593367111963 / (1000 * 30), "SHA1", "6"))
         assertEquals("047515", Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAA", 1593367171420 / (1000 * 30), "SHA1", "6"))
+    }
+
+    @Test
+    fun testOtpGenerationUnpaddedSecrets() {
+        // Secret was generated with `echo 'string with some padding needed' | base32`
+        // We don't care for the resultant OTP's actual value, we just want both the padded and
+        // unpadded variant to generate the same one.
+        val unpaddedOtp = Otp.calculateCode("ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA", 1593367171420 / (1000 * 30), "SHA1", "6")
+        val paddedOtp = Otp.calculateCode("ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA====", 1593367171420 / (1000 * 30), "SHA1", "6")
+        assertNotNull(unpaddedOtp)
+        assertNotNull(paddedOtp)
+        assertEquals(unpaddedOtp, paddedOtp)
     }
 }
