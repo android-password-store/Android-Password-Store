@@ -17,12 +17,10 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
 import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.Otp
-import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,7 +32,6 @@ import org.openintents.openpgp.IOpenPgpService2
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.Date
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
 
