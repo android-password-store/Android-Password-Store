@@ -36,7 +36,7 @@ class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fi
 
     override fun execute() {
         (this.command as? CloneCommand)?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, false, this, Intent()).execute(this.command)
+        GitAsyncTask(callingActivity, this, Intent()).execute(this.command)
     }
 
     override fun onError(err: Exception) {
