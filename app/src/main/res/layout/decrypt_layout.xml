@@ -10,7 +10,7 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
     android:orientation="vertical"
-    tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
+    tools:context="com.zeapo.pwdstore.crypto.DecryptActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"
@@ -132,11 +132,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/copy_otp"
+            android:id="@+id/view_otp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/copy_otp"
+            android:text="@string/view_otp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/extra_content_container" />
 

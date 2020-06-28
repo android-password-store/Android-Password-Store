@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
 import com.zeapo.pwdstore.model.PasswordEntry
@@ -185,15 +186,22 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     }
 
                                     if (entry.hasTotp()) {
-                                        copyOtp.visibility = View.VISIBLE
-                                        copyOtp.setOnClickListener {
-                                            copyTextToClipboard(Otp.calculateCode(
+                                        viewOtp.visibility = View.VISIBLE
+                                        viewOtp.setOnClickListener {
+                                            val code = Otp.calculateCode(
                                                 entry.totpSecret!!,
                                                 Date().time / (1000 * entry.totpPeriod),
                                                 entry.totpAlgorithm,
                                                 entry.digits
-                                            ), false)
-                                            snackbar(message = getString(R.string.clipboard_otp_copied_text))
+                                            )
+                                            MaterialAlertDialogBuilder(this@DecryptActivity)
+                                                .setTitle(R.string.view_otp)
+                                                .setMessage(code)
+                                                .setPositiveButton(R.string.ssh_keygen_copy) { _, _ ->
+                                                    copyTextToClipboard(code, false)
+                                                    snackbar(message = getString(R.string.clipboard_otp_copied_text))
+                                                }
+                                                .show()
                                         }
                                     }
                                 }
