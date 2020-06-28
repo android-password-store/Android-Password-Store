@@ -26,5 +26,12 @@ class OtpTest {
         assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "a"))
         assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "5"))
         assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "11"))
+        assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAB", 10000, "SHA1", "6"))
+    }
+
+    @Test
+    fun testOtpGenerationUnusualSecrets() {
+        assertEquals("127764", Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAAAAA", 1593367111963 / (1000 * 30), "SHA1", "6"))
+        assertEquals("047515", Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAA", 1593367171420 / (1000 * 30), "SHA1", "6"))
     }
 }

@@ -24,7 +24,13 @@ object Otp {
 
     fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String): String? {
         val algo = "Hmac${algorithm.toUpperCase(Locale.ROOT)}"
-        val secretKey = SecretKeySpec(BASE_32.decode(secret), algo)
+        val decodedSecret = try {
+            BASE_32.decode(secret)
+        } catch (e: Exception) {
+            e(e) { "Failed to decode secret" }
+            return null
+        }
+        val secretKey = SecretKeySpec(decodedSecret, algo)
         val digest = try {
             Mac.getInstance(algo).run {
                 init(secretKey)
