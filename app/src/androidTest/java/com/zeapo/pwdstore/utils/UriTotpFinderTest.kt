@@ -15,6 +15,7 @@ class UriTotpFinderTest {
     @Test
     fun findSecret() {
         assertEquals("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ", totpFinder.findSecret(TOTP_URI))
+        assertEquals("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ", totpFinder.findSecret("name\npassword\ntotp: HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"))
     }
 
     @Test
