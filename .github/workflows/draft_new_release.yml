@@ -10,13 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'release'
       - name: Extract version from milestone
         run: |
           VERSION="${{ github.event.milestone.title }}"
           echo "::set-env name=RELEASE_VERSION::$VERSION"
 
       - name: Create release branch
-        run: git checkout -b release/${{ env.RELEASE_VERSION }}
+        run: git checkout -b release-${{ env.RELEASE_VERSION }}
 
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.1.0
@@ -34,12 +36,12 @@ jobs:
           git commit --message "Prepare release ${{ env.RELEASE_VERSION }}"
 
       - name: Push new branch
-        run: git push origin release/${{ env.RELEASE_VERSION }}
+        run: git push origin release-${{ env.RELEASE_VERSION }}
 
       - name: Create pull request
         uses: thomaseizinger/create-pull-request@1.0.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          head: release/${{ env.RELEASE_VERSION }}
-          base: master
+          head: release-${{ env.RELEASE_VERSION }}
+          base: release
           title: Release ${{ env.RELEASE_VERSION }}

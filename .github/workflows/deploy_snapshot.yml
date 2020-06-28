@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - develop
 
 name: Deploy snapshot builds
 jobs:
