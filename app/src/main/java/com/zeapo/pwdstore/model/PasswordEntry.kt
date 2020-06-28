@@ -57,7 +57,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
                     false
                 }
                 line.startsWith("otpauth://", ignoreCase = true) ||
-                line.startsWith("totp:", ignoreCase = true)-> {
+                    line.startsWith("totp:", ignoreCase = true) -> {
                     false
                 }
                 else -> {
