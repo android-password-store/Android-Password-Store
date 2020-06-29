@@ -54,6 +54,7 @@
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_copied_text">Copied to clipboard</string>
+    <string name="clipboard_otp_copied_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="path_toast_text">Please provide a file path</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
@@ -111,6 +112,7 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">Search</string>
     <string name="password">Password:</string>
+    <string name="otp">OTP:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
     <string name="edit_password">Edit password</string>
@@ -118,6 +120,7 @@
     <string name="copy_username">Copy username</string>
     <string name="share_as_plaintext">Share as plaintext</string>
     <string name="last_changed">Last changed %s</string>
+    <string name="view_otp">View OTP</string>
 
     <!-- Preferences -->
     <string name="pref_repository_title">Repository</string>
@@ -297,7 +300,6 @@
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
     <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
-    <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
     <string name="git_operation_remember_passphrase">Remember key passphrase</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>

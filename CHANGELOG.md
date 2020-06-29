@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 -   Folder names that were very long did not look right
 -   Error message for wrong SSH/HTTPS password now looks cleaner
 
+### Added
+
+-   TOTP support is reintroduced by popular demand. HOTP continues to be unsupported and heavily discouraged.
+
 ## [1.9.1] - 2020-06-28
 
 ### Fixed

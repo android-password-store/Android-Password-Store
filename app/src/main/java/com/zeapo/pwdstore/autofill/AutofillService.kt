@@ -28,8 +28,8 @@ import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.splitLines
 import kotlinx.coroutines.CoroutineScope

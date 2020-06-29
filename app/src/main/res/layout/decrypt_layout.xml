@@ -10,7 +10,7 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
     android:orientation="vertical"
-    tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
+    tools:context="com.zeapo.pwdstore.crypto.DecryptActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"
@@ -91,6 +91,29 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/otp_text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/otp"
+            android:visibility="gone"
+            app:endIconDrawable="@drawable/ic_content_copy"
+            app:endIconMode="custom"
+            app:layout_constraintTop_toBottomOf="@id/password_text_container"
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/otp_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:fontFamily="@font/sourcecodepro"
+                android:textIsSelectable="true"
+                tools:text="123456" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/username_text_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +122,7 @@
             android:visibility="gone"
             app:endIconDrawable="@drawable/ic_content_copy"
             app:endIconMode="custom"
-            app:layout_constraintTop_toBottomOf="@id/password_text_container"
+            app:layout_constraintTop_toBottomOf="@id/otp_text_container"
             tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText

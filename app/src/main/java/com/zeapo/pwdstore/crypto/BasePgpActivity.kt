@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
@@ -163,6 +164,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         return DateUtils.getRelativeTimeSpanString(this, timeStamp, true)
     }
+
     /**
      * Base handling of OpenKeychain errors based on the error contained in [result]. Subclasses
      * can use this when they want to default to sane error handling.
@@ -190,12 +192,16 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * Copies provided [text] to the clipboard. Shows a [Snackbar] which can be disabled by passing
      * [showSnackbar] as false.
      */
-    fun copyTextToClipboard(text: String?, showSnackbar: Boolean = true) {
+    fun copyTextToClipboard(
+        text: String?,
+        showSnackbar: Boolean = true,
+        @StringRes snackbarTextRes: Int = R.string.clipboard_copied_text
+    ) {
         val clipboard = clipboard ?: return
         val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
         clipboard.setPrimaryClip(clip)
         if (showSnackbar) {
-            snackbar(message = resources.getString(R.string.clipboard_copied_text))
+            snackbar(message = resources.getString(snackbarTextRes))
         }
     }
 
