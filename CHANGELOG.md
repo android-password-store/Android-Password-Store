@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   TOTP support is reintroduced by popular demand. HOTP continues to be unsupported and heavily discouraged.
+-   Initial support for detecting and filling OTP fields with Autofill
 
 ## [1.9.1] - 2020-06-28
 

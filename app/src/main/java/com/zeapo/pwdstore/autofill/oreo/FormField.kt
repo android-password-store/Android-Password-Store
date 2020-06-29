@@ -10,6 +10,7 @@ import android.text.InputType
 import android.view.View
 import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
+import androidx.autofill.HintConstants
 import java.util.Locale
 
 enum class CertaintyLevel {
@@ -31,14 +32,21 @@ class FormField(
     companion object {
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private val HINTS_USERNAME = listOf(View.AUTOFILL_HINT_USERNAME)
+        private val HINTS_USERNAME = listOf(HintConstants.AUTOFILL_HINT_USERNAME)
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private val HINTS_PASSWORD = listOf(View.AUTOFILL_HINT_PASSWORD)
+        private val HINTS_PASSWORD = listOf(HintConstants.AUTOFILL_HINT_PASSWORD)
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private val HINTS_FILLABLE = HINTS_USERNAME + HINTS_PASSWORD + listOf(
-            View.AUTOFILL_HINT_EMAIL_ADDRESS, View.AUTOFILL_HINT_NAME, View.AUTOFILL_HINT_PHONE
+        private val HINTS_OTP = listOf(HintConstants.AUTOFILL_HINT_SMS_OTP)
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private val HINTS_FILLABLE = HINTS_USERNAME + HINTS_PASSWORD + HINTS_OTP + listOf(
+            HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS,
+            HintConstants.AUTOFILL_HINT_NAME,
+            HintConstants.AUTOFILL_HINT_PERSON_NAME,
+            HintConstants.AUTOFILL_HINT_PHONE,
+            HintConstants.AUTOFILL_HINT_PHONE_NUMBER
         )
 
         private val ANDROID_TEXT_FIELD_CLASS_NAMES = listOf(
@@ -67,11 +75,12 @@ class FormField(
 
         private val HTML_INPUT_FIELD_TYPES_USERNAME = listOf("email", "tel", "text")
         private val HTML_INPUT_FIELD_TYPES_PASSWORD = listOf("password")
+        private val HTML_INPUT_FIELD_TYPES_OTP = listOf("tel", "text")
         private val HTML_INPUT_FIELD_TYPES_FILLABLE =
-            HTML_INPUT_FIELD_TYPES_USERNAME + HTML_INPUT_FIELD_TYPES_PASSWORD
+            (HTML_INPUT_FIELD_TYPES_USERNAME + HTML_INPUT_FIELD_TYPES_PASSWORD + HTML_INPUT_FIELD_TYPES_OTP).toSet().toList()
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private fun isSupportedHint(hint: String) = hint in HINTS_USERNAME + HINTS_PASSWORD
+        private fun isSupportedHint(hint: String) = hint in HINTS_FILLABLE
 
         private val EXCLUDED_TERMS = listOf(
             "url_bar", // Chrome/Edge/Firefox address bar
@@ -84,6 +93,9 @@ class FormField(
         )
         private val USERNAME_HEURISTIC_TERMS = listOf(
             "alias", "e-mail", "email", "login", "user"
+        )
+        private val OTP_HEURISTIC_TERMS = listOf(
+            "code", "otp"
         )
     }
 
@@ -120,6 +132,7 @@ class FormField(
         htmlAttributes.entries.joinToString { "${it.key}=${it.value}" }
     private val htmlInputType = htmlAttributes["type"]
     private val htmlName = htmlAttributes["name"] ?: ""
+    private val htmlMaxLength = htmlAttributes["maxlength"]?.toIntOrNull()
     private val isHtmlField = htmlTag == "input"
     private val isHtmlPasswordField =
         isHtmlField && htmlInputType in HTML_INPUT_FIELD_TYPES_PASSWORD
@@ -140,6 +153,7 @@ class FormField(
         if (autofillHints.isEmpty()) false else autofillHints.intersect(HINTS_FILLABLE).isEmpty()
     private val hasAutofillHintPassword = autofillHints.intersect(HINTS_PASSWORD).isNotEmpty()
     private val hasAutofillHintUsername = autofillHints.intersect(HINTS_USERNAME).isNotEmpty()
+    private val hasAutofillHintOtp = autofillHints.intersect(HINTS_OTP).isNotEmpty()
 
     // W3C autocomplete hint detection for HTML fields
     private val htmlAutocomplete = htmlAttributes["autocomplete"]
@@ -151,6 +165,7 @@ class FormField(
     val hasAutocompleteHintNewPassword = htmlAutocomplete == "new-password"
     private val hasAutocompleteHintPassword =
         hasAutocompleteHintCurrentPassword || hasAutocompleteHintNewPassword
+    val hasAutocompleteHintOtp = htmlAutocomplete == "one-time-code"
 
     // Basic autofill exclusion checks
     private val hasAutofillTypeText = node.autofillType == View.AUTOFILL_TYPE_TEXT
@@ -193,8 +208,18 @@ class FormField(
     val passwordCertainty =
         if (isCertainPasswordField) CertaintyLevel.Certain else if (isLikelyPasswordField) CertaintyLevel.Likely else if (isPossiblePasswordField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
+    // OTP field heuristics (based only on the current field)
+    private val isPossibleOtpField = notExcluded && !isPossiblePasswordField && isTextField
+    private val isCertainOtpField =
+        isPossibleOtpField && (hasAutofillHintOtp || hasAutocompleteHintOtp || htmlMaxLength in 6..8)
+    private val isLikelyOtpField = isPossibleOtpField && (isCertainOtpField || OTP_HEURISTIC_TERMS.any {
+        fieldId.contains(it) || hint.contains(it) || htmlName.contains(it)
+    })
+    val otpCertainty =
+        if (isCertainOtpField) CertaintyLevel.Certain else if (isLikelyOtpField) CertaintyLevel.Likely else if (isPossibleOtpField) CertaintyLevel.Possible else CertaintyLevel.Impossible
+
     // Username field heuristics (based only on the current field)
-    private val isPossibleUsernameField = notExcluded && !isPossiblePasswordField
+    private val isPossibleUsernameField = notExcluded && !isPossiblePasswordField && !isCertainOtpField && isTextField
     private val isCertainUsernameField =
         isPossibleUsernameField && (hasAutofillHintUsername || hasAutocompleteHintUsername)
     private val isLikelyUsernameField = isPossibleUsernameField && (isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.any {
@@ -224,8 +249,8 @@ class FormField(
     override fun toString(): String {
         val field = if (isHtmlTextField) "$htmlTag[type=$htmlInputType]" else className
         val description =
-            "\"$hint\", \"$fieldId\"${if (isFocused) ", focused" else ""}${if (isVisible) ", visible" else ""}, $webOrigin, $htmlAttributesDebug"
-        return "$field ($description): password=$passwordCertainty, username=$usernameCertainty"
+            "\"$hint\", \"$fieldId\"${if (isFocused) ", focused" else ""}${if (isVisible) ", visible" else ""}, $webOrigin, $htmlAttributesDebug, $autofillHints"
+        return "$field ($description): password=$passwordCertainty, username=$usernameCertainty, otp=$otpCertainty"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -86,7 +86,7 @@ val AssistStructure.ViewNode.webOrigin: String?
         "$scheme://$domain"
     }
 
-data class Credentials(val username: String?, val password: String) {
+data class Credentials(val username: String?, val password: String, val otp: String?) {
     companion object {
         fun fromStoreEntry(
             context: Context,
@@ -98,7 +98,7 @@ data class Credentials(val username: String?, val password: String) {
             val username = entry.username
                 ?: directoryStructure.getUsernameFor(file)
                 ?: context.getDefaultUsername()
-            return Credentials(username, entry.password)
+            return Credentials(username, entry.password, entry.calculateTotpCode())
         }
     }
 }

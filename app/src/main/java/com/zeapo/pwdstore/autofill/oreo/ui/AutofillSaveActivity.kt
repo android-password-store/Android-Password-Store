@@ -130,7 +130,7 @@ class AutofillSaveActivity : Activity() {
                         finish()
                         return
                     }
-                val credentials = Credentials(username, password)
+                val credentials = Credentials(username, password, null)
                 val fillInDataset = FillableForm.makeFillInDataset(
                     this,
                     credentials,
