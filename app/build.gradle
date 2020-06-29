@@ -71,8 +71,9 @@ android {
 }
 
 dependencies {
-    implementation deps.androidx.annotation
     implementation deps.androidx.activity_ktx
+    implementation deps.androidx.annotation
+    implementation deps.androidx.autofill
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
     implementation deps.androidx.constraint_layout
