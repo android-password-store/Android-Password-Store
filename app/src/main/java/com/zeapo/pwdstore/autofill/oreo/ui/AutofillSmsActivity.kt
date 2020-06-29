@@ -45,8 +45,6 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
         private var fillOtpFromSmsRequestCode = 1
 
         fun shouldOfferFillFromSms(context: Context, origin: FormOrigin): Boolean {
-            if (origin !is FormOrigin.App)
-                return false
             val smsClient = SmsCodeRetriever.getAutofillClient(context) ?: return false
             return runBlocking {
                 return@runBlocking true
