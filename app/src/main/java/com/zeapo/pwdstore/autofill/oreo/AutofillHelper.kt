@@ -86,7 +86,7 @@ val AssistStructure.ViewNode.webOrigin: String?
         "$scheme://$domain"
     }
 
-data class Credentials(val username: String?, val password: String, val otp: String?) {
+data class Credentials(val username: String?, val password: String?, val otp: String?) {
     companion object {
         fun fromStoreEntry(
             context: Context,
@@ -137,6 +137,13 @@ fun makeGenerateAndFillRemoteView(context: Context, formOrigin: FormOrigin): Rem
     val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
     val summary = context.getString(R.string.oreo_autofill_generate_password)
     val iconRes = R.drawable.ic_autofill_new_password
+    return makeRemoteView(context, title, summary, iconRes)
+}
+
+fun makeFillOtpFromSmsRemoteView(context: Context, formOrigin: FormOrigin): RemoteViews {
+    val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
+    val summary = context.getString(R.string.oreo_autofill_fill_otp_from_sms)
+    val iconRes = R.drawable.ic_autofill_sms
     return makeRemoteView(context, title, summary, iconRes)
 }
 

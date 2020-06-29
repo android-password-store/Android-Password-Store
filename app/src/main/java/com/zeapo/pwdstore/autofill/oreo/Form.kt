@@ -25,6 +25,7 @@ import com.zeapo.pwdstore.autofill.oreo.ui.AutofillDecryptActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillFilterView
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSaveActivity
+import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSmsActivity
 import java.io.File
 
 /**
@@ -285,6 +286,14 @@ class FillableForm private constructor(
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.Generate)
     }
 
+    private fun makeFillOtpFromSmsDataset(context: Context, origin: FormOrigin): Dataset? {
+        if (scenario.fieldsToFillOn(AutofillAction.FillOtpFromSms).isEmpty()) return null
+        if (!AutofillSmsActivity.shouldOfferFillFromSms(context, origin)) return null
+        val remoteView = makeFillOtpFromSmsRemoteView(context, formOrigin)
+        val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
+        return makePlaceholderDataset(remoteView, intentSender, AutofillAction.FillOtpFromSms)
+    }
+
     private fun makePublisherChangedDataset(
         context: Context,
         publisherChangedException: AutofillPublisherChangedException
@@ -338,6 +347,10 @@ class FillableForm private constructor(
                 addDataset(it)
             }
             makeGenerateDataset(context)?.let {
+                hasDataset = true
+                addDataset(it)
+            }
+            makeFillOtpFromSmsDataset(context, this@FillableForm.formOrigin)?.let {
                 hasDataset = true
                 addDataset(it)
             }
