@@ -49,8 +49,8 @@ class ShowSshKeyFragment : DialogFragment() {
     private fun createMaterialDialog(view: View) {
         builder.setView(view)
         builder.setTitle(getString(R.string.your_public_key))
-        builder.setNegativeButton(getString(R.string.dialog_ok)) { _, _ -> requireActivity().finish() }
-        builder.setPositiveButton(resources.getString(R.string.ssh_keygen_copy), null)
+        builder.setNegativeButton(R.string.dialog_ok) { _, _ -> requireActivity().finish() }
+        builder.setPositiveButton(R.string.ssh_keygen_copy, null)
     }
 
     private fun readKeyFromFile() {
