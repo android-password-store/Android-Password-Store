@@ -36,7 +36,7 @@ class ShowSshKeyFragment : DialogFragment() {
         createMaterialDialog(view)
         val ad = builder.create()
         ad.setOnShowListener {
-            val b = ad.getButton(AlertDialog.BUTTON_NEUTRAL)
+            val b = ad.getButton(AlertDialog.BUTTON_POSITIVE)
             b.setOnClickListener {
                 val clipboard = activity.clipboard ?: return@setOnClickListener
                 val clip = ClipData.newPlainText("public key", publicKey.text.toString())
@@ -49,9 +49,8 @@ class ShowSshKeyFragment : DialogFragment() {
     private fun createMaterialDialog(view: View) {
         builder.setView(view)
         builder.setTitle(getString(R.string.your_public_key))
-        builder.setPositiveButton(getString(R.string.dialog_ok)) { _, _ -> requireActivity().finish() }
-        builder.setNegativeButton(getString(R.string.dialog_cancel), null)
-        builder.setNeutralButton(resources.getString(R.string.ssh_keygen_copy), null)
+        builder.setNegativeButton(R.string.dialog_ok) { _, _ -> requireActivity().finish() }
+        builder.setPositiveButton(R.string.ssh_keygen_copy, null)
     }
 
     private fun readKeyFromFile() {
