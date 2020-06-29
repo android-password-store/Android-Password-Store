@@ -5,7 +5,6 @@
 
 package com.zeapo.pwdstore.utils
 
-import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import org.apache.commons.codec.binary.Base32
 import java.nio.ByteBuffer
@@ -19,17 +18,11 @@ import kotlin.experimental.and
 object Otp {
     private val BASE_32 = Base32()
     private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
-    private val validAlgorithms = arrayOf("sha1", "sha256", "sha512")
-
     init {
         check(STEAM_ALPHABET.size == 26)
     }
 
     fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String): String? {
-        if (!validAlgorithms.any { algorithm.equals(it, ignoreCase = true) }) {
-            d { "$algorithm is not a valid TOTP algorithm" }
-            return null
-        }
         val algo = "Hmac${algorithm.toUpperCase(Locale.ROOT)}"
         val decodedSecret = try {
             BASE_32.decode(secret)
