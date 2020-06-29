@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         api-level: [23, 29]
-        variant: [Debug, Release]
+        variant: [nonFreeDebug, nonFreeRelease]
     steps:
 
     - name: Check if relevant files have changed
