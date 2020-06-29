@@ -68,6 +68,15 @@ android {
         buildTypes.release.signingConfig = signingConfigs.release
         buildTypes.debug.signingConfig = signingConfigs.release
     }
+
+    flavorDimensions "free"
+    productFlavors {
+        free {
+            versionNameSuffix "-free"
+        }
+        nonFree {
+        }
+    }
 }
 
 dependencies {
@@ -115,9 +124,9 @@ dependencies {
         debugImplementation deps.third_party.whatthestack
     }
 
-    implementation deps.non_free.google_play_auth
-    implementation deps.non_free.google_play_auth_api_phone
-    implementation deps.non_free.kotlinx_google_play
+    nonFreeImplementation deps.non_free.google_play_auth
+    nonFreeImplementation deps.non_free.google_play_auth_api_phone
+    nonFreeImplementation deps.non_free.kotlinx_google_play
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit
