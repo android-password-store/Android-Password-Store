@@ -119,7 +119,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             val username = filename.text.toString()
                             val extras = "username:$username\n${extraContent.text}"
 
-                            filename.setText("")
+                            filename.text?.clear()
                             extraContent.setText(extras)
                         } else {
                             // User wants to disable username encryption, so we extract the
