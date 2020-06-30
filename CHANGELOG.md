@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 -   TOTP support is reintroduced by popular demand. HOTP continues to be unsupported and heavily discouraged.
 -   Initial support for detecting and filling OTP fields with Autofill
--   Importing TOTP secrets using URI codes
+-   Importing TOTP secrets using QR codes
 
 ## [1.9.1] - 2020-06-28
 
