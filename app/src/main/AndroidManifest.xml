@@ -46,6 +46,14 @@
         </activity>
 
         <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:clearTaskOnLaunch="true"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:node="replace" />
+
+        <activity
             android:name=".git.GitOperationActivity"
             android:theme="@style/NoBackgroundTheme" />
 

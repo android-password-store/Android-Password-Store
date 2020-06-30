@@ -44,6 +44,11 @@ ext.deps = [
         swiperefreshlayout: 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     ],
 
+    first_party: [
+        openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:2.0.0',
+        zxing_android_embedded: 'com.github.android-password-store:zxing-android-embedded:v4.1.0-aps'
+    ],
+
     third_party: [
         bouncycastle: 'org.bouncycastle:bcprov-jdk15on:1.65.01',
         commons_codec: 'commons-codec:commons-codec:1.13',
@@ -52,7 +57,6 @@ ext.deps = [
         jgit: 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r',
         leakcanary: 'com.squareup.leakcanary:leakcanary-android:2.4',
         plumber: 'com.squareup.leakcanary:plumber-android:2.4',
-        openpgp_ktx: 'com.github.android-password-store:openpgp-ktx:2.0.0',
         sshj: 'com.hierynomus:sshj:0.29.0',
         ssh_auth: 'org.sufficientlysecure:sshauthentication-api:1.0',
         timber: 'com.jakewharton.timber:timber:4.7.1',
