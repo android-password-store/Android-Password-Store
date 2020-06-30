@@ -74,7 +74,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         } else {
                             "totp: ${intentResult.contents}\n"
                         }
-                        if (extraContent.text.toString().last() != '\n')
+                        val currentExtras = extraContent.text.toString()
+                        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
                             extraContent.append("\n$contents")
                         else
                             extraContent.append(contents)
