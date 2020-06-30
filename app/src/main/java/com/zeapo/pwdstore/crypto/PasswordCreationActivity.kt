@@ -64,6 +64,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
+            otpImportButton.isVisible = !(suggestedExtra != null &&
+                (suggestedExtra.contains("otpauth://") || suggestedExtra.contains("totp:")))
             otpImportButton.setOnClickListener {
                 registerForActivityResult(StartActivityForResult()) { result ->
                     if (result.resultCode == RESULT_OK) {
