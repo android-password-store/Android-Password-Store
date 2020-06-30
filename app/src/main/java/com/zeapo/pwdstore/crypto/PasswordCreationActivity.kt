@@ -63,14 +63,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             getString(R.string.new_password_title)
         with(binding) {
             setContentView(root)
+            val pwEntry = PasswordEntry("${suggestedPass}\n${suggestedExtra}")
             generatePassword.setOnClickListener { generatePassword() }
-            otpImportButton.isVisible = !(suggestedExtra != null &&
-                (suggestedExtra.contains("otpauth://") || suggestedExtra.contains("totp:")))
+            otpImportButton.isVisible = !pwEntry.hasTotp()
             otpImportButton.setOnClickListener {
                 registerForActivityResult(StartActivityForResult()) { result ->
                     if (result.resultCode == RESULT_OK) {
                         val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
-                        if (extraContent.text.toString().last() != '\n')
+                        if (pwEntry.extraContent.last() != '\n')
                             extraContent.append("\n${intentResult.contents}\n")
                         else
                             extraContent.append("${intentResult.contents}\n")
