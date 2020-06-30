@@ -63,14 +63,13 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             getString(R.string.new_password_title)
         with(binding) {
             setContentView(root)
-            val pwEntry = PasswordEntry("${suggestedPass}\n${suggestedExtra}")
             generatePassword.setOnClickListener { generatePassword() }
-            otpImportButton.isVisible = !pwEntry.hasTotp()
             otpImportButton.setOnClickListener {
                 registerForActivityResult(StartActivityForResult()) { result ->
                     if (result.resultCode == RESULT_OK) {
+                        otpImportButton.isVisible = false
                         val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
-                        if (pwEntry.extraContent.last() != '\n')
+                        if (extraContent.text.toString().last() != '\n')
                             extraContent.append("\n${intentResult.contents}\n")
                         else
                             extraContent.append("${intentResult.contents}\n")
@@ -128,20 +127,20 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             val username = entry.username
 
                             // username should not be null here by the logic in
-                            // updateEncryptUsernameState, but it could still happen due to
+                            // updateViewState, but it could still happen due to
                             // input lag.
                             if (username != null) {
                                 filename.setText(username)
                                 extraContent.setText(entry.extraContentWithoutAuthData)
                             }
                         }
-                        updateEncryptUsernameState()
+                        updateViewState()
                     }
                 }
                 listOf(filename, extraContent).forEach {
-                    it.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    it.doOnTextChanged { _, _, _, _ -> updateViewState() }
                 }
-                updateEncryptUsernameState()
+                updateViewState()
             }
             suggestedPass?.let {
                 password.setText(it)
@@ -182,17 +181,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         }
     }
 
-    private fun updateEncryptUsernameState() = with(binding) {
+    private fun updateViewState() = with(binding) {
+        // Use PasswordEntry to parse extras for username
+        val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
         encryptUsername.apply {
             if (visibility != View.VISIBLE)
                 return@with
             val hasUsernameInFileName = filename.text.toString().isNotBlank()
-            // Use PasswordEntry to parse extras for username
-            val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
             val hasUsernameInExtras = entry.hasUsername()
             isEnabled = hasUsernameInFileName xor hasUsernameInExtras
             isChecked = hasUsernameInExtras
         }
+        otpImportButton.isVisible = !entry.hasTotp()
     }
 
     /**
