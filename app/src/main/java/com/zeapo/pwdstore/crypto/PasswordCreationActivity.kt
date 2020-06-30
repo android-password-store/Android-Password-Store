@@ -70,7 +70,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 registerForActivityResult(StartActivityForResult()) { result ->
                     if (result.resultCode == RESULT_OK) {
                         val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
-                        extraContent.append("\n${intentResult.contents}")
+                        if (extraContent.text.toString().last() != '\n')
+                            extraContent.append("\n${intentResult.contents}\n")
+                        else
+                            extraContent.append("${intentResult.contents}\n")
                         snackbar(message = getString(R.string.otp_import_success))
                     } else {
                         snackbar(message = getString(R.string.otp_import_failure))
