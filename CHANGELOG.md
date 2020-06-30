@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   App crashes upon launching the app for the first time
+
 ## [1.9.1] - 2020-06-28
 
 ### Fixed
