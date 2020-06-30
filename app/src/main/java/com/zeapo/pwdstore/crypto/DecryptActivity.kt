@@ -200,12 +200,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                         }
                                         launch(Dispatchers.IO) {
                                             repeat(Int.MAX_VALUE) {
-                                                val code = Otp.calculateCode(
-                                                    entry.totpSecret!!,
-                                                    Date().time / (1000 * entry.totpPeriod),
-                                                    entry.totpAlgorithm,
-                                                    entry.digits
-                                                ) ?: "Error"
+                                                val code = entry.calculateTotpCode() ?: "Error"
                                                 withContext(Dispatchers.Main) {
                                                     otpText.setText(code)
                                                 }

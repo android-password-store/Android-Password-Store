@@ -106,7 +106,7 @@ class OreoAutofillService : AutofillService() {
         callback.onSuccess(
             AutofillSaveActivity.makeSaveIntentSender(
                 this,
-                credentials = Credentials(username, password),
+                credentials = Credentials(username, password, null),
                 formOrigin = formOrigin
             )
         )

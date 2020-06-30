@@ -4,10 +4,12 @@
  */
 package com.zeapo.pwdstore.model
 
+import com.zeapo.pwdstore.utils.Otp
 import com.zeapo.pwdstore.utils.TotpFinder
 import com.zeapo.pwdstore.utils.UriTotpFinder
 import java.io.ByteArrayOutputStream
 import java.io.UnsupportedEncodingException
+import java.util.Date
 
 /**
  * A single entry in password store. [totpFinder] is an implementation of [TotpFinder] that let's us
@@ -48,6 +50,12 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     fun hasUsername(): Boolean {
         return username != null
+    }
+
+    fun calculateTotpCode(): String? {
+        if (totpSecret == null)
+            return null
+        return Otp.calculateCode(totpSecret, Date().time / (1000 * totpPeriod), totpAlgorithm, digits)
     }
 
     val extraContentWithoutAuthData by lazy {

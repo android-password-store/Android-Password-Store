@@ -166,6 +166,13 @@ val autofillStrategy = strategy {
         }
     }
 
+    // Match a single focused OTP field.
+    rule(applyInSingleOriginMode = true) {
+        otp {
+            takeSingle { otpCertainty >= Likely && isFocused }
+        }
+    }
+
     // Match a single focused username field without a password field.
     rule(applyInSingleOriginMode = true) {
         username {

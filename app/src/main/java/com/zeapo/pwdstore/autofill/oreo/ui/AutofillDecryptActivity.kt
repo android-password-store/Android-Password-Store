@@ -100,7 +100,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
         directoryStructure = AutofillPreferences.directoryStructure(this)
         d { action.toString() }
         launch {
-            val credentials = decryptUsernameAndPassword(File(filePath))
+            val credentials = decryptCredential(File(filePath))
             if (credentials == null) {
                 setResult(RESULT_CANCELED)
             } else {
@@ -153,7 +153,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
         }
     }
 
-    private suspend fun decryptUsernameAndPassword(
+    private suspend fun decryptCredential(
         file: File,
         resumeIntent: Intent? = null
     ): Credentials? {
@@ -178,6 +178,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
             OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 try {
                     val entry = withContext(Dispatchers.IO) {
+                        @Suppress("BlockingMethodInNonBlockingContext")
                         PasswordEntry(decryptedOutput)
                     }
                     Credentials.fromStoreEntry(this, file, entry, directoryStructure)
@@ -203,7 +204,7 @@ class AutofillDecryptActivity : Activity(), CoroutineScope {
                             )
                         }
                     }
-                    decryptUsernameAndPassword(file, intentToResume)
+                    decryptCredential(file, intentToResume)
                 } catch (e: Exception) {
                     e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction" }
                     null
