@@ -291,6 +291,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         recyclerViewState: Parcelable? = null,
         pushPreviousLocation: Boolean = true
     ) {
+        if (!newDirectory.exists()) return
         require(newDirectory.isDirectory) { "Can only navigate to a directory" }
         if (pushPreviousLocation) {
             navigationStack.push(NavigationStackEntry(_currentDir.value!!, recyclerViewState))
