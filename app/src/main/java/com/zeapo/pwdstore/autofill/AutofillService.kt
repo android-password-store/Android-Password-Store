@@ -306,7 +306,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
     private fun setAppMatchingPasswords(appName: String, packageName: String) {
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
-        val defValue = if (settings!!.getBoolean("autofill_default", true)) "/first" else "/never"
+        val defValue = if (settings!!.getBoolean(PreferenceKeys.AUTOFILL_DEFAULT, true)) "/first" else "/never"
         val prefs: SharedPreferences = getSharedPreferences("autofill", Context.MODE_PRIVATE)
         val preference: String?
 

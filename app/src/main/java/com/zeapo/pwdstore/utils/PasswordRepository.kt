@@ -39,7 +39,7 @@ open class PasswordRepository protected constructor() {
         companion object {
             @JvmStatic
             fun getSortOrder(settings: SharedPreferences): PasswordSortOrder {
-                return valueOf(settings.getString("sort_order", null) ?: FOLDER_FIRST.name)
+                return valueOf(settings.getString(PreferenceKeys.SORT_ORDER, null) ?: FOLDER_FIRST.name)
             }
         }
     }

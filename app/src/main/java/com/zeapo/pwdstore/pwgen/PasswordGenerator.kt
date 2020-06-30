@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.pwgen
 import android.content.Context
 import androidx.core.content.edit
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clearFlag
 import com.zeapo.pwdstore.utils.hasFlag
 
@@ -102,7 +103,7 @@ object PasswordGenerator {
             }
         }
 
-        val length = prefs.getInt("length", DEFAULT_LENGTH)
+        val length = prefs.getInt(PreferenceKeys.LENGTH, DEFAULT_LENGTH)
         if (pwgenFlags.clearFlag(NO_AMBIGUOUS) == 0) {
             throw PasswordGeneratorException(ctx.resources.getString(R.string.pwgen_no_chars_error))
         }

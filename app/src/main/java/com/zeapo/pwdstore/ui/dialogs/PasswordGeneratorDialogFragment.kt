@@ -24,6 +24,7 @@ import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorException
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.generate
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
 import com.zeapo.pwdstore.pwgen.PasswordOption
+import com.zeapo.pwdstore.utils.PreferenceKeys
 
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
@@ -45,7 +46,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         view.findViewById<CheckBox>(R.id.pronounceable)?.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
 
         val textView: AppCompatEditText = view.findViewById(R.id.lengthNumber)
-        textView.setText(prefs.getInt("length", 20).toString())
+        textView.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
         val passwordText: AppCompatTextView = view.findViewById(R.id.passwordText)
         passwordText.typeface = monoTypeface
         return MaterialAlertDialogBuilder(requireContext()).run {
