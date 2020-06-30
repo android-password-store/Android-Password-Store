@@ -18,6 +18,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.SearchableRepositoryAdapter
 import com.zeapo.pwdstore.stableId
 import com.zeapo.pwdstore.utils.PasswordItem
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 
 open class PasswordItemRecyclerAdapter :
@@ -50,7 +51,7 @@ open class PasswordItemRecyclerAdapter :
         fun bind(item: PasswordItem) {
             val settings =
                 PreferenceManager.getDefaultSharedPreferences(itemView.context.applicationContext)
-            val showHidden = settings.getBoolean("show_hidden_folders", false)
+            val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
             name.text = item.toString()
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)

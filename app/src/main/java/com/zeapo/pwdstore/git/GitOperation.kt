@@ -23,6 +23,7 @@ import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshAuthData
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import net.schmizz.sshj.userauth.password.PasswordFinder
@@ -50,7 +51,7 @@ private class GitOperationCredentialFinder(val callingActivity: Activity, val co
         @StringRes val errorRes: Int
         when (connectionMode) {
             ConnectionMode.SshKey -> {
-                credentialPref = "ssh_key_local_passphrase"
+                credentialPref = PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE
                 messageRes = R.string.passphrase_dialog_text
                 hintRes = R.string.ssh_keygen_passphrase
                 rememberRes = R.string.git_operation_remember_passphrase
@@ -58,7 +59,7 @@ private class GitOperationCredentialFinder(val callingActivity: Activity, val co
             }
             ConnectionMode.Password -> {
                 // Could be either an SSH or an HTTPS password
-                credentialPref = "https_password"
+                credentialPref = PreferenceKeys.HTTPS_PASSWORD
                 messageRes = R.string.password_dialog_text
                 hintRes = R.string.git_operation_hint_password
                 rememberRes = R.string.git_operation_remember_password
@@ -222,14 +223,14 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Activity
         when (SshSessionFactory.getInstance()) {
             is SshApiSessionFactory -> {
                 PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                    .edit { remove("ssh_openkeystore_keyid") }
+                    .edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
             }
             is SshjSessionFactory -> {
                 callingActivity.applicationContext
                     .getEncryptedPrefs("git_operation")
                     .edit {
-                        remove("ssh_key_local_passphrase")
-                        remove("https_password")
+                        remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
+                        remove(PreferenceKeys.HTTPS_PASSWORD)
                     }
             }
         }
