@@ -69,11 +69,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     if (result.resultCode == RESULT_OK) {
                         otpImportButton.isVisible = false
                         val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
-                        val contents = if (intentResult.contents.startsWith("otpauth://")) {
-                            "${intentResult.contents}\n"
-                        } else {
-                            "totp: ${intentResult.contents}\n"
-                        }
+                        val contents = "${intentResult.contents}\n"
                         val currentExtras = extraContent.text.toString()
                         if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
                             extraContent.append("\n$contents")
