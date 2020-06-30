@@ -383,4 +383,7 @@
     <string name="password_creation_file_write_fail_message">Failed to write password file to the store, please try again.</string>
     <string name="password_creation_file_delete_fail_message">Failed to delete password file %1$s from the store, please delete it manually.</string>
     <string name="password_creation_duplicate_error">File already exists, please use a different name</string>
+    <string name="setup_otp_from_qr_code">Setup OTP from QR code</string>
+    <string name="otp_import_success">Successfully imported TOTP configuration</string>
+    <string name="otp_import_failure">Failed to import TOTP configuration</string>
 </resources>

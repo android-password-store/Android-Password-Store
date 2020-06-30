@@ -17,6 +17,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
@@ -62,6 +64,23 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
+            otpImportButton.setOnClickListener {
+                registerForActivityResult(StartActivityForResult()) { result ->
+                    if (result.resultCode == RESULT_OK) {
+                        val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
+                        extraContent.append("\n${intentResult.contents}")
+                        snackbar(message = getString(R.string.otp_import_success))
+                    } else {
+                        snackbar(message = getString(R.string.otp_import_failure))
+                    }
+                }.launch(
+                    IntentIntegrator(this@PasswordCreationActivity)
+                        .setOrientationLocked(false)
+                        .setBeepEnabled(false)
+                        .setDesiredBarcodeFormats(QR_CODE)
+                        .createScanIntent()
+                )
+            }
 
             category.apply {
                 if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
