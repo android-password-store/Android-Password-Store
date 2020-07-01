@@ -12,6 +12,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.d
@@ -50,7 +52,6 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
         private const val EXTRA_FILE_PATH = "com.zeapo.pwdstore.autofill.oreo.EXTRA_FILE_PATH"
         private const val EXTRA_SEARCH_ACTION =
             "com.zeapo.pwdstore.autofill.oreo.EXTRA_SEARCH_ACTION"
-        private const val REQUEST_CODE_CONTINUE_AFTER_USER_INTERACTION = 1
         private const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
 
         private var decryptFileRequestCode = 1
@@ -194,14 +195,17 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                     val intentToResume = withContext(Dispatchers.Main) {
                         suspendCoroutine<Intent> { cont ->
                             continueAfterUserInteraction = cont
-                            startIntentSenderForResult(
-                                pendingIntent.intentSender,
-                                REQUEST_CODE_CONTINUE_AFTER_USER_INTERACTION,
-                                null,
-                                0,
-                                0,
-                                0
-                            )
+                            registerForActivityResult(StartIntentSenderForResult()) { result ->
+                                if (continueAfterUserInteraction != null) {
+                                    val data = result.data
+                                    if (resultCode == RESULT_OK && data != null) {
+                                        continueAfterUserInteraction?.resume(data)
+                                    } else {
+                                        continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))
+                                    }
+                                    continueAfterUserInteraction = null
+                                }
+                            }.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
                         }
                     }
                     decryptCredential(file, intentToResume)
@@ -228,18 +232,6 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                 e { "Unrecognized OpenPgpApi result: $resultCode" }
                 null
             }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_CONTINUE_AFTER_USER_INTERACTION && continueAfterUserInteraction != null) {
-            if (resultCode == RESULT_OK && data != null) {
-                continueAfterUserInteraction?.resume(data)
-            } else {
-                continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))
-            }
-            continueAfterUserInteraction = null
         }
     }
 }
