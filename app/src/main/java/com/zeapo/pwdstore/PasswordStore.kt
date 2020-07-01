@@ -67,6 +67,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
+import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
@@ -734,10 +735,17 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     /**
      * Refreshes the password list by re-executing the last navigation or search action, preserving
      * the navigation stack and scroll position. If the current directory no longer exists,
-     * navigation is reset to the repository root.
+     * navigation is reset to the repository root. If the optional [target] argument is provided,
+     * it will be entered if it is a directory or scrolled into view if it is a file (both inside
+     * the current directory).
      */
-    fun refreshPasswordList() {
-        if (model.currentDir.value?.isDirectory == true) {
+    fun refreshPasswordList(target: File? = null) {
+        if (target?.isDirectory == true && model.currentDir.value?.contains(target) == true) {
+            plist?.navigateTo(target)
+        } else if (target?.isFile == true && model.currentDir.value?.contains(target) == true) {
+            // Creating new passwords is handled by an activity, so we will refresh in onStart.
+            plist?.scrollToOnNextRefresh(target)
+        } else if (model.currentDir.value?.isDirectory == true) {
             model.forceRefresh()
         } else {
             model.reset()
@@ -764,7 +772,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
                 REQUEST_CODE_ENCRYPT -> {
                     commitChange(resources.getString(R.string.git_commit_add_text,
-                        data!!.extras!!.getString("LONG_NAME")))
+                        data!!.extras!!.getString(PasswordCreationActivity.RETURN_EXTRA_LONG_NAME)))
+                    refreshPasswordList(File(data.extras!!.getString(PasswordCreationActivity.RETURN_EXTRA_CREATED_FILE)!!))
                 }
                 BaseGitActivity.REQUEST_INIT, NEW_REPO_BUTTON -> initializeRepositoryInfo()
                 BaseGitActivity.REQUEST_SYNC, BaseGitActivity.REQUEST_PULL -> refreshPasswordList()

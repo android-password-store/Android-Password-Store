@@ -447,6 +447,8 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
         return selectedFiles.map { it.toPasswordItem(root) }
     }
 
+    fun getPositionForFile(file: File) = itemKeyProvider.getPosition(file.absolutePath)
+
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val view = LayoutInflater.from(parent.context)
             .inflate(layoutRes, parent, false)

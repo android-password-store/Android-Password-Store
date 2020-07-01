@@ -43,6 +43,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
+    private var scrollTarget: File? = null
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
     private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
@@ -132,6 +133,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     // When the result is filtered, we always scroll to the top since that is where
                     // the best fuzzy match appears.
                     recyclerView.scrollToPosition(0)
+                } else if (scrollTarget != null) {
+                    scrollTarget?.let {
+                        recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+                    }
+                    scrollTarget == null
                 } else {
                     // When the result is not filtered and there is a saved scroll position for it,
                     // we try to restore it.
@@ -223,12 +229,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
-                        requireStore().clearSearch()
-                        model.navigateTo(
-                            item.file,
-                            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
-                        )
-                        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                        navigateTo(item.file)
                     } else {
                         if (requireArguments().getBoolean("matchWith", false)) {
                             requireStore().matchPasswordWithApp(item)
@@ -271,6 +272,19 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     fun createFolder() = requireStore().createFolder()
 
     fun createPassword() = requireStore().createPassword()
+
+    fun navigateTo(file: File) {
+        requireStore().clearSearch()
+        model.navigateTo(
+            file,
+            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
+        )
+        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    fun scrollToOnNextRefresh(file: File) {
+        scrollTarget = file
+    }
 
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(item: PasswordItem)
