@@ -147,7 +147,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     scrollTarget?.let {
                         recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
                     }
-                    scrollTarget == null
+                    scrollTarget = null
                 } else {
                     // When the result is not filtered and there is a saved scroll position for it,
                     // we try to restore it.
