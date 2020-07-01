@@ -51,6 +51,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
     private val swipeResult = registerForActivityResult(StartActivityForResult()) {
         binding.swipeRefresher.isRefreshing = false
+        requireStore().refreshPasswordList()
     }
 
     val currentDir: File
