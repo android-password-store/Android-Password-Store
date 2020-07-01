@@ -140,22 +140,26 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             // and not on folder navigations since the latter leads to too many removal animations.
             (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
             recyclerAdapter.submitList(result.passwordItems) {
-                if (result.isFiltered) {
-                    // When the result is filtered, we always scroll to the top since that is where
-                    // the best fuzzy match appears.
-                    recyclerView.scrollToPosition(0)
-                } else if (scrollTarget != null) {
-                    scrollTarget?.let {
-                        recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+                when {
+                    result.isFiltered -> {
+                        // When the result is filtered, we always scroll to the top since that is where
+                        // the best fuzzy match appears.
+                        recyclerView.scrollToPosition(0)
                     }
-                    scrollTarget = null
-                } else {
-                    // When the result is not filtered and there is a saved scroll position for it,
-                    // we try to restore it.
-                    recyclerViewStateToRestore?.let {
-                        recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                    scrollTarget != null -> {
+                        scrollTarget?.let {
+                            recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+                        }
+                        scrollTarget = null
                     }
-                    recyclerViewStateToRestore = null
+                    else -> {
+                        // When the result is not filtered and there is a saved scroll position for it,
+                        // we try to restore it.
+                        recyclerViewStateToRestore?.let {
+                            recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                        }
+                        recyclerViewStateToRestore = null
+                    }
                 }
             }
         }
