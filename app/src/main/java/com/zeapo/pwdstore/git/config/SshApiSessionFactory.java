@@ -110,11 +110,11 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      */
     public static class IdentityBuilder {
         private final SshAuthenticationConnection connection;
+        private final BaseGitActivity callingActivity;
+        private final SharedPreferences settings;
         private SshAuthenticationApi api;
         private String keyId, description, alg;
         private byte[] publicKey;
-        private final BaseGitActivity callingActivity;
-        private final SharedPreferences settings;
 
         /**
          * Construct a new IdentityBuilder
