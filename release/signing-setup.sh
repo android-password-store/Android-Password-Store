@@ -11,5 +11,5 @@ if [[ -n "$ENCRYPT_KEY" ]]; then
       openssl enc -aes-256-cbc -md sha256 -pbkdf2 -d -in "${src}" -out "${SECRETS[${src}]}" -k "${ENCRYPT_KEY}"
     done
 else
-    echo "ENCRYPT_KEY is empty"
+    echo "Usage: ./signing-setup.sh <encryption key>"
 fi
