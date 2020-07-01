@@ -519,6 +519,7 @@ class UserPreference : AppCompatActivity() {
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
                 val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                 registerForActivityResult(StartActivityForResult()) { result ->
+                    if (!validateResult(result)) return@registerForActivityResult
                     val uri = result.data?.data
 
                     tag(TAG).d { "Selected repository URI is $uri" }
