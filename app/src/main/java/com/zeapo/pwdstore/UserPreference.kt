@@ -20,6 +20,7 @@ import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -510,6 +511,7 @@ class UserPreference : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    @Suppress("Deprecation") // for Environment.getExternalStorageDirectory()
     fun selectExternalGitRepository() {
         MaterialAlertDialogBuilder(this)
             .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
@@ -562,22 +564,74 @@ class UserPreference : AppCompatActivity() {
     }
 
     /**
+     * Given a [ActivityResult], validates that the result is usable.
+     */
+    private fun validateResult(result: ActivityResult): Boolean {
+        if (result.resultCode != RESULT_OK) {
+            return false
+        }
+        if (result.data == null) {
+            setResult(RESULT_CANCELED)
+            return false
+        }
+        return true
+    }
+
+    /**
      * Opens a file explorer to import the private key
      */
     private fun getSshKey() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (!validateResult(result)) return@registerForActivityResult
+            try {
+                val uri: Uri = result.data?.data ?: throw IOException("Unable to open file")
+
+                copySshKey(uri)
+
+                Toast.makeText(
+                    this,
+                    this.resources.getString(R.string.ssh_key_success_dialog_title),
+                    Toast.LENGTH_LONG
+                ).show()
+                val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+                prefs.edit { putBoolean(PreferenceKeys.USE_GENERATED_KEY, false) }
+                getEncryptedPrefs("git_operation").edit { remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE) }
+
+                // Delete the public key from generation
+                File("""$filesDir/.ssh_key.pub""").delete()
+                setResult(RESULT_OK)
+
+                finish()
+            } catch (e: Exception) {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                    .setMessage(e.message)
+                    .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                    .show()
+            }
+        }.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*"
-        }
-        startActivityForResult(intent, IMPORT_SSH_KEY)
+        })
     }
 
     /**
      * Exports the passwords
      */
     private fun exportPasswords() {
-        val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        startActivityForResult(Intent.createChooser(i, "Choose Directory"), EXPORT_PASSWORDS)
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (!validateResult(result)) return@registerForActivityResult
+            val uri = result.data?.data
+
+            if (uri != null) {
+                val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
+
+                if (targetDirectory != null) {
+                    exportPasswords(targetDirectory)
+                }
+            }
+        }.launch(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
     }
 
     /**
@@ -596,11 +650,33 @@ class UserPreference : AppCompatActivity() {
      * Pick custom xkpwd dictionary from sdcard
      */
     private fun storeCustomDictionaryPath() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (!validateResult(result)) return@registerForActivityResult
+            val uri: Uri = result.data?.data ?: throw IOException("Unable to open file")
+
+            Toast.makeText(
+                this,
+                this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
+                Toast.LENGTH_SHORT
+            ).show()
+            val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+            prefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
+
+            val customDictPref = prefsFragment.findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
+            setCustomDictSummary(customDictPref, uri)
+            // copy user selected file to internal storage
+            val inputStream = contentResolver.openInputStream(uri)
+            val customDictFile = File(filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
+            inputStream?.copyTo(customDictFile, 1024)
+            inputStream?.close()
+            customDictFile.close()
+
+            setResult(RESULT_OK)
+        }.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*"
-        }
-        startActivityForResult(intent, SET_CUSTOM_XKPWD_DICT)
+        })
     }
 
     @Throws(IllegalArgumentException::class, IOException::class)
@@ -654,86 +730,6 @@ class UserPreference : AppCompatActivity() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
             return autofillManager?.hasEnabledAutofillServices() == true
         }
-
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        if (resultCode == RESULT_OK) {
-            if (data == null) {
-                setResult(RESULT_CANCELED)
-                return
-            }
-
-            when (requestCode) {
-                IMPORT_SSH_KEY -> {
-                    try {
-                        val uri: Uri = data.data ?: throw IOException("Unable to open file")
-
-                        copySshKey(uri)
-
-                        Toast.makeText(
-                            this,
-                            this.resources.getString(R.string.ssh_key_success_dialog_title),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
-                        prefs.edit { putBoolean(PreferenceKeys.USE_GENERATED_KEY, false) }
-                        getEncryptedPrefs("git_operation").edit { remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE) }
-
-                        // Delete the public key from generation
-                        File("""$filesDir/.ssh_key.pub""").delete()
-                        setResult(RESULT_OK)
-
-                        finish()
-                    } catch (e: Exception) {
-                        MaterialAlertDialogBuilder(this)
-                            .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                            .setMessage(e.message)
-                            .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                            .show()
-                    }
-                }
-                EXPORT_PASSWORDS -> {
-                    val uri = data.data
-
-                    if (uri != null) {
-                        val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
-
-                        if (targetDirectory != null) {
-                            exportPasswords(targetDirectory)
-                        }
-                    }
-                }
-                SET_CUSTOM_XKPWD_DICT -> {
-                    val uri: Uri = data.data ?: throw IOException("Unable to open file")
-
-                    Toast.makeText(
-                        this,
-                        this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
-                    prefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
-
-                    val customDictPref = prefsFragment.findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
-                    setCustomDictSummary(customDictPref, uri)
-                    // copy user selected file to internal storage
-                    val inputStream = contentResolver.openInputStream(uri)
-                    val customDictFile = File(filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
-                    inputStream?.copyTo(customDictFile, 1024)
-                    inputStream?.close()
-                    customDictFile.close()
-
-                    setResult(RESULT_OK)
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 
     /**
      * Exports passwords to the given directory.
@@ -807,9 +803,6 @@ class UserPreference : AppCompatActivity() {
     }
 
     companion object {
-        private const val IMPORT_SSH_KEY = 1
-        private const val EXPORT_PASSWORDS = 2
-        private const val SET_CUSTOM_XKPWD_DICT = 3
         private const val TAG = "UserPreference"
 
         /**
