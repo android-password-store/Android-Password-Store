@@ -21,6 +21,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
 import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.Otp
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -148,8 +149,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                 when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
                         try {
-                            val showPassword = settings.getBoolean("show_password", true)
-                            val showExtraContent = settings.getBoolean("show_extra_content", true)
+                            val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
+                            val showExtraContent = settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
                             val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
                             val entry = PasswordEntry(outputStream)
 
@@ -211,7 +212,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                 }
                             }
 
-                            if (settings.getBoolean("copy_on_decrypt", true)) {
+                            if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, true)) {
                                 copyPasswordToClipboard(entry.password)
                             }
                         } catch (e: Exception) {

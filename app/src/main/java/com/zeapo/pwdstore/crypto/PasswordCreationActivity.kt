@@ -17,6 +17,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
@@ -25,6 +27,7 @@ import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.snackbar
@@ -62,6 +65,29 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
+            otpImportButton.setOnClickListener {
+                registerForActivityResult(StartActivityForResult()) { result ->
+                    if (result.resultCode == RESULT_OK) {
+                        otpImportButton.isVisible = false
+                        val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
+                        val contents = "${intentResult.contents}\n"
+                        val currentExtras = extraContent.text.toString()
+                        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+                            extraContent.append("\n$contents")
+                        else
+                            extraContent.append(contents)
+                        snackbar(message = getString(R.string.otp_import_success))
+                    } else {
+                        snackbar(message = getString(R.string.otp_import_failure))
+                    }
+                }.launch(
+                    IntentIntegrator(this@PasswordCreationActivity)
+                        .setOrientationLocked(false)
+                        .setBeepEnabled(false)
+                        .setDesiredBarcodeFormats(QR_CODE)
+                        .createScanIntent()
+                )
+            }
 
             category.apply {
                 if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
@@ -95,7 +121,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             val username = filename.text.toString()
                             val extras = "username:$username\n${extraContent.text}"
 
-                            filename.setText("")
+                            filename.text?.clear()
                             extraContent.setText(extras)
                         } else {
                             // User wants to disable username encryption, so we extract the
@@ -104,20 +130,20 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             val username = entry.username
 
                             // username should not be null here by the logic in
-                            // updateEncryptUsernameState, but it could still happen due to
+                            // updateViewState, but it could still happen due to
                             // input lag.
                             if (username != null) {
                                 filename.setText(username)
                                 extraContent.setText(entry.extraContentWithoutAuthData)
                             }
                         }
-                        updateEncryptUsernameState()
+                        updateViewState()
                     }
                 }
                 listOf(filename, extraContent).forEach {
-                    it.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    it.doOnTextChanged { _, _, _, _ -> updateViewState() }
                 }
-                updateEncryptUsernameState()
+                updateViewState()
             }
             suggestedPass?.let {
                 password.setText(it)
@@ -150,7 +176,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     private fun generatePassword() {
-        when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+        when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, KEY_PWGEN_TYPE_CLASSIC)) {
             KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
                 .show(supportFragmentManager, "generator")
             KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
@@ -158,17 +184,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         }
     }
 
-    private fun updateEncryptUsernameState() = with(binding) {
+    private fun updateViewState() = with(binding) {
+        // Use PasswordEntry to parse extras for username
+        val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
         encryptUsername.apply {
             if (visibility != View.VISIBLE)
                 return@with
             val hasUsernameInFileName = filename.text.toString().isNotBlank()
-            // Use PasswordEntry to parse extras for username
-            val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
             val hasUsernameInExtras = entry.hasUsername()
             isEnabled = hasUsernameInFileName xor hasUsernameInExtras
             isChecked = hasUsernameInExtras
         }
+        otpImportButton.isVisible = !entry.hasTotp()
     }
 
     /**

@@ -14,6 +14,7 @@ import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import com.zeapo.pwdstore.git.config.setUpBouncyCastleForSshj
+import com.zeapo.pwdstore.utils.PreferenceKeys
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -23,7 +24,8 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     override fun onCreate() {
         super.onCreate()
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs?.getBoolean("enable_debug_logging", false) == true) {
+        if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs?.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false) ==
+            true) {
             plant(DebugTree())
         }
         prefs?.registerOnSharedPreferenceChangeListener(this)
@@ -37,13 +39,13 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
-        if (key == "app_theme") {
+        if (key == PreferenceKeys.APP_THEME) {
             setNightMode()
         }
     }
 
     private fun setNightMode() {
-        AppCompatDelegate.setDefaultNightMode(when (prefs?.getString("app_theme", getString(R.string.app_theme_def))) {
+        AppCompatDelegate.setDefaultNightMode(when (prefs?.getString(PreferenceKeys.APP_THEME, getString(R.string.app_theme_def))) {
             "light" -> MODE_NIGHT_NO
             "dark" -> MODE_NIGHT_YES
             "follow_system" -> MODE_NIGHT_FOLLOW_SYSTEM

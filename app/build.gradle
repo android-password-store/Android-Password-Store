@@ -93,6 +93,9 @@ dependencies {
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core
 
+    implementation deps.first_party.openpgp_ktx
+    implementation deps.first_party.zxing_android_embedded
+
     implementation deps.third_party.commons_codec
     implementation deps.third_party.fastscroll
     implementation(deps.third_party.jgit) {
@@ -102,7 +105,6 @@ dependencies {
     implementation deps.third_party.sshj
     implementation deps.third_party.bouncycastle
     implementation deps.third_party.plumber
-    implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.timberkt

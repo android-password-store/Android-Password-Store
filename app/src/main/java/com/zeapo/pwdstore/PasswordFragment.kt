@@ -31,6 +31,7 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
@@ -78,7 +79,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             } else {
                 // When authentication is set to ConnectionMode.None then the only git operation we
                 // can run is a pull, so automatically fallback to that.
-                val operationId = when (ConnectionMode.fromString(settings.getString("git_remote_auth", null))) {
+                val operationId = when (ConnectionMode.fromString(settings.getString
+                (PreferenceKeys.GIT_REMOTE_AUTH, null))) {
                     ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
                     else -> BaseGitActivity.REQUEST_SYNC
                 }
