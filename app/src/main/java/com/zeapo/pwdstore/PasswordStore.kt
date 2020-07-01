@@ -804,19 +804,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private val currentDir: File
         get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            when (requestCode) {
-                REQUEST_CODE_ENCRYPT -> {
-                    commitChange(resources.getString(R.string.git_commit_add_text,
-                        data!!.extras!!.getString(PasswordCreationActivity.RETURN_EXTRA_LONG_NAME)))
-                    refreshPasswordList(File(data.extras!!.getString(PasswordCreationActivity.RETURN_EXTRA_CREATED_FILE)!!))
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
     private suspend fun moveFile(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
             destinationFile.mkdirs()
@@ -911,7 +898,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         get() = getSortOrder(settings)
 
     companion object {
-        const val REQUEST_CODE_ENCRYPT = 9911
         const val REQUEST_ARG_PATH = "PATH"
         const val CLONE_REPO_BUTTON = 401
         const val NEW_REPO_BUTTON = 402
