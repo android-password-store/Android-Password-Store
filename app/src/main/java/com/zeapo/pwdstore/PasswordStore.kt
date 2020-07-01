@@ -622,6 +622,11 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             else
                 size += it.file.listFilesRecursively().size
         }
+        if (size == 0) {
+            selectedItems.map { item -> item.file.deleteRecursively() }
+            refreshPasswordList()
+            return
+        }
         MaterialAlertDialogBuilder(this)
             .setMessage(resources.getQuantityString(R.plurals.delete_dialog_text, size, size))
             .setPositiveButton(resources.getString(R.string.dialog_yes)) { _, _ ->
@@ -633,6 +638,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         filesToDelete.add(item.file)
                 }
                 selectedItems.map { item -> item.file.deleteRecursively() }
+                refreshPasswordList()
                 AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                 commitChange(resources.getString(R.string.git_commit_remove_text,
                     selectedItems.joinToString(separator = ", ") { item ->
