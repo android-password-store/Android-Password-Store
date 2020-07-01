@@ -18,6 +18,7 @@ import kotlin.experimental.and
 object Otp {
     private val BASE_32 = Base32()
     private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
+
     init {
         check(STEAM_ALPHABET.size == 26)
     }
