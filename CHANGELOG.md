@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+-   Navigate into newly created folders and scroll to newly created passwords
+
 ### Fixed
 
 -   Folder names that were very long did not look right

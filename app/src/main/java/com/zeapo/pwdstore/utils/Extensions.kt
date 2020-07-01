@@ -59,6 +59,23 @@ fun Activity.snackbar(
 
 fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
 
+/**
+ * Checks whether this [File] is a directory that contains [other].
+ */
+fun File.contains(other: File): Boolean {
+    if (!isDirectory)
+        return false
+    if (!other.exists())
+        return false
+    val relativePath = try {
+        other.relativeTo(this)
+    } catch (e: Exception) {
+        return false
+    }
+    // Direct containment is equivalent to the relative path being equal to the filename.
+    return relativePath.path == other.name
+}
+
 fun Context.resolveAttribute(attr: Int): Int {
     val typedValue = TypedValue()
     this.theme.resolveAttribute(attr, typedValue, true)
