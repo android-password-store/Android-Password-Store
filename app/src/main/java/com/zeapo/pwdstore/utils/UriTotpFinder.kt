@@ -11,6 +11,7 @@ import android.net.Uri
  * [Uri] backed TOTP URL parser.
  */
 class UriTotpFinder : TotpFinder {
+
     override fun findSecret(content: String): String? {
         content.split("\n".toRegex()).forEach { line ->
             if (line.startsWith("otpauth://totp/")) {
