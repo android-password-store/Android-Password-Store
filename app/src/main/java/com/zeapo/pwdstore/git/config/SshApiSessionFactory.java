@@ -21,6 +21,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.git.BaseGitActivity;
+import com.zeapo.pwdstore.utils.PreferenceKeys;
 
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;
@@ -51,8 +52,8 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      */
     public static final int POST_SIGNATURE = 301;
 
-    private String username;
-    private Identity identity;
+    private final String username;
+    private final Identity identity;
 
     public SshApiSessionFactory(String username, Identity identity) {
         this.username = username;
@@ -108,12 +109,12 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      * build.
      */
     public static class IdentityBuilder {
-        private SshAuthenticationConnection connection;
+        private final SshAuthenticationConnection connection;
+        private final BaseGitActivity callingActivity;
+        private final SharedPreferences settings;
         private SshAuthenticationApi api;
         private String keyId, description, alg;
         private byte[] publicKey;
-        private BaseGitActivity callingActivity;
-        private SharedPreferences settings;
 
         /**
          * Construct a new IdentityBuilder
@@ -137,7 +138,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
             settings =
                 PreferenceManager.getDefaultSharedPreferences(
                     callingActivity.getApplicationContext());
-            keyId = settings.getString("ssh_openkeystore_keyid", null);
+            keyId = settings.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null);
         }
 
         /**
@@ -163,7 +164,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
                     SshAuthenticationApiError error =
                         result.getParcelableExtra(SshAuthenticationApi.EXTRA_ERROR);
                     // On an OpenKeychain SSH API error, clear out the stored keyid
-                    settings.edit().putString("ssh_openkeystore_keyid", null).apply();
+                    settings.edit().putString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null).apply();
 
                     switch (error.getError()) {
                         // If the problem was just a bad keyid, reset to allow them to choose a
@@ -214,7 +215,7 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
             if (intent.hasExtra(SshAuthenticationApi.EXTRA_KEY_ID)) {
                 keyId = intent.getStringExtra(SshAuthenticationApi.EXTRA_KEY_ID);
                 description = intent.getStringExtra(SshAuthenticationApi.EXTRA_KEY_DESCRIPTION);
-                settings.edit().putString("ssh_openkeystore_keyid", keyId).apply();
+                settings.edit().putString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, keyId).apply();
             }
 
             if (intent.hasExtra(SshAuthenticationApi.EXTRA_SSH_PUBLIC_KEY)) {
@@ -284,10 +285,12 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      * A Jsch identity that delegates key operations via the OpenKeychain SSH API
      */
     public static class ApiIdentity implements Identity {
-        private String keyId, description, alg;
-        private byte[] publicKey;
-        private Activity callingActivity;
-        private SshAuthenticationApi api;
+        private final String keyId;
+        private final String description;
+        private final String alg;
+        private final byte[] publicKey;
+        private final Activity callingActivity;
+        private final SshAuthenticationApi api;
         private CountDownLatch latch;
         private byte[] signature;
 

@@ -22,6 +22,7 @@ import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.net.URI
@@ -53,14 +54,14 @@ abstract class BaseGitActivity : AppCompatActivity() {
 
         settings = PreferenceManager.getDefaultSharedPreferences(this)
         encryptedSettings = getEncryptedPrefs("git_operation")
-        protocol = Protocol.fromString(settings.getString("git_remote_protocol", null))
-        connectionMode = ConnectionMode.fromString(settings.getString("git_remote_auth", null))
-        serverHostname = settings.getString("git_remote_server", null) ?: ""
-        serverPort = settings.getString("git_remote_port", null) ?: ""
-        serverUser = settings.getString("git_remote_username", null) ?: ""
-        serverPath = settings.getString("git_remote_location", null) ?: ""
-        username = settings.getString("git_config_user_name", null) ?: ""
-        email = settings.getString("git_config_user_email", null) ?: ""
+        protocol = Protocol.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL, null))
+        connectionMode = ConnectionMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH, null))
+        serverHostname = settings.getString(PreferenceKeys.GIT_REMOTE_SERVER, null) ?: ""
+        serverPort = settings.getString(PreferenceKeys.GIT_REMOTE_PORT, null) ?: ""
+        serverUser = settings.getString(PreferenceKeys.GIT_REMOTE_USERNAME, null) ?: ""
+        serverPath = settings.getString(PreferenceKeys.GIT_REMOTE_LOCATION, null) ?: ""
+        username = settings.getString(PreferenceKeys.GIT_CONFIG_USER_NAME, null) ?: ""
+        email = settings.getString(PreferenceKeys.GIT_CONFIG_USER_EMAIL, null) ?: ""
         updateUrl()
     }
 
@@ -148,7 +149,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
             PasswordRepository.addRemote("origin", newUrl, true)
         // When the server changes, remote password and host key file should be deleted.
         if (previousUrl.isNotEmpty() && newUrl != previousUrl) {
-            encryptedSettings.edit { remove("https_password") }
+            encryptedSettings.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
             File("$filesDir/.host_key").delete()
         }
         url = newUrl

@@ -27,6 +27,7 @@ import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.snackbar
@@ -175,7 +176,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     private fun generatePassword() {
-        when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+        when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, KEY_PWGEN_TYPE_CLASSIC)) {
             KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
                 .show(supportFragmentManager, "generator")
             KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()

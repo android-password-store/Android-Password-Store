@@ -22,6 +22,7 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import java.security.MessageDigest
 
@@ -39,7 +40,7 @@ private fun ByteArray.base64(): String {
 private fun Context.getDefaultUsername(): String? {
     return PreferenceManager
         .getDefaultSharedPreferences(this)
-        .getString("oreo_autofill_default_username", null)
+        .getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME, null)
 }
 
 private fun stableHash(array: Collection<ByteArray>): String {

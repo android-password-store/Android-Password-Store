@@ -27,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
 import com.zeapo.pwdstore.utils.snackbar
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -94,7 +95,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         tag(TAG)
 
-        keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
+        keyIDs = settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, null) ?: emptySet()
     }
 
     /**
@@ -133,7 +134,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * [startActivityForResult].
      */
     fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound, activityResult: ActivityResultLauncher<Intent>) {
-        val providerPackageName = settings.getString("openpgp_provider_list", "")
+        val providerPackageName = settings.getString(PreferenceKeys.OPENPGP_PROVIDER_LIST, "")
         if (providerPackageName.isNullOrEmpty()) {
             Toast.makeText(this, resources.getString(R.string.provider_toast_text), Toast.LENGTH_LONG).show()
             activityResult.launch(Intent(this, UserPreference::class.java))
@@ -215,7 +216,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         var clearAfter = 45
         try {
-            clearAfter = (settings.getString("general_show_time", "45") ?: "45").toInt()
+            clearAfter = (settings.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")
+                ?: "45").toInt()
         } catch (_: NumberFormatException) {
         }
 

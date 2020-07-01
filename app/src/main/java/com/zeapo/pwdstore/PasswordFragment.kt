@@ -31,6 +31,7 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
@@ -42,6 +43,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
+    private var scrollTarget: File? = null
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
     private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
@@ -78,7 +80,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             } else {
                 // When authentication is set to ConnectionMode.None then the only git operation we
                 // can run is a pull, so automatically fallback to that.
-                val operationId = when (ConnectionMode.fromString(settings.getString("git_remote_auth", null))) {
+                val operationId = when (ConnectionMode.fromString(settings.getString
+                (PreferenceKeys.GIT_REMOTE_AUTH, null))) {
                     ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
                     else -> BaseGitActivity.REQUEST_SYNC
                 }
@@ -130,6 +133,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     // When the result is filtered, we always scroll to the top since that is where
                     // the best fuzzy match appears.
                     recyclerView.scrollToPosition(0)
+                } else if (scrollTarget != null) {
+                    scrollTarget?.let {
+                        recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+                    }
+                    scrollTarget == null
                 } else {
                     // When the result is not filtered and there is a saved scroll position for it,
                     // we try to restore it.
@@ -221,12 +229,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
-                        requireStore().clearSearch()
-                        model.navigateTo(
-                            item.file,
-                            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
-                        )
-                        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                        navigateTo(item.file)
                     } else {
                         if (requireArguments().getBoolean("matchWith", false)) {
                             requireStore().matchPasswordWithApp(item)
@@ -269,6 +272,19 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     fun createFolder() = requireStore().createFolder()
 
     fun createPassword() = requireStore().createPassword()
+
+    fun navigateTo(file: File) {
+        requireStore().clearSearch()
+        model.navigateTo(
+            file,
+            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
+        )
+        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    fun scrollToOnNextRefresh(file: File) {
+        scrollTarget = file
+    }
 
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(item: PasswordItem)
