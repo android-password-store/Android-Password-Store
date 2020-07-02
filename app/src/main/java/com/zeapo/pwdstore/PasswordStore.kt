@@ -92,7 +92,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
-    private val cloneResult = registerForActivityResult(StartActivityForResult()) { result ->
+    private val cloneAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
         }
@@ -128,7 +128,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             }
             val intent = Intent(activity, GitOperationActivity::class.java)
             intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-            cloneResult.launch(intent)
+            cloneAction.launch(intent)
         }
     }
 
@@ -847,7 +847,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     CLONE_REPO_BUTTON -> {
                         val intent = Intent(activity, GitServerConfigActivity::class.java)
                         intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                        cloneResult.launch(intent)
+                        cloneAction.launch(intent)
                     }
                 }
             }
@@ -871,7 +871,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 CLONE_REPO_BUTTON -> {
                                     val intent = Intent(activity, GitServerConfigActivity::class.java)
                                     intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                                    cloneResult.launch(intent)
+                                    cloneAction.launch(intent)
                                 }
                             }
                         }
