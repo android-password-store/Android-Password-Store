@@ -50,20 +50,26 @@ jobs:
     - name: Download gradle dependencies
       run: ./gradlew dependencies
 
-    - name: Build release APK and bundle
-      run: ./gradlew :app:assembleFreeRelease :app:bundleFreeRelease
+    - name: Build release binaries
+      run: ./gradlew :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
 
-    - name: Upload release APK
+    - name: Upload non-free release APK
       uses: actions/upload-artifact@master
       with:
-        name: APS Release APK
-        path: app/build/outputs/apk/release/app-release.apk
+        name: APS Non-Free Release APK
+        path: app/build/outputs/apk/nonFree/release/app-release.apk
 
-    - name: Upload release Bundle
+    - name: Upload non-free release Bundle
       uses: actions/upload-artifact@master
       with:
-        name: APS Release Bundle
-        path: app/build/outputs/bundle/release/app-release.aab
+        name: APS Non-Free Release Bundle
+        path: app/build/outputs/bundle/nonFree/release/app-release.aab
+
+    - name: Upload free release APK
+      uses: actions/upload-artifact@master
+      with:
+        name: APS Free Release APK
+        path: app/build/outputs/apk/free/release/app-release.apk
 
     - name: Clean secrets
       if: always()
@@ -77,17 +83,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Get APK
+      - name: Get Non-Free Release APK
         uses: actions/download-artifact@v1
         with:
-          name: APS Release APK
-          path: artifacts
+          name: APS Non-Free Release APK
+          path: artifacts/nonFree
 
-      - name: Get Bundle
+      - name: Get Non-Free Bundle
         uses: actions/download-artifact@v1
         with:
-          name: APS Release Bundle
-          path: artifacts
+          name: APS Non-Free Release Bundle
+          path: artifacts/nonFree
+
+      - name: Get Free Release APK
+        uses: actions/download-artifact@v1
+        with:
+          name: APS Free Release APK
+          path: artifacts/free
 
       - name: Get Changelog Entry
         id: changelog_reader
@@ -112,22 +124,32 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
-      - name: Upload Release Apk
+      - name: Upload Non-Free Release Apk
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/app-release.apk
-          asset_name: APS_${{ steps.get_version.outputs.VERSION }}.apk
+          asset_path: ./artifacts/nonFree/app-release.apk
+          asset_name: APS-nonFree_${{ steps.get_version.outputs.VERSION }}.apk
           asset_content_type: application/vnd.android.package-archive
 
-      - name: Upload Release Bundle
+      - name: Upload Non-Free Release Bundle
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/app-release.aab
-          asset_name: APS_${{ steps.get_version.outputs.VERSION }}.aab
+          asset_path: ./artifacts/nonFree/app-release.aab
+          asset_name: APS-nonFree_${{ steps.get_version.outputs.VERSION }}.aab
           asset_content_type: application/octet-stream
+
+      - name: Upload Free Release Apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/free/app-release.apk
+          asset_name: APS-free_${{ steps.get_version.outputs.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
