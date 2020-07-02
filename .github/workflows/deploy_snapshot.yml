@@ -51,7 +51,7 @@ jobs:
       run: ./gradlew dependencies
 
     - name: Build release app
-      run: ./gradlew :app:assembleRelease
+      run: ./gradlew :app:assembleFreeRelease
       env:
         SNAPSHOT: "true"
 
