@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.w
 import com.google.android.gms.auth.api.phone.SmsCodeRetriever
@@ -29,14 +30,10 @@ import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillSmsBinding
 import com.zeapo.pwdstore.utils.viewBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
+class AutofillSmsActivity : AppCompatActivity() {
 
     companion object {
 
@@ -74,9 +71,6 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var clientState: Bundle
 
-    override val coroutineContext
-        get() = Dispatchers.IO + SupervisorJob()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -95,7 +89,7 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
         }
 
         registerReceiver(smsCodeRetrievedReceiver, IntentFilter(SmsCodeRetriever.SMS_CODE_RETRIEVED_ACTION), SmsRetriever.SEND_PERMISSION, null)
-        launch {
+        lifecycleScope.launch {
             waitForSms()
         }
     }
@@ -106,7 +100,7 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK)
             return
-        launch {
+        lifecycleScope.launch {
             waitForSms()
         }
     }
@@ -139,10 +133,4 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
             finish()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        coroutineContext.cancelChildren()
-    }
-
 }
