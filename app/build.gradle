@@ -68,6 +68,15 @@ android {
         buildTypes.release.signingConfig = signingConfigs.release
         buildTypes.debug.signingConfig = signingConfigs.release
     }
+
+    flavorDimensions "free"
+    productFlavors {
+        free {
+            versionNameSuffix "-free"
+        }
+        nonFree {
+        }
+    }
 }
 
 dependencies {
@@ -116,6 +125,8 @@ dependencies {
         debugImplementation deps.third_party.leakcanary
         debugImplementation deps.third_party.whatthestack
     }
+
+    nonFreeImplementation deps.non_free.google_play_auth_api_phone
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit
