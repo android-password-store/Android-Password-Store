@@ -51,7 +51,7 @@ jobs:
       run: ./gradlew dependencies
 
     - name: Build release APK and bundle
-      run: ./gradlew :app:assembleRelease :app:bundleRelease
+      run: ./gradlew :app:assembleFreeRelease :app:bundleFreeRelease
 
     - name: Upload release APK
       uses: actions/upload-artifact@master
