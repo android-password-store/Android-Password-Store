@@ -17,7 +17,7 @@ class AutofillSmsActivity : AppCompatActivity() {
 
     companion object {
 
-        fun shouldOfferFillFromSms(context: Context, origin: FormOrigin): Boolean {
+        fun shouldOfferFillFromSms(context: Context): Boolean {
             return false
         }
 

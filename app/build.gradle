@@ -126,9 +126,7 @@ dependencies {
         debugImplementation deps.third_party.whatthestack
     }
 
-    nonFreeImplementation deps.non_free.google_play_auth
     nonFreeImplementation deps.non_free.google_play_auth_api_phone
-    nonFreeImplementation deps.non_free.kotlinx_google_play
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit

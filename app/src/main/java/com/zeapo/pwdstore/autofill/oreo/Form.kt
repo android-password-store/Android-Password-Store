@@ -286,9 +286,9 @@ class FillableForm private constructor(
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.Generate)
     }
 
-    private fun makeFillOtpFromSmsDataset(context: Context, origin: FormOrigin): Dataset? {
+    private fun makeFillOtpFromSmsDataset(context: Context): Dataset? {
         if (scenario.fieldsToFillOn(AutofillAction.FillOtpFromSms).isEmpty()) return null
-        if (!AutofillSmsActivity.shouldOfferFillFromSms(context, origin)) return null
+        if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
         val remoteView = makeFillOtpFromSmsRemoteView(context, formOrigin)
         val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.FillOtpFromSms)
@@ -350,7 +350,7 @@ class FillableForm private constructor(
                 hasDataset = true
                 addDataset(it)
             }
-            makeFillOtpFromSmsDataset(context, this@FillableForm.formOrigin)?.let {
+            makeFillOtpFromSmsDataset(context)?.let {
                 hasDataset = true
                 addDataset(it)
             }

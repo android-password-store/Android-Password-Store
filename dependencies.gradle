@@ -65,9 +65,7 @@ ext.deps = [
     ],
 
     non_free: [
-        google_play_auth: 'com.google.android.gms:play-services-auth:18.0.0',
         google_play_auth_api_phone: 'com.google.android.gms:play-services-auth-api-phone:17.4.0',
-        kotlinx_google_play: 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.2'
     ],
 
     testing: [

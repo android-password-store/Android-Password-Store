@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.autofill.oreo.ui
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,16 +16,17 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
-import com.google.android.gms.auth.api.phone.SmsCodeAutofillClient
+import com.github.ajalt.timberkt.w
 import com.google.android.gms.auth.api.phone.SmsCodeRetriever
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.tasks.Tasks
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
-import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillSmsBinding
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.CoroutineScope
@@ -32,8 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.asDeferred
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
@@ -42,23 +42,21 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
 
         private var fillOtpFromSmsRequestCode = 1
 
-        fun shouldOfferFillFromSms(context: Context, origin: FormOrigin): Boolean {
-            val smsClient = SmsCodeRetriever.getAutofillClient(context) ?: return false
-            return runBlocking {
-                return@runBlocking true
-                // FIXME: These Deferreds never complete.
-                val ongoingRequest = smsClient.hasOngoingSmsRequest(origin.identifier).asDeferred().await()
-                if (ongoingRequest) {
-                    d { "Ongoing request for ${origin.identifier}" }
-                    return@runBlocking false
-                }
-                val permissionState = smsClient.checkPermissionState().asDeferred().await()
-                if (permissionState == SmsCodeAutofillClient.PermissionState.DENIED) {
-                    d { "Permission denied" }
-                    return@runBlocking false
-                }
-                true
+        fun shouldOfferFillFromSms(context: Context): Boolean {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                return false
+            val googleApiAvailabilityInstance = GoogleApiAvailability.getInstance()
+            val googleApiStatus = googleApiAvailabilityInstance.isGooglePlayServicesAvailable(context)
+            if (googleApiStatus != ConnectionResult.SUCCESS) {
+                w { "Google Play Services unavailable or not updated: ${googleApiAvailabilityInstance.getErrorString(googleApiStatus)}" }
+                return false
             }
+            // https://developer.android.com/guide/topics/text/autofill-services#sms-autofill
+            if (googleApiAvailabilityInstance.getApkVersion(context) < 190056000) {
+                w { "Google Play Service 19.0.56 or higher required for SMS OTP Autofill" }
+                return false
+            }
+            return true
         }
 
         fun makeFillOtpFromSmsIntentSender(context: Context): IntentSender {
@@ -81,6 +79,7 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         setResult(RESULT_CANCELED)
         binding.cancelButton.setOnClickListener {
             finish()
@@ -101,19 +100,26 @@ class AutofillSmsActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    // Retry starting the SMS code retriever after a permission request.
+    @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK)
+            return
         launch {
             waitForSms()
         }
     }
 
-    private suspend fun waitForSms() {
+    private fun waitForSms() {
         val smsClient = SmsCodeRetriever.getAutofillClient(this@AutofillSmsActivity)
         try {
-            smsClient.startSmsCodeRetriever().asDeferred().await()
+            Tasks.await(smsClient.startSmsCodeRetriever())
         } catch (e: ResolvableApiException) {
-            e.startResolutionForResult(this@AutofillSmsActivity, 1)
+            e.startResolutionForResult(this, 1)
+        } catch (e: Exception) {
+            e(e)
+            finish()
         }
     }
 
