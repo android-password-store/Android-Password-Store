@@ -51,7 +51,7 @@ jobs:
       run: ./gradlew dependencies
 
     - name: Build release app
-      run: ./gradlew :app:assembleFreeRelease
+      run: ./gradlew :app:assembleFreeRelease :app:assembleNonFreeRelease
       env:
         SNAPSHOT: "true"
 
@@ -76,6 +76,8 @@ jobs:
       run: npm install -g cloudflare-cli
 
     - name: Purge Cloudflare cache
-      run: cfcli --token ${CF_TOKEN} purge "https://dl.msfjarvis.dev/APS/$(cd ./app/build/outputs/apk/release/; ls *.apk)"
+      run: |
+        cfcli --token ${CF_TOKEN} purge "https://dl.msfjarvis.dev/APS/$(cd ./app/build/outputs/apk/nonFree/release/; ls *.apk)"
+        cfcli --token ${CF_TOKEN} purge "https://dl.msfjarvis.dev/APS/$(cd ./app/build/outputs/apk/free/release/; ls *.apk)"
       env:
         CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

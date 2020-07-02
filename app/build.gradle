@@ -16,7 +16,7 @@ android {
     if (isSnapshot()) {
         android.applicationVariants.all { final variant ->
             variant.outputs.all {
-                outputFileName = "aps_${defaultConfig.versionName}.apk"
+                outputFileName = "aps-${variant.getFlavorName()}_${defaultConfig.versionName}.apk"
             }
         }
     }
