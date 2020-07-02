@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 -   TOTP support is reintroduced by popular demand. HOTP continues to be unsupported and heavily discouraged.
 -   Initial support for detecting and filling OTP fields with Autofill
+-   OTP codes can be automatically filled from SMS (requires Android P+ and Google Play Services)
 -   Importing TOTP secrets using QR codes
 -   Navigate into newly created folders and scroll to newly created passwords
 
