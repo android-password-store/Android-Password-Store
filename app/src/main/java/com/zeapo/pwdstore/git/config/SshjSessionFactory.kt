@@ -126,10 +126,23 @@ private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
     }
 }
 
-private class SshjSession(private val uri: URIish, private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : RemoteSession {
+private class SshjSession(uri: URIish, private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : RemoteSession {
 
     private lateinit var ssh: SSHClient
     private var currentCommand: Session? = null
+
+    private val uri = if (uri.host.contains('@')) {
+        // URIish's String constructor cannot handle '@' in the user part of the URI and the URL
+        // constructor can't be used since Java's URL does not recognize the ssh scheme. We thus
+        // need to patch everything up ourselves.
+        d { "Before fixup: user=${uri.user}, host=${uri.host}" }
+        val userPlusHost = "${uri.user}@${uri.host}"
+        val realUser = userPlusHost.substringBeforeLast('@')
+        val realHost = userPlusHost.substringAfterLast('@')
+        uri.setUser(realUser).setHost(realHost).also { d { "After fixup: user=${it.user}, host=${it.host}" } }
+    } else {
+        uri
+    }
 
     fun connect(): SshjSession {
         ssh = SSHClient(SshjConfig())
