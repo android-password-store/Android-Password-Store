@@ -39,14 +39,12 @@ import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.autofill.AutofillService
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
 import com.zeapo.pwdstore.autofill.oreo.ChromeCompatFix
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.BasePgpActivity
-import com.zeapo.pwdstore.crypto.GetKeyIdsActivity
 import com.zeapo.pwdstore.git.GitConfigActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
@@ -59,8 +57,6 @@ import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.io.IOException
-import java.util.HashSet
-import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -109,9 +105,6 @@ class UserPreference : AppCompatActivity() {
                 }
             }
 
-            // Crypto preferences
-            val keyPreference = findPreference<Preference>(PreferenceKeys.OPENPGP_KEY_ID_PREF)
-
             // General preferences
             val showTimePreference = findPreference<Preference>(PreferenceKeys.GENERAL_SHOW_TIME)
             val clearClipboard20xPreference = findPreference<CheckBoxPreference>(PreferenceKeys.CLEAR_CLIPBOARD_20X)
@@ -158,24 +151,6 @@ class UserPreference : AppCompatActivity() {
             updateClearSavedPassphrasePrefs()
 
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
-
-            keyPreference?.let { pref ->
-                updateKeyIDsSummary(pref)
-                pref.onPreferenceClickListener = ClickListener {
-                    val providerPackageName = requireNotNull(sharedPreferences.getString(PreferenceKeys.OPENPGP_PROVIDER_LIST, ""))
-                    if (providerPackageName.isEmpty()) {
-                        Snackbar.make(requireView(), resources.getString(R.string.provider_toast_text), Snackbar.LENGTH_LONG).show()
-                        false
-                    } else {
-                        val intent = Intent(callingActivity, GetKeyIdsActivity::class.java)
-                        val keySelectResult = registerForActivityResult(StartActivityForResult()) {
-                            updateKeyIDsSummary(pref)
-                        }
-                        keySelectResult.launch(intent)
-                        true
-                    }
-                }
-            }
 
             sshKeyPreference?.onPreferenceClickListener = ClickListener {
                 callingActivity.getSshKey()
@@ -380,18 +355,6 @@ class UserPreference : AppCompatActivity() {
                     prefCustomDictPicker?.setSummary(R.string.xkpwgen_pref_custom_dict_picker_summary)
                 }
                 true
-            }
-        }
-
-        private fun updateKeyIDsSummary(preference: Preference) {
-            val selectedKeys = (sharedPreferences.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, null)
-                ?: HashSet()).toTypedArray()
-            preference.summary = if (selectedKeys.isEmpty()) {
-                resources.getString(R.string.pref_no_key_selected)
-            } else {
-                selectedKeys.joinToString(separator = ";") { s ->
-                    OpenPgpUtils.convertKeyIdToHex(s.toLong())
-                }
             }
         }
 

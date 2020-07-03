@@ -32,8 +32,6 @@ object PreferenceKeys {
     const val GIT_SERVER_INFO = "git_server_info"
     const val HTTPS_PASSWORD = "https_password"
     const val LENGTH = "length"
-    const val OPENPGP_KEY_IDS_SET = "openpgp_key_ids_set"
-    const val OPENPGP_KEY_ID_PREF = "openpgp_key_id_pref"
     const val OPENPGP_PROVIDER_LIST = "openpgp_provider_list"
     const val OREO_AUTOFILL_CHROME_COMPAT_FIX = "oreo_autofill_chrome_compat_fix"
     const val OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES = "oreo_autofill_custom_public_suffixes"

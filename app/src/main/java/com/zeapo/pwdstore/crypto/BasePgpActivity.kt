@@ -74,12 +74,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
     /**
-     * Read-only field for getting the list of OpenPGP key IDs that we have access to.
-     */
-    var keyIDs = emptySet<String>()
-        private set
-
-    /**
      * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.
      */
     private var serviceConnection: OpenPgpServiceConnection? = null
@@ -87,15 +81,13 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
     /**
      * [onCreate] sets the window up with the right flags to prevent auth leaks through screenshots
-     * or recent apps screen and fills in [keyIDs] from [settings]
+     * or recent apps screen.
      */
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         tag(TAG)
-
-        keyIDs = settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, null) ?: emptySet()
     }
 
     /**

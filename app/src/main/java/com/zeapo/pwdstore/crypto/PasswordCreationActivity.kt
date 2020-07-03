@@ -227,9 +227,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val data = Intent()
         data.action = OpenPgpApi.ACTION_ENCRYPT
 
-        // EXTRA_KEY_IDS requires long[]
-        val longKeys = keyIDs.map { it.toLong() }
-        data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, longKeys.toLongArray())
+        // pass enters the key ID into `.gpg-id`.
+        val keyIdFile = File(category.text.toString()).walkBottomUp().first { it.name == ".gpg-id" }
+        data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyIdFile.readText()))
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
         val content = "$editPass\n$editExtra"
