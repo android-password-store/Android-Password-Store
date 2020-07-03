@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 trap 'exit 1' SIGINT SIGTERM
 
