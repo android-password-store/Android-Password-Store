@@ -228,7 +228,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         data.action = OpenPgpApi.ACTION_ENCRYPT
 
         // pass enters the key ID into `.gpg-id`.
-        val keyIdFile = File(category.text.toString()).walkBottomUp().first { it.name == ".gpg-id" }
+        val keyIdFile = File(category.text.toString()).walkBottomUp().firstOrNull { it.name == ".gpg-id" }
+        if (keyIdFile == null) {
+            snackbar(message = resources.getString(R.string.failed_to_find_key_id))
+            return@with
+        }
         data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyIdFile.readText()))
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
