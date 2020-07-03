@@ -18,7 +18,6 @@
     <string name="git_commit_add_text">使用Android Password Store来添加 %1$s</string>
     <string name="git_commit_edit_text">使用Android Password Store来修改 %1$s</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">未选择提供OpenPGP的应用</string>
     <string name="clipboard_password_toast_text">密码已复制到剪贴板, 你有 %d 秒的时间将其粘贴到其他地方.</string>
     <string name="file_toast_text">请提供一个文件名</string>
     <string name="empty_toast_text">无法使用空白密码或者空白的额外内容</string>
@@ -64,8 +63,6 @@
     <string name="pref_ssh_see_key_title">查看生成的 SSH 公钥</string>
     <string name="pref_git_delete_repo">删除 Repo</string>
     <string name="pref_dialog_delete_title">清空 Repo</string>
-    <string name="pref_crypto_title">加密</string>
-    <string name="pref_provider_title">选择 OpenPGP 应用</string>
     <string name="pref_category_general_title">通用</string>
     <string name="pref_copy_title">自动复制密码</string>
     <string name="pref_copy_dialog_title">解密成功后自动将密码复制到剪贴板</string>

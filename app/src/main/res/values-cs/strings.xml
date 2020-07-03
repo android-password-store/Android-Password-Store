@@ -27,7 +27,6 @@
     <string name="git_commit_edit_text">Upravit heslo %1$s s použítím Android Password Store.</string>
     <string name="git_commit_remove_text">Odstranit %1$s ze store. </string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Nebyl vybrán poskytovatel OpenPGP!</string>
     <string name="clipboard_password_toast_text">Heslo zkopírováno do schránky, máte %d sekund na jeho zkopírování.</string>
     <string name="clipboard_password_no_clear_toast_text">Heslo zkopírováno do schránky</string>
     <string name="file_toast_text">Zadejte prosím jméno souboru</string>
@@ -96,8 +95,6 @@
     <string name="pref_ssh_see_key_title">Zobrazit vygenerovaný veřejný SSH klíč</string>
     <string name="pref_git_delete_repo">Smazat repozitář</string>
     <string name="pref_dialog_delete_title">Vyčistit repozitář</string>
-    <string name="pref_crypto_title">Šifrování</string>
-    <string name="pref_provider_title">Vybrat poskytovatele OpenPGP</string>
     <string name="pref_category_general_title">Všeobecné</string>
     <string name="pref_copy_title">Automaticky kopírovat heslo</string>
     <string name="pref_copy_dialog_title">Automatické kopírování hesla do schránky po úspěšném dešifrování.</string>

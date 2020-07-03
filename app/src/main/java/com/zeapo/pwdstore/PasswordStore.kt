@@ -54,6 +54,7 @@ import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
+import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
@@ -395,8 +396,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             }
             lifecycleScope.launch {
                 val keyIDsIntent = Intent().apply { action = OpenPgpApi.ACTION_GET_KEY_IDS }
-                val providerPackageName = settings.getString(PreferenceKeys.OPENPGP_PROVIDER_LIST, "org.sufficientlysecure.keychain")
-                OpenPgpServiceConnection(applicationContext, providerPackageName, object : OpenPgpServiceConnection.OnBound {
+                OpenPgpServiceConnection(applicationContext, OPENPGP_PROVIDER, object : OpenPgpServiceConnection.OnBound {
                     override fun onBound(service: IOpenPgpService2) {
                         val api = OpenPgpApi(applicationContext, service)
                         launch(Dispatchers.IO) {

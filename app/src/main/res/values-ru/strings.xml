@@ -30,7 +30,6 @@
     <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
     <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
@@ -103,8 +102,6 @@
     <string name="pref_ssh_see_key_title">Просмотреть публичный SSH ключ</string>
     <string name="pref_git_delete_repo">Удалить репозиторий</string>
     <string name="pref_dialog_delete_title">Очистить репозиторий</string>
-    <string name="pref_crypto_title">Шифрование</string>
-    <string name="pref_provider_title">Выберите провайдера OpenPGP</string>
     <string name="pref_category_general_title">Общие</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
     <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>

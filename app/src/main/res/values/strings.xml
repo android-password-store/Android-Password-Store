@@ -47,7 +47,6 @@
     <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">No OpenPGP provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_copied_text">Copied to clipboard</string>
@@ -126,8 +125,6 @@
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>
     <string name="pref_git_delete_repo">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
-    <string name="pref_crypto_title">Crypto</string>
-    <string name="pref_provider_title">Select OpenPGP provider</string>
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_title_passwords">Passwords</string>
     <string name="pref_clipboard_timeout_title">Password copy timeout</string>

@@ -83,12 +83,6 @@
             app:title="@string/pref_select_external_repository" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/pref_crypto_title">
-        <me.msfjarvis.openpgpktx.preference.OpenPgpAppPreference
-            app:key="openpgp_provider_list"
-            app:title="@string/pref_provider_title" />
-    </PreferenceCategory>
-
     <PreferenceCategory app:title="@string/password_generator_category_title">
         <ListPreference
             app:defaultValue="classic"

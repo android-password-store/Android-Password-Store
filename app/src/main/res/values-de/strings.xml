@@ -17,7 +17,6 @@
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
     <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
     <string name="file_toast_text">Bitte setze einen Pfad</string>
     <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
@@ -76,8 +75,6 @@
     <string name="pref_ssh_see_key_title">Zeige erstellten öffentlichen SSH-Key</string>
     <string name="pref_git_delete_repo">Repository löschen</string>
     <string name="pref_dialog_delete_title">Repository löschen</string>
-    <string name="pref_crypto_title">Kryptografie</string>
-    <string name="pref_provider_title">Wähle OpenPGP-Provider</string>
     <string name="pref_category_general_title">Allgemein</string>
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
     <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>

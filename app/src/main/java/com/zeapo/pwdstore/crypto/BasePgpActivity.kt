@@ -14,8 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +24,7 @@ import com.github.ajalt.timberkt.i
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
 import com.zeapo.pwdstore.utils.snackbar
@@ -120,20 +118,11 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     }
 
     /**
-     * Method for subclasses to initiate binding with [OpenPgpServiceConnection]. The design choices
-     * here are a bit dubious at first glance. We require passing a [ActivityResultLauncher] because
-     * it lets us react to having a OpenPgp provider selected without relying on the now deprecated
-     * [startActivityForResult].
+     * Method for subclasses to initiate binding with [OpenPgpServiceConnection].
      */
-    fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound, activityResult: ActivityResultLauncher<Intent>) {
-        val providerPackageName = settings.getString(PreferenceKeys.OPENPGP_PROVIDER_LIST, "")
-        if (providerPackageName.isNullOrEmpty()) {
-            Toast.makeText(this, resources.getString(R.string.provider_toast_text), Toast.LENGTH_LONG).show()
-            activityResult.launch(Intent(this, UserPreference::class.java))
-        } else {
-            serviceConnection = OpenPgpServiceConnection(this, providerPackageName, onBoundListener)
-            serviceConnection?.bindToService()
-        }
+    fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
+        serviceConnection = OpenPgpServiceConnection(this, OPENPGP_PROVIDER, onBoundListener)
+        serviceConnection?.bindToService()
     }
 
     /**

@@ -13,7 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
@@ -57,13 +56,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         }
     }
 
-    private val openKeychainResult = registerForActivityResult(StartActivityForResult()) {
-        decryptAndVerify()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindToOpenKeychain(this, openKeychainResult)
+        bindToOpenKeychain(this)
         title = name
         with(binding) {
             setContentView(root)
@@ -134,7 +129,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     @OptIn(ExperimentalTime::class)
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
         if (api == null) {
-            bindToOpenKeychain(this, openKeychainResult)
+            bindToOpenKeychain(this)
             return
         }
         val data = receivedIntent ?: Intent()

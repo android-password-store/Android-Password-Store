@@ -51,13 +51,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val editing by lazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
-    private val doNothing = registerForActivityResult(StartActivityForResult()) {}
     private var oldCategory: String? = null
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindToOpenKeychain(this, doNothing)
+        bindToOpenKeychain(this)
         title = if (editing)
             getString(R.string.edit_password)
         else

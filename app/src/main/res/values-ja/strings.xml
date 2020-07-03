@@ -18,7 +18,6 @@
     <string name="git_commit_add_text">追加 %1$s ストアから。</string>
     <string name="git_commit_edit_text">編集 %1$s ストアから。</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">OpenPGP プロバイダが選択されていません!</string>
     <string name="clipboard_password_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に貼り付けしてください。</string>
     <string name="file_toast_text">ファイル名を入力してください</string>
     <string name="empty_toast_text">空のパスワードを使用したり、追加のコンテンツを空にすることはできません</string>
@@ -64,8 +63,6 @@
     <string name="pref_ssh_see_key_title">生成した公開 SSH 鍵を表示</string>
     <string name="pref_git_delete_repo">リポジトリを削除</string>
     <string name="pref_dialog_delete_title">リポジトリをクリア</string>
-    <string name="pref_crypto_title">暗号化</string>
-    <string name="pref_provider_title">OpenPGP プロバイダーを選択</string>
     <string name="pref_category_general_title">全般</string>
     <string name="pref_copy_title">自動的にパスワードをコピー</string>
     <string name="pref_copy_dialog_title">復号化が成功した後、自動的にパスワードをクリップボードにコピーします。</string>

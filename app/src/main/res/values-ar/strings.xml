@@ -14,7 +14,6 @@
     <string name="edit">تعديل</string>
     <string name="delete">حذف</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">لم يتم إختيار مزود الأوبن بي جي بي بعد !</string>
     <string name="file_toast_text">الرجاء إدخال إسم ملف</string>
     <!-- Git Async Task -->
     <string name="running_dialog_text">جاري تنفيذ الأمر ...</string>
@@ -63,8 +62,6 @@
     <string name="pref_ssh_see_key_title">إظهار مفتاح الـ SSH العمومي الذي تم توليده</string>
     <string name="pref_git_delete_repo">حذف المستودع</string>
     <string name="pref_dialog_delete_title">تنحية المستودع</string>
-    <string name="pref_crypto_title">التشفير</string>
-    <string name="pref_provider_title">إختيار مزود الأوبن بي جي بي OpenPGP</string>
     <string name="pref_category_general_title">الإعدادات العامة</string>
     <string name="pref_copy_title">نسخ كلمة السر تلقائيًا</string>
     <string name="ssh_key_success_dialog_title">تم استيراد مفتاح الـ SSH</string>
