@@ -63,7 +63,6 @@
     <string name="pref_dialog_delete_title">清空 Repo</string>
     <string name="pref_crypto_title">加密</string>
     <string name="pref_provider_title">選擇 OpenPGP app</string>
-    <string name="pref_key_title">選擇 OpenPGP Key Id</string>
     <string name="pref_category_general_title">一般</string>
     <string name="pref_copy_title">自動複製密碼</string>
     <string name="pref_copy_dialog_title">解密成功後自動將密碼複製到剪貼簿</string>
@@ -114,7 +113,6 @@
     <string name="refresh_list">重新整理</string>
     <string name="no_repo_selected">未選擇外部 Repo</string>
     <string name="send_plaintext_password_to">將密碼以純文字傳送…</string>
-    <string name="show_password">顯示密碼</string>
     <!-- Autofill -->
     <string name="autofill_description">在app中自動填入密碼. 此功能只能在 Andorid 4.3 及以上版本中使用. 在 Andorid 5.0 及以上版本中不需要剪貼簿</string>
     <string name="autofill_apps_default">使用預設值</string>
@@ -123,5 +121,4 @@
     <string name="autofill_apps_match">自動填入</string>
     <string name="autofill_apps_never">手動</string>
     <string name="autofill_apps_delete">刪除</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>

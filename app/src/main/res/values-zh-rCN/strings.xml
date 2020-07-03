@@ -66,7 +66,6 @@
     <string name="pref_dialog_delete_title">清空 Repo</string>
     <string name="pref_crypto_title">加密</string>
     <string name="pref_provider_title">选择 OpenPGP 应用</string>
-    <string name="pref_key_title">选择 OpenPGP Key Id</string>
     <string name="pref_category_general_title">通用</string>
     <string name="pref_copy_title">自动复制密码</string>
     <string name="pref_copy_dialog_title">解密成功后自动将密码复制到剪贴板</string>
@@ -117,7 +116,6 @@
     <string name="refresh_list">刷新列表</string>
     <string name="no_repo_selected">未选择外部 Repo</string>
     <string name="send_plaintext_password_to">将密码以纯文本发送…</string>
-    <string name="show_password">显示密码</string>
     <!-- Autofill -->
     <string name="autofill_description">在app中自动输入密码. 此功能只在 Andorid 4.3 及以上版本中可用. 在 Andorid 5.0 及以上版本中不依赖剪贴板</string>
     <string name="autofill_apps_default">使用默认设置</string>
@@ -126,5 +124,4 @@
     <string name="autofill_apps_match">匹配</string>
     <string name="autofill_apps_never">从不匹配</string>
     <string name="autofill_apps_delete">删除</string>
-    <string name="get_last_changed_failed">获取上次修改日期失败</string>
 </resources>

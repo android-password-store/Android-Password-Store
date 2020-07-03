@@ -23,7 +23,6 @@
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
-    <string name="key_dialog_text">A valid PGP key must be selected in Settings before initializing the repository</string>
     <plurals name="delete_dialog_text">
         <item quantity="one">Are you sure you want to delete the password?</item>
         <item quantity="other">Are you sure you want to delete %d passwords?</item>
@@ -35,8 +34,6 @@
     <string name="use">Use</string>
     <string name="directory_selected_title">Directory already selected</string>
     <string name="directory_selected_message">Do you want to use \"%1$s\"?</string>
-    <string name="no_key_selected_dialog_title">OpenPGP key not selected</string>
-    <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
     <string name="password_exists_title">Password already exists!</string>
     <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
     <string name="password_move_error_title">Error while moving passwords</string>
@@ -117,10 +114,8 @@
     <string name="username">Username:</string>
     <string name="edit_password">Edit password</string>
     <string name="copy_password">Copy password</string>
-    <string name="copy_username">Copy username</string>
     <string name="share_as_plaintext">Share as plaintext</string>
     <string name="last_changed">Last changed %s</string>
-    <string name="view_otp">View OTP</string>
 
     <!-- Preferences -->
     <string name="pref_repository_title">Repository</string>
@@ -133,8 +128,6 @@
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_crypto_title">Crypto</string>
     <string name="pref_provider_title">Select OpenPGP provider</string>
-    <string name="pref_key_title">Select OpenPGP key ID</string>
-    <string name="pref_no_key_selected">No key selected</string>
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_title_passwords">Passwords</string>
     <string name="pref_clipboard_timeout_title">Password copy timeout</string>
@@ -237,9 +230,6 @@
     <string name="refresh_list">Refresh list</string>
     <string name="no_repo_selected">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
-    <string name="show_password">Show password</string>
-    <string name="show_extra">Show extra content</string>
-    <string name="hide_extra">Hide extra content</string>
     <string name="app_icon_hint">App icon</string>
     <string name="folder_icon_hint">Folder icon</string>
 
@@ -254,7 +244,6 @@
     <string name="oreo_autofill_save_passwords_dont_match">Passwords don\'t match</string>
     <string name="oreo_autofill_generate_password">Generate password…</string>
     <string name="oreo_autofill_fill_otp_from_sms">Extract code from SMS…</string>
-    <string name="oreo_autofill_waiting_for_sms">Waiting for SMS…</string>
     <string name="oreo_autofill_max_matches_reached">Maximum number of matches (%1$d) reached; clear matches before adding new ones.</string>
     <string name="oreo_autofill_warning_publisher_header">This app\'s publisher has changed since you first associated a Password Store entry with it:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>The currently installed app may be trying to steal your credentials by pretending to be a trusted app.</b>\n\nTry to uninstall and reinstall the app from a trusted source, such as the Play Store, Amazon Appstore, F-Droid, or your phone manufacturer\'s store.</string>
@@ -301,7 +290,6 @@
     <string name="autofill_toast_username">Select an editable field to paste the username.\nUsername is available for %d seconds.</string>
     <string name="ssh_key_does_not_exist">Unable to open the ssh private key, please check that the file exists</string>
     <string name="new_password_title">New password</string>
-    <string name="edit_password_title">Editing</string>
     <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
     <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
     <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>
@@ -317,7 +305,6 @@
     <string name="abort_rebase">Abort rebase and push new branch</string>
     <string name="reset_to_remote">Hard reset to remote branch</string>
     <string name="commit_hash">Commit hash</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
     <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
     <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>
@@ -359,15 +346,12 @@
     <string name="connection_mode_ssh_key">SSH key</string>
     <string name="connection_mode_basic_authentication">Password</string>
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
-    <string name="connection_mode_none">None</string>
     <string name="git_server_config_save_success">Successfully saved configuration</string>
     <string name="git_server_config_save_error_prefix">Configuration error: %s</string>
     <string name="git_config_error_hostname_empty">empty hostname</string>
     <string name="git_config_error_generic">please verify your settings and try again</string>
     <string name="git_config_error_nonnumeric_port">port must be numeric</string>
     <string name="git_config_error_custom_port_absolute">path must be absolute (start with \'/\') when using a custom port</string>
-    <string name="git_operation_unable_to_open_ssh_key_title">Unable to open the ssh-key</string>
-    <string name="git_operation_unable_to_open_ssh_key_message">Please check that it was imported.</string>
     <string name="git_operation_wrong_passphrase">Wrong passphrase</string>
     <string name="git_operation_wrong_password">Wrong password</string>
     <string name="bottom_sheet_create_new_folder">Create new folder</string>

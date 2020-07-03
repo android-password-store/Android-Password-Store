@@ -19,8 +19,6 @@
     <string name="change">Změnit</string>
     <string name="use">Použít</string>
     <string name="directory_selected_title">Tento adresář je již vybrán</string>
-    <string name="no_key_selected_dialog_title">OpenPGP klíč nebyl zvolen</string>
-    <string name="no_key_selected_dialog_text">Přesměrujeme Vás na nastavení. Prosím, zvolte si Váš OpenPGP klíč.</string>
     <string name="password_exists_title">Heslo již existuje!</string>
     <string name="password_exists_message">Toto přepíše%1$s %2$s .</string>
 
@@ -89,7 +87,6 @@
     <string name="username">Jméno:</string>
     <string name="edit_password">Editovat heslo</string>
     <string name="copy_password">Kopírovat heslo</string>
-    <string name="copy_username">Kopírovat jméno</string>
     <string name="share_as_plaintext">Sdílet v nešifrované podobě</string>
     <string name="last_changed">Naposled změněno %s</string>
     <!-- Preferences -->
@@ -101,7 +98,6 @@
     <string name="pref_dialog_delete_title">Vyčistit repozitář</string>
     <string name="pref_crypto_title">Šifrování</string>
     <string name="pref_provider_title">Vybrat poskytovatele OpenPGP</string>
-    <string name="pref_key_title">Vybrat ID OpenPGP klíče</string>
     <string name="pref_category_general_title">Všeobecné</string>
     <string name="pref_copy_title">Automaticky kopírovat heslo</string>
     <string name="pref_copy_dialog_title">Automatické kopírování hesla do schránky po úspěšném dešifrování.</string>
@@ -159,7 +155,6 @@
     <string name="refresh_list">Obnovit seznam</string>
     <string name="no_repo_selected">Nebyl vybrát externí repozitář</string>
     <string name="send_plaintext_password_to">Odeslat heslo jako plaintext za použití…</string>
-    <string name="show_password">Pokaż hasło</string>
     <!-- Autofill -->
     <string name="autofill_description">Automaticky vyplňuje pole hesel v aplikacích. Funguje pouze pro verzi Androidu 4.3 a vyšší. Není závislé na schránce pro Android verze 5.0 a vyšší.</string>
     <string name="autofill_apps_default">Použít výchozí nastavení</string>
@@ -168,5 +163,4 @@
     <string name="autofill_apps_match">Spárovat s</string>
     <string name="autofill_apps_never">Nikdy nepárovat</string>
     <string name="autofill_apps_delete">Smazat</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>
