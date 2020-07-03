@@ -54,7 +54,6 @@ import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
-import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
@@ -76,12 +75,9 @@ import java.lang.Character.UnicodeBlock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.msfjarvis.openpgpktx.util.OpenPgpApi
-import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
-import org.openintents.openpgp.IOpenPgpService2
 
 class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
@@ -390,33 +386,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         try {
             check(localDir.mkdir()) { "Failed to create directory!" }
             createRepository(localDir)
-            val rootGpgKey = File(localDir.absolutePath + "/.gpg-id")
-            if (!rootGpgKey.createNewFile()) {
+            if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
+                settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
+            } else {
                 throw IllegalStateException("Failed to initialize repository state.")
-            }
-            lifecycleScope.launch {
-                val keyIDsIntent = Intent().apply { action = OpenPgpApi.ACTION_GET_KEY_IDS }
-                OpenPgpServiceConnection(applicationContext, OPENPGP_PROVIDER, object : OpenPgpServiceConnection.OnBound {
-                    override fun onBound(service: IOpenPgpService2) {
-                        val api = OpenPgpApi(applicationContext, service)
-                        launch(Dispatchers.IO) {
-                            api.executeApiAsync(keyIDsIntent, null, null) { result ->
-                                when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-                                    OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                                        val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)
-                                            ?: LongArray(0)
-                                        val key = ids.map { it.toString() }.first()
-                                        rootGpgKey.writeText(key)
-                                        settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    override fun onError(e: Exception) {
-                        e(e)
-                    }
-                })
             }
         } catch (e: Exception) {
             e.printStackTrace()
