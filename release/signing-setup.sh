@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 ENCRYPT_KEY=$1
 

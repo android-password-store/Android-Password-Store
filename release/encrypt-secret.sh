@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 # Simple script that uses OpenSSL to encrypt a provided file with a provided key, and writes the result
 # to the provided path. Yes it's very needy.
