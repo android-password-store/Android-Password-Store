@@ -4,8 +4,8 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.CloneCommand
@@ -18,7 +18,7 @@ import java.io.File
  * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
-class CloneOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
+class CloneOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     /**
      * Sets the command using the repository uri

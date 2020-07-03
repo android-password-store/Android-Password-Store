@@ -4,8 +4,8 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import org.eclipse.jgit.api.AddCommand
@@ -20,7 +20,7 @@ import java.io.File
  * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
-class ResetToRemoteOperation(fileDir: File, callingActivity: Activity) : GitOperation(fileDir, callingActivity) {
+class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     private var addCommand: AddCommand? = null
     private var fetchCommand: FetchCommand? = null

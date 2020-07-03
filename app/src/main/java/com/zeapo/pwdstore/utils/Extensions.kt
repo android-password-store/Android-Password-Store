@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.utils
 
-import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -18,6 +17,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
@@ -49,7 +49,7 @@ fun CharArray.clear() {
 
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
-fun Activity.snackbar(
+fun AppCompatActivity.snackbar(
     view: View = findViewById(android.R.id.content),
     message: String,
     length: Int = Snackbar.LENGTH_SHORT
@@ -96,10 +96,10 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
 }
 
 @MainThread
-fun Activity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
+fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
     if (!PasswordRepository.isGitRepo()) {
         if (finishWithResultOnEnd != null) {
-            setResult(Activity.RESULT_OK, finishWithResultOnEnd)
+            setResult(AppCompatActivity.RESULT_OK, finishWithResultOnEnd)
             finish()
         }
         return
@@ -141,6 +141,6 @@ val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
     get() = getSystemService()
 
-fun Activity.isInsideRepository(file: File): Boolean {
+fun AppCompatActivity.isInsideRepository(file: File): Boolean {
     return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
 }

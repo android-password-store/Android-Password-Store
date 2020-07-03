@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -167,7 +166,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
      */
     fun launchGitOperation(operation: Int) {
         if (url == null) {
-            setResult(Activity.RESULT_CANCELED)
+            setResult(RESULT_CANCELED)
             finish()
             return
         }

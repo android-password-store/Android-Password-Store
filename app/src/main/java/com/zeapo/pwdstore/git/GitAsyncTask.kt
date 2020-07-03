@@ -4,11 +4,11 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
+import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
@@ -28,14 +28,14 @@ import java.lang.ref.WeakReference
 
 
 class GitAsyncTask(
-    activity: Activity,
+    activity: AppCompatActivity,
     private val operation: GitOperation,
     private val finishWithResultOnEnd: Intent?,
     private val silentlyExecute: Boolean = false
 ) : AsyncTask<GitCommand<*>, Int, GitAsyncTask.Result>() {
 
-    private val activityWeakReference: WeakReference<Activity> = WeakReference(activity)
-    private val activity: Activity?
+    private val activityWeakReference: WeakReference<AppCompatActivity> = WeakReference(activity)
+    private val activity: AppCompatActivity?
         get() = activityWeakReference.get()
     private val context: Context = activity.applicationContext
     private val dialog = ProgressDialog(activity)
@@ -86,7 +86,8 @@ class GitAsyncTask(
                                     RemoteRefUpdate.Status.REJECTED_NODELETE,
                                     RemoteRefUpdate.Status.REJECTED_REMOTE_CHANGED,
                                     RemoteRefUpdate.Status.NON_EXISTING,
-                                    RemoteRefUpdate.Status.NOT_ATTEMPTED ->
+                                    RemoteRefUpdate.Status.NOT_ATTEMPTED
+                                    ->
                                         (activity!!.getString(R.string.git_push_generic_error) + rru.status.name)
                                     RemoteRefUpdate.Status.REJECTED_OTHER_REASON -> {
                                         if
@@ -149,21 +150,21 @@ class GitAsyncTask(
                     // Currently, this is only executed when the user cancels a password prompt
                     // during authentication.
                     if (finishWithResultOnEnd != null) {
-                        activity?.setResult(Activity.RESULT_CANCELED)
+                        activity?.setResult(AppCompatActivity.RESULT_CANCELED)
                         activity?.finish()
                     }
                 } else {
                     e(result.err)
                     operation.onError(rootCauseException(result.err))
                     if (finishWithResultOnEnd != null) {
-                        activity?.setResult(Activity.RESULT_CANCELED)
+                        activity?.setResult(AppCompatActivity.RESULT_CANCELED)
                     }
                 }
             }
             is Result.Ok -> {
                 operation.onSuccess()
                 if (finishWithResultOnEnd != null) {
-                    activity?.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
+                    activity?.setResult(AppCompatActivity.RESULT_OK, finishWithResultOnEnd)
                     activity?.finish()
                 }
             }

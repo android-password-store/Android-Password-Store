@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.autofill.AutofillManager
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.bold
@@ -44,7 +45,6 @@ class AutofillFilterView : AppCompatActivity() {
     companion object {
         private const val HEIGHT_PERCENTAGE = 0.9
         private const val WIDTH_PERCENTAGE = 0.75
-        private const val DECRYPT_FILL_REQUEST_CODE = 1
 
         private const val EXTRA_FORM_ORIGIN_WEB =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_FORM_ORIGIN_WEB"
@@ -197,20 +197,15 @@ class AutofillFilterView : AppCompatActivity() {
             item.file
         )
         // intent?.extras? is checked to be non-null in onCreate
-        startActivityForResult(
-            AutofillDecryptActivity.makeDecryptFileIntent(
-                item.file,
-                intent!!.extras!!,
-                this
-            ), DECRYPT_FILL_REQUEST_CODE
-        )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == DECRYPT_FILL_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) setResult(RESULT_OK, data)
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                setResult(RESULT_OK, result.data)
+            }
             finish()
-        }
+        }.launch(AutofillDecryptActivity.makeDecryptFileIntent(
+            item.file,
+            intent!!.extras!!,
+            this
+        ))
     }
 }

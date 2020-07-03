@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.autofill.oreo.ui
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -12,10 +11,11 @@ import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillManager
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.PasswordStore
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
@@ -29,7 +29,7 @@ import com.zeapo.pwdstore.utils.commitChange
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillSaveActivity : Activity() {
+class AutofillSaveActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_FOLDER_NAME =
@@ -109,50 +109,46 @@ class AutofillSaveActivity : Activity() {
                 )
             )
         }
-        startActivityForResult(saveIntent, PasswordStore.REQUEST_CODE_ENCRYPT)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PasswordStore.REQUEST_CODE_ENCRYPT && resultCode == RESULT_OK && data != null) {
-            val createdPath = data.getStringExtra("CREATED_FILE")!!
-            formOrigin?.let {
-                AutofillMatcher.addMatchFor(this, it, File(createdPath))
-            }
-            val longName = data.getStringExtra("LONG_NAME")!!
-            val password = data.getStringExtra("PASSWORD")
-            val result = if (password != null) {
-                // Password was generated and should be filled into a form.
-                val username = data.getStringExtra("USERNAME")
-                val clientState =
-                    intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE) ?: run {
-                        e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
-                        finish()
-                        return
-                    }
-                val credentials = Credentials(username, password, null)
-                val fillInDataset = FillableForm.makeFillInDataset(
-                    this,
-                    credentials,
-                    clientState,
-                    AutofillAction.Generate
-                )
-                Intent().apply {
-                    putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
+        registerForActivityResult(StartActivityForResult()) { result ->
+            val data = result.data
+            if (result.resultCode == RESULT_OK && data != null) {
+                val createdPath = data.getStringExtra("CREATED_FILE")!!
+                formOrigin?.let {
+                    AutofillMatcher.addMatchFor(this, it, File(createdPath))
                 }
-            } else {
-                // Password was extracted from a form, there is nothing to fill.
-                Intent()
+                val longName = data.getStringExtra("LONG_NAME")!!
+                val password = data.getStringExtra("PASSWORD")
+                val resultIntent = if (password != null) {
+                    // Password was generated and should be filled into a form.
+                    val username = data.getStringExtra("USERNAME")
+                    val clientState =
+                        intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE) ?: run {
+                            e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
+                            finish()
+                            return@registerForActivityResult
+                        }
+                    val credentials = Credentials(username, password, null)
+                    val fillInDataset = FillableForm.makeFillInDataset(
+                        this,
+                        credentials,
+                        clientState,
+                        AutofillAction.Generate
+                    )
+                    Intent().apply {
+                        putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
+                    }
+                } else {
+                    // Password was extracted from a form, there is nothing to fill.
+                    Intent()
+                }
+                // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
+                // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
+                commitChange(
+                    getString(R.string.git_commit_add_text, longName),
+                    finishWithResultOnEnd = resultIntent
+                )
+                // GitAsyncTask will finish the activity for us.
             }
-            // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
-            // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
-            commitChange(
-                getString(R.string.git_commit_add_text, longName),
-                finishWithResultOnEnd = result
-            )
-            // GitAsyncTask will finish the activity for us.
-        } else {
-            finish()
-        }
+        }.launch(saveIntent)
     }
 }

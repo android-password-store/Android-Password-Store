@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -43,7 +42,7 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                setResult(Activity.RESULT_CANCELED)
+                setResult(RESULT_CANCELED)
                 finish()
                 return true
             }
@@ -54,7 +53,7 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
 
     private fun selectFolder() {
         intent.putExtra("SELECTED_FOLDER_PATH", passwordList.currentDir.absolutePath)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(RESULT_OK, intent)
         finish()
     }
 }
