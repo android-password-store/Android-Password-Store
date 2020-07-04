@@ -54,6 +54,22 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private var oldCategory: String? = null
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
 
+    private fun File.findTillRoot(fileName: String, rootPath: File): File? {
+        val gpgFile = File(this, fileName)
+        if (gpgFile.exists()) return gpgFile
+
+        if (this.absolutePath == rootPath.absolutePath) {
+            return null
+        }
+
+        val parent = parentFile
+        return if (parent != null && parent.exists()) {
+            parent.findTillRoot(fileName, rootPath)
+        } else {
+            null
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindToOpenKeychain(this)
@@ -227,7 +243,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         data.action = OpenPgpApi.ACTION_ENCRYPT
 
         // pass enters the key ID into `.gpg-id`.
-        val keyIdFile = File(category.text.toString()).walkBottomUp().firstOrNull { it.name == ".gpg-id" }
+        val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
+        val keyIdFile = File(repoRoot, category.text.toString()).findTillRoot(".gpg-id", repoRoot)
         if (keyIdFile == null) {
             snackbar(message = resources.getString(R.string.failed_to_find_key_id))
             return@with
