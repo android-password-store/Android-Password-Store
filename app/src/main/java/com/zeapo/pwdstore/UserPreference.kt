@@ -18,7 +18,10 @@ import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -28,6 +31,7 @@ import androidx.biometric.BiometricManager
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
@@ -55,6 +59,10 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import java.io.File
 import java.io.IOException
@@ -757,7 +765,18 @@ class UserPreference : AppCompatActivity() {
         val passDir = targetDirectory.createDirectory("password_store_$dateString")
 
         if (passDir != null) {
-            copyDirToDir(sourcePassDir, passDir)
+            lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    val snackbar = snackbar(message = getString(R.string.snackbar_exporting_passwords), show = false, length = Snackbar.LENGTH_INDEFINITE)
+                    val parent = snackbar.view.findViewById<View>(com.google.android.material.R.id.snackbar_text).parent as ViewGroup
+                    parent.addView(ProgressBar(this@UserPreference))
+                    snackbar.show()
+                }
+                copyDirToDir(sourcePassDir, passDir)
+                withContext(Dispatchers.Main) {
+                    snackbar(message = getString(R.string.snackbar_password_export_complete))
+                }
+            }
         }
     }
 
@@ -791,14 +810,16 @@ class UserPreference : AppCompatActivity() {
      *  @param sourceDirectory directory to copy from.
      *  @param sourceDirectory directory to copy to.
      */
-    private fun copyDirToDir(sourceDirectory: DocumentFile, targetDirectory: DocumentFile) {
-        sourceDirectory.listFiles().forEach { file ->
-            if (file.isDirectory) {
-                // Create new directory and recurse
-                val newDir = targetDirectory.createDirectory(file.name!!)
-                copyDirToDir(file, newDir!!)
-            } else {
-                copyFileToDir(file, targetDirectory)
+    private suspend fun copyDirToDir(sourceDirectory: DocumentFile, targetDirectory: DocumentFile) {
+        withContext(Dispatchers.IO) {
+            sourceDirectory.listFiles().forEach { file ->
+                if (file.isDirectory) {
+                    // Create new directory and recurse
+                    val newDir = targetDirectory.createDirectory(file.name!!)
+                    copyDirToDir(file, newDir!!)
+                } else {
+                    copyFileToDir(file, targetDirectory)
+                }
             }
         }
     }

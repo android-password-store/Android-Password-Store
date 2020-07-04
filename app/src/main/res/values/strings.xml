@@ -171,6 +171,8 @@
     <string name="pref_select_external_repository">Select external repository</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
+    <string name="snackbar_exporting_passwords">Exporting passwords…</string>
+    <string name="snackbar_password_export_complete">Finished exporting passwords</string>
     <string name="prefs_version">Version</string>
 
     <!-- PasswordGenerator fragment -->
