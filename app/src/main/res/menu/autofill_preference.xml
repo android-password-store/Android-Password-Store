@@ -9,7 +9,7 @@
     tools:context=".pwdstore.autofill.AutofillPreferenceActivity">
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:icon="@drawable/ic_search_24dp"
         android:title="@string/action_search"
         pwstore:actionViewClass="androidx.appcompat.widget.SearchView"
         pwstore:showAsAction="ifRoom|collapseActionView" />

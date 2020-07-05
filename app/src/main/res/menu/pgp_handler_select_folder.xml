@@ -9,7 +9,7 @@
     tools:context="com.zeapo.pwdstore.SelectFolderActivity">
     <item
         android:id="@+id/crypto_select"
-        android:icon="@drawable/ic_done_white_24dp"
+        android:icon="@drawable/ic_done_24dp"
         android:title="@string/crypto_select"
         pwstore:showAsAction="ifRoom" />
 </menu>
