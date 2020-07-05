@@ -29,9 +29,16 @@
         <item name="textInputStyle">@style/AppTheme.TextInputLayout</item>
     </style>
 
-    <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="boxStrokeColor">?attr/colorSecondary</item>
+    <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/outlined_box_selector</item>
         <item name="hintTextColor">?attr/colorSecondary</item>
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/color_control_normal</item>
     </style>
 
     <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
