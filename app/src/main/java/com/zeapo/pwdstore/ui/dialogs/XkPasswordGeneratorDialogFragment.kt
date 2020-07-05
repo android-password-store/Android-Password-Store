@@ -9,18 +9,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
-import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import com.github.ajalt.timberkt.Timber.tag
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.databinding.FragmentXkpwgenBinding
 import com.zeapo.pwdstore.pwgen.PasswordGenerator
 import com.zeapo.pwdstore.pwgenxkpwd.CapsType
 import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
@@ -28,40 +26,26 @@ import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
-    private lateinit var editSeparator: AppCompatEditText
-    private lateinit var editNumWords: AppCompatEditText
-    private lateinit var cbSymbols: CheckBox
-    private lateinit var spinnerCapsType: Spinner
-    private lateinit var cbNumbers: CheckBox
     private lateinit var prefs: SharedPreferences
-    private lateinit var spinnerNumbersCount: Spinner
-    private lateinit var spinnerSymbolsCount: Spinner
+    private lateinit var binding: FragmentXkpwgenBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity = requireActivity()
         val inflater = callingActivity.layoutInflater
-        val view = inflater.inflate(R.layout.fragment_xkpwgen, null)
+        binding = FragmentXkpwgenBinding.inflate(inflater)
 
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
 
-        builder.setView(view)
+        builder.setView(binding.root)
 
         prefs = callingActivity.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        cbNumbers = view.findViewById(R.id.xknumerals)
-        cbNumbers.isChecked = prefs.getBoolean(PREF_KEY_USE_NUMERALS, false)
-
-        spinnerNumbersCount = view.findViewById(R.id.xk_numbers_count)
-
         val storedNumbersCount = prefs.getInt(PREF_KEY_NUMBERS_COUNT, 0)
-        spinnerNumbersCount.setSelection(storedNumbersCount)
+        binding.xkNumCount.value = storedNumbersCount.toFloat()
 
-        cbSymbols = view.findViewById(R.id.xksymbols)
-        cbSymbols.isChecked = prefs.getBoolean(PREF_KEY_USE_SYMBOLS, false) != false
-        spinnerSymbolsCount = view.findViewById(R.id.xk_symbols_count)
         val symbolsCount = prefs.getInt(PREF_KEY_SYMBOLS_COUNT, 0)
-        spinnerSymbolsCount.setSelection(symbolsCount)
+        binding.xkSymbolCount.value = symbolsCount.toFloat()
 
         val previousStoredCapStyle: String = try {
             prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)!!
@@ -69,31 +53,24 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             tag("xkpw").e(e)
             DEFAULT_CAPS_STYLE
         }
-        spinnerCapsType = view.findViewById(R.id.xkCapType)
 
-        val lastCapitalsStyleIndex: Int
-
-        lastCapitalsStyleIndex = try {
+        val lastCapitalsStyleIndex: Int = try {
             CapsType.valueOf(previousStoredCapStyle).ordinal
         } catch (e: Exception) {
             tag("xkpw").e(e)
             DEFAULT_CAPS_INDEX
         }
-        spinnerCapsType.setSelection(lastCapitalsStyleIndex)
+        binding.xkCapType.setSelection(lastCapitalsStyleIndex)
+        binding.xkNumWords.setText(prefs.getString(PREF_KEY_NUM_WORDS, DEFAULT_NUMBER_OF_WORDS))
 
-        editNumWords = view.findViewById(R.id.xk_num_words)
-        editNumWords.setText(prefs.getString(PREF_KEY_NUM_WORDS, DEFAULT_NUMBER_OF_WORDS))
+        binding.xkSeparator.setText(prefs.getString(PREF_KEY_SEPARATOR, DEFAULT_WORD_SEPARATOR))
 
-        editSeparator = view.findViewById(R.id.xk_separator)
-        editSeparator.setText(prefs.getString(PREF_KEY_SEPARATOR, DEFAULT_WORD_SEPARATOR))
-
-        val passwordText: AppCompatTextView = view.findViewById(R.id.xkPasswordText)
-        passwordText.typeface = monoTypeface
+        binding.xkPasswordText.typeface = monoTypeface
 
         builder.setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
             setPreferences()
             val edit = callingActivity.findViewById<EditText>(R.id.password)
-            edit.setText(passwordText.text)
+            edit.setText(binding.xkPasswordText.text)
         }
 
         // flip neutral and negative buttons
@@ -104,11 +81,11 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
         dialog.setOnShowListener {
             setPreferences()
-            makeAndSetPassword(passwordText)
+            makeAndSetPassword(binding.xkPasswordText)
 
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 setPreferences()
-                makeAndSetPassword(passwordText)
+                makeAndSetPassword(binding.xkPasswordText)
             }
         }
         return dialog
@@ -117,13 +94,13 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
     private fun makeAndSetPassword(passwordText: AppCompatTextView) {
         try {
             passwordText.text = PasswordBuilder(requireContext())
-                .setNumberOfWords(Integer.valueOf(editNumWords.text.toString()))
+                .setNumberOfWords(Integer.valueOf(binding.xkNumWords.text.toString()))
                 .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
                 .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
-                .setSeparator(editSeparator.text.toString())
-                .appendNumbers(if (cbNumbers.isChecked) Integer.parseInt(spinnerNumbersCount.selectedItem as String) else 0)
-                .appendSymbols(if (cbSymbols.isChecked) Integer.parseInt(spinnerSymbolsCount.selectedItem as String) else 0)
-                .setCapitalization(CapsType.valueOf(spinnerCapsType.selectedItem.toString())).create()
+                .setSeparator(binding.xkSeparator.text.toString())
+                .appendNumbers(binding.xkNumCount.value.toInt())
+                .appendSymbols(binding.xkSymbolCount.value.toInt())
+                .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
         } catch (e: PasswordGenerator.PasswordGeneratorException) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
             tag("xkpw").e(e, "failure generating xkpasswd")
@@ -133,19 +110,15 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
     private fun setPreferences() {
         prefs.edit {
-            putBoolean(PREF_KEY_USE_NUMERALS, cbNumbers.isChecked)
-            putBoolean(PREF_KEY_USE_SYMBOLS, cbSymbols.isChecked)
-            putString(PREF_KEY_CAPITALS_STYLE, spinnerCapsType.selectedItem.toString())
-            putString(PREF_KEY_NUM_WORDS, editNumWords.text.toString())
-            putString(PREF_KEY_SEPARATOR, editSeparator.text.toString())
-            putInt(PREF_KEY_NUMBERS_COUNT, Integer.parseInt(spinnerNumbersCount.selectedItem as String) - 1)
-            putInt(PREF_KEY_SYMBOLS_COUNT, Integer.parseInt(spinnerSymbolsCount.selectedItem as String) - 1)
+            putString(PREF_KEY_CAPITALS_STYLE, binding.xkCapType.selectedItem.toString())
+            putString(PREF_KEY_NUM_WORDS, binding.xkNumWords.text.toString())
+            putString(PREF_KEY_SEPARATOR, binding.xkSeparator.text.toString())
+            putInt(PREF_KEY_NUMBERS_COUNT, binding.xkNumCount.value.toInt())
+            putInt(PREF_KEY_SYMBOLS_COUNT, binding.xkSymbolCount.value.toInt())
         }
     }
 
     companion object {
-        const val PREF_KEY_USE_NUMERALS = "pref_key_use_numerals"
-        const val PREF_KEY_USE_SYMBOLS = "pref_key_use_symbols"
         const val PREF_KEY_CAPITALS_STYLE = "pref_key_capitals_style"
         const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
         const val PREF_KEY_SEPARATOR = "pref_key_separator"
