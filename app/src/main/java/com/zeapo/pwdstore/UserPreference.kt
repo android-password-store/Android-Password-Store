@@ -18,10 +18,7 @@ import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -77,6 +74,12 @@ typealias ChangeListener = Preference.OnPreferenceChangeListener
 
 class UserPreference : AppCompatActivity() {
 
+    /**
+     * This boolean is used to disable exit operations during password exports because the Uri access
+     * does not outlive this activity and hence we can't complete the export if the activity
+     * terminates.
+     */
+    private var exporting = false
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragmentCompat() {
@@ -497,6 +500,7 @@ class UserPreference : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        if (exporting) return
         super.onBackPressed()
         setResult(RESULT_OK)
         finish()
@@ -564,6 +568,7 @@ class UserPreference : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             android.R.id.home -> {
+                if (exporting) return true
                 setResult(RESULT_OK)
                 finish()
                 true
@@ -766,14 +771,13 @@ class UserPreference : AppCompatActivity() {
 
         if (passDir != null) {
             lifecycleScope.launch {
+                exporting = true
                 withContext(Dispatchers.Main) {
-                    val snackbar = snackbar(message = getString(R.string.snackbar_exporting_passwords), show = false, length = Snackbar.LENGTH_INDEFINITE)
-                    val parent = snackbar.view.findViewById<View>(com.google.android.material.R.id.snackbar_text).parent as ViewGroup
-                    parent.addView(ProgressBar(this@UserPreference))
-                    snackbar.show()
+                    snackbar(message = getString(R.string.snackbar_exporting_passwords), length = Snackbar.LENGTH_INDEFINITE)
                 }
                 copyDirToDir(sourcePassDir, passDir)
                 withContext(Dispatchers.Main) {
+                    exporting = false
                     snackbar(message = getString(R.string.snackbar_password_export_complete))
                 }
             }
