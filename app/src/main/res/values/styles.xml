@@ -39,7 +39,7 @@
     <style name="AppTheme.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="rippleColor">@color/ripple_color</item>
-        <item name="strokeColor">?attr/colorSecondary</item>
+        <item name="boxStrokeColor">?attr/colorSecondary</item>
         <item name="backgroundTint">@color/toggle_button_selector</item>
     </style>
 
