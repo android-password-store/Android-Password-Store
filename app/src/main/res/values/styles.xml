@@ -26,7 +26,6 @@
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
         <item name="materialButtonOutlinedStyle">@style/AppTheme.OutlinedButton</item>
-        <item name="textInputStyle">@style/TextInputLayoutBase</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
     </style>
 
@@ -78,19 +77,6 @@
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="colorControlActivated">@color/color_control_normal</item>
-    </style>
-
-    <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/secondary_color</item>
-        <item name="hintTextColor">@color/color_control_normal</item>
-        <item name="hintEnabled">true</item>
-        <item name="materialThemeOverlay">
-            @style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox
-        </item>
     </style>
 
     <style name="DialogLikeTheme" parent="AppTheme">
