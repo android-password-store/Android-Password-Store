@@ -104,7 +104,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     oldCategory = path
                 }
             }
-            suggestedName?.let { filename.setText(it) }
+            if (suggestedName != null) {
+                filename.setText(suggestedName)
+            } else {
+                filename.requestFocus()
+            }
             // Allow the user to quickly switch between storing the username as the filename or
             // in the encrypted extras. This only makes sense if the directory structure is
             // FileBased.
