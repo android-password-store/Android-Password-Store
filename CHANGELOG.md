@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+-   Light theme is now a consistent white across the board with ample contrast
+
 ### Fixed
 
 -   Folder names that were very long did not look right
