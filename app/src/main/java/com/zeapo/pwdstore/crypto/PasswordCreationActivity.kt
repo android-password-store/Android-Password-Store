@@ -164,7 +164,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home, R.id.cancel_password_add -> {
+            android.R.id.home -> {
                 setResult(RESULT_CANCELED)
                 finish()
             }
