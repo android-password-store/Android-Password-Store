@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 -   Folder names that were very long did not look right
 -   Error message for wrong SSH/HTTPS password now looks cleaner
 -   Fix authentication failure with usernames that contain the `@` character
+-   Text input boxes were illegible on dark theme
 
 ### Added
 
