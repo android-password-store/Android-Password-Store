@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 -   Error message for wrong SSH/HTTPS password now looks cleaner
 -   Fix authentication failure with usernames that contain the `@` character
 -   Text input boxes were illegible on dark theme
+-   Top-level password names had inconsistent top margin making them look askew
 
 ### Added
 
