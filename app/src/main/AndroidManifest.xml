@@ -99,6 +99,19 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/autofill_config" />
         </service>
+
+        <service
+            android:name=".autofill.oreo.ChromeCompatFix"
+            android:enabled="@bool/enable_chrome_compat_fix"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/oreo_autofill_chrome_compat_fix" />
+        </service>
+
         <service
             android:name=".ClipboardService"
             android:process=":clipboard_service_process" />

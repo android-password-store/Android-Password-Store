@@ -275,6 +275,11 @@
     <string name="oreo_autofill_enable_dialog_description">Password Store can offer to fill login forms and even save credentials you enter in apps or on websites.</string>
     <string name="oreo_autofill_enable_dialog_instructions">To enable this feature, tap OK to go to Autofill settings. There, select Password Store from the list and confirm the confirmation prompt with OK.</string>
     <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill support with installed browsers:</string>
+    <string name="oreo_autofill_chrome_compat_fix_summary">Make Autofill more reliable in Chrome</string>
+    <string name="oreo_autofill_chrome_compat_fix_description">This accessibility service makes
+        Autofill apps work more reliably in Chrome. It is only useful if you are also using an
+        Autofill app, but this app need not be Password Store.
+    </string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
