@@ -27,7 +27,6 @@
         <item name="materialButtonOutlinedStyle">@style/AppTheme.OutlinedButton</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="textInputStyle">@style/AppTheme.TextInputLayout</item>
-        <item name="sliderStyle">@style/AppTheme.Slider</item>
     </style>
 
     <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
@@ -58,12 +57,6 @@
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/secondary_color</item>
         <item name="colorSecondary">@color/secondary_color</item>
-    </style>
-
-    <style name="AppTheme.Slider" parent="Widget.MaterialComponents.Slider">
-        <item name="thumbColor">?attr/colorSecondary</item>
-        <item name="trackColor">?attr/colorSecondary</item>
-        <item name="haloColor">@color/slider_halo_selector</item>
     </style>
 
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">

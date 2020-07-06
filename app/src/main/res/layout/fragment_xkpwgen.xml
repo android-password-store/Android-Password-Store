@@ -5,100 +5,39 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="24dp"
+        android:paddingStart="24dp"
         android:paddingTop="20dp"
-        android:paddingRight="24dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="20dp">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/xkPasswordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:paddingBottom="8dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textIsSelectable="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/xknumerals"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:labelFor="@id/xk_num_count"
-            android:text="@string/xkpwgen_numbers"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xkPasswordText" />
-
-        <com.google.android.material.slider.Slider
-            android:id="@+id/xk_num_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:stepSize="1"
-            android:valueFrom="0"
-            android:valueTo="10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xknumerals" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/xksymbols"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/xkpwgen_symbols"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xk_num_count" />
-
-        <com.google.android.material.slider.Slider
-            android:id="@+id/xk_symbol_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:stepSize="1"
-            android:valueFrom="0"
-            android:valueTo="10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xksymbols" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/password_case"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:labelFor="@id/xkCapType"
-            android:text="Case"
-            app:layout_constraintEnd_toStartOf="@id/xkCapType"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xk_symbol_count" />
-
-        <Spinner
-            android:id="@+id/xkCapType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/capitalization_type_values"
-            android:entryValues="@array/capitalization_type_values"
-            android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/password_case"
-            app:layout_constraintTop_toBottomOf="@id/xk_symbol_count" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="horisticia.tockmendprost" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/total_words"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:hint="@string/xkpwgen_length"
             android:labelFor="@id/xk_num_words"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xkCapType">
+            app:layout_constraintTop_toBottomOf="@id/xkPasswordText">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/xk_num_words"
@@ -113,10 +52,10 @@
             android:id="@+id/separator"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
             android:hint="@string/xkpwgen_separator"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@id/total_words"
             app:layout_constraintTop_toTopOf="@id/total_words">
 
@@ -128,5 +67,16 @@
                 android:ems="10"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/xkCapType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:entries="@array/capitalization_type_values"
+            android:entryValues="@array/capitalization_type_values"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

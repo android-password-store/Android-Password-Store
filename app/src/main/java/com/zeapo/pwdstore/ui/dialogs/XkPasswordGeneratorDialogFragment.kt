@@ -41,12 +41,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
         prefs = callingActivity.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        val storedNumbersCount = prefs.getInt(PREF_KEY_NUMBERS_COUNT, 0)
-        binding.xkNumCount.value = storedNumbersCount.toFloat()
-
-        val symbolsCount = prefs.getInt(PREF_KEY_SYMBOLS_COUNT, 0)
-        binding.xkSymbolCount.value = symbolsCount.toFloat()
-
         val previousStoredCapStyle: String = try {
             prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)!!
         } catch (e: Exception) {
@@ -98,8 +92,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
                 .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
                 .setSeparator(binding.xkSeparator.text.toString())
-                .appendNumbers(binding.xkNumCount.value.toInt())
-                .appendSymbols(binding.xkSymbolCount.value.toInt())
                 .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
         } catch (e: PasswordGenerator.PasswordGeneratorException) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
@@ -113,8 +105,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             putString(PREF_KEY_CAPITALS_STYLE, binding.xkCapType.selectedItem.toString())
             putString(PREF_KEY_NUM_WORDS, binding.xkNumWords.text.toString())
             putString(PREF_KEY_SEPARATOR, binding.xkSeparator.text.toString())
-            putInt(PREF_KEY_NUMBERS_COUNT, binding.xkNumCount.value.toInt())
-            putInt(PREF_KEY_SYMBOLS_COUNT, binding.xkSymbolCount.value.toInt())
         }
     }
 
@@ -122,8 +112,6 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val PREF_KEY_CAPITALS_STYLE = "pref_key_capitals_style"
         const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
         const val PREF_KEY_SEPARATOR = "pref_key_separator"
-        const val PREF_KEY_NUMBERS_COUNT = "pref_key_xkpwgen_numbers_count"
-        const val PREF_KEY_SYMBOLS_COUNT = "pref_key_symbols_count"
         val DEFAULT_CAPS_STYLE = CapsType.Sentencecase.name
         val DEFAULT_CAPS_INDEX = CapsType.Sentencecase.ordinal
         const val DEFAULT_NUMBER_OF_WORDS = "3"
