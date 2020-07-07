@@ -22,6 +22,7 @@
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>
         <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
         <item name="actionModeStyle">@style/ActionMode</item>
+        <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
         <item name="materialButtonOutlinedStyle">@style/AppTheme.OutlinedButton</item>
