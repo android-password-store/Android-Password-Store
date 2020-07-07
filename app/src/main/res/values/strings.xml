@@ -194,8 +194,8 @@
     <string name="xkpwgen_separator">Separator</string>
     <string name="xkpwgen_custom_dict_imported">Custom wordlist: %1$s</string>
     <string name="xkpwgen_separator_character">separator character</string>
-    <string name="xkpwgen_numbers">numbers:</string>
-    <string name="xkpwgen_symbols">symbols:</string>
+    <string name="xkpwgen_numbers">Numbers</string>
+    <string name="xkpwgen_symbols">Symbols</string>
     <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->

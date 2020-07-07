@@ -15,21 +15,21 @@
         android:id="@+id/cover"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_margin="10dp"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@mipmap/ic_launcher_foreground"
         app:layout_constraintBottom_toTopOf="@id/text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="10dp"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/oreo_autofill_waiting_for_sms"
         android:layout_margin="10dp"
+        android:text="@string/oreo_autofill_waiting_for_sms"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cover" />
@@ -48,9 +48,9 @@
     <Button
         android:id="@+id/cancelButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="@string/dialog_cancel"
         android:textColor="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"

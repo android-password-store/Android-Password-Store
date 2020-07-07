@@ -3,27 +3,21 @@
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base palette -->
-    <color name="primary_color">#607d8b</color>
-    <color name="primary_light_color">#8eacbb</color>
-    <color name="primary_dark_color">#34515e</color>
+    <color name="primary_color">@color/white</color>
+    <color name="primary_light_color">@color/white</color>
+    <color name="primary_dark_color">@color/white</color>
     <color name="secondary_color">#ff7043</color>
     <color name="primary_text_color">#212121</color>
     <color name="white">#ffffffff</color>
 
     <!-- Theme variables -->
-    <color name="window_background">#eceff1</color>
     <color name="ic_launcher_background">#D4F1EA</color>
     <color name="color_control_normal">@color/primary_text_color</color>
     <color name="list_multiselect_background">#668eacbb</color>
-    <color name="navigation_bar_color">#000000</color>
+    <color name="navigation_bar_color">@color/primary_color</color>
     <color name="status_bar_color">@color/primary_dark_color</color>
     <color name="ripple_color">#aaff7043</color>
     <color name="button_color">#44ff7043</color>
-
-    <!-- Override TextInputEditText stroke color like a boss -->
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">
-        @color/secondary_color
-    </color>
 </resources>
