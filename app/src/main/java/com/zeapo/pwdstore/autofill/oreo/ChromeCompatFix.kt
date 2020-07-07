@@ -5,22 +5,50 @@
 package com.zeapo.pwdstore.autofill.oreo
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.v
+import com.github.ajalt.timberkt.w
+import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.autofillManager
 
+@RequiresApi(Build.VERSION_CODES.P)
 class ChromeCompatFix : AccessibilityService() {
+
+    companion object {
+        fun setStatusInPreferences(context: Context, enabled: Boolean) {
+            PreferenceManager.getDefaultSharedPreferences(context).edit {
+                putBoolean(PreferenceKeys.OREO_AUTOFILL_CHROME_COMPAT_FIX, enabled)
+            }
+        }
+    }
+
+    private val isEnabledInPreferences
+        get() = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PreferenceKeys.OREO_AUTOFILL_CHROME_COMPAT_FIX, true)
 
     private val handler = Handler(Looper.getMainLooper())
     private val forceRootNodePopulation = Runnable {
         val rootPackageName = rootInActiveWindow?.packageName.toString()
         v { "$rootPackageName: forced root node population" }
     }
+    private val disableListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs: SharedPreferences, key: String ->
+        if (key != PreferenceKeys.OREO_AUTOFILL_CHROME_COMPAT_FIX)
+            return@OnSharedPreferenceChangeListener
+        if (!isEnabledInPreferences) {
+            i { "Disabled in settings, shutting down..." }
+            disableSelf()
+        }
+    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         handler.removeCallbacks(forceRootNodePopulation)
         when (event.eventType) {
@@ -45,6 +73,20 @@ class ChromeCompatFix : AccessibilityService() {
                 v { "${event.packageName} (${AccessibilityEvent.eventTypeToString(event.eventType)}): debounced root node population" }
             }
         }
+    }
+
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        // Allow the service to be activated only if the Autofill service is already enabled.
+        if (autofillManager?.hasEnabledAutofillServices() != true) {
+            w { "Autofill service not enabled, shutting down..." }
+            disableSelf()
+            return
+        }
+        // Update preferences if the user manually activated the service.
+        setStatusInPreferences(this, true)
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(disableListener)
     }
 
     override fun onInterrupt() {}

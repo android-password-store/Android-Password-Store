@@ -277,8 +277,13 @@
     <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill support with installed browsers:</string>
     <string name="oreo_autofill_chrome_compat_fix_summary">Make Autofill more reliable in Chrome</string>
     <string name="oreo_autofill_chrome_compat_fix_description">This accessibility service makes
-        Autofill apps work more reliably in Chrome. It is only useful if you are also using an
-        Autofill app, but this app need not be Password Store.
+        Autofill work more reliably in Chrome. It can only be activated if you are already using
+        Password Store as your Autofill service.\n\nThis service is only active while you are
+        using Chrome. It does not access any data or take any actions on your behalf, but forces
+        Chrome to properly forward user interactions to the Password Store Autofill
+        service.\n\nChrome\'s performance should not be noticeably affected. If you are experiencing
+        any problems with this service, please create an issue at
+        https://msfjarvis.dev/ga.
     </string>
 
     <!-- Autofill -->
@@ -393,4 +398,6 @@
     <string name="add_otp">Add OTP</string>
     <string name="otp_import_success">Successfully imported TOTP configuration</string>
     <string name="otp_import_failure">Failed to import TOTP configuration</string>
+    <string name="oreo_autofill_chrome_compat_fix_preference_title">Improve reliability in Chrome</string>
+    <string name="oreo_autofill_chrome_compat_fix_preference_summary">Requires activating an accessibility service and may affect overall Chrome performance</string>
 </resources>

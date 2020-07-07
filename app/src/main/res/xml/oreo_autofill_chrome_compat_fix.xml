@@ -4,7 +4,7 @@
   -->
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityEventTypes="typeWindowContentChanged|typeAnnouncement|typeWindowStateChanged"
-    android:accessibilityFeedbackType="feedbackVisual"
+    android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault"
     android:canRetrieveWindowContent="true"
     android:description="@string/oreo_autofill_chrome_compat_fix_description"
