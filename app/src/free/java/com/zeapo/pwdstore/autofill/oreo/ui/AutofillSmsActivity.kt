@@ -9,7 +9,6 @@ import android.content.IntentSender
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Suppress("UNUSED_PARAMETER")
