@@ -283,7 +283,7 @@
         Chrome to properly forward user interactions to the Password Store Autofill
         service.\n\nChrome\'s performance should not be noticeably affected. If you are experiencing
         any problems with this service, please create an issue at
-        https://msfjarvis.dev/ga.
+        https://msfjarvis.dev/aps.
     </string>
 
     <!-- Autofill -->
