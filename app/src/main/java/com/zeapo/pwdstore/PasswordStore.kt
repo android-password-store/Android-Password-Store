@@ -70,14 +70,14 @@ import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
+import java.io.File
+import java.lang.Character.UnicodeBlock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
-import java.io.File
-import java.lang.Character.UnicodeBlock
 
 class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
@@ -904,6 +904,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         get() = getSortOrder(settings)
 
     companion object {
+
         const val REQUEST_ARG_PATH = "PATH"
         const val CLONE_REPO_BUTTON = 401
         const val NEW_REPO_BUTTON = 402

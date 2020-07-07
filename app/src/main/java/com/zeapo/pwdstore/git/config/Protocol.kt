@@ -10,6 +10,7 @@ enum class Protocol(val pref: String) {
     ;
 
     companion object {
+
         private val map = values().associateBy(Protocol::pref)
         fun fromString(type: String?): Protocol {
             return map[type ?: return Ssh]

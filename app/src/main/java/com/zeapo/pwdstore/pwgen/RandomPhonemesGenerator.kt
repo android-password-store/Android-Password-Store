@@ -8,6 +8,7 @@ import com.zeapo.pwdstore.utils.hasFlag
 import java.util.Locale
 
 object RandomPhonemesGenerator {
+
     private const val CONSONANT = 0x0001
     private const val VOWEL = 0x0002
     private const val DIPHTHONG = 0x0004
@@ -57,6 +58,7 @@ object RandomPhonemesGenerator {
     )
 
     private class Element(str: String, val flags: Int) {
+
         val upperCase = str.toUpperCase(Locale.ROOT)
         val lowerCase = str.toLowerCase(Locale.ROOT)
         val length = str.length

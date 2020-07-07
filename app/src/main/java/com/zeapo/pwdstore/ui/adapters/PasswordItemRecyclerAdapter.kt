@@ -41,6 +41,7 @@ open class PasswordItemRecyclerAdapter :
     }
 
     class PasswordItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         private val name: AppCompatTextView = itemView.findViewById(R.id.label)
         private val typeImage: AppCompatImageView = itemView.findViewById(R.id.type_image)
         private val childCount: AppCompatTextView = itemView.findViewById(R.id.child_count)

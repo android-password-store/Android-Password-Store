@@ -10,6 +10,7 @@ import com.hierynomus.sshj.signature.SignatureEdDSA
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
 import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
+import java.security.Security
 import net.schmizz.keepalive.KeepAliveProvider
 import net.schmizz.sshj.ConfigImpl
 import net.schmizz.sshj.common.LoggerFactory
@@ -30,7 +31,6 @@ import net.schmizz.sshj.userauth.keyprovider.PuTTYKeyFile
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.slf4j.Logger
 import org.slf4j.Marker
-import java.security.Security
 
 
 fun setUpBouncyCastleForSshj() {

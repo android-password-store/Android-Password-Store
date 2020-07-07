@@ -27,6 +27,7 @@ enum class AutofillAction {
 sealed class AutofillScenario<out T : Any> {
 
     companion object {
+
         const val BUNDLE_KEY_USERNAME_ID = "usernameId"
         const val BUNDLE_KEY_FILL_USERNAME = "fillUsername"
         const val BUNDLE_KEY_OTP_ID = "otpId"
@@ -64,6 +65,7 @@ sealed class AutofillScenario<out T : Any> {
     }
 
     class Builder<T : Any> {
+
         var username: T? = null
         var fillUsername = false
         var otp: T? = null

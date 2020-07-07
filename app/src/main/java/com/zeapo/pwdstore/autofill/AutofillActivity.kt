@@ -90,6 +90,7 @@ class AutofillActivity : AppCompatActivity() {
     }
 
     companion object {
+
         const val REQUEST_CODE_DECRYPT_AND_VERIFY = 9913
         const val REQUEST_CODE_PICK = 777
         const val REQUEST_CODE_PICK_MATCH_WITH = 778

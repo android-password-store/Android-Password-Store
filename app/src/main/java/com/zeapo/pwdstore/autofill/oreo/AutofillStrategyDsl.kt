@@ -174,6 +174,7 @@ class AutofillRule private constructor(
     ) {
 
         companion object {
+
             private var ruleId = 1
         }
 

@@ -24,6 +24,7 @@ import com.zeapo.pwdstore.utils.hasFlag
 class OreoAutofillService : AutofillService() {
 
     companion object {
+
         // TODO: Provide a user-configurable denylist
         private val DENYLISTED_PACKAGES = listOf(
             BuildConfig.APPLICATION_ID,

@@ -55,6 +55,7 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     companion object {
+
         const val ACTION_DECRYPT_PASS = "DECRYPT_PASS"
     }
 }

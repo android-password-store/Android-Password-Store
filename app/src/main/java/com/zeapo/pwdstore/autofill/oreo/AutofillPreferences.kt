@@ -110,6 +110,7 @@ enum class DirectoryStructure(val value: String) {
     }
 
     companion object {
+
         const val PREFERENCE = "oreo_autofill_directory_structure"
         private val DEFAULT = FileBased
 

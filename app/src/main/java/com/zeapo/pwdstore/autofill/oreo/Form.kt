@@ -37,6 +37,7 @@ sealed class FormOrigin(open val identifier: String) {
     data class App(override val identifier: String) : FormOrigin(identifier)
 
     companion object {
+
         private const val BUNDLE_KEY_WEB_IDENTIFIER = "webIdentifier"
         private const val BUNDLE_KEY_APP_IDENTIFIER = "appIdentifier"
 
@@ -74,6 +75,7 @@ sealed class FormOrigin(open val identifier: String) {
 private class Form(context: Context, structure: AssistStructure, isManualRequest: Boolean) {
 
     companion object {
+
         private val SUPPORTED_SCHEMES = listOf("http", "https")
     }
 
@@ -202,6 +204,7 @@ class FillableForm private constructor(
 ) {
 
     companion object {
+
         fun makeFillInDataset(
             context: Context,
             credentials: Credentials,

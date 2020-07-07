@@ -57,7 +57,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
-import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -65,6 +64,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.HashSet
 import java.util.TimeZone
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -74,6 +74,7 @@ class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragmentCompat() {
+
         private var autoFillEnablePreference: SwitchPreferenceCompat? = null
         private var oreoAutofillChromeCompatFix: SwitchPreferenceCompat? = null
         private var clearSavedPassPreference: Preference? = null
@@ -843,6 +844,7 @@ class UserPreference : AppCompatActivity() {
     }
 
     companion object {
+
         private const val TAG = "UserPreference"
 
         /**

@@ -32,6 +32,7 @@ import java.io.File
 class AutofillSaveActivity : AppCompatActivity() {
 
     companion object {
+
         private const val EXTRA_FOLDER_NAME =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_FOLDER_NAME"
         private const val EXTRA_PASSWORD = "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_PASSWORD"
