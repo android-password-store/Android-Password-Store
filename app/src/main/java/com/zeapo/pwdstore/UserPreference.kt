@@ -738,7 +738,7 @@ class UserPreference : AppCompatActivity() {
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
                 .mapNotNull { it?.resolveInfo?.serviceInfo }
-                .any { it.packageName == BuildConfig.APPLICATION_ID && it.name == AutofillService::class.java.name}
+                .any { it.packageName == BuildConfig.APPLICATION_ID && it.name == AutofillService::class.java.name }
         }
 
     private val isChromeCompatFixServiceEnabled: Boolean
@@ -748,7 +748,7 @@ class UserPreference : AppCompatActivity() {
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
                 .mapNotNull { it?.resolveInfo?.serviceInfo }
-                .any { it.packageName == BuildConfig.APPLICATION_ID && it.name == ChromeCompatFix::class.java.name}
+                .any { it.packageName == BuildConfig.APPLICATION_ID && it.name == ChromeCompatFix::class.java.name }
         }
 
     private val isChromeCompatFixServiceSupported: Boolean

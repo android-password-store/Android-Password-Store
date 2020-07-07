@@ -13,8 +13,8 @@
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="oreo_autofill_chrome_compat_fix"
-            app:title="@string/oreo_autofill_chrome_compat_fix_preference_title"
-            app:summary="@string/oreo_autofill_chrome_compat_fix_preference_summary" />
+            app:summary="@string/oreo_autofill_chrome_compat_fix_preference_summary"
+            app:title="@string/oreo_autofill_chrome_compat_fix_preference_title" />
         <ListPreference
             app:defaultValue="file"
             app:entries="@array/oreo_autofill_directory_structure_entries"
