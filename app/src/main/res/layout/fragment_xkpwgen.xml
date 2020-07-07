@@ -4,144 +4,78 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
+        android:paddingStart="24dp"
         android:paddingTop="20dp"
-        android:paddingRight="24dp"
-        android:paddingBottom="20dp"
-        tools:context=".MainActivityFragment">
+        android:paddingEnd="24dp"
+        android:paddingBottom="20dp">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/xkPasswordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:paddingBottom="8dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
+            android:textIsSelectable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="horisticia.tockmendprost" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/total_words"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/xkpwgen_length"
+            android:labelFor="@id/xk_num_words"
+            app:layout_constraintEnd_toStartOf="@id/separator"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/xkPasswordText">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/xk_num_words"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".6"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/pwgen_include"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="@string/xkpwgen_separator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@id/total_words"
+            app:layout_constraintTop_toTopOf="@id/total_words">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/xknumerals"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/xkpwgen_numbers" />
-
-                    <Spinner
-                        android:id="@+id/xk_numbers_count"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:dropDownWidth="40dp"
-                        android:entries="@array/xk_range_1_10"
-                        android:entryValues="@array/xk_range_1_10"
-                        android:gravity="center_vertical"
-                        android:minWidth="40dp"
-                        android:spinnerMode="dropdown" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/xksymbols"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/xkpwgen_symbols" />
-
-                    <Spinner
-                        android:id="@+id/xk_symbols_count"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:dropDownWidth="40dp"
-                        android:entries="@array/xk_range_1_10"
-                        android:entryValues="@array/xk_range_1_10"
-                        android:gravity="center_vertical"
-                        android:minWidth="40dp"
-                        android:spinnerMode="dropdown" />
-                </LinearLayout>
-
-                <Spinner
-                    android:id="@+id/xkCapType"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:entries="@array/capitalization_type_values"
-                    android:entryValues="@array/capitalization_type_values"
-                    android:spinnerMode="dropdown" />
-            </LinearLayout>
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/xk_separator"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.4"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/xkpwgen_length"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <EditText
-                    android:id="@+id/xk_num_words"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:maxLength="2" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/xkpwgen_separator"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <EditText
-                    android:id="@+id/xk_separator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:autofillHints=""
-                    android:ems="10"
-                    android:hint="@string/xkpwgen_separator_character"
-                    android:inputType="text" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+        <Spinner
+            android:id="@+id/xkCapType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:entries="@array/capitalization_type_values"
+            android:entryValues="@array/capitalization_type_values"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -65,7 +65,11 @@ open class PasswordItemRecyclerAdapter :
             } else {
                 typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
                 val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
-                val source = "$parentPath\n$item"
+                val source = if (parentPath.isNotEmpty()) {
+                    "$parentPath\n$item"
+                } else {
+                    "$item"
+                }
                 val spannable = SpannableString(source)
                 spannable.setSpan(RelativeSizeSpan(0.7f), 0, parentPath.length, 0)
                 name.text = spannable

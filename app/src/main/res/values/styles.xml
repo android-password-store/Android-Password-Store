@@ -6,28 +6,39 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorOnPrimary">@color/color_control_normal</item>
         <item name="colorPrimaryDark">@color/primary_color</item>
         <item name="colorPrimaryVariant">@color/primary_light_color</item>
         <item name="colorSecondary">@color/secondary_color</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSurface">@color/window_background</item>
+        <item name="colorSurface">@color/primary_color</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="colorOnSurface">@color/color_control_normal</item>
         <item name="colorControlNormal">@color/color_control_normal</item>
         <item name="android:colorBackgroundFloating">@color/primary_color</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>
-        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
         <item name="actionModeStyle">@style/ActionMode</item>
-        <item name="alertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
         <item name="materialButtonOutlinedStyle">@style/AppTheme.OutlinedButton</item>
-        <item name="textInputStyle">@style/TextInputLayoutBase</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="textInputStyle">@style/AppTheme.TextInputLayout</item>
+    </style>
+
+    <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/outlined_box_selector</item>
+        <item name="hintTextColor">?attr/colorSecondary</item>
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/color_control_normal</item>
     </style>
 
     <style name="AppTheme.MaterialButton" parent="Widget.MaterialComponents.Button">
@@ -46,7 +57,6 @@
     <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/secondary_color</item>
         <item name="colorSecondary">@color/secondary_color</item>
-        <item name="android:windowBackground">@color/window_background</item>
     </style>
 
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
@@ -55,7 +65,6 @@
 
     <style name="BottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowIsTranslucent">false</item>
@@ -78,19 +87,6 @@
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="colorControlActivated">@color/color_control_normal</item>
-    </style>
-
-    <style name="TextInputLayoutBase" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/secondary_color</item>
-        <item name="hintTextColor">@color/color_control_normal</item>
-        <item name="hintEnabled">true</item>
-        <item name="materialThemeOverlay">
-            @style/ThemeOverlay.AppTheme.TextInputEditText.OutlinedBox
-        </item>
     </style>
 
     <style name="DialogLikeTheme" parent="AppTheme">

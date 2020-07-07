@@ -104,7 +104,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     oldCategory = path
                 }
             }
-            suggestedName?.let { filename.setText(it) }
+            if (suggestedName != null) {
+                filename.setText(suggestedName)
+            } else {
+                filename.requestFocus()
+            }
             // Allow the user to quickly switch between storing the username as the filename or
             // in the encrypted extras. This only makes sense if the directory structure is
             // FileBased.
@@ -164,7 +168,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home, R.id.cancel_password_add -> {
+            android.R.id.home -> {
                 setResult(RESULT_CANCELED)
                 finish()
             }
