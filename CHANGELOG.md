@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 -   Folder names that were very long did not look right
 -   Error message for wrong SSH/HTTPS password now looks cleaner
 -   Fix authentication failure with usernames that contain the `@` character
+-   Autofill can now be made more reliable in Chrome by enabling an accessibility service that works around known Chrome limitations
 
 ### Added
 
