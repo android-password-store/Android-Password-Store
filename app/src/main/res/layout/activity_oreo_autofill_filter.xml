@@ -76,7 +76,7 @@
 
     </ViewSwitcher>
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/strictDomainSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
         app:layout_constraintVertical_bias="1.0"
         tools:text="Phishing-resistant search" />
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/shouldMatch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
         app:layout_constraintVertical_bias="1.0"
         tools:text="Match with example.org" />
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/shouldClear"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
