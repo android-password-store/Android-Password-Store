@@ -35,15 +35,15 @@
             android:layout_marginEnd="8dp"
             android:hint="@string/xkpwgen_length"
             android:labelFor="@id/xk_num_words"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@id/separator"
+            app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/xkPasswordText">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/xk_num_words"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:inputType="number"
                 android:maxLength="2" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -55,16 +55,15 @@
             android:layout_marginStart="8dp"
             android:hint="@string/xkpwgen_separator"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toEndOf="@id/total_words"
             app:layout_constraintTop_toTopOf="@id/total_words">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/xk_separator"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:ems="10"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +75,7 @@
             android:entries="@array/capitalization_type_values"
             android:entryValues="@array/capitalization_type_values"
             android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
