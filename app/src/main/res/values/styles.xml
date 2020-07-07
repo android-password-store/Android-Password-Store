@@ -20,7 +20,7 @@
         <item name="android:colorBackgroundFloating">@color/primary_color</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="materialAlertDialogTheme">@style/AppTheme.Dialog</item>
         <item name="materialButtonStyle">@style/AppTheme.MaterialButton</item>
