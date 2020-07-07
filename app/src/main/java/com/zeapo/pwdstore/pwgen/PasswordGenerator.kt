@@ -21,6 +21,7 @@ enum class PasswordOption(val key: String) {
 }
 
 object PasswordGenerator {
+
     const val DEFAULT_LENGTH = 16
 
     const val DIGITS = 0x0001

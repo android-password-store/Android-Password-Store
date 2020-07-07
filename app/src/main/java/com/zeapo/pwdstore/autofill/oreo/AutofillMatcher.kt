@@ -43,6 +43,7 @@ class AutofillPublisherChangedException(val formOrigin: FormOrigin) :
 class AutofillMatcher {
 
     companion object {
+
         private const val MAX_NUM_MATCHES = 10
 
         private const val PREFERENCE_PREFIX_TOKEN = "token;"

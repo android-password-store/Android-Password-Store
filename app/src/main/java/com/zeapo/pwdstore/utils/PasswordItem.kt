@@ -41,6 +41,7 @@ data class PasswordItem(
     }
 
     companion object {
+
         const val TYPE_CATEGORY = 'c'
         const val TYPE_PASSWORD = 'p'
 

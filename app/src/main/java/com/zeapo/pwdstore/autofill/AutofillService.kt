@@ -35,15 +35,6 @@ import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.splitLines
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.msfjarvis.openpgpktx.util.OpenPgpApi
-import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.openintents.openpgp.IOpenPgpService2
-import org.openintents.openpgp.OpenPgpError
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -53,8 +44,18 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.msfjarvis.openpgpktx.util.OpenPgpApi
+import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import org.openintents.openpgp.IOpenPgpService2
+import org.openintents.openpgp.OpenPgpError
 
 class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
     private var serviceConnection: OpenPgpServiceConnection? = null
     private var settings: SharedPreferences? = null
     private var info: AccessibilityNodeInfo? = null // the original source of the event (the edittext field)
@@ -560,10 +561,12 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
     }
 
     internal object Constants {
+
         const val TAG = "Keychain"
     }
 
     private inner class OnBoundListener : OpenPgpServiceConnection.OnBound {
+
         override fun onBound(service: IOpenPgpService2) {
             decryptAndVerify()
         }
@@ -574,6 +577,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
     }
 
     companion object {
+
         var instance: AutofillService? = null
             private set
     }

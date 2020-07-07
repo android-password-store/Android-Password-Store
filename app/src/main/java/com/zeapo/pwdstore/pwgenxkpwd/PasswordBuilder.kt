@@ -138,6 +138,7 @@ class PasswordBuilder(ctx: Context) {
     }
 
     companion object {
+
         private const val SYMBOLS = "!@\$%^&*-_+=:|~?/.;#"
     }
 }

@@ -30,11 +30,11 @@ import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
 import com.zeapo.pwdstore.utils.snackbar
+import java.io.File
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
-import java.io.File
 
 @Suppress("Registered")
 open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
@@ -237,6 +237,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     }
 
     companion object {
+
         private const val TAG = "APS/BasePgpActivity"
         const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"

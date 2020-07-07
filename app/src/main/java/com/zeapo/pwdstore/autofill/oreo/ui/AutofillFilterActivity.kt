@@ -43,6 +43,7 @@ import com.zeapo.pwdstore.utils.viewBinding
 class AutofillFilterView : AppCompatActivity() {
 
     companion object {
+
         private const val HEIGHT_PERCENTAGE = 0.9
         private const val WIDTH_PERCENTAGE = 0.75
 

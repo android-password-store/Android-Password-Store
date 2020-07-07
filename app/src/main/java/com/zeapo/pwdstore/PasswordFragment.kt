@@ -35,10 +35,11 @@ import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
+
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var settings: SharedPreferences
@@ -280,6 +281,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
     companion object {
+
         const val ITEM_CREATION_REQUEST_KEY = "creation_key"
         const val ACTION_KEY = "action"
         const val ACTION_FOLDER = "folder"
@@ -301,6 +303,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
     interface OnFragmentInteractionListener {
+
         fun onFragmentInteraction(item: PasswordItem)
     }
 }

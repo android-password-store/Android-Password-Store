@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import java.io.IOException
+import java.lang.ref.WeakReference
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.UserAuthException
@@ -23,8 +25,6 @@ import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
 import org.eclipse.jgit.transport.RemoteRefUpdate
 import org.eclipse.jgit.transport.SshSessionFactory
-import java.io.IOException
-import java.lang.ref.WeakReference
 
 
 class GitAsyncTask(

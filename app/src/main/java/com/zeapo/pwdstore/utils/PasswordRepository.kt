@@ -8,15 +8,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import java.io.File
+import java.io.FileFilter
+import java.util.Comparator
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
-import java.io.File
-import java.io.FileFilter
-import java.util.Comparator
 
 open class PasswordRepository protected constructor() {
 
@@ -37,6 +37,7 @@ open class PasswordRepository protected constructor() {
         });
 
         companion object {
+
             @JvmStatic
             fun getSortOrder(settings: SharedPreferences): PasswordSortOrder {
                 return valueOf(settings.getString(PreferenceKeys.SORT_ORDER, null)

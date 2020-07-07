@@ -32,15 +32,15 @@ import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.eclipse.jgit.api.Git
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -349,6 +349,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     companion object {
+
         private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
         const val RETURN_EXTRA_CREATED_FILE = "CREATED_FILE"

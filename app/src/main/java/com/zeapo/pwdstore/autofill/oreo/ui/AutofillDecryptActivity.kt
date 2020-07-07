@@ -24,16 +24,6 @@ import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.model.PasswordEntry
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.msfjarvis.openpgpktx.util.OpenPgpApi
-import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.openintents.openpgp.IOpenPgpService2
-import org.openintents.openpgp.OpenPgpError
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -44,11 +34,22 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.msfjarvis.openpgpktx.util.OpenPgpApi
+import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import org.openintents.openpgp.IOpenPgpService2
+import org.openintents.openpgp.OpenPgpError
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
 
     companion object {
+
         private const val EXTRA_FILE_PATH = "com.zeapo.pwdstore.autofill.oreo.EXTRA_FILE_PATH"
         private const val EXTRA_SEARCH_ACTION =
             "com.zeapo.pwdstore.autofill.oreo.EXTRA_SEARCH_ACTION"

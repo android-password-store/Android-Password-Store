@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.splitLines
-import me.zhanghai.android.fastscroll.PopupTextProvider
 import java.util.ArrayList
 import java.util.Locale
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 internal class AutofillRecyclerAdapter(
     allApps: List<AppInfo>,
@@ -161,6 +161,7 @@ internal class AutofillRecyclerAdapter(
     }
 
     internal inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+
         var name: AppCompatTextView = view.findViewById(R.id.app_name)
         var icon: AppCompatImageView = view.findViewById(R.id.app_icon)
         var secondary: AppCompatTextView = view.findViewById(R.id.secondary_text)

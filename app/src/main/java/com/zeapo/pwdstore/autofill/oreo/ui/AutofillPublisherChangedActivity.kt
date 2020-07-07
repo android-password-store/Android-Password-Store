@@ -28,6 +28,7 @@ import com.zeapo.pwdstore.utils.viewBinding
 class AutofillPublisherChangedActivity : AppCompatActivity() {
 
     companion object {
+
         private const val EXTRA_APP_PACKAGE =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_APP_PACKAGE"
         private var publisherChangedRequestCode = 1

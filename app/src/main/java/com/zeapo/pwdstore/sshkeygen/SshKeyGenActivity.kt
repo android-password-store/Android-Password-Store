@@ -20,11 +20,11 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivitySshKeygenBinding
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
+import java.io.File
+import java.io.FileOutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 
 class SshKeyGenActivity : AppCompatActivity() {
 
