@@ -3,7 +3,7 @@
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accessibilityEventTypes="typeWindowContentChanged|typeViewAccessibilityFocused"
+    android:accessibilityEventTypes="typeWindowContentChanged|typeAnnouncement|typeWindowStateChanged"
     android:accessibilityFeedbackType="feedbackVisual"
     android:accessibilityFlags="flagDefault"
     android:canRetrieveWindowContent="true"
