@@ -67,12 +67,6 @@ typealias ChangeListener = Preference.OnPreferenceChangeListener
 
 class UserPreference : AppCompatActivity() {
 
-    /**
-     * This boolean is used to disable exit operations during password exports because the Uri access
-     * does not outlive this activity and hence we can't complete the export if the activity
-     * terminates.
-     */
-    private var exporting = false
     private lateinit var prefsFragment: PrefsFragment
 
     class PrefsFragment : PreferenceFragmentCompat() {
@@ -513,7 +507,6 @@ class UserPreference : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (exporting) return
         super.onBackPressed()
         setResult(RESULT_OK)
         finish()
@@ -581,7 +574,6 @@ class UserPreference : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             android.R.id.home -> {
-                if (exporting) return true
                 setResult(RESULT_OK)
                 finish()
                 true
