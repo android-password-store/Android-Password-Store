@@ -77,7 +77,7 @@ class GitConfigActivity : BaseGitActivity() {
             addOnButtonCheckedListener { _, checkedId, checked ->
                 if (checked) {
                     settings.edit {
-                        putBoolean("rebase_on_pull", checkedId != R.id.pull_strategy_merge)
+                        putBoolean("rebase_on_pull", checkedId == R.id.pull_strategy_rebase)
                     }
                 }
             }

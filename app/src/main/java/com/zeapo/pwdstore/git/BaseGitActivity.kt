@@ -249,10 +249,9 @@ abstract class BaseGitActivity : AppCompatActivity() {
         const val REQUEST_PULL = 101
         const val REQUEST_PUSH = 102
         const val REQUEST_CLONE = 103
-        const val REQUEST_INIT = 104
-        const val REQUEST_SYNC = 105
-        const val BREAK_OUT_OF_DETACHED = 106
-        const val REQUEST_RESET = 107
+        const val REQUEST_SYNC = 104
+        const val BREAK_OUT_OF_DETACHED = 105
+        const val REQUEST_RESET = 106
         const val TAG = "AbstractGitActivity"
     }
 }

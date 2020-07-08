@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import java.io.File
+import org.eclipse.jgit.api.FetchCommand
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.MergeCommand
 import org.eclipse.jgit.api.PullCommand
 
 /**
@@ -20,6 +22,10 @@ import org.eclipse.jgit.api.PullCommand
  */
 class PullOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
+    private var pullCommand: PullCommand? = null
+    private var fetchCommand: FetchCommand? = null
+    private var mergeCommand: MergeCommand? = null
+
     /**
      * Sets the commands required to do a git pull on the repository. The [rebase] parameter decides
      * whether the pull will be of type `git pull origin --rebase` or `git pull origin --no-rebase`.
@@ -27,16 +33,28 @@ class PullOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOper
      * @return An instance of [PullOperation]
      */
     fun setCommand(rebase: Boolean): PullOperation {
-        this.command = Git(repository)
-            .pull()
-            .setRebase(rebase)
-            .setRemote("origin")
+        val git = Git(repository)
+        if (rebase) {
+            pullCommand = git
+                .pull()
+                .setRebase(true)
+                .setRemote("origin")
+        } else {
+            fetchCommand = git.fetch().setRemote("origin")
+            mergeCommand = git.merge().include(repository!!.resolve("origin/master"))
+        }
         return this
     }
 
     override fun execute() {
-        (this.command as? PullCommand)?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, this, Intent()).execute(this.command)
+        pullCommand?.setCredentialsProvider(this.provider)
+        fetchCommand?.setCredentialsProvider(this.provider)
+        val task = GitAsyncTask(callingActivity, this, Intent())
+        if (pullCommand != null) {
+            task.execute(this.pullCommand)
+        } else {
+            task.execute(this.fetchCommand, this.mergeCommand)
+        }
     }
 
     override fun onError(err: Exception) {
