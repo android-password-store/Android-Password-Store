@@ -171,8 +171,6 @@
     <string name="pref_select_external_repository">Select external repository</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
-    <string name="snackbar_exporting_passwords">Exporting passwords…</string>
-    <string name="snackbar_password_export_complete">Finished exporting passwords</string>
     <string name="prefs_version">Version</string>
 
     <!-- PasswordGenerator fragment -->
@@ -402,5 +400,5 @@
     <string name="otp_import_failure">Failed to import TOTP configuration</string>
     <string name="oreo_autofill_chrome_compat_fix_preference_title">Improve reliability in Chrome</string>
     <string name="oreo_autofill_chrome_compat_fix_preference_summary">Requires activating an accessibility service and may affect overall Chrome performance</string>
-    <string name="exporting_passwords">Exporting passwords</string>
+    <string name="exporting_passwords">Exporting passwords…</string>
 </resources>
