@@ -42,7 +42,9 @@ import com.github.ajalt.timberkt.w
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
+import com.zeapo.pwdstore.autofill.AutofillService
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
+import com.zeapo.pwdstore.autofill.oreo.ChromeCompatFix
 import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.BasePgpActivity
 import com.zeapo.pwdstore.crypto.GetKeyIdsActivity
@@ -84,6 +86,7 @@ class UserPreference : AppCompatActivity() {
 
     class PrefsFragment : PreferenceFragmentCompat() {
         private var autoFillEnablePreference: SwitchPreferenceCompat? = null
+        private var oreoAutofillChromeCompatFix: SwitchPreferenceCompat? = null
         private var clearSavedPassPreference: Preference? = null
         private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
@@ -129,6 +132,7 @@ class UserPreference : AppCompatActivity() {
 
             // Autofill preferences
             autoFillEnablePreference = findPreference(PreferenceKeys.AUTOFILL_ENABLE)
+            oreoAutofillChromeCompatFix = findPreference(PreferenceKeys.OREO_AUTOFILL_CHROME_COMPAT_FIX)
             val oreoAutofillDirectoryStructurePreference = findPreference<ListPreference>(PreferenceKeys.OREO_AUTOFILL_DIRECTORY_STRUCTURE)
             val oreoAutofillDefaultUsername = findPreference<EditTextPreference>(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
             val oreoAutofillCustomPublixSuffixes = findPreference<EditTextPreference>(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
@@ -287,6 +291,16 @@ class UserPreference : AppCompatActivity() {
                 true
             }
 
+            oreoAutofillChromeCompatFix?.onPreferenceClickListener = ClickListener {
+                if (oreoAutofillChromeCompatFix!!.isChecked) {
+                    startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                    true
+                } else {
+                    // Service will disable itself on startup if the preference has the value false.
+                    false
+                }
+            }
+
             findPreference<Preference>(PreferenceKeys.EXPORT_PASSWORDS)?.apply {
                 isVisible = sharedPreferences.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
                 onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -409,15 +423,19 @@ class UserPreference : AppCompatActivity() {
         }
 
         private fun updateAutofillSettings() {
-            val isAccessibilityServiceEnabled = callingActivity.isAccessibilityServiceEnabled
+            val isAccessibilityAutofillServiceEnabled = callingActivity.isAccessibilityAutofillServiceEnabled
             val isAutofillServiceEnabled = callingActivity.isAutofillServiceEnabled
             autoFillEnablePreference?.isChecked =
-                isAccessibilityServiceEnabled || isAutofillServiceEnabled
+                isAccessibilityAutofillServiceEnabled || isAutofillServiceEnabled
             autofillDependencies.forEach {
-                it.isVisible = isAccessibilityServiceEnabled
+                it.isVisible = isAccessibilityAutofillServiceEnabled
             }
             oreoAutofillDependencies.forEach {
                 it.isVisible = isAutofillServiceEnabled
+            }
+            oreoAutofillChromeCompatFix?.apply {
+                isChecked = callingActivity.isChromeCompatFixServiceEnabled
+                isVisible = callingActivity.isChromeCompatFixServiceSupported
             }
         }
 
@@ -439,13 +457,16 @@ class UserPreference : AppCompatActivity() {
         }
 
         private fun onEnableAutofillClick() {
-            if (callingActivity.isAccessibilityServiceEnabled) {
+            if (callingActivity.isAccessibilityAutofillServiceEnabled) {
                 startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             } else if (callingActivity.isAutofillServiceEnabled) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     callingActivity.autofillManager!!.disableAutofillServices()
-                else
+                    ChromeCompatFix.setStatusInPreferences(requireContext(), false)
+                    updateAutofillSettings()
+                } else {
                     throw IllegalStateException("isAutofillServiceEnabled == true, but Build.VERSION.SDK_INT < Build.VERSION_CODES.O")
+                }
             } else {
                 val enableOreoAutofill = callingActivity.isAutofillServiceSupported
                 MaterialAlertDialogBuilder(callingActivity).run {
@@ -723,14 +744,32 @@ class UserPreference : AppCompatActivity() {
         File("$filesDir/.ssh_key").writeText(lines.joinToString("\n"))
     }
 
-    private val isAccessibilityServiceEnabled: Boolean
+    private val isAccessibilityAutofillServiceEnabled: Boolean
         get() {
             val am = getSystemService<AccessibilityManager>() ?: return false
             val runningServices = am
                 .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
             return runningServices
-                .map { it.id.substringBefore("/") }
-                .any { it == BuildConfig.APPLICATION_ID }
+                .mapNotNull { it?.resolveInfo?.serviceInfo }
+                .any { it.packageName == BuildConfig.APPLICATION_ID && it.name == AutofillService::class.java.name }
+        }
+
+    private val isChromeCompatFixServiceEnabled: Boolean
+        get() {
+            val am = getSystemService<AccessibilityManager>() ?: return false
+            val runningServices = am
+                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+            return runningServices
+                .mapNotNull { it?.resolveInfo?.serviceInfo }
+                .any { it.packageName == BuildConfig.APPLICATION_ID && it.name == ChromeCompatFix::class.java.name }
+        }
+
+    private val isChromeCompatFixServiceSupported: Boolean
+        get() {
+            // Autofill compat mode is only available starting with Android Pie and only makes sense
+            // when used with Autofill enabled.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false
+            return isAutofillServiceEnabled
         }
 
     private val isAutofillServiceSupported: Boolean

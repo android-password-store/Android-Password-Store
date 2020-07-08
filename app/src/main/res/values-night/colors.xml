@@ -12,10 +12,9 @@
     <color name="primary_text_color">#FFFFFFFF</color>
 
     <!-- Theme variables -->
-    <color name="window_background">@color/primary_color</color>
     <color name="navigation_bar_color">@color/primary_color</color>
     <color name="list_multiselect_background">#66EEEEEE</color>
-    <color name="status_bar_color">@color/window_background</color>
+    <color name="status_bar_color">@color/primary_color</color>
     <color name="ripple_color">#aaff7539</color>
     <color name="button_color">#44ff7539</color>
 </resources>
