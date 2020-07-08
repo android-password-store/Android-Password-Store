@@ -33,10 +33,10 @@ class PasswordExportService : Service() {
                 ACTION_EXPORT_PASSWORD -> {
                     val uri = intent.getParcelableExtra<Uri>("uri")
 
-                    if (uri is Uri) {
+                    if (uri != null) {
                         val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 
-                        if (targetDirectory is DocumentFile) {
+                        if (targetDirectory != null) {
                             createNotification()
                             scope.launch {
                                 exportPasswords(targetDirectory)
