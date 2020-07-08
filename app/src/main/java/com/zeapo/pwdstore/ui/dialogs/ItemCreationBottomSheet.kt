@@ -24,6 +24,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.resolveAttribute
 
 class ItemCreationBottomSheet : BottomSheetDialogFragment() {
+
     private var behavior: BottomSheetBehavior<FrameLayout>? = null
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {

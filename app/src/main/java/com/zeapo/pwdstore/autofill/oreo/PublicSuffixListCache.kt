@@ -12,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import mozilla.components.lib.publicsuffixlist.PublicSuffixList
 
 private object PublicSuffixListCache {
+
     private lateinit var publicSuffixList: PublicSuffixList
 
     fun getOrCachePublicSuffixList(context: Context): PublicSuffixList {

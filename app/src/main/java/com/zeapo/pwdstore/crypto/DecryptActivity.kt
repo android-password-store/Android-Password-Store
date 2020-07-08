@@ -22,6 +22,10 @@ import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
 import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
+import java.io.ByteArrayOutputStream
+import java.io.File
+import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,12 +33,9 @@ import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
-import java.io.ByteArrayOutputStream
-import java.io.File
-import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 
 class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
+
     private val binding by viewBinding(DecryptLayoutBinding::inflate)
 
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }

@@ -43,6 +43,7 @@ class FolderCreationDialogFragment : DialogFragment() {
     }
 
     companion object {
+
         private const val CURRENT_DIR_EXTRA = "CURRENT_DIRECTORY"
         fun newInstance(startingDirectory: String): FolderCreationDialogFragment {
             val extras = bundleOf(CURRENT_DIR_EXTRA to startingDirectory)

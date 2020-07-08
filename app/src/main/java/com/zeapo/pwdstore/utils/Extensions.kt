@@ -26,8 +26,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
-import org.eclipse.jgit.api.Git
 import java.io.File
+import org.eclipse.jgit.api.Git
 
 fun Int.clearFlag(flag: Int): Int {
     return this and flag.inv()

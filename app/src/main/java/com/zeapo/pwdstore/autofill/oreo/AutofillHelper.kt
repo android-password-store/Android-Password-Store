@@ -89,6 +89,7 @@ val AssistStructure.ViewNode.webOrigin: String?
 
 data class Credentials(val username: String?, val password: String?, val otp: String?) {
     companion object {
+
         fun fromStoreEntry(
             context: Context,
             file: File,

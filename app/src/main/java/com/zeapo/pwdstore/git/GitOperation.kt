@@ -26,6 +26,9 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
+import java.io.File
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
@@ -34,9 +37,6 @@ import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
-import java.io.File
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
 import com.google.android.material.R as materialR
 
 
@@ -245,6 +245,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
     open fun onSuccess() {}
 
     companion object {
+
         const val GET_SSH_KEY_FROM_CLONE = 201
     }
 }

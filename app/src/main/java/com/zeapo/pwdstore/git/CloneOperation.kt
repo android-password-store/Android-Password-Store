@@ -8,9 +8,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import java.io.File
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
-import java.io.File
 
 /**
  * Creates a new clone operation

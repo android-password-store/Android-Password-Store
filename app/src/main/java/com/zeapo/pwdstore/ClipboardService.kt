@@ -153,6 +153,7 @@ class ClipboardService : Service() {
     }
 
     companion object {
+
         private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
         const val ACTION_START = "ACTION_START_CLIPBOARD_TIMER"
         private const val CHANNEL_ID = "NotificationService"

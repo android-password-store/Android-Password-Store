@@ -109,6 +109,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
     }
 
     companion object {
+
         const val PREF_KEY_CAPITALS_STYLE = "pref_key_capitals_style"
         const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
         const val PREF_KEY_SEPARATOR = "pref_key_separator"

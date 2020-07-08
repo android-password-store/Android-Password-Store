@@ -12,6 +12,7 @@ enum class ConnectionMode(val pref: String) {
     ;
 
     companion object {
+
         private val map = values().associateBy(ConnectionMode::pref)
         fun fromString(type: String?): ConnectionMode {
             return map[type ?: return SshKey]

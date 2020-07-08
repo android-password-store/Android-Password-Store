@@ -14,6 +14,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 
 
 class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
+
     private lateinit var passwordList: SelectFolderFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {

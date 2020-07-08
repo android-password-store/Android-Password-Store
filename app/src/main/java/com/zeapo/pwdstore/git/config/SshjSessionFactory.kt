@@ -8,6 +8,14 @@ import android.util.Base64
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import com.zeapo.pwdstore.utils.clear
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.security.GeneralSecurityException
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.SSHClient
@@ -26,23 +34,17 @@ import org.eclipse.jgit.transport.RemoteSession
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.security.GeneralSecurityException
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
 
 sealed class SshAuthData {
     class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData() {
+
         override fun clearCredentials() {
             passwordFinder.clearPasswords()
         }
     }
 
     class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData() {
+
         override fun clearCredentials() {
             passphraseFinder.clearPasswords()
         }

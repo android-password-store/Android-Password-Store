@@ -31,6 +31,10 @@ import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import java.io.File
+import java.text.Collator
+import java.util.Locale
+import java.util.Stack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -45,10 +49,6 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
-import java.io.File
-import java.text.Collator
-import java.util.Locale
-import java.util.Stack
 
 private fun File.toPasswordItem(root: File) = if (isFile)
     PasswordItem.newPassword(name, this, root)
@@ -380,6 +380,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 }
 
 private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() {
+
     override fun areItemsTheSame(oldItem: PasswordItem, newItem: PasswordItem) =
         oldItem.file.absolutePath == newItem.file.absolutePath
 

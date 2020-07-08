@@ -106,6 +106,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     companion object {
+
         val USERNAME_FIELDS = arrayOf(
             "login:",
             "username:",

@@ -6,7 +6,6 @@
 package com.zeapo.pwdstore.utils
 
 import com.github.ajalt.timberkt.e
-import org.apache.commons.codec.binary.Base32
 import java.nio.ByteBuffer
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
@@ -14,8 +13,10 @@ import java.util.Locale
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
+import org.apache.commons.codec.binary.Base32
 
 object Otp {
+
     private val BASE_32 = Base32()
     private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
 

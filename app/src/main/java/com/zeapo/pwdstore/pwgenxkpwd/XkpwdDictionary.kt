@@ -11,6 +11,7 @@ import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 
 class XkpwdDictionary(context: Context) {
+
     val words: Map<Int, List<String>>
 
     init {
@@ -32,6 +33,7 @@ class XkpwdDictionary(context: Context) {
     }
 
     companion object {
+
         const val XKPWD_CUSTOM_DICT_FILE = "custom_dict.txt"
     }
 }
