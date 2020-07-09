@@ -16,51 +16,32 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.TimeZone
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PasswordExportService : Service() {
-
-    private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             when (intent.action) {
                 ACTION_EXPORT_PASSWORD -> {
                     val uri = intent.getParcelableExtra<Uri>("uri")
-
                     if (uri != null) {
                         val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 
                         if (targetDirectory != null) {
                             createNotification()
-                            scope.launch {
-                                exportPasswords(targetDirectory)
-                                withContext(Dispatchers.Main) {
-                                    stopSelf()
-                                    return@withContext START_NOT_STICKY
-                                }
-                            }
+                            exportPasswords(targetDirectory)
+                            stopSelf()
+                            return START_NOT_STICKY
                         }
                     }
                 }
             }
         }
-
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
-    }
-
-    override fun onDestroy() {
-        scope.cancel()
-        super.onDestroy()
     }
 
     /**
@@ -88,9 +69,7 @@ class PasswordExportService : Service() {
         val passDir = targetDirectory.createDirectory("password_store_$dateString")
 
         if (passDir != null) {
-            scope.launch {
-                copyDirToDir(sourcePassDir, passDir)
-            }
+            copyDirToDir(sourcePassDir, passDir)
         }
     }
 
@@ -124,16 +103,14 @@ class PasswordExportService : Service() {
      *  @param sourceDirectory directory to copy from.
      *  @param targetDirectory directory to copy to.
      */
-    private suspend fun copyDirToDir(sourceDirectory: DocumentFile, targetDirectory: DocumentFile) {
-        withContext(Dispatchers.IO) {
-            sourceDirectory.listFiles().forEach { file ->
-                if (file.isDirectory) {
-                    // Create new directory and recurse
-                    val newDir = targetDirectory.createDirectory(file.name!!)
-                    copyDirToDir(file, newDir!!)
-                } else {
-                    copyFileToDir(file, targetDirectory)
-                }
+    private fun copyDirToDir(sourceDirectory: DocumentFile, targetDirectory: DocumentFile) {
+        sourceDirectory.listFiles().forEach { file ->
+            if (file.isDirectory) {
+                // Create new directory and recurse
+                val newDir = targetDirectory.createDirectory(file.name!!)
+                copyDirToDir(file, newDir!!)
+            } else {
+                copyFileToDir(file, targetDirectory)
             }
         }
     }
