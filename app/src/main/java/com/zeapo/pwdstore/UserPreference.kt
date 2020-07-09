@@ -59,11 +59,7 @@ import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.io.IOException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.HashSet
-import java.util.TimeZone
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 
 typealias ClickListener = Preference.OnPreferenceClickListener
@@ -643,6 +639,13 @@ class UserPreference : AppCompatActivity() {
      * Exports the passwords
      */
     private fun exportPasswords() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+        }
+
         registerForActivityResult(StartActivityForResult()) { result ->
             if (!validateResult(result)) return@registerForActivityResult
             val uri = result.data?.data
@@ -651,10 +654,19 @@ class UserPreference : AppCompatActivity() {
                 val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 
                 if (targetDirectory != null) {
-                    exportPasswords(targetDirectory)
+                    val service = Intent(applicationContext, PasswordExportService::class.java).apply {
+                        action = PasswordExportService.ACTION_EXPORT_PASSWORD
+                        putExtra("uri", uri)
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(service)
+                    } else {
+                        startService(service)
+                    }
                 }
             }
-        }.launch(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
+        }.launch(intent)
     }
 
     /**
@@ -771,77 +783,6 @@ class UserPreference : AppCompatActivity() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
             return autofillManager?.hasEnabledAutofillServices() == true
         }
-
-    /**
-     * Exports passwords to the given directory.
-     *
-     * Recursively copies the existing password store to an external directory.
-     *
-     * @param targetDirectory directory to copy password directory to.
-     */
-    private fun exportPasswords(targetDirectory: DocumentFile) {
-
-        val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory(applicationContext))
-        val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
-
-        tag(TAG).d { "Copying ${repositoryDirectory.path} to $targetDirectory" }
-
-        val dateString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime
-                .now()
-                .format(DateTimeFormatter.ISO_DATE_TIME)
-        } else {
-            String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")))
-        }
-
-        val passDir = targetDirectory.createDirectory("password_store_$dateString")
-
-        if (passDir != null) {
-            copyDirToDir(sourcePassDir, passDir)
-        }
-    }
-
-    /**
-     * Copies a password file to a given directory.
-     *
-     * Note: this does not preserve last modified time.
-     *
-     * @param passwordFile password file to copy.
-     * @param targetDirectory target directory to copy password.
-     */
-    private fun copyFileToDir(passwordFile: DocumentFile, targetDirectory: DocumentFile) {
-        val sourceInputStream = contentResolver.openInputStream(passwordFile.uri)
-        val name = passwordFile.name
-        val targetPasswordFile = targetDirectory.createFile("application/octet-stream", name!!)
-        if (targetPasswordFile?.exists() == true) {
-            val destOutputStream = contentResolver.openOutputStream(targetPasswordFile.uri)
-
-            if (destOutputStream != null && sourceInputStream != null) {
-                sourceInputStream.copyTo(destOutputStream, 1024)
-
-                sourceInputStream.close()
-                destOutputStream.close()
-            }
-        }
-    }
-
-    /**
-     * Recursively copies a directory to a destination.
-     *
-     *  @param sourceDirectory directory to copy from.
-     *  @param sourceDirectory directory to copy to.
-     */
-    private fun copyDirToDir(sourceDirectory: DocumentFile, targetDirectory: DocumentFile) {
-        sourceDirectory.listFiles().forEach { file ->
-            if (file.isDirectory) {
-                // Create new directory and recurse
-                val newDir = targetDirectory.createDirectory(file.name!!)
-                copyDirToDir(file, newDir!!)
-            } else {
-                copyFileToDir(file, targetDirectory)
-            }
-        }
-    }
 
     companion object {
 
