@@ -116,6 +116,9 @@
             android:name=".ClipboardService"
             android:process=":clipboard_service_process" />
         <service
+            android:name=".PasswordExportService"
+            android:process=":password_export_service_process" />
+        <service
             android:name=".autofill.oreo.OreoAutofillService"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
