@@ -11,7 +11,10 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -51,8 +54,13 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val editing by lazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
-    private var oldCategory: String? = null
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
+    private var oldCategory: String? = null
+    private var copy: Boolean = false
+
+    private val userInteractionRequiredResult: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(StartIntentSenderForResult()) {
+        encrypt()
+    }
 
     private fun File.findTillRoot(fileName: String, rootPath: File): File? {
         val gpgFile = File(this, fileName)
@@ -187,8 +195,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 setResult(RESULT_CANCELED)
                 finish()
             }
-            R.id.save_password -> encrypt()
-            R.id.save_and_copy_password -> encrypt(copy = true)
+            R.id.save_password -> {
+                copy = false
+                encrypt()
+            }
+            R.id.save_and_copy_password -> {
+                copy = true
+                encrypt()
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -220,7 +234,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt(copy: Boolean = false) = with(binding) {
+    private fun encrypt() = with(binding) {
         val editName = filename.text.toString().trim()
         val editPass = password.text.toString()
         val editExtra = extraContent.text.toString()
@@ -249,7 +263,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             snackbar(message = resources.getString(R.string.failed_to_find_key_id))
             return@with
         }
-        data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyIdFile.readText()))
+        val keyId = keyIdFile.readText()
+        if (keyId.toLongOrNull() != null) {
+            data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyId.toLong()))
+        } else {
+            data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(keyId))
+        }
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
         val content = "$editPass\n$editExtra"
@@ -361,6 +380,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         } catch (e: Exception) {
                             e(e) { "An Exception occurred" }
                         }
+                    }
+                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+                        val sender = getUserInteractionRequestIntent(result)
+                        userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
                     }
                     OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
                 }
