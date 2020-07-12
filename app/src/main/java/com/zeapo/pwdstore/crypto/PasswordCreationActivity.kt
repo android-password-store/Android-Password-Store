@@ -58,8 +58,20 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private var oldCategory: String? = null
     private var copy: Boolean = false
 
-    private val userInteractionRequiredResult: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(StartIntentSenderForResult()) {
-        encrypt()
+    private val userInteractionRequiredResult: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(StartIntentSenderForResult()) { result ->
+        if (result.data == null) {
+            setResult(RESULT_CANCELED, null)
+            finish()
+            return@registerForActivityResult
+        }
+
+        when (result.resultCode) {
+            RESULT_OK -> encrypt(result.data)
+            RESULT_CANCELED -> {
+                setResult(RESULT_CANCELED, result.data)
+                finish()
+            }
+        }
     }
 
     private fun File.findTillRoot(fileName: String, rootPath: File): File? {
@@ -234,7 +246,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt() = with(binding) {
+    private fun encrypt(receivedIntent: Intent? = null) = with(binding) {
         val editName = filename.text.toString().trim()
         val editPass = password.text.toString()
         val editExtra = extraContent.text.toString()
@@ -253,7 +265,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             copyPasswordToClipboard(editPass)
         }
 
-        val data = Intent()
+        val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_ENCRYPT
 
         // pass enters the key ID into `.gpg-id`.
