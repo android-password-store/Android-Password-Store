@@ -276,9 +276,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             return@with
         }
         val keyId = keyIdFile.readText()
-        if (keyId.toLongOrNull() != null) {
+        if (keyId.toLongOrNull(radix = 16) != null) {
             // Being able to parse a Long out of the key text means it's a key ID
-            data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyId.toLong()))
+            data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyId.toLong(radix = 16)))
         } else {
             // Otherwise, it's an email - a user ID.
             data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(keyId))
