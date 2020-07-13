@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 -   A brand new icon to go with our biggest update ever!
 -   Light theme is now a consistent white across the board with ample contrast
 -   XkPassword generator is now easier to use with less configuration options
+-   Edit screen now has better protection and guidance for invalid names
 
 ### Fixed
 
