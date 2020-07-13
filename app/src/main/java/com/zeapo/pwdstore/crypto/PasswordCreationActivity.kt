@@ -287,6 +287,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         finish()
                                     }
                                     .show()
+                                return@executeApiAsync
                             }
 
                             val returnIntent = Intent()
