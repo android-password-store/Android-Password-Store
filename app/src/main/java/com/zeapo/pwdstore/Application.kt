@@ -24,7 +24,6 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     override fun onCreate() {
         super.onCreate()
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        plant(DebugTree())
         if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs?.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false) ==
             true) {
             plant(DebugTree())
