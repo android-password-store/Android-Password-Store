@@ -89,7 +89,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 )
             }
 
-            category.apply {
+            directoryInputLayout.apply {
                 if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
                     isEnabled = true
                 } else {
@@ -100,7 +100,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 if (path.isEmpty() && !isEnabled)
                     visibility = View.GONE
                 else {
-                    setText(path)
+                    directory.setText(path)
                     oldCategory = path
                 }
             }
@@ -213,6 +213,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         if (editName.isEmpty()) {
             snackbar(message = resources.getString(R.string.file_toast_text))
             return@with
+        } else if (editName.contains('/')) {
+            snackbar(message = resources.getString(R.string.invalid_filename_text))
+            return@with
         }
 
         if (editPass.isEmpty() && editExtra.isEmpty()) {
@@ -239,8 +242,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val path = when {
             // If we allowed the user to edit the relative path, we have to consider it here instead
             // of fullPath.
-            category.isEnabled -> {
-                val editRelativePath = category.text.toString().trim()
+            directoryInputLayout.isEnabled -> {
+                val editRelativePath = directory.text.toString().trim()
                 if (editRelativePath.isEmpty()) {
                     snackbar(message = resources.getString(R.string.path_toast_text))
                     return
@@ -272,6 +275,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 snackbar(message = getString(R.string.message_error_destination_outside_repo))
                                 return@executeApiAsync
                             }
+
                             try {
                                 file.outputStream().use {
                                     it.write(outputStream.toByteArray())
@@ -318,7 +322,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 }
                             }
 
-                            if (category.isVisible && category.isEnabled && oldFileName != null) {
+                            if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
                                 val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
                                 if (oldFile.path != file.path && !oldFile.delete()) {
                                     setResult(RESULT_CANCELED)

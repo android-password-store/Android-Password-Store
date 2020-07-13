@@ -401,4 +401,6 @@
     <string name="oreo_autofill_chrome_compat_fix_preference_title">Improve reliability in Chrome</string>
     <string name="oreo_autofill_chrome_compat_fix_preference_summary">Requires activating an accessibility service and may affect overall Chrome performance</string>
     <string name="exporting_passwords">Exporting passwords…</string>
+    <string name="invalid_filename_text">File name must not contain \'/\', use category to set directory</string>
+    <string name="directory_hint">Directory</string>
 </resources>
