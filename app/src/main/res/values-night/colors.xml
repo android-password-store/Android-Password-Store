@@ -5,16 +5,14 @@
 
 <resources>
     <!-- Base palette -->
-    <color name="primary_color">#FF111111</color>
-    <color name="primary_light_color">#FF373737</color>
-    <color name="primary_dark_color">#FF000000</color>
-    <color name="secondary_color">#FFFF7539</color>
-    <color name="primary_text_color">#FFFFFFFF</color>
+    <color name="primary_color">#ff111111</color>
+    <color name="primary_light_color">#ff373737</color>
+    <color name="primary_dark_color">#ff000000</color>
+    <color name="secondary_color">#ff3b6888</color>
+    <color name="primary_text_color">#ffffffff</color>
 
     <!-- Theme variables -->
-    <color name="navigation_bar_color">@color/primary_color</color>
-    <color name="list_multiselect_background">#66EEEEEE</color>
-    <color name="status_bar_color">@color/primary_color</color>
-    <color name="ripple_color">#aaff7539</color>
-    <color name="button_color">#44ff7539</color>
+    <color name="list_multiselect_background">#66eeeeee</color>
+    <color name="ripple_color">#aa3b6888</color>
+    <color name="button_color">#443b6888</color>
 </resources>
