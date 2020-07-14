@@ -4,5 +4,5 @@
   -->
 
 <resources>
-    <bool name="enable_chrome_compat_fix">true</bool>
+    <color name="navigation_bar_color">#000000</color>
 </resources>

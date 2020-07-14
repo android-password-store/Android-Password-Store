@@ -24,6 +24,7 @@ import com.zeapo.pwdstore.utils.autofillManager
 class ChromeCompatFix : AccessibilityService() {
 
     companion object {
+
         fun setStatusInPreferences(context: Context, enabled: Boolean) {
             PreferenceManager.getDefaultSharedPreferences(context).edit {
                 putBoolean(PreferenceKeys.OREO_AUTOFILL_CHROME_COMPAT_FIX, enabled)

@@ -6,7 +6,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="APSTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorOnPrimary">@color/color_control_normal</item>
         <item name="colorPrimaryDark">@color/primary_color</item>
@@ -29,6 +29,8 @@
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="textInputStyle">@style/AppTheme.TextInputLayout</item>
     </style>
+
+    <style name="AppTheme" parent="APSTheme" />
 
     <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/outlined_box_selector</item>
