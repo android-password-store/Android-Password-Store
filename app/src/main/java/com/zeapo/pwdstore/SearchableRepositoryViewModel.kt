@@ -30,6 +30,11 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
+import java.io.File
+import java.text.Collator
+import java.util.Locale
+import java.util.Stack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -44,10 +49,6 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
-import java.io.File
-import java.text.Collator
-import java.util.Locale
-import java.util.Stack
 
 private fun File.toPasswordItem(root: File) = if (isFile)
     PasswordItem.newPassword(name, this, root)
@@ -140,9 +141,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         get() = PasswordRepository.getRepositoryDirectory(getApplication())
     private val settings = PreferenceManager.getDefaultSharedPreferences(getApplication())
     private val showHiddenDirs
-        get() = settings.getBoolean("show_hidden_folders", false)
+        get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
     private val defaultSearchMode
-        get() = if (settings.getBoolean("filter_recursively", true)) {
+        get() = if (settings.getBoolean(PreferenceKeys.FILTER_RECURSIVELY, true)) {
             SearchMode.RecursivelyInSubdirectories
         } else {
             SearchMode.InCurrentDirectoryOnly
@@ -291,6 +292,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         recyclerViewState: Parcelable? = null,
         pushPreviousLocation: Boolean = true
     ) {
+        if (!newDirectory.exists()) return
         require(newDirectory.isDirectory) { "Can only navigate to a directory" }
         if (pushPreviousLocation) {
             navigationStack.push(NavigationStackEntry(_currentDir.value!!, recyclerViewState))
@@ -378,6 +380,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 }
 
 private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() {
+
     override fun areItemsTheSame(oldItem: PasswordItem, newItem: PasswordItem) =
         oldItem.file.absolutePath == newItem.file.absolutePath
 
@@ -444,6 +447,8 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
         val root = PasswordRepository.getRepositoryDirectory(context)
         return selectedFiles.map { it.toPasswordItem(root) }
     }
+
+    fun getPositionForFile(file: File) = itemKeyProvider.getPosition(file.absolutePath)
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val view = LayoutInflater.from(parent.context)

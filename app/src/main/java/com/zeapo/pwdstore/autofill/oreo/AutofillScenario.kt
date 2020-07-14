@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.e
 
 enum class AutofillAction {
-    Match, Search, Generate
+    Match, Search, Generate, FillOtpFromSms
 }
 
 /**
@@ -27,8 +27,10 @@ enum class AutofillAction {
 sealed class AutofillScenario<out T : Any> {
 
     companion object {
+
         const val BUNDLE_KEY_USERNAME_ID = "usernameId"
         const val BUNDLE_KEY_FILL_USERNAME = "fillUsername"
+        const val BUNDLE_KEY_OTP_ID = "otpId"
         const val BUNDLE_KEY_CURRENT_PASSWORD_IDS = "currentPasswordIds"
         const val BUNDLE_KEY_NEW_PASSWORD_IDS = "newPasswordIds"
         const val BUNDLE_KEY_GENERIC_PASSWORD_IDS = "genericPasswordIds"
@@ -38,6 +40,7 @@ sealed class AutofillScenario<out T : Any> {
                 Builder<AutofillId>().apply {
                     username = clientState.getParcelable(BUNDLE_KEY_USERNAME_ID)
                     fillUsername = clientState.getBoolean(BUNDLE_KEY_FILL_USERNAME)
+                    otp = clientState.getParcelable(BUNDLE_KEY_OTP_ID)
                     currentPassword.addAll(
                         clientState.getParcelableArrayList(
                             BUNDLE_KEY_CURRENT_PASSWORD_IDS
@@ -62,8 +65,10 @@ sealed class AutofillScenario<out T : Any> {
     }
 
     class Builder<T : Any> {
+
         var username: T? = null
         var fillUsername = false
+        var otp: T? = null
         val currentPassword = mutableListOf<T>()
         val newPassword = mutableListOf<T>()
         val genericPassword = mutableListOf<T>()
@@ -74,6 +79,7 @@ sealed class AutofillScenario<out T : Any> {
                 ClassifiedAutofillScenario(
                     username = username,
                     fillUsername = fillUsername,
+                    otp = otp,
                     currentPassword = currentPassword,
                     newPassword = newPassword
                 )
@@ -81,6 +87,7 @@ sealed class AutofillScenario<out T : Any> {
                 GenericAutofillScenario(
                     username = username,
                     fillUsername = fillUsername,
+                    otp = otp,
                     genericPassword = genericPassword
                 )
             }
@@ -89,6 +96,7 @@ sealed class AutofillScenario<out T : Any> {
 
     abstract val username: T?
     abstract val fillUsername: Boolean
+    abstract val otp: T?
     abstract val allPasswordFields: List<T>
     abstract val passwordFieldsToFillOnMatch: List<T>
     abstract val passwordFieldsToFillOnSearch: List<T>
@@ -99,19 +107,24 @@ sealed class AutofillScenario<out T : Any> {
         get() = listOfNotNull(username) + passwordFieldsToSave
 
     val allFields
-        get() = listOfNotNull(username) + allPasswordFields
+        get() = listOfNotNull(username, otp) + allPasswordFields
 
     fun fieldsToFillOn(action: AutofillAction): List<T> {
-        val passwordFieldsToFill = when (action) {
-            AutofillAction.Match -> passwordFieldsToFillOnMatch
-            AutofillAction.Search -> passwordFieldsToFillOnSearch
+        val credentialFieldsToFill = when (action) {
+            AutofillAction.Match -> passwordFieldsToFillOnMatch + listOfNotNull(otp)
+            AutofillAction.Search -> passwordFieldsToFillOnSearch + listOfNotNull(otp)
             AutofillAction.Generate -> passwordFieldsToFillOnGenerate
+            AutofillAction.FillOtpFromSms -> listOfNotNull(otp)
         }
         return when {
-            passwordFieldsToFill.isNotEmpty() -> {
+            action == AutofillAction.FillOtpFromSms -> {
+                // When filling from an SMS, we cannot get any data other than the OTP itself.
+                credentialFieldsToFill
+            }
+            credentialFieldsToFill.isNotEmpty() -> {
                 // If the current action would fill into any password field, we also fill into the
                 // username field if possible.
-                listOfNotNull(username.takeIf { fillUsername }) + passwordFieldsToFill
+                listOfNotNull(username.takeIf { fillUsername }) + credentialFieldsToFill
             }
             allPasswordFields.isEmpty() && action != AutofillAction.Generate -> {
                 // If there no password fields at all, we still offer to fill the username, e.g. in
@@ -127,6 +140,7 @@ sealed class AutofillScenario<out T : Any> {
 data class ClassifiedAutofillScenario<T : Any>(
     override val username: T?,
     override val fillUsername: Boolean,
+    override val otp: T?,
     val currentPassword: List<T>,
     val newPassword: List<T>
 ) : AutofillScenario<T>() {
@@ -147,6 +161,7 @@ data class ClassifiedAutofillScenario<T : Any>(
 data class GenericAutofillScenario<T : Any>(
     override val username: T?,
     override val fillUsername: Boolean,
+    override val otp: T?,
     val genericPassword: List<T>
 ) : AutofillScenario<T>() {
 
@@ -183,14 +198,15 @@ fun Dataset.Builder.fillWith(
 ) {
     val credentialsToFill = credentials ?: Credentials(
         "USERNAME",
-        "PASSWORD"
+        "PASSWORD",
+        "OTP"
     )
     for (field in scenario.fieldsToFillOn(action)) {
-        val value = if (field == scenario.username) {
-            credentialsToFill.username
-        } else {
-            credentialsToFill.password
-        } ?: continue
+        val value = when (field) {
+            scenario.username -> credentialsToFill.username
+            scenario.otp -> credentialsToFill.otp
+            else -> credentialsToFill.password
+        }
         setValue(field, AutofillValue.forText(value))
     }
 }
@@ -209,6 +225,7 @@ inline fun <T : Any, S : Any> AutofillScenario<T>.map(transform: (T) -> S): Auto
     val builder = AutofillScenario.Builder<S>()
     builder.username = username?.let(transform)
     builder.fillUsername = fillUsername
+    builder.otp = otp?.let(transform)
     when (this) {
         is ClassifiedAutofillScenario -> {
             builder.currentPassword.addAll(currentPassword.map(transform))
@@ -225,9 +242,10 @@ inline fun <T : Any, S : Any> AutofillScenario<T>.map(transform: (T) -> S): Auto
 @JvmName("toBundleAutofillId")
 private fun AutofillScenario<AutofillId>.toBundle(): Bundle = when (this) {
     is ClassifiedAutofillScenario<AutofillId> -> {
-        Bundle(4).apply {
+        Bundle(5).apply {
             putParcelable(AutofillScenario.BUNDLE_KEY_USERNAME_ID, username)
             putBoolean(AutofillScenario.BUNDLE_KEY_FILL_USERNAME, fillUsername)
+            putParcelable(AutofillScenario.BUNDLE_KEY_OTP_ID, otp)
             putParcelableArrayList(
                 AutofillScenario.BUNDLE_KEY_CURRENT_PASSWORD_IDS, ArrayList(currentPassword)
             )
@@ -237,9 +255,10 @@ private fun AutofillScenario<AutofillId>.toBundle(): Bundle = when (this) {
         }
     }
     is GenericAutofillScenario<AutofillId> -> {
-        Bundle(3).apply {
+        Bundle(4).apply {
             putParcelable(AutofillScenario.BUNDLE_KEY_USERNAME_ID, username)
             putBoolean(AutofillScenario.BUNDLE_KEY_FILL_USERNAME, fillUsername)
+            putParcelable(AutofillScenario.BUNDLE_KEY_OTP_ID, otp)
             putParcelableArrayList(
                 AutofillScenario.BUNDLE_KEY_GENERIC_PASSWORD_IDS, ArrayList(genericPassword)
             )

@@ -16,6 +16,7 @@ import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.R
 
 object BiometricAuthenticator {
+
     private const val TAG = "BiometricAuthenticator"
     private val handler = Handler()
 

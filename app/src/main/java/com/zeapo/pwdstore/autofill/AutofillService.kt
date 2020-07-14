@@ -2,6 +2,8 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+@file:Suppress("Deprecation")
+
 package com.zeapo.pwdstore.autofill
 
 import android.accessibilityservice.AccessibilityService
@@ -28,19 +30,11 @@ import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.splitLines
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.msfjarvis.openpgpktx.util.OpenPgpApi
-import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import org.openintents.openpgp.IOpenPgpService2
-import org.openintents.openpgp.OpenPgpError
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -50,8 +44,18 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.msfjarvis.openpgpktx.util.OpenPgpApi
+import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import org.openintents.openpgp.IOpenPgpService2
+import org.openintents.openpgp.OpenPgpError
 
 class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
+
     private var serviceConnection: OpenPgpServiceConnection? = null
     private var settings: SharedPreferences? = null
     private var info: AccessibilityNodeInfo? = null // the original source of the event (the edittext field)
@@ -228,7 +232,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
         // if autofill_always checked, show dialog even if no matches (automatic
         // or otherwise)
-        if (items.isEmpty() && !settings!!.getBoolean("autofill_always", false)) {
+        if (items.isEmpty() && !settings!!.getBoolean(PreferenceKeys.AUTOFILL_ALWAYS, false)) {
             return
         }
         showSelectPasswordDialog(packageName, appName, isWeb)
@@ -268,7 +272,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         var settingsURL = webViewURL
 
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
-        val defValue = if (settings!!.getBoolean("autofill_default", true)) "/first" else "/never"
+        val defValue = if (settings!!.getBoolean(PreferenceKeys.AUTOFILL_DEFAULT, true)) "/first" else "/never"
         val prefs: SharedPreferences = getSharedPreferences("autofill_web", Context.MODE_PRIVATE)
         var preference: String
 
@@ -305,7 +309,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
 
     private fun setAppMatchingPasswords(appName: String, packageName: String) {
         // if autofill_default is checked and prefs.getString DNE, 'Automatically match with password'/"first" otherwise "never"
-        val defValue = if (settings!!.getBoolean("autofill_default", true)) "/first" else "/never"
+        val defValue = if (settings!!.getBoolean(PreferenceKeys.AUTOFILL_DEFAULT, true)) "/first" else "/never"
         val prefs: SharedPreferences = getSharedPreferences("autofill", Context.MODE_PRIVATE)
         val preference: String?
 
@@ -414,7 +418,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         // make it optional (or make height a setting for the same effect)
         val itemNames = arrayOfNulls<CharSequence>(items.size + 2)
         val passwordDirectory = PasswordRepository.getRepositoryDirectory(applicationContext).toString()
-        val autofillFullPath = settings!!.getBoolean("autofill_full_path", false)
+        val autofillFullPath = settings!!.getBoolean(PreferenceKeys.AUTOFILL_FULL_PATH, false)
         for (i in items.indices) {
             if (autofillFullPath) {
                 itemNames[i] = items[i].path.replace(".gpg", "")
@@ -518,7 +522,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
                     // save password entry for pasting the username as well
                     if (entry?.hasUsername() == true) {
                         lastPassword = entry
-                        val ttl = Integer.parseInt(settings!!.getString("general_show_time", "45")!!)
+                        val ttl = Integer.parseInt(settings!!.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")!!)
                         withContext(Dispatchers.Main) { Toast.makeText(applicationContext, getString(R.string.autofill_toast_username, ttl), Toast.LENGTH_LONG).show() }
                         lastPasswordMaxDate = System.currentTimeMillis() + ttl * 1000L
                     }
@@ -557,10 +561,12 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
     }
 
     internal object Constants {
+
         const val TAG = "Keychain"
     }
 
     private inner class OnBoundListener : OpenPgpServiceConnection.OnBound {
+
         override fun onBound(service: IOpenPgpService2) {
             decryptAndVerify()
         }
@@ -571,6 +577,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
     }
 
     companion object {
+
         var instance: AutofillService? = null
             private set
     }

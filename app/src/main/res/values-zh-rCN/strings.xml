@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">Repo 信息</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">在尝试添加密码或任何同步操作前请在下方克隆或添加一个新的 Repo</string>
-    <string name="delete_dialog_text">你确定要删除密码 %1$s</string>
     <string name="delete">删除</string>
     <!-- git commits -->
     <string name="git_commit_add_text">使用Android Password Store来添加 %1$s</string>

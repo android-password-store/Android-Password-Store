@@ -5,16 +5,16 @@
 package com.zeapo.pwdstore.git
 
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import java.io.File
 import org.eclipse.jgit.api.AddCommand
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.StatusCommand
-import java.io.File
 
 /**
  * Creates a new git operation
@@ -22,7 +22,7 @@ import java.io.File
  * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
-class SyncOperation(fileDir: File, callingActivity: FragmentActivity) : GitOperation(fileDir, callingActivity) {
+class SyncOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     private var addCommand: AddCommand? = null
     private var statusCommand: StatusCommand? = null
@@ -50,7 +50,7 @@ class SyncOperation(fileDir: File, callingActivity: FragmentActivity) : GitOpera
             this.pullCommand?.setCredentialsProvider(this.provider)
             this.pushCommand?.setCredentialsProvider(this.provider)
         }
-        GitAsyncTask(callingActivity, false, this, Intent()).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
+        GitAsyncTask(callingActivity, this, Intent()).execute(this.addCommand, this.statusCommand, this.commitCommand, this.pullCommand, this.pushCommand)
     }
 
     override fun onError(err: Exception) {

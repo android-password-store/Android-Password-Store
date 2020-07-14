@@ -16,7 +16,7 @@ android {
     if (isSnapshot()) {
         android.applicationVariants.all { final variant ->
             variant.outputs.all {
-                outputFileName = "aps_${defaultConfig.versionName}.apk"
+                outputFileName = "aps-${variant.getFlavorName()}_${defaultConfig.versionName}.apk"
             }
         }
     }
@@ -25,8 +25,8 @@ android {
 
     defaultConfig {
         applicationId 'dev.msfjarvis.aps'
-        versionCode 10802
-        versionName '1.9.0-SNAPSHOT'
+        versionCode 10921
+        versionName '1.10.0-SNAPSHOT'
     }
 
     lintOptions {
@@ -68,11 +68,21 @@ android {
         buildTypes.release.signingConfig = signingConfigs.release
         buildTypes.debug.signingConfig = signingConfigs.release
     }
+
+    flavorDimensions "free"
+    productFlavors {
+        free {
+            versionNameSuffix "-free"
+        }
+        nonFree {
+        }
+    }
 }
 
 dependencies {
-    implementation deps.androidx.annotation
     implementation deps.androidx.activity_ktx
+    implementation deps.androidx.annotation
+    implementation deps.androidx.autofill
     implementation deps.androidx.appcompat
     implementation deps.androidx.biometric
     implementation deps.androidx.constraint_layout
@@ -92,6 +102,10 @@ dependencies {
     implementation deps.kotlin.coroutines.android
     implementation deps.kotlin.coroutines.core
 
+    implementation deps.first_party.openpgp_ktx
+    implementation deps.first_party.zxing_android_embedded
+
+    implementation deps.third_party.commons_codec
     implementation deps.third_party.fastscroll
     implementation(deps.third_party.jgit) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
@@ -103,7 +117,6 @@ dependencies {
     implementation deps.third_party.bouncycastle
     implementation deps.third_party.bouncycastle_pkix
     implementation deps.third_party.plumber
-    implementation deps.third_party.openpgp_ktx
     implementation deps.third_party.ssh_auth
     implementation deps.third_party.timber
     implementation deps.third_party.timberkt
@@ -115,6 +128,8 @@ dependencies {
         debugImplementation deps.third_party.leakcanary
         debugImplementation deps.third_party.whatthestack
     }
+
+    nonFreeImplementation deps.non_free.google_play_auth_api_phone
 
     // Testing-only dependencies
     androidTestImplementation deps.testing.junit

@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">リポジトリ情報</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">パスワードや同期操作を追加する前に、以下の新しいリポジトリをクローンまたは作成してください。</string>
-    <string name="delete_dialog_text">パスワードを削除してもよろしいですか %1$s</string>
     <string name="delete">削除</string>
     <!-- git commits -->
     <string name="git_commit_add_text">追加 %1$s ストアから。</string>

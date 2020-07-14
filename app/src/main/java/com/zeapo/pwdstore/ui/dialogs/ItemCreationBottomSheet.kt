@@ -11,15 +11,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.zeapo.pwdstore.PasswordFragment
+import com.zeapo.pwdstore.PasswordFragment.Companion.ACTION_FOLDER
+import com.zeapo.pwdstore.PasswordFragment.Companion.ACTION_KEY
+import com.zeapo.pwdstore.PasswordFragment.Companion.ACTION_PASSWORD
+import com.zeapo.pwdstore.PasswordFragment.Companion.ITEM_CREATION_REQUEST_KEY
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.resolveAttribute
 
 class ItemCreationBottomSheet : BottomSheetDialogFragment() {
+
     private var behavior: BottomSheetBehavior<FrameLayout>? = null
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -50,11 +55,11 @@ class ItemCreationBottomSheet : BottomSheetDialogFragment() {
                     addBottomSheetCallback(bottomSheetCallback)
                 }
                 dialog.findViewById<View>(R.id.create_folder)?.setOnClickListener {
-                    (requireTargetFragment() as PasswordFragment).createFolder()
+                    setFragmentResult(ITEM_CREATION_REQUEST_KEY, bundleOf(ACTION_KEY to ACTION_FOLDER))
                     dismiss()
                 }
                 dialog.findViewById<View>(R.id.create_password)?.setOnClickListener {
-                    (requireTargetFragment() as PasswordFragment).createPassword()
+                    setFragmentResult(ITEM_CREATION_REQUEST_KEY, bundleOf(ACTION_KEY to ACTION_PASSWORD))
                     dismiss()
                 }
             }
@@ -68,9 +73,5 @@ class ItemCreationBottomSheet : BottomSheetDialogFragment() {
     override fun dismiss() {
         super.dismiss()
         behavior?.removeBottomSheetCallback(bottomSheetCallback)
-    }
-
-    private fun requireTargetFragment(): Fragment = requireNotNull(targetFragment) {
-        "A target fragment must be set for $this"
     }
 }

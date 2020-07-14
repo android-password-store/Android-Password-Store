@@ -1,13 +1,14 @@
-Simple password manager that is compatible with [https://www.passwordstore.org/
-pass]: Passwords are stored in simple text files which are encrypted with
-OpenPGP.
+<p>Simple password manager that is compatible with <a href="https://www.passwordstore.org/">pass</a>: Passwords are stored in simple text files which are encrypted with OpenPGP.</p>
 
-Requires [[org.sufficientlysecure.keychain]] to encrypt and decrypt passwords.
+<p>Requires <a href="https://f-droid.org/en/packages/org.sufficientlysecure.keychain/">OpenKeychain</a> to encrypt and decrypt passwords.</p>
 
-'''Features:'''
-
-* Clone an existing pass repository or start a new one
-* Create and organize password files
-* Sync with a remote Git repository
-* Decrypt and copy passwords
-* Automatically fill and save credentials in apps and supported browsers
+<p>
+<strong>Features:</strong>
+<ul>
+<li>Clone an existing pass repository or start a new one</li>
+<li>Create and organize password files</li>
+<li>Sync with a remote Git repository</li>
+<li>Decrypt and copy passwords</li>
+<li>Automatically fill and save credentials in apps and supported browsers</li>
+</ul>
+</p>

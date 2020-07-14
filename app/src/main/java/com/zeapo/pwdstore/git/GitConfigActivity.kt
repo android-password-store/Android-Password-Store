@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitConfigBinding
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import org.eclipse.jgit.lib.Constants
 
@@ -58,8 +59,8 @@ class GitConfigActivity : BaseGitActivity() {
                     .show()
             } else {
                 settings.edit {
-                    putString("git_config_user_email", email)
-                    putString("git_config_user_name", name)
+                    putString(PreferenceKeys.GIT_CONFIG_USER_EMAIL, email)
+                    putString(PreferenceKeys.GIT_CONFIG_USER_NAME, name)
                 }
                 PasswordRepository.setUserName(name)
                 PasswordRepository.setUserEmail(email)

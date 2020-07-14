@@ -8,6 +8,14 @@ import android.util.Base64
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import com.zeapo.pwdstore.utils.clear
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.security.GeneralSecurityException
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.SSHClient
@@ -26,28 +34,22 @@ import org.eclipse.jgit.transport.RemoteSession
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.security.GeneralSecurityException
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
 
 sealed class SshAuthData {
     class AndroidKeystoreKey(val keyAlias: String) : SshAuthData() {
         override fun clearCredentials() {}
     }
     class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData() {
+
         override fun clearCredentials() {
-            passwordFinder.clearPassword()
+            passwordFinder.clearPasswords()
         }
     }
 
     class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData() {
+
         override fun clearCredentials() {
-            passphraseFinder.clearPassword()
+            passphraseFinder.clearPasswords()
         }
     }
 
@@ -60,13 +62,14 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 
     private var isRetry = false
     private var lastPassword: CharArray? = null
+    private val rememberToWipe: MutableList<CharArray> = mutableListOf()
 
     fun resetForReuse() {
         isRetry = false
     }
 
-    fun clearPassword() {
-        lastPassword?.clear()
+    fun clearPasswords() {
+        rememberToWipe.forEach { it.clear() }
         lastPassword = null
     }
 
@@ -76,17 +79,20 @@ abstract class InteractivePasswordFinder : PasswordFinder {
             // now being reused for a new one. We try the previous password so that the user
             // does not have to type it again.
             isRetry = true
-            return lastPassword!!
+            return lastPassword!!.clone().also { rememberToWipe.add(it) }
         }
-        clearPassword()
+        clearPasswords()
         val password = runBlocking(Dispatchers.Main) {
             suspendCoroutine<String?> { cont ->
                 askForPassword(cont, isRetry)
             }
         }
         isRetry = true
-        return password?.toCharArray()?.also { lastPassword = it }
-            ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
+        if (password == null)
+            throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
+        val passwordChars = password.toCharArray().also { rememberToWipe.add(it) }
+        lastPassword = passwordChars
+        return passwordChars.clone().also { rememberToWipe.add(it) }
     }
 
     final override fun shouldRetry(resource: Resource<*>?) = true
@@ -125,10 +131,23 @@ private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
     }
 }
 
-private class SshjSession(private val uri: URIish, private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : RemoteSession {
+private class SshjSession(uri: URIish, private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : RemoteSession {
 
     private lateinit var ssh: SSHClient
     private var currentCommand: Session? = null
+
+    private val uri = if (uri.host.contains('@')) {
+        // URIish's String constructor cannot handle '@' in the user part of the URI and the URL
+        // constructor can't be used since Java's URL does not recognize the ssh scheme. We thus
+        // need to patch everything up ourselves.
+        d { "Before fixup: user=${uri.user}, host=${uri.host}" }
+        val userPlusHost = "${uri.user}@${uri.host}"
+        val realUser = userPlusHost.substringBeforeLast('@')
+        val realHost = userPlusHost.substringAfterLast('@')
+        uri.setUser(realUser).setHost(realHost).also { d { "After fixup: user=${it.user}, host=${it.host}" } }
+    } else {
+        uri
+    }
 
     fun connect(): SshjSession {
         ssh = SSHClient(SshjConfig())

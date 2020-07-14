@@ -14,9 +14,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,60 +33,73 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
-import java.util.Stack
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
+
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var settings: SharedPreferences
 
     private var recyclerViewStateToRestore: Parcelable? = null
     private var actionMode: ActionMode? = null
+    private var scrollTarget: File? = null
 
     private val model: SearchableRepositoryViewModel by activityViewModels()
     private val binding by viewBinding(PasswordRecyclerViewBinding::bind)
+    private val swipeResult = registerForActivityResult(StartActivityForResult()) {
+        binding.swipeRefresher.isRefreshing = false
+        requireStore().refreshPasswordList()
+    }
 
-    private fun requireStore() = requireActivity() as PasswordStore
+    val currentDir: File
+        get() = model.currentDir.value!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
         initializePasswordList()
         binding.fab.setOnClickListener {
-            ItemCreationBottomSheet().apply {
-                setTargetFragment(this@PasswordFragment, 1000)
-            }.show(parentFragmentManager, "BOTTOM_SHEET")
+            ItemCreationBottomSheet().show(childFragmentManager, "BOTTOM_SHEET")
+        }
+        childFragmentManager.setFragmentResultListener(ITEM_CREATION_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+            when (bundle.getString(ACTION_KEY)) {
+                ACTION_FOLDER -> requireStore().createFolder()
+                ACTION_PASSWORD -> requireStore().createPassword()
+            }
         }
     }
 
     private fun initializePasswordList() {
         val gitDir = File(PasswordRepository.getRepositoryDirectory(requireContext()), ".git")
         val hasGitDir = gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
-        if (hasGitDir) {
-            binding.swipeRefresher.setOnRefreshListener {
-                if (!PasswordRepository.isGitRepo()) {
-                    Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.clone_button) {
-                            val intent = Intent(context, GitServerConfigActivity::class.java)
-                            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                            startActivityForResult(intent, BaseGitActivity.REQUEST_CLONE)
-                        }
-                        .show()
-                    binding.swipeRefresher.isRefreshing = false
-                } else {
-                    // When authentication is set to ConnectionMode.None then the only git operation we
-                    // can run is a pull, so automatically fallback to that.
-                    val operationId = when (ConnectionMode.fromString(settings.getString("git_remote_auth", null))) {
-                        ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
-                        else -> BaseGitActivity.REQUEST_SYNC
+        binding.swipeRefresher.setOnRefreshListener {
+            if (!hasGitDir) {
+                requireStore().refreshPasswordList()
+                binding.swipeRefresher.isRefreshing = false
+            } else if (!PasswordRepository.isGitRepo()) {
+                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.clone_button) {
+                        val intent = Intent(context, GitServerConfigActivity::class.java)
+                        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                        swipeResult.launch(intent)
                     }
-                    val intent = Intent(context, GitOperationActivity::class.java)
-                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
-                    startActivityForResult(intent, operationId)
+                    .show()
+                binding.swipeRefresher.isRefreshing = false
+            } else {
+                // When authentication is set to ConnectionMode.None then the only git operation we
+                // can run is a pull, so automatically fallback to that.
+                val operationId = when (ConnectionMode.fromString(settings.getString
+                (PreferenceKeys.GIT_REMOTE_AUTH, null))) {
+                    ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
+                    else -> BaseGitActivity.REQUEST_SYNC
                 }
+                val intent = Intent(context, GitOperationActivity::class.java)
+                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
+                swipeResult.launch(intent)
             }
         }
 
@@ -126,17 +141,26 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             // and not on folder navigations since the latter leads to too many removal animations.
             (recyclerView.itemAnimator as OnOffItemAnimator).isEnabled = result.isFiltered
             recyclerAdapter.submitList(result.passwordItems) {
-                if (result.isFiltered) {
-                    // When the result is filtered, we always scroll to the top since that is where
-                    // the best fuzzy match appears.
-                    recyclerView.scrollToPosition(0)
-                } else {
-                    // When the result is not filtered and there is a saved scroll position for it,
-                    // we try to restore it.
-                    recyclerViewStateToRestore?.let {
-                        recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                when {
+                    result.isFiltered -> {
+                        // When the result is filtered, we always scroll to the top since that is where
+                        // the best fuzzy match appears.
+                        recyclerView.scrollToPosition(0)
                     }
-                    recyclerViewStateToRestore = null
+                    scrollTarget != null -> {
+                        scrollTarget?.let {
+                            recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+                        }
+                        scrollTarget = null
+                    }
+                    else -> {
+                        // When the result is not filtered and there is a saved scroll position for it,
+                        // we try to restore it.
+                        recyclerViewStateToRestore?.let {
+                            recyclerView.layoutManager!!.onRestoreInstanceState(it)
+                        }
+                        recyclerViewStateToRestore = null
+                    }
                 }
             }
         }
@@ -155,26 +179,31 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         // Called each time the action mode is shown. Always called after onCreateActionMode, but
         // may be called multiple times if the mode is invalidated.
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            menu.findItem(R.id.menu_edit_password).isVisible =
+                recyclerAdapter.getSelectedItems(requireContext())
+                    .all { it.type == PasswordItem.TYPE_CATEGORY }
             return true
         }
 
         // Called when the user selects a contextual menu item
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            when (item.itemId) {
+            return when (item.itemId) {
                 R.id.menu_delete_password -> {
-                    requireStore().deletePasswords(
-                        Stack<PasswordItem>().apply {
-                            recyclerAdapter.getSelectedItems(requireContext()).forEach { push(it) }
-                        }
-                    )
-                    mode.finish() // Action picked, so close the CAB
-                    return true
+                    requireStore().deletePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    // Action picked, so close the CAB
+                    mode.finish()
+                    true
                 }
                 R.id.menu_move_password -> {
                     requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
-                    return false
+                    false
                 }
-                else -> return false
+                R.id.menu_edit_password -> {
+                    requireStore().renameCategory(recyclerAdapter.getSelectedItems(requireContext()))
+                    mode.finish()
+                    false
+                }
+                else -> false
             }
         }
 
@@ -216,12 +245,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
-                        requireStore().clearSearch()
-                        model.navigateTo(
-                            item.file,
-                            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
-                        )
-                        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                        navigateTo(item.file)
                     } else {
                         if (requireArguments().getBoolean("matchWith", false)) {
                             requireStore().matchPasswordWithApp(item)
@@ -236,9 +260,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        binding.swipeRefresher.isRefreshing = false
-    }
+    private fun requireStore() = requireActivity() as PasswordStore
 
     /**
      * Returns true if the back press was handled by the [Fragment].
@@ -254,18 +276,34 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         return true
     }
 
-    val currentDir: File
-        get() = model.currentDir.value!!
-
     fun dismissActionMode() {
         actionMode?.finish()
     }
 
-    fun createFolder() = requireStore().createFolder()
+    companion object {
 
-    fun createPassword() = requireStore().createPassword()
+        const val ITEM_CREATION_REQUEST_KEY = "creation_key"
+        const val ACTION_KEY = "action"
+        const val ACTION_FOLDER = "folder"
+        const val ACTION_PASSWORD = "password"
+    }
+
+
+    fun navigateTo(file: File) {
+        requireStore().clearSearch()
+        model.navigateTo(
+            file,
+            recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
+        )
+        requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    fun scrollToOnNextRefresh(file: File) {
+        scrollTarget = file
+    }
 
     interface OnFragmentInteractionListener {
+
         fun onFragmentInteraction(item: PasswordItem)
     }
 }

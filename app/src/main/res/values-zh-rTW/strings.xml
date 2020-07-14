@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">Repo 訊息</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">在嘗試新增密碼或任何同步操作之前請在下方 clone 或新增一個新的 Repo</string>
-    <string name="delete_dialog_text">你確定要刪除密碼 %1$s</string>
     <string name="delete">刪除</string>
     <!-- PGPHandler -->
     <string name="provider_toast_text">未選擇提供 OpenPGP 的 app</string>

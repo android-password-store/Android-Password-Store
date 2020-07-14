@@ -25,6 +25,7 @@ import com.zeapo.pwdstore.autofill.oreo.ui.AutofillDecryptActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillFilterView
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSaveActivity
+import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSmsActivity
 import java.io.File
 
 /**
@@ -36,6 +37,7 @@ sealed class FormOrigin(open val identifier: String) {
     data class App(override val identifier: String) : FormOrigin(identifier)
 
     companion object {
+
         private const val BUNDLE_KEY_WEB_IDENTIFIER = "webIdentifier"
         private const val BUNDLE_KEY_APP_IDENTIFIER = "appIdentifier"
 
@@ -73,6 +75,7 @@ sealed class FormOrigin(open val identifier: String) {
 private class Form(context: Context, structure: AssistStructure, isManualRequest: Boolean) {
 
     companion object {
+
         private val SUPPORTED_SCHEMES = listOf("http", "https")
     }
 
@@ -201,6 +204,7 @@ class FillableForm private constructor(
 ) {
 
     companion object {
+
         fun makeFillInDataset(
             context: Context,
             credentials: Credentials,
@@ -285,6 +289,14 @@ class FillableForm private constructor(
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.Generate)
     }
 
+    private fun makeFillOtpFromSmsDataset(context: Context): Dataset? {
+        if (scenario.fieldsToFillOn(AutofillAction.FillOtpFromSms).isEmpty()) return null
+        if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
+        val remoteView = makeFillOtpFromSmsRemoteView(context, formOrigin)
+        val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
+        return makePlaceholderDataset(remoteView, intentSender, AutofillAction.FillOtpFromSms)
+    }
+
     private fun makePublisherChangedDataset(
         context: Context,
         publisherChangedException: AutofillPublisherChangedException
@@ -338,6 +350,10 @@ class FillableForm private constructor(
                 addDataset(it)
             }
             makeGenerateDataset(context)?.let {
+                hasDataset = true
+                addDataset(it)
+            }
+            makeFillOtpFromSmsDataset(context)?.let {
                 hasDataset = true
                 addDataset(it)
             }

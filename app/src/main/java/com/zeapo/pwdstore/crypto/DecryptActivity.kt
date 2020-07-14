@@ -17,19 +17,25 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
+import com.zeapo.pwdstore.model.PasswordEntry
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
+import java.io.ByteArrayOutputStream
+import java.io.File
+import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
-import java.io.ByteArrayOutputStream
-import java.io.File
 
 class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
+
     private val binding by viewBinding(DecryptLayoutBinding::inflate)
 
     private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }
@@ -125,6 +131,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_plaintext_password_to)))
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun decryptAndVerify(receivedIntent: Intent? = null) {
         if (api == null) {
             bindToOpenKeychain(this, openKeychainResult)
@@ -141,8 +148,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                 when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
                         try {
-                            val showPassword = settings.getBoolean("show_password", true)
-                            val showExtraContent = settings.getBoolean("show_extra_content", true)
+                            val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
+                            val showExtraContent = settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
                             val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
                             val entry = PasswordEntry(outputStream)
 
@@ -163,14 +170,16 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                 }
 
                                 if (entry.hasExtraContent()) {
-                                    extraContentContainer.visibility = View.VISIBLE
-                                    extraContent.typeface = monoTypeface
-                                    extraContent.setText(entry.extraContentWithoutUsername)
-                                    if (!showExtraContent) {
-                                        extraContent.transformationMethod = PasswordTransformationMethod.getInstance()
+                                    if (entry.extraContentWithoutAuthData.isNotEmpty()) {
+                                        extraContentContainer.visibility = View.VISIBLE
+                                        extraContent.typeface = monoTypeface
+                                        extraContent.setText(entry.extraContentWithoutAuthData)
+                                        if (!showExtraContent) {
+                                            extraContent.transformationMethod = PasswordTransformationMethod.getInstance()
+                                        }
+                                        extraContentContainer.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutAuthData) }
+                                        extraContent.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutAuthData) }
                                     }
-                                    extraContentContainer.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutUsername) }
-                                    extraContent.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutUsername) }
 
                                     if (entry.hasUsername()) {
                                         usernameText.typeface = monoTypeface
@@ -180,10 +189,29 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     } else {
                                         usernameTextContainer.visibility = View.GONE
                                     }
+
+                                    if (entry.hasTotp()) {
+                                        otpTextContainer.visibility = View.VISIBLE
+                                        otpTextContainer.setEndIconOnClickListener {
+                                            copyTextToClipboard(
+                                                otpText.text.toString(),
+                                                snackbarTextRes = R.string.clipboard_otp_copied_text
+                                            )
+                                        }
+                                        launch(Dispatchers.IO) {
+                                            repeat(Int.MAX_VALUE) {
+                                                val code = entry.calculateTotpCode() ?: "Error"
+                                                withContext(Dispatchers.Main) {
+                                                    otpText.setText(code)
+                                                }
+                                                delay(30.seconds)
+                                            }
+                                        }
+                                    }
                                 }
                             }
 
-                            if (settings.getBoolean("copy_on_decrypt", true)) {
+                            if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, true)) {
                                 copyPasswordToClipboard(entry.password)
                             }
                         } catch (e: Exception) {

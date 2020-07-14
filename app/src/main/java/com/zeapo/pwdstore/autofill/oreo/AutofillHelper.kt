@@ -19,9 +19,10 @@ import androidx.annotation.RequiresApi
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.PasswordEntry
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import java.security.MessageDigest
 
@@ -39,7 +40,7 @@ private fun ByteArray.base64(): String {
 private fun Context.getDefaultUsername(): String? {
     return PreferenceManager
         .getDefaultSharedPreferences(this)
-        .getString("oreo_autofill_default_username", null)
+        .getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME, null)
 }
 
 private fun stableHash(array: Collection<ByteArray>): String {
@@ -86,8 +87,9 @@ val AssistStructure.ViewNode.webOrigin: String?
         "$scheme://$domain"
     }
 
-data class Credentials(val username: String?, val password: String) {
+data class Credentials(val username: String?, val password: String?, val otp: String?) {
     companion object {
+
         fun fromStoreEntry(
             context: Context,
             file: File,
@@ -98,7 +100,7 @@ data class Credentials(val username: String?, val password: String) {
             val username = entry.username
                 ?: directoryStructure.getUsernameFor(file)
                 ?: context.getDefaultUsername()
-            return Credentials(username, entry.password)
+            return Credentials(username, entry.password, entry.calculateTotpCode())
         }
     }
 }
@@ -137,6 +139,13 @@ fun makeGenerateAndFillRemoteView(context: Context, formOrigin: FormOrigin): Rem
     val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
     val summary = context.getString(R.string.oreo_autofill_generate_password)
     val iconRes = R.drawable.ic_autofill_new_password
+    return makeRemoteView(context, title, summary, iconRes)
+}
+
+fun makeFillOtpFromSmsRemoteView(context: Context, formOrigin: FormOrigin): RemoteViews {
+    val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
+    val summary = context.getString(R.string.oreo_autofill_fill_otp_from_sms)
+    val iconRes = R.drawable.ic_autofill_sms
     return makeRemoteView(context, title, summary, iconRes)
 }
 

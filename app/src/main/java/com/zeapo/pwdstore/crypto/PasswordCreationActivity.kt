@@ -17,26 +17,30 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.zeapo.pwdstore.PasswordEntry
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.databinding.PasswordCreationActivityBinding
+import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
+import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.eclipse.jgit.api.Git
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -61,8 +65,31 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         with(binding) {
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
+            otpImportButton.setOnClickListener {
+                registerForActivityResult(StartActivityForResult()) { result ->
+                    if (result.resultCode == RESULT_OK) {
+                        otpImportButton.isVisible = false
+                        val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
+                        val contents = "${intentResult.contents}\n"
+                        val currentExtras = extraContent.text.toString()
+                        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+                            extraContent.append("\n$contents")
+                        else
+                            extraContent.append(contents)
+                        snackbar(message = getString(R.string.otp_import_success))
+                    } else {
+                        snackbar(message = getString(R.string.otp_import_failure))
+                    }
+                }.launch(
+                    IntentIntegrator(this@PasswordCreationActivity)
+                        .setOrientationLocked(false)
+                        .setBeepEnabled(false)
+                        .setDesiredBarcodeFormats(QR_CODE)
+                        .createScanIntent()
+                )
+            }
 
-            category.apply {
+            directoryInputLayout.apply {
                 if (suggestedName != null || suggestedPass != null || shouldGeneratePassword) {
                     isEnabled = true
                 } else {
@@ -73,11 +100,15 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 if (path.isEmpty() && !isEnabled)
                     visibility = View.GONE
                 else {
-                    setText(path)
+                    directory.setText(path)
                     oldCategory = path
                 }
             }
-            suggestedName?.let { filename.setText(it) }
+            if (suggestedName != null) {
+                filename.setText(suggestedName)
+            } else {
+                filename.requestFocus()
+            }
             // Allow the user to quickly switch between storing the username as the filename or
             // in the encrypted extras. This only makes sense if the directory structure is
             // FileBased.
@@ -94,7 +125,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             val username = filename.text.toString()
                             val extras = "username:$username\n${extraContent.text}"
 
-                            filename.setText("")
+                            filename.text?.clear()
                             extraContent.setText(extras)
                         } else {
                             // User wants to disable username encryption, so we extract the
@@ -103,19 +134,20 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             val username = entry.username
 
                             // username should not be null here by the logic in
-                            // updateEncryptUsernameState, but it could still happen due to
+                            // updateViewState, but it could still happen due to
                             // input lag.
                             if (username != null) {
                                 filename.setText(username)
-                                extraContent.setText(entry.extraContentWithoutUsername)
+                                extraContent.setText(entry.extraContentWithoutAuthData)
                             }
                         }
-                        updateEncryptUsernameState()
+                        updateViewState()
                     }
                 }
                 listOf(filename, extraContent).forEach {
-                    it.doOnTextChanged { _, _, _, _ -> updateEncryptUsernameState() }
+                    it.doOnTextChanged { _, _, _, _ -> updateViewState() }
                 }
+                updateViewState()
             }
             suggestedPass?.let {
                 password.setText(it)
@@ -136,7 +168,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home, R.id.cancel_password_add -> {
+            android.R.id.home -> {
                 setResult(RESULT_CANCELED)
                 finish()
             }
@@ -148,7 +180,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     private fun generatePassword() {
-        when (settings.getString("pref_key_pwgen_type", KEY_PWGEN_TYPE_CLASSIC)) {
+        when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, KEY_PWGEN_TYPE_CLASSIC)) {
             KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
                 .show(supportFragmentManager, "generator")
             KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment()
@@ -156,17 +188,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         }
     }
 
-    private fun updateEncryptUsernameState() = with(binding) {
+    private fun updateViewState() = with(binding) {
+        // Use PasswordEntry to parse extras for username
+        val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
         encryptUsername.apply {
             if (visibility != View.VISIBLE)
                 return@with
             val hasUsernameInFileName = filename.text.toString().isNotBlank()
-            // Use PasswordEntry to parse extras for username
-            val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
             val hasUsernameInExtras = entry.hasUsername()
             isEnabled = hasUsernameInFileName xor hasUsernameInExtras
             isChecked = hasUsernameInExtras
         }
+        otpImportButton.isVisible = !entry.hasTotp()
     }
 
     /**
@@ -179,6 +212,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
         if (editName.isEmpty()) {
             snackbar(message = resources.getString(R.string.file_toast_text))
+            return@with
+        } else if (editName.contains('/')) {
+            snackbar(message = resources.getString(R.string.invalid_filename_text))
             return@with
         }
 
@@ -206,8 +242,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val path = when {
             // If we allowed the user to edit the relative path, we have to consider it here instead
             // of fullPath.
-            category.isEnabled -> {
-                val editRelativePath = category.text.toString().trim()
+            directoryInputLayout.isEnabled -> {
+                val editRelativePath = directory.text.toString().trim()
                 if (editRelativePath.isEmpty()) {
                     snackbar(message = resources.getString(R.string.path_toast_text))
                     return
@@ -234,6 +270,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 snackbar(message = getString(R.string.password_creation_duplicate_error))
                                 return@executeApiAsync
                             }
+
+                            if (!isInsideRepository(file)) {
+                                snackbar(message = getString(R.string.message_error_destination_outside_repo))
+                                return@executeApiAsync
+                            }
+
                             try {
                                 file.outputStream().use {
                                     it.write(outputStream.toByteArray())
@@ -249,6 +291,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         finish()
                                     }
                                     .show()
+                                return@executeApiAsync
                             }
 
                             val returnIntent = Intent()
@@ -279,7 +322,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 }
                             }
 
-                            if (category.isVisible && category.isEnabled) {
+                            if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
                                 val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
                                 if (oldFile.path != file.path && !oldFile.delete()) {
                                     setResult(RESULT_CANCELED)
@@ -311,6 +354,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     companion object {
+
         private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
         const val RETURN_EXTRA_CREATED_FILE = "CREATED_FILE"

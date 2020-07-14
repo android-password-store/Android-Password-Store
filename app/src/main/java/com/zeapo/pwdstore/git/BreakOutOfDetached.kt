@@ -4,16 +4,17 @@
  */
 package com.zeapo.pwdstore.git
 
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseCommand
-import java.io.File
 
-class BreakOutOfDetached(fileDir: File, callingActivity: FragmentActivity) : GitOperation(fileDir, callingActivity) {
+class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
+
     private lateinit var commands: List<GitCommand<out Any>>
 
     /**
@@ -58,7 +59,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: FragmentActivity) : Git
                 }
             }
         }
-        GitAsyncTask(callingActivity, true, this, null)
+        GitAsyncTask(callingActivity, this, null)
             .execute(*this.commands.toTypedArray())
     }
 

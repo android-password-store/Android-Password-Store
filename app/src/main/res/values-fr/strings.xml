@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">Information sur le dépôt Git</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de pass ou d\'effectuer une opération de synchornisation.</string>
-    <string name="delete_dialog_text">Êtes-vous sûr de vouloir supprimer le mot de passe %1$s?</string>
     <string name="move">Déplacer</string>
     <string name="edit">Éditer</string>
     <string name="delete">Supprimer</string>
@@ -194,7 +193,6 @@
     <string name="git_push_generic_error">Poussée rejetée par le dépôt distant, raison:</string>
     <string name="git_push_other_error">Pousser au dépôt distant sans avance rapide rejetée. Vérifiez la variable receive.denyNonFastForwards dans le fichier de configuration du répertoire de destination.</string>
     <string name="jgit_error_push_dialog_text">Une erreur s\'est produite lors de l\'opération de poussée:</string>
-    <string name="hotp_remember_clear_choice">Effacer les préférences enregistrées pour l’incrémentation HOTP</string>
     <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
     <string name="hackish_tools">Outils de hack</string>
     <string name="commit_hash">Commettre la clé</string>

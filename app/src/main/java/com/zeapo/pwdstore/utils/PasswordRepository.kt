@@ -8,15 +8,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import java.io.File
+import java.io.FileFilter
+import java.util.Comparator
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
-import java.io.File
-import java.io.FileFilter
-import java.util.Comparator
 
 open class PasswordRepository protected constructor() {
 
@@ -37,9 +37,11 @@ open class PasswordRepository protected constructor() {
         });
 
         companion object {
+
             @JvmStatic
             fun getSortOrder(settings: SharedPreferences): PasswordSortOrder {
-                return valueOf(settings.getString("sort_order", null) ?: FOLDER_FIRST.name)
+                return valueOf(settings.getString(PreferenceKeys.SORT_ORDER, null)
+                    ?: FOLDER_FIRST.name)
             }
         }
     }
@@ -154,8 +156,8 @@ open class PasswordRepository protected constructor() {
             if (!::settings.isInitialized) {
                 settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
             }
-            return if (settings.getBoolean("git_external", false)) {
-                val externalRepo = settings.getString("git_external_repo", null)
+            return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
+                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
                 if (externalRepo != null)
                     File(externalRepo)
                 else
@@ -174,9 +176,9 @@ open class PasswordRepository protected constructor() {
             // uninitialize the repo if the dir does not exist or is absolutely empty
             settings.edit {
                 if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {
-                    putBoolean("repository_initialized", false)
+                    putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
                 } else {
-                    putBoolean("repository_initialized", true)
+                    putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)
                 }
             }
 
@@ -217,7 +219,7 @@ open class PasswordRepository protected constructor() {
             // We need to recover the passwords then parse the files
             val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
             val passwordList = ArrayList<PasswordItem>()
-            val showHiddenDirs = settings.getBoolean("show_hidden_folders", false)
+            val showHiddenDirs = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
 
             if (passList.size == 0) return passwordList
             if (showHiddenDirs) {

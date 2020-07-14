@@ -5,14 +5,14 @@
 package com.zeapo.pwdstore.git
 
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import java.io.File
 import org.eclipse.jgit.api.AddCommand
 import org.eclipse.jgit.api.FetchCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.ResetCommand
-import java.io.File
 
 /**
  * Creates a new git operation
@@ -20,7 +20,7 @@ import java.io.File
  * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
-class ResetToRemoteOperation(fileDir: File, callingActivity: FragmentActivity) : GitOperation(fileDir, callingActivity) {
+class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     private var addCommand: AddCommand? = null
     private var fetchCommand: FetchCommand? = null
@@ -41,7 +41,7 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: FragmentActivity) :
 
     override fun execute() {
         this.fetchCommand?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, false, this, Intent())
+        GitAsyncTask(callingActivity, this, Intent())
             .execute(this.addCommand, this.fetchCommand, this.resetCommand)
     }
 

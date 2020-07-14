@@ -2,6 +2,8 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+@file:Suppress("Deprecation")
+
 package com.zeapo.pwdstore.autofill
 
 import android.content.Context
@@ -20,9 +22,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.AutofillRecyclerViewBinding
 import com.zeapo.pwdstore.utils.viewBinding
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.lang.ref.WeakReference
 import java.util.ArrayList
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class AutofillPreferenceActivity : AppCompatActivity() {
 

@@ -13,7 +13,6 @@
     <string name="title_activity_git_clone">Repository Informationen</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
-    <string name="delete_dialog_text">Bist du dir sicher, dass du das Passwort löschen möchtest %1$s?</string>
     <string name="move">Verschieben</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>

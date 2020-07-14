@@ -10,7 +10,6 @@
     <string name="dialog_delete">حذف المجلد</string>
     <string name="dialog_do_not_delete">إلغاء</string>
     <string name="title_activity_git_clone">معلومات حول المستودع</string>
-    <string name="delete_dialog_text">هل تود حقًا حذف كلمة السر %1$s ؟</string>
     <string name="move">نقل</string>
     <string name="edit">تعديل</string>
     <string name="delete">حذف</string>

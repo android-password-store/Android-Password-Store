@@ -46,6 +46,14 @@
         </activity>
 
         <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:clearTaskOnLaunch="true"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:node="replace" />
+
+        <activity
             android:name=".git.GitOperationActivity"
             android:theme="@style/NoBackgroundTheme" />
 
@@ -95,6 +103,9 @@
             android:name=".ClipboardService"
             android:process=":clipboard_service_process" />
         <service
+            android:name=".PasswordExportService"
+            android:process=":password_export_service_process" />
+        <service
             android:name=".autofill.oreo.OreoAutofillService"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
@@ -130,6 +141,11 @@
         <activity
             android:name=".autofill.oreo.ui.AutofillSaveActivity"
             android:theme="@style/NoBackgroundTheme" />
+        <activity
+            android:name=".autofill.oreo.ui.AutofillSmsActivity"
+            android:configChanges="orientation"
+            android:theme="@style/DialogLikeTheme"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".autofill.oreo.ui.AutofillPublisherChangedActivity"
             android:configChanges="orientation|keyboardHidden"

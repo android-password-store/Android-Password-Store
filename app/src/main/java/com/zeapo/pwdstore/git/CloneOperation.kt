@@ -5,12 +5,12 @@
 package com.zeapo.pwdstore.git
 
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import java.io.File
 import org.eclipse.jgit.api.CloneCommand
 import org.eclipse.jgit.api.Git
-import java.io.File
 
 /**
  * Creates a new clone operation
@@ -18,7 +18,7 @@ import java.io.File
  * @param fileDir the git working tree directory
  * @param callingActivity the calling activity
  */
-class CloneOperation(fileDir: File, callingActivity: FragmentActivity) : GitOperation(fileDir, callingActivity) {
+class CloneOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     /**
      * Sets the command using the repository uri
@@ -36,7 +36,7 @@ class CloneOperation(fileDir: File, callingActivity: FragmentActivity) : GitOper
 
     override fun execute() {
         (this.command as? CloneCommand)?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, false, this, Intent()).execute(this.command)
+        GitAsyncTask(callingActivity, this, Intent()).execute(this.command)
     }
 
     override fun onError(err: Exception) {

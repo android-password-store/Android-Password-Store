@@ -30,18 +30,23 @@ val autofillStrategy = strategy {
     // TODO: Introduce a custom fill/generate/update flow for this scenario
     rule {
         newPassword {
-            takePair { all { hasAutocompleteHintNewPassword } }
+            takePair { all { hasHintNewPassword } }
             breakTieOnPair { any { isFocused } }
         }
         currentPassword(optional = true) {
             takeSingle { alreadyMatched ->
                 val adjacentToNewPasswords =
                     directlyPrecedes(alreadyMatched) || directlyFollows(alreadyMatched)
-                hasAutocompleteHintCurrentPassword && adjacentToNewPasswords
+                // The Autofill framework has not hint that applies to current passwords only.
+                // In this scenario, we have already matched fields a pair of fields with a specific
+                // new password hint, so we take a generic Autofill password hint to mean a current
+                // password.
+                (hasAutocompleteHintCurrentPassword || hasAutofillHintPassword) &&
+                    adjacentToNewPasswords
             }
         }
         username(optional = true) {
-            takeSingle { hasAutocompleteHintUsername }
+            takeSingle { hasHintUsername }
             breakTieOnSingle { alreadyMatched -> directlyPrecedes(alreadyMatched) }
             breakTieOnSingle { isFocused }
         }
@@ -73,7 +78,7 @@ val autofillStrategy = strategy {
             breakTieOnSingle { isFocused }
         }
         username(optional = true) {
-            takeSingle { hasAutocompleteHintUsername }
+            takeSingle { hasHintUsername }
             breakTieOnSingle { alreadyMatched -> directlyPrecedes(alreadyMatched) }
             breakTieOnSingle { isFocused }
         }
@@ -115,7 +120,7 @@ val autofillStrategy = strategy {
     // field.
     rule(applyInSingleOriginMode = true) {
         newPassword {
-            takeSingle { hasAutocompleteHintNewPassword && isFocused }
+            takeSingle { hasHintNewPassword && isFocused }
         }
         username(optional = true) {
             takeSingle { alreadyMatched ->
@@ -157,7 +162,7 @@ val autofillStrategy = strategy {
     // filling of hidden password fields to scenarios where this is clearly warranted.
     rule {
         username {
-            takeSingle { hasAutocompleteHintUsername && isFocused }
+            takeSingle { hasHintUsername && isFocused }
         }
         currentPassword(matchHidden = true) {
             takeSingle { alreadyMatched ->
@@ -166,12 +171,19 @@ val autofillStrategy = strategy {
         }
     }
 
+    // Match a single focused OTP field.
+    rule(applyInSingleOriginMode = true) {
+        otp {
+            takeSingle { otpCertainty >= Likely && isFocused }
+        }
+    }
+
     // Match a single focused username field without a password field.
     rule(applyInSingleOriginMode = true) {
         username {
             takeSingle { usernameCertainty >= Likely && isFocused }
             breakTieOnSingle { usernameCertainty >= Certain }
-            breakTieOnSingle { hasAutocompleteHintUsername }
+            breakTieOnSingle { hasHintUsername }
         }
     }
 

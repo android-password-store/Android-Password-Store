@@ -1,0 +1,47 @@
+name: "Draft new release"
+
+on:
+  milestone:
+    types: [closed]
+
+jobs:
+  draft-new-release:
+    name: "Draft a new release"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'release'
+      - name: Extract version from milestone
+        run: |
+          VERSION="${{ github.event.milestone.title }}"
+          echo "::set-env name=RELEASE_VERSION::$VERSION"
+
+      - name: Create release branch
+        run: git checkout -b release-${{ env.RELEASE_VERSION }}
+
+      - name: Update changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@1.1.0
+        with:
+          version: ${{ env.RELEASE_VERSION }}
+
+      - name: Initialize git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email noreply@github.com
+
+      - name: Commit changelog
+        run: |
+          git add CHANGELOG.md
+          git commit --message "Prepare release ${{ env.RELEASE_VERSION }}"
+
+      - name: Push new branch
+        run: git push origin release-${{ env.RELEASE_VERSION }}
+
+      - name: Create pull request
+        uses: thomaseizinger/create-pull-request@1.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          head: release-${{ env.RELEASE_VERSION }}
+          base: release
+          title: Release ${{ env.RELEASE_VERSION }}

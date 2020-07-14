@@ -10,6 +10,8 @@ import android.security.keystore.UserNotAuthenticatedException
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
@@ -26,8 +28,12 @@ import com.zeapo.pwdstore.git.config.SshAuthData
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
+import java.io.File
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
@@ -36,14 +42,15 @@ import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
-import java.io.File
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
+import com.google.android.material.R as materialR
 
 
 const val ANDROID_KEYSTORE_ALIAS_SSH_KEY = "ssh_key"
 
-private class GitOperationCredentialFinder(val callingActivity: FragmentActivity, val connectionMode: ConnectionMode) : InteractivePasswordFinder() {
+private class GitOperationCredentialFinder(
+    val callingActivity: AppCompatActivity,
+    val connectionMode: ConnectionMode
+) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
         val gitOperationPrefs = callingActivity.getEncryptedPrefs("git_operation")
@@ -54,7 +61,7 @@ private class GitOperationCredentialFinder(val callingActivity: FragmentActivity
         @StringRes val errorRes: Int
         when (connectionMode) {
             ConnectionMode.SshKey -> {
-                credentialPref = "ssh_key_local_passphrase"
+                credentialPref = PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE
                 messageRes = R.string.passphrase_dialog_text
                 hintRes = R.string.ssh_keygen_passphrase
                 rememberRes = R.string.git_operation_remember_passphrase
@@ -62,7 +69,7 @@ private class GitOperationCredentialFinder(val callingActivity: FragmentActivity
             }
             ConnectionMode.Password -> {
                 // Could be either an SSH or an HTTPS password
-                credentialPref = "https_password"
+                credentialPref = PreferenceKeys.HTTPS_PASSWORD
                 messageRes = R.string.password_dialog_text
                 hintRes = R.string.git_operation_hint_password
                 rememberRes = R.string.git_operation_remember_password
@@ -73,7 +80,7 @@ private class GitOperationCredentialFinder(val callingActivity: FragmentActivity
         val storedCredential = gitOperationPrefs.getString(credentialPref, null)
         if (isRetry)
             gitOperationPrefs.edit { remove(credentialPref) }
-        if (storedCredential.isNullOrEmpty()) {
+        if (storedCredential == null) {
             val layoutInflater = LayoutInflater.from(callingActivity)
 
             @SuppressLint("InflateParams")
@@ -83,7 +90,8 @@ private class GitOperationCredentialFinder(val callingActivity: FragmentActivity
             val rememberCredential = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
             rememberCredential.setText(rememberRes)
             if (isRetry)
-                editCredential.error = callingActivity.resources.getString(errorRes)
+                editCredential.setError(callingActivity.resources.getString(errorRes),
+                    ContextCompat.getDrawable(callingActivity, materialR.drawable.mtrl_ic_error))
             MaterialAlertDialogBuilder(callingActivity).run {
                 setTitle(R.string.passphrase_dialog_title)
                 setMessage(messageRes)
@@ -120,7 +128,7 @@ private class GitOperationCredentialFinder(val callingActivity: FragmentActivity
  * @param gitDir the git working tree directory
  * @param callingActivity the calling activity
  */
-abstract class GitOperation(gitDir: File, internal val callingActivity: FragmentActivity) {
+abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompatActivity) {
 
     protected val repository: Repository? = PasswordRepository.getRepository(gitDir)
     internal var provider: CredentialsProvider? = null
@@ -307,14 +315,14 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         when (SshSessionFactory.getInstance()) {
             is SshApiSessionFactory -> {
                 PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                    .edit { remove("ssh_openkeystore_keyid") }
+                    .edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
             }
             is SshjSessionFactory -> {
                 callingActivity.applicationContext
                     .getEncryptedPrefs("git_operation")
                     .edit {
-                        remove("ssh_key_local_passphrase")
-                        remove("https_password")
+                        remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
+                        remove(PreferenceKeys.HTTPS_PASSWORD)
                     }
             }
         }
@@ -326,6 +334,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     open fun onSuccess() {}
 
     companion object {
+
         const val GET_SSH_KEY_FROM_CLONE = 201
     }
 }

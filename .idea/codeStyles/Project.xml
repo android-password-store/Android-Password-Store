@@ -7,7 +7,7 @@
     <option name="SOFT_MARGINS" value="100" />
     <option name="DO_NOT_FORMAT">
       <list>
-        <fileSet type="namedScope" name="publicsuffixlist" pattern="src[app]:mozilla.components.lib.publicsuffixlist.PublicSuffixList||src[app]:mozilla.components.lib.publicsuffixlist.PublicSuffixListData||src[app]:mozilla.components.lib.publicsuffixlist.PublicSuffixListLoader||src[app]:mozilla.components.lib.publicsuffixlist.ext.ByteArray" />
+        <fileSet type="namedScope" name="third_party" pattern="src[Android-Password-Store.app]:mozilla.components.lib.publicsuffixlist..*" />
       </list>
     </option>
     <JavaCodeStyleSettings>
@@ -16,6 +16,23 @@
     <JetCodeStyleSettings>
       <option name="PACKAGES_TO_USE_STAR_IMPORTS">
         <value />
+      </option>
+      <option name="PACKAGES_IMPORT_LAYOUT">
+        <value>
+          <package name="" alias="false" withSubpackages="true" />
+          <package name="android" alias="false" withSubpackages="true" />
+          <package name="androidx" alias="false" withSubpackages="true" />
+          <package name="com" alias="false" withSubpackages="true" />
+          <package name="java" alias="false" withSubpackages="true" />
+          <package name="javax" alias="false" withSubpackages="true" />
+          <package name="kotlin" alias="false" withSubpackages="true" />
+          <package name="kotlinx" alias="false" withSubpackages="true" />
+          <package name="me" alias="false" withSubpackages="true" />
+          <package name="mozilla" alias="false" withSubpackages="true" />
+          <package name="net" alias="false" withSubpackages="true" />
+          <package name="org" alias="false" withSubpackages="true" />
+          <package name="" alias="true" withSubpackages="true" />
+        </value>
       </option>
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />

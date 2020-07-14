@@ -20,7 +20,7 @@ class FolderCreationDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         alertDialogBuilder.setTitle(R.string.title_create_folder)
-        alertDialogBuilder.setView(R.layout.folder_creation_dialog_fragment)
+        alertDialogBuilder.setView(R.layout.folder_dialog_fragment)
         alertDialogBuilder.setPositiveButton(getString(R.string.button_create)) { _, _ ->
             createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
         }
@@ -36,12 +36,14 @@ class FolderCreationDialogFragment : DialogFragment() {
         val dialog = requireDialog()
         val materialTextView = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
         val folderName = materialTextView.text.toString()
-        File("$currentDir/$folderName").mkdir()
-        (requireActivity() as PasswordStore).refreshPasswordList()
+        val newFolder = File("$currentDir/$folderName")
+        newFolder.mkdir()
+        (requireActivity() as PasswordStore).refreshPasswordList(newFolder)
         dismiss()
     }
 
     companion object {
+
         private const val CURRENT_DIR_EXTRA = "CURRENT_DIRECTORY"
         fun newInstance(startingDirectory: String): FolderCreationDialogFragment {
             val extras = bundleOf(CURRENT_DIR_EXTRA to startingDirectory)

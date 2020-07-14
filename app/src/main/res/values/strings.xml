@@ -24,7 +24,10 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
     <string name="key_dialog_text">A valid PGP key must be selected in Settings before initializing the repository</string>
-    <string name="delete_dialog_text">Are you sure you want to delete the password %1$s?</string>
+    <plurals name="delete_dialog_text">
+        <item quantity="one">Are you sure you want to delete the password?</item>
+        <item quantity="other">Are you sure you want to delete %d passwords?</item>
+    </plurals>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -36,18 +39,22 @@
     <string name="no_key_selected_dialog_text">We will redirect you to settings. Please select your OpenPGP Key.</string>
     <string name="password_exists_title">Password already exists!</string>
     <string name="password_exists_message">This will overwrite %1$s with %2$s.</string>
+    <string name="password_move_error_title">Error while moving passwords</string>
+    <string name="password_move_error_message">Failed to move %1$s to %2$s</string>
 
     <!-- git commits -->
     <string name="git_commit_add_text">Add generated password for %1$s using Android Password Store.</string>
     <string name="git_commit_edit_text">Edit password for %1$s using Android Password Store.</string>
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
+    <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="provider_toast_text">No OpenPGP provider selected!</string>
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
     <string name="clipboard_password_no_clear_toast_text">Password copied to clipboard</string>
     <string name="clipboard_copied_text">Copied to clipboard</string>
+    <string name="clipboard_otp_copied_text">OTP code copied to clipboard</string>
     <string name="file_toast_text">Please provide a file name</string>
     <string name="path_toast_text">Please provide a file path</string>
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
@@ -105,6 +112,7 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">Search</string>
     <string name="password">Password:</string>
+    <string name="otp">OTP:</string>
     <string name="extra_content">Extra content:</string>
     <string name="username">Username:</string>
     <string name="edit_password">Edit password</string>
@@ -112,6 +120,7 @@
     <string name="copy_username">Copy username</string>
     <string name="share_as_plaintext">Share as plaintext</string>
     <string name="last_changed">Last changed %s</string>
+    <string name="view_otp">View OTP</string>
 
     <!-- Preferences -->
     <string name="pref_repository_title">Repository</string>
@@ -177,6 +186,7 @@
     <string name="pwgen_pronounceable">Pronounceable</string>
     <string name="pwgen_no_chars_error">No characters included</string>
     <string name="pwgen_length_too_short_error">Length too short for selected criteria</string>
+    <string name="pwgen_max_iterations_exceeded">Failed to generate a password satisfying the constraints. Try to increase the length.</string>
 
     <!-- XKPWD password generator -->
     <string name="xkpwgen_title">Xkpasswd Generator</string>
@@ -184,8 +194,8 @@
     <string name="xkpwgen_separator">Separator</string>
     <string name="xkpwgen_custom_dict_imported">Custom wordlist: %1$s</string>
     <string name="xkpwgen_separator_character">separator character</string>
-    <string name="xkpwgen_numbers">numbers:</string>
-    <string name="xkpwgen_symbols">symbols:</string>
+    <string name="xkpwgen_numbers">Numbers</string>
+    <string name="xkpwgen_symbols">Symbols</string>
     <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->
@@ -217,6 +227,7 @@
     <string name="dialog_positive">Go to Settings</string>
     <string name="dialog_negative">Go back</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_skip">Skip</string>
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
@@ -244,6 +255,8 @@
     <string name="oreo_autofill_save_app_not_supported">This app is currently not supported</string>
     <string name="oreo_autofill_save_passwords_dont_match">Passwords don\'t match</string>
     <string name="oreo_autofill_generate_password">Generate password…</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Extract code from SMS…</string>
+    <string name="oreo_autofill_waiting_for_sms">Waiting for SMS…</string>
     <string name="oreo_autofill_max_matches_reached">Maximum number of matches (%1$d) reached; clear matches before adding new ones.</string>
     <string name="oreo_autofill_warning_publisher_header">This app\'s publisher has changed since you first associated a Password Store entry with it:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>The currently installed app may be trying to steal your credentials by pretending to be a trusted app.</b>\n\nTry to uninstall and reinstall the app from a trusted source, such as the Play Store, Amazon Appstore, F-Droid, or your phone manufacturer\'s store.</string>
@@ -291,7 +304,6 @@
     <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
     <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
-    <string name="hotp_remember_clear_choice">Clear saved preference for HOTP incrementing</string>
     <string name="git_operation_remember_passphrase">Remember key passphrase</string>
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>
@@ -318,6 +330,11 @@
     <string name="pref_show_hidden_title">Show hidden folders</string>
     <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
     <string name="title_create_folder">Create folder</string>
+    <string name="title_rename_folder">Rename folder</string>
+    <string name="message_category_error_empty_field">Category name can\'t be empty</string>
+    <string name="message_category_error_category_exists">Category name already exists</string>
+    <string name="message_error_destination_outside_repo">Destination must be within the repository</string>
+    <string name="message_rename_folder">Enter destination for %1$s</string>
     <string name="button_create">Create</string>
     <string name="pref_search_on_start">Open search on start</string>
     <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
@@ -374,4 +391,11 @@
     <string name="password_creation_file_write_fail_message">Failed to write password file to the store, please try again.</string>
     <string name="password_creation_file_delete_fail_message">Failed to delete password file %1$s from the store, please delete it manually.</string>
     <string name="password_creation_duplicate_error">File already exists, please use a different name</string>
+    <string name="add_otp">Add OTP</string>
+    <string name="otp_import_success">Successfully imported TOTP configuration</string>
+    <string name="otp_import_failure">Failed to import TOTP configuration</string>
+    <string name="oreo_autofill_chrome_compat_fix_preference_title">Improve reliability in Chrome</string>
+    <string name="exporting_passwords">Exporting passwords…</string>
+    <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
+    <string name="directory_hint">Directory</string>
 </resources>

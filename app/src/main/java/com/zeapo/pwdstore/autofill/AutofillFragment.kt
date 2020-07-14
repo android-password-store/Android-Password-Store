@@ -2,6 +2,8 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+@file:Suppress("Deprecation")
+
 package com.zeapo.pwdstore.autofill
 
 import android.annotation.SuppressLint
@@ -32,6 +34,7 @@ import com.zeapo.pwdstore.utils.resolveAttribute
 import com.zeapo.pwdstore.utils.splitLines
 
 class AutofillFragment : DialogFragment() {
+
     private var adapter: ArrayAdapter<String>? = null
     private var isWeb: Boolean = false
 
@@ -223,6 +226,7 @@ class AutofillFragment : DialogFragment() {
     }
 
     companion object {
+
         private const val MATCH_WITH = 777
     }
 }

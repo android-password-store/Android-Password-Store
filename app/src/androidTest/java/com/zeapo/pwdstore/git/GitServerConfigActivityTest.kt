@@ -17,11 +17,11 @@ import androidx.test.rule.ActivityTestRule
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.BaseGitActivity.GitUpdateUrlResult
+import kotlin.test.assertEquals
 import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class GitServerConfigActivityTest {

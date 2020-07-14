@@ -4,8 +4,11 @@
  */
 package com.zeapo.pwdstore.utils
 
+<<<<<<< HEAD
 import android.app.Activity
 import android.app.KeyguardManager
+=======
+>>>>>>> develop
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -16,8 +19,10 @@ import android.view.View
 import android.view.autofill.AutofillManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
+import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -27,8 +32,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitAsyncTask
 import com.zeapo.pwdstore.git.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
-import org.eclipse.jgit.api.Git
 import java.io.File
+import org.eclipse.jgit.api.Git
+
+fun Int.clearFlag(flag: Int): Int {
+    return this and flag.inv()
+}
 
 infix fun Int.hasFlag(flag: Int): Boolean {
     return this and flag == flag
@@ -46,7 +55,7 @@ fun CharArray.clear() {
 
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
-fun Activity.snackbar(
+fun AppCompatActivity.snackbar(
     view: View = findViewById(android.R.id.content),
     message: String,
     length: Int = Snackbar.LENGTH_SHORT
@@ -55,6 +64,23 @@ fun Activity.snackbar(
 }
 
 fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
+
+/**
+ * Checks whether this [File] is a directory that contains [other].
+ */
+fun File.contains(other: File): Boolean {
+    if (!isDirectory)
+        return false
+    if (!other.exists())
+        return false
+    val relativePath = try {
+        other.relativeTo(this)
+    } catch (e: Exception) {
+        return false
+    }
+    // Direct containment is equivalent to the relative path being equal to the filename.
+    return relativePath.path == other.name
+}
 
 fun Context.resolveAttribute(attr: Int): Int {
     val typedValue = TypedValue()
@@ -75,10 +101,11 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     )
 }
 
-fun FragmentActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
+@MainThread
+fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
     if (!PasswordRepository.isGitRepo()) {
         if (finishWithResultOnEnd != null) {
-            setResult(Activity.RESULT_OK, finishWithResultOnEnd)
+            setResult(AppCompatActivity.RESULT_OK, finishWithResultOnEnd)
             finish()
         }
         return
@@ -87,7 +114,7 @@ fun FragmentActivity.commitChange(message: String, finishWithResultOnEnd: Intent
         override fun execute() {
             d { "Comitting with message: '$message'" }
             val git = Git(repository)
-            val task = GitAsyncTask(this@commitChange, true, this, finishWithResultOnEnd, silentlyExecute = true)
+            val task = GitAsyncTask(this@commitChange, this, finishWithResultOnEnd, silentlyExecute = true)
             task.execute(
                 git.add().addFilepattern("."),
                 git.commit().setAll(true).setMessage(message)
@@ -101,6 +128,7 @@ fun FragmentActivity.commitChange(message: String, finishWithResultOnEnd: Intent
  * view whose id is [id]. Solution based on a StackOverflow
  * answer: https://stackoverflow.com/a/13056259/297261
  */
+@MainThread
 fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
     setOnShowListener {
         findViewById<T>(id)?.apply {
@@ -124,3 +152,7 @@ val Context.keyguardManager: KeyguardManager?
 
 val Context.clipboardManager: ClipboardManager?
     get() = getSystemService()
+
+fun AppCompatActivity.isInsideRepository(file: File): Boolean {
+    return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
+}

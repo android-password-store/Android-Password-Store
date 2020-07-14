@@ -6,8 +6,8 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        api-level: [23, 29, 30]
-        variant: [Debug, Release]
+        api-level: [23, 29]
+        variant: [freeRelease, nonFreeRelease]
     steps:
 
     - name: Check if relevant files have changed
@@ -22,7 +22,7 @@ jobs:
             pull_number: context.payload.number,
             per_page: 100
           })
-          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.endsWith("gradle") || f.filename.startsWith(".github") || f.filename.startsWith("gradle") || f.filename.endsWith("properties")).length > 0
+          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.endsWith("gradle") || f.filename.startsWith(".github/workflows/pull_request.yml") || f.filename.startsWith("gradle") || f.filename.endsWith("properties")).length > 0
           console.log(serviceChanged)
           return serviceChanged
 
@@ -71,10 +71,10 @@ jobs:
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@v2.10.0
+      uses: reactivecircus/android-emulator-runner@v2.11.0
       with:
         api-level: ${{ matrix.api-level }}
-        target: google_apis
+        target: default
         script: |
           adb shell settings put global animator_duration_scale 0
           adb shell settings put global transition_animation_scale 0

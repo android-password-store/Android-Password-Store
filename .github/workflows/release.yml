@@ -1,0 +1,155 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    name: Build release binaries
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v1
+
+    - name: Decrypt secrets
+      run: release/signing-setup.sh "$ENCRYPT_KEY"
+      env:
+        ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
+
+    - name: Copy CI gradle.properties
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Generate cache key
+      run: ./.github/checksum.sh checksum.txt
+
+    - name: Cache gradle modules
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches/modules-2
+        key: ${{ runner.os }}-gradlemodules-${{ hashFiles('checksum.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-gradlemodules-
+
+    - name: Cache gradle jars
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches/jars-3
+        key: ${{ runner.os }}-gradlejars-${{ hashFiles('checksum.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-gradlejars-
+
+    - name: Cache gradle build
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches/build-cache-1
+        key: ${{ runner.os }}-gradlebuildcache-${{ hashFiles('checksum.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-gradlebuildcache-
+
+    - name: Download gradle dependencies
+      run: ./gradlew dependencies
+
+    - name: Build release binaries
+      run: ./gradlew :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
+
+    - name: Upload non-free release APK
+      uses: actions/upload-artifact@master
+      with:
+        name: APS Non-Free Release APK
+        path: app/build/outputs/apk/nonFree/release/app-release.apk
+
+    - name: Upload non-free release Bundle
+      uses: actions/upload-artifact@master
+      with:
+        name: APS Non-Free Release Bundle
+        path: app/build/outputs/bundle/nonFree/release/app-release.aab
+
+    - name: Upload free release APK
+      uses: actions/upload-artifact@master
+      with:
+        name: APS Free Release APK
+        path: app/build/outputs/apk/free/release/app-release.apk
+
+    - name: Clean secrets
+      if: always()
+      run: release/signing-cleanup.sh
+
+  create_github_release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Get Non-Free Release APK
+        uses: actions/download-artifact@v1
+        with:
+          name: APS Non-Free Release APK
+          path: artifacts/nonFree
+
+      - name: Get Non-Free Bundle
+        uses: actions/download-artifact@v1
+        with:
+          name: APS Non-Free Release Bundle
+          path: artifacts/nonFree
+
+      - name: Get Free Release APK
+        uses: actions/download-artifact@v1
+        with:
+          name: APS Free Release APK
+          path: artifacts/free
+
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v1.1.0
+        with:
+          version: ${{ github.ref }}
+          path: ./CHANGELOG.md
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.changelog_reader.outputs.log_entry }}
+          draft: false
+          prerelease: false
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Upload Non-Free Release Apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/nonFree/app-release.apk
+          asset_name: APS-nonFree_${{ steps.get_version.outputs.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload Non-Free Release Bundle
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/nonFree/app-release.aab
+          asset_name: APS-nonFree_${{ steps.get_version.outputs.VERSION }}.aab
+          asset_content_type: application/octet-stream
+
+      - name: Upload Free Release Apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/free/app-release.apk
+          asset_name: APS-free_${{ steps.get_version.outputs.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive

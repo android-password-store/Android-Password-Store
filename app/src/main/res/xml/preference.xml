@@ -190,7 +190,7 @@
 
     <PreferenceCategory>
         <Preference
-            app:icon="@mipmap/ic_launcher_round"
+            app:icon="@mipmap/ic_launcher"
             app:key="app_version"
             app:title="@string/prefs_version" />
     </PreferenceCategory>

@@ -164,7 +164,7 @@ class AutofillRule private constructor(
     )
 
     enum class FillableFieldType {
-        Username, CurrentPassword, NewPassword, GenericPassword,
+        Username, Otp, CurrentPassword, NewPassword, GenericPassword,
     }
 
     @AutofillDsl
@@ -174,6 +174,7 @@ class AutofillRule private constructor(
     ) {
 
         companion object {
+
             private var ruleId = 1
         }
 
@@ -188,6 +189,18 @@ class AutofillRule private constructor(
                     matcher = SingleFieldMatcher.Builder().apply(block).build(),
                     optional = optional,
                     matchHidden = matchHidden
+                )
+            )
+        }
+
+        fun otp(optional: Boolean = false, block: SingleFieldMatcher.Builder.() -> Unit) {
+            require(matchers.none { it.type == FillableFieldType.Otp }) { "Every rule block can only have at most one otp block" }
+            matchers.add(
+                AutofillRuleMatcher(
+                    type = FillableFieldType.Otp,
+                    matcher = SingleFieldMatcher.Builder().apply(block).build(),
+                    optional = optional,
+                    matchHidden = false
                 )
             )
         }
@@ -247,6 +260,7 @@ class AutofillRule private constructor(
     fun match(
         allPassword: List<FormField>,
         allUsername: List<FormField>,
+        allOtp: List<FormField>,
         singleOriginMode: Boolean,
         isManualRequest: Boolean
     ): AutofillScenario<FormField>? {
@@ -264,6 +278,7 @@ class AutofillRule private constructor(
         for ((type, matcher, optional, matchHidden) in matchers) {
             val fieldsToMatchOn = when (type) {
                 FillableFieldType.Username -> allUsername
+                FillableFieldType.Otp -> allOtp
                 else -> allPassword
             }.filter { matchHidden || it.isVisible }
             val matchResult = matcher.match(fieldsToMatchOn, alreadyMatched) ?: if (optional) {
@@ -280,6 +295,10 @@ class AutofillRule private constructor(
                     scenarioBuilder.username = matchResult.single()
                     // Hidden username fields should be saved but not filled.
                     scenarioBuilder.fillUsername = scenarioBuilder.username!!.isVisible == true
+                }
+                FillableFieldType.Otp -> {
+                    check(matchResult.size == 1 && scenarioBuilder.otp == null)
+                    scenarioBuilder.otp = matchResult.single()
                 }
                 FillableFieldType.CurrentPassword -> scenarioBuilder.currentPassword.addAll(
                     matchResult
@@ -338,12 +357,16 @@ class AutofillStrategy private constructor(private val rules: List<AutofillRule>
         val possibleUsernameFields =
             fields.filter { it.usernameCertainty >= CertaintyLevel.Possible }
         d { "Possible username fields: ${possibleUsernameFields.size}" }
+        val possibleOtpFields =
+            fields.filter { it.otpCertainty >= CertaintyLevel.Possible }
+        d { "Possible otp fields: ${possibleOtpFields.size}" }
         // Return the result of the first rule that matches
         d { "Rules: ${rules.size}" }
         for (rule in rules) {
             return rule.match(
                 possiblePasswordFields,
                 possibleUsernameFields,
+                possibleOtpFields,
                 singleOriginMode = singleOriginMode,
                 isManualRequest = isManualRequest
             )

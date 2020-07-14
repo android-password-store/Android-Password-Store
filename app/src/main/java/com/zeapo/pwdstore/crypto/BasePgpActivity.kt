@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
@@ -26,13 +27,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
 import com.zeapo.pwdstore.utils.snackbar
+import java.io.File
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
-import java.io.File
 
 @Suppress("Registered")
 open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
@@ -93,7 +95,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         tag(TAG)
 
-        keyIDs = settings.getStringSet("openpgp_key_ids_set", null) ?: emptySet()
+        keyIDs = settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, null) ?: emptySet()
     }
 
     /**
@@ -132,7 +134,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * [startActivityForResult].
      */
     fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound, activityResult: ActivityResultLauncher<Intent>) {
-        val providerPackageName = settings.getString("openpgp_provider_list", "")
+        val providerPackageName = settings.getString(PreferenceKeys.OPENPGP_PROVIDER_LIST, "")
         if (providerPackageName.isNullOrEmpty()) {
             Toast.makeText(this, resources.getString(R.string.provider_toast_text), Toast.LENGTH_LONG).show()
             activityResult.launch(Intent(this, UserPreference::class.java))
@@ -163,6 +165,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         return DateUtils.getRelativeTimeSpanString(this, timeStamp, true)
     }
+
     /**
      * Base handling of OpenKeychain errors based on the error contained in [result]. Subclasses
      * can use this when they want to default to sane error handling.
@@ -190,12 +193,16 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * Copies provided [text] to the clipboard. Shows a [Snackbar] which can be disabled by passing
      * [showSnackbar] as false.
      */
-    fun copyTextToClipboard(text: String?, showSnackbar: Boolean = true) {
+    fun copyTextToClipboard(
+        text: String?,
+        showSnackbar: Boolean = true,
+        @StringRes snackbarTextRes: Int = R.string.clipboard_copied_text
+    ) {
         val clipboard = clipboard ?: return
         val clip = ClipData.newPlainText("pgp_handler_result_pm", text)
         clipboard.setPrimaryClip(clip)
         if (showSnackbar) {
-            snackbar(message = resources.getString(R.string.clipboard_copied_text))
+            snackbar(message = resources.getString(snackbarTextRes))
         }
     }
 
@@ -209,7 +216,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         var clearAfter = 45
         try {
-            clearAfter = (settings.getString("general_show_time", "45") ?: "45").toInt()
+            clearAfter = (settings.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")
+                ?: "45").toInt()
         } catch (_: NumberFormatException) {
         }
 
@@ -229,6 +237,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     }
 
     companion object {
+
         private const val TAG = "APS/BasePgpActivity"
         const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"

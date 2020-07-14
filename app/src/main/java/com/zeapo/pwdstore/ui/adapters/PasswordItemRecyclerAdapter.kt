@@ -18,6 +18,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.SearchableRepositoryAdapter
 import com.zeapo.pwdstore.stableId
 import com.zeapo.pwdstore.utils.PasswordItem
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 
 open class PasswordItemRecyclerAdapter :
@@ -40,6 +41,7 @@ open class PasswordItemRecyclerAdapter :
     }
 
     class PasswordItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         private val name: AppCompatTextView = itemView.findViewById(R.id.label)
         private val typeImage: AppCompatImageView = itemView.findViewById(R.id.type_image)
         private val childCount: AppCompatTextView = itemView.findViewById(R.id.child_count)
@@ -50,7 +52,7 @@ open class PasswordItemRecyclerAdapter :
         fun bind(item: PasswordItem) {
             val settings =
                 PreferenceManager.getDefaultSharedPreferences(itemView.context.applicationContext)
-            val showHidden = settings.getBoolean("show_hidden_folders", false)
+            val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
             name.text = item.toString()
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
@@ -64,7 +66,11 @@ open class PasswordItemRecyclerAdapter :
             } else {
                 typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
                 val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
-                val source = "$parentPath\n$item"
+                val source = if (parentPath.isNotEmpty()) {
+                    "$parentPath\n$item"
+                } else {
+                    "$item"
+                }
                 val spannable = SpannableString(source)
                 spannable.setSpan(RelativeSizeSpan(0.7f), 0, parentPath.length, 0)
                 name.text = spannable

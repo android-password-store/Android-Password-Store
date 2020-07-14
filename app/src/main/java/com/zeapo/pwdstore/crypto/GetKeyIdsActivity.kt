@@ -14,6 +14,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.Timber
 import com.github.ajalt.timberkt.e
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,7 +70,7 @@ class GetKeyIdsActivity : BasePgpActivity() {
                                 ?: LongArray(0)
                             val keys = ids.map { it.toString() }.toSet()
                             // use Long
-                            settings.edit { putStringSet("openpgp_key_ids_set", keys) }
+                            settings.edit { putStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, keys) }
                             snackbar(message = "PGP keys selected")
                             setResult(RESULT_OK)
                             finish()

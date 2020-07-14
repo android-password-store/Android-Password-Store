@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 # Delete Release key
 rm -f keystore.jks

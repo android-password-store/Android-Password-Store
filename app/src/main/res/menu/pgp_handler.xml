@@ -9,17 +9,17 @@
     tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
     <item
         android:id="@+id/share_password_as_plaintext"
-        android:icon="@drawable/ic_share_white_24dp"
+        android:icon="@drawable/ic_share_24dp"
         android:title="@string/share_as_plaintext"
         pwstore:showAsAction="ifRoom" />
     <item
         android:id="@+id/copy_password"
-        android:icon="@drawable/ic_content_copy_white_24dp"
+        android:icon="@drawable/ic_content_copy"
         android:title="@string/copy_password"
         pwstore:showAsAction="ifRoom" />
     <item
         android:id="@+id/edit_password"
-        android:icon="@drawable/ic_edit_white_24dp"
+        android:icon="@drawable/ic_edit_24dp"
         android:title="@string/edit_password"
         pwstore:showAsAction="ifRoom" />
 </menu>
