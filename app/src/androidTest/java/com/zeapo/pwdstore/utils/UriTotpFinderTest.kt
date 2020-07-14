@@ -5,8 +5,8 @@
 
 package com.zeapo.pwdstore.utils
 
-import org.junit.Test
 import kotlin.test.assertEquals
+import org.junit.Test
 
 class UriTotpFinderTest {
 
@@ -34,6 +34,7 @@ class UriTotpFinderTest {
     }
 
     companion object {
+
         const val TOTP_URI = "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA256&digits=12&period=25"
     }
 }
