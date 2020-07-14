@@ -18,7 +18,6 @@ All notable changes to this project will be documented in this file.
 -   Fix authentication failure with usernames that contain the `@` character
 -   Text input boxes were illegible on dark theme
 -   Top-level password names had inconsistent top margin making them look askew
--   Autofill can now be made more reliable in Chrome by enabling an accessibility service that works around known Chrome limitations
 -   Password Store no longer ignores the selected OpenKeychain key
 -   Password export now happens in a separate process, preventing possible freezes
 
