@@ -273,7 +273,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
         // pass enters the key ID into `.gpg-id`.
         val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
-        val keyIdFile = File(repoRoot, category.text.toString()).findTillRoot(".gpg-id", repoRoot)
+        val keyIdFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
         if (keyIdFile == null) {
             snackbar(message = resources.getString(R.string.failed_to_find_key_id))
             return@with
