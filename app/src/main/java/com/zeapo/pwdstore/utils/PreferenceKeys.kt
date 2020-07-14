@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package com.zeapo.pwdstore.utils
 
 object PreferenceKeys {
@@ -32,7 +37,9 @@ object PreferenceKeys {
     const val GIT_SERVER_INFO = "git_server_info"
     const val HTTPS_PASSWORD = "https_password"
     const val LENGTH = "length"
-    const val OREO_AUTOFILL_CHROME_COMPAT_FIX = "oreo_autofill_chrome_compat_fix"
+    const val OPENPGP_KEY_IDS_SET = "openpgp_key_ids_set"
+    const val OPENPGP_KEY_ID_PREF = "openpgp_key_id_pref"
+    const val OPENPGP_PROVIDER_LIST = "openpgp_provider_list"
     const val OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES = "oreo_autofill_custom_public_suffixes"
     const val OREO_AUTOFILL_DEFAULT_USERNAME = "oreo_autofill_default_username"
     const val OREO_AUTOFILL_DIRECTORY_STRUCTURE = "oreo_autofill_directory_structure"

@@ -4,7 +4,5 @@
   -->
 
 <resources>
-    <bool name="leak_canary_allow_in_non_debuggable_build">true</bool>
-    <bool name="enable_accessibility_autofill">true</bool>
-    <bool name="light_status_bar">true</bool>
+    <color name="navigation_bar_color">@color/primary_color</color>
 </resources>
