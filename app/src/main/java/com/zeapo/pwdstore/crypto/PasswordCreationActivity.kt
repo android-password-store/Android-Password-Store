@@ -43,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.eclipse.jgit.api.Git
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
@@ -243,6 +244,38 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         otpImportButton.isVisible = !entry.hasTotp()
     }
 
+    private sealed class GpgIdentifier {
+        data class KeyId(val id: Long) : GpgIdentifier()
+        data class UserId(val email: String) : GpgIdentifier()
+    }
+
+    @OptIn(ExperimentalUnsignedTypes::class)
+    private fun parseGpgIdentifier(identifier: String) : GpgIdentifier? {
+        // Match long key IDs:
+        // FF22334455667788 or 0xFF22334455667788
+        val maybeLongKeyId = identifier.removePrefix("0x").takeIf {
+            it.matches("[a-fA-F0-9]{16}".toRegex())
+        }
+        if (maybeLongKeyId != null) {
+            val keyId = maybeLongKeyId.toULong()
+            return GpgIdentifier.KeyId(maybeLongKeyId.toLong())
+        }
+
+        // Match fingerprints:
+        // FF223344556677889900112233445566778899 or 0xFF223344556677889900112233445566778899
+        val maybeFingerprint = identifier.removePrefix("0x").takeIf {
+            it.matches("[a-fA-F0-9]{40}".toRegex())
+        }
+        if (maybeFingerprint != null) {
+            // Truncating to the long key ID is not a security issue since OpenKeychain only accepts
+            // non-ambiguous key IDs.
+            val keyId = maybeFingerprint.takeLast(16).toULong(16)
+            return GpgIdentifier.KeyId(keyId.toLong())
+        }
+
+        return OpenPgpUtils.splitUserId(identifier).email?.let { GpgIdentifier.UserId(it) }
+    }
+
     /**
      * Encrypts the password and the extra content
      */
@@ -273,18 +306,19 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
         // pass enters the key ID into `.gpg-id`.
         val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
-        val keyIdFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
-        if (keyIdFile == null) {
+        val gpgIdentifierFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
+        if (gpgIdentifierFile == null) {
             snackbar(message = resources.getString(R.string.failed_to_find_key_id))
             return@with
         }
-        val keyId = keyIdFile.readText()
-        if (keyId.toLongOrNull(radix = 16) != null) {
-            // Being able to parse a Long out of the key text means it's a key ID
-            data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(keyId.toLong(radix = 16)))
-        } else {
-            // Otherwise, it's an email - a user ID.
-            data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(keyId))
+        val gpgIdentifierFileContent = gpgIdentifierFile.useLines { it.firstOrNull() } ?: ""
+        when (val identifier = parseGpgIdentifier(gpgIdentifierFileContent)) {
+            is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id))
+            is GpgIdentifier.UserId -> data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(identifier.email))
+            null -> {
+                snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                return@with
+            }
         }
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 

@@ -373,6 +373,7 @@
     <string name="oreo_autofill_chrome_compat_fix_preference_title">Improve reliability in Chrome</string>
     <string name="exporting_passwords">Exporting passwords…</string>
     <string name="failed_to_find_key_id">Failed to locate .gpg-id, is your store set up correctly?</string>
+    <string name="invalid_gpg_id">Found .gpg-id, but it did not contain a key ID, fingerprint or user ID</string>
     <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
     <string name="directory_hint">Directory</string>
 </resources>
