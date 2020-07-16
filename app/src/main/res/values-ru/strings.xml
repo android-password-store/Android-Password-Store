@@ -20,8 +20,6 @@
     <string name="use">Использовать</string>
     <string name="directory_selected_title">Директория уже выбрана</string>
     <string name="directory_selected_message">Вы хотите использовать \"%1$s\"?</string>
-    <string name="no_key_selected_dialog_title">Ключ OpenPGP не выбран</string>
-    <string name="no_key_selected_dialog_text">Мы перенаправим вас в настройки. Пожалуйста, выберите ваш OpenGPG ключ.</string>
     <string name="password_exists_title">Пароль уже существует!</string>
     <string name="password_exists_message">Это перезапишет %1$sна%2$s</string>
 
@@ -32,7 +30,6 @@
     <string name="git_commit_move_text">Переименовать %1$sв%2$s.</string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Не выбран провайдер OpenPGP!</string>
     <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
     <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
     <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
@@ -94,7 +91,6 @@
     <string name="username">Имя пользователя:</string>
     <string name="edit_password">Редактировать пароль</string>
     <string name="copy_password">Скопировать пароль</string>
-    <string name="copy_username">Скопировать имя пользователя</string>
     <string name="share_as_plaintext">Поделиться в открытом виде</string>
     <string name="last_changed">Последние изменение %s</string>
 
@@ -106,10 +102,6 @@
     <string name="pref_ssh_see_key_title">Просмотреть публичный SSH ключ</string>
     <string name="pref_git_delete_repo">Удалить репозиторий</string>
     <string name="pref_dialog_delete_title">Очистить репозиторий</string>
-    <string name="pref_crypto_title">Шифрование</string>
-    <string name="pref_provider_title">Выберите провайдера OpenPGP</string>
-    <string name="pref_key_title">Выберите ключ OpenPGP</string>
-    <string name="pref_no_key_selected">Ключи не выбраны</string>
     <string name="pref_category_general_title">Общие</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
     <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
@@ -199,9 +191,6 @@
     <string name="refresh_list">Обновить список</string>
     <string name="no_repo_selected">Внешний репозиторий не выбран</string>
     <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
-    <string name="show_password">Показать пароль</string>
-    <string name="show_extra">Показать дополнительную информацию</string>
-    <string name="hide_extra">Скрыть расширенный контекст</string>
     <string name="app_icon_hint">Иконка приложения</string>
     <string name="folder_icon_hint">Иконка папки</string>
 
@@ -244,7 +233,6 @@
     <string name="autofill_toast_username">Выберите поле ввода для вставки имени пользователя.\nИмя пользователя можно вставить в течение %d секунд.</string>
     <string name="ssh_key_does_not_exist">Невозможно открыть приватный ключ ssh, пожалуйста проверьте, что файл существует</string>
     <string name="new_password_title">Новый пароль</string>
-    <string name="edit_password_title">Редактирование</string>
     <string name="autofill_ins_1_hint">Снимок экрана сервисов доступности</string>
     <string name="autofill_ins_2_hint">Снимок экрана переключателя в сервисах доступности</string>
     <string name="autofill_ins_3_hint">Снимок экрана сервиса автозаполнения в действии</string>
@@ -258,7 +246,6 @@
     <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
     <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
     <string name="commit_hash">Хэш-сумма изменений</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
     <string name="openkeychain_ssh_api_connect_fail">Ошибка при подключении к сервису OpenKeychain SSH API</string>
     <string name="no_ssh_api_provider">Не найдено SSH API провайдеров. OpenKeychain установлен?</string>
     <string name="ssh_api_pending_intent_failed">Ожидаемое намерение SSH API не удалось</string>

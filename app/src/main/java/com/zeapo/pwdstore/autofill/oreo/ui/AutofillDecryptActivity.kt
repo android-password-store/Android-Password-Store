@@ -24,6 +24,7 @@ import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.model.PasswordEntry
+import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -53,7 +54,6 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
         private const val EXTRA_FILE_PATH = "com.zeapo.pwdstore.autofill.oreo.EXTRA_FILE_PATH"
         private const val EXTRA_SEARCH_ACTION =
             "com.zeapo.pwdstore.autofill.oreo.EXTRA_SEARCH_ACTION"
-        private const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
 
         private var decryptFileRequestCode = 1
 

@@ -16,8 +16,6 @@
     <string name="move">Mover</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
-    <string name="no_key_selected_dialog_title">No se ha seleccionado una llave OpenPGP</string>
-    <string name="no_key_selected_dialog_text">Serás redirigido a los ajustes. Por favor selecciona tu llave OpenPGP.</string>
     <!-- git commits -->
     <string name="git_commit_add_text">"Contraseña para %1$s agregada usando Android Password Store."</string>
     <string name="git_commit_edit_text">"%1$s editada usando Android Password Store."</string>
@@ -25,7 +23,6 @@
     <string name="git_commit_move_text">"Renombrado %1$s a %2$s usando Android Password Store.."</string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">¡No se ha seleccionado ningún proveedor OpenGPG!</string>
     <string name="clipboard_password_toast_text">Contraseña copiada al portapapeles, tienes %d segundos para pegarla.</string>
     <string name="clipboard_password_no_clear_toast_text">Contraseña copiada al portapapeles</string>
     <string name="file_toast_text">Por favor selecciona un nombre de archivo</string>
@@ -82,7 +79,6 @@
     <string name="username">Nombre de usuario:</string>
     <string name="edit_password">Editar contraseña</string>
     <string name="copy_password">Copiar contraseña</string>
-    <string name="copy_username">Copiar nombre de usuario</string>
     <string name="share_as_plaintext">Compartir como texto plano</string>
     <string name="last_changed">Última modificación %s</string>
 
@@ -94,10 +90,6 @@
     <string name="pref_ssh_see_key_title">Ver llave pública SSH generada</string>
     <string name="pref_git_delete_repo">Eliminar repositorio</string>
     <string name="pref_dialog_delete_title">Limpiar repositorio</string>
-    <string name="pref_crypto_title">Cifrado</string>
-    <string name="pref_provider_title">Selecciona un proveedor OpenPGP</string>
-    <string name="pref_key_title">Selecciona la llave OpenPGP</string>
-    <string name="pref_no_key_selected">Ninguna llave seleccionada</string>
     <string name="pref_category_general_title">General</string>
     <string name="pref_copy_title">Copiar contraseña automáticamente</string>
     <string name="pref_copy_dialog_title">Automáticamente copia la contraseña al portapapeles si el descifrado fue exitoso.</string>
@@ -167,8 +159,6 @@
     <string name="refresh_list">Actualizar lista</string>
     <string name="no_repo_selected">Ningún repositorio externo seleccionado</string>
     <string name="send_plaintext_password_to">Enviar contraseña en texto plano usando…</string>
-    <string name="show_password">Mostrar contraseña</string>
-    <string name="show_extra">Mostrar contenido extra</string>
     <string name="app_icon_hint">Ícono de app</string>
     <string name="folder_icon_hint">Ícono de directorio</string>
 
@@ -187,7 +177,6 @@
     <string name="autofill_toast_username">Selecciona un campo editable para pegar el nombre de usuario.\nNombre de usuario disponible por %d segundos.</string>
     <string name="ssh_key_does_not_exist">Imposible abrir la llave privada SSH. Por favor verifica que el archivo exista</string>
     <string name="new_password_title">Nueva contraseña</string>
-    <string name="edit_password_title">Editando</string>
     <string name="autofill_ins_1_hint">Pantalla de Servicios de Accesibilidad</string>
     <string name="autofill_ins_2_hint">Pantalla de activación en Servicios de Accesibilidad</string>
     <string name="autofill_ins_3_hint">Pantalla de servicio de autollenado en acción</string>
@@ -198,5 +187,4 @@
     <string name="hackish_tools">Hackish tools</string>
     <string name="abort_rebase">Abortar rebase</string>
     <string name="commit_hash">Hash del commit</string>
-    <string name="get_last_changed_failed">Error al obtener la fecha de último cambio</string>
 </resources>

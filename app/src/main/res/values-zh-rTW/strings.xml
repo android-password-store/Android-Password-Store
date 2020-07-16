@@ -15,7 +15,6 @@
     <string name="creation_dialog_text">在嘗試新增密碼或任何同步操作之前請在下方 clone 或新增一個新的 Repo</string>
     <string name="delete">刪除</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">未選擇提供 OpenPGP 的 app</string>
     <string name="clipboard_password_toast_text">密碼已複製到剪貼簿, 你有 %d 秒的時間將其貼上到其他地方.</string>
     <string name="file_toast_text">請填寫文件名稱</string>
     <string name="empty_toast_text">不能使用空白密碼或者空白的備註</string>
@@ -61,9 +60,6 @@
     <string name="pref_ssh_see_key_title">顯示生成的 SSH 公鑰</string>
     <string name="pref_git_delete_repo">刪除 Repo</string>
     <string name="pref_dialog_delete_title">清空 Repo</string>
-    <string name="pref_crypto_title">加密</string>
-    <string name="pref_provider_title">選擇 OpenPGP app</string>
-    <string name="pref_key_title">選擇 OpenPGP Key Id</string>
     <string name="pref_category_general_title">一般</string>
     <string name="pref_copy_title">自動複製密碼</string>
     <string name="pref_copy_dialog_title">解密成功後自動將密碼複製到剪貼簿</string>
@@ -114,7 +110,6 @@
     <string name="refresh_list">重新整理</string>
     <string name="no_repo_selected">未選擇外部 Repo</string>
     <string name="send_plaintext_password_to">將密碼以純文字傳送…</string>
-    <string name="show_password">顯示密碼</string>
     <!-- Autofill -->
     <string name="autofill_description">在app中自動填入密碼. 此功能只能在 Andorid 4.3 及以上版本中使用. 在 Andorid 5.0 及以上版本中不需要剪貼簿</string>
     <string name="autofill_apps_default">使用預設值</string>
@@ -123,5 +118,4 @@
     <string name="autofill_apps_match">自動填入</string>
     <string name="autofill_apps_never">手動</string>
     <string name="autofill_apps_delete">刪除</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>
