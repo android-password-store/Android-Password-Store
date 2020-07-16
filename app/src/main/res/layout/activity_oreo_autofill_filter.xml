@@ -14,7 +14,7 @@
     <ImageView
         android:id="@+id/cover"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         android:background="@color/primary_color"
         android:contentDescription="@string/app_name"
         android:src="@mipmap/ic_launcher_foreground"
