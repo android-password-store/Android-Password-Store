@@ -18,6 +18,7 @@ buildscript {
 
 plugins {
     id("com.github.ben-manes.versions") version "0.28.0"
+    id("com.autonomousapps.dependency-analysis") version "0.53.0"
 }
 
 subprojects {
