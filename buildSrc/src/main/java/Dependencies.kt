@@ -5,7 +5,7 @@
 
 object Plugins {
 
-    const val agp = "com.android.tools.build:gradle:4.0.0"
+    const val agp = "com.android.tools.build:gradle:4.0.1"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72"
 }
 
