@@ -106,7 +106,6 @@ dependencies {
 
     implementation(Dependencies.Kotlin.Coroutines.android)
     implementation(Dependencies.Kotlin.Coroutines.core)
-    implementation(Dependencies.Kotlin.stdlib8)
 
     implementation(Dependencies.FirstParty.openpgp_ktx)
     implementation(Dependencies.FirstParty.zxing_android_embedded)
