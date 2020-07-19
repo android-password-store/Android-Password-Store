@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 -   XkPassword generator is now easier to use with less configuration options
 -   Edit screen now has better protection and guidance for invalid names
 -   Improved biometric authentication UX on app start
+-   Improved password list UI
 
 ### Fixed
 
