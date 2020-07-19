@@ -96,7 +96,7 @@ class UserPreference : AppCompatActivity() {
             if (!PasswordRepository.isGitRepo()) {
                 listOfNotNull(
                     gitServerPreference, gitConfigPreference, sshKeyPreference,
-                    sshKeygenPreference, viewSshKeyPreference, clearSavedPassPreference
+                    viewSshKeyPreference, clearSavedPassPreference
                 ).forEach {
                     it.parent?.removePreference(it)
                 }

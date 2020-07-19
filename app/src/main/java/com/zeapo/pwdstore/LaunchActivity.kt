@@ -50,7 +50,6 @@ class LaunchActivity : AppCompatActivity() {
         } else {
             startActivity(Intent(this, PasswordStore::class.java))
         }
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         Handler().postDelayed({ finish() }, if (noAuth) 0L else 500L)
     }
 
