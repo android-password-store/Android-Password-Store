@@ -8,8 +8,10 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ClipData
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
@@ -35,15 +37,12 @@ class ShowSshKeyFragment : DialogFragment() {
         createMaterialDialog(view)
         val ad = builder.create()
         ad.setOnShowListener {
-            val b = ad.getButton(AlertDialog.BUTTON_POSITIVE)
-            b.setOnClickListener {
+            ad.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 val clipboard = activity.clipboardManager ?: return@setOnClickListener
                 val clip = ClipData.newPlainText("public key", publicKey.text.toString())
-                context.clipboardManager?.setPrimaryClip(clip)
+                clipboard.setPrimaryClip(clip)
                 Toast.makeText(context, R.string.ssh_keygen_copied_key, Toast.LENGTH_SHORT).show()
             }
-            setNegativeButton(R.string.dialog_cancel, null)
-            create()
         }
         return ad
     }

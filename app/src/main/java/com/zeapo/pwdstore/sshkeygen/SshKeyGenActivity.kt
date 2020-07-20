@@ -24,12 +24,11 @@ import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.keyguardManager
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
-import java.io.FileOutputStream
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import net.schmizz.sshj.common.Buffer
 import net.schmizz.sshj.common.KeyType
 
@@ -59,8 +58,7 @@ class SshKeyGenActivity : AppCompatActivity() {
                     }
                 }
             }
-            keyRequireAuthentication.isEnabled =
-                requireContext().keyguardManager?.isDeviceSecure == true
+            keyRequireAuthentication.isEnabled = keyguardManager?.isDeviceSecure == true
             keyRequireAuthentication.isChecked = keyRequireAuthentication.isEnabled
         }
     }
@@ -85,8 +83,8 @@ class SshKeyGenActivity : AppCompatActivity() {
         }
         val encodedPublicKey = Base64.encodeToString(rawPublicKey, Base64.NO_WRAP)
         val sshPublicKey = "$keyType $encodedPublicKey $comment"
-        File(requireActivity().filesDir, ".ssh_key").writeText("keystore")
-        File(requireActivity().filesDir, ".ssh_key.pub").writeText(sshPublicKey)
+        File(filesDir, ".ssh_key").writeText("keystore")
+        File(filesDir, ".ssh_key.pub").writeText(sshPublicKey)
     }
 
     private suspend fun generate(comment: String) {
@@ -100,36 +98,36 @@ class SshKeyGenActivity : AppCompatActivity() {
                 if (requireAuthentication) {
                     val result = withContext(Dispatchers.Main) {
                         suspendCoroutine<BiometricAuthenticator.Result> { cont ->
-                            BiometricAuthenticator.authenticate(requireActivity(), R.string.biometric_prompt_title_ssh_keygen) {
+                            BiometricAuthenticator.authenticate(this@SshKeyGenActivity, R.string.biometric_prompt_title_ssh_keygen) {
                                 cont.resume(it)
                             }
                         }
                     }
                     if (result !is BiometricAuthenticator.Result.Success)
                         throw UserNotAuthenticatedException(getString(R.string.biometric_auth_generic_failure))
-                generateAndStoreKey(requireAuthentication, comment)
+                    generateAndStoreKey(requireAuthentication, comment)
+                }
             }
             null
         } catch (e: Exception) {
             e.printStackTrace()
             e
         }
-        val activity = requireActivity()
         binding.generate.apply {
             text = getString(R.string.ssh_keygen_generate)
             isEnabled = true
         }
         if (e == null) {
             val df = ShowSshKeyFragment()
-            df.show(requireActivity().supportFragmentManager, "public_key")
-            val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+            df.show(supportFragmentManager, "public_key")
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             prefs.edit { putBoolean("use_generated_key", true) }
         } else {
-            MaterialAlertDialogBuilder(activity)
-                .setTitle(activity.getString(R.string.error_generate_ssh_key))
-                .setMessage(activity.getString(R.string.ssh_key_error_dialog_text) + e.message)
-                .setPositiveButton(activity.getString(R.string.dialog_ok)) { _, _ ->
-                    requireActivity().finish()
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.error_generate_ssh_key))
+                .setMessage(getString(R.string.ssh_key_error_dialog_text) + e.message)
+                .setPositiveButton(getString(R.string.dialog_ok)) { _, _ ->
+                    finish()
                 }
                 .show()
         }

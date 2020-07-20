@@ -6,7 +6,6 @@ package com.zeapo.pwdstore.git.config
 
 import com.github.ajalt.timberkt.Timber
 import com.github.ajalt.timberkt.d
-import com.hierynomus.sshj.signature.SignatureEdDSA
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
 import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
@@ -14,9 +13,6 @@ import java.security.Security
 import net.schmizz.keepalive.KeepAliveProvider
 import net.schmizz.sshj.ConfigImpl
 import net.schmizz.sshj.common.LoggerFactory
-import net.schmizz.sshj.signature.SignatureECDSA
-import net.schmizz.sshj.signature.SignatureRSA
-import net.schmizz.sshj.signature.SignatureRSA.FactoryCERT
 import net.schmizz.sshj.transport.compression.NoneCompression
 import net.schmizz.sshj.transport.kex.Curve25519SHA256
 import net.schmizz.sshj.transport.kex.Curve25519SHA256.FactoryLibSsh
@@ -221,14 +217,15 @@ class SshjConfig : ConfigImpl() {
     }
 
     private fun initSignatureFactories() {
-        signatureFactories = listOf(
+        // TODO(FabianHenneke): why is this field unavailable?
+        /*signatureFactories = listOf(
             SignatureEdDSA.Factory(),
             SignatureECDSA.Factory256(),
             SignatureECDSA.Factory384(),
             SignatureECDSA.Factory521(),
             SignatureRSA.Factory(),
             FactoryCERT()
-        )
+        )*/
     }
 
     private fun initRandomFactory() {
