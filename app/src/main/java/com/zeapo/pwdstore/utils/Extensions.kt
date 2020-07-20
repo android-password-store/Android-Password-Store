@@ -4,11 +4,7 @@
  */
 package com.zeapo.pwdstore.utils
 
-<<<<<<< HEAD
-import android.app.Activity
 import android.app.KeyguardManager
-=======
->>>>>>> develop
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
