@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 -   Initial support for detecting and filling OTP fields with Autofill
 -   OTP codes can be automatically filled from SMS (requires Android P+ and Google Play Services)
 -   Importing TOTP secrets using QR codes
+-   Support for ed25519/ECDSA SSH keys
 -   Navigate into newly created folders and scroll to newly created passwords
 -   Support per-directory keys
 
