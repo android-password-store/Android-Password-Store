@@ -196,6 +196,7 @@ class SshjConfig : ConfigImpl() {
     init {
         loggerFactory = TimberLoggerFactory
         keepAliveProvider = KeepAliveProvider.HEARTBEAT
+        version = "OpenSSH_8.2p1 Ubuntu-4ubuntu0.1"
 
         initKeyExchangeFactories()
         initKeyAlgorithms()
