@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.git.config
 
 import com.github.ajalt.timberkt.Timber
 import com.github.ajalt.timberkt.d
+import com.hierynomus.sshj.key.KeyAlgorithms
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
 import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
@@ -197,7 +198,7 @@ class SshjConfig : ConfigImpl() {
         keepAliveProvider = KeepAliveProvider.HEARTBEAT
 
         initKeyExchangeFactories()
-        initSignatureFactories()
+        initKeyAlgorithms()
         initRandomFactory()
         initFileKeyProviderFactories()
         initCipherFactories()
@@ -216,16 +217,17 @@ class SshjConfig : ConfigImpl() {
         )
     }
 
-    private fun initSignatureFactories() {
-        // TODO(FabianHenneke): why is this field unavailable?
-        /*signatureFactories = listOf(
-            SignatureEdDSA.Factory(),
-            SignatureECDSA.Factory256(),
-            SignatureECDSA.Factory384(),
-            SignatureECDSA.Factory521(),
-            SignatureRSA.Factory(),
-            FactoryCERT()
-        )*/
+    private fun initKeyAlgorithms() {
+        keyAlgorithms = listOf(
+            KeyAlgorithms.EdDSA25519(),
+            KeyAlgorithms.RSASHA512(),
+            KeyAlgorithms.RSASHA256(),
+            KeyAlgorithms.ECDSASHANistp521(),
+            KeyAlgorithms.ECDSASHANistp384(),
+            KeyAlgorithms.ECDSASHANistp256(),
+            KeyAlgorithms.SSHRSACertV01(),
+            KeyAlgorithms.SSHRSA()
+        )
     }
 
     private fun initRandomFactory() {
