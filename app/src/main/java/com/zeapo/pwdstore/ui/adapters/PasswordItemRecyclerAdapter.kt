@@ -43,7 +43,6 @@ open class PasswordItemRecyclerAdapter :
     class PasswordItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val name: AppCompatTextView = itemView.findViewById(R.id.label)
-        private val typeImage: AppCompatImageView = itemView.findViewById(R.id.type_image)
         private val childCount: AppCompatTextView = itemView.findViewById(R.id.child_count)
         private val folderIndicator: AppCompatImageView =
             itemView.findViewById(R.id.folder_indicator)
@@ -55,7 +54,6 @@ open class PasswordItemRecyclerAdapter :
             val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
             name.text = item.toString()
             if (item.type == PasswordItem.TYPE_CATEGORY) {
-                typeImage.setImageResource(R.drawable.ic_multiple_files_24dp)
                 folderIndicator.visibility = View.VISIBLE
                 val children = item.file.listFiles { pathname ->
                     !(!showHidden && (pathname.isDirectory && pathname.isHidden))
@@ -64,7 +62,6 @@ open class PasswordItemRecyclerAdapter :
                 childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
                 childCount.text = "$count"
             } else {
-                typeImage.setImageResource(R.drawable.ic_action_secure_24dp)
                 val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
                 val source = if (parentPath.isNotEmpty()) {
                     "$parentPath\n$item"

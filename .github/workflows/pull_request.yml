@@ -28,7 +28,7 @@ jobs:
 
     - name: Checkout repository
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
@@ -40,7 +40,7 @@ jobs:
 
     - name: Cache gradle modules
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches/modules-2
         key: ${{ runner.os }}-gradlemodules-${{ hashFiles('checksum.txt') }}
@@ -49,7 +49,7 @@ jobs:
 
     - name: Cache gradle jars
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches/jars-3
         key: ${{ runner.os }}-gradlejars-${{ hashFiles('checksum.txt') }}
@@ -58,7 +58,7 @@ jobs:
 
     - name: Cache gradle build
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches/build-cache-1
         key: ${{ runner.os }}-gradlebuildcache-${{ hashFiles('checksum.txt') }}

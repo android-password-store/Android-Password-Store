@@ -17,7 +17,6 @@
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Kein OpenPGP-Provider ausgewählt!</string>
     <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
     <string name="file_toast_text">Bitte setze einen Pfad</string>
     <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
@@ -66,7 +65,6 @@
     <string name="username">Benutzername:</string>
     <string name="edit_password">Passwort bearbeiten</string>
     <string name="copy_password">Passwort kopieren</string>
-    <string name="copy_username">Benutzername kopieren</string>
     <string name="share_as_plaintext">Als Klartext teilen</string>
     <string name="last_changed">Zuletzt geändert %s</string>
     <!-- Preferences -->
@@ -77,9 +75,6 @@
     <string name="pref_ssh_see_key_title">Zeige erstellten öffentlichen SSH-Key</string>
     <string name="pref_git_delete_repo">Repository löschen</string>
     <string name="pref_dialog_delete_title">Repository löschen</string>
-    <string name="pref_crypto_title">Kryptografie</string>
-    <string name="pref_provider_title">Wähle OpenPGP-Provider</string>
-    <string name="pref_key_title">Wähle OpenPGP-Key ID</string>
     <string name="pref_category_general_title">Allgemein</string>
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
     <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
@@ -138,8 +133,6 @@
     <string name="refresh_list">Aktualisieren</string>
     <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
     <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
-    <string name="show_password">Password wiedergeben</string>
-    <string name="show_extra">Zeige weiteren Inhalt</string>
     <string name="app_icon_hint">App Icon</string>
     <string name="folder_icon_hint">Verzeichnis Icon</string>
 
@@ -159,5 +152,4 @@
     <string name="autofill_ins_1_hint">Bildschirmfoto Accessibility Services</string>
     <string name="autofill_ins_2_hint">Bildschirmfoto des Schalters in Accessibility Services</string>
     <string name="autofill_ins_3_hint">Bildschirmfoto von Autofill in Aktion</string>
-    <string name="get_last_changed_failed">Das Abrufen des letzten Änderungsdatums ist fehlgeschlagen.</string>
 </resources>

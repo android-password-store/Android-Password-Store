@@ -35,6 +35,8 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirect
 import java.io.File
 import org.eclipse.jgit.api.Git
 
+const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
+
 fun Int.clearFlag(flag: Int): Int {
     return this and flag.inv()
 }

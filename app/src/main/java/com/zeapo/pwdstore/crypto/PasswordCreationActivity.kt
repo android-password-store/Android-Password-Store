@@ -11,7 +11,10 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
+import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.eclipse.jgit.api.Git
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
@@ -51,13 +55,45 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
     private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
     private val editing by lazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
-    private val doNothing = registerForActivityResult(StartActivityForResult()) {}
-    private var oldCategory: String? = null
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
+    private var oldCategory: String? = null
+    private var copy: Boolean = false
+
+    private val userInteractionRequiredResult: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(StartIntentSenderForResult()) { result ->
+        if (result.data == null) {
+            setResult(RESULT_CANCELED, null)
+            finish()
+            return@registerForActivityResult
+        }
+
+        when (result.resultCode) {
+            RESULT_OK -> encrypt(result.data)
+            RESULT_CANCELED -> {
+                setResult(RESULT_CANCELED, result.data)
+                finish()
+            }
+        }
+    }
+
+    private fun File.findTillRoot(fileName: String, rootPath: File): File? {
+        val gpgFile = File(this, fileName)
+        if (gpgFile.exists()) return gpgFile
+
+        if (this.absolutePath == rootPath.absolutePath) {
+            return null
+        }
+
+        val parent = parentFile
+        return if (parent != null && parent.exists()) {
+            parent.findTillRoot(fileName, rootPath)
+        } else {
+            null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindToOpenKeychain(this, doNothing)
+        bindToOpenKeychain(this)
         title = if (editing)
             getString(R.string.edit_password)
         else
@@ -172,8 +208,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 setResult(RESULT_CANCELED)
                 finish()
             }
-            R.id.save_password -> encrypt()
-            R.id.save_and_copy_password -> encrypt(copy = true)
+            R.id.save_password -> {
+                copy = false
+                encrypt()
+            }
+            R.id.save_and_copy_password -> {
+                copy = true
+                encrypt()
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -202,10 +244,42 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         otpImportButton.isVisible = !entry.hasTotp()
     }
 
+    private sealed class GpgIdentifier {
+        data class KeyId(val id: Long) : GpgIdentifier()
+        data class UserId(val email: String) : GpgIdentifier()
+    }
+
+    @OptIn(ExperimentalUnsignedTypes::class)
+    private fun parseGpgIdentifier(identifier: String) : GpgIdentifier? {
+        // Match long key IDs:
+        // FF22334455667788 or 0xFF22334455667788
+        val maybeLongKeyId = identifier.removePrefix("0x").takeIf {
+            it.matches("[a-fA-F0-9]{16}".toRegex())
+        }
+        if (maybeLongKeyId != null) {
+            val keyId = maybeLongKeyId.toULong()
+            return GpgIdentifier.KeyId(maybeLongKeyId.toLong())
+        }
+
+        // Match fingerprints:
+        // FF223344556677889900112233445566778899 or 0xFF223344556677889900112233445566778899
+        val maybeFingerprint = identifier.removePrefix("0x").takeIf {
+            it.matches("[a-fA-F0-9]{40}".toRegex())
+        }
+        if (maybeFingerprint != null) {
+            // Truncating to the long key ID is not a security issue since OpenKeychain only accepts
+            // non-ambiguous key IDs.
+            val keyId = maybeFingerprint.takeLast(16).toULong(16)
+            return GpgIdentifier.KeyId(keyId.toLong())
+        }
+
+        return OpenPgpUtils.splitUserId(identifier).email?.let { GpgIdentifier.UserId(it) }
+    }
+
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt(copy: Boolean = false) = with(binding) {
+    private fun encrypt(receivedIntent: Intent? = null) = with(binding) {
         val editName = filename.text.toString().trim()
         val editPass = password.text.toString()
         val editExtra = extraContent.text.toString()
@@ -227,12 +301,25 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             copyPasswordToClipboard(editPass)
         }
 
-        val data = Intent()
+        val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_ENCRYPT
 
-        // EXTRA_KEY_IDS requires long[]
-        val longKeys = keyIDs.map { it.toLong() }
-        data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, longKeys.toLongArray())
+        // pass enters the key ID into `.gpg-id`.
+        val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
+        val gpgIdentifierFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
+        if (gpgIdentifierFile == null) {
+            snackbar(message = resources.getString(R.string.failed_to_find_key_id))
+            return@with
+        }
+        val gpgIdentifierFileContent = gpgIdentifierFile.useLines { it.firstOrNull() } ?: ""
+        when (val identifier = parseGpgIdentifier(gpgIdentifierFileContent)) {
+            is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id))
+            is GpgIdentifier.UserId -> data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(identifier.email))
+            null -> {
+                snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                return@with
+            }
+        }
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
         val content = "$editPass\n$editExtra"
@@ -346,6 +433,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         } catch (e: Exception) {
                             e(e) { "An Exception occurred" }
                         }
+                    }
+                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+                        val sender = getUserInteractionRequestIntent(result)
+                        userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
                     }
                     OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
                 }

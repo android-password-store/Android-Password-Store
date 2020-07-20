@@ -417,17 +417,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 return // if not empty, just show me the passwords!
             }
         }
-        val keyIds = settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, HashSet())
-        if (keyIds != null && keyIds.isEmpty()) {
-            MaterialAlertDialogBuilder(this)
-                .setMessage(resources.getString(R.string.key_dialog_text))
-                .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
-                    val intent = Intent(activity, UserPreference::class.java)
-                    repositoryInitAction.launch(intent)
-                }
-                .setNegativeButton(resources.getString(R.string.dialog_negative), null)
-                .show()
-        }
         createRepository()
     }
 
@@ -578,17 +567,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.creation_dialog_text))
                 .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                .show()
-            return false
-        }
-        if (settings.getStringSet(PreferenceKeys.OPENPGP_KEY_IDS_SET, HashSet()).isNullOrEmpty()) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(resources.getString(R.string.no_key_selected_dialog_title))
-                .setMessage(resources.getString(R.string.no_key_selected_dialog_text))
-                .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
-                    val intent = Intent(activity, UserPreference::class.java)
-                    startActivity(intent)
-                }
                 .show()
             return false
         }

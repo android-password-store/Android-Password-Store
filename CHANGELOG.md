@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 -   Light theme is now a consistent white across the board with ample contrast
 -   XkPassword generator is now easier to use with less configuration options
 -   Edit screen now has better protection and guidance for invalid names
+-   Improved biometric authentication UX on app start
+-   Improved password list UI
 
 ### Fixed
 
@@ -31,6 +33,7 @@ All notable changes to this project will be documented in this file.
 -   OTP codes can be automatically filled from SMS (requires Android P+ and Google Play Services)
 -   Importing TOTP secrets using QR codes
 -   Navigate into newly created folders and scroll to newly created passwords
+-   Support per-directory keys
 
 ## [1.9.2] - 2020-06-30
 

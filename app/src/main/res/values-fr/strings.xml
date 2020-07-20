@@ -20,8 +20,6 @@
     <string name="use">Utiliser</string>
     <string name="directory_selected_title">Répertoire déjà sélectionné</string>
     <string name="directory_selected_message">Voulez-vous utiliser \"%1$s\"?</string>
-    <string name="no_key_selected_dialog_title">Clé OpenPGP non sélectionnée</string>
-    <string name="no_key_selected_dialog_text">Nous allons vous rediriger vers les paramètres. Veuillez sélectionner votre clé OpenPGP.</string>
     <string name="password_exists_title">Le mot de passe existe!</string>
     <string name="password_exists_message">Cela écrasera %1$s avec %2$s.</string>
 
@@ -32,7 +30,6 @@
     <string name="git_commit_move_text">Renommer %1$sà %2$s. </string>
 
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Aucun prestataire OpenPGP sélectionné !</string>
     <string name="clipboard_password_toast_text">Mot de passe copié dans le presse papier, vous avez %d secondes pour coller celui-ci.</string>
     <string name="file_toast_text">Renseignez un nom de fichier</string>
     <string name="empty_toast_text">Vous ne pouvez pas utiliser un mot de passe vide ou des données supplémentaires vide</string>
@@ -89,7 +86,6 @@
     <string name="username">Nom d\'utilisateur</string>
     <string name="edit_password">Éditer le mot de passe</string>
     <string name="copy_password">Copier le mot de passe</string>
-    <string name="copy_username">Copier le nom d\'utilisateur</string>
     <string name="share_as_plaintext">Partager en clair</string>
     <string name="last_changed">Dernière modification le %s</string>
 
@@ -101,10 +97,6 @@
     <string name="pref_ssh_see_key_title">Voir la clef publique SSH générée</string>
     <string name="pref_git_delete_repo">Supprimer le dépôt</string>
     <string name="pref_dialog_delete_title">Effacer le dépôt</string>
-    <string name="pref_crypto_title">Chiffrement</string>
-    <string name="pref_provider_title">Sélection du prestataire OpenPGP</string>
-    <string name="pref_key_title">Sélection de votre identifiant OpenPGP</string>
-    <string name="pref_no_key_selected">Aucune clé sélectionnée</string>
     <string name="pref_category_general_title">Général</string>
     <string name="pref_copy_title">Copie automatique du mot de passe</string>
     <string name="pref_copy_dialog_title">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
@@ -166,8 +158,6 @@
     <string name="refresh_list">Rafraichir la liste</string>
     <string name="no_repo_selected">Pas de dépôt externe séléctionné</string>
     <string name="send_plaintext_password_to">Envoyer le mot de passe en clair via…</string>
-    <string name="show_password">Montrer le mot de passe</string>
-    <string name="show_extra">Afficher le contenu supplémentaire</string>
     <string name="app_icon_hint">Icône de l\'application</string>
     <string name="folder_icon_hint">Icône du dossier</string>
 
@@ -185,7 +175,6 @@
     <string name="autofill_paste_username">Coller le nom d\'utilisateur?\n\n%s</string>
     <string name="ssh_key_does_not_exist">Impossible d\'ouvrir la clef ssh, merci de vérifier que le ficher existe</string>
     <string name="new_password_title">Nouveau mot de passe</string>
-    <string name="edit_password_title">Montage</string>
     <string name="autofill_ins_1_hint">Capture des services d\'accessibilité</string>
     <string name="autofill_ins_2_hint">Capture de bascule dans les services d\'accessibilité</string>
     <string name="autofill_ins_3_hint">Capture du service de remplissage automatique en action</string>
@@ -196,5 +185,4 @@
     <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
     <string name="hackish_tools">Outils de hack</string>
     <string name="commit_hash">Commettre la clé</string>
-    <string name="get_last_changed_failed">Failed to get last changed date</string>
 </resources>
