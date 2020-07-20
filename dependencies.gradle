@@ -51,7 +51,7 @@ ext.deps = [
 
     third_party: [
         bouncycastle: 'org.bouncycastle:bcprov-jdk15on:1.65.01',
-        bouncycastle_pkix: 'org.bouncycastle:bcpkix-jdk15on:1.65.01',
+        bouncycastle_pkix: 'org.bouncycastle:bcpkix-jdk15on:1.65',
         commons_codec: 'commons-codec:commons-codec:1.13',
         eddsa: 'net.i2p.crypto:eddsa:0.3.0',
         fastscroll: 'me.zhanghai.android.fastscroll:library:1.1.4',
