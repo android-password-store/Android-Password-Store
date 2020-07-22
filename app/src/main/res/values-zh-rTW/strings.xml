@@ -50,7 +50,6 @@
     <string name="crypto_name_hint">名稱</string>
     <string name="crypto_pass_label">密碼</string>
     <string name="crypto_extra_label">備註</string>
-    <string name="crypto_cancel">取消</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">搜尋</string>
     <!-- Preferences -->

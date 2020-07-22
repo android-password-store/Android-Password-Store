@@ -16,7 +16,6 @@
     <string name="title_activity_git_clone">Informações do repositório</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Por favor, clone ou crie um novo repositório abaixo antes de tentar adicionar uma senha ou executar qualquer operação de sincronização.</string>
-    <string name="key_dialog_text">Uma chave PGP válida deve ser selecionada nas configurações antes de inicializar o repositório</string>
     <plurals name="delete_dialog_text">
         <item quantity="one">Tem certeza que deseja excluir a senha %d?</item>
         <item quantity="other">Tem certeza que deseja excluir a senha %d?</item>
@@ -28,8 +27,6 @@
     <string name="use">Usar</string>
     <string name="directory_selected_title">Diretório já selecionado</string>
     <string name="directory_selected_message">Você quer usar \"%1$s\"?</string>
-    <string name="no_key_selected_dialog_title">Chave OpenPGP não selecionada</string>
-    <string name="no_key_selected_dialog_text">Nós o redirecionaremos para as configurações. Por favor, selecione sua chave OpenPGP.</string>
     <string name="password_exists_title">Senha já existe!</string>
     <string name="password_exists_message">Isso irá sobrescrever %1$s com %2$s.</string>
     <string name="password_move_error_title">Erro ao mover senhas</string>
@@ -41,7 +38,6 @@
     <string name="git_commit_move_text">Renomear %1$s para %2$s.</string>
     <string name="git_commit_move_multiple_text">Mova múltiplas senhas para %1$s.</string>
     <!-- PGPHandler -->
-    <string name="provider_toast_text">Nenhum provedor OpenPGP selecionado!</string>
     <string name="clipboard_password_toast_text">Senha copiada para área de transferência, você tem %d segundos para colá-la em algum lugar.</string>
     <string name="clipboard_password_no_clear_toast_text">Senha copiada para área de transferência</string>
     <string name="clipboard_copied_text">Copiado para a área de transferência</string>
@@ -88,7 +84,6 @@
     <string name="crypto_extra_label">Conteúdo extra</string>
     <string name="crypto_encrypt_username_label">Criptografar nome de usuário</string>
     <string name="crypto_select">Selecionar</string>
-    <string name="crypto_cancel">Cancelar</string>
     <string name="crypto_save">Salvar</string>
     <string name="crypto_save_and_copy">Salvar e Copiar</string>
     <!-- DECRYPT Layout -->
@@ -98,7 +93,6 @@
     <string name="username">Usuário:</string>
     <string name="edit_password">Editar senha</string>
     <string name="copy_password">Copiar senha</string>
-    <string name="copy_username">Copiar usuário</string>
     <string name="share_as_plaintext">Compartilhar como texto</string>
     <string name="last_changed">Última alteração %s</string>
     <!-- Preferences -->
@@ -110,10 +104,6 @@
     <string name="pref_ssh_see_key_title">Ver a chave SSH pública gerada</string>
     <string name="pref_git_delete_repo">Excluir repositório</string>
     <string name="pref_dialog_delete_title">Limpar repositório</string>
-    <string name="pref_crypto_title">Cripto</string>
-    <string name="pref_provider_title">Selecionar o provedor de OpenPGP</string>
-    <string name="pref_key_title">Selecionar o ID da chave OpenPGP</string>
-    <string name="pref_no_key_selected">Nenhuma chave selecionada</string>
     <string name="pref_category_general_title">Geral</string>
     <string name="pref_category_title_passwords">Senhas</string>
     <string name="pref_clipboard_timeout_title">Tempo limite de cópia da senha</string>
@@ -170,9 +160,6 @@
     <string name="xkpwgen_length">Total de palavras</string>
     <string name="xkpwgen_separator">Separador</string>
     <string name="xkpwgen_custom_dict_imported">Lista de palavras personalizada: %1$s</string>
-    <string name="xkpwgen_separator_character">separador de caracteres</string>
-    <string name="xkpwgen_numbers">números:</string>
-    <string name="xkpwgen_symbols">símbolos:</string>
     <string name="xkpwgen_builder_error">O dicionário selecionado não contém palavras suficientes de tamanho %1$d..%2$d</string>
     <!-- XKPWD prefs -->
     <string name="xkpwgen_pref_gentype_title">Tipo de gerador de senha</string>
@@ -209,11 +196,7 @@
     <string name="refresh_list">Atualizar lista</string>
     <string name="no_repo_selected">Nenhum repositório externo selecionado</string>
     <string name="send_plaintext_password_to">Enviar senha como texto simples usando…</string>
-    <string name="show_password">Exibir senha</string>
-    <string name="show_extra">Exibir conteúdo extra</string>
-    <string name="hide_extra">Ocultar conteúdo extra</string>
     <string name="app_icon_hint">Ícone do aplicativo</string>
-    <string name="folder_icon_hint">Ícone de pasta</string>
     <!-- Oreo Autofill -->
     <string name="oreo_autofill_strict_domain_search">Busca resistente a phishing</string>
     <string name="oreo_autofill_match_with">Combinar com %1$s</string>
@@ -258,7 +241,6 @@
     <string name="autofill_toast_username">Selecione um campo editável para colar o nome de usuário.\nNome de usuário está disponível por %d segundos.</string>
     <string name="ssh_key_does_not_exist">Não foi possível abrir a chave privada ssh, por favor verifique se o arquivo existe</string>
     <string name="new_password_title">Nova senha</string>
-    <string name="edit_password_title">Editando</string>
     <string name="autofill_ins_1_hint">Captura de tela de serviços de acessibilidade</string>
     <string name="autofill_ins_2_hint">Captura de tela de alternância nos serviços de acessibilidade</string>
     <string name="autofill_ins_3_hint">Captura de tela do serviço de preenchimento automático em ação</string>
@@ -269,13 +251,11 @@
     <string name="jgit_error_push_dialog_text">Ocorreu um erro durante a operação de push:</string>
     <string name="clear_saved_passphrase_ssh">Limpar a frase secreta salva para chave SSH local</string>
     <string name="clear_saved_passphrase_https">Limpar senha HTTPS salva</string>
-    <string name="hotp_remember_clear_choice">Limpar preferências salvas para incrementação em HOTP</string>
     <string name="git_operation_remember_passphrase">Lembrar senha da chave</string>
     <string name="hackish_tools">Ferramentas de hackers</string>
     <string name="abort_rebase">Abortar rebase e realizar push do novo branch</string>
     <string name="reset_to_remote">Hard reset no branch remoto</string>
     <string name="commit_hash">Commit hash</string>
-    <string name="get_last_changed_failed">Falha ao obter a última data de mudança</string>
     <string name="openkeychain_ssh_api_connect_fail">Falha ao conectar ao serviço de API SSH do OpenKeychain.</string>
     <string name="no_ssh_api_provider">Nenhum provedor de API SSH encontrado. O OpenKeychain está instalado?</string>
     <string name="ssh_api_pending_intent_failed">SSH API pendente falhou</string>
@@ -314,15 +294,12 @@
     <string name="theme_follow_system">Padrão do sistema</string>
     <string name="connection_mode_ssh_key">Chave SSH</string>
     <string name="connection_mode_basic_authentication">Senha</string>
-    <string name="connection_mode_none">Nenhuma</string>
     <string name="git_server_config_save_success">Configuração salva com sucesso</string>
     <string name="git_server_config_save_error_prefix">Erro de configuração: %s</string>
     <string name="git_config_error_hostname_empty">hostname vazio</string>
     <string name="git_config_error_generic">por favor, verifique suas configurações e tente novamente</string>
     <string name="git_config_error_nonnumeric_port">porta deve ser numérica</string>
     <string name="git_config_error_custom_port_absolute">caminho deve ser absoluto (começar com \'/\') ao usar uma porta personalizada</string>
-    <string name="git_operation_unable_to_open_ssh_key_title">Não é possível abrir a chave ssh</string>
-    <string name="git_operation_unable_to_open_ssh_key_message">Por favor, verifique se foi importado.</string>
     <string name="git_operation_wrong_passphrase">Frase segura incorreta</string>
     <string name="git_operation_wrong_password">Senha incorreta</string>
     <string name="bottom_sheet_create_new_folder">Criar nova pasta</string>

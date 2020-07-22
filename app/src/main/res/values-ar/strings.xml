@@ -44,7 +44,6 @@
     <string name="crypto_name_hint">التسمية</string>
     <string name="crypto_pass_label">كلمة السر</string>
     <string name="crypto_select">إختر</string>
-    <string name="crypto_cancel">إلغاء</string>
     <string name="crypto_save">حفظ</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">البحث</string>
@@ -105,7 +104,6 @@
     <string name="pwd_generate_button">توليد</string>
     <string name="refresh_list">تحديث القائمة</string>
     <string name="app_icon_hint">أيقونة التطبيق</string>
-    <string name="folder_icon_hint">أيقونة المجلد</string>
 
     <string name="autofill_apps_default">إستخدم الإعداد الإفتراضي</string>
     <string name="autofill_apps_match_ellipsis">طابق مع ...</string>
