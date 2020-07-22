@@ -75,7 +75,6 @@
     <string name="crypto_extra_label">Extra</string>
     <string name="crypto_encrypt_username_label">Zašifrovat jméno</string>
     <string name="crypto_select">Vybrat</string>
-    <string name="crypto_cancel">Zrušit</string>
     <string name="crypto_save">Uložit</string>
     <string name="crypto_save_and_copy">Uložit kopii</string>
 

@@ -77,7 +77,6 @@
     <string name="crypto_pass_label">Mot de passe</string>
     <string name="crypto_extra_label">Extra</string>
     <string name="crypto_select">Sélectionner</string>
-    <string name="crypto_cancel">Annuler</string>
     <string name="crypto_save">Sauvegarder</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">Chercher</string>
@@ -160,7 +159,6 @@
     <string name="no_repo_selected">Pas de dépôt externe séléctionné</string>
     <string name="send_plaintext_password_to">Envoyer le mot de passe en clair via…</string>
     <string name="app_icon_hint">Icône de l\'application</string>
-    <string name="folder_icon_hint">Icône du dossier</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Remplissage automatique des champs de type mot de passe dans les applications. Ne fonctionne que sur les version d\'Android 4.3 et supérieure. Ne dépend pas du presse-papier pour les version d\'Android 5.0 et supérieure.</string>
