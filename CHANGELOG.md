@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.10.0] - 2020-07-22
+
 ## [1.9.2] - 2020-06-30
 
 ### Fixed
@@ -215,7 +217,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.0...HEAD
+
+[1.10.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.2...1.10.0
 
 [1.9.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.1...1.9.2
 
