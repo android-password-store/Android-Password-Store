@@ -117,7 +117,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           body: ${{ steps.changelog_reader.outputs.log_entry }}
-          draft: false
+          draft: true
           prerelease: false
 
       - name: Get the version
