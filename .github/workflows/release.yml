@@ -57,19 +57,19 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: APS Non-Free Release APK
-        path: app/build/outputs/apk/nonFree/release/app-release.apk
+        path: app/build/outputs/apk/nonFree/release/app-nonFree-release.apk
 
     - name: Upload non-free release Bundle
       uses: actions/upload-artifact@v2
       with:
         name: APS Non-Free Release Bundle
-        path: app/build/outputs/bundle/nonFree/release/app-release.aab
+        path: app/build/outputs/bundle/nonFreeRelease/app-nonFree-release.aab
 
     - name: Upload free release APK
       uses: actions/upload-artifact@v2
       with:
         name: APS Free Release APK
-        path: app/build/outputs/apk/free/release/app-release.apk
+        path: app/build/outputs/apk/free/release/app-free-release.apk
 
     - name: Clean secrets
       if: always()
@@ -130,7 +130,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/nonFree/app-release.apk
+          asset_path: ./artifacts/nonFree/app-nonFree-release.apk
           asset_name: APS-nonFree_${{ steps.get_version.outputs.VERSION }}.apk
           asset_content_type: application/vnd.android.package-archive
 
@@ -140,7 +140,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/nonFree/app-release.aab
+          asset_path: ./artifacts/nonFree/app-nonFree-release.aab
           asset_name: APS-nonFree_${{ steps.get_version.outputs.VERSION }}.aab
           asset_content_type: application/octet-stream
 
@@ -150,6 +150,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/free/app-release.apk
+          asset_path: ./artifacts/free/app-free-release.apk
           asset_name: APS-free_${{ steps.get_version.outputs.VERSION }}.apk
           asset_content_type: application/vnd.android.package-archive
