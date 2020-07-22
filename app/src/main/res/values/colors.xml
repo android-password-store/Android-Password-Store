@@ -7,9 +7,7 @@
     <!-- Base palette -->
     <color name="primary_color">@color/white</color>
     <color name="primary_light_color">@color/white</color>
-    <color name="primary_dark_color">@color/white</color>
     <color name="secondary_color">#003e5b</color>
-    <color name="secondary_light_color">#3b6888</color>
     <color name="secondary_dark_color">#001831</color>
     <color name="primary_text_color">#212121</color>
     <color name="white">#ffffffff</color>

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.10.0] - 2020-07-22
+
 ### Changed
 
 -   A brand new icon to go with our biggest update ever!
@@ -29,8 +31,10 @@ All notable changes to this project will be documented in this file.
 -   Initial support for detecting and filling OTP fields with Autofill
 -   OTP codes can be automatically filled from SMS (requires Android P+ and Google Play Services)
 -   Importing TOTP secrets using QR codes
+-   Support for ed25519/ECDSA SSH keys
 -   Navigate into newly created folders and scroll to newly created passwords
 -   Support per-directory keys
+-   Full pt-BR localization
 
 ## [1.9.2] - 2020-06-30
 
@@ -243,7 +247,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.0...HEAD
+
+[1.10.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.2...1.10.0
 
 [1.9.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.1...1.9.2
 

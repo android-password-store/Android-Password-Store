@@ -199,7 +199,7 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                             registerForActivityResult(StartIntentSenderForResult()) { result ->
                                 if (continueAfterUserInteraction != null) {
                                     val data = result.data
-                                    if (resultCode == RESULT_OK && data != null) {
+                                    if (result.resultCode == RESULT_OK && data != null) {
                                         continueAfterUserInteraction?.resume(data)
                                     } else {
                                         continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))

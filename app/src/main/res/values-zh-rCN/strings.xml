@@ -53,7 +53,6 @@
     <string name="crypto_name_hint">名称</string>
     <string name="crypto_pass_label">密码</string>
     <string name="crypto_extra_label">备注</string>
-    <string name="crypto_cancel">取消</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">搜索</string>
     <!-- Preferences -->
