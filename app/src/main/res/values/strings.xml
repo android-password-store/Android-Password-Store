@@ -101,7 +101,6 @@
     <string name="crypto_extra_label">Extra content</string>
     <string name="crypto_encrypt_username_label">Encrypt username</string>
     <string name="crypto_select">Select</string>
-    <string name="crypto_cancel">Cancel</string>
     <string name="crypto_save">Save</string>
     <string name="crypto_save_and_copy">Save and Copy</string>
 
@@ -183,9 +182,6 @@
     <string name="xkpwgen_length">Total words</string>
     <string name="xkpwgen_separator">Separator</string>
     <string name="xkpwgen_custom_dict_imported">Custom wordlist: %1$s</string>
-    <string name="xkpwgen_separator_character">separator character</string>
-    <string name="xkpwgen_numbers">Numbers</string>
-    <string name="xkpwgen_symbols">Symbols</string>
     <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->
@@ -228,7 +224,6 @@
     <string name="no_repo_selected">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="app_icon_hint">App icon</string>
-    <string name="folder_icon_hint">Folder icon</string>
 
     <!-- Oreo Autofill -->
     <string name="oreo_autofill_strict_domain_search">Phishing-resistant search</string>
@@ -241,7 +236,6 @@
     <string name="oreo_autofill_save_passwords_dont_match">Passwords don\'t match</string>
     <string name="oreo_autofill_generate_password">Generate password…</string>
     <string name="oreo_autofill_fill_otp_from_sms">Extract code from SMS…</string>
-    <string name="oreo_autofill_waiting_for_sms">Waiting for SMS…</string>
     <string name="oreo_autofill_max_matches_reached">Maximum number of matches (%1$d) reached; clear matches before adding new ones.</string>
     <string name="oreo_autofill_warning_publisher_header">This app\'s publisher has changed since you first associated a Password Store entry with it:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>The currently installed app may be trying to steal your credentials by pretending to be a trusted app.</b>\n\nTry to uninstall and reinstall the app from a trusted source, such as the Play Store, Amazon Appstore, F-Droid, or your phone manufacturer\'s store.</string>
@@ -370,7 +364,6 @@
     <string name="add_otp">Add OTP</string>
     <string name="otp_import_success">Successfully imported TOTP configuration</string>
     <string name="otp_import_failure">Failed to import TOTP configuration</string>
-    <string name="oreo_autofill_chrome_compat_fix_preference_title">Improve reliability in Chrome</string>
     <string name="exporting_passwords">Exporting passwords…</string>
     <string name="failed_to_find_key_id">Failed to locate .gpg-id, is your store set up correctly?</string>
     <string name="invalid_gpg_id">Found .gpg-id, but it did not contain a key ID, fingerprint or user ID</string>

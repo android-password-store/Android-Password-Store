@@ -80,7 +80,6 @@
     <string name="crypto_extra_label">Дополнительно</string>
     <string name="crypto_encrypt_username_label">Зашифровать имя пользователя</string>
     <string name="crypto_select">Выбрать</string>
-    <string name="crypto_cancel">Отменить</string>
     <string name="crypto_save">Сохранить</string>
     <string name="crypto_save_and_copy">Сохранить и скопировать</string>
 
@@ -154,9 +153,6 @@
     <string name="xkpwgen_length">Всего слов</string>
     <string name="xkpwgen_separator">Разделитель</string>
     <string name="xkpwgen_custom_dict_imported">Пользовательский список слов: %1$s</string>
-    <string name="xkpwgen_separator_character">символ разделитель</string>
-    <string name="xkpwgen_numbers">числа:</string>
-    <string name="xkpwgen_symbols">символы:</string>
     <string name="xkpwgen_builder_error">Выбранный словарь не содержит достаточного количества слова заданной длинны %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->
@@ -192,7 +188,6 @@
     <string name="no_repo_selected">Внешний репозиторий не выбран</string>
     <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
     <string name="app_icon_hint">Иконка приложения</string>
-    <string name="folder_icon_hint">Иконка папки</string>
 
     <!-- Oreo Autofill -->
     <string name="oreo_autofill_match_with">Совпадает с %1$s</string>

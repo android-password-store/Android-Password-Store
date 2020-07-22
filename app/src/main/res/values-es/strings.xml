@@ -70,7 +70,6 @@
     <string name="crypto_pass_label">Contraseña:</string>
     <string name="crypto_extra_label">Extra:</string>
     <string name="crypto_select">Seleccionar</string>
-    <string name="crypto_cancel">Cancelar</string>
     <string name="crypto_save">Guardar</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">Buscar</string>
@@ -160,7 +159,6 @@
     <string name="no_repo_selected">Ningún repositorio externo seleccionado</string>
     <string name="send_plaintext_password_to">Enviar contraseña en texto plano usando…</string>
     <string name="app_icon_hint">Ícono de app</string>
-    <string name="folder_icon_hint">Ícono de directorio</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Autollena campos de contraseña en aplicaciones. Solo funciona en Android 4.3 y superiores. No depende del portapapales en Android 5.0 y superiores.</string>

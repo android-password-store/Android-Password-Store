@@ -56,7 +56,6 @@
     <string name="crypto_pass_label">Passwort</string>
     <string name="crypto_extra_label">Extra</string>
     <string name="crypto_select">Auswählen</string>
-    <string name="crypto_cancel">Abbrechen</string>
     <string name="crypto_save">Speichern</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">Suche</string>
@@ -135,7 +134,6 @@
     <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
     <string name="send_plaintext_password_to">Passwort senden als Nur-Text mit behilfe von…</string>
     <string name="app_icon_hint">App Icon</string>
-    <string name="folder_icon_hint">Verzeichnis Icon</string>
 
     <!-- Autofill -->
     <string name="autofill_description">Füge das Passwort automatisch in Apps ein (Autofill). Funktioniert nur unter Android 4.3 und höher. Dies basiert nicht auf der Zwischenablage für Android 5.0 oder höher.</string>

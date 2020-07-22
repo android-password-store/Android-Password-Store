@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 -   Support for ed25519/ECDSA SSH keys
 -   Navigate into newly created folders and scroll to newly created passwords
 -   Support per-directory keys
+-   Full pt-BR localization
 
 ## [1.9.2] - 2020-06-30
 
