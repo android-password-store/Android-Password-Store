@@ -57,19 +57,19 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: APS Non-Free Release APK
-        path: app/build/outputs/apk/nonFree/release/app-release.apk
+        path: app/build/outputs/apk/nonFree/release/app-nonFree-release.apk
 
     - name: Upload non-free release Bundle
       uses: actions/upload-artifact@v2
       with:
         name: APS Non-Free Release Bundle
-        path: app/build/outputs/bundle/nonFree/release/app-release.aab
+        path: app/build/outputs/bundle/nonFreeRelease/app-nonFree-release.aab
 
     - name: Upload free release APK
       uses: actions/upload-artifact@v2
       with:
         name: APS Free Release APK
-        path: app/build/outputs/apk/free/release/app-release.apk
+        path: app/build/outputs/apk/free/release/app-free-release.apk
 
     - name: Clean secrets
       if: always()
