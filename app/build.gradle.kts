@@ -69,8 +69,9 @@ android {
                 storePassword = keystoreProperties["storePassword"] as String
             }
         }
-        buildTypes.getByName("release").signingConfig = signingConfigs.getByName("release")
-        buildTypes.getByName("debug").signingConfig = signingConfigs.getByName("release")
+        listOf("release", "debug").map {
+            buildTypes.getByName(it).signingConfig = signingConfigs.getByName(it)
+        }
     }
 
     flavorDimensions("free")
