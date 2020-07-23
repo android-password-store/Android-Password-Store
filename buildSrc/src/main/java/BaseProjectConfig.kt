@@ -106,7 +106,7 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
 
     defaultConfig {
         minSdkVersion(23)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
     }
 
     packagingOptions {
