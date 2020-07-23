@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 import java.util.Properties
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 
 plugins {
     kotlin("android")
@@ -15,15 +16,13 @@ fun isSnapshot(): Boolean {
 }
 
 android {
-    /*
     if (isSnapshot()) {
-        android.applicationVariants.all { variant ->
-            variant.outputs.all {
-                outputFileName = "aps-${variant.getFlavorName()}_${defaultConfig.versionName}.apk"
+        applicationVariants.all {
+            outputs.all {
+                (this as BaseVariantOutputImpl).outputFileName = "aps-${flavorName}_$versionName.apk"
             }
         }
     }
-    */
 
     buildFeatures.viewBinding = true
 
