@@ -312,26 +312,32 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 snackbar(message = resources.getString(R.string.failed_to_find_key_id))
                 return@with
             }
-            val gpgIdentifierFileContent = gpgIdentifierFile.useLines { it.firstOrNull()?.trim() } ?: ""
-            if (gpgIdentifierFileContent.isEmpty()) {
+            val gpgIdentifiers = gpgIdentifierFile.readLines().map { line ->
+                parseGpgIdentifier(line) ?: run {
+                    snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                    return@with
+                }
+            }
+            if (gpgIdentifiers.isEmpty()) {
                 registerForActivityResult(StartActivityForResult()) { result ->
                     if (result.resultCode == RESULT_OK) {
-                        result.data?.getStringExtra(OpenPgpApi.EXTRA_KEY_ID)?.let { keyId ->
-                            gpgIdentifierFile.writeText(keyId)
+                        result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
+                            gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                             encrypt(data)
                         }
                     }
                 }.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
                 return@with
             }
-            when (val identifier = parseGpgIdentifier(gpgIdentifierFileContent)) {
-                is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id).toLongArray())
-                is GpgIdentifier.UserId -> data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(identifier.email))
-                null -> {
-                    snackbar(message = resources.getString(R.string.invalid_gpg_id))
-                    return@with
-                }
+            val keyIds = gpgIdentifiers.filterIsInstance<GpgIdentifier.KeyId>().map { it.id }.toLongArray()
+            if (keyIds.isNotEmpty()) {
+                data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, keyIds)
             }
+            val userIds = gpgIdentifiers.filterIsInstance<GpgIdentifier.UserId>().map { it.email }.toTypedArray()
+            if (userIds.isNotEmpty()) {
+                data.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds)
+            }
+
             data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
             val content = "$editPass\n$editExtra"
