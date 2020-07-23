@@ -214,7 +214,8 @@ class FormField(
     // TODO: Revisit this decision in the future
     private val excludedByHints = excludedByAutofillHints
 
-    val relevantField = isTextField && hasAutofillTypeText && !excludedByHints
+    // Only offer to fill into custom views if they explicitly opted into Autofill.
+    val relevantField = hasAutofillTypeText && (isTextField || autofillHints.isNotEmpty()) && !excludedByHints
 
     // Exclude fields based on hint, resource ID or HTML name.
     // Note: We still report excluded fields as relevant since they count for adjacency heuristics,
@@ -232,7 +233,7 @@ class FormField(
         if (isCertainPasswordField) CertaintyLevel.Certain else if (isLikelyPasswordField) CertaintyLevel.Likely else if (isPossiblePasswordField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
     // OTP field heuristics (based only on the current field)
-    private val isPossibleOtpField = notExcluded && !isPossiblePasswordField && isTextField
+    private val isPossibleOtpField = notExcluded && !isPossiblePasswordField
     private val isCertainOtpField = isPossibleOtpField && hasHintOtp
     private val isLikelyOtpField = isPossibleOtpField && (
         isCertainOtpField || OTP_HEURISTIC_TERMS.anyMatchesFieldInfo ||
@@ -241,7 +242,7 @@ class FormField(
         if (isCertainOtpField) CertaintyLevel.Certain else if (isLikelyOtpField) CertaintyLevel.Likely else if (isPossibleOtpField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
     // Username field heuristics (based only on the current field)
-    private val isPossibleUsernameField = notExcluded && !isPossiblePasswordField && !isCertainOtpField && isTextField
+    private val isPossibleUsernameField = notExcluded && !isPossiblePasswordField && !isCertainOtpField
     private val isCertainUsernameField = isPossibleUsernameField && hasHintUsername
     private val isLikelyUsernameField = isPossibleUsernameField && (isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.anyMatchesFieldInfo))
     val usernameCertainty =
