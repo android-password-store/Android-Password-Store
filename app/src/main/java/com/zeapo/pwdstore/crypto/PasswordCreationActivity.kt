@@ -323,6 +323,15 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     if (result.resultCode == RESULT_OK) {
                         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
+                            val repo = PasswordRepository.getRepository(null)
+                            if (repo != null) {
+                                commitChange(
+                                    getString(
+                                        R.string.git_commit_gpg_id,
+                                        getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                                    ).also { e { it } }
+                                )
+                            }
                             encrypt(data)
                         }
                     }

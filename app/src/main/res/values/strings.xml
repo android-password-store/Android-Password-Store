@@ -45,6 +45,7 @@
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
     <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
+    <string name="git_commit_gpg_id">Initialize GPG IDs in %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
