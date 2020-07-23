@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Using long key IDs in .gpg-id no longer leads to a crash
+-   Long key IDs and fingerprints are now correctly forwarded to OpenKeychain
+
+### Added
+
+-   Support for multiple GPG IDs in .gpg-id
+-   Creating an entry in an empty store now lets you select keys to initialize .gpg-id with
+
 ## [1.10.0] - 2020-07-22
 
 ### Changed
