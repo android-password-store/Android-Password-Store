@@ -257,8 +257,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             it.matches("[a-fA-F0-9]{16}".toRegex())
         }
         if (maybeLongKeyId != null) {
-            val keyId = maybeLongKeyId.toULong()
-            return GpgIdentifier.KeyId(maybeLongKeyId.toLong())
+            val keyId = maybeLongKeyId.toULong(16)
+            return GpgIdentifier.KeyId(keyId.toLong())
         }
 
         // Match fingerprints:
