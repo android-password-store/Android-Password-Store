@@ -258,7 +258,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         }
         if (maybeLongKeyId != null) {
             val keyId = maybeLongKeyId.toULong()
-            return GpgIdentifier.KeyId(keyId.toLong())
+            return GpgIdentifier.KeyId(maybeLongKeyId.toLong())
         }
 
         // Match fingerprints:
