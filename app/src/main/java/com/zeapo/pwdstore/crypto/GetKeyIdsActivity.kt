@@ -53,11 +53,8 @@ class GetKeyIdsActivity : BasePgpActivity() {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
                         try {
                             val id = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.firstOrNull()
-                            val keyResult = Intent().apply {
-                                if (id != null) {
-                                    putExtra(OpenPgpApi.EXTRA_KEY_ID, OpenPgpUtils.convertKeyIdToHex(id))
-                                }
-                            }
+                            val keyResult = Intent().putExtra(
+                                OpenPgpApi.EXTRA_KEY_ID, id?.let { OpenPgpUtils.convertKeyIdToHex(it) })
                             setResult(RESULT_OK, keyResult)
                             finish()
                         } catch (e: Exception) {
