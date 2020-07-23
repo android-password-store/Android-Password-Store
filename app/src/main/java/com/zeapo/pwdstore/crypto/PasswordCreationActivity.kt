@@ -258,7 +258,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         }
         if (maybeLongKeyId != null) {
             val keyId = maybeLongKeyId.toULong()
-            return GpgIdentifier.KeyId(maybeLongKeyId.toLong())
+            return GpgIdentifier.KeyId(keyId.toLong())
         }
 
         // Match fingerprints:
@@ -279,166 +279,179 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     /**
      * Encrypts the password and the extra content
      */
-    private fun encrypt(receivedIntent: Intent? = null) = with(binding) {
-        val editName = filename.text.toString().trim()
-        val editPass = password.text.toString()
-        val editExtra = extraContent.text.toString()
+    private fun encrypt(receivedIntent: Intent? = null) {
+        with(binding) {
+            val editName = filename.text.toString().trim()
+            val editPass = password.text.toString()
+            val editExtra = extraContent.text.toString()
 
-        if (editName.isEmpty()) {
-            snackbar(message = resources.getString(R.string.file_toast_text))
-            return@with
-        } else if (editName.contains('/')) {
-            snackbar(message = resources.getString(R.string.invalid_filename_text))
-            return@with
-        }
-
-        if (editPass.isEmpty() && editExtra.isEmpty()) {
-            snackbar(message = resources.getString(R.string.empty_toast_text))
-            return@with
-        }
-
-        if (copy) {
-            copyPasswordToClipboard(editPass)
-        }
-
-        val data = receivedIntent ?: Intent()
-        data.action = OpenPgpApi.ACTION_ENCRYPT
-
-        // pass enters the key ID into `.gpg-id`.
-        val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
-        val gpgIdentifierFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
-        if (gpgIdentifierFile == null) {
-            snackbar(message = resources.getString(R.string.failed_to_find_key_id))
-            return@with
-        }
-        val gpgIdentifierFileContent = gpgIdentifierFile.useLines { it.firstOrNull() } ?: ""
-        when (val identifier = parseGpgIdentifier(gpgIdentifierFileContent)) {
-            is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id))
-            is GpgIdentifier.UserId -> data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(identifier.email))
-            null -> {
-                snackbar(message = resources.getString(R.string.invalid_gpg_id))
+            if (editName.isEmpty()) {
+                snackbar(message = resources.getString(R.string.file_toast_text))
+                return@with
+            } else if (editName.contains('/')) {
+                snackbar(message = resources.getString(R.string.invalid_filename_text))
                 return@with
             }
-        }
-        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
-        val content = "$editPass\n$editExtra"
-        val inputStream = ByteArrayInputStream(content.toByteArray())
-        val outputStream = ByteArrayOutputStream()
-
-        val path = when {
-            // If we allowed the user to edit the relative path, we have to consider it here instead
-            // of fullPath.
-            directoryInputLayout.isEnabled -> {
-                val editRelativePath = directory.text.toString().trim()
-                if (editRelativePath.isEmpty()) {
-                    snackbar(message = resources.getString(R.string.path_toast_text))
-                    return
-                }
-                val passwordDirectory = File("$repoPath/${editRelativePath.trim('/')}")
-                if (!passwordDirectory.exists() && !passwordDirectory.mkdir()) {
-                    snackbar(message = "Failed to create directory ${editRelativePath.trim('/')}")
-                    return
-                }
-
-                "${passwordDirectory.path}/$editName.gpg"
+            if (editPass.isEmpty() && editExtra.isEmpty()) {
+                snackbar(message = resources.getString(R.string.empty_toast_text))
+                return@with
             }
-            else -> "$fullPath/$editName.gpg"
-        }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            api?.executeApiAsync(data, inputStream, outputStream) { result ->
-                when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-                    OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                        try {
-                            val file = File(path)
-                            // If we're not editing, this file should not already exist!
-                            if (!editing && file.exists()) {
-                                snackbar(message = getString(R.string.password_creation_duplicate_error))
-                                return@executeApiAsync
-                            }
+            if (copy) {
+                copyPasswordToClipboard(editPass)
+            }
 
-                            if (!isInsideRepository(file)) {
-                                snackbar(message = getString(R.string.message_error_destination_outside_repo))
-                                return@executeApiAsync
-                            }
+            val data = receivedIntent ?: Intent()
+            data.action = OpenPgpApi.ACTION_ENCRYPT
 
+            // pass enters the key ID into `.gpg-id`.
+            val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
+            val gpgIdentifierFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
+            if (gpgIdentifierFile == null) {
+                snackbar(message = resources.getString(R.string.failed_to_find_key_id))
+                return@with
+            }
+            val gpgIdentifierFileContent = gpgIdentifierFile.useLines { it.firstOrNull()?.trim() } ?: ""
+            if (gpgIdentifierFileContent.isEmpty()) {
+                registerForActivityResult(StartActivityForResult()) { result ->
+                    if (result.resultCode == RESULT_OK) {
+                        result.data?.getStringExtra(OpenPgpApi.EXTRA_KEY_ID)?.let { keyId ->
+                            gpgIdentifierFile.writeText(keyId)
+                            encrypt(data)
+                        }
+                    }
+                }.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
+                return@with
+            }
+            when (val identifier = parseGpgIdentifier(gpgIdentifierFileContent)) {
+                is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id))
+                is GpgIdentifier.UserId -> data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(identifier.email))
+                null -> {
+                    snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                    return@with
+                }
+            }
+            data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
+
+            val content = "$editPass\n$editExtra"
+            val inputStream = ByteArrayInputStream(content.toByteArray())
+            val outputStream = ByteArrayOutputStream()
+
+            val path = when {
+                // If we allowed the user to edit the relative path, we have to consider it here instead
+                // of fullPath.
+                directoryInputLayout.isEnabled -> {
+                    val editRelativePath = directory.text.toString().trim()
+                    if (editRelativePath.isEmpty()) {
+                        snackbar(message = resources.getString(R.string.path_toast_text))
+                        return
+                    }
+                    val passwordDirectory = File("$repoPath/${editRelativePath.trim('/')}")
+                    if (!passwordDirectory.exists() && !passwordDirectory.mkdir()) {
+                        snackbar(message = "Failed to create directory ${editRelativePath.trim('/')}")
+                        return
+                    }
+
+                    "${passwordDirectory.path}/$editName.gpg"
+                }
+                else -> "$fullPath/$editName.gpg"
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                api?.executeApiAsync(data, inputStream, outputStream) { result ->
+                    when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+                        OpenPgpApi.RESULT_CODE_SUCCESS -> {
                             try {
-                                file.outputStream().use {
-                                    it.write(outputStream.toByteArray())
+                                val file = File(path)
+                                // If we're not editing, this file should not already exist!
+                                if (!editing && file.exists()) {
+                                    snackbar(message = getString(R.string.password_creation_duplicate_error))
+                                    return@executeApiAsync
                                 }
-                            } catch (e: IOException) {
-                                e(e) { "Failed to write password file" }
-                                setResult(RESULT_CANCELED)
-                                MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                    .setTitle(getString(R.string.password_creation_file_fail_title))
-                                    .setMessage(getString(R.string.password_creation_file_write_fail_message))
-                                    .setCancelable(false)
-                                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                                        finish()
+
+                                if (!isInsideRepository(file)) {
+                                    snackbar(message = getString(R.string.message_error_destination_outside_repo))
+                                    return@executeApiAsync
+                                }
+
+                                try {
+                                    file.outputStream().use {
+                                        it.write(outputStream.toByteArray())
                                     }
-                                    .show()
-                                return@executeApiAsync
-                            }
-
-                            val returnIntent = Intent()
-                            returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
-                            returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
-                            returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
-
-                            if (shouldGeneratePassword) {
-                                val directoryStructure =
-                                    AutofillPreferences.directoryStructure(applicationContext)
-                                val entry = PasswordEntry(content)
-                                returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
-                                val username = PasswordEntry(content).username
-                                    ?: directoryStructure.getUsernameFor(file)
-                                returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
-                            }
-
-                            val repo = PasswordRepository.getRepository(null)
-                            if (repo != null) {
-                                val status = Git(repo).status().call()
-                                if (status.modified.isNotEmpty()) {
-                                    commitChange(
-                                        getString(
-                                            R.string.git_commit_edit_text,
-                                            getLongName(fullPath, repoPath, editName)
-                                        )
-                                    )
-                                }
-                            }
-
-                            if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
-                                val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
-                                if (oldFile.path != file.path && !oldFile.delete()) {
+                                } catch (e: IOException) {
+                                    e(e) { "Failed to write password file" }
                                     setResult(RESULT_CANCELED)
                                     MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                        .setTitle(R.string.password_creation_file_fail_title)
-                                        .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                                        .setTitle(getString(R.string.password_creation_file_fail_title))
+                                        .setMessage(getString(R.string.password_creation_file_write_fail_message))
                                         .setCancelable(false)
                                         .setPositiveButton(android.R.string.ok) { _, _ ->
                                             finish()
                                         }
                                         .show()
+                                    return@executeApiAsync
+                                }
+
+                                val returnIntent = Intent()
+                                returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
+                                returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
+                                returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
+
+                                if (shouldGeneratePassword) {
+                                    val directoryStructure =
+                                        AutofillPreferences.directoryStructure(applicationContext)
+                                    val entry = PasswordEntry(content)
+                                    returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
+                                    val username = PasswordEntry(content).username
+                                        ?: directoryStructure.getUsernameFor(file)
+                                    returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
+                                }
+
+                                val repo = PasswordRepository.getRepository(null)
+                                if (repo != null) {
+                                    val status = Git(repo).status().call()
+                                    if (status.modified.isNotEmpty()) {
+                                        commitChange(
+                                            getString(
+                                                R.string.git_commit_edit_text,
+                                                getLongName(fullPath, repoPath, editName)
+                                            )
+                                        )
+                                    }
+                                }
+
+                                if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
+                                    val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
+                                    if (oldFile.path != file.path && !oldFile.delete()) {
+                                        setResult(RESULT_CANCELED)
+                                        MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                            .setTitle(R.string.password_creation_file_fail_title)
+                                            .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                                            .setCancelable(false)
+                                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                                finish()
+                                            }
+                                            .show()
+                                    } else {
+                                        setResult(RESULT_OK, returnIntent)
+                                        finish()
+                                    }
                                 } else {
                                     setResult(RESULT_OK, returnIntent)
                                     finish()
                                 }
-                            } else {
-                                setResult(RESULT_OK, returnIntent)
-                                finish()
-                            }
 
-                        } catch (e: Exception) {
-                            e(e) { "An Exception occurred" }
+                            } catch (e: Exception) {
+                                e(e) { "An Exception occurred" }
+                            }
                         }
+                        OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+                            val sender = getUserInteractionRequestIntent(result)
+                            userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
+                        }
+                        OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
                     }
-                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                        val sender = getUserInteractionRequestIntent(result)
-                        userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
-                    }
-                    OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
                 }
             }
         }
