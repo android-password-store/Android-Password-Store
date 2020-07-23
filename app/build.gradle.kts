@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 11001
+        versionCode = 11011
         versionName = "1.11.0-SNAPSHOT"
     }
 

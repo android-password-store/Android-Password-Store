@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.10.1] - 2020-07-23
+
 ### Fixed
 
 -   Using long key IDs in .gpg-id no longer leads to a crash
@@ -257,7 +259,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.0...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.1...HEAD
+
+[1.10.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.0...1.10.1
 
 [1.10.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.2...1.10.0
 
