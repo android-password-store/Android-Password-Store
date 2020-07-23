@@ -45,6 +45,7 @@
     <string name="git_commit_remove_text">Remove %1$s from store.</string>
     <string name="git_commit_move_text">Rename %1$s to %2$s.</string>
     <string name="git_commit_move_multiple_text">Move multiple passwords to %1$s.</string>
+    <string name="git_commit_gpg_id">Initialize GPG IDs in %1$s.</string>
 
     <!-- PGPHandler -->
     <string name="clipboard_password_toast_text">Password copied to clipboard, you have %d seconds to paste it somewhere.</string>
@@ -366,7 +367,7 @@
     <string name="otp_import_failure">Failed to import TOTP configuration</string>
     <string name="exporting_passwords">Exporting passwords…</string>
     <string name="failed_to_find_key_id">Failed to locate .gpg-id, is your store set up correctly?</string>
-    <string name="invalid_gpg_id">Found .gpg-id, but it did not contain a key ID, fingerprint or user ID</string>
+    <string name="invalid_gpg_id">Found .gpg-id, but it contains an invalid key ID, fingerprint or user ID</string>
     <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
     <string name="directory_hint">Directory</string>
 </resources>
