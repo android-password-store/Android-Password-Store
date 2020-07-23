@@ -325,7 +325,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 return@with
             }
             when (val identifier = parseGpgIdentifier(gpgIdentifierFileContent)) {
-                is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id))
+                is GpgIdentifier.KeyId -> data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, arrayOf(identifier.id).toLongArray())
                 is GpgIdentifier.UserId -> data.putExtra(OpenPgpApi.EXTRA_USER_IDS, arrayOf(identifier.email))
                 null -> {
                     snackbar(message = resources.getString(R.string.invalid_gpg_id))
