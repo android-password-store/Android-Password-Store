@@ -130,7 +130,6 @@ dependencies {
         debugImplementation(Dependencies.ThirdParty.whatthestack)
     }
 
-    // Workaround for product flavors not resolving correctly
     "nonFreeImplementation"(Dependencies.NonFree.google_play_auth_api_phone)
 
     // Testing-only dependencies
