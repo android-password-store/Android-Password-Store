@@ -250,7 +250,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     @OptIn(ExperimentalUnsignedTypes::class)
-    private fun parseGpgIdentifier(identifier: String) : GpgIdentifier? {
+    private fun parseGpgIdentifier(identifier: String): GpgIdentifier? {
         // Match long key IDs:
         // FF22334455667788 or 0xFF22334455667788
         val maybeLongKeyId = identifier.removePrefix("0x").takeIf {
@@ -312,12 +312,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 snackbar(message = resources.getString(R.string.failed_to_find_key_id))
                 return@with
             }
-            val gpgIdentifiers = gpgIdentifierFile.readLines().map { line ->
-                parseGpgIdentifier(line) ?: run {
-                    snackbar(message = resources.getString(R.string.invalid_gpg_id))
-                    return@with
+            val gpgIdentifiers = gpgIdentifierFile.readLines()
+                .filter { it.isNotBlank() }
+                .map { line ->
+                    parseGpgIdentifier(line) ?: run {
+                        snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                        return@with
+                    }
                 }
-            }
             if (gpgIdentifiers.isEmpty()) {
                 registerForActivityResult(StartActivityForResult()) { result ->
                     if (result.resultCode == RESULT_OK) {
