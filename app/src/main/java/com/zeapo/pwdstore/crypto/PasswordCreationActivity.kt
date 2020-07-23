@@ -329,7 +329,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     getString(
                                         R.string.git_commit_gpg_id,
                                         getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                    ).also { e { it } }
+                                    )
                                 )
                             }
                             encrypt(data)
