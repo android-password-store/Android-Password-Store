@@ -69,8 +69,8 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: ./gradlew test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
 
-    - name: Run instrumentation tests
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
+    - name: Run instrumentation tests on free flavor
+      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'freeRelease' }}
       uses: reactivecircus/android-emulator-runner@v2.11.0
       with:
         api-level: ${{ matrix.api-level }}
@@ -79,4 +79,16 @@ jobs:
           adb shell settings put global animator_duration_scale 0
           adb shell settings put global transition_animation_scale 0
           adb shell settings put global window_animation_scale 0
-          ./gradlew connectedCheck
+          ./gradlew :app:connectedFreeDebugAndroidTest
+
+    - name: Run instrumentation tests on nonFree flavor
+      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'nonFreeRelease' }}
+      uses: reactivecircus/android-emulator-runner@v2.11.0
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: default
+        script: |
+          adb shell settings put global animator_duration_scale 0
+          adb shell settings put global transition_animation_scale 0
+          adb shell settings put global window_animation_scale 0
+          ./gradlew :app:connectedNonFreeDebugAndroidTest
