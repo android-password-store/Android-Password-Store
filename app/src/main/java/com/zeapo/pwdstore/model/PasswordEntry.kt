@@ -31,7 +31,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     init {
         val passContent = content.split("\n".toRegex(), 2).toTypedArray()
-        password = passContent[0]
+        password = if (EXTRA_CONTENT_FIELDS.any { passContent[0].startsWith(it) }) "" else passContent[0]
         extraContent = findExtraContent(passContent)
         username = findUsername()
         digits = findOtpDigits(content)
@@ -85,8 +85,10 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return null
     }
 
-    private fun findExtraContent(passContent: Array<String>): String {
-        return if (passContent.size > 1) passContent[1] else ""
+    private fun findExtraContent(passContent: Array<String>) = when {
+        password.isEmpty() -> passContent[0]
+        passContent.size > 1 -> passContent[1]
+        else -> ""
     }
 
     private fun findTotpSecret(decryptedContent: String): String? {
@@ -118,5 +120,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             "id:",
             "identity:"
         )
+
+        private val EXTRA_CONTENT_FIELDS = USERNAME_FIELDS + UriTotpFinder.TOTP_FIELDS
     }
 }

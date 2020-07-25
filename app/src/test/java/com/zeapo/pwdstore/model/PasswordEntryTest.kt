@@ -83,6 +83,22 @@ class PasswordEntryTest {
         assertEquals("545293", code)
     }
 
+    @Test fun testGeneratesOtpWithOnlyUriInFile() {
+        val entry = makeEntry(TOTP_URI)
+        assertTrue(entry.password.isEmpty())
+        assertTrue(entry.hasTotp())
+        val code = Otp.calculateCode(
+            entry.totpSecret!!,
+            // The hardcoded date value allows this test to stay reproducible.
+            Date(8640000).time / (1000 * entry.totpPeriod),
+            entry.totpAlgorithm,
+            entry.digits
+        )
+        assertNotNull(code) { "Generated OTP cannot be null" }
+        assertEquals(entry.digits.toInt(), code.length)
+        assertEquals("545293", code)
+    }
+
     companion object {
 
         const val TOTP_URI = "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
