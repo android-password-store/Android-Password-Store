@@ -31,7 +31,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     init {
         val passContent = content.split("\n".toRegex(), 2).toTypedArray()
-        password = if (EXTRA_CONTENT_FIELDS.any { passContent[0].startsWith(it) }) "" else passContent[0]
+        password = if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) "" else passContent[0]
         extraContent = findExtraContent(passContent)
         username = findUsername()
         digits = findOtpDigits(content)
@@ -120,7 +120,5 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             "id:",
             "identity:"
         )
-
-        private val EXTRA_CONTENT_FIELDS = USERNAME_FIELDS + UriTotpFinder.TOTP_FIELDS
     }
 }

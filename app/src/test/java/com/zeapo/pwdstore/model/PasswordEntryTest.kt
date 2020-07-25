@@ -99,6 +99,13 @@ class PasswordEntryTest {
         assertEquals("545293", code)
     }
 
+    @Test fun testOnlyLooksForUriInFirstLine() {
+        val entry = makeEntry("id:\n$TOTP_URI")
+        assertTrue(entry.password.isNotEmpty())
+        assertTrue(entry.hasTotp())
+        assertFalse(entry.hasUsername())
+    }
+
     companion object {
 
         const val TOTP_URI = "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
