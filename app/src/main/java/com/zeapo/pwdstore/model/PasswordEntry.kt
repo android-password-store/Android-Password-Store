@@ -86,7 +86,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     private fun findExtraContent(passContent: Array<String>) = when {
-        password.isEmpty() -> passContent[0]
+        password.isEmpty() && passContent[0].isNotEmpty() -> passContent[0]
         passContent.size > 1 -> passContent[1]
         else -> ""
     }
