@@ -14,10 +14,10 @@ class UriTotpFinder : TotpFinder {
 
     override fun findSecret(content: String): String? {
         content.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/")) {
+            if (line.startsWith(TOTP_FIELDS[0])) {
                 return Uri.parse(line).getQueryParameter("secret")
             }
-            if (line.startsWith("totp:", ignoreCase = true)) {
+            if (line.startsWith(TOTP_FIELDS[1], ignoreCase = true)) {
                 return line.split(": *".toRegex(), 2).toTypedArray()[1]
             }
         }
@@ -26,7 +26,7 @@ class UriTotpFinder : TotpFinder {
 
     override fun findDigits(content: String): String {
         content.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/") &&
+            if (line.startsWith(TOTP_FIELDS[0]) &&
                 Uri.parse(line).getQueryParameter("digits") != null) {
                 return Uri.parse(line).getQueryParameter("digits")!!
             }
@@ -36,7 +36,7 @@ class UriTotpFinder : TotpFinder {
 
     override fun findPeriod(content: String): Long {
         content.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/") &&
+            if (line.startsWith(TOTP_FIELDS[0]) &&
                 Uri.parse(line).getQueryParameter("period") != null) {
                 val period = Uri.parse(line).getQueryParameter("period")!!.toLongOrNull()
                 if (period != null && period > 0)
@@ -48,11 +48,18 @@ class UriTotpFinder : TotpFinder {
 
     override fun findAlgorithm(content: String): String {
         content.split("\n".toRegex()).forEach { line ->
-            if (line.startsWith("otpauth://totp/") &&
+            if (line.startsWith(TOTP_FIELDS[0]) &&
                 Uri.parse(line).getQueryParameter("algorithm") != null) {
                 return Uri.parse(line).getQueryParameter("algorithm")!!
             }
         }
         return "sha1"
+    }
+
+    companion object {
+        val TOTP_FIELDS = arrayOf(
+            "otpauth://totp",
+            "totp:"
+        )
     }
 }
