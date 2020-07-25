@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Properly handle cases where files contain only TOTP secrets and no password
+
 ## [1.10.1] - 2020-07-23
 
 ### Fixed
