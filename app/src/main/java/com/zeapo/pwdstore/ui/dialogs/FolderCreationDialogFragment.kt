@@ -37,7 +37,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         val materialTextView = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
         val folderName = materialTextView.text.toString()
         val newFolder = File("$currentDir/$folderName")
-        newFolder.mkdir()
+        newFolder.mkdirs()
         (requireActivity() as PasswordStore).refreshPasswordList(newFolder)
         dismiss()
     }

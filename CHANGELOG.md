@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Properly handle cases where files contain only TOTP secrets and no password
+- Allow creating nested directories directly
 
 ## [1.10.1] - 2020-07-23
 
