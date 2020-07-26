@@ -7,13 +7,6 @@ import androidx.fragment.app.commit
 import dev.msfjarvis.aps.R
 
 /**
- * Check if [permission] is granted to the app. Aliases to [isPermissionGranted] internally.
- */
-fun Fragment.isPermissionGranted(permission: String): Boolean {
-    return requireActivity().isPermissionGranted(permission)
-}
-
-/**
  * Calls `finish()` on the enclosing [androidx.fragment.app.FragmentActivity]
  */
 fun Fragment.finish() = requireActivity().finish()
