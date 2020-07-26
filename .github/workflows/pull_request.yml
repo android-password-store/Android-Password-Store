@@ -92,3 +92,10 @@ jobs:
           adb shell settings put global transition_animation_scale 0
           adb shell settings put global window_animation_scale 0
           ./gradlew :app:connectedNonFreeDebugAndroidTest
+
+    - name: (Fail-only) upload test report
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+          name: Test report
+          path: app/build/reports
