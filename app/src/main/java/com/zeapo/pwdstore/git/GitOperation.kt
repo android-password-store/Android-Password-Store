@@ -9,12 +9,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.config.ConnectionMode
@@ -37,7 +37,6 @@ import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
-import com.google.android.material.R as materialR
 
 
 private class GitOperationCredentialFinder(
@@ -78,13 +77,13 @@ private class GitOperationCredentialFinder(
 
             @SuppressLint("InflateParams")
             val dialogView = layoutInflater.inflate(R.layout.git_credential_layout, null)
+            val credentialLayout = dialogView.findViewById<TextInputLayout>(R.id.git_auth_passphrase_layout)
             val editCredential = dialogView.findViewById<TextInputEditText>(R.id.git_auth_credential)
             editCredential.setHint(hintRes)
             val rememberCredential = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
             rememberCredential.setText(rememberRes)
             if (isRetry)
-                editCredential.setError(callingActivity.resources.getString(errorRes),
-                    ContextCompat.getDrawable(callingActivity, materialR.drawable.mtrl_ic_error))
+                credentialLayout.error = callingActivity.resources.getString(errorRes)
             MaterialAlertDialogBuilder(callingActivity).run {
                 setTitle(R.string.passphrase_dialog_title)
                 setMessage(messageRes)
