@@ -83,8 +83,8 @@ dependencies {
     implementation(Dependencies.ThirdParty.timberkt)
 
     if (isSnapshot()) {
-        implementation(Dependencies.ThirdParty.leakcanary)
-        implementation(Dependencies.ThirdParty.whatthestack)
+        releaseImplementation(Dependencies.ThirdParty.leakcanary)
+        releaseImplementation(Dependencies.ThirdParty.whatthestack)
     } else {
         debugImplementation(Dependencies.ThirdParty.leakcanary)
         debugImplementation(Dependencies.ThirdParty.whatthestack)
