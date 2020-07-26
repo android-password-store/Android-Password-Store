@@ -39,9 +39,9 @@ android {
     }
 
     packagingOptions {
-        exclude(".readme")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/NOTICE.txt")
+        exclude("**/*.version")
+        exclude("**/*.txt")
+        exclude("**/*.kotlin_module")
     }
 
     buildTypes {
