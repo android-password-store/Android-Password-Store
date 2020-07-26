@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 - Properly handle cases where files contain only TOTP secrets and no password
 - Allow creating nested directories directly
+- I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
 
 ## [1.10.1] - 2020-07-23
 
