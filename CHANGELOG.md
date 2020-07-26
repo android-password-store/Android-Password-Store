@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Slightly reduce APK size
+- Always show the parent path in entries
+
 ### Fixed
 
 - Properly handle cases where files contain only TOTP secrets and no password
