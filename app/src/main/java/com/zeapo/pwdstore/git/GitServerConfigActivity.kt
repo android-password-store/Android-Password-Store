@@ -157,7 +157,7 @@ class GitServerConfigActivity : BaseGitActivity() {
             !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")) {
             MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources.getString(R.string.dialog_delete_msg) + " " + localDir.toString())
+                .setMessage(resources.getString(R.string.dialog_delete_msg, localDir.toString()))
                 .setCancelable(false)
                 .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
                     try {
