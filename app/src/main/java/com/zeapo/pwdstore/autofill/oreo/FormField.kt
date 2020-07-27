@@ -33,19 +33,19 @@ class FormField(
 
         private val HINTS_USERNAME = listOf(
             HintConstants.AUTOFILL_HINT_USERNAME,
-            HintConstants.AUTOFILL_HINT_NEW_USERNAME
+            HintConstants.AUTOFILL_HINT_NEW_USERNAME,
         )
 
         private val HINTS_NEW_PASSWORD = listOf(
-            HintConstants.AUTOFILL_HINT_NEW_PASSWORD
+            HintConstants.AUTOFILL_HINT_NEW_PASSWORD,
         )
 
         private val HINTS_PASSWORD = HINTS_NEW_PASSWORD + listOf(
-            HintConstants.AUTOFILL_HINT_PASSWORD
+            HintConstants.AUTOFILL_HINT_PASSWORD,
         )
 
         private val HINTS_OTP = listOf(
-            HintConstants.AUTOFILL_HINT_SMS_OTP
+            HintConstants.AUTOFILL_HINT_SMS_OTP,
         )
 
         @Suppress("DEPRECATION")
@@ -54,7 +54,7 @@ class FormField(
             HintConstants.AUTOFILL_HINT_NAME,
             HintConstants.AUTOFILL_HINT_PERSON_NAME,
             HintConstants.AUTOFILL_HINT_PHONE,
-            HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+            HintConstants.AUTOFILL_HINT_PHONE_NUMBER,
         )
 
         private val ANDROID_TEXT_FIELD_CLASS_NAMES = listOf(
@@ -62,7 +62,7 @@ class FormField(
             "android.widget.AutoCompleteTextView",
             "androidx.appcompat.widget.AppCompatEditText",
             "android.support.v7.widget.AppCompatEditText",
-            "com.google.android.material.textfield.TextInputEditText"
+            "com.google.android.material.textfield.TextInputEditText",
         )
 
         private const val ANDROID_WEB_VIEW_CLASS_NAME = "android.webkit.WebView"
@@ -75,15 +75,24 @@ class FormField(
                 InputType.TYPE_CLASS_TEXT -> typeVariation in listOf(
                     InputType.TYPE_TEXT_VARIATION_PASSWORD,
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD,
-                    InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
+                    InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD,
                 )
                 else -> false
             }
         }
 
-        private val HTML_INPUT_FIELD_TYPES_USERNAME = listOf("email", "tel", "text")
-        private val HTML_INPUT_FIELD_TYPES_PASSWORD = listOf("password")
-        private val HTML_INPUT_FIELD_TYPES_OTP = listOf("tel", "text")
+        private val HTML_INPUT_FIELD_TYPES_USERNAME = listOf(
+            "email",
+            "tel",
+            "text",
+        )
+        private val HTML_INPUT_FIELD_TYPES_PASSWORD = listOf(
+            "password",
+        )
+        private val HTML_INPUT_FIELD_TYPES_OTP = listOf(
+            "tel",
+            "text",
+        )
         private val HTML_INPUT_FIELD_TYPES_FILLABLE =
             (HTML_INPUT_FIELD_TYPES_USERNAME + HTML_INPUT_FIELD_TYPES_PASSWORD + HTML_INPUT_FIELD_TYPES_OTP).toSet().toList()
 
@@ -95,20 +104,27 @@ class FormField(
             "url_field", // Opera address bar
             "location_bar_edit_text", // Samsung address bar
             "search", "find", "captcha",
-            "postal" // Prevent postal code fields from being mistaken for OTP fields
+            "postal", // Prevent postal code fields from being mistaken for OTP fields
 
         )
         private val PASSWORD_HEURISTIC_TERMS = listOf(
-            "pass", "pswd", "pwd"
+            "pass",
+            "pswd",
+            "pwd",
         )
         private val USERNAME_HEURISTIC_TERMS = listOf(
-            "alias", "e-mail", "email", "login", "user"
+            "alias",
+            "e-mail",
+            "email",
+            "login",
+            "user",
         )
         private val OTP_HEURISTIC_TERMS = listOf(
-            "einmal", "otp"
+            "einmal",
+            "otp",
         )
         private val OTP_WEAK_HEURISTIC_TERMS = listOf(
-            "code"
+            "code",
         )
     }
 

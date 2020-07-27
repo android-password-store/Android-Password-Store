@@ -217,7 +217,7 @@ class SshjConfig : ConfigImpl() {
             ECDHNistP.Factory521(),
             ECDHNistP.Factory384(),
             ECDHNistP.Factory256(),
-            DHGexSHA256.Factory()
+            DHGexSHA256.Factory(),
         )
     }
 
@@ -228,7 +228,7 @@ class SshjConfig : ConfigImpl() {
             SignatureECDSA.Factory384(),
             SignatureECDSA.Factory521(),
             SignatureRSA.Factory(),
-            FactoryCERT()
+            FactoryCERT(),
         )
     }
 
@@ -242,7 +242,7 @@ class SshjConfig : ConfigImpl() {
             PKCS8KeyFile.Factory(),
             PKCS5KeyFile.Factory(),
             OpenSSHKeyFile.Factory(),
-            PuTTYKeyFile.Factory()
+            PuTTYKeyFile.Factory(),
         )
     }
 
@@ -251,7 +251,7 @@ class SshjConfig : ConfigImpl() {
         cipherFactories = listOf(
             BlockCiphers.AES128CTR(),
             BlockCiphers.AES192CTR(),
-            BlockCiphers.AES256CTR()
+            BlockCiphers.AES256CTR(),
         )
     }
 
@@ -260,13 +260,13 @@ class SshjConfig : ConfigImpl() {
             Macs.HMACSHA2256(),
             Macs.HMACSHA2256Etm(),
             Macs.HMACSHA2512(),
-            Macs.HMACSHA2512Etm()
+            Macs.HMACSHA2512Etm(),
         )
     }
 
     private fun initCompressionFactories() {
         compressionFactories = listOf(
-            NoneCompression.Factory()
+            NoneCompression.Factory(),
         )
     }
 }

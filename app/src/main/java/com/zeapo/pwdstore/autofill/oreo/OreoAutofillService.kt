@@ -33,7 +33,7 @@ class OreoAutofillService : AutofillService() {
             "com.android.settings.intelligence",
             "com.android.systemui",
             "com.oneplus.applocker",
-            "org.sufficientlysecure.keychain"
+            "org.sufficientlysecure.keychain",
         )
 
         private const val DISABLE_AUTOFILL_DURATION_MS = 1000 * 60 * 60 * 24L

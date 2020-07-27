@@ -22,14 +22,13 @@ object RandomPasswordGenerator {
      *   set, the password will not contain any symbols.
      * - [PasswordGenerator.NO_AMBIGUOUS]: If set, the password will not contain any ambiguous
      *   characters.
-     * - [PasswordGenerator.NO_VOWELS]: If set, the password will not contain any vowels.
      */
     fun generate(targetLength: Int, pwFlags: Int): String? {
         val bank = listOfNotNull(
             PasswordGenerator.DIGITS_STR.takeIf { pwFlags hasFlag PasswordGenerator.DIGITS },
             PasswordGenerator.UPPERS_STR.takeIf { pwFlags hasFlag PasswordGenerator.UPPERS },
             PasswordGenerator.LOWERS_STR.takeIf { pwFlags hasFlag PasswordGenerator.LOWERS },
-            PasswordGenerator.SYMBOLS_STR.takeIf { pwFlags hasFlag PasswordGenerator.SYMBOLS }
+            PasswordGenerator.SYMBOLS_STR.takeIf { pwFlags hasFlag PasswordGenerator.SYMBOLS },
         ).joinToString("")
 
         var password = ""
