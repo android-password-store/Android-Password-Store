@@ -316,7 +316,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 .filter { it.isNotBlank() }
                 .map { line ->
                     parseGpgIdentifier(line) ?: run {
-                        snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                        if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex())) {
+                            snackbar(message = resources.getString(R.string.short_key_ids_unsupported))
+                        } else {
+                            snackbar(message = resources.getString(R.string.invalid_gpg_id))
+                        }
                         return@with
                     }
                 }
