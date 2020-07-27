@@ -2,10 +2,11 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+
 package com.zeapo.pwdstore.model
 
 import com.zeapo.pwdstore.utils.Otp
-import com.zeapo.pwdstore.utils.TotpFinder
+import com.zeapo.pwdstore.utils.UriTotpFinder
 import java.util.Date
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -14,9 +15,9 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import org.junit.Test
 
-class PasswordEntryTest {
+class PasswordEntryAndroidTest {
 
-    private fun makeEntry(content: String) = PasswordEntry(content, testFinder)
+    private fun makeEntry(content: String) = PasswordEntry(content, UriTotpFinder())
 
     @Test fun testGetPassword() {
         assertEquals("fooooo", makeEntry("fooooo\nbla\n").password)
@@ -109,24 +110,5 @@ class PasswordEntryTest {
     companion object {
 
         const val TOTP_URI = "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
-
-        // This implementation is hardcoded for the URI above.
-        val testFinder = object : TotpFinder {
-            override fun findSecret(content: String): String? {
-                return "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"
-            }
-
-            override fun findDigits(content: String): String {
-                return "6"
-            }
-
-            override fun findPeriod(content: String): Long {
-                return 30
-            }
-
-            override fun findAlgorithm(content: String): String {
-                return "SHA1"
-            }
-        }
     }
 }

@@ -52,7 +52,15 @@ open class PasswordItemRecyclerAdapter :
             val settings =
                 PreferenceManager.getDefaultSharedPreferences(itemView.context.applicationContext)
             val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
-            name.text = item.toString()
+            val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
+            val source = if (parentPath.isNotEmpty()) {
+                "$parentPath\n$item"
+            } else {
+                "$item"
+            }
+            val spannable = SpannableString(source)
+            spannable.setSpan(RelativeSizeSpan(0.7f), 0, parentPath.length, 0)
+            name.text = spannable
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 folderIndicator.visibility = View.VISIBLE
                 val children = item.file.listFiles { pathname ->
@@ -62,15 +70,6 @@ open class PasswordItemRecyclerAdapter :
                 childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
                 childCount.text = "$count"
             } else {
-                val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
-                val source = if (parentPath.isNotEmpty()) {
-                    "$parentPath\n$item"
-                } else {
-                    "$item"
-                }
-                val spannable = SpannableString(source)
-                spannable.setSpan(RelativeSizeSpan(0.7f), 0, parentPath.length, 0)
-                name.text = spannable
                 childCount.visibility = View.GONE
                 folderIndicator.visibility = View.GONE
             }

@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 11001
+        versionCode = 11011
         versionName = "1.11.0-SNAPSHOT"
     }
 
@@ -39,9 +39,9 @@ android {
     }
 
     packagingOptions {
-        exclude(".readme")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/NOTICE.txt")
+        exclude("**/*.version")
+        exclude("**/*.txt")
+        exclude("**/*.kotlin_module")
     }
 
     buildTypes {
