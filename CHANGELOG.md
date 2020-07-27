@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Allow changing the branch used for Git operations
+
 ### Changed
 
 - Slightly reduce APK size

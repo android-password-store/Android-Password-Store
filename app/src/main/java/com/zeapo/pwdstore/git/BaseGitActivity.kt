@@ -41,6 +41,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
     lateinit var serverPath: String
     lateinit var username: String
     lateinit var email: String
+    lateinit var branch: String
     private var identityBuilder: SshApiSessionFactory.IdentityBuilder? = null
     private var identity: SshApiSessionFactory.ApiIdentity? = null
     lateinit var settings: SharedPreferences
@@ -61,6 +62,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         serverPath = settings.getString(PreferenceKeys.GIT_REMOTE_LOCATION, null) ?: ""
         username = settings.getString(PreferenceKeys.GIT_CONFIG_USER_NAME, null) ?: ""
         email = settings.getString(PreferenceKeys.GIT_CONFIG_USER_EMAIL, null) ?: ""
+        branch = settings.getString(PreferenceKeys.GIT_BRANCH_NAME, null) ?: "master"
         updateUrl()
     }
 
@@ -248,10 +250,9 @@ abstract class BaseGitActivity : AppCompatActivity() {
         const val REQUEST_PULL = 101
         const val REQUEST_PUSH = 102
         const val REQUEST_CLONE = 103
-        const val REQUEST_INIT = 104
-        const val REQUEST_SYNC = 105
-        const val BREAK_OUT_OF_DETACHED = 106
-        const val REQUEST_RESET = 107
+        const val REQUEST_SYNC = 104
+        const val BREAK_OUT_OF_DETACHED = 105
+        const val REQUEST_RESET = 106
         const val TAG = "AbstractGitActivity"
     }
 }
