@@ -3,7 +3,9 @@
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
-<autofill-service xmlns:android="http://schemas.android.com/apk/res/android">
+<autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedAttribute">
     <compatibility-package android:name="com.android.chrome" />
     <compatibility-package android:name="com.brave.browser" />
     <compatibility-package android:name="com.chrome.beta" />
@@ -12,7 +14,13 @@
     <compatibility-package android:name="com.microsoft.emmx" />
     <compatibility-package android:name="com.opera.mini.native" />
     <compatibility-package android:name="com.opera.mini.native.beta" />
-    <compatibility-package android:name="org.mozilla.fennec_fdroid" />
-    <compatibility-package android:name="org.mozilla.firefox" />
-    <compatibility-package android:name="org.mozilla.firefox_beta" />
+    <compatibility-package
+        android:name="org.mozilla.fennec_fdroid"
+        android:maxLongVersionCode="679999" />
+    <compatibility-package
+        android:name="org.mozilla.firefox"
+        android:maxLongVersionCode="679999" />
+    <compatibility-package
+        android:name="org.mozilla.firefox_beta"
+        android:maxLongVersionCode="679999" />
 </autofill-service>
