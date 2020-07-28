@@ -177,13 +177,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 extraContent.setText(entry.extraContentWithoutAuthData)
                             }
                         }
-                        updateViewState()
                     }
                 }
                 listOf(filename, extraContent).forEach {
                     it.doOnTextChanged { _, _, _, _ -> updateViewState() }
                 }
-                updateViewState()
             }
             suggestedPass?.let {
                 password.setText(it)
@@ -194,6 +192,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 generatePassword()
                 password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
+            updateViewState()
         }
     }
 
@@ -424,8 +423,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         AutofillPreferences.directoryStructure(applicationContext)
                                     val entry = PasswordEntry(content)
                                     returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
-                                    val username = PasswordEntry(content).username
-                                        ?: directoryStructure.getUsernameFor(file)
+                                    val username = entry.username ?: directoryStructure.getUsernameFor(file)
                                     returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                                 }
 
