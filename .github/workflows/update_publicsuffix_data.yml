@@ -1,3 +1,4 @@
+name: Update Publix Suffix List data
 on:
   schedule:
     - cron: '0 0 * * 6'
@@ -20,7 +21,7 @@ jobs:
         run: |
           git checkout -b bot/update-psl
           git add app/src/main/assets/publicsuffixes
-          git commit --message "Update Public Suffix List data'
+          git commit --message "Update Public Suffix List data"
 
       - name: Create update PR
         uses: thomaseizinger/create-pull-request@1.0.0
