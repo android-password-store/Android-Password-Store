@@ -6,13 +6,15 @@ package com.zeapo.pwdstore.git
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
-import org.eclipse.jgit.api.AddCommand
-import org.eclipse.jgit.api.FetchCommand
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.GitCommand
 import org.eclipse.jgit.api.ResetCommand
+import org.eclipse.jgit.api.TransportCommand
 
 /**
  * Creates a new git operation
@@ -22,9 +24,7 @@ import org.eclipse.jgit.api.ResetCommand
  */
 class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
-    private var addCommand: AddCommand? = null
-    private var fetchCommand: FetchCommand? = null
-    private var resetCommand: ResetCommand? = null
+    private lateinit var commands: List<GitCommand<out Any>>
 
     /**
      * Sets the command
@@ -32,17 +32,27 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) 
      * @return the current object
      */
     fun setCommands(): ResetToRemoteOperation {
+        val remoteBranch = PreferenceManager
+            .getDefaultSharedPreferences(callingActivity.applicationContext)
+            .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
         val git = Git(repository)
-        this.addCommand = git.add().addFilepattern(".")
-        this.fetchCommand = git.fetch().setRemote("origin")
-        this.resetCommand = git.reset().setRef("origin/master").setMode(ResetCommand.ResetType.HARD)
+        val cmds = arrayListOf(
+            git.add().addFilepattern("."),
+            git.fetch().setRemote("origin"),
+            git.reset().setRef("origin/$remoteBranch").setMode(ResetCommand.ResetType.HARD)
+        )
+        if (git.branchList().call().none { it.name == remoteBranch }) {
+            cmds.add(
+                git.branchCreate().setName(remoteBranch).setForce(true)
+            )
+        }
+        commands = cmds
         return this
     }
 
     override fun execute() {
-        this.fetchCommand?.setCredentialsProvider(this.provider)
-        GitAsyncTask(callingActivity, this, Intent())
-            .execute(this.addCommand, this.fetchCommand, this.resetCommand)
+        commands.filterIsInstance<TransportCommand<*, *>>().map { it.setCredentialsProvider(provider) }
+        GitAsyncTask(callingActivity, this, Intent()).execute(*commands.toTypedArray())
     }
 
     override fun onError(err: Exception) {
