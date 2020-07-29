@@ -74,7 +74,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "org.mozilla.firefox_beta" to "p4tipRZbRJSy/q2edqKA0i2Tf+5iUa7OWZRGsuoxmwQ=",
     "org.mozilla.focus" to "YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w=",
     "org.mozilla.klar" to "YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w=",
-    "org.torproject.torbrowser" to "IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg="
+    "org.torproject.torbrowser" to "IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg=",
 )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
@@ -112,7 +112,7 @@ private val BROWSER_MULTI_ORIGIN_METHOD = mapOf(
     "org.mozilla.firefox_beta" to BrowserMultiOriginMethod.WebView,
     "org.mozilla.focus" to BrowserMultiOriginMethod.Field,
     "org.mozilla.klar" to BrowserMultiOriginMethod.Field,
-    "org.torproject.torbrowser" to BrowserMultiOriginMethod.WebView
+    "org.torproject.torbrowser" to BrowserMultiOriginMethod.WebView,
 )
 
 private fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginMethod =
@@ -135,7 +135,7 @@ private val BROWSER_SAVE_FLAG = mapOf(
     "org.mozilla.fennec_aurora" to 0,
     "com.opera.mini.native" to 0,
     "com.opera.mini.native.beta" to 0,
-    "com.opera.touch" to 0
+    "com.opera.touch" to 0,
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -162,7 +162,7 @@ private val FLAKY_BROWSERS = listOf(
     "com.android.chrome",
     "com.chrome.beta",
     "com.chrome.canary",
-    "com.chrome.dev"
+    "com.chrome.dev",
 )
 
 enum class BrowserAutofillSupportLevel {
@@ -170,7 +170,7 @@ enum class BrowserAutofillSupportLevel {
     FlakyFill,
     PasswordFill,
     GeneralFill,
-    GeneralFillAndSave
+    GeneralFillAndSave,
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

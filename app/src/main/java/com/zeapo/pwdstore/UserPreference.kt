@@ -95,8 +95,11 @@ class UserPreference : AppCompatActivity() {
 
             if (!PasswordRepository.isGitRepo()) {
                 listOfNotNull(
-                    gitServerPreference, gitConfigPreference, sshKeyPreference,
-                    viewSshKeyPreference, clearSavedPassPreference
+                    gitServerPreference,
+                    gitConfigPreference,
+                    sshKeyPreference,
+                    viewSshKeyPreference,
+                    clearSavedPassPreference,
                 ).forEach {
                     it.parent?.removePreference(it)
                 }
@@ -119,12 +122,12 @@ class UserPreference : AppCompatActivity() {
                 autoFillAppsPreference,
                 autoFillDefaultPreference,
                 autoFillAlwaysShowDialogPreference,
-                autoFillShowFullNamePreference
+                autoFillShowFullNamePreference,
             )
             oreoAutofillDependencies = listOfNotNull(
                 oreoAutofillDirectoryStructurePreference,
                 oreoAutofillDefaultUsername,
-                oreoAutofillCustomPublixSuffixes
+                oreoAutofillCustomPublixSuffixes,
             )
             oreoAutofillCustomPublixSuffixes?.apply {
                 setOnBindEditTextListener {

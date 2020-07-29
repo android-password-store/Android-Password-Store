@@ -232,7 +232,8 @@ class AutofillRule private constructor(
         fun genericPassword(optional: Boolean = false, block: FieldMatcher.Builder.() -> Unit) {
             require(matchers.none {
                 it.type in listOf(
-                    FillableFieldType.CurrentPassword, FillableFieldType.NewPassword
+                    FillableFieldType.CurrentPassword,
+                    FillableFieldType.NewPassword,
                 )
             }) { "Every rule block can only have either genericPassword or {current,new}Password blocks" }
             matchers.add(

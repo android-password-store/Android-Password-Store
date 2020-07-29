@@ -11,7 +11,6 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
@@ -59,7 +58,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private var oldCategory: String? = null
     private var copy: Boolean = false
 
-    private val userInteractionRequiredResult: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(StartIntentSenderForResult()) { result ->
+    private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
         if (result.data == null) {
             setResult(RESULT_CANCELED, null)
             finish()
