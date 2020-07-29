@@ -192,8 +192,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 generatePassword()
                 password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
-            updateViewState()
         }
+        updateViewState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
