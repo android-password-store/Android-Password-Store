@@ -35,6 +35,7 @@ object PreferenceKeys {
     const val GIT_REMOTE_SERVER = "git_remote_server"
     const val GIT_REMOTE_USERNAME = "git_remote_username"
     const val GIT_SERVER_INFO = "git_server_info"
+    const val GIT_BRANCH_NAME = "git_branch"
     const val HTTPS_PASSWORD = "https_password"
     const val LENGTH = "length"
     const val OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES = "oreo_autofill_custom_public_suffixes"

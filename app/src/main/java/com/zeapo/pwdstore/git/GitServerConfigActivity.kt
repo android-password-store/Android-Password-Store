@@ -102,6 +102,13 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
         }
 
+        binding.serverBranch.apply {
+            setText(branch)
+            doOnTextChanged { text, _, _, _ ->
+                branch = text.toString().trim()
+            }
+        }
+
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize(this)
@@ -114,12 +121,14 @@ class GitServerConfigActivity : BaseGitActivity() {
                         putString(PreferenceKeys.GIT_REMOTE_PORT, serverPort)
                         putString(PreferenceKeys.GIT_REMOTE_USERNAME, serverUser)
                         putString(PreferenceKeys.GIT_REMOTE_LOCATION, serverPath)
+                        putString(PreferenceKeys.GIT_BRANCH_NAME, branch)
                     }
                     if (!isClone) {
                         Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
                         Handler().postDelayed(500) { finish() }
-                    } else
+                    } else {
                         cloneRepository()
+                    }
                 }
                 else -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_error_prefix, getString(result.textRes)), Snackbar.LENGTH_LONG).show()
             }

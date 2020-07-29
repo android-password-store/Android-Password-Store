@@ -5,8 +5,10 @@
 package com.zeapo.pwdstore.git
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -16,6 +18,9 @@ import org.eclipse.jgit.api.RebaseCommand
 class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     private lateinit var commands: List<GitCommand<out Any>>
+    private val gitBranch = PreferenceManager
+        .getDefaultSharedPreferences(callingActivity.applicationContext)
+        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
 
     /**
      * Sets the command
@@ -24,7 +29,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
      */
     fun setCommands(): BreakOutOfDetached {
         val git = Git(repository)
-        val branchName = "conflicting-master-${System.currentTimeMillis()}"
+        val branchName = "conflicting-$gitBranch-${System.currentTimeMillis()}"
 
         this.commands = listOf(
             // abort the rebase
@@ -33,8 +38,8 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
             git.checkout().setCreateBranch(true).setName(branchName),
             // push the changes
             git.push().setRemote("origin"),
-            // switch back to master
-            git.checkout().setName("master")
+            // switch back to ${gitBranch}
+            git.checkout().setName(gitBranch)
         )
         return this
     }
@@ -76,7 +81,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
             .setMessage("There was a conflict when trying to rebase. " +
-                "Your local master branch was pushed to another branch named conflicting-master-....\n" +
+                "Your local $gitBranch branch was pushed to another branch named conflicting-$gitBranch-....\n" +
                 "Use this branch to resolve conflict on your computer")
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()

@@ -20,7 +20,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/server_label"
             style="@style/TextAppearance.MaterialComponents.Headline5"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/server_name"
@@ -32,7 +32,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_server_protocol"
             style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/server_protocol"
@@ -42,7 +42,7 @@
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/clone_protocol_group"
             style="@style/TextAppearance.MaterialComponents.Headline1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,10 +67,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/server_user_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="@string/server_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clone_protocol_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -125,10 +127,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/label_server_path"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="@string/server_path"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_server_url">
 
@@ -136,8 +139,28 @@
                 android:id="@+id/server_path"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/server_branch"
                 android:inputType="textWebEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/label_server_branch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Branch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_server_path">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/server_branch"
+                android:imeOptions="actionDone"
+                android:layout_width="match_parent"
+                android:inputType="textNoSuggestions"
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,7 +174,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/connection_mode"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_server_path" />
+            app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/connection_mode_group"

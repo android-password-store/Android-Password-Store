@@ -36,7 +36,7 @@ class GitConfigActivity : BaseGitActivity() {
         if (repo != null) {
             try {
                 val objectId = repo.resolve(Constants.HEAD)
-                val ref = repo.getRef("refs/heads/master")
+                val ref = repo.getRef("refs/heads/$branch")
                 val head = if (ref.objectId.equals(objectId)) ref.name else "DETACHED"
                 binding.gitCommitHash.text = String.format("%s (%s)", objectId.abbreviate(8).name(), head)
 
