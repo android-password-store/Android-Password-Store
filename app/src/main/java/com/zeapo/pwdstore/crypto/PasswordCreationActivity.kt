@@ -234,7 +234,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
         encryptUsername.apply {
             if (visibility != View.VISIBLE)
-                return@with
+                return@apply
             val hasUsernameInFileName = filename.text.toString().isNotBlank()
             val hasUsernameInExtras = entry.hasUsername()
             isEnabled = hasUsernameInFileName xor hasUsernameInExtras
