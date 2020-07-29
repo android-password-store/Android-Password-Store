@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Properly handle cases where files contain only TOTP secrets and no password
+- Correctly hide TOTP import button when TOTP secret/OTPAUTH URL is already present in extra content
 
 ## [1.10.1] - 2020-07-23
 
