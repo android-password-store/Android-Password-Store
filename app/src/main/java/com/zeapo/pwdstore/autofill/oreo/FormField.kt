@@ -271,7 +271,7 @@ class FormField(
     }
 
     infix fun directlyPrecedes(that: Iterable<FormField>): Boolean {
-        val firstIndex = that.map { it.index }.min() ?: return false
+        val firstIndex = that.map { it.index }.minOrNull() ?: return false
         return index == firstIndex - 1
     }
 
@@ -280,7 +280,7 @@ class FormField(
     }
 
     infix fun directlyFollows(that: Iterable<FormField>): Boolean {
-        val lastIndex = that.map { it.index }.max() ?: return false
+        val lastIndex = that.map { it.index }.maxOrNull() ?: return false
         return index == lastIndex + 1
     }
 
