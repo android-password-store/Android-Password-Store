@@ -24,13 +24,30 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.tasks.Task
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.Credentials
 import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillSmsBinding
 import com.zeapo.pwdstore.utils.viewBinding
+import java.util.concurrent.ExecutionException
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+suspend fun <T> Task<T>.suspendableAwait() = suspendCoroutine<T> { cont ->
+    addOnSuccessListener { result: T ->
+        cont.resume(result)
+    }
+    addOnFailureListener { e ->
+        // Unwrap specific exceptions (e.g. ResolvableApiException) from ExecutionException.
+        val cause = (e as? ExecutionException)?.cause ?: e
+        cont.resumeWithException(cause)
+    }
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillSmsActivity : AppCompatActivity() {
@@ -105,15 +122,21 @@ class AutofillSmsActivity : AppCompatActivity() {
         }
     }
 
-    private fun waitForSms() {
+    private suspend fun waitForSms() {
         val smsClient = SmsCodeRetriever.getAutofillClient(this@AutofillSmsActivity)
         try {
-            Tasks.await(smsClient.startSmsCodeRetriever())
+            withContext(Dispatchers.IO) {
+                smsClient.startSmsCodeRetriever().suspendableAwait()
+            }
         } catch (e: ResolvableApiException) {
-            e.startResolutionForResult(this, 1)
+            withContext(Dispatchers.Main) {
+                e.startResolutionForResult(this@AutofillSmsActivity, 1)
+            }
         } catch (e: Exception) {
             e(e)
-            finish()
+            withContext(Dispatchers.Main) {
+                finish()
+            }
         }
     }
 

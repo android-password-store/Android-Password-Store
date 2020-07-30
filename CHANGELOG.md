@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Allow creating nested directories directly
 - I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
 - Correctly hide TOTP import button when TOTP secret/OTPAUTH URL is already present in extra content
+- SMS OTP Autofill no longer crashes when invoked and correctly asks for the required permission on first use
 
 ## [1.10.1] - 2020-07-23
 
