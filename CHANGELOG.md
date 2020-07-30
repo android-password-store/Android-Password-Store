@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.10.2] - 2020-07-30
+
 ### Fixed
 
-- Properly handle cases where files contain only TOTP secrets and no password
-- Correctly hide TOTP import button when TOTP secret/OTPAUTH URL is already present in extra content
-- SMS OTP Autofill no longer crashes when invoked and correctly asks for the required permission on first use
+-   Properly handle cases where files contain only TOTP secrets and no password
+-   Correctly hide TOTP import button when TOTP secret/OTPAUTH URL is already present in extra content
+-   SMS OTP Autofill no longer crashes when invoked and correctly asks for the required permission on first use
 
 ## [1.10.1] - 2020-07-23
 
@@ -265,7 +267,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.1...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...HEAD
+
+[1.10.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.1...1.10.2
 
 [1.10.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.0...1.10.1
 
