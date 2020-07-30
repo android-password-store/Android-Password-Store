@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Properly handle cases where files contain only TOTP secrets and no password
 - Correctly hide TOTP import button when TOTP secret/OTPAUTH URL is already present in extra content
+- SMS OTP Autofill no longer crashes when invoked and correctly asks for the required permission on first use
 
 ## [1.10.1] - 2020-07-23
 
