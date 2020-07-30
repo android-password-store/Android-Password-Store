@@ -122,6 +122,8 @@ class FormField(
         private val OTP_HEURISTIC_TERMS = listOf(
             "einmal",
             "otp",
+            "challenge",
+            "verification",
         )
         private val OTP_WEAK_HEURISTIC_TERMS = listOf(
             "code",
