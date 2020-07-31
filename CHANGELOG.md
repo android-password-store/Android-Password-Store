@@ -17,6 +17,12 @@ All notable changes to this project will be documented in this file.
 - Allow creating nested directories directly
 - I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
 
+## [1.10.3] - 2020-07-30
+
+### Fixed
+
+-   Worked around a dependency bug that would crash the Autofill service when triggered on an OTP field
+
 ## [1.10.2] - 2020-07-30
 
 ### Fixed
@@ -280,7 +286,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.3...HEAD
+
+[1.10.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...1.10.3
 
 [1.10.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.1...1.10.2
 
