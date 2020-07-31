@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
+import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,6 +22,7 @@ import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
 import org.eclipse.jgit.transport.RemoteRefUpdate
+import org.eclipse.jgit.transport.SshSessionFactory
 
 class GitCommandExecutor(
     private val activity: AppCompatActivity,
@@ -125,6 +127,8 @@ class GitCommandExecutor(
                 activity.finish()
             }
         }
+        (SshSessionFactory.getInstance() as? SshjSessionFactory)?.clearCredentials()
+        SshSessionFactory.setInstance(null)
     }
 
     private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
