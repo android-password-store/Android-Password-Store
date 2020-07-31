@@ -23,6 +23,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs?.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false) ==
             true) {
@@ -51,5 +52,9 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
             "follow_system" -> MODE_NIGHT_FOLLOW_SYSTEM
             else -> MODE_NIGHT_AUTO_BATTERY
         })
+    }
+
+    companion object {
+        lateinit var instance: Application
     }
 }

@@ -43,9 +43,8 @@ object ErrorMessages {
         PushException.Reason.GENERIC to R.string.git_push_generic_error
     )
 
-    /*
     operator fun get(throwable: Throwable?): String {
-        val resources = Application.instance!!.resources
+        val resources = Application.instance.resources
         if (throwable == null) return resources.getString(R.string.git_unknown_error)
         return when (val rootCause = rootCause(throwable)) {
             is PullException -> {
@@ -57,7 +56,6 @@ object ErrorMessages {
             else -> resources.getString(R.string.git_unknown_error)
         }
     }
-    */
 
     private fun rootCause(throwable: Throwable): Throwable {
         var cause = throwable
