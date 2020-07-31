@@ -24,10 +24,9 @@ import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.git.GitAsyncTask
-import com.zeapo.pwdstore.git.GitOperation
+import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
-import org.eclipse.jgit.api.Git
 
 const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
 
@@ -107,14 +106,14 @@ fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Inten
         return
     }
     object : GitOperation(getRepositoryDirectory(this@commitChange), this@commitChange) {
+        override val commands = arrayOf(
+            git.add().addFilepattern("."),
+            git.commit().setAll(true).setMessage(message),
+        )
+
         override fun execute() {
             d { "Comitting with message: '$message'" }
-            val git = Git(repository)
-            val task = GitAsyncTask(this@commitChange, this, finishWithResultOnEnd, silentlyExecute = true)
-            task.execute(
-                git.add().addFilepattern("."),
-                git.commit().setAll(true).setMessage(message)
-            )
+            GitAsyncTask(this@commitChange, this, finishWithResultOnEnd, silentlyExecute = true).execute(*commands)
         }
     }.execute()
 }

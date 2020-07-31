@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
+import com.zeapo.pwdstore.git.operation.GitOperation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason

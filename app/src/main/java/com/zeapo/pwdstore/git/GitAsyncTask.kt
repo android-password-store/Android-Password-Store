@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import com.zeapo.pwdstore.git.operation.GitOperation
 import java.io.IOException
 import java.lang.ref.WeakReference
 import net.schmizz.sshj.common.DisconnectReason
