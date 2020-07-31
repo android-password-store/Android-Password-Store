@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Worked around a dependency bug that would crash the Autofill service when triggered on an OTP field
+
 ## [1.10.2] - 2020-07-30
 
 ### Fixed
