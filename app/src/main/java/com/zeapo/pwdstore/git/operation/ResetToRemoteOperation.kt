@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import org.eclipse.jgit.api.ResetCommand
@@ -33,9 +33,8 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) 
         git.branchCreate().setName(remoteBranch).setForce(false),
     )
 
-    override fun execute() {
-        setCredentialProvider()
-        GitAsyncTask(callingActivity, this, Intent()).execute(*commands)
+    override suspend fun execute() {
+        GitCommandExecutor(callingActivity, this).execute()
     }
 
     override fun onError(err: Exception) {

@@ -12,6 +12,7 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
@@ -32,6 +33,7 @@ import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import java.io.File
 import java.net.URI
+import kotlinx.coroutines.launch
 
 /**
  * Abstract AppCompatActivity that holds some information that is commonly shared across git-related
@@ -173,7 +175,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
      *
      * @param operation The type of git operation to launch
      */
-    fun launchGitOperation(operation: Int) {
+    suspend fun launchGitOperation(operation: Int) {
         if (url == null) {
             setResult(RESULT_CANCELED)
             finish()
@@ -246,7 +248,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
             if (identityBuilder != null) {
                 identityBuilder!!.consume(data)
             }
-            launchGitOperation(requestCode)
+            lifecycleScope.launch { launchGitOperation(requestCode) }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

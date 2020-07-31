@@ -20,28 +20,21 @@ import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
-import org.eclipse.jgit.api.TransportCommand
-import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.RemoteRefUpdate
 
 class GitCommandExecutor(
     private val activity: AppCompatActivity,
     private val operation: GitOperation,
-    private val credentialsProvider: CredentialsProvider?,
-    private val finishWithResultOnEnd: Intent = Intent()
+    private val finishWithResultOnEnd: Intent? = Intent()
 ) {
 
-    sealed class Result {
+    private sealed class Result {
         object Ok : Result()
         data class Err(val err: Exception) : Result()
     }
 
-    suspend fun execute(): Result {
-        credentialsProvider?.let { provider ->
-            operation.commands.filterIsInstance<TransportCommand<*, *>>().map { cmd ->
-                cmd.setCredentialsProvider(provider)
-            }
-        }
+    suspend fun execute() {
+        operation.setCredentialProvider()
         var nbChanges = 0
         var operationResult: Result = Result.Ok
         for (command in operation.commands) {
@@ -113,10 +106,6 @@ class GitCommandExecutor(
                 operationResult = Result.Err(e)
             }
         }
-        return operationResult
-    }
-
-    fun postExecute(operationResult: Result) {
         when (operationResult) {
             is Result.Err -> {
                 if (isExplicitlyUserInitiatedError(operationResult.err)) {

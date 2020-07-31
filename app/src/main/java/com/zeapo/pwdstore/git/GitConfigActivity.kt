@@ -9,6 +9,7 @@ import android.os.Handler
 import android.util.Patterns
 import androidx.core.content.edit
 import androidx.core.os.postDelayed
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -16,6 +17,7 @@ import com.zeapo.pwdstore.databinding.ActivityGitConfigBinding
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
+import kotlinx.coroutines.launch
 import org.eclipse.jgit.lib.Constants
 
 class GitConfigActivity : BaseGitActivity() {
@@ -47,8 +49,8 @@ class GitConfigActivity : BaseGitActivity() {
             } catch (ignored: Exception) {
             }
         }
-        binding.gitAbortRebase.setOnClickListener { launchGitOperation(BREAK_OUT_OF_DETACHED) }
-        binding.gitResetToRemote.setOnClickListener { launchGitOperation(REQUEST_RESET) }
+        binding.gitAbortRebase.setOnClickListener { lifecycleScope.launch { launchGitOperation(BREAK_OUT_OF_DETACHED) } }
+        binding.gitResetToRemote.setOnClickListener { lifecycleScope.launch { launchGitOperation(REQUEST_RESET) } }
         binding.saveButton.setOnClickListener {
             val email = binding.gitUserEmail.text.toString().trim()
             val name = binding.gitUserName.text.toString().trim()

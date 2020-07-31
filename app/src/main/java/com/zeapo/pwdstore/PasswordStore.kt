@@ -34,7 +34,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
@@ -581,7 +580,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                commitChange(resources.getString(R.string.git_commit_add_text, result.data?.extras?.getString("LONG_NAME")))
+                lifecycleScope.launch {
+                    commitChange(resources.getString(R.string.git_commit_add_text, result.data?.extras?.getString("LONG_NAME")))
+                }
                 refreshPasswordList()
             }
         }.launch(intent)
@@ -618,11 +619,13 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 selectedItems.map { item -> item.file.deleteRecursively() }
                 refreshPasswordList()
                 AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
-                commitChange(resources.getString(R.string.git_commit_remove_text,
-                    selectedItems.joinToString(separator = ", ") { item ->
-                        item.file.toRelativeString(getRepositoryDirectory(this))
-                    }
-                ))
+                lifecycleScope.launch {
+                    commitChange(resources.getString(R.string.git_commit_remove_text,
+                        selectedItems.joinToString(separator = ", ") { item ->
+                            item.file.toRelativeString(getRepositoryDirectory(this@PasswordStore))
+                        }
+                    ))
+                }
             }
             .setNegativeButton(resources.getString(R.string.dialog_no), null)
             .show()

@@ -39,7 +39,7 @@ import org.eclipse.jgit.transport.URIish
 abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompatActivity) {
 
     abstract val commands: Array<GitCommand<out Any>>
-    internal var provider: CredentialsProvider? = null
+    private var provider: CredentialsProvider? = null
     private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     protected val repository = PasswordRepository.getRepository(gitDir)
@@ -107,9 +107,9 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
     /**
      * Executes the GitCommand in an async task
      */
-    abstract fun execute()
+    abstract suspend fun execute()
 
-    fun executeAfterAuthentication(
+    suspend fun executeAfterAuthentication(
         connectionMode: ConnectionMode,
         username: String,
         identity: SshApiSessionFactory.ApiIdentity?

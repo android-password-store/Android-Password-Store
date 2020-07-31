@@ -8,7 +8,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -25,9 +25,9 @@ class PushOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOper
         Git(repository).push().setPushAll().setRemote("origin"),
     )
 
-    override fun execute() {
+    override suspend fun execute() {
         setCredentialProvider()
-        GitAsyncTask(callingActivity, this, Intent()).execute(*commands)
+        GitCommandExecutor(callingActivity, this).execute()
     }
 
     override fun onError(err: Exception) {

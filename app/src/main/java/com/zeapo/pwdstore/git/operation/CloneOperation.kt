@@ -4,11 +4,10 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -26,9 +25,8 @@ class CloneOperation(fileDir: File, uri: String, callingActivity: AppCompatActiv
         Git.cloneRepository().setCloneAllBranches(true).setDirectory(repository?.workTree).setURI(uri),
     )
 
-    override fun execute() {
-        setCredentialProvider()
-        GitAsyncTask(callingActivity, this, Intent()).execute(*commands)
+    override suspend fun execute() {
+        GitCommandExecutor(callingActivity, this).execute()
     }
 
     override fun onError(err: Exception) {

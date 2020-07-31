@@ -23,7 +23,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
-import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
@@ -97,7 +97,7 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
 }
 
 @MainThread
-fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
+suspend fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
     if (!PasswordRepository.isGitRepo()) {
         if (finishWithResultOnEnd != null) {
             setResult(AppCompatActivity.RESULT_OK, finishWithResultOnEnd)
@@ -111,9 +111,9 @@ fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Inten
             git.commit().setAll(true).setMessage(message),
         )
 
-        override fun execute() {
+        override suspend fun execute() {
             d { "Comitting with message: '$message'" }
-            GitAsyncTask(this@commitChange, this, finishWithResultOnEnd, silentlyExecute = true).execute(*commands)
+            GitCommandExecutor(this@commitChange, this, finishWithResultOnEnd).execute()
         }
     }.execute()
 }

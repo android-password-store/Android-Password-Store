@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.content.edit
 import androidx.core.os.postDelayed
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -20,6 +21,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.IOException
+import kotlinx.coroutines.launch
 
 /**
  * Activity that encompasses both the initial clone as well as editing the server config for future
@@ -171,7 +173,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                 .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
                     try {
                         localDir.deleteRecursively()
-                        launchGitOperation(REQUEST_CLONE)
+                        lifecycleScope.launch { launchGitOperation(REQUEST_CLONE) }
                     } catch (e: IOException) {
                         // TODO Handle the exception correctly if we are unable to delete the directory...
                         e.printStackTrace()
@@ -201,7 +203,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                 e.printStackTrace()
                 MaterialAlertDialogBuilder(this).setMessage(e.message).show()
             }
-            launchGitOperation(REQUEST_CLONE)
+            lifecycleScope.launch { launchGitOperation(REQUEST_CLONE) }
         }
     }
 }

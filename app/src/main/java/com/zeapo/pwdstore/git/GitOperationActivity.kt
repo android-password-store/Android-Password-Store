@@ -8,19 +8,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.utils.PasswordRepository
+import kotlinx.coroutines.launch
 
 open class GitOperationActivity : BaseGitActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         when (intent.extras?.getInt(REQUEST_ARG_OP)) {
-            REQUEST_PULL -> syncRepository(REQUEST_PULL)
-            REQUEST_PUSH -> syncRepository(REQUEST_PUSH)
-            REQUEST_SYNC -> syncRepository(REQUEST_SYNC)
+            REQUEST_PULL -> lifecycleScope.launch { syncRepository(REQUEST_PULL) }
+            REQUEST_PUSH -> lifecycleScope.launch { syncRepository(REQUEST_PUSH) }
+            REQUEST_SYNC -> lifecycleScope.launch { syncRepository(REQUEST_SYNC) }
             else -> {
                 setResult(RESULT_CANCELED)
                 finish()
@@ -54,7 +56,7 @@ open class GitOperationActivity : BaseGitActivity() {
      *
      * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH
      */
-    private fun syncRepository(operation: Int) {
+    private suspend fun syncRepository(operation: Int) {
         if (serverUser.isEmpty() || serverHostname.isEmpty() || url.isNullOrEmpty())
             MaterialAlertDialogBuilder(this)
                 .setMessage(getString(R.string.set_information_dialog_text))

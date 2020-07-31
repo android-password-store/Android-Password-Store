@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import org.eclipse.jgit.api.RebaseCommand
@@ -31,7 +31,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
         git.checkout().setName(gitBranch),
     )
 
-    override fun execute() {
+    override suspend fun execute() {
         if (!git.repository.repositoryState.isRebasing) {
             MaterialAlertDialogBuilder(callingActivity)
                 .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
@@ -41,8 +41,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
                 }.show()
             return
         }
-        setCredentialProvider()
-        GitAsyncTask(callingActivity, this, null).execute(*commands)
+        GitCommandExecutor(callingActivity, this).execute()
     }
 
     override fun onError(err: Exception) {

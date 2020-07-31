@@ -4,11 +4,10 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.GitAsyncTask
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import java.io.File
 
 /**
@@ -27,9 +26,8 @@ class SyncOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOper
         git.push().setPushAll().setRemote("origin"),
     )
 
-    override fun execute() {
-        setCredentialProvider()
-        GitAsyncTask(callingActivity, this, Intent()).execute(*commands)
+    override suspend fun execute() {
+        GitCommandExecutor(callingActivity, this).execute()
     }
 
     override fun onError(err: Exception) {
