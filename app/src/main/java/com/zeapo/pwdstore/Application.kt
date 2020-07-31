@@ -55,6 +55,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     }
 
     companion object {
+
         lateinit var instance: Application
     }
 }

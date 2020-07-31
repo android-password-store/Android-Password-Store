@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
