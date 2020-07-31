@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.10.3] - 2020-07-30
+
 ### Fixed
 
 -   Worked around a dependency bug that would crash the Autofill service when triggered on an OTP field
@@ -271,7 +273,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.3...HEAD
+
+[1.10.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...1.10.3
 
 [1.10.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.1...1.10.2
 
