@@ -30,7 +30,7 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) 
         git.add().addFilepattern("."),
         git.fetch().setRemote("origin"),
         git.reset().setRef("origin/$remoteBranch").setMode(ResetCommand.ResetType.HARD),
-        git.branchCreate().setName(remoteBranch).setForce(false),
+        git.branchCreate().setName(remoteBranch).setForce(true),
     )
 
     override suspend fun execute() {
