@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
@@ -35,7 +36,10 @@ class GitCommandExecutor(
 
     suspend fun execute() {
         operation.setCredentialProvider()
-        activity.snackbar(message = activity.resources.getString(R.string.git_operation_running))
+        val snackbar = activity.snackbar(
+            message = activity.resources.getString(R.string.git_operation_running),
+            length = Snackbar.LENGTH_INDEFINITE,
+        )
         var nbChanges = 0
         var operationResult: Result = Result.Ok
         for (command in operation.commands) {
@@ -126,6 +130,7 @@ class GitCommandExecutor(
                 activity.finish()
             }
         }
+        snackbar.dismiss()
         (SshSessionFactory.getInstance() as? SshjSessionFactory)?.clearCredentials()
         SshSessionFactory.setInstance(null)
     }

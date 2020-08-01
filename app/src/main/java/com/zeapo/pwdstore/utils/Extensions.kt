@@ -54,8 +54,10 @@ fun AppCompatActivity.snackbar(
     view: View = findViewById(android.R.id.content),
     message: String,
     length: Int = Snackbar.LENGTH_SHORT,
-) {
-    Snackbar.make(view, message, length).show()
+): Snackbar {
+    val snackbar = Snackbar.make(view, message, length)
+    snackbar.show()
+    return snackbar
 }
 
 fun File.listFilesRecursively() = walkTopDown().filter { !it.isDirectory }.toList()
