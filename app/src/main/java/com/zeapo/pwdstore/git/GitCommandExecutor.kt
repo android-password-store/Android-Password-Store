@@ -9,8 +9,10 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
+import com.zeapo.pwdstore.utils.snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
@@ -37,6 +39,7 @@ class GitCommandExecutor(
 
     suspend fun execute() {
         operation.setCredentialProvider()
+        activity.snackbar(message = activity.resources.getString(R.string.git_operation_running))
         var nbChanges = 0
         var operationResult: Result = Result.Ok
         for (command in operation.commands) {

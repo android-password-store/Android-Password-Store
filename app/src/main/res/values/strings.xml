@@ -374,4 +374,5 @@
     <string name="git_push_nff_error">Push was rejected by remote, run pull before pushing again. You can use Synchronize rather than pull/push as it implements both</string>
     <string name="git_push_generic_error">Push was rejected by remote, reason: %1$s</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
+    <string name="git_operation_running">Running git operation…</string>
 </resources>
