@@ -12,6 +12,7 @@ import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
+import com.zeapo.pwdstore.utils.Result
 import com.zeapo.pwdstore.utils.snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,11 +32,6 @@ class GitCommandExecutor(
     private val operation: GitOperation,
     private val finishWithResultOnEnd: Intent? = Intent(),
 ) {
-
-    private sealed class Result {
-        object Ok : Result()
-        data class Err(val err: Exception) : Result()
-    }
 
     suspend fun execute() {
         operation.setCredentialProvider()

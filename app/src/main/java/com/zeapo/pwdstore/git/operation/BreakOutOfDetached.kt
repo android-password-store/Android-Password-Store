@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
@@ -45,9 +46,11 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
     }
 
     override fun onError(err: Exception) {
+        super.onError(err)
+        val error = ErrorMessages[err]
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage("Error occurred when checking out another branch operation ${err.message}")
+            .setMessage(error)
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()
             }.show()

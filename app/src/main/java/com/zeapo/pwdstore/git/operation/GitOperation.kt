@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.git.operation
 
 import android.content.Intent
+import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -143,6 +144,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
     /**
      * Action to execute on error
      */
+    @CallSuper
     open fun onError(err: Exception) {
         // Clear various auth related fields on failure
         when (SshSessionFactory.getInstance()) {

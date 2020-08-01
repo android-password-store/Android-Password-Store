@@ -53,7 +53,7 @@ object ErrorMessages {
             is PushException -> {
                 resources.getString(PUSH_REASON_MAP.getValue(rootCause.reason), *rootCause.fmt)
             }
-            else -> resources.getString(R.string.git_unknown_error)
+            else -> throwable.message ?: resources.getString(R.string.git_unknown_error)
         }
     }
 

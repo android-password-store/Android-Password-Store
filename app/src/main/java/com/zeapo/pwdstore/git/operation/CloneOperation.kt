@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
@@ -37,12 +38,10 @@ class CloneOperation(fileDir: File, uri: String, callingActivity: AppCompatActiv
 
     override fun onError(err: Exception) {
         super.onError(err)
+        val error = ErrorMessages[err]
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage("Error occurred during the clone operation, " +
-                callingActivity.resources.getString(R.string.jgit_error_dialog_text) +
-                err.message +
-                "\nPlease check the FAQ for possible reasons why this error might occur.")
+            .setMessage(error)
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
             .show()
     }
