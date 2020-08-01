@@ -5,9 +5,11 @@
 package com.zeapo.pwdstore.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitCommandExecutor
+import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -21,8 +23,12 @@ import org.eclipse.jgit.api.GitCommand
  */
 class CloneOperation(fileDir: File, uri: String, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
+    private val remoteBranch = PreferenceManager
+        .getDefaultSharedPreferences(callingActivity.applicationContext)
+        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
+
     override val commands: Array<GitCommand<out Any>> = arrayOf(
-        Git.cloneRepository().setCloneAllBranches(true).setDirectory(repository?.workTree).setURI(uri),
+        Git.cloneRepository().setBranch(remoteBranch).setDirectory(repository?.workTree).setURI(uri),
     )
 
     override suspend fun execute() {
