@@ -20,7 +20,7 @@ open class GitException(message: String? = null) : Exception(message)
 class PullException(val reason: Reason) : GitException() {
 
     enum class Reason {
-        REBASE_FAILED
+        REBASE_FAILED,
     }
 }
 
@@ -28,19 +28,19 @@ class PushException(val reason: Reason, vararg val fmt: String) : GitException()
     enum class Reason {
         NON_FAST_FORWARD,
         REMOTE_REJECTED,
-        GENERIC
+        GENERIC,
     }
 }
 
 object ErrorMessages {
 
     private val PULL_REASON_MAP = mapOf(
-        PullException.Reason.REBASE_FAILED to R.string.git_pull_fail_error
+        PullException.Reason.REBASE_FAILED to R.string.git_pull_fail_error,
     )
     private val PUSH_REASON_MAP = mapOf(
         PushException.Reason.NON_FAST_FORWARD to R.string.git_push_nff_error,
         PushException.Reason.REMOTE_REJECTED to R.string.git_push_other_error,
-        PushException.Reason.GENERIC to R.string.git_push_generic_error
+        PushException.Reason.GENERIC to R.string.git_push_generic_error,
     )
 
     operator fun get(throwable: Throwable?): String {
