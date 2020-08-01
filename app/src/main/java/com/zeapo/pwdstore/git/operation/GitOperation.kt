@@ -45,6 +45,9 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     protected val repository = PasswordRepository.getRepository(gitDir)
     protected val git = Git(repository)
+    protected val remoteBranch = PreferenceManager
+        .getDefaultSharedPreferences(callingActivity.applicationContext)
+        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
 
     private class PasswordFinderCredentialsProvider(private val username: String, private val passwordFinder: PasswordFinder) : CredentialsProvider() {
 

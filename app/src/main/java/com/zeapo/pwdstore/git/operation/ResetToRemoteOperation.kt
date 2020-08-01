@@ -5,12 +5,10 @@
 package com.zeapo.pwdstore.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.GitCommandExecutor
-import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import org.eclipse.jgit.api.ResetCommand
 
@@ -21,10 +19,6 @@ import org.eclipse.jgit.api.ResetCommand
  * @param callingActivity the calling activity
  */
 class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
-
-    private val remoteBranch = PreferenceManager
-        .getDefaultSharedPreferences(callingActivity.applicationContext)
-        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
 
     override val commands = arrayOf(
         git.add().addFilepattern("."),

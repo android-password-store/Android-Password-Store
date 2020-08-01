@@ -5,21 +5,16 @@
 package com.zeapo.pwdstore.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.GitCommandExecutor
-import com.zeapo.pwdstore.utils.PreferenceKeys
 import java.io.File
 import org.eclipse.jgit.api.RebaseCommand
 
 class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
-    private val gitBranch = PreferenceManager
-        .getDefaultSharedPreferences(callingActivity.applicationContext)
-        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
-    private val branchName = "conflicting-$gitBranch-${System.currentTimeMillis()}"
+    private val branchName = "conflicting-$remoteBranch-${System.currentTimeMillis()}"
 
     override val commands = arrayOf(
         // abort the rebase
@@ -29,7 +24,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
         // push the changes
         git.push().setRemote("origin"),
         // switch back to ${gitBranch}
-        git.checkout().setName(gitBranch),
+        git.checkout().setName(remoteBranch),
     )
 
     override suspend fun execute() {
@@ -60,7 +55,7 @@ class BreakOutOfDetached(fileDir: File, callingActivity: AppCompatActivity) : Gi
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
             .setMessage("There was a conflict when trying to rebase. " +
-                "Your local $gitBranch branch was pushed to another branch named conflicting-$gitBranch-....\n" +
+                "Your local $remoteBranch branch was pushed to another branch named conflicting-$remoteBranch-....\n" +
                 "Use this branch to resolve conflict on your computer")
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()
