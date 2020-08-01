@@ -37,6 +37,7 @@ object ErrorMessages {
     private val PULL_REASON_MAP = mapOf(
         PullException.Reason.REBASE_FAILED to R.string.git_pull_fail_error,
     )
+
     private val PUSH_REASON_MAP = mapOf(
         PushException.Reason.NON_FAST_FORWARD to R.string.git_push_nff_error,
         PushException.Reason.REMOTE_REJECTED to R.string.git_push_other_error,
