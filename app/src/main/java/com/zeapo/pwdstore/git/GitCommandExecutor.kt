@@ -29,7 +29,7 @@ import org.eclipse.jgit.transport.SshSessionFactory
 class GitCommandExecutor(
     private val activity: AppCompatActivity,
     private val operation: GitOperation,
-    private val finishWithResultOnEnd: Intent? = Intent()
+    private val finishWithResultOnEnd: Intent? = Intent(),
 ) {
 
     private sealed class Result {

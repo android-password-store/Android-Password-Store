@@ -53,7 +53,7 @@ val Context.clipboard get() = getSystemService<ClipboardManager>()
 fun AppCompatActivity.snackbar(
     view: View = findViewById(android.R.id.content),
     message: String,
-    length: Int = Snackbar.LENGTH_SHORT
+    length: Int = Snackbar.LENGTH_SHORT,
 ) {
     Snackbar.make(view, message, length).show()
 }
