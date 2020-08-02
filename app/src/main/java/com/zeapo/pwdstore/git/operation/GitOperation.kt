@@ -9,7 +9,6 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
@@ -166,7 +165,13 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
                     }
             }
         }
-        d { ErrorMessages[err] }
+        val error = ErrorMessages[err]
+        MaterialAlertDialogBuilder(callingActivity)
+            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
+            .setMessage(error)
+            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
+                callingActivity.finish()
+            }.show()
     }
 
     /**

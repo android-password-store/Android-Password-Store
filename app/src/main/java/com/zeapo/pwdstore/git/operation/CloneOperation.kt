@@ -5,9 +5,6 @@
 package com.zeapo.pwdstore.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.GitCommandExecutor
 import java.io.File
 import org.eclipse.jgit.api.Git
@@ -28,15 +25,5 @@ class CloneOperation(fileDir: File, uri: String, callingActivity: AppCompatActiv
 
     override suspend fun execute() {
         GitCommandExecutor(callingActivity, this).execute()
-    }
-
-    override fun onError(err: Exception) {
-        super.onError(err)
-        val error = ErrorMessages[err]
-        MaterialAlertDialogBuilder(callingActivity)
-            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage(error)
-            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ -> }
-            .show()
     }
 }
