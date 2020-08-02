@@ -12,46 +12,50 @@ import com.zeapo.pwdstore.R
 /**
  * Supertype for all Git-related [Exception]s that can be thrown by [GitCommandExecutor.execute].
  */
-open class GitException(message: String? = null) : Exception(message)
+sealed class GitException(message: String? = null) : Exception(message) {
 
-/**
- * Encapsulates possible errors from a [org.eclipse.jgit.api.PullCommand].
- */
-class PullException(val reason: Reason) : GitException() {
+    /**
+     * Encapsulates possible errors from a [org.eclipse.jgit.api.PullCommand].
+     */
+    class PullException(val reason: Reason) : GitException() {
 
-    enum class Reason {
-        REBASE_FAILED,
+        enum class Reason {
+            REBASE_FAILED,
+        }
     }
-}
 
-class PushException(val reason: Reason, vararg val fmt: String) : GitException() {
-    enum class Reason {
-        NON_FAST_FORWARD,
-        REMOTE_REJECTED,
-        GENERIC,
+    /**
+     * Encapsulates possible errors from a [org.eclipse.jgit.api.PushCommand].
+     */
+    class PushException(val reason: Reason, vararg val fmt: String) : GitException() {
+        enum class Reason {
+            NON_FAST_FORWARD,
+            REMOTE_REJECTED,
+            GENERIC,
+        }
     }
 }
 
 object ErrorMessages {
 
     private val PULL_REASON_MAP = mapOf(
-        PullException.Reason.REBASE_FAILED to R.string.git_pull_fail_error,
+        GitException.PullException.Reason.REBASE_FAILED to R.string.git_pull_fail_error,
     )
 
     private val PUSH_REASON_MAP = mapOf(
-        PushException.Reason.NON_FAST_FORWARD to R.string.git_push_nff_error,
-        PushException.Reason.REMOTE_REJECTED to R.string.git_push_other_error,
-        PushException.Reason.GENERIC to R.string.git_push_generic_error,
+        GitException.PushException.Reason.NON_FAST_FORWARD to R.string.git_push_nff_error,
+        GitException.PushException.Reason.REMOTE_REJECTED to R.string.git_push_other_error,
+        GitException.PushException.Reason.GENERIC to R.string.git_push_generic_error,
     )
 
     operator fun get(throwable: Throwable?): String {
         val resources = Application.instance.resources
         if (throwable == null) return resources.getString(R.string.git_unknown_error)
         return when (val rootCause = rootCause(throwable)) {
-            is PullException -> {
+            is GitException.PullException -> {
                 resources.getString(PULL_REASON_MAP.getValue(rootCause.reason))
             }
-            is PushException -> {
+            is GitException.PushException -> {
                 resources.getString(PUSH_REASON_MAP.getValue(rootCause.reason), *rootCause.fmt)
             }
             else -> throwable.message ?: resources.getString(R.string.git_unknown_error)
