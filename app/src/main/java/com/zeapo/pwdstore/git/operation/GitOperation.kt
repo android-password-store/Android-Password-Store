@@ -9,9 +9,11 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
@@ -164,6 +166,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
                     }
             }
         }
+        d { ErrorMessages[err] }
     }
 
     /**
