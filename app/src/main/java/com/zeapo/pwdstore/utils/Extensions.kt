@@ -14,7 +14,6 @@ import android.view.View
 import android.view.autofill.AutofillManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
-import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -98,7 +97,6 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     )
 }
 
-@MainThread
 suspend fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
     if (!PasswordRepository.isGitRepo()) {
         if (finishWithResultOnEnd != null) {
@@ -125,7 +123,6 @@ suspend fun AppCompatActivity.commitChange(message: String, finishWithResultOnEn
  * view whose id is [id]. Solution based on a StackOverflow
  * answer: https://stackoverflow.com/a/13056259/297261
  */
-@MainThread
 fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
     setOnShowListener {
         findViewById<T>(id)?.apply {
