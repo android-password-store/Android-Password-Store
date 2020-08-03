@@ -167,10 +167,9 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompa
             }
         }
         d(err)
-        val error = ErrorMessages[err]
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage(error)
+            .setMessage(ErrorMessages[err])
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()
             }.show()
