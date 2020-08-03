@@ -108,6 +108,7 @@ suspend fun AppCompatActivity.commitChange(message: String, finishWithResultOnEn
     object : GitOperation(getRepositoryDirectory(this@commitChange), this@commitChange) {
         override val commands = arrayOf(
             git.add().addFilepattern("."),
+            git.status(),
             git.commit().setAll(true).setMessage(message),
         )
 
