@@ -6,8 +6,8 @@ package com.zeapo.pwdstore.git.operation
 
 import android.content.Intent
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,7 +39,7 @@ import org.eclipse.jgit.transport.URIish
  * @param gitDir the git working tree directory
  * @param callingActivity the calling activity
  */
-abstract class GitOperation(gitDir: File, internal val callingActivity: AppCompatActivity) {
+abstract class GitOperation(gitDir: File, internal val callingActivity: FragmentActivity) {
 
     abstract val commands: Array<GitCommand<out Any>>
     private var provider: CredentialsProvider? = null

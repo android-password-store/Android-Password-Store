@@ -7,7 +7,7 @@ package com.zeapo.pwdstore.git
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.e
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -31,7 +31,7 @@ import org.eclipse.jgit.transport.RemoteRefUpdate
 import org.eclipse.jgit.transport.SshSessionFactory
 
 class GitCommandExecutor(
-    private val activity: AppCompatActivity,
+    private val activity: FragmentActivity,
     private val operation: GitOperation,
     private val finishWithResultOnEnd: Intent? = Intent(),
     private val finishActivityOnEnd: Boolean = true,

@@ -3,8 +3,8 @@ package com.zeapo.pwdstore.git.operation
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -19,7 +19,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
 class CredentialFinder(
-    val callingActivity: AppCompatActivity,
+    val callingActivity: FragmentActivity,
     val connectionMode: ConnectionMode
 ) : InteractivePasswordFinder() {
 

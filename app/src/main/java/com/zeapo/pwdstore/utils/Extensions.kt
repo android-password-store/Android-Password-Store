@@ -16,8 +16,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
@@ -49,7 +49,7 @@ fun CharArray.clear() {
 
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
-fun AppCompatActivity.snackbar(
+fun FragmentActivity.snackbar(
     view: View = findViewById(android.R.id.content),
     message: String,
     length: Int = Snackbar.LENGTH_SHORT,
@@ -97,14 +97,14 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     )
 }
 
-suspend fun AppCompatActivity.commitChange(
+suspend fun FragmentActivity.commitChange(
     message: String,
     finishWithResultOnEnd: Intent? = null,
     finishActivityOnEnd: Boolean = true,
 ) {
     if (!PasswordRepository.isGitRepo()) {
         if (finishWithResultOnEnd != null) {
-            setResult(AppCompatActivity.RESULT_OK, finishWithResultOnEnd)
+            setResult(FragmentActivity.RESULT_OK, finishWithResultOnEnd)
             finish()
         }
         return
@@ -151,6 +151,6 @@ val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
     get() = getSystemService()
 
-fun AppCompatActivity.isInsideRepository(file: File): Boolean {
+fun FragmentActivity.isInsideRepository(file: File): Boolean {
     return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
 }
