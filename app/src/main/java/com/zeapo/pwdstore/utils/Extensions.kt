@@ -97,7 +97,11 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     )
 }
 
-suspend fun AppCompatActivity.commitChange(message: String, finishWithResultOnEnd: Intent? = null) {
+suspend fun AppCompatActivity.commitChange(
+    message: String,
+    finishWithResultOnEnd: Intent? = null,
+    finishActivityOnEnd: Boolean = true,
+) {
     if (!PasswordRepository.isGitRepo()) {
         if (finishWithResultOnEnd != null) {
             setResult(AppCompatActivity.RESULT_OK, finishWithResultOnEnd)
@@ -114,7 +118,12 @@ suspend fun AppCompatActivity.commitChange(message: String, finishWithResultOnEn
 
         override suspend fun execute() {
             d { "Comitting with message: '$message'" }
-            GitCommandExecutor(this@commitChange, this, finishWithResultOnEnd).execute()
+            GitCommandExecutor(
+                this@commitChange,
+                this,
+                finishWithResultOnEnd,
+                finishActivityOnEnd,
+            ).execute()
         }
     }.execute()
 }

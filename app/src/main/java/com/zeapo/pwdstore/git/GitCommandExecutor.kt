@@ -34,6 +34,7 @@ class GitCommandExecutor(
     private val activity: AppCompatActivity,
     private val operation: GitOperation,
     private val finishWithResultOnEnd: Intent? = Intent(),
+    private val finishActivityOnEnd: Boolean = true,
 ) {
 
     suspend fun execute() {
@@ -119,7 +120,7 @@ class GitCommandExecutor(
                     // Currently, this is only executed when the user cancels a password prompt
                     // during authentication.
                     activity.setResult(Activity.RESULT_CANCELED)
-                    activity.finish()
+                    if (finishActivityOnEnd) activity.finish()
                 } else {
                     e(operationResult.err)
                     operation.onError(rootCauseException(operationResult.err))
@@ -129,7 +130,7 @@ class GitCommandExecutor(
             is Result.Ok -> {
                 operation.onSuccess()
                 activity.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
-                activity.finish()
+                if (finishActivityOnEnd) activity.finish()
             }
         }
         snackbar.dismiss()
