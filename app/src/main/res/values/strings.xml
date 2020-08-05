@@ -367,6 +367,7 @@
     <string name="short_key_ids_unsupported">A key ID in .gpg-id is too short, please use either long key IDs (16 characters) or fingerprints (40 characters)</string>
     <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
     <string name="directory_hint">Directory</string>
+    <string name="new_folder_set_gpg_key">Set GPG key for directory</string>
 
     <!-- GitException messages -->
     <string name="git_unknown_error">Unknown error</string>
@@ -375,4 +376,6 @@
     <string name="git_push_generic_error">Push was rejected by remote, reason: %1$s</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
     <string name="git_operation_running">Running git operation…</string>
+    <string name="folder_creation_err_file_exists">A file by that name already exists</string>
+    <string name="folder_creation_err_folder_exists">A folder by that name already exists</string>
 </resources>
