@@ -116,15 +116,14 @@ class GitCommandExecutor(
         }
         when (operationResult) {
             is Result.Err -> {
+                activity.setResult(Activity.RESULT_CANCELED)
                 if (isExplicitlyUserInitiatedError(operationResult.err)) {
                     // Currently, this is only executed when the user cancels a password prompt
                     // during authentication.
-                    activity.setResult(Activity.RESULT_CANCELED)
                     if (finishActivityOnEnd) activity.finish()
                 } else {
                     e(operationResult.err)
                     operation.onError(rootCauseException(operationResult.err))
-                    activity.setResult(Activity.RESULT_CANCELED)
                 }
             }
             is Result.Ok -> {
