@@ -22,7 +22,6 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.FilterMode

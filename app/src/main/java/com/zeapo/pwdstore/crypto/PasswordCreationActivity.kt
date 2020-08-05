@@ -329,12 +329,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                             val repo = PasswordRepository.getRepository(null)
                             if (repo != null) {
-                                commitChange(
-                                    getString(
-                                        R.string.git_commit_gpg_id,
-                                        getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                                lifecycleScope.launch {
+                                    commitChange(
+                                        getString(
+                                            R.string.git_commit_gpg_id,
+                                            getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                                        )
                                     )
-                                )
+                                }
                             }
                             encrypt(data)
                         }
@@ -422,7 +424,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         AutofillPreferences.directoryStructure(applicationContext)
                                     val entry = PasswordEntry(content)
                                     returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
-                                    val username = entry.username ?: directoryStructure.getUsernameFor(file)
+                                    val username = entry.username
+                                        ?: directoryStructure.getUsernameFor(file)
                                     returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                                 }
 
@@ -430,12 +433,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 if (repo != null) {
                                     val status = Git(repo).status().call()
                                     if (status.modified.isNotEmpty()) {
-                                        commitChange(
-                                            getString(
-                                                R.string.git_commit_edit_text,
-                                                getLongName(fullPath, repoPath, editName)
+                                        lifecycleScope.launch {
+                                            commitChange(
+                                                getString(
+                                                    R.string.git_commit_edit_text,
+                                                    getLongName(fullPath, repoPath, editName)
+                                                )
                                             )
-                                        )
+                                        }
                                     }
                                 }
 

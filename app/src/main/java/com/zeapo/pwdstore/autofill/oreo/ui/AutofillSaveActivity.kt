@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
@@ -27,6 +28,7 @@ import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.commitChange
 import java.io.File
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillSaveActivity : AppCompatActivity() {
@@ -144,10 +146,12 @@ class AutofillSaveActivity : AppCompatActivity() {
                 }
                 // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
                 // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
-                commitChange(
-                    getString(R.string.git_commit_add_text, longName),
-                    finishWithResultOnEnd = resultIntent
-                )
+                lifecycleScope.launch {
+                    commitChange(
+                        getString(R.string.git_commit_add_text, longName),
+                        finishWithResultOnEnd = resultIntent
+                    )
+                }
                 // GitAsyncTask will finish the activity for us.
             }
         }.launch(saveIntent)

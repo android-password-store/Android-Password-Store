@@ -57,6 +57,7 @@ class UriTotpFinder : TotpFinder {
     }
 
     companion object {
+
         val TOTP_FIELDS = arrayOf(
             "otpauth://totp",
             "totp:"
