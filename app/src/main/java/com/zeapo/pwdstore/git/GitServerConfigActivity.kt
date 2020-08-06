@@ -113,7 +113,7 @@ class GitServerConfigActivity : BaseGitActivity() {
 
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
-                PasswordRepository.initialize(this)
+                PasswordRepository.initialize()
             when (val result = updateUrl()) {
                 GitUpdateUrlResult.Ok -> {
                     settings.edit {
@@ -161,7 +161,7 @@ class GitServerConfigActivity : BaseGitActivity() {
      * Clones the repository, the directory exists, deletes it
      */
     private fun cloneRepository() {
-        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
+        val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
         val localDirFiles = localDir.listFiles() ?: emptyArray()
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
         if (localDir.exists() && localDirFiles.isNotEmpty() &&

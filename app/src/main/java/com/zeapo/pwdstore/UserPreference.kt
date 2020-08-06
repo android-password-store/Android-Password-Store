@@ -6,6 +6,7 @@ package com.zeapo.pwdstore
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
@@ -20,8 +21,8 @@ import android.text.TextUtils
 import android.view.MenuItem
 import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.biometric.BiometricManager
@@ -53,6 +54,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.io.IOException
 
@@ -69,15 +71,15 @@ class UserPreference : AppCompatActivity() {
         private var clearSavedPassPreference: Preference? = null
         private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
-        private lateinit var callingActivity: UserPreference
+        private lateinit var prefsActivity: UserPreference
         private lateinit var sharedPreferences: SharedPreferences
         private lateinit var encryptedPreferences: SharedPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            callingActivity = requireActivity() as UserPreference
+            prefsActivity = requireActivity() as UserPreference
             val context = requireContext()
             sharedPreferences = preferenceManager.sharedPreferences
-            encryptedPreferences = requireActivity().applicationContext.getEncryptedPrefs("git_operation")
+            encryptedPreferences = requireActivity().getEncryptedPrefs("git_operation")
 
             addPreferencesFromResource(R.xml.preference)
 
@@ -152,12 +154,12 @@ class UserPreference : AppCompatActivity() {
             appVersionPreference?.summary = "Version: ${BuildConfig.VERSION_NAME}"
 
             sshKeyPreference?.onPreferenceClickListener = ClickListener {
-                callingActivity.getSshKey()
+                prefsActivity.getSshKey()
                 true
             }
 
             sshKeygenPreference?.onPreferenceClickListener = ClickListener {
-                callingActivity.makeSshKey(true)
+                prefsActivity.makeSshKey(true)
                 true
             }
 
@@ -185,24 +187,24 @@ class UserPreference : AppCompatActivity() {
             }
 
             gitServerPreference?.onPreferenceClickListener = ClickListener {
-                startActivity(Intent(callingActivity, GitServerConfigActivity::class.java))
+                startActivity(Intent(prefsActivity, GitServerConfigActivity::class.java))
                 true
             }
 
             gitConfigPreference?.onPreferenceClickListener = ClickListener {
-                startActivity(Intent(callingActivity, GitConfigActivity::class.java))
+                startActivity(Intent(prefsActivity, GitConfigActivity::class.java))
                 true
             }
 
             deleteRepoPreference?.onPreferenceClickListener = ClickListener {
-                val repoDir = PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext)
-                MaterialAlertDialogBuilder(callingActivity)
+                val repoDir = PasswordRepository.getRepositoryDirectory()
+                MaterialAlertDialogBuilder(prefsActivity)
                     .setTitle(R.string.pref_dialog_delete_title)
                     .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
                         try {
-                            PasswordRepository.getRepositoryDirectory(callingActivity.applicationContext).deleteRecursively()
+                            PasswordRepository.getRepositoryDirectory().deleteRecursively()
                             PasswordRepository.closeRepository()
                         } catch (ignored: Exception) {
                             // TODO Handle the different cases of exceptions
@@ -215,7 +217,7 @@ class UserPreference : AppCompatActivity() {
                         }
                         sharedPreferences.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false) }
                         dialogInterface.cancel()
-                        callingActivity.finish()
+                        prefsActivity.finish()
                     }
                     .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ -> run { dialogInterface.cancel() } }
                     .show()
@@ -226,7 +228,7 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.summary =
                 sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO, context.getString(R.string.no_repo_selected))
             selectExternalGitRepositoryPreference?.onPreferenceClickListener = ClickListener {
-                callingActivity.selectExternalGitRepository()
+                prefsActivity.selectExternalGitRepository()
                 true
             }
 
@@ -241,7 +243,7 @@ class UserPreference : AppCompatActivity() {
             externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
             autoFillAppsPreference?.onPreferenceClickListener = ClickListener {
-                val intent = Intent(callingActivity, AutofillPreferenceActivity::class.java)
+                val intent = Intent(prefsActivity, AutofillPreferenceActivity::class.java)
                 startActivity(intent)
                 true
             }
@@ -254,7 +256,7 @@ class UserPreference : AppCompatActivity() {
             findPreference<Preference>(PreferenceKeys.EXPORT_PASSWORDS)?.apply {
                 isVisible = sharedPreferences.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
                 onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    callingActivity.exportPasswords()
+                    prefsActivity.exportPasswords()
                     true
                 }
             }
@@ -316,7 +318,7 @@ class UserPreference : AppCompatActivity() {
 
             val prefCustomXkpwdDictionary = findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
             prefCustomXkpwdDictionary?.onPreferenceClickListener = ClickListener {
-                callingActivity.storeCustomDictionaryPath()
+                prefsActivity.storeCustomDictionaryPath()
                 true
             }
             val dictUri = sharedPreferences.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, "")
@@ -361,8 +363,8 @@ class UserPreference : AppCompatActivity() {
         }
 
         private fun updateAutofillSettings() {
-            val isAccessibilityServiceEnabled = callingActivity.isAccessibilityServiceEnabled
-            val isAutofillServiceEnabled = callingActivity.isAutofillServiceEnabled
+            val isAccessibilityServiceEnabled = prefsActivity.isAccessibilityServiceEnabled
+            val isAutofillServiceEnabled = prefsActivity.isAutofillServiceEnabled
             autoFillEnablePreference?.isChecked =
                 isAccessibilityServiceEnabled || isAutofillServiceEnabled
             autofillDependencies.forEach {
@@ -391,16 +393,16 @@ class UserPreference : AppCompatActivity() {
         }
 
         private fun onEnableAutofillClick() {
-            if (callingActivity.isAccessibilityServiceEnabled) {
+            if (prefsActivity.isAccessibilityServiceEnabled) {
                 startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            } else if (callingActivity.isAutofillServiceEnabled) {
+            } else if (prefsActivity.isAutofillServiceEnabled) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    callingActivity.autofillManager!!.disableAutofillServices()
+                    prefsActivity.autofillManager!!.disableAutofillServices()
                 else
                     throw IllegalStateException("isAutofillServiceEnabled == true, but Build.VERSION.SDK_INT < Build.VERSION_CODES.O")
             } else {
-                val enableOreoAutofill = callingActivity.isAutofillServiceSupported
-                MaterialAlertDialogBuilder(callingActivity).run {
+                val enableOreoAutofill = prefsActivity.isAutofillServiceSupported
+                MaterialAlertDialogBuilder(prefsActivity).run {
                     setTitle(R.string.pref_autofill_enable_title)
                     if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         @SuppressLint("InflateParams")
@@ -480,10 +482,8 @@ class UserPreference : AppCompatActivity() {
             .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
             .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                registerForActivityResult(StartActivityForResult()) { result ->
-                    if (!validateResult(result)) return@registerForActivityResult
-                    val uri = result.data?.data
+                registerForActivityResult(OpenDocumentTree()) { uri: Uri? ->
+                    if (uri == null) return@registerForActivityResult
 
                     tag(TAG).d { "Selected repository URI is $uri" }
                     // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
@@ -491,7 +491,7 @@ class UserPreference : AppCompatActivity() {
                     val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     val path = if (split.size > 1) split[1] else split[0]
                     val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                    val prefs = sharedPrefs
 
                     tag(TAG).d { "Selected repository path is $repoPath" }
 
@@ -500,14 +500,14 @@ class UserPreference : AppCompatActivity() {
                             .setTitle(getString(R.string.sdcard_root_warning_title))
                             .setMessage(getString(R.string.sdcard_root_warning_message))
                             .setPositiveButton("Remove everything") { _, _ ->
-                                prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri?.path) }
+                                prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
                             }
                             .setNegativeButton(R.string.dialog_cancel, null)
                             .show()
                     }
                     prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
 
-                }.launch(Intent.createChooser(i, "Choose Directory"))
+                }.launch(null)
             }
             .setNegativeButton(R.string.dialog_cancel, null)
             .show()
@@ -528,28 +528,12 @@ class UserPreference : AppCompatActivity() {
     }
 
     /**
-     * Given a [ActivityResult], validates that the result is usable.
-     */
-    private fun validateResult(result: ActivityResult): Boolean {
-        if (result.resultCode != RESULT_OK) {
-            return false
-        }
-        if (result.data == null) {
-            setResult(RESULT_CANCELED)
-            return false
-        }
-        return true
-    }
-
-    /**
      * Opens a file explorer to import the private key
      */
     private fun getSshKey() {
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (!validateResult(result)) return@registerForActivityResult
+        registerForActivityResult(OpenDocument()) { uri: Uri? ->
+            if (uri == null) return@registerForActivityResult
             try {
-                val uri: Uri = result.data?.data ?: throw IOException("Unable to open file")
-
                 copySshKey(uri)
 
                 Toast.makeText(
@@ -557,7 +541,7 @@ class UserPreference : AppCompatActivity() {
                     this.resources.getString(R.string.ssh_key_success_dialog_title),
                     Toast.LENGTH_LONG
                 ).show()
-                val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                val prefs = sharedPrefs
 
                 prefs.edit { putBoolean(PreferenceKeys.USE_GENERATED_KEY, false) }
                 getEncryptedPrefs("git_operation").edit { remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE) }
@@ -574,44 +558,39 @@ class UserPreference : AppCompatActivity() {
                     .setPositiveButton(resources.getString(R.string.dialog_ok), null)
                     .show()
             }
-        }.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"
-        })
+        }.launch(arrayOf("*/*"))
     }
 
     /**
      * Exports the passwords
      */
     private fun exportPasswords() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
-                Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-        }
-
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (!validateResult(result)) return@registerForActivityResult
-            val uri = result.data?.data
-
-            if (uri != null) {
-                val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
-
-                if (targetDirectory != null) {
-                    val service = Intent(applicationContext, PasswordExportService::class.java).apply {
-                        action = PasswordExportService.ACTION_EXPORT_PASSWORD
-                        putExtra("uri", uri)
-                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        startForegroundService(service)
-                    } else {
-                        startService(service)
-                    }
+        registerForActivityResult(object : OpenDocumentTree() {
+            override fun createIntent(context: Context, input: Uri?): Intent {
+                return super.createIntent(context, input).apply {
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
                 }
             }
-        }.launch(intent)
+        }) { uri: Uri? ->
+            if (uri == null) return@registerForActivityResult
+            val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
+
+            if (targetDirectory != null) {
+                val service = Intent(applicationContext, PasswordExportService::class.java).apply {
+                    action = PasswordExportService.ACTION_EXPORT_PASSWORD
+                    putExtra("uri", uri)
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(service)
+                } else {
+                    startService(service)
+                }
+            }
+        }.launch(null)
     }
 
     /**
@@ -630,18 +609,16 @@ class UserPreference : AppCompatActivity() {
      * Pick custom xkpwd dictionary from sdcard
      */
     private fun storeCustomDictionaryPath() {
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (!validateResult(result)) return@registerForActivityResult
-            val uri: Uri = result.data?.data ?: throw IOException("Unable to open file")
+        registerForActivityResult(OpenDocument()) { uri ->
+            if (uri == null) return@registerForActivityResult
 
             Toast.makeText(
                 this,
                 this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
                 Toast.LENGTH_SHORT
             ).show()
-            val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-            prefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
+            sharedPrefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
 
             val customDictPref = prefsFragment.findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
             setCustomDictSummary(customDictPref, uri)
@@ -653,10 +630,7 @@ class UserPreference : AppCompatActivity() {
             customDictFile.close()
 
             setResult(RESULT_OK)
-        }.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"
-        })
+        }.launch(arrayOf("*/*"))
     }
 
     @Throws(IllegalArgumentException::class, IOException::class)

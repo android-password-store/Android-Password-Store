@@ -69,6 +69,7 @@ import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.lang.Character.UnicodeBlock
 import kotlinx.coroutines.Dispatchers
@@ -83,9 +84,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private lateinit var activity: PasswordStore
     private lateinit var searchItem: MenuItem
     private lateinit var searchView: SearchView
-    private lateinit var settings: SharedPreferences
     private var plist: PasswordFragment? = null
     private var shortcutManager: ShortcutManager? = null
+
+    private val settings by lazy { sharedPrefs }
 
     private val model: SearchableRepositoryViewModel by viewModels {
         ViewModelProvider.AndroidViewModelFactory(application)
@@ -119,7 +121,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     dir.exists() &&
                     dir.isDirectory &&
                     dir.listFilesRecursively().isNotEmpty() &&
-                    getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
+                    getPasswords(dir, getRepositoryDirectory(), sortOrder).isNotEmpty()) {
                     closeRepository()
                     checkLocalRepository()
                     return@registerForActivityResult
@@ -153,7 +155,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         activity = this
-        settings = PreferenceManager.getDefaultSharedPreferences(this.applicationContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager = getSystemService()
         }
@@ -209,7 +210,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }
 
         model.currentDir.observe(this) { dir ->
-            val basePath = getRepositoryDirectory(applicationContext).absoluteFile
+            val basePath = getRepositoryDirectory().absoluteFile
             supportActionBar!!.apply {
                 if (dir != basePath)
                     title = dir.name
@@ -379,9 +380,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     private fun createRepository() {
         if (!isInitialized) {
-            initialize(this)
+            initialize()
         }
-        val localDir = getRepositoryDirectory(applicationContext)
+        val localDir = getRepositoryDirectory()
         try {
             check(localDir.mkdir()) { "Failed to create directory!" }
             createRepository(localDir)
@@ -409,7 +410,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         if (externalRepo && externalRepoPath != null) {
             val dir = File(externalRepoPath)
             if (dir.exists() && dir.isDirectory &&
-                getPasswords(dir, getRepositoryDirectory(this), sortOrder).isNotEmpty()) {
+                getPasswords(dir, getRepositoryDirectory(), sortOrder).isNotEmpty()) {
                 closeRepository()
                 checkLocalRepository()
                 return // if not empty, just show me the passwords!
@@ -449,7 +450,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     }
 
     private fun checkLocalRepository() {
-        val repo = initialize(this)
+        val repo = initialize()
         if (repo == null) {
             val intent = Intent(activity, UserPreference::class.java)
             intent.putExtra("operation", "git_external")
@@ -459,7 +460,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 }
             }.launch(intent)
         } else {
-            checkLocalRepository(getRepositoryDirectory(applicationContext))
+            checkLocalRepository(getRepositoryDirectory())
         }
     }
 
@@ -472,7 +473,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
                 plist = PasswordFragment()
                 val args = Bundle()
-                args.putString(REQUEST_ARG_PATH, getRepositoryDirectory(applicationContext).absolutePath)
+                args.putString(REQUEST_ARG_PATH, getRepositoryDirectory().absolutePath)
 
                 // if the activity was started from the autofill settings, the
                 // intent is to match a clicked pwd with app. pass this to fragment
@@ -506,7 +507,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     }
 
     private fun getLastChangedTimestamp(fullPath: String): Long {
-        val repoPath = getRepositoryDirectory(this)
+        val repoPath = getRepositoryDirectory()
         val repository = getRepository(repoPath)
         if (repository == null) {
             d { "getLastChangedTimestamp: No git repository" }
@@ -534,7 +535,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         for (intent in arrayOf(decryptIntent, authDecryptIntent)) {
             intent.putExtra("NAME", item.toString())
             intent.putExtra("FILE_PATH", item.file.absolutePath)
-            intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
+            intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
             intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.file.absolutePath))
         }
         // Needs an action to be a shortcut intent
@@ -577,7 +578,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         i { "Adding file to : ${currentDir.absolutePath}" }
         val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
-        intent.putExtra("REPO_PATH", getRepositoryDirectory(applicationContext).absolutePath)
+        intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 lifecycleScope.launch {
@@ -623,7 +624,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 refreshPasswordList()
                 AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                 val fmt = selectedItems.joinToString(separator = ", ") { item ->
-                    item.file.toRelativeString(getRepositoryDirectory(this@PasswordStore))
+                    item.file.toRelativeString(getRepositoryDirectory())
                 }
                 lifecycleScope.launch {
                     commitChange(
@@ -645,7 +646,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             val intentData = result.data ?: return@registerForActivityResult
             val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
             val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
-            val repositoryPath = getRepositoryDirectory(applicationContext).absolutePath
+            val repositoryPath = getRepositoryDirectory().absolutePath
             if (!target.isDirectory) {
                 e { "Tried moving passwords to a non-existing folder." }
                 return@registerForActivityResult
@@ -703,7 +704,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         }
                     }
                     else -> {
-                        val repoDir = getRepositoryDirectory(applicationContext).absolutePath
+                        val repoDir = getRepositoryDirectory().absolutePath
                         val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
                         withContext(Dispatchers.Main) {
                             commitChange(
@@ -756,7 +757,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 when {
                     newCategoryEditText.text.isNullOrBlank() -> renameCategory(oldCategory, CategoryRenameError.EmptyField)
                     newCategory.exists() -> renameCategory(oldCategory, CategoryRenameError.CategoryExists)
-                    !isInsideRepository(newCategory) -> renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
+                    !newCategory.isInsideRepository() -> renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
                     else -> lifecycleScope.launch(Dispatchers.IO) {
                         moveFile(oldCategory.file, newCategory)
                         withContext(Dispatchers.Main) {
@@ -803,7 +804,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     }
 
     private val currentDir: File
-        get() = plist?.currentDir ?: getRepositoryDirectory(applicationContext)
+        get() = plist?.currentDir ?: getRepositoryDirectory()
 
     private suspend fun moveFile(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
@@ -887,7 +888,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     fun matchPasswordWithApp(item: PasswordItem) {
         val path = item.file
             .absolutePath
-            .replace(getRepositoryDirectory(applicationContext).toString() + "/", "")
+            .replace(getRepositoryDirectory().toString() + "/", "")
             .replace(".gpg", "")
         val data = Intent()
         data.putExtra("path", path)

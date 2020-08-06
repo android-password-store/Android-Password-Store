@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -33,6 +32,7 @@ import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
@@ -59,7 +59,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        settings = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        settings = requireContext().sharedPrefs
         initializePasswordList()
         binding.fab.setOnClickListener {
             ItemCreationBottomSheet().show(childFragmentManager, "BOTTOM_SHEET")
@@ -73,7 +73,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
     private fun initializePasswordList() {
-        val gitDir = File(PasswordRepository.getRepositoryDirectory(requireContext()), ".git")
+        val gitDir = File(PasswordRepository.getRepositoryDirectory(), ".git")
         val hasGitDir = gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
         binding.swipeRefresher.setOnRefreshListener {
             if (!hasGitDir) {
@@ -180,7 +180,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         // may be called multiple times if the mode is invalidated.
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
             menu.findItem(R.id.menu_edit_password).isVisible =
-                recyclerAdapter.getSelectedItems(requireContext())
+                recyclerAdapter.getSelectedItems()
                     .all { it.type == PasswordItem.TYPE_CATEGORY }
             return true
         }
@@ -189,17 +189,17 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.menu_delete_password -> {
-                    requireStore().deletePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    requireStore().deletePasswords(recyclerAdapter.getSelectedItems())
                     // Action picked, so close the CAB
                     mode.finish()
                     true
                 }
                 R.id.menu_move_password -> {
-                    requireStore().movePasswords(recyclerAdapter.getSelectedItems(requireContext()))
+                    requireStore().movePasswords(recyclerAdapter.getSelectedItems())
                     false
                 }
                 R.id.menu_edit_password -> {
-                    requireStore().renameCategory(recyclerAdapter.getSelectedItems(requireContext()))
+                    requireStore().renameCategory(recyclerAdapter.getSelectedItems())
                     mode.finish()
                     false
                 }

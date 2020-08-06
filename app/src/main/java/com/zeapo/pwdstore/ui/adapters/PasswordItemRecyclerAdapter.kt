@@ -19,6 +19,7 @@ import com.zeapo.pwdstore.SearchableRepositoryAdapter
 import com.zeapo.pwdstore.stableId
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 
 open class PasswordItemRecyclerAdapter :
@@ -49,8 +50,7 @@ open class PasswordItemRecyclerAdapter :
         lateinit var itemDetails: ItemDetailsLookup.ItemDetails<String>
 
         fun bind(item: PasswordItem) {
-            val settings =
-                PreferenceManager.getDefaultSharedPreferences(itemView.context.applicationContext)
+            val settings = itemView.context.sharedPrefs
             val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
             val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
             val source = if (parentPath.isNotEmpty()) {

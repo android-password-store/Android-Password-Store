@@ -34,7 +34,7 @@ class GitConfigActivity : BaseGitActivity() {
         else
             binding.gitUserName.setText(username)
         binding.gitUserEmail.setText(email)
-        val repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory(this))
+        val repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory())
         if (repo != null) {
             try {
                 val objectId = repo.resolve(Constants.HEAD)

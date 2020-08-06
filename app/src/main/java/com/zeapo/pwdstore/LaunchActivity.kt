@@ -13,12 +13,13 @@ import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.sharedPrefs
 
 class LaunchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val prefs = sharedPrefs
         if (prefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)) {
             BiometricAuthenticator.authenticate(this) {
                 when (it) {

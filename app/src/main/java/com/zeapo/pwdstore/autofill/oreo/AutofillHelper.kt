@@ -121,7 +121,7 @@ private fun makeRemoteView(
 fun makeFillMatchRemoteView(context: Context, file: File, formOrigin: FormOrigin): RemoteViews {
     val title = formOrigin.getPrettyIdentifier(context, untrusted = false)
     val directoryStructure = AutofillPreferences.directoryStructure(context)
-    val relativeFile = file.relativeTo(PasswordRepository.getRepositoryDirectory(context))
+    val relativeFile = file.relativeTo(PasswordRepository.getRepositoryDirectory())
     val summary = directoryStructure.getUsernameFor(relativeFile)
         ?: directoryStructure.getPathToIdentifierFor(relativeFile) ?: ""
     val iconRes = R.drawable.ic_person_black_24dp

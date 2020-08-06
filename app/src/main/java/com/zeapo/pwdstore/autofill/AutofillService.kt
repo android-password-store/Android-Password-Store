@@ -76,7 +76,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
     }
 
     fun setPickedPassword(path: String) {
-        items.add(File("${PasswordRepository.getRepositoryDirectory(applicationContext)}/$path.gpg"))
+        items.add(File("${PasswordRepository.getRepositoryDirectory()}/$path.gpg"))
         bindDecryptAndVerify()
     }
 
@@ -296,9 +296,9 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         when (preference) {
             "/first" -> {
                 if (!PasswordRepository.isInitialized) {
-                    PasswordRepository.initialize(this)
+                    PasswordRepository.initialize()
                 }
-                items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), webViewTitle)
+                items = searchPasswords(PasswordRepository.getRepositoryDirectory(), webViewTitle)
             }
             "/never" -> items = ArrayList()
             else -> getPreferredPasswords(preference)
@@ -318,9 +318,9 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         when (preference) {
             "/first" -> {
                 if (!PasswordRepository.isInitialized) {
-                    PasswordRepository.initialize(this)
+                    PasswordRepository.initialize()
                 }
-                items = searchPasswords(PasswordRepository.getRepositoryDirectory(this), appName)
+                items = searchPasswords(PasswordRepository.getRepositoryDirectory(), appName)
             }
             "/never" -> items = ArrayList()
             else -> getPreferredPasswords(preference)
@@ -331,12 +331,12 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
     // file into the items list.
     private fun getPreferredPasswords(preference: String) {
         if (!PasswordRepository.isInitialized) {
-            PasswordRepository.initialize(this)
+            PasswordRepository.initialize()
         }
         val preferredPasswords = preference.splitLines()
         items = ArrayList()
         for (password in preferredPasswords) {
-            val path = PasswordRepository.getRepositoryDirectory(applicationContext).toString() + "/" + password + ".gpg"
+            val path = PasswordRepository.getRepositoryDirectory().toString() + "/" + password + ".gpg"
             if (File(path).exists()) {
                 items.add(File(path))
             }
@@ -417,7 +417,7 @@ class AutofillService : AccessibilityService(), CoroutineScope by CoroutineScope
         // populate the dialog items, always with pick + pick and match. Could
         // make it optional (or make height a setting for the same effect)
         val itemNames = arrayOfNulls<CharSequence>(items.size + 2)
-        val passwordDirectory = PasswordRepository.getRepositoryDirectory(applicationContext).toString()
+        val passwordDirectory = PasswordRepository.getRepositoryDirectory().toString()
         val autofillFullPath = settings!!.getBoolean(PreferenceKeys.AUTOFILL_FULL_PATH, false)
         for (i in items.indices) {
             if (autofillFullPath) {

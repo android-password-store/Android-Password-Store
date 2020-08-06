@@ -9,11 +9,9 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.preference.PreferenceManager
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.nio.file.Paths
-
-private val Context.defaultSharedPreferences: SharedPreferences
-    get() = PreferenceManager.getDefaultSharedPreferences(this)
 
 enum class DirectoryStructure(val value: String) {
     EncryptedUsername("encrypted_username"),
@@ -122,8 +120,7 @@ enum class DirectoryStructure(val value: String) {
 object AutofillPreferences {
 
     fun directoryStructure(context: Context): DirectoryStructure {
-        val value =
-            context.defaultSharedPreferences.getString(DirectoryStructure.PREFERENCE, null)
+        val value = context.sharedPrefs.getString(DirectoryStructure.PREFERENCE, null)
         return DirectoryStructure.fromValue(value)
     }
 }
