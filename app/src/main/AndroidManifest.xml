@@ -137,6 +137,7 @@
     </application>
 
     <queries>
+        <package android:name="org.sufficientlysecure.keychain" />
         <intent>
             <action android:name="android.intent.action.SEND" />
             <data android:mimeType="text/plain" />
