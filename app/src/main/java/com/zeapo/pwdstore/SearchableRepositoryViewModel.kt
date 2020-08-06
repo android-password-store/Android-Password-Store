@@ -50,10 +50,10 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
-private fun File.toPasswordItem(root: File) = if (isFile)
-    PasswordItem.newPassword(name, this, root)
+private fun File.toPasswordItem() = if (isFile)
+    PasswordItem.newPassword(name, this, PasswordRepository.getRepositoryDirectory())
 else
-    PasswordItem.newCategory(name, this, root)
+    PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
 
 private fun PasswordItem.fuzzyMatch(filter: String): Int {
     var i = 0
@@ -216,7 +216,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             val passwordList = when (filterModeToUse) {
                 FilterMode.NoFilter -> {
                     prefilteredResultFlow
-                        .map { it.toPasswordItem(root) }
+                        .map { it.toPasswordItem() }
                         .toList()
                         .sortedWith(itemComparator)
                 }
@@ -228,7 +228,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                             .filter { absoluteFile ->
                                 regex.containsMatchIn(absoluteFile.relativeTo(root).path)
                             }
-                            .map { it.toPasswordItem(root) }
+                            .map { it.toPasswordItem() }
                             .toList()
                             .sortedWith(itemComparator)
                     } else {
@@ -238,7 +238,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 FilterMode.Fuzzy -> {
                     prefilteredResultFlow
                         .map {
-                            val item = it.toPasswordItem(root)
+                            val item = it.toPasswordItem()
                             Pair(item.fuzzyMatch(searchAction.filter), item)
                         }
                         .filter { it.first > 0 }
@@ -443,10 +443,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
     private val selectedFiles
         get() = requireSelectionTracker().selection.map { File(it) }
 
-    fun getSelectedItems(): List<PasswordItem> {
-        val root = PasswordRepository.getRepositoryDirectory()
-        return selectedFiles.map { it.toPasswordItem(root) }
-    }
+    fun getSelectedItems() = selectedFiles.map { it.toPasswordItem() }
 
     fun getPositionForFile(file: File) = itemKeyProvider.getPosition(file.absolutePath)
 
