@@ -19,6 +19,7 @@ import com.jcraft.jsch.KeyPair
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivitySshKeygenBinding
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
 import java.io.FileOutputStream
@@ -91,8 +92,7 @@ class SshKeyGenActivity : AppCompatActivity() {
         if (e == null) {
             val df = ShowSshKeyFragment()
             df.show(supportFragmentManager, "public_key")
-            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            prefs.edit { putBoolean("use_generated_key", true) }
+            sharedPrefs.edit { putBoolean("use_generated_key", true) }
         } else {
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.error_generate_ssh_key))

@@ -19,6 +19,7 @@ import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
+import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,7 +32,7 @@ import kotlinx.coroutines.withContext
 class ClipboardService : Service() {
 
     private val scope = CoroutineScope(Job() + Dispatchers.Main)
-    private val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    private val settings: SharedPreferences by lazy { sharedPrefs }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {

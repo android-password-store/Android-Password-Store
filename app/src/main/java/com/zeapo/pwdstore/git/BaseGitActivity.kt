@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,6 +30,7 @@ import com.zeapo.pwdstore.git.operation.SyncOperation
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.net.URI
 import kotlinx.coroutines.launch
@@ -61,7 +61,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        settings = PreferenceManager.getDefaultSharedPreferences(this)
+        settings = sharedPrefs
         encryptedSettings = getEncryptedPrefs("git_operation")
         protocol = Protocol.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL, null))
         connectionMode = ConnectionMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH, null))
@@ -197,7 +197,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     return
             }
 
-            val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory(this))
+            val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
             val op = when (operation) {
                 REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, url!!, this)
                 REQUEST_PULL -> PullOperation(localDir, this)

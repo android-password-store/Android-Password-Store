@@ -158,9 +158,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                     .edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
             }
             is SshjSessionFactory -> {
-                callingActivity.applicationContext
-                    .getEncryptedPrefs("git_operation")
-                    .edit {
+                callingActivity.getEncryptedPrefs("git_operation").edit {
                         remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
                         remove(PreferenceKeys.HTTPS_PASSWORD)
                     }

@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore
 
 import android.app.Application
-import android.content.Context
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +30,7 @@ import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.text.Collator
 import java.util.Locale
@@ -50,10 +50,10 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
-private fun File.toPasswordItem(root: File) = if (isFile)
-    PasswordItem.newPassword(name, this, root)
+private fun File.toPasswordItem() = if (isFile)
+    PasswordItem.newPassword(name, this, PasswordRepository.getRepositoryDirectory())
 else
-    PasswordItem.newCategory(name, this, root)
+    PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
 
 private fun PasswordItem.fuzzyMatch(filter: String): Int {
     var i = 0
@@ -138,8 +138,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     }
 
     private val root
-        get() = PasswordRepository.getRepositoryDirectory(getApplication())
-    private val settings = PreferenceManager.getDefaultSharedPreferences(getApplication())
+        get() = PasswordRepository.getRepositoryDirectory()
+    private val settings by lazy { application.sharedPrefs }
     private val showHiddenDirs
         get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
     private val defaultSearchMode
@@ -216,7 +216,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             val passwordList = when (filterModeToUse) {
                 FilterMode.NoFilter -> {
                     prefilteredResultFlow
-                        .map { it.toPasswordItem(root) }
+                        .map { it.toPasswordItem() }
                         .toList()
                         .sortedWith(itemComparator)
                 }
@@ -228,7 +228,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                             .filter { absoluteFile ->
                                 regex.containsMatchIn(absoluteFile.relativeTo(root).path)
                             }
-                            .map { it.toPasswordItem(root) }
+                            .map { it.toPasswordItem() }
                             .toList()
                             .sortedWith(itemComparator)
                     } else {
@@ -238,7 +238,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 FilterMode.Fuzzy -> {
                     prefilteredResultFlow
                         .map {
-                            val item = it.toPasswordItem(root)
+                            val item = it.toPasswordItem()
                             Pair(item.fuzzyMatch(searchAction.filter), item)
                         }
                         .filter { it.first > 0 }
@@ -443,10 +443,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
     private val selectedFiles
         get() = requireSelectionTracker().selection.map { File(it) }
 
-    fun getSelectedItems(context: Context): List<PasswordItem> {
-        val root = PasswordRepository.getRepositoryDirectory(context)
-        return selectedFiles.map { it.toPasswordItem(root) }
-    }
+    fun getSelectedItems() = selectedFiles.map { it.toPasswordItem() }
 
     fun getPositionForFile(file: File) = itemKeyProvider.getPosition(file.absolutePath)
 

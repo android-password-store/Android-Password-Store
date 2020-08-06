@@ -8,6 +8,7 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 
 class XkpwdDictionary(context: Context) {
@@ -15,7 +16,7 @@ class XkpwdDictionary(context: Context) {
     val words: Map<Int, List<String>>
 
     init {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val prefs = context.sharedPrefs
         val uri = prefs.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, "")!!
         val customDictFile = File(context.filesDir, XKPWD_CUSTOM_DICT_FILE)
 

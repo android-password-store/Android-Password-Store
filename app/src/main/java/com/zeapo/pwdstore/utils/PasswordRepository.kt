@@ -4,10 +4,9 @@
  */
 package com.zeapo.pwdstore.utils
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import com.zeapo.pwdstore.Application
 import java.io.File
 import java.io.FileFilter
 import java.util.Comparator
@@ -49,7 +48,9 @@ open class PasswordRepository protected constructor() {
     companion object {
 
         private var repository: Repository? = null
-        private lateinit var settings: SharedPreferences
+        private val settings by lazy { Application.instance.sharedPrefs }
+        private val filesDir
+            get() = Application.instance.filesDir
 
         /**
          * Returns the git repository
@@ -152,27 +153,21 @@ open class PasswordRepository protected constructor() {
         }
 
         @JvmStatic
-        fun getRepositoryDirectory(context: Context): File {
-            if (!::settings.isInitialized) {
-                settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-            }
+        fun getRepositoryDirectory(): File {
             return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
                 val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
                 if (externalRepo != null)
                     File(externalRepo)
                 else
-                    File(context.filesDir.toString(), "/store")
+                    File(filesDir.toString(), "/store")
             } else {
-                File(context.filesDir.toString(), "/store")
+                File(filesDir.toString(), "/store")
             }
         }
 
         @JvmStatic
-        fun initialize(context: Context): Repository? {
-            if (!::settings.isInitialized) {
-                settings = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-            }
-            val dir = getRepositoryDirectory(context)
+        fun initialize(): Repository? {
+            val dir = getRepositoryDirectory()
             // uninitialize the repo if the dir does not exist or is absolutely empty
             settings.edit {
                 if (!dir.exists() || !dir.isDirectory || dir.listFiles()!!.isEmpty()) {

@@ -304,7 +304,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             data.action = OpenPgpApi.ACTION_ENCRYPT
 
             // pass enters the key ID into `.gpg-id`.
-            val repoRoot = PasswordRepository.getRepositoryDirectory(applicationContext)
+            val repoRoot = PasswordRepository.getRepositoryDirectory()
             val gpgIdentifierFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
             if (gpgIdentifierFile == null) {
                 snackbar(message = resources.getString(R.string.failed_to_find_key_id))
@@ -391,7 +391,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     return@executeApiAsync
                                 }
 
-                                if (!isInsideRepository(file)) {
+                                if (!file.isInsideRepository()) {
                                     snackbar(message = getString(R.string.message_error_destination_outside_repo))
                                     return@executeApiAsync
                                 }

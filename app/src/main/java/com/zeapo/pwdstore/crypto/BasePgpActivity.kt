@@ -27,6 +27,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
+import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.snackbar
 import java.io.File
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -69,7 +70,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     /**
      * [SharedPreferences] instance used by subclasses to persist settings
      */
-    val settings: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    val settings: SharedPreferences by lazy { sharedPrefs }
 
     /**
      * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.

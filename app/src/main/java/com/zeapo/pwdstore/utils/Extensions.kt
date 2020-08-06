@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
+import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
@@ -97,6 +98,9 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
     )
 }
 
+val Context.sharedPrefs: SharedPreferences
+    get() = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
 suspend fun FragmentActivity.commitChange(
     message: String,
     finishWithResultOnEnd: Intent? = null,
@@ -109,7 +113,7 @@ suspend fun FragmentActivity.commitChange(
         }
         return
     }
-    object : GitOperation(getRepositoryDirectory(this@commitChange), this@commitChange) {
+    object : GitOperation(getRepositoryDirectory(), this@commitChange) {
         override val commands = arrayOf(
             git.add().addFilepattern("."),
             git.status(),
@@ -151,6 +155,6 @@ val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
     get() = getSystemService()
 
-fun FragmentActivity.isInsideRepository(file: File): Boolean {
-    return file.canonicalPath.contains(getRepositoryDirectory(this).canonicalPath)
+fun File.isInsideRepository(): Boolean {
+    return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
 }

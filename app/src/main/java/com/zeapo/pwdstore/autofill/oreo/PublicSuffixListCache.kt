@@ -8,6 +8,7 @@ import android.content.Context
 import android.util.Patterns
 import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.runBlocking
 import mozilla.components.lib.publicsuffixlist.PublicSuffixList
 
@@ -68,8 +69,7 @@ fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
 }
 
 fun getCustomSuffixes(context: Context): Sequence<String> {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    return prefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES, "")!!
+    return context.sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES, "")!!
         .splitToSequence('\n')
         .filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
 }
