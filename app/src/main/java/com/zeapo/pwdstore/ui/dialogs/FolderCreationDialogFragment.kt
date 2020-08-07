@@ -54,17 +54,12 @@ class FolderCreationDialogFragment : DialogFragment() {
         val folderNameView = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
         val folderNameViewContainer = dialog.findViewById<TextInputLayout>(R.id.folder_name_container)
         val newFolder = File("$currentDir/${folderNameView.text}")
-        if (newFolder.exists()) {
-            folderNameViewContainer.error = when {
-                newFolder.isFile -> getString(R.string.folder_creation_err_file_exists)
-                newFolder.isDirectory -> getString(R.string.folder_creation_err_folder_exists)
-                // Should be impossible but eh.
-                else -> return
-            }
-            return
-        } else {
-            folderNameViewContainer.error = null
+        folderNameViewContainer.error = when {
+            newFolder.isFile -> getString(R.string.folder_creation_err_file_exists)
+            newFolder.isDirectory -> getString(R.string.folder_creation_err_folder_exists)
+            else -> null
         }
+        if (folderNameViewContainer.error != null) return
         newFolder.mkdirs()
         (requireActivity() as PasswordStore).refreshPasswordList(newFolder)
         if (dialog.findViewById<MaterialCheckBox>(R.id.set_gpg_key).isChecked) {
