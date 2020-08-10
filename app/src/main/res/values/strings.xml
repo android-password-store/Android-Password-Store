@@ -375,4 +375,12 @@
     <string name="git_push_generic_error">Push was rejected by remote, reason: %1$s</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
     <string name="git_operation_running">Running git operation…</string>
+
+    <!-- OpenKeychain not installed -->
+    <string name="openkeychain_not_installed_title">OpenKeychain not installed</string>
+    <string name="openkeychain_not_installed_message">OpenKeychain is required for Password Store to function, please install it from the stores below</string>
+    <string name="openkeychain_not_installed_google_play">Google Play</string>
+    <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="openkeychain_not_installed_fdroid">F-Droid</string>
+    <string name="fdroid_deeplink_template">https://f-droid.org/en/packages/%1$s/</string>
 </resources>

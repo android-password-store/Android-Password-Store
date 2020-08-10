@@ -6,10 +6,13 @@
 package com.zeapo.pwdstore.crypto
 
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
@@ -17,10 +20,10 @@ import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
@@ -79,6 +82,12 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     var api: OpenPgpApi? = null
 
     /**
+     * A [OpenPgpServiceConnection.OnBound] instance for the last listener that we wish to bind with
+     * in case the previous attempt was cancelled due to missing [OPENPGP_PROVIDER] package.
+     */
+    private var previousListener: OpenPgpServiceConnection.OnBound? = null
+
+    /**
      * [onCreate] sets the window up with the right flags to prevent auth leaks through screenshots
      * or recent apps screen.
      */
@@ -98,6 +107,16 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     override fun onDestroy() {
         super.onDestroy()
         serviceConnection?.unbindFromService()
+        previousListener = null
+    }
+
+    /**
+     * [onResume] controls the flow for resumption of a PGP operation that was previously interrupted
+     * by the [OPENPGP_PROVIDER] package being missing.
+     */
+    override fun onResume() {
+        super.onResume()
+        previousListener?.let { bindToOpenKeychain(it) }
     }
 
     /**
@@ -122,8 +141,45 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * Method for subclasses to initiate binding with [OpenPgpServiceConnection].
      */
     fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
-        serviceConnection = OpenPgpServiceConnection(this, OPENPGP_PROVIDER, onBoundListener)
-        serviceConnection?.bindToService()
+        val installed = try {
+            packageManager.getPackageInfo(OPENPGP_PROVIDER, 0)
+            true
+        } catch (_: PackageManager.NameNotFoundException) {
+            false
+        }
+        if (!installed) {
+            previousListener = onBoundListener
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.openkeychain_not_installed_title))
+                .setMessage(getString(R.string.openkeychain_not_installed_message))
+                .setPositiveButton(getString(R.string.openkeychain_not_installed_google_play)) { _, _ ->
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse(getString(R.string.play_deeplink_template, OPENPGP_PROVIDER))
+                            setPackage("com.android.vending")
+                        }
+                        startActivity(intent)
+                    } catch (_: ActivityNotFoundException) {
+                    }
+                }
+                .setNeutralButton(getString(R.string.openkeychain_not_installed_fdroid)) { _, _ ->
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse(getString(R.string.fdroid_deeplink_template, OPENPGP_PROVIDER))
+                        }
+                        startActivity(intent)
+                    } catch (_: ActivityNotFoundException) {
+                    }
+                }
+                .setOnCancelListener { finish() }
+                .show()
+            return
+        } else {
+            previousListener = null
+            serviceConnection = OpenPgpServiceConnection(this, OPENPGP_PROVIDER, onBoundListener).also {
+                it.bindToService()
+            }
+        }
     }
 
     /**
