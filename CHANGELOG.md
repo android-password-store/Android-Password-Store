@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Allow changing the branch used for Git operations
+- Allow setting a subdirectory key when creating folders
 
 ### Changed
 

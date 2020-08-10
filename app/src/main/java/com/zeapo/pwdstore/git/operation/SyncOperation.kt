@@ -18,7 +18,6 @@ class SyncOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOper
 
     override val commands = arrayOf(
         git.add().addFilepattern("."),
-        git.status(),
         git.commit().setAll(true).setMessage("[Android Password Store] Sync"),
         git.pull().setRebase(true).setRemote("origin"),
         git.push().setPushAll().setRemote("origin"),

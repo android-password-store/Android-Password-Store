@@ -367,6 +367,7 @@
     <string name="short_key_ids_unsupported">A key ID in .gpg-id is too short, please use either long key IDs (16 characters) or fingerprints (40 characters)</string>
     <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
     <string name="directory_hint">Directory</string>
+    <string name="new_folder_set_gpg_key">Set GPG key for directory</string>
 
     <!-- GitException messages -->
     <string name="git_unknown_error">Unknown error</string>
@@ -383,4 +384,8 @@
     <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
     <string name="openkeychain_not_installed_fdroid">F-Droid</string>
     <string name="fdroid_deeplink_template">https://f-droid.org/en/packages/%1$s/</string>
+
+    <!-- GPG key selection in folder creation -->
+    <string name="folder_creation_err_file_exists">A file by that name already exists</string>
+    <string name="folder_creation_err_folder_exists">A folder by that name already exists</string>
 </resources>

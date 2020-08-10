@@ -116,7 +116,6 @@ suspend fun FragmentActivity.commitChange(
     object : GitOperation(getRepositoryDirectory(), this@commitChange) {
         override val commands = arrayOf(
             git.add().addFilepattern("."),
-            git.status(),
             git.commit().setAll(true).setMessage(message),
         )
 

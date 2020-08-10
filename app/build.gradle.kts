@@ -24,6 +24,8 @@ android {
         }
     }
 
+    adbOptions.installOptions("--user 0")
+
     buildFeatures.viewBinding = true
 
     defaultConfig {
