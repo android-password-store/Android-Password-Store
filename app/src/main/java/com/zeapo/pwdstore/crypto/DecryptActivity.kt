@@ -206,7 +206,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                 }
                             }
 
-                            if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, true)) {
+                            if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
                                 copyPasswordToClipboard(entry.password)
                             }
                         } catch (e: Exception) {
