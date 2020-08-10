@@ -26,7 +26,6 @@ import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseResult
-import org.eclipse.jgit.api.StatusCommand
 import org.eclipse.jgit.transport.RemoteRefUpdate
 import org.eclipse.jgit.transport.SshSessionFactory
 
@@ -43,22 +42,14 @@ class GitCommandExecutor(
             message = activity.resources.getString(R.string.git_operation_running),
             length = Snackbar.LENGTH_INDEFINITE,
         )
-        var nbChanges = 0
         var operationResult: Result = Result.Ok
         for (command in operation.commands) {
             try {
                 when (command) {
-                    is StatusCommand -> {
-                        // in case we have changes, we want to keep track of it
-                        val status = withContext(Dispatchers.IO) {
-                            command.call()
-                        }
-                        nbChanges = status.changed.size + status.missing.size
-                    }
                     is CommitCommand -> {
                         // the previous status will eventually be used to avoid a commit
                         withContext(Dispatchers.IO) {
-                            if (nbChanges > 0) command.call()
+                            command.call()
                         }
                     }
                     is PullCommand -> {
