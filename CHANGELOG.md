@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- The Git repository URL can now be specified directly
 - Slightly reduce APK size
 - Always show the parent path in entries
 - Passwords will no longer be copied to the clipboard by default

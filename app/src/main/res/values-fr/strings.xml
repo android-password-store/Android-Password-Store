@@ -60,10 +60,6 @@
 
     <string name="server_name">Serveur</string>
     <string name="server_protocol">Protocole</string>
-    <string name="server_url">URL du serveur</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Chemin du dépôt</string>
-    <string name="server_user">Nom d\'utilisateur</string>
 
     <string name="connection_mode">Méthode d\'authentification</string>
 

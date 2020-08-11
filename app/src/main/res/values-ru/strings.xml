@@ -62,10 +62,6 @@
 
     <string name="server_name">Сервер</string>
     <string name="server_protocol">Протокол</string>
-    <string name="server_url">URL сервера</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Путь к репозиторию</string>
-    <string name="server_user">Имя пользователя</string>
 
     <string name="connection_mode">Тип авторизации</string>
 

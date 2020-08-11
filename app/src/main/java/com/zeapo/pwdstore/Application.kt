@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import com.zeapo.pwdstore.git.config.setUpBouncyCastleForSshj
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.sharedPrefs
+import com.zeapo.pwdstore.utils.getString
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -30,6 +30,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         sharedPrefs.registerOnSharedPreferenceChangeListener(this)
         setNightMode()
         setUpBouncyCastleForSshj()
+        runMigrations(applicationContext)
     }
 
     override fun onTerminate() {
@@ -44,7 +45,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     }
 
     private fun setNightMode() {
-        AppCompatDelegate.setDefaultNightMode(when (sharedPrefs.getString(PreferenceKeys.APP_THEME, getString(R.string.app_theme_def))) {
+        AppCompatDelegate.setDefaultNightMode(when (sharedPrefs.getString(PreferenceKeys.APP_THEME) ?: getString(R.string.app_theme_def)) {
             "light" -> MODE_NIGHT_NO
             "dark" -> MODE_NIGHT_YES
             "follow_system" -> MODE_NIGHT_FOLLOW_SYSTEM

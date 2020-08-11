@@ -18,18 +18,12 @@ import com.jcraft.jsch.Identity;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.UserInfo;
 import com.zeapo.pwdstore.R;
 import com.zeapo.pwdstore.git.BaseGitActivity;
 import com.zeapo.pwdstore.utils.PreferenceKeys;
 
-import org.eclipse.jgit.errors.UnsupportedCredentialItem;
-import org.eclipse.jgit.transport.CredentialItem;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.CredentialsProviderUserInfo;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
-import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.util.Base64;
 import org.eclipse.jgit.util.FS;
 import org.openintents.ssh.authentication.ISshAuthenticationService;
@@ -52,11 +46,9 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
      */
     public static final int POST_SIGNATURE = 301;
 
-    private final String username;
     private final Identity identity;
 
-    public SshApiSessionFactory(String username, Identity identity) {
-        this.username = username;
+    public SshApiSessionFactory(Identity identity) {
         this.identity = identity;
     }
 
@@ -74,32 +66,6 @@ public class SshApiSessionFactory extends JschConfigSessionFactory {
     protected void configure(@NonNull OpenSshConfig.Host hc, Session session) {
         session.setConfig("StrictHostKeyChecking", "no");
         session.setConfig("PreferredAuthentications", "publickey");
-
-        CredentialsProvider provider =
-            new CredentialsProvider() {
-                @Override
-                public boolean isInteractive() {
-                    return false;
-                }
-
-                @Override
-                public boolean supports(CredentialItem... items) {
-                    return true;
-                }
-
-                @Override
-                public boolean get(URIish uri, CredentialItem... items)
-                    throws UnsupportedCredentialItem {
-                    for (CredentialItem item : items) {
-                        if (item instanceof CredentialItem.Username) {
-                            ((CredentialItem.Username) item).setValue(username);
-                        }
-                    }
-                    return true;
-                }
-            };
-        UserInfo userInfo = new CredentialsProviderUserInfo(session, provider);
-        session.setUserInfo(userInfo);
     }
 
     /**

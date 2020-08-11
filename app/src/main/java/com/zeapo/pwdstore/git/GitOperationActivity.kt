@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.utils.PasswordRepository
 import kotlinx.coroutines.launch
 
@@ -57,7 +58,7 @@ open class GitOperationActivity : BaseGitActivity() {
      * @param operation the operation to execute can be REQUEST_PULL or REQUEST_PUSH
      */
     private suspend fun syncRepository(operation: Int) {
-        if (serverUser.isEmpty() || serverHostname.isEmpty() || url.isNullOrEmpty())
+        if (GitSettings.url.isNullOrEmpty())
             MaterialAlertDialogBuilder(this)
                 .setMessage(getString(R.string.set_information_dialog_text))
                 .setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
@@ -72,7 +73,7 @@ open class GitOperationActivity : BaseGitActivity() {
                 .show()
         else {
             // check that the remote origin is here, else add it
-            PasswordRepository.addRemote("origin", url!!, true)
+            PasswordRepository.addRemote("origin", GitSettings.url!!, true)
             launchGitOperation(operation)
         }
     }

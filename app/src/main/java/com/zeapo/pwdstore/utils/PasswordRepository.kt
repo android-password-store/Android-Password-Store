@@ -39,8 +39,7 @@ open class PasswordRepository protected constructor() {
 
             @JvmStatic
             fun getSortOrder(settings: SharedPreferences): PasswordSortOrder {
-                return valueOf(settings.getString(PreferenceKeys.SORT_ORDER, null)
-                    ?: FOLDER_FIRST.name)
+                return valueOf(settings.getString(PreferenceKeys.SORT_ORDER) ?: FOLDER_FIRST.name)
             }
         }
     }
@@ -155,7 +154,7 @@ open class PasswordRepository protected constructor() {
         @JvmStatic
         fun getRepositoryDirectory(): File {
             return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
-                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
+                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
                 if (externalRepo != null)
                     File(externalRepo)
                 else
@@ -239,7 +238,7 @@ open class PasswordRepository protected constructor() {
          * @param username username
          */
         @JvmStatic
-        fun setUserName(username: String) {
+        fun setGitAuthorName(username: String) {
             setStringConfig("user", null, "name", username)
         }
 
@@ -249,7 +248,7 @@ open class PasswordRepository protected constructor() {
          * @param email email
          */
         @JvmStatic
-        fun setUserEmail(email: String) {
+        fun setGitAuthorEmail(email: String) {
             setStringConfig("user", null, "email", email)
         }
 

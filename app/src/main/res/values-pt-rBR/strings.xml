@@ -68,10 +68,6 @@
     <string name="external_repository_dialog_text">Você deve selecionar um diretório onde armazenar suas senhas. Se você deseja armazenar suas senhas dentro do armazenamento oculto do aplicativo, cancele esta caixa de diálogo e desative a opção \"Repositório Externo\".</string>
     <string name="server_name">Servidor</string>
     <string name="server_protocol">Protocolo</string>
-    <string name="server_url">URL do servidor</string>
-    <string name="server_port_hint">Porta</string>
-    <string name="server_path">Caminho do repositório</string>
-    <string name="server_user">Usuário</string>
     <string name="connection_mode">Modo de autenticação</string>
     <!-- Git Config fragment -->
     <string name="git_user_name_hint">Usuário</string>
@@ -295,7 +291,6 @@
     <string name="connection_mode_ssh_key">Chave SSH</string>
     <string name="connection_mode_basic_authentication">Senha</string>
     <string name="git_server_config_save_success">Configuração salva com sucesso</string>
-    <string name="git_server_config_save_error_prefix">Erro de configuração: %s</string>
     <string name="git_config_error_hostname_empty">hostname vazio</string>
     <string name="git_config_error_generic">por favor, verifique suas configurações e tente novamente</string>
     <string name="git_config_error_nonnumeric_port">porta deve ser numérica</string>

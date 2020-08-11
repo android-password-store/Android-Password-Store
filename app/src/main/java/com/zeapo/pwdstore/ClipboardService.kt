@@ -15,10 +15,10 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +46,7 @@ class ClipboardService : Service() {
 
                 ACTION_START -> {
                     val time = try {
-                        Integer.parseInt(settings.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45") as String)
+                        Integer.parseInt(settings.getString(PreferenceKeys.GENERAL_SHOW_TIME) ?: "45")
                     } catch (e: NumberFormatException) {
                         45
                     }

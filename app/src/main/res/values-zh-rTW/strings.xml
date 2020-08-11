@@ -38,10 +38,6 @@
     <string name="initialize">使用本機目錄</string>
     <string name="server_name">伺服器</string>
     <string name="server_protocol">port</string>
-    <string name="server_url">伺服器 URL</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Repo 路徑</string>
-    <string name="server_user">使用者名稱</string>
 
     <string name="connection_mode">認證模式</string>
 

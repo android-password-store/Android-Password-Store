@@ -54,10 +54,6 @@
 
     <string name="server_name">Servidor</string>
     <string name="server_protocol">Protocolo</string>
-    <string name="server_url">URL de servidor</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Ruta del repositorio</string>
-    <string name="server_user">Nombre de usuario</string>
 
     <string name="connection_mode">Modo de autenticación</string>
 

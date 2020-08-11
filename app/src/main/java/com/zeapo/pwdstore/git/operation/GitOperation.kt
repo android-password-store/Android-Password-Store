@@ -15,6 +15,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshAuthData
@@ -47,18 +48,15 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     protected val repository = PasswordRepository.getRepository(gitDir)
     protected val git = Git(repository)
-    protected val remoteBranch = PreferenceManager
-        .getDefaultSharedPreferences(callingActivity.applicationContext)
-        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
+    protected val remoteBranch = GitSettings.branch
 
-    private class PasswordFinderCredentialsProvider(private val username: String, private val passwordFinder: PasswordFinder) : CredentialsProvider() {
+    private class PasswordFinderCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
 
         override fun isInteractive() = true
 
         override fun get(uri: URIish?, vararg items: CredentialItem): Boolean {
             for (item in items) {
                 when (item) {
-                    is CredentialItem.Username -> item.value = username
                     is CredentialItem.Password -> item.value = passwordFinder.reqPassword(null)
                     else -> UnsupportedCredentialItem(uri, item.javaClass.name)
                 }
@@ -67,26 +65,26 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         }
 
         override fun supports(vararg items: CredentialItem) = items.all {
-            it is CredentialItem.Username || it is CredentialItem.Password
+            it is CredentialItem.Password
         }
     }
 
-    private fun withPasswordAuthentication(username: String, passwordFinder: InteractivePasswordFinder): GitOperation {
-        val sessionFactory = SshjSessionFactory(username, SshAuthData.Password(passwordFinder), hostKeyFile)
+    private fun withPasswordAuthentication(passwordFinder: InteractivePasswordFinder): GitOperation {
+        val sessionFactory = SshjSessionFactory(SshAuthData.Password(passwordFinder), hostKeyFile)
         SshSessionFactory.setInstance(sessionFactory)
-        this.provider = PasswordFinderCredentialsProvider(username, passwordFinder)
+        this.provider = PasswordFinderCredentialsProvider(passwordFinder)
         return this
     }
 
-    private fun withPublicKeyAuthentication(username: String, passphraseFinder: InteractivePasswordFinder): GitOperation {
-        val sessionFactory = SshjSessionFactory(username, SshAuthData.PublicKeyFile(sshKeyFile, passphraseFinder), hostKeyFile)
+    private fun withPublicKeyAuthentication(passphraseFinder: InteractivePasswordFinder): GitOperation {
+        val sessionFactory = SshjSessionFactory(SshAuthData.PublicKeyFile(sshKeyFile, passphraseFinder), hostKeyFile)
         SshSessionFactory.setInstance(sessionFactory)
         this.provider = null
         return this
     }
 
-    private fun withOpenKeychainAuthentication(username: String, identity: SshApiSessionFactory.ApiIdentity?): GitOperation {
-        SshSessionFactory.setInstance(SshApiSessionFactory(username, identity))
+    private fun withOpenKeychainAuthentication(identity: SshApiSessionFactory.ApiIdentity?): GitOperation {
+        SshSessionFactory.setInstance(SshApiSessionFactory(identity))
         this.provider = null
         return this
     }
@@ -117,7 +115,6 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
 
     suspend fun executeAfterAuthentication(
         connectionMode: ConnectionMode,
-        username: String,
         identity: SshApiSessionFactory.ApiIdentity?
     ) {
         when (connectionMode) {
@@ -136,12 +133,12 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                         callingActivity.finish()
                     }.show()
             } else {
-                withPublicKeyAuthentication(username, CredentialFinder(callingActivity,
-                    connectionMode)).execute()
+                withPublicKeyAuthentication(
+                    CredentialFinder(callingActivity, connectionMode)).execute()
             }
-            ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(username, identity).execute()
+            ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(identity).execute()
             ConnectionMode.Password -> withPasswordAuthentication(
-                username, CredentialFinder(callingActivity, connectionMode)).execute()
+                CredentialFinder(callingActivity, connectionMode)).execute()
             ConnectionMode.None -> execute()
         }
     }

@@ -7,18 +7,16 @@ package com.zeapo.pwdstore.git
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.core.content.edit
 import androidx.core.os.postDelayed
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitCloneBinding
 import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.IOException
 import kotlinx.coroutines.launch
@@ -40,22 +38,22 @@ class GitServerConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.cloneProtocolGroup.check(when (protocol) {
+        binding.cloneProtocolGroup.check(when (GitSettings.protocol) {
             Protocol.Ssh -> R.id.clone_protocol_ssh
             Protocol.Https -> R.id.clone_protocol_https
         })
         binding.cloneProtocolGroup.addOnButtonCheckedListener { _, checkedId, checked ->
             if (checked) {
                 when (checkedId) {
-                    R.id.clone_protocol_https -> protocol = Protocol.Https
-                    R.id.clone_protocol_ssh -> protocol = Protocol.Ssh
+                    R.id.clone_protocol_https -> GitSettings.protocol = Protocol.Https
+                    R.id.clone_protocol_ssh -> GitSettings.protocol = Protocol.Ssh
                 }
                 updateConnectionModeToggleGroup()
             }
         }
 
         binding.connectionModeGroup.apply {
-            when (connectionMode) {
+            when (GitSettings.connectionMode) {
                 ConnectionMode.SshKey -> check(R.id.connection_mode_ssh_key)
                 ConnectionMode.Password -> check(R.id.connection_mode_password)
                 ConnectionMode.OpenKeychain -> check(R.id.connection_mode_open_keychain)
@@ -63,82 +61,37 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
             addOnButtonCheckedListener { _, _, _ ->
                 when (checkedButtonId) {
-                    R.id.connection_mode_ssh_key -> connectionMode = ConnectionMode.SshKey
-                    R.id.connection_mode_open_keychain -> connectionMode = ConnectionMode.OpenKeychain
-                    R.id.connection_mode_password -> connectionMode = ConnectionMode.Password
-                    View.NO_ID -> connectionMode = ConnectionMode.None
+                    R.id.connection_mode_ssh_key -> GitSettings.connectionMode = ConnectionMode.SshKey
+                    R.id.connection_mode_open_keychain -> GitSettings.connectionMode = ConnectionMode.OpenKeychain
+                    R.id.connection_mode_password -> GitSettings.connectionMode = ConnectionMode.Password
+                    View.NO_ID -> GitSettings.connectionMode = ConnectionMode.None
                 }
             }
         }
         updateConnectionModeToggleGroup()
 
-        binding.serverUrl.apply {
-            setText(serverHostname)
-            doOnTextChanged { text, _, _, _ ->
-                serverHostname = text.toString().trim()
-            }
-        }
-
-        binding.serverPort.apply {
-            setText(serverPort)
-            doOnTextChanged { text, _, _, _ ->
-                serverPort = text.toString().trim()
-            }
-        }
-
-        binding.serverUser.apply {
-            if (serverUser.isEmpty()) {
-                requestFocus()
-            } else {
-                setText(serverUser)
-            }
-            doOnTextChanged { text, _, _, _ ->
-                serverUser = text.toString().trim()
-            }
-        }
-
-        binding.serverPath.apply {
-            setText(serverPath)
-            doOnTextChanged { text, _, _, _ ->
-                serverPath = text.toString().trim()
-            }
-        }
-
-        binding.serverBranch.apply {
-            setText(branch)
-            doOnTextChanged { text, _, _, _ ->
-                branch = text.toString().trim()
-            }
-        }
+        binding.serverUrl.setText(GitSettings.url)
+        binding.serverBranch.setText(GitSettings.branch)
 
         binding.saveButton.setOnClickListener {
             if (isClone && PasswordRepository.getRepository(null) == null)
                 PasswordRepository.initialize()
-            when (val result = updateUrl()) {
-                GitUpdateUrlResult.Ok -> {
-                    settings.edit {
-                        putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, protocol.pref)
-                        putString(PreferenceKeys.GIT_REMOTE_AUTH, connectionMode.pref)
-                        putString(PreferenceKeys.GIT_REMOTE_SERVER, serverHostname)
-                        putString(PreferenceKeys.GIT_REMOTE_PORT, serverPort)
-                        putString(PreferenceKeys.GIT_REMOTE_USERNAME, serverUser)
-                        putString(PreferenceKeys.GIT_REMOTE_LOCATION, serverPath)
-                        putString(PreferenceKeys.GIT_BRANCH_NAME, branch)
-                    }
-                    if (!isClone) {
-                        Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
-                        Handler().postDelayed(500) { finish() }
-                    } else {
-                        cloneRepository()
-                    }
+            GitSettings.branch = binding.serverBranch.text.toString().trim()
+            if (GitSettings.updateUrlIfValid(binding.serverUrl.text.toString().trim())) {
+                if (!isClone) {
+                    Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+                    Handler().postDelayed(500) { finish() }
+                } else {
+                    cloneRepository()
                 }
-                else -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_error_prefix, getString(result.textRes)), Snackbar.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(binding.root, getString(R.string.git_server_config_save_error), Snackbar.LENGTH_LONG).show()
             }
         }
     }
 
     private fun updateConnectionModeToggleGroup() {
-        if (protocol == Protocol.Ssh) {
+        if (GitSettings.protocol == Protocol.Ssh) {
             // Reset connection mode to SSH key if the current value (none) is not valid for SSH
             if (binding.connectionModeGroup.checkedButtonIds.isEmpty())
                 binding.connectionModeGroup.check(R.id.connection_mode_ssh_key)
@@ -150,7 +103,7 @@ class GitServerConfigActivity : BaseGitActivity() {
             // Reset connection mode to password if the current value is not valid for HTTPS
             // Important note: This has to happen before disabling the other toggle buttons or they
             // won't uncheck.
-            if (connectionMode !in listOf(ConnectionMode.None, ConnectionMode.Password))
+            if (GitSettings.connectionMode !in listOf(ConnectionMode.None, ConnectionMode.Password))
                 binding.connectionModeGroup.check(R.id.connection_mode_password)
             binding.connectionModeSshKey.isEnabled = false
             binding.connectionModeOpenKeychain.isEnabled = false

@@ -41,10 +41,6 @@
     <string name="initialize">使用本地目录</string>
     <string name="server_name">服务器</string>
     <string name="server_protocol">接口</string>
-    <string name="server_url">服务器 URL</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Repo 路径</string>
-    <string name="server_user">用户名</string>
 
     <string name="connection_mode">认证模式</string>
 

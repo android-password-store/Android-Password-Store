@@ -41,10 +41,6 @@
     <string name="initialize">ローカルディレクトリーを使用する</string>
     <string name="server_name">サーバー</string>
     <string name="server_protocol">プロトコル</string>
-    <string name="server_url">サーバー URL</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">リポジトリのパス</string>
-    <string name="server_user">ユーザー名</string>
 
     <string name="connection_mode">認証モード</string>
 

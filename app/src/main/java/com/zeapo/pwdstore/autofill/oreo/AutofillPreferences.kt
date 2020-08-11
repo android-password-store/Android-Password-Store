@@ -5,10 +5,8 @@
 package com.zeapo.pwdstore.autofill.oreo
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.nio.file.Paths

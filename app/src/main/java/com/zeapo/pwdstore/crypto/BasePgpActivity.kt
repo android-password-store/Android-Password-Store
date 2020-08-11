@@ -30,6 +30,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.snackbar
 import java.io.File
@@ -254,8 +255,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
         var clearAfter = 45
         try {
-            clearAfter = (settings.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")
-                ?: "45").toInt()
+            clearAfter = (settings.getString(PreferenceKeys.GENERAL_SHOW_TIME) ?: "45").toInt()
         } catch (_: NumberFormatException) {
         }
 
