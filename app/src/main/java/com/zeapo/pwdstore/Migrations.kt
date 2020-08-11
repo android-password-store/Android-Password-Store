@@ -76,10 +76,8 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
         remove(PreferenceKeys.GIT_REMOTE_SERVER)
         remove(PreferenceKeys.GIT_REMOTE_USERNAME)
     }
-    if (url == null) {
+    if (url == null || !GitSettings.updateUrlIfValid(url)) {
         e { "Failed to migrate to URL-based Git config, generated URL is invalid" }
-        return
     }
-    GitSettings.updateUrlIfValid(url)
 }
 
