@@ -23,6 +23,8 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.getString
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.security.MessageDigest
 
@@ -37,11 +39,7 @@ private fun ByteArray.base64(): String {
     return Base64.encodeToString(this, Base64.NO_WRAP)
 }
 
-private fun Context.getDefaultUsername(): String? {
-    return PreferenceManager
-        .getDefaultSharedPreferences(this)
-        .getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME, null)
-}
+private fun Context.getDefaultUsername() = sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
 
 private fun stableHash(array: Collection<ByteArray>): String {
     val hashes = array.map { it.sha256().base64() }

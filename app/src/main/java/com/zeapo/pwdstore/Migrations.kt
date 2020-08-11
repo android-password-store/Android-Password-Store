@@ -13,6 +13,7 @@ import com.github.ajalt.timberkt.i
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.net.URI
 
@@ -21,13 +22,13 @@ fun runMigrations(context: Context) {
 }
 
 private fun migrateToGitUrlBasedConfig(context: Context) {
-    val serverHostname = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_SERVER, null)
+    val serverHostname = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_SERVER)
         ?: return
     i { "Migrating to URL-based Git config" }
-    val serverPort = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PORT, null) ?: ""
-    val serverUser = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_USERNAME, null) ?: ""
-    val serverPath = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION, null) ?: ""
-    val protocol = Protocol.fromString(context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL, null))
+    val serverPort = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PORT) ?: ""
+    val serverUser = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_USERNAME) ?: ""
+    val serverPath = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION) ?: ""
+    val protocol = Protocol.fromString(context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
 
     // Whether we need the leading ssh:// depends on the use of a custom port.
     val hostnamePart = serverHostname.removePrefix("ssh://")

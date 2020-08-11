@@ -15,6 +15,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.config.SshApiSessionFactory
 import com.zeapo.pwdstore.git.config.SshAuthData
@@ -47,9 +48,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     protected val repository = PasswordRepository.getRepository(gitDir)
     protected val git = Git(repository)
-    protected val remoteBranch = PreferenceManager
-        .getDefaultSharedPreferences(callingActivity.applicationContext)
-        .getString(PreferenceKeys.GIT_BRANCH_NAME, "master")
+    protected val remoteBranch = GitSettings.branch
 
     private class PasswordFinderCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
 

@@ -50,6 +50,7 @@ import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -64,6 +65,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.g
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.contains
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isInsideRepository
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
@@ -112,8 +114,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private val directoryChangeAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) &&
-                settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null) != null) {
-                val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
+                settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO) != null) {
+                val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
                 val dir = externalRepoPath?.let { File(it) }
                 if (dir != null &&
                     dir.exists() &&
@@ -250,8 +252,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuRes = when {
-            ConnectionMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH, null))
-                == ConnectionMode.None -> R.menu.main_menu_no_auth
+            GitSettings.connectionMode == ConnectionMode.None -> R.menu.main_menu_no_auth
             PasswordRepository.isGitRepo() -> R.menu.main_menu_git
             else -> R.menu.main_menu_non_git
         }
@@ -401,7 +402,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     private fun initializeRepositoryInfo() {
         val externalRepo = settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
-        val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
+        val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
         if (externalRepo && !hasRequiredStoragePermissions()) {
             return
         }
@@ -847,7 +848,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             }
             .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
                 settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, true) }
-                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO, null)
+                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
                 if (externalRepo == null) {
                     val intent = Intent(activity, UserPreference::class.java)
                     intent.putExtra("operation", "git_external")

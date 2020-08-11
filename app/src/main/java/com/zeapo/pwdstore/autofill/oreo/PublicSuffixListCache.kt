@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.autofill.oreo
 import android.content.Context
 import android.util.Patterns
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.runBlocking
 import mozilla.components.lib.publicsuffixlist.PublicSuffixList
@@ -68,9 +69,10 @@ fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
 }
 
 fun getCustomSuffixes(context: Context): Sequence<String> {
-    return context.sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES, "")!!
-        .splitToSequence('\n')
-        .filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
+    return context.sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
+        ?.splitToSequence('\n')
+        ?.filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
+        ?: emptySequence()
 }
 
 suspend fun getCanonicalSuffix(context: Context, domain: String): String {

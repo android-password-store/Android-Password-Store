@@ -101,6 +101,8 @@ fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
 val Context.sharedPrefs: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
+fun SharedPreferences.getString(key: String): String? = getString(key, null)
+
 suspend fun FragmentActivity.commitChange(
     message: String,
     finishWithResultOnEnd: Intent? = null,

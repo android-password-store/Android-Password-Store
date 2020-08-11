@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.pwgenxkpwd
 import android.content.Context
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 
@@ -16,7 +17,7 @@ class XkpwdDictionary(context: Context) {
 
     init {
         val prefs = context.sharedPrefs
-        val uri = prefs.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, "")!!
+        val uri = prefs.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT) ?: ""
         val customDictFile = File(context.filesDir, XKPWD_CUSTOM_DICT_FILE)
 
         val lines = if (prefs.getBoolean(PreferenceKeys.PREF_KEY_IS_CUSTOM_DICT, false) &&

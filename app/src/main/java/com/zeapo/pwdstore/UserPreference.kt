@@ -53,6 +53,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.autofillManager
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.io.IOException
@@ -140,11 +141,11 @@ class UserPreference : AppCompatActivity() {
             // Misc preferences
             val appVersionPreference = findPreference<Preference>(PreferenceKeys.APP_VERSION)
 
-            selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO, getString(R.string.no_repo_selected))
+            selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO) ?: getString(R.string.no_repo_selected)
             viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean(PreferenceKeys.USE_GENERATED_KEY, false)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
-            clearClipboard20xPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.GENERAL_SHOW_TIME, "45")?.toInt() != 0
-            openkeystoreIdPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null)?.isNotEmpty()
+            clearClipboard20xPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toInt() != 0
+            openkeystoreIdPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID)?.isNotEmpty()
                 ?: false
 
             updateAutofillSettings()
@@ -170,9 +171,9 @@ class UserPreference : AppCompatActivity() {
 
             clearSavedPassPreference?.onPreferenceClickListener = ClickListener {
                 encryptedPreferences.edit {
-                    if (encryptedPreferences.getString(PreferenceKeys.HTTPS_PASSWORD, null) != null)
+                    if (encryptedPreferences.getString(PreferenceKeys.HTTPS_PASSWORD) != null)
                         remove(PreferenceKeys.HTTPS_PASSWORD)
-                    else if (encryptedPreferences.getString(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE, null) != null)
+                    else if (encryptedPreferences.getString(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE) != null)
                         remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
                 }
                 updateClearSavedPassphrasePrefs()
@@ -225,7 +226,7 @@ class UserPreference : AppCompatActivity() {
             }
 
             selectExternalGitRepositoryPreference?.summary =
-                sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO, context.getString(R.string.no_repo_selected))
+                sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO) ?: context.getString(R.string.no_repo_selected)
             selectExternalGitRepositoryPreference?.onPreferenceClickListener = ClickListener {
                 prefsActivity.selectExternalGitRepository()
                 true
@@ -320,7 +321,7 @@ class UserPreference : AppCompatActivity() {
                 prefsActivity.storeCustomDictionaryPath()
                 true
             }
-            val dictUri = sharedPreferences.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, "")
+            val dictUri = sharedPreferences.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT) ?: ""
 
             if (!TextUtils.isEmpty(dictUri)) {
                 setCustomDictSummary(prefCustomXkpwdDictionary, Uri.parse(dictUri))
@@ -376,8 +377,8 @@ class UserPreference : AppCompatActivity() {
 
         private fun updateClearSavedPassphrasePrefs() {
             clearSavedPassPreference?.apply {
-                val sshPass = encryptedPreferences.getString(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE, null)
-                val httpsPass = encryptedPreferences.getString(PreferenceKeys.HTTPS_PASSWORD, null)
+                val sshPass = encryptedPreferences.getString(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
+                val httpsPass = encryptedPreferences.getString(PreferenceKeys.HTTPS_PASSWORD)
                 if (sshPass == null && httpsPass == null) {
                     isVisible = false
                     return@apply
