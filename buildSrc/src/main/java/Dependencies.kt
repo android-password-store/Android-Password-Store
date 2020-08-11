@@ -25,18 +25,18 @@ object Dependencies {
         const val autofill = "androidx.autofill:autofill:1.1.0-alpha01"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
         const val biometric = "androidx.biometric:biometric:1.1.0-alpha01"
-        const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.0-beta8"
+        const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.0-rc1"
         const val core_ktx = "androidx.core:core-ktx:1.5.0-alpha01"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
         const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0-alpha07"
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:2.3.0-alpha06"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha06"
         const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha06"
-        const val material = "com.google.android.material:material:1.3.0-alpha01"
+        const val material = "com.google.android.material:material:1.3.0-alpha02"
         const val preference = "androidx.preference:preference:1.1.1"
         const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-alpha05"
         const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
-        const val security = "androidx.security:security-crypto:1.1.0-alpha01"
+        const val security = "androidx.security:security-crypto:1.1.0-alpha02"
         const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
     }
 
@@ -74,11 +74,11 @@ object Dependencies {
 
         object AndroidX {
 
-            const val runner = "androidx.test:runner:1.3.0-rc01"
-            const val rules = "androidx.test:rules:1.3.0-rc01"
-            const val junit = "androidx.test.ext:junit:1.1.2-rc01"
-            const val espresso_core = "androidx.test.espresso:espresso-core:3.3.0-rc01"
-            const val espresso_intents = "androidx.test.espresso:espresso-intents:3.3.0-rc01"
+            const val runner = "androidx.test:runner:1.3.0-rc03"
+            const val rules = "androidx.test:rules:1.3.0-rc03"
+            const val junit = "androidx.test.ext:junit:1.1.2-rc03"
+            const val espresso_core = "androidx.test.espresso:espresso-core:3.3.0-rc03"
+            const val espresso_intents = "androidx.test.espresso:espresso-intents:3.3.0-rc03"
         }
     }
 }
