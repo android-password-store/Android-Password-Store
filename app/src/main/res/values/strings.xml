@@ -214,6 +214,7 @@
     <string name="git_sync">Synchronize repository</string>
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
+    <string name="git_push_up_to_date">Everything up-to-date</string>
     <string name="show_password_pref_title">Show the password</string>
     <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted. This does not disable copying to clipboard.</string>
     <string name="show_extra_content_pref_title">Show extra content</string>
