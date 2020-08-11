@@ -28,10 +28,6 @@
 -keep class org.bouncycastle.jce.provider.** { *; }
 -keep class !org.bouncycastle.jce.provider.X509LDAPCertStoreSpi { *; }
 
-# Tink (for security-crypto)
-# I'm most certainly not a fan of this catch-all rule
--keep class com.google.crypto.tink.proto.** { *; }
-
 # WhatTheStack
 -keep class com.haroldadmin.whatthestack.WhatTheStackInitializer {
   <init>();
