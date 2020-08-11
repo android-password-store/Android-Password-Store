@@ -40,10 +40,6 @@
     <string name="initialize">Nutze lokalen Ordner</string>
     <string name="server_name">Server</string>
     <string name="server_protocol">Protokoll</string>
-    <string name="server_url">Server URL</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Repo-Pfad</string>
-    <string name="server_user">Nutzername</string>
 
     <string name="connection_mode">Authentifizierungsmethode</string>
 

@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PreferenceKeys

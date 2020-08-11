@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import com.zeapo.pwdstore.git.config.setUpBouncyCastleForSshj
@@ -30,6 +29,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         sharedPrefs.registerOnSharedPreferenceChangeListener(this)
         setNightMode()
         setUpBouncyCastleForSshj()
+        runMigrations(applicationContext)
     }
 
     override fun onTerminate() {

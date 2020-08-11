@@ -29,10 +29,6 @@
     <string name="initialize">إستخدام مجلد محلي</string>
     <string name="server_name">الخادوم</string>
     <string name="server_protocol">البروتوكول</string>
-    <string name="server_url">عنوان الخادوم</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">مسار المستودع</string>
-    <string name="server_user">إسم المستخدم</string>
 
     <string name="connection_mode">نوع المصادقة</string>
 

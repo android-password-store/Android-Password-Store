@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
-import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.sharedPrefs

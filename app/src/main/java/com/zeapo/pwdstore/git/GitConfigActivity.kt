@@ -7,15 +7,14 @@ package com.zeapo.pwdstore.git
 import android.os.Bundle
 import android.os.Handler
 import android.util.Patterns
-import androidx.core.content.edit
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityGitConfigBinding
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlinx.coroutines.launch
 import org.eclipse.jgit.lib.Constants
@@ -29,16 +28,16 @@ class GitConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (username.isEmpty())
+        if (GitSettings.authorName.isEmpty())
             binding.gitUserName.requestFocus()
         else
-            binding.gitUserName.setText(username)
-        binding.gitUserEmail.setText(email)
+            binding.gitUserName.setText(GitSettings.authorName)
+        binding.gitUserEmail.setText(GitSettings.authorEmail)
         val repo = PasswordRepository.getRepository(PasswordRepository.getRepositoryDirectory())
         if (repo != null) {
             try {
                 val objectId = repo.resolve(Constants.HEAD)
-                val ref = repo.getRef("refs/heads/$branch")
+                val ref = repo.getRef("refs/heads/${GitSettings.branch}")
                 val head = if (ref.objectId.equals(objectId)) ref.name else "DETACHED"
                 binding.gitCommitHash.text = String.format("%s (%s)", objectId.abbreviate(8).name(), head)
 
@@ -60,12 +59,10 @@ class GitConfigActivity : BaseGitActivity() {
                     .setPositiveButton(getString(R.string.dialog_ok), null)
                     .show()
             } else {
-                settings.edit {
-                    putString(PreferenceKeys.GIT_CONFIG_USER_EMAIL, email)
-                    putString(PreferenceKeys.GIT_CONFIG_USER_NAME, name)
-                }
-                PasswordRepository.setUserName(name)
-                PasswordRepository.setUserEmail(email)
+                GitSettings.authorEmail = email
+                GitSettings.authorName = name
+                PasswordRepository.setGitAuthorEmail(email)
+                PasswordRepository.setGitAuthorName(name)
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
                 Handler().postDelayed(500) { finish() }
             }

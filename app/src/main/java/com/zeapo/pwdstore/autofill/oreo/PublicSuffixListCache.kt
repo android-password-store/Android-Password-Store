@@ -6,7 +6,6 @@ package com.zeapo.pwdstore.autofill.oreo
 
 import android.content.Context
 import android.util.Patterns
-import androidx.preference.PreferenceManager
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.runBlocking

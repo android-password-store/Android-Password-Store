@@ -83,10 +83,8 @@
 
     <string name="server_name">Server</string>
     <string name="server_protocol">Protocol</string>
-    <string name="server_url">Server URL</string>
-    <string name="server_port_hint">Port</string>
-    <string name="server_path">Repo path</string>
-    <string name="server_user">Username</string>
+    <string name="server_url">Repository URL</string>
+    <string name="server_branch">Branch</string>
 
     <string name="connection_mode">Authentication Mode</string>
 
@@ -326,7 +324,7 @@
     <string name="connection_mode_basic_authentication">Password</string>
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
     <string name="git_server_config_save_success">Successfully saved configuration</string>
-    <string name="git_server_config_save_error_prefix">Configuration error: %s</string>
+    <string name="git_server_config_save_error">The provided repository URL is not valid</string>
     <string name="git_config_error_hostname_empty">empty hostname</string>
     <string name="git_config_error_generic">please verify your settings and try again</string>
     <string name="git_config_error_nonnumeric_port">port must be numeric</string>

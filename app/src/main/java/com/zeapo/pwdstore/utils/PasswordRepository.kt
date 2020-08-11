@@ -239,7 +239,7 @@ open class PasswordRepository protected constructor() {
          * @param username username
          */
         @JvmStatic
-        fun setUserName(username: String) {
+        fun setGitAuthorName(username: String) {
             setStringConfig("user", null, "name", username)
         }
 
@@ -249,7 +249,7 @@ open class PasswordRepository protected constructor() {
          * @param email email
          */
         @JvmStatic
-        fun setUserEmail(email: String) {
+        fun setGitAuthorEmail(email: String) {
             setStringConfig("user", null, "email", email)
         }
 

@@ -57,10 +57,6 @@
     <string name="external_repository_dialog_title">Vyberte kam ukládat hesla</string>
     <string name="server_name">Server</string>
     <string name="server_protocol">Protokol</string>
-    <string name="server_url">URL serveru</string>
-    <string name="server_port_hint">22</string>
-    <string name="server_path">Cesta k repozitáři</string>
-    <string name="server_user">Jméno</string>
 
     <string name="connection_mode">Mód ověření</string>
 

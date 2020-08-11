@@ -95,10 +95,10 @@ abstract class InteractivePasswordFinder : PasswordFinder {
     final override fun shouldRetry(resource: Resource<*>?) = true
 }
 
-class SshjSessionFactory(private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
+class SshjSessionFactory(private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
 
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
-        return SshjSession(uri, username, authData, hostKeyFile).connect()
+        return SshjSession(uri, uri.user, authData, hostKeyFile).connect()
     }
 
     fun clearCredentials() {
