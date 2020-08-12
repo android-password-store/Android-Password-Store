@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.git
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.e
 import com.google.android.material.snackbar.Snackbar
@@ -85,6 +86,16 @@ class GitCommandExecutor(
                                         } else {
                                             PushException(PushException.Reason.GENERIC, rru.message)
                                         }
+                                    }
+                                    RemoteRefUpdate.Status.UP_TO_DATE -> {
+                                        withContext(Dispatchers.Main) {
+                                            Toast.makeText(
+                                                activity.applicationContext,
+                                                activity.applicationContext.getString(R.string.git_push_up_to_date),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        null
                                     }
                                     else -> null
 
