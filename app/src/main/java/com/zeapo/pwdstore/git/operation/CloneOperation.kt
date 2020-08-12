@@ -24,6 +24,15 @@ class CloneOperation(fileDir: File, uri: String, callingActivity: AppCompatActiv
     )
 
     override suspend fun execute() {
-        GitCommandExecutor(callingActivity, this).execute()
+        GitCommandExecutor(callingActivity, this, finishActivityOnEnd = false).execute()
+    }
+
+    override fun onSuccess() {
+        callingActivity.finish()
+    }
+
+    override fun onError(err: Exception) {
+        finishFromErrorDialog = false
+        super.onError(err)
     }
 }

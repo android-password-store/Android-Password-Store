@@ -46,6 +46,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     private var provider: CredentialsProvider? = null
     private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
+    protected var finishFromErrorDialog = true
     protected val repository = PasswordRepository.getRepository(gitDir)
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
@@ -166,7 +167,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage(ErrorMessages[err])
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                callingActivity.finish()
+                if (finishFromErrorDialog) callingActivity.finish()
             }.show()
     }
 

@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Allow creating nested directories directly
 - I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
 - Fix crash when OpenKeychain is not installed
+- Clone operation won't leave user on an empty password list upon failure
 
 ## [1.10.3] - 2020-07-30
 
