@@ -48,7 +48,7 @@ object ErrorMessages {
         return when (val rootCause = rootCause(throwable)) {
             is GitException -> rootCause.message
             is UnknownHostException -> resources.getString(R.string.git_unknown_host, throwable.message)
-            else -> throwable.message?.let { "${throwable.javaClass.simpleName}: $it" } ?: resources.getString(R.string.git_unknown_error)
+            else -> throwable.message ?: resources.getString(R.string.git_unknown_error)
         }
     }
 
