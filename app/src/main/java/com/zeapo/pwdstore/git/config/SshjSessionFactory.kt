@@ -7,7 +7,6 @@ package com.zeapo.pwdstore.git.config
 import android.util.Base64
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
-import com.zeapo.pwdstore.utils.clear
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -36,56 +35,24 @@ import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
 
 sealed class SshAuthData {
-    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData() {
-
-        override fun clearCredentials() {
-            passwordFinder.clearPassword()
-        }
-    }
-
-    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData() {
-
-        override fun clearCredentials() {
-            passphraseFinder.clearPassword()
-        }
-    }
-
-    abstract fun clearCredentials()
+    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
+    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
 
+    private var isRetry = false
+
     abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
 
-    private var isRetry = false
-    private var lastPassword: CharArray? = null
-
-    fun resetForReuse() {
-        isRetry = false
-    }
-
-    fun clearPassword() {
-        lastPassword?.clear()
-        lastPassword = null
-    }
-
     final override fun reqPassword(resource: Resource<*>?): CharArray {
-        if (lastPassword != null && !isRetry) {
-            // This instance successfully authenticated in a previous authentication step and is
-            // now being reused for a new one. We try the previous password so that the user
-            // does not have to type it again.
-            isRetry = true
-            return lastPassword!!
-        }
-        clearPassword()
         val password = runBlocking(Dispatchers.Main) {
             suspendCoroutine<String?> { cont ->
                 askForPassword(cont, isRetry)
             }
         }
         isRetry = true
-        return password?.toCharArray()?.also { lastPassword = it }
-            ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
+        return password?.toCharArray() ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
     }
 
     final override fun shouldRetry(resource: Resource<*>?) = true
@@ -95,10 +62,6 @@ class SshjSessionFactory(private val authData: SshAuthData, private val hostKeyF
 
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
         return SshjSession(uri, uri.user, authData, hostKeyFile).connect()
-    }
-
-    fun clearCredentials() {
-        authData.clearCredentials()
     }
 }
 
@@ -151,11 +114,9 @@ private class SshjSession(uri: URIish, private val username: String, private val
         when (authData) {
             is SshAuthData.Password -> {
                 ssh.authPassword(username, authData.passwordFinder)
-                authData.passwordFinder.resetForReuse()
             }
             is SshAuthData.PublicKeyFile -> {
                 ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
-                authData.passphraseFinder.resetForReuse()
             }
         }
         return this

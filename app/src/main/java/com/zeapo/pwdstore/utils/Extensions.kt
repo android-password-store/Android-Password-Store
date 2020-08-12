@@ -42,12 +42,6 @@ fun String.splitLines(): Array<String> {
     return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 }
 
-fun CharArray.clear() {
-    forEachIndexed { i, _ ->
-        this[i] = 0.toChar()
-    }
-}
-
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
 fun FragmentActivity.snackbar(
