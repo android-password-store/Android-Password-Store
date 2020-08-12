@@ -52,7 +52,8 @@ abstract class InteractivePasswordFinder : PasswordFinder {
             }
         }
         isRetry = true
-        return password?.toCharArray() ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
+        return password?.toCharArray()
+            ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
     }
 
     final override fun shouldRetry(resource: Resource<*>?) = true
@@ -60,8 +61,17 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 
 class SshjSessionFactory(private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
 
+    private var currentSession: SshjSession? = null
+
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
-        return SshjSession(uri, uri.user, authData, hostKeyFile).connect()
+        return currentSession ?: SshjSession(uri, uri.user, authData, hostKeyFile).connect().also {
+            d { "New SSH connection created" }
+            currentSession = it
+        }
+    }
+
+    fun close() {
+        currentSession?.close()
     }
 }
 
@@ -124,17 +134,28 @@ private class SshjSession(uri: URIish, private val username: String, private val
 
     override fun exec(commandName: String?, timeout: Int): Process {
         if (currentCommand != null) {
-            w { "Killing old session" }
-            currentCommand?.close()
-            currentCommand = null
+            w { "Killing old command" }
+            disconnect()
         }
         val session = ssh.startSession()
         currentCommand = session
         return SshjProcess(session.exec(commandName), timeout.toLong())
     }
 
+    /**
+     * Kills the current command if one is running and returns the session into a state where `exec`
+     * can be called.
+     *
+     * Note that this does *not* disconnect the session. Unfortunately, the function has to be
+     * called `disconnect` to override the corresponding abstract function in `RemoteSession`.
+     */
     override fun disconnect() {
         currentCommand?.close()
+        currentCommand = null
+    }
+
+    fun close() {
+        disconnect()
         ssh.close()
     }
 }

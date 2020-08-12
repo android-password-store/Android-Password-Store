@@ -131,6 +131,9 @@ class GitCommandExecutor(
             }
         }
         snackbar.dismiss()
+        withContext(Dispatchers.IO) {
+            (SshSessionFactory.getInstance() as? SshjSessionFactory)?.close()
+        }
         SshSessionFactory.setInstance(null)
     }
 
