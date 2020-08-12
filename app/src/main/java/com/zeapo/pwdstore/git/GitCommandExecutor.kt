@@ -59,7 +59,7 @@ class GitCommandExecutor(
                         }
                         val rr = result.rebaseResult
                         if (rr.status === RebaseResult.Status.STOPPED) {
-                            operationResult = Result.Err(PullException(PullException.Reason.REBASE_FAILED))
+                            operationResult = Result.Err(PullException.PullRebaseFailed)
                         }
                     }
                     is PushCommand -> {
@@ -70,21 +70,17 @@ class GitCommandExecutor(
                             // Code imported (modified) from Gerrit PushOp, license Apache v2
                             for (rru in result.remoteUpdates) {
                                 val error = when (rru.status) {
-                                    RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD -> {
-                                        PushException(PushException.Reason.NON_FAST_FORWARD)
-                                    }
+                                    RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD -> PushException.NonFastForward
                                     RemoteRefUpdate.Status.REJECTED_NODELETE,
                                     RemoteRefUpdate.Status.REJECTED_REMOTE_CHANGED,
                                     RemoteRefUpdate.Status.NON_EXISTING,
                                     RemoteRefUpdate.Status.NOT_ATTEMPTED,
-                                    -> {
-                                        PushException(PushException.Reason.GENERIC, rru.status.name)
-                                    }
+                                    -> PushException.Generic(rru.status.name)
                                     RemoteRefUpdate.Status.REJECTED_OTHER_REASON -> {
                                         if ("non-fast-forward" == rru.message) {
-                                            PushException(PushException.Reason.REMOTE_REJECTED)
+                                            PushException.RemoteRejected
                                         } else {
-                                            PushException(PushException.Reason.GENERIC, rru.message)
+                                            PushException.Generic(rru.message)
                                         }
                                     }
                                     RemoteRefUpdate.Status.UP_TO_DATE -> {
