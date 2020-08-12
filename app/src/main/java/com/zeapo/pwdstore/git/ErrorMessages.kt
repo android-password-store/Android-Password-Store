@@ -16,6 +16,8 @@ import java.net.UnknownHostException
  */
 sealed class GitException(@StringRes res: Int, vararg fmt: String) : Exception(buildMessage(res, *fmt)) {
 
+    override val message = super.message!!
+
     companion object {
         private fun buildMessage(@StringRes res: Int, vararg fmt: String) = Application.instance.resources.getString(res, *fmt)
     }
@@ -44,7 +46,7 @@ object ErrorMessages {
         val resources = Application.instance.resources
         if (throwable == null) return resources.getString(R.string.git_unknown_error)
         return when (val rootCause = rootCause(throwable)) {
-            is GitException -> rootCause.message!!
+            is GitException -> rootCause.message
             is UnknownHostException -> resources.getString(R.string.git_unknown_host, throwable.message)
             else -> throwable.message?.let { "${throwable.javaClass.simpleName}: $it" } ?: resources.getString(R.string.git_unknown_error)
         }
