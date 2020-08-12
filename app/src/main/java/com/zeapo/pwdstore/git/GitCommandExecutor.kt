@@ -44,8 +44,8 @@ class GitCommandExecutor(
             length = Snackbar.LENGTH_INDEFINITE,
         )
         var operationResult: Result = Result.Ok
-        for (command in operation.commands) {
-            try {
+        try {
+            for (command in operation.commands) {
                 when (command) {
                     is CommitCommand -> {
                         // the previous status will eventually be used to avoid a commit
@@ -108,9 +108,9 @@ class GitCommandExecutor(
                         }
                     }
                 }
-            } catch (e: Exception) {
-                operationResult = Result.Err(e)
             }
+        } catch (e: Exception) {
+            operationResult = Result.Err(e)
         }
         when (operationResult) {
             is Result.Err -> {
@@ -131,7 +131,9 @@ class GitCommandExecutor(
             }
         }
         snackbar.dismiss()
-        (SshSessionFactory.getInstance() as? SshjSessionFactory)?.clearCredentials()
+        withContext(Dispatchers.IO) {
+            (SshSessionFactory.getInstance() as? SshjSessionFactory)?.close()
+        }
         SshSessionFactory.setInstance(null)
     }
 
