@@ -39,14 +39,14 @@ sealed class SshAuthData {
     class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData() {
 
         override fun clearCredentials() {
-            passwordFinder.clearPasswords()
+            passwordFinder.clearPassword()
         }
     }
 
     class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData() {
 
         override fun clearCredentials() {
-            passphraseFinder.clearPasswords()
+            passphraseFinder.clearPassword()
         }
     }
 
@@ -59,14 +59,13 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 
     private var isRetry = false
     private var lastPassword: CharArray? = null
-    private val rememberToWipe: MutableList<CharArray> = mutableListOf()
 
     fun resetForReuse() {
         isRetry = false
     }
 
-    fun clearPasswords() {
-        rememberToWipe.forEach { it.clear() }
+    fun clearPassword() {
+        lastPassword?.clear()
         lastPassword = null
     }
 
@@ -76,20 +75,17 @@ abstract class InteractivePasswordFinder : PasswordFinder {
             // now being reused for a new one. We try the previous password so that the user
             // does not have to type it again.
             isRetry = true
-            return lastPassword!!.clone().also { rememberToWipe.add(it) }
+            return lastPassword!!
         }
-        clearPasswords()
+        clearPassword()
         val password = runBlocking(Dispatchers.Main) {
             suspendCoroutine<String?> { cont ->
                 askForPassword(cont, isRetry)
             }
         }
         isRetry = true
-        if (password == null)
-            throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
-        val passwordChars = password.toCharArray().also { rememberToWipe.add(it) }
-        lastPassword = passwordChars
-        return passwordChars.clone().also { rememberToWipe.add(it) }
+        return password?.toCharArray()?.also { lastPassword = it }
+            ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
     }
 
     final override fun shouldRetry(resource: Resource<*>?) = true
