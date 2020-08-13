@@ -44,7 +44,6 @@ import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
-import org.eclipse.jgit.api.Git
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -328,16 +327,13 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     if (result.resultCode == RESULT_OK) {
                         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
-                            val repo = PasswordRepository.getRepository(null)
-                            if (repo != null) {
-                                lifecycleScope.launch {
-                                    commitChange(
-                                        getString(
-                                            R.string.git_commit_gpg_id,
-                                            getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                        )
+                            lifecycleScope.launch {
+                                commitChange(
+                                    getString(
+                                        R.string.git_commit_gpg_id,
+                                        getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
                                     )
-                                }
+                                )
                             }
                             encrypt(data)
                         }
@@ -430,19 +426,13 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                                 }
 
-                                val repo = PasswordRepository.getRepository(null)
-                                if (repo != null) {
-                                    val status = Git(repo).status().call()
-                                    if (status.modified.isNotEmpty()) {
-                                        lifecycleScope.launch {
-                                            commitChange(
-                                                getString(
-                                                    R.string.git_commit_edit_text,
-                                                    getLongName(fullPath, repoPath, editName)
-                                                )
-                                            )
-                                        }
-                                    }
+                                lifecycleScope.launch {
+                                    commitChange(
+                                        getString(
+                                            R.string.git_commit_edit_text,
+                                            getLongName(fullPath, repoPath, editName)
+                                        )
+                                    )
                                 }
 
                                 if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {

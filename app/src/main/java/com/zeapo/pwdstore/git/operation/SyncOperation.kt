@@ -17,9 +17,15 @@ import java.io.File
 class SyncOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
 
     override val commands = arrayOf(
+        // Stage all files
         git.add().addFilepattern("."),
+        // Populate the changed files count
+        git.status(),
+        // Commit everything! If needed, obviously.
         git.commit().setAll(true).setMessage("[Android Password Store] Sync"),
+        // Pull and rebase on top of the remote branch
         git.pull().setRebase(true).setRemote("origin"),
+        // Push it all back
         git.push().setPushAll().setRemote("origin"),
     )
 
