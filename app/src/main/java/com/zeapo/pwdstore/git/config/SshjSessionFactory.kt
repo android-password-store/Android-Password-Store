@@ -7,7 +7,6 @@ package com.zeapo.pwdstore.git.config
 import android.util.Base64
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
-import com.zeapo.pwdstore.utils.clear
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -36,60 +35,25 @@ import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
 
 sealed class SshAuthData {
-    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData() {
-
-        override fun clearCredentials() {
-            passwordFinder.clearPasswords()
-        }
-    }
-
-    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData() {
-
-        override fun clearCredentials() {
-            passphraseFinder.clearPasswords()
-        }
-    }
-
-    abstract fun clearCredentials()
+    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
+    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
 
+    private var isRetry = false
+
     abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
 
-    private var isRetry = false
-    private var lastPassword: CharArray? = null
-    private val rememberToWipe: MutableList<CharArray> = mutableListOf()
-
-    fun resetForReuse() {
-        isRetry = false
-    }
-
-    fun clearPasswords() {
-        rememberToWipe.forEach { it.clear() }
-        lastPassword = null
-    }
-
     final override fun reqPassword(resource: Resource<*>?): CharArray {
-        if (lastPassword != null && !isRetry) {
-            // This instance successfully authenticated in a previous authentication step and is
-            // now being reused for a new one. We try the previous password so that the user
-            // does not have to type it again.
-            isRetry = true
-            return lastPassword!!.clone().also { rememberToWipe.add(it) }
-        }
-        clearPasswords()
         val password = runBlocking(Dispatchers.Main) {
             suspendCoroutine<String?> { cont ->
                 askForPassword(cont, isRetry)
             }
         }
         isRetry = true
-        if (password == null)
-            throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
-        val passwordChars = password.toCharArray().also { rememberToWipe.add(it) }
-        lastPassword = passwordChars
-        return passwordChars.clone().also { rememberToWipe.add(it) }
+        return password?.toCharArray()
+            ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
     }
 
     final override fun shouldRetry(resource: Resource<*>?) = true
@@ -97,12 +61,17 @@ abstract class InteractivePasswordFinder : PasswordFinder {
 
 class SshjSessionFactory(private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
 
+    private var currentSession: SshjSession? = null
+
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
-        return SshjSession(uri, uri.user, authData, hostKeyFile).connect()
+        return currentSession ?: SshjSession(uri, uri.user, authData, hostKeyFile).connect().also {
+            d { "New SSH connection created" }
+            currentSession = it
+        }
     }
 
-    fun clearCredentials() {
-        authData.clearCredentials()
+    fun close() {
+        currentSession?.close()
     }
 }
 
@@ -155,11 +124,9 @@ private class SshjSession(uri: URIish, private val username: String, private val
         when (authData) {
             is SshAuthData.Password -> {
                 ssh.authPassword(username, authData.passwordFinder)
-                authData.passwordFinder.resetForReuse()
             }
             is SshAuthData.PublicKeyFile -> {
                 ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
-                authData.passphraseFinder.resetForReuse()
             }
         }
         return this
@@ -167,17 +134,28 @@ private class SshjSession(uri: URIish, private val username: String, private val
 
     override fun exec(commandName: String?, timeout: Int): Process {
         if (currentCommand != null) {
-            w { "Killing old session" }
-            currentCommand?.close()
-            currentCommand = null
+            w { "Killing old command" }
+            disconnect()
         }
         val session = ssh.startSession()
         currentCommand = session
         return SshjProcess(session.exec(commandName), timeout.toLong())
     }
 
+    /**
+     * Kills the current command if one is running and returns the session into a state where `exec`
+     * can be called.
+     *
+     * Note that this does *not* disconnect the session. Unfortunately, the function has to be
+     * called `disconnect` to override the corresponding abstract function in `RemoteSession`.
+     */
     override fun disconnect() {
         currentCommand?.close()
+        currentCommand = null
+    }
+
+    fun close() {
+        disconnect()
         ssh.close()
     }
 }
