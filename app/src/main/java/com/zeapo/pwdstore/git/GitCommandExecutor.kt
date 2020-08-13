@@ -44,7 +44,7 @@ class GitCommandExecutor(
             message = activity.resources.getString(R.string.git_operation_running),
             length = Snackbar.LENGTH_INDEFINITE,
         )
-        // Count the number of staged files
+        // Count the number of uncommitted files
         var nbChanges = 0
         var operationResult: Result = Result.Ok
         try {
