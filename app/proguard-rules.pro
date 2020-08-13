@@ -15,20 +15,19 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--dontwarn java.lang.invoke.*
--dontwarn org.eclipse.jgit.**
--dontwarn com.google.common.**
--dontwarn org.slf4j.**
--keep class androidx.appcompat.widget.SearchView { *; }
 -keepattributes SourceFile,LineNumberTable
 -dontobfuscate
+
 -keep class com.jcraft.jsch.**
 -keep class org.eclipse.jgit.internal.JGitText { *; }
 -keep class org.bouncycastle.jcajce.provider.** { *; }
 -keep class org.bouncycastle.jce.provider.** { *; }
 -keep class !org.bouncycastle.jce.provider.X509LDAPCertStoreSpi { *; }
-
 # WhatTheStack
 -keep class com.haroldadmin.whatthestack.WhatTheStackInitializer {
   <init>();
 }
+
+-dontwarn sun.misc.SignalHandler
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn javax.servlet.ServletContextListener
