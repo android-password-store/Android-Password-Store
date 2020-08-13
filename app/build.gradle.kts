@@ -118,7 +118,7 @@ dependencies {
     implementation(Dependencies.ThirdParty.jgit) {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
-    // Loaded dynamically by JGit to provider symlink support
+    // Loaded dynamically by JGit to provide symlink support
     implementation(Dependencies.ThirdParty.jgit_java7)
     implementation(Dependencies.ThirdParty.jsch)
     implementation(Dependencies.ThirdParty.sshj)
