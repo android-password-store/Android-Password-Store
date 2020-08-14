@@ -19,13 +19,13 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -220,12 +220,12 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }
     }
 
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
         refreshPasswordList()
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         // do not attempt to checkLocalRepository() if no storage permission: immediate crash
         if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
@@ -236,16 +236,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         if (settings.getBoolean(PreferenceKeys.SEARCH_ON_START, false) && ::searchItem.isInitialized) {
             if (!searchItem.isActionViewExpanded) {
                 searchItem.expandActionView()
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // If request is cancelled, the result arrays are empty.
-        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkLocalRepository()
             }
         }
     }
@@ -431,11 +421,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 Snackbar.LENGTH_INDEFINITE
             ).run {
                 setAction(getString(R.string.snackbar_action_grant)) {
-                    ActivityCompat.requestPermissions(
-                        activity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        REQUEST_EXTERNAL_STORAGE
-                    )
+                    registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                        if (granted) checkLocalRepository()
+                    }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     dismiss()
                 }
                 show()
@@ -903,7 +891,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         const val REQUEST_ARG_PATH = "PATH"
         const val CLONE_REPO_BUTTON = 401
         const val NEW_REPO_BUTTON = 402
-        private const val REQUEST_EXTERNAL_STORAGE = 50
         private fun isPrintable(c: Char): Boolean {
             val block = UnicodeBlock.of(c)
             return (!Character.isISOControl(c) &&
