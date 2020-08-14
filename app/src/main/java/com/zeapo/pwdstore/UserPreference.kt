@@ -464,7 +464,7 @@ class UserPreference : AppCompatActivity() {
         when (intent?.getStringExtra("operation")) {
             "get_ssh_key" -> getSshKey()
             "make_ssh_key" -> makeSshKey(false)
-            "git_external" -> selectExternalGitRepository()
+            "git_external" -> selectExternalGitRepository(fromIntent = true)
         }
         prefsFragment = PrefsFragment()
 
@@ -477,7 +477,7 @@ class UserPreference : AppCompatActivity() {
     }
 
     @Suppress("Deprecation") // for Environment.getExternalStorageDirectory()
-    fun selectExternalGitRepository() {
+    fun selectExternalGitRepository(fromIntent: Boolean = false) {
         MaterialAlertDialogBuilder(this)
             .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
             .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
@@ -506,6 +506,10 @@ class UserPreference : AppCompatActivity() {
                             .show()
                     }
                     prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
+                    if (fromIntent) {
+                        setResult(RESULT_OK)
+                        finish()
+                    }
 
                 }.launch(null)
             }
