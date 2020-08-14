@@ -12,6 +12,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +24,7 @@ import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileNotFoundException
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
 import kotlinx.coroutines.Dispatchers
@@ -135,7 +137,13 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         val data = receivedIntent ?: Intent()
         data.action = OpenPgpApi.ACTION_DECRYPT_VERIFY
 
-        val inputStream = File(fullPath).inputStream()
+        val inputStream = try {
+            File(fullPath).inputStream()
+        } catch (e: FileNotFoundException) {
+            Toast.makeText(this, getString(R.string.error_broken_symlink), Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
         val outputStream = ByteArrayOutputStream()
 
         lifecycleScope.launch(Dispatchers.IO) {
