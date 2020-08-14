@@ -62,7 +62,7 @@ import java.io.File
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
 
-class UserPreference : AppCompatActivity() {
+class UserPreference : BaseActivity() {
 
     private lateinit var prefsFragment: PrefsFragment
 

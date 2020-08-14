@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import com.zeapo.pwdstore.git.sshj.setUpBouncyCastleForSshj
@@ -20,6 +21,10 @@ import com.zeapo.pwdstore.utils.sharedPrefs
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
 
+    var requiresAuthentication = true;
+    var isAuthenticating = false;
+    var isAuthenticationEnabled = false;
+
     override fun onCreate() {
         super.onCreate()
         instance = this
@@ -28,9 +33,11 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
             plant(DebugTree())
         }
         sharedPrefs.registerOnSharedPreferenceChangeListener(this)
+        isAuthenticationEnabled = sharedPrefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false);
         setNightMode()
         setUpBouncyCastleForSshj()
         runMigrations(applicationContext)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(BaseActivity.ProcessLifecycleObserver(this))
     }
 
     override fun onTerminate() {
@@ -39,8 +46,9 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
-        if (key == PreferenceKeys.APP_THEME) {
-            setNightMode()
+        when (key) {
+            PreferenceKeys.APP_THEME -> setNightMode()
+            PreferenceKeys.BIOMETRIC_AUTH -> isAuthenticationEnabled = sharedPrefs.getBoolean(key, false);
         }
     }
 

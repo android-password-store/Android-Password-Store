@@ -98,6 +98,7 @@ dependencies {
     implementation(Dependencies.AndroidX.fragment_ktx)
     implementation(Dependencies.AndroidX.lifecycle_common)
     implementation(Dependencies.AndroidX.lifecycle_livedata_ktx)
+    implementation(Dependencies.AndroidX.lifecycle_process)
     implementation(Dependencies.AndroidX.lifecycle_viewmodel_ktx)
     implementation(Dependencies.AndroidX.material)
     implementation(Dependencies.AndroidX.preference)
