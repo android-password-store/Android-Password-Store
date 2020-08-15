@@ -19,7 +19,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -127,6 +127,12 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     return@registerForActivityResult
                 }
             }
+            checkPermissionsAndCloneAction.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }
+
+    private val checkPermissionsAndCloneAction = registerForActivityResult(RequestPermission()) { granted ->
+        if (granted) {
             val intent = Intent(activity, GitServerConfigActivity::class.java)
             intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
             cloneAction.launch(intent)
@@ -227,7 +233,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     override fun onResume() {
         super.onResume()
-        // do not attempt to checkLocalRepository() if no storage permission: immediate crash
         if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
             hasRequiredStoragePermissions(true)
         } else {
@@ -413,15 +418,16 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
      * is true if the permission has been granted.
      */
     private fun hasRequiredStoragePermissions(checkLocalRepo: Boolean = false): Boolean {
+        val cloning = supportFragmentManager.findFragmentByTag("ToCloneOrNot") != null
         return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED && !cloning) {
             Snackbar.make(
                 findViewById(R.id.main_layout),
                 getString(R.string.access_sdcard_text),
                 Snackbar.LENGTH_INDEFINITE
             ).run {
                 setAction(getString(R.string.snackbar_action_grant)) {
-                    registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                    registerForActivityResult(RequestPermission()) { granted ->
                         if (granted) checkLocalRepository()
                     }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     dismiss()
@@ -479,7 +485,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             supportActionBar!!.hide()
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             supportFragmentManager.commit {
-                replace(R.id.main_layout, ToCloneOrNot())
+                replace(R.id.main_layout, ToCloneOrNot(), "ToCloneOrNot")
             }
         }
     }

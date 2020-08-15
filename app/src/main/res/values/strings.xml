@@ -27,6 +27,7 @@
         <item quantity="one">Are you sure you want to delete the password?</item>
         <item quantity="other">Are you sure you want to delete %d passwords?</item>
     </plurals>
+    <string name="delete_directory_progress_text">Deleting…</string>
     <string name="move">Move</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
