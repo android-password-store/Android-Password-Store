@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file.
 - I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
 - Fix crash when OpenKeychain is not installed
 - Clone operation won't leave user on an empty password list upon failure
+- Cloning a new repository to external storage wouldn't work
+- UI froze for some people when deleting existing files from the external directory
 
 ## [1.10.3] - 2020-07-30
 

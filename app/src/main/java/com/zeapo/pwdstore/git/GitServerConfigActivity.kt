@@ -17,9 +17,12 @@ import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.IOException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Activity that encompasses both the initial clone as well as editing the server config for future
@@ -125,8 +128,14 @@ class GitServerConfigActivity : BaseGitActivity() {
                 .setCancelable(false)
                 .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
                     try {
-                        localDir.deleteRecursively()
-                        lifecycleScope.launch { launchGitOperation(REQUEST_CLONE) }
+                        lifecycleScope.launch {
+                            val snackbar = snackbar(message = getString(R.string.delete_directory_progress_text), length = Snackbar.LENGTH_INDEFINITE)
+                            withContext(Dispatchers.IO) {
+                                localDir.deleteRecursively()
+                            }
+                            snackbar.dismiss()
+                            launchGitOperation(REQUEST_CLONE)
+                        }
                     } catch (e: IOException) {
                         // TODO Handle the exception correctly if we are unable to delete the directory...
                         e.printStackTrace()
