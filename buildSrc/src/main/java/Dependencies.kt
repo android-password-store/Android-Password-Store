@@ -3,18 +3,21 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
+private const val KOTLIN_VERSION = "1.4.0"
+
 object Plugins {
 
     const val agp = "com.android.tools.build:gradle:4.0.1"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0-rc"
+    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
 }
 
 object Dependencies {
     object Kotlin {
         object Coroutines {
 
-            const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8-1.4.0-rc"
-            const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8-1.4.0-rc"
+            private const val version = "1.3.9"
+            const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+            const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         }
     }
 
@@ -71,7 +74,7 @@ object Dependencies {
     object Testing {
 
         const val junit = "junit:junit:4.13"
-        const val kotlin_test_junit = "org.jetbrains.kotlin:kotlin-test-junit:1.3.72"
+        const val kotlin_test_junit = "org.jetbrains.kotlin:kotlin-test-junit:$KOTLIN_VERSION"
 
         object AndroidX {
 
