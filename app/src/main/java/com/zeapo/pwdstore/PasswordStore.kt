@@ -127,7 +127,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     return@registerForActivityResult
                 }
             }
-            val intent = Intent(activity, GitOperationActivity::class.java)
+            val intent = Intent(activity, GitServerConfigActivity::class.java)
             intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
             cloneAction.launch(intent)
         }
