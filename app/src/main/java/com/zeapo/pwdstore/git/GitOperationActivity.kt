@@ -20,13 +20,12 @@ open class GitOperationActivity : BaseGitActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        when (intent.extras?.getInt(REQUEST_ARG_OP)) {
+        when (val reqCode = intent.extras?.getInt(REQUEST_ARG_OP)) {
             REQUEST_PULL -> lifecycleScope.launch { syncRepository(REQUEST_PULL) }
             REQUEST_PUSH -> lifecycleScope.launch { syncRepository(REQUEST_PUSH) }
             REQUEST_SYNC -> lifecycleScope.launch { syncRepository(REQUEST_SYNC) }
             else -> {
-                setResult(RESULT_CANCELED)
-                finish()
+                throw IllegalArgumentException("Invalid request code: $reqCode")
             }
         }
     }
