@@ -154,7 +154,7 @@
             app:summary="@string/show_extra_content_pref_summary"
             app:title="@string/show_extra_content_pref_title" />
         <CheckBoxPreference
-            app:defaultValue="true"
+            app:defaultValue="false"
             app:dialogTitle="@string/pref_copy_dialog_title"
             app:key="copy_on_decrypt"
             app:summary="@string/pref_copy_dialog_title"
