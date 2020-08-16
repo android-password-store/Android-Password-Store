@@ -21,10 +21,6 @@ import com.zeapo.pwdstore.utils.sharedPrefs
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    @Volatile var requiresAuthentication = true;
-    @Volatile var isAuthenticating = false;
-    @Volatile var isAuthenticationEnabled = false;
-
     override fun onCreate() {
         super.onCreate()
         instance = this
@@ -33,11 +29,11 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
             plant(DebugTree())
         }
         sharedPrefs.registerOnSharedPreferenceChangeListener(this)
-        isAuthenticationEnabled = sharedPrefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false);
+        AuthManager.isAuthEnabled = sharedPrefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(BaseActivity.ProcessLifecycleObserver())
         setNightMode()
         setUpBouncyCastleForSshj()
         runMigrations(applicationContext)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(BaseActivity.ProcessLifecycleObserver(this))
     }
 
     override fun onTerminate() {
@@ -48,7 +44,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
         when (key) {
             PreferenceKeys.APP_THEME -> setNightMode()
-            PreferenceKeys.BIOMETRIC_AUTH -> isAuthenticationEnabled = sharedPrefs.getBoolean(key, false);
+            PreferenceKeys.BIOMETRIC_AUTH -> AuthManager.isAuthEnabled = sharedPrefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)
         }
     }
 

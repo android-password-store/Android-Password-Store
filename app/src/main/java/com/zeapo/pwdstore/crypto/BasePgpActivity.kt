@@ -17,7 +17,6 @@ import android.text.format.DateUtils
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
@@ -25,7 +24,7 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.zeapo.pwdstore.Application
+import com.zeapo.pwdstore.AuthManager
 import com.zeapo.pwdstore.BaseActivity
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
@@ -188,7 +187,7 @@ open class BasePgpActivity : BaseActivity(), OpenPgpServiceConnection.OnBound {
      */
     fun getUserInteractionRequestIntent(result: Intent): IntentSender {
         i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
-        application.isAuthenticating = true
+        AuthManager.skipAuth = true
         return (result.getParcelableExtra(OpenPgpApi.RESULT_INTENT) as PendingIntent).intentSender
     }
 
