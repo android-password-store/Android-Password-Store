@@ -93,8 +93,8 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
                 .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
                 .setSeparator(binding.xkSeparator.text.toString())
-                .appendNumbers(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_SYMBOL_PLACEHOLDER_DIGIT })
-                .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_SYMBOL_PLACEHOLDER_SYMBOL })
+                .appendNumbers(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_DIGIT })
+                .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL })
                 .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
         } catch (e: PasswordGenerator.PasswordGeneratorException) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
@@ -126,7 +126,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val DEFAULT_MIN_WORD_LENGTH = 3
         const val DEFAULT_MAX_WORD_LENGTH = 9
         const val FALLBACK_ERROR_PASS = "42"
-        const val EXTRA_SYMBOL_PLACEHOLDER_DIGIT = 'd'
-        const val EXTRA_SYMBOL_PLACEHOLDER_SYMBOL = 's'
+        const val EXTRA_CHAR_PLACEHOLDER_DIGIT = 'd'
+        const val EXTRA_CHAR_PLACEHOLDER_SYMBOL = 's'
     }
 }
