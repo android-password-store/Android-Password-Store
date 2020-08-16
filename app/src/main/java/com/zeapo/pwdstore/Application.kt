@@ -44,7 +44,10 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
         when (key) {
             PreferenceKeys.APP_THEME -> setNightMode()
-            PreferenceKeys.BIOMETRIC_AUTH -> AuthManager.isAuthEnabled = sharedPrefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)
+            PreferenceKeys.BIOMETRIC_AUTH -> {
+                AuthManager.isAuthEnabled = sharedPrefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)
+                AuthManager.doOnSuccess()
+            }
         }
     }
 
