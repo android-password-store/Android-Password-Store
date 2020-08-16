@@ -1,7 +1,5 @@
 package com.zeapo.pwdstore
 
-import com.github.ajalt.timberkt.Timber.d
-
 object AuthManager {
 
     private var isAuthRequired = true
