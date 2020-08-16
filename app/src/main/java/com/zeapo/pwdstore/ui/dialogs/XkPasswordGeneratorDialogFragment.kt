@@ -118,8 +118,8 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
         const val PREF_KEY_SEPARATOR = "pref_key_separator"
         const val PREF_KEY_EXTRA_SYMBOLS_MASK = "pref_key_xkpwgen_extra_symbols_mask"
-        val DEFAULT_CAPS_STYLE = CapsType.Sentencecase.name
-        val DEFAULT_CAPS_INDEX = CapsType.Sentencecase.ordinal
+        val DEFAULT_CAPS_STYLE = CapsType.Sentence.name
+        val DEFAULT_CAPS_INDEX = CapsType.Sentence.ordinal
         const val DEFAULT_NUMBER_OF_WORDS = "3"
         const val DEFAULT_WORD_SEPARATOR = "."
         const val DEFAULT_EXTRA_SYMBOLS_MASK = "ds"

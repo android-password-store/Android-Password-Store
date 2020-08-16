@@ -75,29 +75,27 @@
             android:entries="@array/capitalization_type_values"
             android:entryValues="@array/capitalization_type_values"
             android:spinnerMode="dropdown"
-            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintEnd_toEndOf="@id/total_words"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/total_words" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/xk_numbers_symbols_label"
-            android:layout_marginTop="16dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_weight="0.3"
             android:hint="@string/xkpwgen_extrachars_label"
-            app:layout_constraintStart_toEndOf="@id/xkCapType"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator">
+            app:layout_constraintStart_toStartOf="@id/separator"
+            app:layout_constraintTop_toBottomOf="@id/separator"
+            app:layout_constraintTop_toTopOf="@id/xkCapType">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/xk_number_symbol_mask"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
-                android:text="@string/xk_numbers_symbols_append_default"
-                android:inputType="text" />
+                android:inputType="text"
+                android:text="@string/xk_numbers_symbols_append_default" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
