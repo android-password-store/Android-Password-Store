@@ -25,6 +25,8 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.Application
+import com.zeapo.pwdstore.BaseActivity
 import com.zeapo.pwdstore.ClipboardService
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
@@ -40,7 +42,7 @@ import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
 @Suppress("Registered")
-open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
+open class BasePgpActivity : BaseActivity(), OpenPgpServiceConnection.OnBound {
 
     /**
      * Full path to the repository
@@ -186,6 +188,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      */
     fun getUserInteractionRequestIntent(result: Intent): IntentSender {
         i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
+        application.isAuthenticating = true
         return (result.getParcelableExtra(OpenPgpApi.RESULT_INTENT) as PendingIntent).intentSender
     }
 

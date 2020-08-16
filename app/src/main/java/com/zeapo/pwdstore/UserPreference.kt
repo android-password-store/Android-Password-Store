@@ -584,6 +584,7 @@ class UserPreference : BaseActivity() {
      * Exports the passwords
      */
     private fun exportPasswords() {
+        application.isAuthenticating = true
         registerForActivityResult(object : OpenDocumentTree() {
             override fun createIntent(context: Context, input: Uri?): Intent {
                 return super.createIntent(context, input).apply {

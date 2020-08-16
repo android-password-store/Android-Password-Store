@@ -21,9 +21,9 @@ import com.zeapo.pwdstore.utils.sharedPrefs
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    var requiresAuthentication = true;
-    var isAuthenticating = false;
-    var isAuthenticationEnabled = false;
+    @Volatile var requiresAuthentication = true;
+    @Volatile var isAuthenticating = false;
+    @Volatile var isAuthenticationEnabled = false;
 
     override fun onCreate() {
         super.onCreate()

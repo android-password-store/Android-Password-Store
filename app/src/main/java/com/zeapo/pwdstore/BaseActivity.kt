@@ -18,13 +18,15 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val prefs = sharedPrefs
-        d { "requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
+        d { "1 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
         if (application.isAuthenticationEnabled && application.requiresAuthentication && !application.isAuthenticating) {
             val view = findViewById<View>(android.R.id.content)
             view.isVisible = false
             application.isAuthenticating = true
+            d { "2 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
             BiometricAuthenticator.authenticate(this) {
                 view.isVisible = true
+                d { "3 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
                 when (it) {
                     is BiometricAuthenticator.Result.Success -> {
                         application.isAuthenticating = false
@@ -43,16 +45,26 @@ abstract class BaseActivity : AppCompatActivity() {
                 }
             }
         }
+
+//        d { "4 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
+////        if (application.isAuthenticating) {
+////            application.isAuthenticating = false
+////            application.requiresAuthentication = false
+////            d { "5 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
+////        }
     }
 
-    private fun shouldAuthenticate() {
-
-    }
-
-    class ProcessLifecycleObserver(private val application: Application): DefaultLifecycleObserver {
+    class ProcessLifecycleObserver(private val application: Application) : DefaultLifecycleObserver {
 
         override fun onStop(owner: LifecycleOwner) {
-            application.requiresAuthentication = true
+            d { "6 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
+            if (application.isAuthenticating) {
+                application.requiresAuthentication = false
+                application.isAuthenticating = false
+            } else {
+                application.requiresAuthentication = true
+            }
+            d { "7 requiresAuthentication : ${application.requiresAuthentication}  isAuthenticating : ${application.isAuthenticating} " }
             super.onStop(owner)
         }
     }
