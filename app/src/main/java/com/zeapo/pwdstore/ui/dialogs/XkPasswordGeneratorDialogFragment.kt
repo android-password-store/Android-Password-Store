@@ -58,6 +58,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         binding.xkNumWords.setText(prefs.getString(PREF_KEY_NUM_WORDS, DEFAULT_NUMBER_OF_WORDS))
 
         binding.xkSeparator.setText(prefs.getString(PREF_KEY_SEPARATOR, DEFAULT_WORD_SEPARATOR))
+        binding.xkNumberSymbolMask.setText(prefs.getString(PREF_KEY_EXTRA_SYMBOLS_MASK, DEFAULT_EXTRA_SYMBOLS_MASK))
 
         binding.xkPasswordText.typeface = monoTypeface
 
@@ -92,6 +93,8 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
                 .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
                 .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
                 .setSeparator(binding.xkSeparator.text.toString())
+                .appendNumbers(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_DIGIT })
+                .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL })
                 .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
         } catch (e: PasswordGenerator.PasswordGeneratorException) {
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
@@ -105,6 +108,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             putString(PREF_KEY_CAPITALS_STYLE, binding.xkCapType.selectedItem.toString())
             putString(PREF_KEY_NUM_WORDS, binding.xkNumWords.text.toString())
             putString(PREF_KEY_SEPARATOR, binding.xkSeparator.text.toString())
+            putString(PREF_KEY_EXTRA_SYMBOLS_MASK, binding.xkNumberSymbolMask.text.toString())
         }
     }
 
@@ -113,12 +117,16 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         const val PREF_KEY_CAPITALS_STYLE = "pref_key_capitals_style"
         const val PREF_KEY_NUM_WORDS = "pref_key_num_words"
         const val PREF_KEY_SEPARATOR = "pref_key_separator"
-        val DEFAULT_CAPS_STYLE = CapsType.Sentencecase.name
-        val DEFAULT_CAPS_INDEX = CapsType.Sentencecase.ordinal
+        const val PREF_KEY_EXTRA_SYMBOLS_MASK = "pref_key_xkpwgen_extra_symbols_mask"
+        val DEFAULT_CAPS_STYLE = CapsType.Sentence.name
+        val DEFAULT_CAPS_INDEX = CapsType.Sentence.ordinal
         const val DEFAULT_NUMBER_OF_WORDS = "3"
         const val DEFAULT_WORD_SEPARATOR = "."
+        const val DEFAULT_EXTRA_SYMBOLS_MASK = "ds"
         const val DEFAULT_MIN_WORD_LENGTH = 3
         const val DEFAULT_MAX_WORD_LENGTH = 9
         const val FALLBACK_ERROR_PASS = "42"
+        const val EXTRA_CHAR_PLACEHOLDER_DIGIT = 'd'
+        const val EXTRA_CHAR_PLACEHOLDER_SYMBOL = 's'
     }
 }

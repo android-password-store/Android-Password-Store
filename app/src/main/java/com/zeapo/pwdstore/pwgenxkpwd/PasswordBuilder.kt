@@ -22,7 +22,7 @@ class PasswordBuilder(ctx: Context) {
     private var maxWordLength = 9
     private var minWordLength = 5
     private var separator = "."
-    private var capsType = CapsType.Sentencecase
+    private var capsType = CapsType.Sentence
     private var prependDigits = 0
     private var numDigits = 0
     private var isPrependWithSeparator = false
@@ -109,7 +109,7 @@ class PasswordBuilder(ctx: Context) {
                 val candidate = wordBank.secureRandomElement()
                 val s = when (capsType) {
                     CapsType.UPPERCASE -> candidate.toUpperCase(Locale.getDefault())
-                    CapsType.Sentencecase -> if (i == 0) candidate.capitalize(Locale.getDefault()) else candidate
+                    CapsType.Sentence -> if (i == 0) candidate.capitalize(Locale.getDefault()) else candidate
                     CapsType.TitleCase -> candidate.capitalize(Locale.getDefault())
                     CapsType.lowercase -> candidate.toLowerCase(Locale.getDefault())
                     CapsType.As_iS -> candidate
