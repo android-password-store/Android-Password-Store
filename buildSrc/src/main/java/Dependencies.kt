@@ -45,7 +45,7 @@ object Dependencies {
 
     object FirstParty {
 
-        const val openpgp_ktx = "com.github.android-password-store:openpgp-ktx:2.0.0"
+        const val openpgp_ktx = "com.github.android-password-store:openpgp-ktx:2.1.0"
         const val zxing_android_embedded = "com.github.android-password-store:zxing-android-embedded:4.1.0-aps"
     }
 
