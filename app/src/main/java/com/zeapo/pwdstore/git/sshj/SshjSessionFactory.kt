@@ -2,9 +2,10 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package com.zeapo.pwdstore.git.config
+package com.zeapo.pwdstore.git.sshj
 
 import android.util.Base64
+import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import java.io.File
@@ -37,6 +38,7 @@ import org.eclipse.jgit.util.FS
 sealed class SshAuthData {
     class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
     class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
+    class OpenKeychain(val activity: FragmentActivity) : SshAuthData()
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
@@ -127,6 +129,13 @@ private class SshjSession(uri: URIish, private val username: String, private val
             }
             is SshAuthData.PublicKeyFile -> {
                 ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
+            }
+            is SshAuthData.OpenKeychain -> {
+                runBlocking {
+                    OpenKeychainKeyProvider.prepareAndUse(authData.activity) { provider ->
+                        ssh.authPublickey(username, provider)
+                    }
+                }
             }
         }
         return this

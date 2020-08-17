@@ -16,10 +16,9 @@ import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.GitSettings
-import com.zeapo.pwdstore.git.config.InteractivePasswordFinder
-import com.zeapo.pwdstore.git.config.SshApiSessionFactory
-import com.zeapo.pwdstore.git.config.SshAuthData
-import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import com.zeapo.pwdstore.git.sshj.InteractivePasswordFinder
+import com.zeapo.pwdstore.git.sshj.SshAuthData
+import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
@@ -84,8 +83,9 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         return this
     }
 
-    private fun withOpenKeychainAuthentication(identity: SshApiSessionFactory.ApiIdentity?): GitOperation {
-        SshSessionFactory.setInstance(SshApiSessionFactory(identity))
+    private fun withOpenKeychainAuthentication(activity: FragmentActivity): GitOperation {
+        val sessionFactory = SshjSessionFactory(SshAuthData.OpenKeychain(activity), hostKeyFile)
+        SshSessionFactory.setInstance(sessionFactory)
         this.provider = null
         return this
     }
@@ -116,7 +116,6 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
 
     suspend fun executeAfterAuthentication(
         connectionMode: ConnectionMode,
-        identity: SshApiSessionFactory.ApiIdentity?
     ) {
         when (connectionMode) {
             ConnectionMode.SshKey -> if (!sshKeyFile.exists()) {
@@ -137,7 +136,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                 withPublicKeyAuthentication(
                     CredentialFinder(callingActivity, connectionMode)).execute()
             }
-            ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(identity).execute()
+            ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(callingActivity).execute()
             ConnectionMode.Password -> withPasswordAuthentication(
                 CredentialFinder(callingActivity, connectionMode)).execute()
             ConnectionMode.None -> execute()
@@ -150,18 +149,12 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     @CallSuper
     open fun onError(err: Exception) {
         // Clear various auth related fields on failure
-        when (SshSessionFactory.getInstance()) {
-            is SshApiSessionFactory -> {
-                PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-                    .edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
-            }
-            is SshjSessionFactory -> {
-                callingActivity.getEncryptedPrefs("git_operation").edit {
-                        remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
-                        remove(PreferenceKeys.HTTPS_PASSWORD)
-                    }
-            }
+        callingActivity.getEncryptedPrefs("git_operation").edit {
+            remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
+            remove(PreferenceKeys.HTTPS_PASSWORD)
         }
+        PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
+            .edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
         d(err)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
