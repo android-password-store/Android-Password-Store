@@ -52,6 +52,7 @@ import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
+import com.zeapo.pwdstore.utils.MRU
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
@@ -89,6 +90,8 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     private val settings by lazy { sharedPrefs }
 
+    // Most Recently Used password
+    private var mruPassword: MRU? = null
     private val model: SearchableRepositoryViewModel by viewModels {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
@@ -175,6 +178,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             savedInstance = null
         }
         super.onCreate(savedInstance)
+
+        MRU.MRUInit(sharedPrefs)
+        mruPassword = MRU.getInstance()
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -551,6 +557,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 shortcutManager!!.addDynamicShortcuts(listOf(shortcut))
             }
         }
+        //add item as recently used
+        mruPassword?.add(item.file.absolutePath)
+        mruPassword?.print()
+
         startActivity(decryptIntent)
     }
 

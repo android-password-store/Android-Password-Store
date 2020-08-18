@@ -28,8 +28,10 @@ import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.ConnectionMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
+import com.zeapo.pwdstore.ui.adapters.MRUPasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
+import com.zeapo.pwdstore.utils.MRU
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.sharedPrefs
@@ -40,6 +42,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
+    private lateinit var recyclerMRUAdapter: MRUPasswordItemRecyclerAdapter
     private lateinit var listener: OnFragmentInteractionListener
     private lateinit var settings: SharedPreferences
 
@@ -100,6 +103,9 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 swipeResult.launch(intent)
             }
         }
+        binding.passMruRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerMRUAdapter = MRUPasswordItemRecyclerAdapter(MRU.getInstance()!!.toList())
+        binding.passMruRecycler.adapter = recyclerMRUAdapter
 
         recyclerAdapter = PasswordItemRecyclerAdapter()
             .onItemClicked { _, item ->
