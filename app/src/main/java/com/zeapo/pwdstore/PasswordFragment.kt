@@ -31,7 +31,6 @@ import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.MRUPasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
-import com.zeapo.pwdstore.utils.MRU
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.sharedPrefs
@@ -104,7 +103,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             }
         }
         binding.passMruRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        recyclerMRUAdapter = MRUPasswordItemRecyclerAdapter(MRU.getInstance()!!.toList())
+        recyclerMRUAdapter = MRUPasswordItemRecyclerAdapter()
         binding.passMruRecycler.adapter = recyclerMRUAdapter
 
         recyclerAdapter = PasswordItemRecyclerAdapter()

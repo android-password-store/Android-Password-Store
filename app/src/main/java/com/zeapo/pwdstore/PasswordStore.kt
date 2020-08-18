@@ -73,6 +73,7 @@ import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.lang.Character.UnicodeBlock
+import java.util.LinkedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -91,7 +92,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private val settings by lazy { sharedPrefs }
 
     // Most Recently Used password
-    private var mruPassword: MRU? = null
     private val model: SearchableRepositoryViewModel by viewModels {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
@@ -179,8 +179,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         }
         super.onCreate(savedInstance)
 
-        MRU.MRUInit(sharedPrefs)
-        mruPassword = MRU.getInstance()
+        MRU.mRUInit(sharedPrefs)
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -558,8 +557,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             }
         }
         //add item as recently used
-        mruPassword?.add(item.file.absolutePath)
-        mruPassword?.print()
+        MRU.add(item.file.absolutePath)
 
         startActivity(decryptIntent)
     }
