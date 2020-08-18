@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
-import com.zeapo.pwdstore.git.config.setUpBouncyCastleForSshj
+import com.zeapo.pwdstore.git.sshj.setUpBouncyCastleForSshj
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.getString

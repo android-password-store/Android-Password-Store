@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
 import com.zeapo.pwdstore.git.GitException.PushException
-import com.zeapo.pwdstore.git.config.SshjSessionFactory
+import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.Result
 import com.zeapo.pwdstore.utils.snackbar

@@ -2,7 +2,7 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package com.zeapo.pwdstore.git.config
+package com.zeapo.pwdstore.git.sshj
 
 import com.github.ajalt.timberkt.Timber
 import com.github.ajalt.timberkt.d
@@ -232,7 +232,9 @@ class SshjConfig : ConfigImpl() {
             KeyAlgorithms.ECDSASHANistp384(),
             KeyAlgorithms.ECDSASHANistp256(),
             KeyAlgorithms.SSHRSA(),
-        )
+        ).map {
+            OpenKeychainWrappedKeyAlgorithmFactory(it)
+        }
     }
 
     private fun initRandomFactory() {
