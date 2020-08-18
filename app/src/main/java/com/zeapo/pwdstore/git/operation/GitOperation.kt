@@ -8,7 +8,6 @@ import android.content.Intent
 import androidx.annotation.CallSuper
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
-import androidx.preference.PreferenceManager
 import com.github.ajalt.timberkt.Timber.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
@@ -22,6 +21,7 @@ import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
@@ -153,8 +153,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
             remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
             remove(PreferenceKeys.HTTPS_PASSWORD)
         }
-        PreferenceManager.getDefaultSharedPreferences(callingActivity.applicationContext)
-            .edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
+        callingActivity.sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
         d(err)
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
