@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
@@ -104,6 +105,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         }
         binding.passMruRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerMRUAdapter = MRUPasswordItemRecyclerAdapter()
+        recyclerMRUAdapter.onItemClick =  { item -> Toast.makeText(context, item, Toast.LENGTH_SHORT).show() }
         binding.passMruRecycler.adapter = recyclerMRUAdapter
 
         recyclerAdapter = PasswordItemRecyclerAdapter()
