@@ -2,8 +2,8 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-import java.util.Properties
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import java.util.Properties
 
 plugins {
     kotlin("android")
@@ -113,11 +113,11 @@ dependencies {
     implementation(Dependencies.FirstParty.zxing_android_embedded)
 
     implementation(Dependencies.ThirdParty.commons_codec)
+    implementation(Dependencies.ThirdParty.eddsa)
     implementation(Dependencies.ThirdParty.fastscroll)
     implementation(Dependencies.ThirdParty.jgit) {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
-    implementation(Dependencies.ThirdParty.jsch)
     implementation(Dependencies.ThirdParty.sshj)
     implementation(Dependencies.ThirdParty.bouncycastle)
     implementation(Dependencies.ThirdParty.plumber)

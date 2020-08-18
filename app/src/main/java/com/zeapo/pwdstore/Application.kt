@@ -14,8 +14,8 @@ import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import com.zeapo.pwdstore.git.sshj.setUpBouncyCastleForSshj
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.getString
+import com.zeapo.pwdstore.utils.sharedPrefs
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {

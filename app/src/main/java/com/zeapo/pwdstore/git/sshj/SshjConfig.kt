@@ -15,6 +15,7 @@ import java.security.Security
 import net.schmizz.keepalive.KeepAliveProvider
 import net.schmizz.sshj.ConfigImpl
 import net.schmizz.sshj.common.LoggerFactory
+import net.schmizz.sshj.common.SecurityUtils
 import net.schmizz.sshj.transport.compression.NoneCompression
 import net.schmizz.sshj.transport.kex.Curve25519SHA256
 import net.schmizz.sshj.transport.kex.Curve25519SHA256.FactoryLibSsh
@@ -52,6 +53,9 @@ fun setUpBouncyCastleForSshj() {
         Security.insertProviderAt(BouncyCastleProvider(), bcIndex + 1)
     }
     d { "JCE providers: ${Security.getProviders().joinToString { "${it.name} (${it.version})" }}" }
+    // Prevent sshj from forwarding all cryptographic operations to BC.
+    SecurityUtils.setRegisterBouncyCastle(false)
+    SecurityUtils.setSecurityProvider(null)
 }
 
 private abstract class AbstractLogger(private val name: String) : Logger {

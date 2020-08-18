@@ -199,12 +199,29 @@
     <string name="ssh_keygen_passphrase">Passphrase</string>
     <string name="ssh_keygen_comment">Comment</string>
     <string name="ssh_keygen_generate">Generate</string>
-    <string name="ssh_keygen_copy">Copy</string>
-    <string name="ssh_keygen_tip">Provide this public key to your Git server.</string>
+    <string name="ssh_keygen_share">Share</string>
+    <string name="ssh_keygen_later">Later</string>
+    <string name="ssh_keygen_message">%1$s\n\nProvide this public key to your Git server.</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
     <string name="ssh_keygen_generating_done">Done!</string>
-    <string name="key_length_2048" translatable="false">2048</string>
-    <string name="key_length_4096" translatable="false">4096</string>
+    <string name="ssh_keygen_require_authentication">Protect with screen lock credential</string>
+    <string name="ssh_keygen_copied_key">Public key copied to clipboard</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">Ed25519</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bit)</b>\nSupported by all servers, but authentication is comparatively slow.</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nFast authentication and supported by most servers that are still receiving updates.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nFast authentication, but only supported by rather modern servers.</string>
+    <string name="ssh_keygen_existing_title">SSH key</string>
+    <string name="ssh_keygen_existing_message">Replace existing SSH key? You might lose access to your server.</string>
+    <string name="ssh_keygen_existing_replace">Replace</string>
+    <string name="ssh_keygen_existing_keep">Keep</string>
+
+
+    <!-- SSH Android Keystore auth -->
+    <string name="biometric_auth_generic_failure">Screen lock authentication failed</string>
+    <string name="biometric_prompt_title_ssh_auth">Unlock SSH key</string>
+    <string name="biometric_prompt_title_ssh_keygen">Generate SSH key</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>

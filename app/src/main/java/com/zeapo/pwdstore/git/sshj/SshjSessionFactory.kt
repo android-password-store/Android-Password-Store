@@ -37,7 +37,7 @@ import org.eclipse.jgit.util.FS
 
 sealed class SshAuthData {
     class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
-    class PublicKeyFile(val keyFile: File, val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
+    class SshKey(val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
     class OpenKeychain(val activity: FragmentActivity) : SshAuthData()
 }
 
@@ -127,8 +127,8 @@ private class SshjSession(uri: URIish, private val username: String, private val
             is SshAuthData.Password -> {
                 ssh.authPassword(username, authData.passwordFinder)
             }
-            is SshAuthData.PublicKeyFile -> {
-                ssh.authPublickey(username, ssh.loadKeys(authData.keyFile.absolutePath, authData.passphraseFinder))
+            is SshAuthData.SshKey -> {
+                ssh.authPublickey(username, SshKey.provide(ssh, authData.passphraseFinder))
             }
             is SshAuthData.OpenKeychain -> {
                 runBlocking {

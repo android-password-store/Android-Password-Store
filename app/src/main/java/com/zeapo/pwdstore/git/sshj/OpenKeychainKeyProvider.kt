@@ -22,8 +22,6 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.schmizz.sshj.common.Base64
-import net.schmizz.sshj.common.Buffer
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.KeyType
 import net.schmizz.sshj.userauth.UserAuthException
@@ -118,10 +116,8 @@ class OpenKeychainKeyProvider private constructor(private val activity: Fragment
             is ApiResponse.Success -> {
                 val response = sshPublicKeyResponse.response as SshPublicKeyResponse
                 val sshPublicKey = response.sshPublicKey!!
-                val sshKeyParts = sshPublicKey.split("""\s+""".toRegex())
-                check(sshKeyParts.size >= 2) { "OpenKeychain API returned invalid SSH key" }
-                @Suppress("BlockingMethodInNonBlockingContext")
-                publicKey = Buffer.PlainBuffer(Base64.decode(sshKeyParts[1])).readPublicKey()
+                publicKey = parseSshPublicKey(sshPublicKey) ?:
+                    throw IllegalStateException("OpenKeychain API returned invalid SSH key")
             }
             is ApiResponse.NoSuchKey -> if (isRetry) {
                 throw sshPublicKeyResponse.exception

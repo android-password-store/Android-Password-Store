@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.utils
 
+import android.app.KeyguardManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -161,6 +162,9 @@ fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
 val Context.autofillManager: AutofillManager?
     @RequiresApi(Build.VERSION_CODES.O)
     get() = getSystemService()
+
+val Context.keyguardManager: KeyguardManager
+    get() = getSystemService()!!
 
 fun File.isInsideRepository(): Boolean {
     return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
