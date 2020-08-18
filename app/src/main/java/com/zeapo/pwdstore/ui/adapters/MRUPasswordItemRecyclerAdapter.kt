@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.utils.MRU
 
 class MRUPasswordItemRecyclerAdapter : RecyclerView.Adapter<MRUPasswordItemRecyclerAdapter.ViewHolder>() {
+
     private val mruPasswords = MRU.mRU
     var onItemClick: ((String) -> Unit)? = null
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,11 +28,12 @@ class MRUPasswordItemRecyclerAdapter : RecyclerView.Adapter<MRUPasswordItemRecyc
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 onItemClick?.invoke(mruPasswords[absoluteAdapterPosition])
             }
         }
-        fun bindItems(path : String) {
+
+        fun bindItems(path: String) {
             val textPath = itemView.findViewById<TextView>(android.R.id.text1)
             val relativePath = path.split("store/")
             textPath.text = relativePath[1]

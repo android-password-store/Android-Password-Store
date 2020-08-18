@@ -105,7 +105,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         }
         binding.passMruRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerMRUAdapter = MRUPasswordItemRecyclerAdapter()
-        recyclerMRUAdapter.onItemClick =  { item -> Toast.makeText(context, item, Toast.LENGTH_SHORT).show() }
+        recyclerMRUAdapter.onItemClick = { item -> Toast.makeText(context, item, Toast.LENGTH_SHORT).show() }
         binding.passMruRecycler.adapter = recyclerMRUAdapter
 
         recyclerAdapter = PasswordItemRecyclerAdapter()

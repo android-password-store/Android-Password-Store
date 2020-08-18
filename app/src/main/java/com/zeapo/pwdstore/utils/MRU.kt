@@ -10,7 +10,7 @@ object MRU {
     var settings: SharedPreferences? = null
 
     fun mRUInit(settings: SharedPreferences) {
-        if (this.settings == null){
+        if (this.settings == null) {
             this.settings = settings
             for (i in 4 downTo 0) {
                 MRU.settings!!.getString("R$i", null)?.let { mRU.add(it) }
