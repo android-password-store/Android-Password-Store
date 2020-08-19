@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.11.0] - 2020-08-18
+
 ### Added
+
 - Allow changing the branch used for Git operations
 - Allow setting a subdirectory key when creating folders
 - Allow adding digits/symbols in XkPasswd generated passwords using a mask-like value (`dds` gives you two digits and a symbol, and so on)
@@ -12,20 +15,20 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- The Git repository URL can now be specified directly
-- Slightly reduce APK size
-- Always show the parent path in entries
-- Passwords will no longer be copied to the clipboard by default
-- Notify user if there was nothing to push
+-   The Git repository URL can now be specified directly
+-   Slightly reduce APK size
+-   Always show the parent path in entries
+-   Passwords will no longer be copied to the clipboard by default
+-   Notify user if there was nothing to push
 
 ### Fixed
 
-- Allow creating nested directories directly
-- I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
-- Fix crash when OpenKeychain is not installed
-- Clone operation won't leave user on an empty password list upon failure
-- Cloning a new repository to external storage wouldn't work
-- UI froze for some people when deleting existing files from the external directory
+-   Allow creating nested directories directly
+-   I keep saying this but for real: error message for wrong SSH/HTTPS password is properly fixed now
+-   Fix crash when OpenKeychain is not installed
+-   Clone operation won't leave user on an empty password list upon failure
+-   Cloning a new repository to external storage wouldn't work
+-   UI froze for some people when deleting existing files from the external directory
 
 ## [1.10.3] - 2020-07-30
 
@@ -296,7 +299,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.3...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.0...HEAD
+
+[1.11.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.3...1.11.0
 
 [1.10.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...1.10.3
 
