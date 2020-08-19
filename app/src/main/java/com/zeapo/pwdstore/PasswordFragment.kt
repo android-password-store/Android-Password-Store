@@ -32,6 +32,8 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
@@ -243,6 +245,13 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         try {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
+                    if(settings.getString(PreferenceKeys.SORT_ORDER) == PasswordRepository.PasswordSortOrder.RECENTLY_USED.name ){
+                        //save the time when password was used
+                        val editor = settings.edit()
+                        editor.putString(item.file.absolutePath ,System.currentTimeMillis().toString())
+                        editor.apply()
+                    }
+
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
                         navigateTo(item.file)
                     } else {

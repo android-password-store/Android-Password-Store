@@ -140,6 +140,7 @@
     <string name="pref_folder_first_sort_order">Folders first</string>
     <string name="pref_file_first_sort_order">Files first</string>
     <string name="pref_type_independent_sort_order">Type independent</string>
+    <string name="pref_recently_used_sort_order">Recently used</string>
     <string name="pref_autofill_title">Autofill</string>
     <string name="pref_autofill_enable_title">Enable Autofill</string>
     <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
