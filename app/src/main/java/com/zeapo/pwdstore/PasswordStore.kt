@@ -6,6 +6,7 @@ package com.zeapo.pwdstore
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo.Builder
@@ -753,6 +754,17 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     !newCategory.isInsideRepository() -> renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
                     else -> lifecycleScope.launch(Dispatchers.IO) {
                         moveFile(oldCategory.file, newCategory)
+
+                        //associate the new category with the last category's timestamp in history
+                        val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+                        val timestamp = preference.getString(oldCategory.file.absolutePath)
+                        if ( timestamp != null){
+                            val editor = preference.edit()
+                            editor.remove(oldCategory.file.absolutePath)
+                            editor.putString(newCategory.absolutePath, timestamp)
+                            editor.apply()
+                        }
+
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name),
