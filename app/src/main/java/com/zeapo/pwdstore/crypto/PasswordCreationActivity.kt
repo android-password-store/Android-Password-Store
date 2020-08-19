@@ -5,6 +5,7 @@
 
 package com.zeapo.pwdstore.crypto
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -409,6 +410,17 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         }
                                         .show()
                                     return@executeApiAsync
+                                }
+
+                                //associate the new password name with the last name's timestamp in history
+                                val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+                                val oldFilePath = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg"
+                                val timestamp = preference.getString(oldFilePath)
+                                if ( timestamp != null){
+                                    val editor = preference.edit()
+                                    editor.remove(oldFilePath)
+                                    editor.putString(file.absolutePath, timestamp)
+                                    editor.apply()
                                 }
 
                                 val returnIntent = Intent()
