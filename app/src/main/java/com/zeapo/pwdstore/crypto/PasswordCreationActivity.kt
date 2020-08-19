@@ -416,7 +416,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                                 val oldFilePath = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg"
                                 val timestamp = preference.getString(oldFilePath)
-                                if ( timestamp != null){
+                                if (timestamp != null) {
                                     val editor = preference.edit()
                                     editor.remove(oldFilePath)
                                     editor.putString(file.absolutePath, timestamp)
