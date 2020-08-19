@@ -31,15 +31,14 @@ open class PasswordRepository protected constructor() {
             p1.name.compareTo(p2.name, ignoreCase = true)
         }),
 
-        RECENTLY_USED(Comparator{
-            p1: PasswordItem, p2: PasswordItem ->
+        RECENTLY_USED(Comparator { p1: PasswordItem, p2: PasswordItem ->
             val timeP1 = settings.getString(p1.file.absolutePath)
             val timeP2 = settings.getString(p2.file.absolutePath)
-            when{
+            when {
                 timeP1 != null && timeP2 != null -> timeP2.compareTo(timeP1)
-                timeP1 != null && timeP2 == null ->  return@Comparator -1
-                timeP1 == null && timeP2 != null ->  return@Comparator 1
-                else  ->  p1.name.compareTo(p2.name, ignoreCase = true)
+                timeP1 != null && timeP2 == null -> return@Comparator -1
+                timeP1 == null && timeP2 != null -> return@Comparator 1
+                else -> p1.name.compareTo(p2.name, ignoreCase = true)
             }
         }),
 
