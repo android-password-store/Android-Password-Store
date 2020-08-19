@@ -15,6 +15,7 @@ import android.view.View
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -417,10 +418,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 val oldFilePath = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg"
                                 val timestamp = preference.getString(oldFilePath)
                                 if (timestamp != null) {
-                                    val editor = preference.edit()
-                                    editor.remove(oldFilePath)
-                                    editor.putString(file.absolutePath, timestamp)
-                                    editor.apply()
+                                    preference.edit{
+                                        remove(oldFilePath)
+                                        putString(file.absolutePath, timestamp)
+                                    }
                                 }
 
                                 val returnIntent = Intent()

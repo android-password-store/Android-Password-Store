@@ -759,10 +759,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                         val timestamp = preference.getString(oldCategory.file.absolutePath)
                         if (timestamp != null) {
-                            val editor = preference.edit()
-                            editor.remove(oldCategory.file.absolutePath)
-                            editor.putString(newCategory.absolutePath, timestamp)
-                            editor.apply()
+                            preference.edit(){
+                                remove(oldCategory.file.absolutePath)
+                                putString(newCategory.absolutePath, timestamp)
+                            }
                         }
 
                         withContext(Dispatchers.Main) {
