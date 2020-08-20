@@ -5,6 +5,7 @@
 
 package com.zeapo.pwdstore.crypto
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -14,6 +15,7 @@ import android.view.View
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +32,7 @@ import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isInsideRepository
@@ -409,6 +412,17 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                         }
                                         .show()
                                     return@executeApiAsync
+                                }
+
+                                //associate the new password name with the last name's timestamp in history
+                                val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+                                val oldFilePathHash = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg".base64()
+                                val timestamp = preference.getString(oldFilePathHash)
+                                if (timestamp != null) {
+                                    preference.edit {
+                                        remove(oldFilePathHash)
+                                        putString(file.absolutePath.base64(), timestamp)
+                                    }
                                 }
 
                                 val returnIntent = Intent()

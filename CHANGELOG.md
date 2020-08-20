@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   Allow sorting by recently used
+
 ## [1.11.0] - 2020-08-18
 
 ### Added

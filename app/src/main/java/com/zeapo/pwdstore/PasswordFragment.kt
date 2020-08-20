@@ -16,6 +16,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.view.ActionMode
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -32,6 +33,9 @@ import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.base64
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
@@ -243,6 +247,14 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         try {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
+                    if (settings.getString(PreferenceKeys.SORT_ORDER) == PasswordRepository.PasswordSortOrder.RECENTLY_USED.name) {
+                        //save the time when password was used
+                        val preferences = context.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+                        preferences.edit {
+                            putString(item.file.absolutePath.base64(), System.currentTimeMillis().toString())
+                        }
+                    }
+
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
                         navigateTo(item.file)
                     } else {

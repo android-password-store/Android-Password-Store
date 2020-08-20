@@ -96,6 +96,7 @@ private fun PasswordItem.Companion.makeComparator(
         // declare them all equal at this stage.
         PasswordRepository.PasswordSortOrder.INDEPENDENT -> Comparator<PasswordItem> { _, _ -> 0 }
         PasswordRepository.PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
+        PasswordRepository.PasswordSortOrder.RECENTLY_USED -> PasswordRepository.PasswordSortOrder.RECENTLY_USED.comparator
     }
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
             directoryStructure.getIdentifierFor(it.file)

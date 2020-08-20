@@ -8,11 +8,13 @@
         <item>@string/pref_folder_first_sort_order</item>
         <item>@string/pref_file_first_sort_order</item>
         <item>@string/pref_type_independent_sort_order</item>
+        <item>@string/pref_recently_used_sort_order</item>
     </string-array>
     <string-array name="sort_order_values">
         <item>FOLDER_FIRST</item>
         <item>FILE_FIRST</item>
         <item>INDEPENDENT</item>
+        <item>RECENTLY_USED</item>
     </string-array>
     <string-array name="capitalization_type_values">
         <item>lowercase</item>
