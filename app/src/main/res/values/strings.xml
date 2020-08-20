@@ -226,7 +226,6 @@
     <string name="no_repo_selected">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="app_icon_hint">App icon</string>
-    <string name="error_broken_symlink">File not found, likely because of a broken symlink</string>
 
     <!-- Oreo Autofill -->
     <string name="oreo_autofill_strict_domain_search">Phishing-resistant search</string>
