@@ -4,13 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   Allow sorting by recently used
+
 ## [1.11.0] - 2020-08-18
 
 ### Added
 -   Allow changing the branch used for Git operations
 -   Allow setting a subdirectory key when creating folders
 -   Allow adding digits/symbols in XkPasswd generated passwords using a mask-like value (`dds` gives you two digits and a symbol, and so on)
--   Allow sort by recently used password
 
 ### Changed
 
