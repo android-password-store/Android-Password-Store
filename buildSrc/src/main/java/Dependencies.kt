@@ -56,7 +56,6 @@ object Dependencies {
         const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.4"
         const val jsch = "com.jcraft:jsch:0.1.55"
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
-        const val jgit_java7 = "org.eclipse.jgit:org.eclipse.jgit.java7:3.7.1.201504261725-r"
         const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.4"
         const val plumber = "com.squareup.leakcanary:plumber-android:2.4"
         const val sshj = "com.hierynomus:sshj:0.30.0"
