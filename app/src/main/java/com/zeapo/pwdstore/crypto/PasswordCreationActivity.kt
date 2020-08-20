@@ -416,11 +416,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
                                 //associate the new password name with the last name's timestamp in history
                                 val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
-                                val oldFilePath = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg"
-                                val timestamp = preference.getString(oldFilePath)
+                                val oldFilePathHash = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg".base64()
+                                val timestamp = preference.getString(oldFilePathHash)
                                 if (timestamp != null) {
                                     preference.edit {
-                                        remove(oldFilePath.base64())
+                                        remove(oldFilePathHash)
                                         putString(file.absolutePath.base64(), timestamp)
                                     }
                                 }
