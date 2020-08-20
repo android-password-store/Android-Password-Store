@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 11101
+        versionCode = 11111
         versionName = "1.12.0-SNAPSHOT"
     }
 
@@ -118,8 +118,6 @@ dependencies {
     implementation(Dependencies.ThirdParty.jgit) {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
-    // Loaded dynamically by JGit to provide symlink support
-    implementation(Dependencies.ThirdParty.jgit_java7)
     implementation(Dependencies.ThirdParty.jsch)
     implementation(Dependencies.ThirdParty.sshj)
     implementation(Dependencies.ThirdParty.bouncycastle)

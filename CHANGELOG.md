@@ -8,9 +8,16 @@ All notable changes to this project will be documented in this file.
 
 -   Allow sorting by recently used
 
+## [1.11.1] - 2020-08-21
+
+### Fixed
+
+-   App failed to start on Android 7 and below
+
 ## [1.11.0] - 2020-08-18
 
 ### Added
+
 -   Allow changing the branch used for Git operations
 -   Allow setting a subdirectory key when creating folders
 -   Allow adding digits/symbols in XkPasswd generated passwords using a mask-like value (`dds` gives you two digits and a symbol, and so on)
@@ -301,7 +308,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.0...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.1...HEAD
+
+[1.11.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.0...1.11.1
 
 [1.11.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.3...1.11.0
 
