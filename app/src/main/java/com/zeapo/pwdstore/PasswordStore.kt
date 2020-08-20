@@ -758,7 +758,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
                         //associate the new category with the last category's timestamp in history
                         val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
-                        val timestamp = preference.getString(oldCategory.file.absolutePath)
+                        val timestamp = preference.getString(oldCategory.file.absolutePath.base64())
                         if (timestamp != null) {
                             preference.edit {
                                 remove(oldCategory.file.absolutePath.base64())
