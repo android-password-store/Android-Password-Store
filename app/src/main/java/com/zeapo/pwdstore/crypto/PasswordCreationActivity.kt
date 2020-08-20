@@ -32,6 +32,7 @@ import com.zeapo.pwdstore.ui.dialogs.PasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.ui.dialogs.XkPasswordGeneratorDialogFragment
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isInsideRepository
@@ -418,9 +419,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 val oldFilePath = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg"
                                 val timestamp = preference.getString(oldFilePath)
                                 if (timestamp != null) {
-                                    preference.edit{
-                                        remove(oldFilePath)
-                                        putString(file.absolutePath, timestamp)
+                                    preference.edit {
+                                        remove(oldFilePath.base64())
+                                        putString(file.absolutePath.base64(), timestamp)
                                     }
                                 }
 

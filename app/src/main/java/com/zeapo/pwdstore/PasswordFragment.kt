@@ -34,6 +34,7 @@ import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
@@ -250,7 +251,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                         //save the time when password was used
                         val preferences = context.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                         preferences.edit {
-                            putString(item.file.absolutePath, System.currentTimeMillis().toString())
+                            putString(item.file.absolutePath.base64(), System.currentTimeMillis().toString())
                         }
                     }
 

@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
+import android.util.Base64
 import android.util.TypedValue
 import android.view.View
 import android.view.autofill.AutofillManager
@@ -40,6 +41,10 @@ infix fun Int.hasFlag(flag: Int): Boolean {
 
 fun String.splitLines(): Array<String> {
     return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+}
+
+fun String.base64(): String {
+    return Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
 }
 
 val Context.clipboard get() = getSystemService<ClipboardManager>()

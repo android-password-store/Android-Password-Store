@@ -64,6 +64,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.getString
@@ -759,9 +760,9 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                         val timestamp = preference.getString(oldCategory.file.absolutePath)
                         if (timestamp != null) {
-                            preference.edit(){
-                                remove(oldCategory.file.absolutePath)
-                                putString(newCategory.absolutePath, timestamp)
+                            preference.edit {
+                                remove(oldCategory.file.absolutePath.base64())
+                                putString(newCategory.absolutePath.base64(), timestamp)
                             }
                         }
 
