@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   Allow sorting by recently used
--   Support for [Bromite](https://www.bromite.org/) and [Ungoogled Chromium](https://git.droidware.info/wchen342/ungoogled-chromium-android)
+-   Add [Bromite](https://www.bromite.org/) and [Ungoogled Chromium](https://git.droidware.info/wchen342/ungoogled-chromium-android) to supported browsers list for Autofill
 
 ### Fixed
 
