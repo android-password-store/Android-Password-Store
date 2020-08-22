@@ -65,6 +65,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "com.opera.mini.native" to "V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I=",
     "com.opera.mini.native.beta" to "V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I=",
     "com.opera.touch" to "qtjiBNJNF3k0yc0MY8xqo4779CxKaVcJfiIQ9X+qZ6o=",
+    "org.bromite.bromite" to "4e5c0HbXsNyEyytF+3i4bfLrOaO2xWuj3CkqXgw7lQQ=",
     "org.gnu.icecat" to "wi2iuVvK/WYZUzd2g0Qzn9ef3kAisQURZ8U1WSMTkcM=",
     "org.mozilla.fenix" to "UAR3kIjn+YjVvFzF+HmP6/T4zQhKGypG79TI7krq8hE=",
     "org.mozilla.fenix.nightly" to "d+rEzu02r++6dheZMd1MwZWrDNVLrzVdIV57vdKOQCo=",
@@ -75,6 +76,8 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "org.mozilla.focus" to "YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w=",
     "org.mozilla.klar" to "YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w=",
     "org.torproject.torbrowser" to "IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg=",
+    "org.ungoogled.chromium.stable" to "29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk=",
+    "org.ungoogled.chromium.extensions.stable" to "29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk=",
 )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
@@ -163,6 +166,8 @@ private val FLAKY_BROWSERS = listOf(
     "com.chrome.beta",
     "com.chrome.canary",
     "com.chrome.dev",
+    "org.bromite.bromite",
+    "org.ungoogled.chromium.stable",
 )
 
 enum class BrowserAutofillSupportLevel {
