@@ -61,8 +61,6 @@ class GitConfigActivity : BaseGitActivity() {
             } else {
                 GitSettings.authorEmail = email
                 GitSettings.authorName = name
-                PasswordRepository.setGitAuthorEmail(email)
-                PasswordRepository.setGitAuthorName(name)
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
                 Handler().postDelayed(500) { finish() }
             }

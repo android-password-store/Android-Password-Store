@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
 import com.zeapo.pwdstore.git.GitException.PushException
+import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.Result
@@ -28,6 +29,7 @@ import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
+import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.RemoteRefUpdate
 import org.eclipse.jgit.transport.SshSessionFactory
 
@@ -60,7 +62,9 @@ class GitCommandExecutor(
                         // the previous status will eventually be used to avoid a commit
                         if (nbChanges > 0) {
                             withContext(Dispatchers.IO) {
-                                command.call()
+                                command
+                                    .setAuthor(PersonIdent(GitSettings.authorName, GitSettings.authorEmail))
+                                    .call()
                             }
                         }
                     }
