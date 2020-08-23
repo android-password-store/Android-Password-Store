@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 -   Password creation UI will scroll if it does not fit on the screen
+-   Saving a password after creating it fails to finish commit operation
 
 ## [1.11.1] - 2020-08-21
 
