@@ -61,7 +61,7 @@ object BiometricAuthenticator {
                 callback(Result.Success(result.cryptoObject))
             }
         }
-        val validAuthenticators = Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_STRONG
+        val validAuthenticators = Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
         val canAuth = BiometricManager.from(activity).canAuthenticate(validAuthenticators) == BiometricManager.BIOMETRIC_SUCCESS
         val deviceHasKeyguard = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
         if (canAuth || deviceHasKeyguard) {
