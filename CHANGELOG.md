@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ## [1.11.2] - 2020-08-24
 
+### Fixed
+
+-   Saving a password after creating it fails to finish commit operation
+
 ## [1.11.1] - 2020-08-21
 
 ### Fixed
