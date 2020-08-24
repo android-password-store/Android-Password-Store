@@ -108,6 +108,7 @@ object GitSettings {
         Valid,
         FailedToParseUrl,
         MissingUsername,
+        ProtocolMismatch,
     }
 
     fun updateConnectionSettingsIfValid(newProtocol: Protocol, newAuthMode: AuthMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
@@ -118,6 +119,10 @@ object GitSettings {
         }
         if (newAuthMode != AuthMode.None && parsedUrl.user.isNullOrBlank())
             return UpdateConnectionSettingsResult.MissingUsername
+        when (newProtocol) {
+            Protocol.Https -> if (parsedUrl.scheme !in listOf("http", "https")) return UpdateConnectionSettingsResult.ProtocolMismatch
+            Protocol.Ssh -> if (parsedUrl.scheme !in listOf(null, "git")) return UpdateConnectionSettingsResult.ProtocolMismatch
+        }
 
         url = newUrl
         protocol = newProtocol
