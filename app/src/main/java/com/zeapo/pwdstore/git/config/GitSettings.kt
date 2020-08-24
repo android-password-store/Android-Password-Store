@@ -116,7 +116,7 @@ object GitSettings {
         } catch (_: Exception) {
             return UpdateConnectionSettingsResult.FailedToParseUrl
         }
-        if (connectionMode != ConnectionMode.None && parsedUrl.user.isNullOrBlank())
+        if (newConnectionMode != ConnectionMode.None && parsedUrl.user.isNullOrBlank())
             return UpdateConnectionSettingsResult.MissingUsername
 
         url = newUrl
