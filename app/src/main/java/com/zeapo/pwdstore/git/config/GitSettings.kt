@@ -55,14 +55,14 @@ object GitSettings {
 
     var protocol
         get() = Protocol.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
-        set(value) {
+        private set(value) {
             settings.edit {
                 putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, value.pref)
             }
         }
     var connectionMode
         get() = ConnectionMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
-        set(value) {
+        private set(value) {
             settings.edit {
                 putString(PreferenceKeys.GIT_REMOTE_AUTH, value.pref)
             }
@@ -71,6 +71,8 @@ object GitSettings {
         get() = settings.getString(PreferenceKeys.GIT_REMOTE_URL)
         private set(value) {
             require(value != null)
+            if (value == url)
+                return
             settings.edit {
                 putString(PreferenceKeys.GIT_REMOTE_URL, value)
             }
@@ -96,20 +98,31 @@ object GitSettings {
         }
     var branch
         get() = settings.getString(PreferenceKeys.GIT_BRANCH_NAME) ?: DEFAULT_BRANCH
-        set(value) {
+        private set(value) {
             settings.edit {
                 putString(PreferenceKeys.GIT_BRANCH_NAME, value)
             }
         }
 
-    fun updateUrlIfValid(newUrl: String): Boolean {
-        try {
+    enum class UpdateConnectionSettingsResult {
+        Valid,
+        FailedToParseUrl,
+        MissingUsername,
+    }
+
+    fun updateConnectionSettingsIfValid(newProtocol: Protocol, newConnectionMode: ConnectionMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
+        val parsedUrl = try {
             URIish(newUrl)
         } catch (_: Exception) {
-            return false
+            return UpdateConnectionSettingsResult.FailedToParseUrl
         }
-        if (newUrl != url)
-            url = newUrl
-        return true
+        if (connectionMode != ConnectionMode.None && parsedUrl.user.isNullOrBlank())
+            return UpdateConnectionSettingsResult.MissingUsername
+
+        url = newUrl
+        protocol = newProtocol
+        connectionMode = newConnectionMode
+        branch = newBranch
+        return UpdateConnectionSettingsResult.Valid
     }
 }
