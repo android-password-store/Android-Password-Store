@@ -32,6 +32,9 @@ class GitServerConfigActivity : BaseGitActivity() {
 
     private val binding by viewBinding(ActivityGitCloneBinding::inflate)
 
+    private lateinit var newProtocol: Protocol
+    private lateinit var newConnectionMode: ConnectionMode
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val isClone = intent?.extras?.getInt(REQUEST_ARG_OP) ?: -1 == REQUEST_CLONE
@@ -41,22 +44,26 @@ class GitServerConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.cloneProtocolGroup.check(when (GitSettings.protocol) {
-            Protocol.Ssh -> R.id.clone_protocol_ssh
-            Protocol.Https -> R.id.clone_protocol_https
-        })
-        binding.cloneProtocolGroup.addOnButtonCheckedListener { _, checkedId, checked ->
-            if (checked) {
-                when (checkedId) {
-                    R.id.clone_protocol_https -> GitSettings.protocol = Protocol.Https
-                    R.id.clone_protocol_ssh -> GitSettings.protocol = Protocol.Ssh
+        newProtocol = GitSettings.protocol
+        binding.cloneProtocolGroup.apply {
+            when (newProtocol) {
+                Protocol.Ssh -> check(R.id.clone_protocol_ssh)
+                Protocol.Https -> check(R.id.clone_protocol_https)
+            }
+            addOnButtonCheckedListener { _, checkedId, checked ->
+                if (checked) {
+                    when (checkedId) {
+                        R.id.clone_protocol_https -> newProtocol = Protocol.Https
+                        R.id.clone_protocol_ssh -> newProtocol = Protocol.Ssh
+                    }
+                    updateConnectionModeToggleGroup()
                 }
-                updateConnectionModeToggleGroup()
             }
         }
 
+        newConnectionMode = GitSettings.connectionMode
         binding.connectionModeGroup.apply {
-            when (GitSettings.connectionMode) {
+            when (newConnectionMode) {
                 ConnectionMode.SshKey -> check(R.id.connection_mode_ssh_key)
                 ConnectionMode.Password -> check(R.id.connection_mode_password)
                 ConnectionMode.OpenKeychain -> check(R.id.connection_mode_open_keychain)
@@ -64,10 +71,10 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
             addOnButtonCheckedListener { _, _, _ ->
                 when (checkedButtonId) {
-                    R.id.connection_mode_ssh_key -> GitSettings.connectionMode = ConnectionMode.SshKey
-                    R.id.connection_mode_open_keychain -> GitSettings.connectionMode = ConnectionMode.OpenKeychain
-                    R.id.connection_mode_password -> GitSettings.connectionMode = ConnectionMode.Password
-                    View.NO_ID -> GitSettings.connectionMode = ConnectionMode.None
+                    R.id.connection_mode_ssh_key -> newConnectionMode = ConnectionMode.SshKey
+                    R.id.connection_mode_open_keychain -> newConnectionMode = ConnectionMode.OpenKeychain
+                    R.id.connection_mode_password -> newConnectionMode = ConnectionMode.Password
+                    View.NO_ID -> newConnectionMode = ConnectionMode.None
                 }
             }
         }
@@ -77,36 +84,50 @@ class GitServerConfigActivity : BaseGitActivity() {
         binding.serverBranch.setText(GitSettings.branch)
 
         binding.saveButton.setOnClickListener {
-            if (isClone && PasswordRepository.getRepository(null) == null)
-                PasswordRepository.initialize()
-            GitSettings.branch = binding.serverBranch.text.toString().trim()
-            if (GitSettings.updateUrlIfValid(binding.serverUrl.text.toString().trim())) {
-                if (!isClone) {
-                    Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
-                    Handler().postDelayed(500) { finish() }
-                } else {
-                    cloneRepository()
+            when (GitSettings.updateConnectionSettingsIfValid(
+                newProtocol = newProtocol,
+                newConnectionMode = newConnectionMode,
+                newUrl = binding.serverUrl.text.toString().trim(),
+                newBranch = binding.serverBranch.text.toString().trim())) {
+                GitSettings.UpdateConnectionSettingsResult.FailedToParseUrl -> {
+                    Snackbar.make(binding.root, getString(R.string.git_server_config_save_error), Snackbar.LENGTH_LONG).show()
                 }
-            } else {
-                Snackbar.make(binding.root, getString(R.string.git_server_config_save_error), Snackbar.LENGTH_LONG).show()
+                GitSettings.UpdateConnectionSettingsResult.MissingUsername -> {
+                    when (newProtocol) {
+                        Protocol.Https -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_https), Snackbar.LENGTH_LONG).show()
+                        Protocol.Ssh -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_ssh), Snackbar.LENGTH_LONG).show()
+                    }
+                }
+                else -> {
+                    if (isClone && PasswordRepository.getRepository(null) == null)
+                        PasswordRepository.initialize()
+                    if (!isClone) {
+                        Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+                        Handler().postDelayed(500) { finish() }
+                    } else {
+                        cloneRepository()
+                    }
+                }
             }
         }
     }
 
     private fun updateConnectionModeToggleGroup() {
-        if (GitSettings.protocol == Protocol.Ssh) {
-            // Reset connection mode to SSH key if the current value (none) is not valid for SSH
-            if (binding.connectionModeGroup.checkedButtonIds.isEmpty())
-                binding.connectionModeGroup.check(R.id.connection_mode_ssh_key)
+        if (newProtocol == Protocol.Ssh) {
             binding.connectionModeSshKey.isEnabled = true
             binding.connectionModeOpenKeychain.isEnabled = true
+            // Reset connection mode to SSH key if the current value (none) is not valid for SSH.
+            // Important note: This has to happen after enabling the other toggle buttons or they
+            // won't check.
+            if (binding.connectionModeGroup.checkedButtonIds.isEmpty())
+                binding.connectionModeGroup.check(R.id.connection_mode_ssh_key)
             binding.connectionModeGroup.isSelectionRequired = true
         } else {
             binding.connectionModeGroup.isSelectionRequired = false
             // Reset connection mode to password if the current value is not valid for HTTPS
             // Important note: This has to happen before disabling the other toggle buttons or they
             // won't uncheck.
-            if (GitSettings.connectionMode !in listOf(ConnectionMode.None, ConnectionMode.Password))
+            if (newConnectionMode !in listOf(ConnectionMode.None, ConnectionMode.Password))
                 binding.connectionModeGroup.check(R.id.connection_mode_password)
             binding.connectionModeSshKey.isEnabled = false
             binding.connectionModeOpenKeychain.isEnabled = false

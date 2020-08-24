@@ -9,9 +9,14 @@ All notable changes to this project will be documented in this file.
 -   Allow sorting by recently used
 -   Add [Bromite](https://www.bromite.org/) and [Ungoogled Chromium](https://git.droidware.info/wchen342/ungoogled-chromium-android) to supported browsers list for Autofill
 
+### Changed
+
+-   A descriptive error message is shown if no username is specified in the Git server settings
+
 ### Fixed
 
 -   Password creation UI will scroll if it does not fit on the screen
+-   Git server protocol and authentication mode are only updated when explicitly saved
 
 ## [1.11.2] - 2020-08-24
 
