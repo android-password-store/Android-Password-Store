@@ -29,7 +29,7 @@ enum class Protocol(val pref: String) {
     }
 }
 
-enum class ConnectionMode(val pref: String) {
+enum class AuthMode(val pref: String) {
     SshKey("ssh-key"),
     Password("username/password"),
     OpenKeychain("OpenKeychain"),
@@ -38,10 +38,10 @@ enum class ConnectionMode(val pref: String) {
 
     companion object {
 
-        private val map = values().associateBy(ConnectionMode::pref)
-        fun fromString(type: String?): ConnectionMode {
+        private val map = values().associateBy(AuthMode::pref)
+        fun fromString(type: String?): AuthMode {
             return map[type ?: return SshKey]
-                ?: throw IllegalArgumentException("$type is not a valid ConnectionMode")
+                ?: throw IllegalArgumentException("$type is not a valid AuthMode")
         }
     }
 }
@@ -60,8 +60,8 @@ object GitSettings {
                 putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, value.pref)
             }
         }
-    var connectionMode
-        get() = ConnectionMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
+    var authMode
+        get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
         private set(value) {
             settings.edit {
                 putString(PreferenceKeys.GIT_REMOTE_AUTH, value.pref)
@@ -110,18 +110,18 @@ object GitSettings {
         MissingUsername,
     }
 
-    fun updateConnectionSettingsIfValid(newProtocol: Protocol, newConnectionMode: ConnectionMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
+    fun updateConnectionSettingsIfValid(newProtocol: Protocol, newAuthMode: AuthMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
         val parsedUrl = try {
             URIish(newUrl)
         } catch (_: Exception) {
             return UpdateConnectionSettingsResult.FailedToParseUrl
         }
-        if (newConnectionMode != ConnectionMode.None && parsedUrl.user.isNullOrBlank())
+        if (newAuthMode != AuthMode.None && parsedUrl.user.isNullOrBlank())
             return UpdateConnectionSettingsResult.MissingUsername
 
         url = newUrl
         protocol = newProtocol
-        connectionMode = newConnectionMode
+        authMode = newAuthMode
         branch = newBranch
         return UpdateConnectionSettingsResult.Valid
     }

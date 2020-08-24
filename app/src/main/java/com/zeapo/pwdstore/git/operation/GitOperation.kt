@@ -13,7 +13,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.ErrorMessages
-import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.sshj.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.sshj.SshAuthData
@@ -116,10 +116,10 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     abstract suspend fun execute()
 
     suspend fun executeAfterAuthentication(
-        connectionMode: ConnectionMode,
+        authMode: AuthMode,
     ) {
-        when (connectionMode) {
-            ConnectionMode.SshKey -> if (!sshKeyFile.exists()) {
+        when (authMode) {
+            AuthMode.SshKey -> if (!sshKeyFile.exists()) {
                 MaterialAlertDialogBuilder(callingActivity)
                     .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
                     .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
@@ -135,12 +135,12 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                     }.show()
             } else {
                 withPublicKeyAuthentication(
-                    CredentialFinder(callingActivity, connectionMode)).execute()
+                    CredentialFinder(callingActivity, authMode)).execute()
             }
-            ConnectionMode.OpenKeychain -> withOpenKeychainAuthentication(callingActivity).execute()
-            ConnectionMode.Password -> withPasswordAuthentication(
-                CredentialFinder(callingActivity, connectionMode)).execute()
-            ConnectionMode.None -> execute()
+            AuthMode.OpenKeychain -> withOpenKeychainAuthentication(callingActivity).execute()
+            AuthMode.Password -> withPasswordAuthentication(
+                CredentialFinder(callingActivity, authMode)).execute()
+            AuthMode.None -> execute()
         }
     }
 

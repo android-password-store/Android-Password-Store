@@ -40,7 +40,7 @@
             app:layout_constraintTop_toBottomOf="@id/server_label" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/clone_protocol_group"
+            android:id="@+id/protocol_group"
             style="@style/TextAppearance.MaterialComponents.Headline1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,14 +51,14 @@
             app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/clone_protocol_ssh"
+                android:id="@+id/protocol_ssh"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/clone_protocol_ssh" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/clone_protocol_https"
+                android:id="@+id/protocol_https"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:hint="@string/server_url"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clone_protocol_group">
+            app:layout_constraintTop_toBottomOf="@id/protocol_group">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/server_url"
@@ -117,7 +117,7 @@
             app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/connection_mode_group"
+            android:id="@+id/auth_mode_group"
             style="@style/TextAppearance.MaterialComponents.Headline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,21 +127,21 @@
             app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/connection_mode_ssh_key"
+                android:id="@+id/auth_mode_ssh_key"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connection_mode_ssh_key" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/connection_mode_password"
+                android:id="@+id/auth_mode_password"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connection_mode_basic_authentication" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/connection_mode_open_keychain"
+                android:id="@+id/auth_mode_open_keychain"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -155,6 +155,6 @@
             android:layout_marginTop="8dp"
             android:text="@string/crypto_save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/connection_mode_group" />
+            app:layout_constraintTop_toBottomOf="@id/auth_mode_group" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

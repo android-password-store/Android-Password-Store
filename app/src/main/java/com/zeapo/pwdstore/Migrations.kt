@@ -78,7 +78,7 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
     }
     if (url == null || GitSettings.updateConnectionSettingsIfValid(
             newProtocol = protocol,
-            newConnectionMode = GitSettings.connectionMode,
+            newAuthMode = GitSettings.authMode,
             newUrl = url,
             newBranch = GitSettings.branch) != GitSettings.UpdateConnectionSettingsResult.Valid) {
         e { "Failed to migrate to URL-based Git config, generated URL is invalid" }

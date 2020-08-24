@@ -10,7 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.sshj.InteractivePasswordFinder
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
@@ -20,7 +20,7 @@ import kotlin.coroutines.resume
 
 class CredentialFinder(
     val callingActivity: FragmentActivity,
-    val connectionMode: ConnectionMode
+    val authMode: AuthMode
 ) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
@@ -30,15 +30,15 @@ class CredentialFinder(
         @StringRes val hintRes: Int
         @StringRes val rememberRes: Int
         @StringRes val errorRes: Int
-        when (connectionMode) {
-            ConnectionMode.SshKey -> {
+        when (authMode) {
+            AuthMode.SshKey -> {
                 credentialPref = PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE
                 messageRes = R.string.passphrase_dialog_text
                 hintRes = R.string.ssh_keygen_passphrase
                 rememberRes = R.string.git_operation_remember_passphrase
                 errorRes = R.string.git_operation_wrong_passphrase
             }
-            ConnectionMode.Password -> {
+            AuthMode.Password -> {
                 // Could be either an SSH or an HTTPS password
                 credentialPref = PreferenceKeys.HTTPS_PASSWORD
                 messageRes = R.string.password_dialog_text
