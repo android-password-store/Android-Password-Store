@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 -   Saving a password after creating it fails to finish commit operation
+-   HTTPS authentication did not prompt users for password
 
 ## [1.11.1] - 2020-08-21
 
