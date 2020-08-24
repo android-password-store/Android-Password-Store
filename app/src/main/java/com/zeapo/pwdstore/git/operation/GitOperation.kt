@@ -58,6 +58,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         override fun get(uri: URIish?, vararg items: CredentialItem): Boolean {
             for (item in items) {
                 when (item) {
+                    is CredentialItem.Username -> item.value = uri?.user
                     is CredentialItem.Password -> item.value = passwordFinder.reqPassword(null)
                     else -> UnsupportedCredentialItem(uri, item.javaClass.name)
                 }
@@ -66,7 +67,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         }
 
         override fun supports(vararg items: CredentialItem) = items.all {
-            it is CredentialItem.Password
+            it is CredentialItem.Username || it is CredentialItem.Password
         }
     }
 
