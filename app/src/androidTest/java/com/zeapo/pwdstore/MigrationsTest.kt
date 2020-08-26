@@ -24,6 +24,7 @@ class MigrationsTest {
         assertNull(getString(PreferenceKeys.GIT_REMOTE_USERNAME))
         assertNull(getString(PreferenceKeys.GIT_REMOTE_SERVER))
         assertNull(getString(PreferenceKeys.GIT_REMOTE_LOCATION))
+        assertNull(getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
     }
 
     @Test

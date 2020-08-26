@@ -332,6 +332,7 @@
     <string name="git_server_config_save_error">The provided repository URL is not valid</string>
     <string name="git_server_config_save_missing_username_https">Please specify the HTTPS username in the form https://username@example.com/…</string>
     <string name="git_server_config_save_missing_username_ssh">Please specify the SSH username in the form username@example.com:…</string>
+    <string name="git_server_config_save_auth_mode_mismatch">Valid authentication modes for %1$s: %2$s</string>
     <string name="git_config_error_hostname_empty">empty hostname</string>
     <string name="git_config_error_generic">please verify your settings and try again</string>
     <string name="git_config_error_nonnumeric_port">port must be numeric</string>

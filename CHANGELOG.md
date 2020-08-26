@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 -   A descriptive error message is shown if no username is specified in the Git server settings
+-   Remove explicit protocol choice from Git server settings, it is now inferred from your URL
 
 ### Fixed
 
