@@ -75,13 +75,12 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
         remove(PreferenceKeys.GIT_REMOTE_PORT)
         remove(PreferenceKeys.GIT_REMOTE_SERVER)
         remove(PreferenceKeys.GIT_REMOTE_USERNAME)
+        remove(PreferenceKeys.GIT_REMOTE_PROTOCOL)
     }
     if (url == null || GitSettings.updateConnectionSettingsIfValid(
-            newProtocol = protocol,
             newAuthMode = GitSettings.authMode,
             newUrl = url,
             newBranch = GitSettings.branch) != GitSettings.UpdateConnectionSettingsResult.Valid) {
         e { "Failed to migrate to URL-based Git config, generated URL is invalid" }
     }
 }
-

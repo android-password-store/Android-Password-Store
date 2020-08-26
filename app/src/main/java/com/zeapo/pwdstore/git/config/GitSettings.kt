@@ -53,13 +53,6 @@ object GitSettings {
     private val settings by lazy { Application.instance.sharedPrefs }
     private val encryptedSettings by lazy { Application.instance.getEncryptedPrefs("git_operation") }
 
-    var protocol
-        get() = Protocol.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
-        private set(value) {
-            settings.edit {
-                putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, value.pref)
-            }
-        }
     var authMode
         get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
         private set(value) {
@@ -104,28 +97,40 @@ object GitSettings {
             }
         }
 
-    enum class UpdateConnectionSettingsResult {
-        Valid,
-        FailedToParseUrl,
-        MissingUsername,
-        ProtocolMismatch,
+    sealed class UpdateConnectionSettingsResult {
+        class MissingUsername(val newProtocol: Protocol) : UpdateConnectionSettingsResult()
+        class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) : UpdateConnectionSettingsResult()
+        object Valid : UpdateConnectionSettingsResult()
+        object FailedToParseUrl : UpdateConnectionSettingsResult()
+        object ProtocolMismatch : UpdateConnectionSettingsResult()
     }
 
-    fun updateConnectionSettingsIfValid(newProtocol: Protocol, newAuthMode: AuthMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
+    fun updateConnectionSettingsIfValid(newAuthMode: AuthMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
         val parsedUrl = try {
             URIish(newUrl)
         } catch (_: Exception) {
             return UpdateConnectionSettingsResult.FailedToParseUrl
         }
+        val newProtocol = when (parsedUrl.scheme) {
+            in listOf("http", "https") -> Protocol.Https
+            in listOf("ssh") -> Protocol.Ssh
+            else -> return UpdateConnectionSettingsResult.FailedToParseUrl
+        }
         if (newAuthMode != AuthMode.None && parsedUrl.user.isNullOrBlank())
-            return UpdateConnectionSettingsResult.MissingUsername
-        when (newProtocol) {
-            Protocol.Https -> if (parsedUrl.scheme !in listOf("http", "https")) return UpdateConnectionSettingsResult.ProtocolMismatch
-            Protocol.Ssh -> if (parsedUrl.scheme !in listOf(null, "git")) return UpdateConnectionSettingsResult.ProtocolMismatch
+            return UpdateConnectionSettingsResult.MissingUsername(newProtocol)
+
+        val validHttpsAuth = listOf(AuthMode.None, AuthMode.Password)
+        val validSshAuth = listOf(AuthMode.OpenKeychain, AuthMode.Password, AuthMode.SshKey)
+        when {
+            newProtocol == Protocol.Https && newAuthMode !in validHttpsAuth -> {
+                return UpdateConnectionSettingsResult.AuthModeMismatch(newProtocol, validHttpsAuth)
+            }
+            newProtocol == Protocol.Ssh && newAuthMode !in validSshAuth -> {
+                return UpdateConnectionSettingsResult.AuthModeMismatch(newProtocol, validSshAuth)
+            }
         }
 
         url = newUrl
-        protocol = newProtocol
         authMode = newAuthMode
         branch = newBranch
         return UpdateConnectionSettingsResult.Valid

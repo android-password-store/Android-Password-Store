@@ -32,7 +32,6 @@ class GitServerConfigActivity : BaseGitActivity() {
 
     private val binding by viewBinding(ActivityGitCloneBinding::inflate)
 
-    private lateinit var newProtocol: Protocol
     private lateinit var newAuthMode: AuthMode
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,24 +43,8 @@ class GitServerConfigActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        newProtocol = GitSettings.protocol
-        binding.protocolGroup.apply {
-            when (newProtocol) {
-                Protocol.Ssh -> check(R.id.protocol_ssh)
-                Protocol.Https -> check(R.id.protocol_https)
-            }
-            addOnButtonCheckedListener { _, checkedId, checked ->
-                if (checked) {
-                    when (checkedId) {
-                        R.id.protocol_https -> newProtocol = Protocol.Https
-                        R.id.protocol_ssh -> newProtocol = Protocol.Ssh
-                    }
-                    updateAuthModeToggleGroup()
-                }
-            }
-        }
-
         newAuthMode = GitSettings.authMode
+
         binding.authModeGroup.apply {
             when (newAuthMode) {
                 AuthMode.SshKey -> check(R.id.auth_mode_ssh_key)
@@ -78,22 +61,20 @@ class GitServerConfigActivity : BaseGitActivity() {
                 }
             }
         }
-        updateAuthModeToggleGroup()
 
         binding.serverUrl.setText(GitSettings.url)
         binding.serverBranch.setText(GitSettings.branch)
 
         binding.saveButton.setOnClickListener {
-            when (GitSettings.updateConnectionSettingsIfValid(
-                newProtocol = newProtocol,
+            when (val updateResult = GitSettings.updateConnectionSettingsIfValid(
                 newAuthMode = newAuthMode,
                 newUrl = binding.serverUrl.text.toString().trim(),
                 newBranch = binding.serverBranch.text.toString().trim())) {
                 GitSettings.UpdateConnectionSettingsResult.FailedToParseUrl -> {
                     Snackbar.make(binding.root, getString(R.string.git_server_config_save_error), Snackbar.LENGTH_LONG).show()
                 }
-                GitSettings.UpdateConnectionSettingsResult.MissingUsername -> {
-                    when (newProtocol) {
+                is GitSettings.UpdateConnectionSettingsResult.MissingUsername -> {
+                    when (updateResult.newProtocol) {
                         Protocol.Https -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_https), Snackbar.LENGTH_LONG).show()
                         Protocol.Ssh -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_ssh), Snackbar.LENGTH_LONG).show()
                     }
@@ -111,29 +92,15 @@ class GitServerConfigActivity : BaseGitActivity() {
                         cloneRepository()
                     }
                 }
+                is GitSettings.UpdateConnectionSettingsResult.AuthModeMismatch -> {
+                    val message = getString(
+                        R.string.git_server_config_save_auth_mode_mismatch,
+                        updateResult.newProtocol,
+                        updateResult.validModes.joinToString(", ") { it.pref },
+                    )
+                    Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+                }
             }
-        }
-    }
-
-    private fun updateAuthModeToggleGroup() {
-        if (newProtocol == Protocol.Ssh) {
-            binding.authModeSshKey.isEnabled = true
-            binding.authModeOpenKeychain.isEnabled = true
-            // Reset connection mode to SSH key if the current value (none) is not valid for SSH.
-            // Important note: This has to happen after enabling the other toggle buttons or they
-            // won't check.
-            if (binding.authModeGroup.checkedButtonIds.isEmpty())
-                binding.authModeGroup.check(R.id.auth_mode_ssh_key)
-            binding.authModeGroup.isSelectionRequired = true
-        } else {
-            binding.authModeGroup.isSelectionRequired = false
-            // Reset connection mode to password if the current value is not valid for HTTPS
-            // Important note: This has to happen before disabling the other toggle buttons or they
-            // won't uncheck.
-            if (newAuthMode !in listOf(AuthMode.None, AuthMode.Password))
-                binding.authModeGroup.check(R.id.auth_mode_password)
-            binding.authModeSshKey.isEnabled = false
-            binding.authModeOpenKeychain.isEnabled = false
         }
     }
 
