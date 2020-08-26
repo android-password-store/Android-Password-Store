@@ -18,7 +18,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
--   Password creation UI will scroll if it does not fit on the screen
 -   Git server protocol and authentication mode are only updated when explicitly saved
 -   Remember HTTPS password during a sync operation
 
