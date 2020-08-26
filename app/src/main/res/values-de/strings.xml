@@ -11,6 +11,7 @@
     <string name="dialog_delete">Ordner löschen</string>
     <string name="dialog_do_not_delete">Abbruch</string>
     <string name="title_activity_git_clone">Repository Informationen</string>
+    <string name="title_activity_git_log">Commit-Log</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
     <string name="move">Verschieben</string>
@@ -121,6 +122,7 @@
     <string name="git_sync">Synchronisiere Repository</string>
     <string name="git_pull">Git Pull</string>
     <string name="git_push">Git Push</string>
+    <string name="git_log">Commit-Log anzeigen</string>
     <string name="show_password_pref_title">Zeige das Password</string>
     <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
     <string name="show_extra_content_pref_title">Zeige weiteren Inhalt</string>

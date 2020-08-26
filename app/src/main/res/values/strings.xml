@@ -20,6 +20,7 @@
     <string name="dialog_do_not_delete">Cancel</string>
     <string name="title_activity_git_clone">Repository information</string>
     <string name="title_activity_git_config" translatable="false">Git configuration</string>
+    <string name="title_activity_git_log">Commit log</string>
 
     <!-- Password Store -->
     <string name="creation_dialog_text">Please clone or create a new repository below before trying to add a password or running any synchronization operation.</string>
@@ -217,6 +218,7 @@
     <string name="git_pull">Pull from remote</string>
     <string name="git_push">Push to remote</string>
     <string name="git_push_up_to_date">Everything up-to-date</string>
+    <string name="git_log">Show commit log</string>
     <string name="show_password_pref_title">Show the password</string>
     <string name="show_password_pref_summary">Control the visibility of the passwords once decrypted. This does not disable copying to clipboard.</string>
     <string name="show_extra_content_pref_title">Show extra content</string>
@@ -392,6 +394,6 @@
     <!-- GPG key selection in folder creation -->
     <string name="folder_creation_err_file_exists">A file by that name already exists</string>
     <string name="folder_creation_err_folder_exists">A folder by that name already exists</string>
-    <string name="xkpwgen_extrachars_label" >Digits/Symbols (d/s)</string>
+    <string name="xkpwgen_extrachars_label">Digits/Symbols (d/s)</string>
     <string name="xk_numbers_symbols_append_default">ds</string>
 </resources>
