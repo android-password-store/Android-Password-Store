@@ -7,18 +7,10 @@ package com.zeapo.pwdstore.git.log
 
 import com.github.ajalt.timberkt.e
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.hash
+import com.zeapo.pwdstore.utils.time
 import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
-import java.util.Date
-
-private fun hash(commit: RevCommit) = ObjectId.toString(commit.id)
-
-private fun date(commit: RevCommit): Date {
-    val epochMilliseconds = commit.commitTime.toLong()
-    val epochSeconds = epochMilliseconds * 1000
-    return Date(epochSeconds)
-}
 
 private fun commits(): Iterable<RevCommit> {
     val repo = PasswordRepository.getRepository(null)
@@ -49,7 +41,7 @@ class GitLogModel {
     // user experience.
     private val cache: MutableList<GitCommit> by lazy {
             commits().map {
-            GitCommit(hash(it), it.shortMessage, it.authorIdent.name, date(it))
+            GitCommit(it.hash, it.shortMessage, it.authorIdent.name, it.time)
         }.toMutableList()
     }
     val size = cache.size
