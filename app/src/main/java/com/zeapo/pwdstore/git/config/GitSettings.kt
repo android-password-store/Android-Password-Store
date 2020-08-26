@@ -112,7 +112,7 @@ object GitSettings {
         }
         val newProtocol = when (parsedUrl.scheme) {
             in listOf("http", "https") -> Protocol.Https
-            in listOf("ssh") -> Protocol.Ssh
+            in listOf("ssh", null) -> Protocol.Ssh
             else -> return UpdateConnectionSettingsResult.FailedToParseUrl
         }
         if (newAuthMode != AuthMode.None && parsedUrl.user.isNullOrBlank())
