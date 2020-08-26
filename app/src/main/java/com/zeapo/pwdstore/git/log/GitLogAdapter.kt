@@ -47,12 +47,10 @@ class GitLogAdapter : RecyclerView.Adapter<GitLogAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: GitLogRowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(commit: GitCommit) {
-            binding.apply {
-                gitLogRowMessage.text = commit.shortMessage
-                gitLogRowHash.text = shortHash(commit.hash)
-                gitLogRowTime.text = stringFrom(commit.time)
-            }
+        fun bind(commit: GitCommit) = with(binding) {
+            gitLogRowMessage.text = commit.shortMessage
+            gitLogRowHash.text = shortHash(commit.hash)
+            gitLogRowTime.text = stringFrom(commit.time)
         }
     }
 }
