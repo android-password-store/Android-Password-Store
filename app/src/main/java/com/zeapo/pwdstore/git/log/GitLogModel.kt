@@ -39,7 +39,7 @@ private fun commits(): Iterable<RevCommit> {
  *
  * All commits are acquired on the first request to this object.
  */
-class GitLogModel() {
+class GitLogModel {
 
     // All commits are acquired here at once. Acquiring the commits in batches would not have been
     // entirely sensible because the amount of computation required to obtain commit number n from

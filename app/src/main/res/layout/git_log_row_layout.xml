@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/activity_vertical_margin"
@@ -17,29 +17,29 @@
         android:layout_marginTop="@dimen/normal_margin"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="Commit message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/git_log_row_hash" />
+        app:layout_constraintTop_toBottomOf="@+id/git_log_row_hash"
+        tools:text="Commit message" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/git_log_row_hash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hash"
-        android:textColor="@color/secondary_color"
+        android:textColor="?attr/colorSecondary"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hash" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/git_log_row_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.5"
-        android:text="Time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
