@@ -79,9 +79,6 @@ class GitServerConfigActivity : BaseGitActivity() {
                         Protocol.Ssh -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_ssh), Snackbar.LENGTH_LONG).show()
                     }
                 }
-                GitSettings.UpdateConnectionSettingsResult.ProtocolMismatch -> {
-                    Snackbar.make(binding.root, getString(R.string.git_server_config_save_protocol_mismatch), Snackbar.LENGTH_LONG).show()
-                }
                 GitSettings.UpdateConnectionSettingsResult.Valid -> {
                     if (isClone && PasswordRepository.getRepository(null) == null)
                         PasswordRepository.initialize()

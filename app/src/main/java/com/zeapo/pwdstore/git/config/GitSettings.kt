@@ -102,7 +102,6 @@ object GitSettings {
         class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) : UpdateConnectionSettingsResult()
         object Valid : UpdateConnectionSettingsResult()
         object FailedToParseUrl : UpdateConnectionSettingsResult()
-        object ProtocolMismatch : UpdateConnectionSettingsResult()
     }
 
     fun updateConnectionSettingsIfValid(newAuthMode: AuthMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
