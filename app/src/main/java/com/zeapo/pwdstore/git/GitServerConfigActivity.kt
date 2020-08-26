@@ -96,7 +96,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                     val message = getString(
                         R.string.git_server_config_save_auth_mode_mismatch,
                         updateResult.newProtocol,
-                        updateResult.validModes.joinToString(", ") { it.pref },
+                        updateResult.validModes.joinToString(", "),
                     )
                     Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
                 }
