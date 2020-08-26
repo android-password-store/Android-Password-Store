@@ -29,42 +29,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/label_server_protocol"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/server_protocol"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/server_label" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/protocol_group"
-            style="@style/TextAppearance.MaterialComponents.Headline1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_server_protocol"
-            app:selectionRequired="true"
-            app:singleSelection="true">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/protocol_ssh"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/clone_protocol_ssh" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/protocol_https"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/clone_protocol_https" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/label_server_url"
             android:layout_width="0dp"
@@ -73,15 +37,15 @@
             android:hint="@string/server_url"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/protocol_group">
+            app:layout_constraintTop_toBottomOf="@id/server_label">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/server_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
-                android:nextFocusForward="@id/server_branch"
-                android:inputType="textWebEmailAddress" />
+                android:inputType="textWebEmailAddress"
+                android:nextFocusForward="@id/server_branch" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,21 +55,21 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="@string/server_branch"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_server_url">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/server_branch"
-                android:imeOptions="actionDone"
                 android:layout_width="match_parent"
-                android:inputType="textNoSuggestions"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textNoSuggestions" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/label_connection_mode"
+            android:id="@+id/label_auth_mode"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_connection_mode"
+            app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
             app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
