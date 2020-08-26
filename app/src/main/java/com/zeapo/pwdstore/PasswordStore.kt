@@ -51,7 +51,7 @@ import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.log.GitLogActivity
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
-import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -250,7 +250,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuRes = when {
-            GitSettings.connectionMode == ConnectionMode.None -> R.menu.main_menu_no_auth
+            GitSettings.authMode == AuthMode.None -> R.menu.main_menu_no_auth
             PasswordRepository.isGitRepo() -> R.menu.main_menu_git
             else -> R.menu.main_menu_non_git
         }

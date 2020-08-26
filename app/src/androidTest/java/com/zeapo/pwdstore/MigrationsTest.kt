@@ -8,7 +8,7 @@ package com.zeapo.pwdstore
 
 import android.content.Context
 import androidx.core.content.edit
-import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getString
@@ -36,7 +36,7 @@ class MigrationsTest {
             putString(PreferenceKeys.GIT_REMOTE_LOCATION, "/mnt/disk3/pass-repo")
             putString(PreferenceKeys.GIT_REMOTE_SERVER, "192.168.0.102")
             putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, Protocol.Ssh.pref)
-            putString(PreferenceKeys.GIT_REMOTE_AUTH, ConnectionMode.Password.pref)
+            putString(PreferenceKeys.GIT_REMOTE_AUTH, AuthMode.Password.pref)
         }
         runMigrations(context)
         checkOldKeysAreRemoved(context)
@@ -55,7 +55,7 @@ class MigrationsTest {
             putString(PreferenceKeys.GIT_REMOTE_LOCATION, "/mnt/disk3/pass-repo")
             putString(PreferenceKeys.GIT_REMOTE_SERVER, "192.168.0.102")
             putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, Protocol.Ssh.pref)
-            putString(PreferenceKeys.GIT_REMOTE_AUTH, ConnectionMode.SshKey.pref)
+            putString(PreferenceKeys.GIT_REMOTE_AUTH, AuthMode.SshKey.pref)
         }
         runMigrations(context)
         checkOldKeysAreRemoved(context)
@@ -74,7 +74,7 @@ class MigrationsTest {
             putString(PreferenceKeys.GIT_REMOTE_LOCATION, "Android-Password-Store/pass-test")
             putString(PreferenceKeys.GIT_REMOTE_SERVER, "github.com")
             putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, Protocol.Https.pref)
-            putString(PreferenceKeys.GIT_REMOTE_AUTH, ConnectionMode.None.pref)
+            putString(PreferenceKeys.GIT_REMOTE_AUTH, AuthMode.None.pref)
         }
         runMigrations(context)
         checkOldKeysAreRemoved(context)

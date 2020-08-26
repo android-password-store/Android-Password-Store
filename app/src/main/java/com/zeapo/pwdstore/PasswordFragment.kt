@@ -26,7 +26,7 @@ import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
-import com.zeapo.pwdstore.git.config.ConnectionMode
+import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
@@ -93,10 +93,10 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     .show()
                 binding.swipeRefresher.isRefreshing = false
             } else {
-                // When authentication is set to ConnectionMode.None then the only git operation we
-                // can run is a pull, so automatically fallback to that.
-                val operationId = when (GitSettings.connectionMode) {
-                    ConnectionMode.None -> BaseGitActivity.REQUEST_PULL
+                // When authentication is set to AuthMode.None then the only git operation we can
+                // run is a pull, so automatically fallback to that.
+                val operationId = when (GitSettings.authMode) {
+                    AuthMode.None -> BaseGitActivity.REQUEST_PULL
                     else -> BaseGitActivity.REQUEST_SYNC
                 }
                 val intent = Intent(context, GitOperationActivity::class.java)
