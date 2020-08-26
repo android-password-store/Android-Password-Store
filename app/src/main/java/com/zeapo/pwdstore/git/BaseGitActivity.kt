@@ -61,7 +61,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
                     return
                 }
             }
-            op.executeAfterAuthentication(GitSettings.connectionMode)
+            op.executeAfterAuthentication(GitSettings.authMode)
         } catch (e: Exception) {
             e.printStackTrace()
             MaterialAlertDialogBuilder(this).setMessage(e.message).show()
