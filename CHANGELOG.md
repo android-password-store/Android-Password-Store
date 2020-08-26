@@ -7,6 +7,23 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   Allow sorting by recently used
+-   Add [Bromite](https://www.bromite.org/) and [Ungoogled Chromium](https://git.droidware.info/wchen342/ungoogled-chromium-android) to supported browsers list for Autofill
+
+### Changed
+
+-   A descriptive error message is shown if no username is specified in the Git server settings
+
+### Fixed
+
+-   Password creation UI will scroll if it does not fit on the screen
+-   Git server protocol and authentication mode are only updated when explicitly saved
+
+## [1.11.2] - 2020-08-24
+
+### Fixed
+
+-   Saving a password after creating it fails to finish commit operation
+-   HTTPS authentication did not prompt users for password
 
 ### Fixed
 
@@ -312,7 +329,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.1...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.2...HEAD
+
+[1.11.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.1...1.11.2
 
 [1.11.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.0...1.11.1
 

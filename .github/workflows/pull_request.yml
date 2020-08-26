@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         api-level: [23, 29]
-        variant: [freeRelease, nonFreeRelease]
+        variant: [freeDebug, nonFreeDebug]
     steps:
 
     - name: Check if relevant files have changed
@@ -70,7 +70,7 @@ jobs:
       run: ./gradlew test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
 
     - name: Run instrumentation tests on free flavor
-      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'freeRelease' }}
+      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'freeDebug' }}
       uses: reactivecircus/android-emulator-runner@v2.11.0
       with:
         api-level: ${{ matrix.api-level }}
@@ -82,7 +82,7 @@ jobs:
           ./gradlew :app:connectedFreeDebugAndroidTest
 
     - name: Run instrumentation tests on nonFree flavor
-      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'nonFreeRelease' }}
+      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'nonFreeDebug' }}
       uses: reactivecircus/android-emulator-runner@v2.11.0
       with:
         api-level: ${{ matrix.api-level }}

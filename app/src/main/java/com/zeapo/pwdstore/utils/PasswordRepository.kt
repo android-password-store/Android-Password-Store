@@ -244,47 +244,5 @@ open class PasswordRepository protected constructor() {
             passwordList.sortWith(sortOrder.comparator)
             return passwordList
         }
-
-        /**
-         * Sets the git user name
-         *
-         * @param username username
-         */
-        @JvmStatic
-        fun setGitAuthorName(username: String) {
-            setStringConfig("user", null, "name", username)
-        }
-
-        /**
-         * Sets the git user email
-         *
-         * @param email email
-         */
-        @JvmStatic
-        fun setGitAuthorEmail(email: String) {
-            setStringConfig("user", null, "email", email)
-        }
-
-        /**
-         * Sets a git config value
-         *
-         * @param section config section name
-         * @param subsection config subsection name
-         * @param name config name
-         * @param value the value to be set
-         */
-        @JvmStatic
-        @Suppress("SameParameterValue")
-        private fun setStringConfig(section: String, subsection: String?, name: String, value: String) {
-            if (isInitialized) {
-                val config = repository!!.config
-                config.setString(section, subsection, name, value)
-                try {
-                    config.save()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
     }
 }
