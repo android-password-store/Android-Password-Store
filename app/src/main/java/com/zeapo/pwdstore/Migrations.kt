@@ -30,24 +30,13 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
     val serverPath = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION) ?: ""
     val protocol = Protocol.fromString(context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
 
-    // Whether we need the leading ssh:// depends on the use of a custom port.
     val hostnamePart = serverHostname.removePrefix("ssh://")
     val url = when (protocol) {
         Protocol.Ssh -> {
+            val portPart = if (serverPort.isEmpty()) "22" else serverPort
             val userPart = if (serverUser.isEmpty()) "" else "${serverUser.trimEnd('@')}@"
-            val portPart =
-                if (serverPort == "22" || serverPort.isEmpty()) "" else ":$serverPort"
-            if (portPart.isEmpty()) {
-                "$userPart$hostnamePart:$serverPath"
-            } else {
-                // Only absolute paths are supported with custom ports.
-                if (!serverPath.startsWith('/'))
-                    null
-                else
-                    // We have to specify the ssh scheme as this is the only way to pass a custom
-                    // port.
-                    "ssh://$userPart$hostnamePart$portPart$serverPath"
-            }
+            val serverPart = if (serverPath.startsWith('/')) serverPath else "/$serverPath"
+            "ssh://$userPart$hostnamePart:$portPart$serverPart"
         }
         Protocol.Https -> {
             val portPart =

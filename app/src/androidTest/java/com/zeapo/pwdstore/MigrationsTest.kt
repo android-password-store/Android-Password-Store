@@ -62,7 +62,7 @@ class MigrationsTest {
         checkOldKeysAreRemoved(context)
         assertEquals(
             context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
-            "msfjarvis@192.168.0.102:/mnt/disk3/pass-repo"
+            "ssh://msfjarvis@192.168.0.102:22/mnt/disk3/pass-repo"
         )
     }
 
