@@ -33,7 +33,7 @@ data class PasswordItem(
     }
 
     override fun toString(): String {
-        return name.replace(".gpg", "")
+        return name.replace("\\.gpg$".toRegex(), "")
     }
 
     override fun hashCode(): Int {
