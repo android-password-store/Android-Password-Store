@@ -302,8 +302,8 @@
     <string name="access_sdcard_text">The store location is in your SD Card or Internal storage, but the app does not have permission to access it.</string>
     <string name="your_public_key">Your public key</string>
     <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
-    <string name="pref_show_hidden_title">Show hidden folders</string>
-    <string name="pref_show_hidden_summary">Include hidden directories in the password list</string>
+    <string name="pref_show_hidden_title">Show hidden files and folders</string>
+    <string name="pref_show_hidden_summary">Include hidden files directories in the password list</string>
     <string name="title_create_folder">Create folder</string>
     <string name="title_rename_folder">Rename folder</string>
     <string name="message_category_error_empty_field">Category name can\'t be empty</string>
