@@ -50,7 +50,9 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
 
-    private class PasswordFinderCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
+    private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
+
+        private var cachedPassword: CharArray? = null
 
         override fun isInteractive() = true
 
@@ -58,7 +60,11 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
             for (item in items) {
                 when (item) {
                     is CredentialItem.Username -> item.value = uri?.user
-                    is CredentialItem.Password -> item.value = passwordFinder.reqPassword(null)
+                    is CredentialItem.Password -> {
+                        item.value = cachedPassword?.clone() ?: passwordFinder.reqPassword(null).also {
+                            cachedPassword = it.clone()
+                        }
+                    }
                     else -> UnsupportedCredentialItem(uri, item.javaClass.name)
                 }
             }
@@ -68,12 +74,17 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         override fun supports(vararg items: CredentialItem) = items.all {
             it is CredentialItem.Username || it is CredentialItem.Password
         }
+
+        override fun reset(uri: URIish?) {
+            cachedPassword?.fill(0.toChar())
+            cachedPassword = null
+        }
     }
 
     private fun withPasswordAuthentication(passwordFinder: InteractivePasswordFinder): GitOperation {
         val sessionFactory = SshjSessionFactory(SshAuthData.Password(passwordFinder), hostKeyFile)
         SshSessionFactory.setInstance(sessionFactory)
-        this.provider = PasswordFinderCredentialsProvider(passwordFinder)
+        this.provider = HttpsCredentialsProvider(passwordFinder)
         return this
     }
 
