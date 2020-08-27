@@ -91,6 +91,7 @@ class MigrationsTest {
         val context = Application.instance.applicationContext
         context.sharedPrefs.edit { clear() }
         runMigrations(context)
+        assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true))
         assertEquals(false, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
     }
 
@@ -102,6 +103,7 @@ class MigrationsTest {
             putBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true)
         }
         runMigrations(context)
+        assertEquals(false, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false))
         assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
     }
 }
