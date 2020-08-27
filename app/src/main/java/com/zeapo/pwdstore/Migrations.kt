@@ -87,8 +87,8 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
 }
 
 private fun migrateToHideAll(context: Context) {
+    context.sharedPrefs.all[PreferenceKeys.SHOW_HIDDEN_FOLDERS] ?: return
     val isHidden = context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
-    if (!isHidden) return
     context.sharedPrefs.edit {
         remove(PreferenceKeys.SHOW_HIDDEN_FOLDERS)
         putBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, isHidden)
