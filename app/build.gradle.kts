@@ -80,7 +80,6 @@ android {
     flavorDimensions("free")
     productFlavors {
         create("free") {
-            versionNameSuffix = "-free"
         }
         create("nonFree") {
         }
