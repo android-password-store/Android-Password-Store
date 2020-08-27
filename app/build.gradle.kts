@@ -30,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 11121
+        versionCode = 11131
         versionName = "1.12.0-SNAPSHOT"
     }
 
@@ -80,7 +80,6 @@ android {
     flavorDimensions("free")
     productFlavors {
         create("free") {
-            versionNameSuffix = "-free"
         }
         create("nonFree") {
         }
