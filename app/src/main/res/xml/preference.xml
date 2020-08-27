@@ -127,7 +127,7 @@
             app:title="@string/pref_search_on_start" />
         <CheckBoxPreference
             app:defaultValue="false"
-            app:key="show_hidden_folders"
+            app:key="show_hidden_contents"
             app:persistent="true"
             app:summary="@string/pref_show_hidden_summary"
             app:title="@string/pref_show_hidden_title" />
