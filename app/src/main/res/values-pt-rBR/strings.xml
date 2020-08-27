@@ -269,8 +269,6 @@
     <string name="access_sdcard_text">O local do armazenamento está em seu cartão SD ou armazenamento interno, mas o aplicativo não tem permissão para acessá-lo.</string>
     <string name="your_public_key">Sua chave pública</string>
     <string name="error_generate_ssh_key">Erro ao tentar gerar a chave SSH</string>
-    <string name="pref_show_hidden_title">Mostrar pastas ocultas</string>
-    <string name="pref_show_hidden_summary">Incluir diretórios ocultos na lista de senhas</string>
     <string name="title_create_folder">Criar pasta</string>
     <string name="title_rename_folder">Renomear pasta</string>
     <string name="message_category_error_empty_field">O nome da categoria não pode ser vazio</string>

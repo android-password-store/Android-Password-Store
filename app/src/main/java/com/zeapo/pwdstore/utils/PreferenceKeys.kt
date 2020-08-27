@@ -28,16 +28,21 @@ object PreferenceKeys {
     const val GIT_EXTERNAL = "git_external"
     const val GIT_EXTERNAL_REPO = "git_external_repo"
     const val GIT_REMOTE_AUTH = "git_remote_auth"
+
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_LOCATION = "git_remote_location"
+
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_PORT = "git_remote_port"
+
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_PROTOCOL = "git_remote_protocol"
     const val GIT_DELETE_REPO = "git_delete_repo"
+
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_SERVER = "git_remote_server"
     const val GIT_REMOTE_URL = "git_remote_url"
+
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_USERNAME = "git_remote_username"
     const val GIT_SERVER_INFO = "git_server_info"
@@ -55,7 +60,13 @@ object PreferenceKeys {
     const val REPO_CHANGED = "repo_changed"
     const val SEARCH_ON_START = "search_on_start"
     const val SHOW_EXTRA_CONTENT = "show_extra_content"
+
+    @Deprecated(
+        message = "Use SHOW_HIDDEN_CONTENTS instead",
+        replaceWith = ReplaceWith("PreferenceKeys.SHOW_HIDDEN_CONTENTS")
+    )
     const val SHOW_HIDDEN_FOLDERS = "show_hidden_folders"
+    const val SHOW_HIDDEN_CONTENTS = "show_hidden_contents"
     const val SORT_ORDER = "sort_order"
     const val SHOW_PASSWORD = "show_password"
     const val SSH_KEY = "ssh_key"

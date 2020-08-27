@@ -226,12 +226,10 @@ open class PasswordRepository protected constructor() {
             // We need to recover the passwords then parse the files
             val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
             val passwordList = ArrayList<PasswordItem>()
-            val showHiddenDirs = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
+            val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
 
             if (passList.size == 0) return passwordList
-            if (showHiddenDirs) {
-                passList.filter { !(it.isFile && it.isHidden) }.toCollection(passList.apply { clear() })
-            } else {
+            if (!showHidden) {
                 passList.filter { !it.isHidden }.toCollection(passList.apply { clear() })
             }
             passList.forEach { file ->
