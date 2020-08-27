@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Delete stored HTTPS password on connection errors (such as failed authentication)
+
 ## [1.11.2] - 2020-08-24
 
 ### Fixed
