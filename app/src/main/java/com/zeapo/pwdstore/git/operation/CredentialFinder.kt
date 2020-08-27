@@ -48,9 +48,9 @@ class CredentialFinder(
             }
             else -> throw IllegalStateException("Only SshKey and Password connection mode ask for passwords")
         }
-        val storedCredential = gitOperationPrefs.getString(credentialPref, null)
         if (isRetry)
             gitOperationPrefs.edit { remove(credentialPref) }
+        val storedCredential = gitOperationPrefs.getString(credentialPref, null)
         if (storedCredential == null) {
             val layoutInflater = LayoutInflater.from(callingActivity)
 
