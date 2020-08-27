@@ -151,7 +151,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
     open fun onError(err: Exception) {
         // Clear various auth related fields on failure
         callingActivity.getEncryptedPrefs("git_operation").edit {
-            remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
+            remove(PreferenceKeys.HTTPS_PASSWORD)
         }
         callingActivity.sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
         d(err)
