@@ -94,7 +94,7 @@ private fun PasswordItem.Companion.makeComparator(
         PasswordRepository.PasswordSortOrder.FOLDER_FIRST -> compareBy { it.type }
         // In order to let INDEPENDENT not distinguish between items based on their type, we simply
         // declare them all equal at this stage.
-        PasswordRepository.PasswordSortOrder.INDEPENDENT -> Comparator<PasswordItem> { _, _ -> 0 }
+        PasswordRepository.PasswordSortOrder.INDEPENDENT -> Comparator { _, _ -> 0 }
         PasswordRepository.PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
         PasswordRepository.PasswordSortOrder.RECENTLY_USED -> PasswordRepository.PasswordSortOrder.RECENTLY_USED.comparator
     }
@@ -140,8 +140,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     private val root
         get() = PasswordRepository.getRepositoryDirectory()
     private val settings by lazy { application.sharedPrefs }
-    private val showHiddenDirs
-        get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
+    private val showHiddenContents
+        get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
     private val defaultSearchMode
         get() = if (settings.getBoolean(PreferenceKeys.FILTER_RECURSIVELY, true)) {
             SearchMode.RecursivelyInSubdirectories
@@ -254,8 +254,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         }.asLiveData(Dispatchers.IO)
 
     private fun shouldTake(file: File) = with(file) {
+        if (showHiddenContents) return true
         if (isDirectory) {
-            !isHidden || showHiddenDirs
+            !isHidden
         } else {
             !isHidden && file.extension == "gpg"
         }
