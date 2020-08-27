@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.11.3] - 2020-08-27
+
 ### Fixed
 
 -   Delete stored HTTPS password on connection errors (such as failed authentication)
@@ -315,7 +317,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.3...HEAD
+
+[1.11.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.2...1.11.3
 
 [1.11.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.1...1.11.2
 
