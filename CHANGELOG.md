@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 -   Password creation UI will scroll if it does not fit on the screen
 -   Git server protocol and authentication mode are only updated when explicitly saved
+-   Remember HTTPS password during a sync operation
 
 ## [1.11.2] - 2020-08-24
 
