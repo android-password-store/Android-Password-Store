@@ -19,6 +19,7 @@ import java.net.URI
 
 fun runMigrations(context: Context) {
     migrateToGitUrlBasedConfig(context)
+    migrateToHideAll(context)
 }
 
 private fun migrateToGitUrlBasedConfig(context: Context) {
@@ -82,5 +83,14 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
             newUrl = url,
             newBranch = GitSettings.branch) != GitSettings.UpdateConnectionSettingsResult.Valid) {
         e { "Failed to migrate to URL-based Git config, generated URL is invalid" }
+    }
+}
+
+private fun migrateToHideAll(context: Context) {
+    context.sharedPrefs.all[PreferenceKeys.SHOW_HIDDEN_FOLDERS] ?: return
+    val isHidden = context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
+    context.sharedPrefs.edit {
+        remove(PreferenceKeys.SHOW_HIDDEN_FOLDERS)
+        putBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, isHidden)
     }
 }

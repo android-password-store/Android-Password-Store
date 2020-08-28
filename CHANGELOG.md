@@ -14,11 +14,19 @@ All notable changes to this project will be documented in this file.
 
 -   A descriptive error message is shown if no username is specified in the Git server settings
 -   Remove explicit protocol choice from Git server settings, it is now inferred from your URL
+-   'Show hidden folders' is now 'Show hidden files and folders'
 
 ### Fixed
 
 -   Password creation UI will scroll if it does not fit on the screen
 -   Git server protocol and authentication mode are only updated when explicitly saved
+-   Remember HTTPS password during a sync operation
+
+## [1.11.3] - 2020-08-27
+
+### Fixed
+
+-   Delete stored HTTPS password on connection errors (such as failed authentication)
 
 ## [1.11.2] - 2020-08-24
 
@@ -327,7 +335,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.3...HEAD
+
+[1.11.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.2...1.11.3
 
 [1.11.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.1...1.11.2
 

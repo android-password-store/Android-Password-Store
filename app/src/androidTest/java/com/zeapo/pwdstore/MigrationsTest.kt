@@ -4,6 +4,7 @@
  */
 
 @file:Suppress("DEPRECATION")
+
 package com.zeapo.pwdstore
 
 import android.content.Context
@@ -13,9 +14,9 @@ import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class MigrationsTest {
 
@@ -83,5 +84,26 @@ class MigrationsTest {
             context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
             "https://github.com/Android-Password-Store/pass-test"
         )
+    }
+
+    @Test
+    fun verifyHiddenFoldersMigrationIfDisabled() {
+        val context = Application.instance.applicationContext
+        context.sharedPrefs.edit { clear() }
+        runMigrations(context)
+        assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true))
+        assertEquals(false, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
+    }
+
+    @Test
+    fun verifyHiddenFoldersMigrationIfEnabled() {
+        val context = Application.instance.applicationContext
+        context.sharedPrefs.edit {
+            clear()
+            putBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true)
+        }
+        runMigrations(context)
+        assertEquals(false, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false))
+        assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
     }
 }
