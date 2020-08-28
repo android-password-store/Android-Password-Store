@@ -114,7 +114,7 @@ suspend fun FragmentActivity.commitChange(
         }
         return
     }
-    object : GitOperation(getRepositoryDirectory(), this@commitChange) {
+    object : GitOperation(this@commitChange) {
         override val commands = arrayOf(
             // Stage all files
             git.add().addFilepattern("."),
@@ -124,14 +124,12 @@ suspend fun FragmentActivity.commitChange(
             git.commit().setAll(true).setMessage(message),
         )
 
-        override suspend fun execute() {
+        override val finishActivityOnEnd = finishActivityOnEnd
+        override val finishWithResultOnEnd = finishWithResultOnEnd
+
+        override fun preExecute(): Boolean {
             d { "Comitting with message: '$message'" }
-            GitCommandExecutor(
-                this@commitChange,
-                this,
-                finishWithResultOnEnd,
-                finishActivityOnEnd,
-            ).execute()
+            return true
         }
     }.execute()
 }

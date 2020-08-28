@@ -13,16 +13,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.ErrorMessages
+import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
-import com.zeapo.pwdstore.git.sshj.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.sshj.SshAuthData
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
-import java.io.File
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -30,23 +29,26 @@ import org.eclipse.jgit.api.TransportCommand
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
-import org.eclipse.jgit.transport.SshSessionFactory
+import org.eclipse.jgit.transport.SshTransport
+import org.eclipse.jgit.transport.Transport
 import org.eclipse.jgit.transport.URIish
 
 /**
  * Creates a new git operation
  *
- * @param gitDir the git working tree directory
  * @param callingActivity the calling activity
  */
-abstract class GitOperation(gitDir: File, internal val callingActivity: FragmentActivity) {
+abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
     abstract val commands: Array<GitCommand<out Any>>
-    private var provider: CredentialsProvider? = null
+    open val finishActivityOnEnd = true
+    open val finishWithResultOnEnd: Intent? = null
+
     private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
-    protected var finishFromErrorDialog = true
-    protected val repository = PasswordRepository.getRepository(gitDir)
+    private var sshSessionFactory: SshjSessionFactory? = null
+
+    protected val repository = PasswordRepository.getRepository(null)!!
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
 
@@ -61,9 +63,10 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                 when (item) {
                     is CredentialItem.Username -> item.value = uri?.user
                     is CredentialItem.Password -> {
-                        item.value = cachedPassword?.clone() ?: passwordFinder.reqPassword(null).also {
-                            cachedPassword = it.clone()
-                        }
+                        item.value = cachedPassword?.clone()
+                            ?: passwordFinder.reqPassword(null).also {
+                                cachedPassword = it.clone()
+                            }
                     }
                     else -> UnsupportedCredentialItem(uri, item.javaClass.name)
                 }
@@ -81,27 +84,6 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         }
     }
 
-    private fun withPasswordAuthentication(passwordFinder: InteractivePasswordFinder): GitOperation {
-        val sessionFactory = SshjSessionFactory(SshAuthData.Password(passwordFinder), hostKeyFile)
-        SshSessionFactory.setInstance(sessionFactory)
-        this.provider = HttpsCredentialsProvider(passwordFinder)
-        return this
-    }
-
-    private fun withPublicKeyAuthentication(passphraseFinder: InteractivePasswordFinder): GitOperation {
-        val sessionFactory = SshjSessionFactory(SshAuthData.PublicKeyFile(sshKeyFile, passphraseFinder), hostKeyFile)
-        SshSessionFactory.setInstance(sessionFactory)
-        this.provider = null
-        return this
-    }
-
-    private fun withOpenKeychainAuthentication(activity: FragmentActivity): GitOperation {
-        val sessionFactory = SshjSessionFactory(SshAuthData.OpenKeychain(activity), hostKeyFile)
-        SshSessionFactory.setInstance(sessionFactory)
-        this.provider = null
-        return this
-    }
-
     private fun getSshKey(make: Boolean) {
         try {
             // Ask the UserPreference to provide us with the ssh-key
@@ -115,20 +97,32 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         }
     }
 
-    fun setCredentialProvider() {
-        provider?.let { credentialsProvider ->
-            commands.filterIsInstance<TransportCommand<*, *>>().forEach { it.setCredentialsProvider(credentialsProvider) }
+    private fun registerAuthProviders(authData: SshAuthData, credentialsProvider: CredentialsProvider? = null) {
+        sshSessionFactory = SshjSessionFactory(authData, hostKeyFile)
+        commands.filterIsInstance<TransportCommand<*, *>>().forEach { command ->
+            command.setTransportConfigCallback { transport: Transport ->
+                (transport as? SshTransport)?.sshSessionFactory = sshSessionFactory
+                credentialsProvider?.let { transport.credentialsProvider = it }
+            }
         }
     }
 
     /**
-     * Executes the GitCommand in an async task
+     * Executes the GitCommand in an async task.
      */
-    abstract suspend fun execute()
+    suspend fun execute() {
+        if (!preExecute()) {
+            return
+        }
+        GitCommandExecutor(
+            callingActivity,
+            this,
+            finishActivityOnEnd = finishActivityOnEnd,
+            finishWithResultOnEnd = finishWithResultOnEnd).execute()
+        postExecute()
+    }
 
-    suspend fun executeAfterAuthentication(
-        authMode: AuthMode,
-    ) {
+    suspend fun executeAfterAuthentication(authMode: AuthMode) {
         when (authMode) {
             AuthMode.SshKey -> if (!sshKeyFile.exists()) {
                 MaterialAlertDialogBuilder(callingActivity)
@@ -145,14 +139,31 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                         callingActivity.finish()
                     }.show()
             } else {
-                withPublicKeyAuthentication(
-                    CredentialFinder(callingActivity, authMode)).execute()
+                registerAuthProviders(
+                    SshAuthData.PublicKeyFile(sshKeyFile, CredentialFinder(callingActivity, AuthMode.SshKey)))
             }
-            AuthMode.OpenKeychain -> withOpenKeychainAuthentication(callingActivity).execute()
-            AuthMode.Password -> withPasswordAuthentication(
-                CredentialFinder(callingActivity, authMode)).execute()
-            AuthMode.None -> execute()
+            AuthMode.OpenKeychain -> registerAuthProviders(SshAuthData.OpenKeychain(callingActivity))
+            AuthMode.Password -> {
+                val credentialFinder = CredentialFinder(callingActivity, AuthMode.Password)
+                val httpsCredentialProvider = HttpsCredentialsProvider(credentialFinder)
+                registerAuthProviders(
+                    SshAuthData.Password(CredentialFinder(callingActivity, AuthMode.Password)),
+                    httpsCredentialProvider)
+            }
+            AuthMode.None -> {
+            }
         }
+        execute()
+    }
+
+    /**
+     * Called before execution of the Git operation.
+     * Return false to cancel.
+     */
+    open fun preExecute() = true
+
+    private fun postExecute() {
+        sshSessionFactory?.close()
     }
 
     /**
@@ -170,7 +181,7 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage(ErrorMessages[err])
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                if (finishFromErrorDialog) callingActivity.finish()
+                if (finishActivityOnEnd) callingActivity.finish()
             }.show()
     }
 

@@ -15,8 +15,8 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
 import com.zeapo.pwdstore.git.GitException.PushException
 import com.zeapo.pwdstore.git.config.GitSettings
-import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.git.operation.GitOperation
+import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.Result
 import com.zeapo.pwdstore.utils.snackbar
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,6 @@ class GitCommandExecutor(
 ) {
 
     suspend fun execute() {
-        operation.setCredentialProvider()
         val snackbar = activity.snackbar(
             message = activity.resources.getString(R.string.git_operation_running),
             length = Snackbar.LENGTH_INDEFINITE,
@@ -149,7 +148,6 @@ class GitCommandExecutor(
         withContext(Dispatchers.IO) {
             (SshSessionFactory.getInstance() as? SshjSessionFactory)?.close()
         }
-        SshSessionFactory.setInstance(null)
     }
 
     private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {

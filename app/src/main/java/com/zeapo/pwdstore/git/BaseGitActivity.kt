@@ -48,12 +48,12 @@ abstract class BaseGitActivity : AppCompatActivity() {
         try {
             val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
             val op = when (operation) {
-                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(localDir, GitSettings.url!!, this)
-                REQUEST_PULL -> PullOperation(localDir, this)
-                REQUEST_PUSH -> PushOperation(localDir, this)
-                REQUEST_SYNC -> SyncOperation(localDir, this)
-                BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(localDir, this)
-                REQUEST_RESET -> ResetToRemoteOperation(localDir, this)
+                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(GitSettings.url!!, this)
+                REQUEST_PULL -> PullOperation(this)
+                REQUEST_PUSH -> PushOperation(this)
+                REQUEST_SYNC -> SyncOperation(this)
+                BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
+                REQUEST_RESET -> ResetToRemoteOperation(this)
                 else -> {
                     tag(TAG).e { "Operation not recognized : $operation" }
                     setResult(RESULT_CANCELED)
