@@ -13,7 +13,8 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.revwalk.RevCommit
 
 private fun commits(): Iterable<RevCommit> {
-    val repo = PasswordRepository.getRepository(null)
+    val repoDir = PasswordRepository.getRepositoryDirectory()
+    val repo = PasswordRepository.getRepository(repoDir)
     if (repo == null) {
         e { "Could not access git repository" }
         return listOf()
@@ -40,7 +41,7 @@ class GitLogModel {
     // Additionally, tests with 1000 commits in the log have not produced a significant delay in the
     // user experience.
     private val cache: MutableList<GitCommit> by lazy {
-            commits().map {
+        commits().map {
             GitCommit(it.hash, it.shortMessage, it.authorIdent.name, it.time)
         }.toMutableList()
     }
