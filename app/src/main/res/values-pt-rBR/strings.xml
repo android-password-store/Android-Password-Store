@@ -248,7 +248,6 @@
     <string name="clear_saved_passphrase_ssh">Limpar a frase secreta salva para chave SSH local</string>
     <string name="clear_saved_passphrase_https">Limpar senha HTTPS salva</string>
     <string name="git_operation_remember_passphrase">Lembrar senha da chave</string>
-    <string name="git_tools">Ferramentas de hackers</string>
     <string name="abort_rebase">Abortar rebase e realizar push do novo branch</string>
     <string name="reset_to_remote">Hard reset no branch remoto</string>
     <string name="openkeychain_ssh_api_connect_fail">Falha ao conectar ao serviço de API SSH do OpenKeychain.</string>
