@@ -354,19 +354,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 listRefreshAction.launch(intent)
                 return true
             }
-            R.id.git_log -> {
-                if (!isInitialized) {
-                    initBefore.show()
-                    return false
-                }
-                try {
-                    intent = Intent(this, GitLogActivity::class.java)
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                return true
-            }
             R.id.refresh -> {
                 refreshPasswordList()
                 return true

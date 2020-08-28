@@ -233,10 +233,9 @@
     <string name="git_push_other_error">Удаленный репозиторий отклонил запись изменений без быстрой перемотки вперед. Проверьте переменную receive.denyNonFastForwards в файле конфигурации репозитория назначения.</string>
     <string name="jgit_error_push_dialog_text">В хоте операции записи изменений возникла ошибка:</string>
     <string name="git_operation_remember_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
-    <string name="hackish_tools">Костыльные инструменты</string>
+    <string name="git_tools">Костыльные инструменты</string>
     <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
     <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
-    <string name="commit_hash">Хэш-сумма изменений</string>
     <string name="openkeychain_ssh_api_connect_fail">Ошибка при подключении к сервису OpenKeychain SSH API</string>
     <string name="no_ssh_api_provider">Не найдено SSH API провайдеров. OpenKeychain установлен?</string>
     <string name="ssh_api_pending_intent_failed">Ожидаемое намерение SSH API не удалось</string>

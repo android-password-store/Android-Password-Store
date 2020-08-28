@@ -118,8 +118,8 @@
 
     <!-- Preferences -->
     <string name="pref_repository_title">Repository</string>
-    <string name="pref_edit_server_info">Edit git server settings</string>
-    <string name="pref_edit_git_config">Git utils</string>
+    <string name="pref_edit_server_info">Edit Git server settings</string>
+    <string name="pref_edit_git_config">Local Git config &amp; utilities</string>
     <string name="pref_ssh_title">Import SSH key</string>
     <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>
@@ -283,10 +283,12 @@
     <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
     <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
     <string name="git_operation_remember_passphrase">Remember key passphrase</string>
-    <string name="hackish_tools">Hackish tools</string>
+    <string name="git_tools">Utilities</string>
     <string name="abort_rebase">Abort rebase and push new branch</string>
     <string name="reset_to_remote">Hard reset to remote branch</string>
-    <string name="commit_hash">Commit hash</string>
+    <string name="git_head_on_branch">On branch %1$s</string>
+    <string name="git_head_detached">HEAD detached at %1$s</string>
+    <string name="git_head_missing">Unable to locate HEAD</string>
     <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
     <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
     <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>

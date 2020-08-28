@@ -30,10 +30,6 @@
         android:title="@string/refresh_list" />
 
     <item
-        android:id="@+id/git_log"
-        android:title="@string/git_log" />
-
-    <item
         android:id="@+id/user_pref"
         android:orderInCategory="100"
         android:title="@string/action_settings" />
