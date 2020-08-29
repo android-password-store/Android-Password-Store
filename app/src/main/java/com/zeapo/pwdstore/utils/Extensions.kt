@@ -28,6 +28,9 @@ import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
+import java.util.Date
+import org.eclipse.jgit.lib.ObjectId
+import org.eclipse.jgit.revwalk.RevCommit
 
 const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
 
@@ -160,3 +163,23 @@ val Context.autofillManager: AutofillManager?
 fun File.isInsideRepository(): Boolean {
     return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
 }
+
+/**
+ * Unique SHA-1 hash of this commit as hexadecimal string.
+ *
+ * @see RevCommit.id
+ */
+val RevCommit.hash: String
+    get() = ObjectId.toString(id)
+
+/**
+ * Time this commit was made with second precision.
+ *
+ * @see RevCommit.commitTime
+ */
+val RevCommit.time: Date
+    get() {
+        val epochSeconds = commitTime.toLong()
+        val epochMilliseconds = epochSeconds * 1000
+        return Date(epochMilliseconds)
+    }

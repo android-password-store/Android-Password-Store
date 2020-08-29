@@ -178,6 +178,4 @@
     <string name="git_push_other_error">Pousser au dépôt distant sans avance rapide rejetée. Vérifiez la variable receive.denyNonFastForwards dans le fichier de configuration du répertoire de destination.</string>
     <string name="jgit_error_push_dialog_text">Une erreur s\'est produite lors de l\'opération de poussée:</string>
     <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
-    <string name="hackish_tools">Outils de hack</string>
-    <string name="commit_hash">Commettre la clé</string>
 </resources>

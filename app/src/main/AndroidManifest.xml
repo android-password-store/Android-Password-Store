@@ -66,6 +66,10 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".git.log.GitLogActivity"
+            android:label="@string/title_activity_git_log" />
+
+        <activity
             android:name=".UserPreference"
             android:label="@string/action_settings"
             android:parentActivityName=".PasswordStore" />
