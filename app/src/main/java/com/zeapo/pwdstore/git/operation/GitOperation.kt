@@ -115,7 +115,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         GitCommandExecutor(
             callingActivity,
             this,
-        )
+        ).execute()
         postExecute()
     }
 
