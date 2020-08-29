@@ -33,11 +33,6 @@
 
     <style name="AppTheme" parent="APSTheme" />
 
-    <style name="AppTheme.NoActionBar" parent="APSTheme">
-        <item name="windowActionBar">false</item>
-        <item name="android:windowActionBar">false</item>
-    </style>
-
     <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/outlined_box_selector</item>
         <item name="hintTextColor">?attr/colorSecondary</item>

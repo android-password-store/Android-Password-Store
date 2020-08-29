@@ -34,8 +34,7 @@
 
         <activity
             android:name=".OnboardingActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:configChanges="orientation|screenSize" />
 
         <activity
             android:name=".LaunchActivity"
