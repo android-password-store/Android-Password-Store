@@ -51,6 +51,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     protected val repository = PasswordRepository.getRepository(null)!!
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
+    protected var finishFromErrorDialog = true
 
     private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
 
@@ -182,7 +183,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage(ErrorMessages[err])
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                callingActivity.finish()
+                if (finishFromErrorDialog) callingActivity.finish()
             }.show()
     }
 

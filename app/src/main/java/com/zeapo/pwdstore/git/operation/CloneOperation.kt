@@ -21,6 +21,7 @@ class CloneOperation(uri: String, callingActivity: AppCompatActivity) : GitOpera
     )
 
     override fun onSuccess() {
+        finishFromErrorDialog = false
         callingActivity.finish()
     }
 }
