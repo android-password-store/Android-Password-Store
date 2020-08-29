@@ -33,6 +33,11 @@
             android:label="@string/app_name" />
 
         <activity
+            android:name=".OnboardingActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".LaunchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"

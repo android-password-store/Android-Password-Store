@@ -8,7 +8,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo.Builder
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
@@ -26,7 +25,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentManager
@@ -54,16 +52,13 @@ import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.closeRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.createRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getPasswords
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
-import com.zeapo.pwdstore.utils.PasswordRepository.PasswordSortOrder.Companion.getSortOrder
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
+import com.zeapo.pwdstore.utils.checkRuntimePermission
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.getString
@@ -94,43 +89,9 @@ class PasswordStore : BaseGitActivity() {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
-    private val cloneAction = registerForActivityResult(StartActivityForResult()) { result ->
+    private val listRefreshAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-        }
-    }
-
-    private val repositoryInitAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            initializeRepositoryInfo()
-        }
-    }
-
-    private val directoryChangeAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) &&
-                settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO) != null) {
-                val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-                val dir = externalRepoPath?.let { File(it) }
-                if (dir != null &&
-                    dir.exists() &&
-                    dir.isDirectory &&
-                    dir.listFilesRecursively().isNotEmpty() &&
-                    getPasswords(dir, getRepositoryDirectory(), sortOrder).isNotEmpty()) {
-                    closeRepository()
-                    checkLocalRepository()
-                    return@registerForActivityResult
-                }
-            }
-            checkPermissionsAndCloneAction.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-    }
-
-    private val checkPermissionsAndCloneAction = registerForActivityResult(RequestPermission()) { granted ->
-        if (granted) {
-            val intent = Intent(activity, GitServerConfigActivity::class.java)
-            intent.putExtra(REQUEST_ARG_OP, REQUEST_CLONE)
-            cloneAction.launch(intent)
+            refreshPasswordList()
         }
     }
 
@@ -160,9 +121,7 @@ class PasswordStore : BaseGitActivity() {
         // prevent attempt to create password list fragment
         var savedInstance = savedInstanceState
         if (savedInstanceState != null && (!settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) ||
-                ContextCompat.checkSelfPermission(
-                    activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)) {
+                !checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             savedInstance = null
         }
         super.onCreate(savedInstance)
@@ -229,7 +188,7 @@ class PasswordStore : BaseGitActivity() {
     override fun onResume() {
         super.onResume()
         if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
-            hasRequiredStoragePermissions(true)
+            hasRequiredStoragePermissions()
         } else {
             checkLocalRepository()
         }
@@ -361,47 +320,6 @@ class PasswordStore : BaseGitActivity() {
             searchItem.collapseActionView()
     }
 
-    private fun createRepository() {
-        if (!isInitialized) {
-            initialize()
-        }
-        val localDir = getRepositoryDirectory()
-        try {
-            check(localDir.mkdir()) { "Failed to create directory!" }
-            createRepository(localDir)
-            if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
-                settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-            } else {
-                throw IllegalStateException("Failed to initialize repository state.")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (!localDir.delete()) {
-                d { "Failed to delete local repository" }
-            }
-            return
-        }
-        checkLocalRepository()
-    }
-
-    private fun initializeRepositoryInfo() {
-        val externalRepo = settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
-        val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-        if (externalRepo && !hasRequiredStoragePermissions()) {
-            return
-        }
-        if (externalRepo && externalRepoPath != null) {
-            val dir = File(externalRepoPath)
-            if (dir.exists() && dir.isDirectory &&
-                getPasswords(dir, getRepositoryDirectory(), sortOrder).isNotEmpty()) {
-                closeRepository()
-                checkLocalRepository()
-                return // if not empty, just show me the passwords!
-            }
-        }
-        createRepository()
-    }
-
     private fun runGitOperation(operation: Int) = lifecycleScope.launch {
         launchGitOperation(operation).fold(
             success = { refreshPasswordList() },
@@ -413,10 +331,8 @@ class PasswordStore : BaseGitActivity() {
      * Validates if storage permission is granted, and requests for it if not. The return value
      * is true if the permission has been granted.
      */
-    private fun hasRequiredStoragePermissions(checkLocalRepo: Boolean = false): Boolean {
-        val cloning = supportFragmentManager.findFragmentByTag("ToCloneOrNot") != null
-        return if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED && !cloning) {
+    private fun hasRequiredStoragePermissions(): Boolean {
+        return if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Snackbar.make(
                 findViewById(R.id.main_layout),
                 getString(R.string.access_sdcard_text),
@@ -432,8 +348,7 @@ class PasswordStore : BaseGitActivity() {
             }
             false
         } else {
-            if (checkLocalRepo)
-                checkLocalRepository()
+            checkLocalRepository()
             true
         }
     }
@@ -478,11 +393,7 @@ class PasswordStore : BaseGitActivity() {
                 }
             }
         } else {
-            supportActionBar!!.hide()
-            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            supportFragmentManager.commit {
-                replace(R.id.main_layout, ToCloneOrNot(), "ToCloneOrNot")
-            }
+            startActivity(Intent(this, OnboardingActivity::class.java))
         }
     }
 
@@ -821,60 +732,6 @@ class PasswordStore : BaseGitActivity() {
         }
     }
 
-    fun initRepository(operation: Int) {
-        closeRepository()
-        MaterialAlertDialogBuilder(this)
-            .setTitle(resources.getString(R.string.location_dialog_title))
-            .setMessage(resources.getString(R.string.location_dialog_text))
-            .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
-                settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
-                when (operation) {
-                    NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                    CLONE_REPO_BUTTON -> {
-                        val intent = Intent(activity, GitServerConfigActivity::class.java)
-                        intent.putExtra(REQUEST_ARG_OP, REQUEST_CLONE)
-                        cloneAction.launch(intent)
-                    }
-                }
-            }
-            .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
-                settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, true) }
-                val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-                if (externalRepo == null) {
-                    val intent = Intent(activity, UserPreference::class.java)
-                    intent.putExtra("operation", "git_external")
-                    when (operation) {
-                        NEW_REPO_BUTTON -> repositoryInitAction.launch(intent)
-                        CLONE_REPO_BUTTON -> directoryChangeAction.launch(intent)
-                    }
-                } else {
-                    MaterialAlertDialogBuilder(activity)
-                        .setTitle(resources.getString(R.string.directory_selected_title))
-                        .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
-                        .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
-                            when (operation) {
-                                NEW_REPO_BUTTON -> initializeRepositoryInfo()
-                                CLONE_REPO_BUTTON -> {
-                                    val intent = Intent(activity, GitServerConfigActivity::class.java)
-                                    intent.putExtra(REQUEST_ARG_OP, REQUEST_CLONE)
-                                    cloneAction.launch(intent)
-                                }
-                            }
-                        }
-                        .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
-                            val intent = Intent(activity, UserPreference::class.java)
-                            intent.putExtra("operation", "git_external")
-                            when (operation) {
-                                NEW_REPO_BUTTON -> repositoryInitAction.launch(intent)
-                                CLONE_REPO_BUTTON -> directoryChangeAction.launch(intent)
-                            }
-                        }
-                        .show()
-                }
-            }
-            .show()
-    }
-
     fun matchPasswordWithApp(item: PasswordItem) {
         val path = item.file
             .absolutePath
@@ -886,14 +743,9 @@ class PasswordStore : BaseGitActivity() {
         finish()
     }
 
-    private val sortOrder: PasswordRepository.PasswordSortOrder
-        get() = getSortOrder(settings)
-
     companion object {
 
         const val REQUEST_ARG_PATH = "PATH"
-        const val CLONE_REPO_BUTTON = 401
-        const val NEW_REPO_BUTTON = 402
         private fun isPrintable(c: Char): Boolean {
             val block = UnicodeBlock.of(c)
             return (!Character.isISOControl(c) &&

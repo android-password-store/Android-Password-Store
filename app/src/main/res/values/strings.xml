@@ -77,7 +77,8 @@
     <string name="clone">Clone from server</string>
     <string name="initialize">Use local directory</string>
     <string name="location_dialog_title">Repository location</string>
-    <string name="location_dialog_text">Select where to create or clone your password repository.</string>
+    <string name="location_dialog_create_text">Select where to create your password repository</string>
+    <string name="location_dialog_clone_text">Select where to clone your password repository</string>
     <string name="location_sdcard">SD-Card</string>
     <string name="location_hidden">Hidden (Preferred)</string>
     <string name="external_repository_dialog_title">Choose where to store the passwords</string>

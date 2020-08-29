@@ -20,7 +20,6 @@ import org.eclipse.jgit.transport.URIish
 
 open class PasswordRepository protected constructor() {
 
-    @Suppress("Unused")
     enum class PasswordSortOrder(val comparator: Comparator<PasswordItem>) {
 
         FOLDER_FIRST(Comparator { p1: PasswordItem, p2: PasswordItem ->

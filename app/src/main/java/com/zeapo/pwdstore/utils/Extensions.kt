@@ -8,6 +8,7 @@ import android.app.KeyguardManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Base64
 import android.util.TypedValue
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.preference.PreferenceManager
@@ -129,6 +131,10 @@ suspend fun FragmentActivity.commitChange(
             return true
         }
     }.execute()
+}
+
+fun FragmentActivity.checkRuntimePermission(permission: String): Boolean {
+    return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 }
 
 /**
