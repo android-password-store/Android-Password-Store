@@ -464,12 +464,28 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                             }
                                             .show()
                                     } else {
+                                        lifecycleScope.launch {
+                                            commitChange(
+                                                resources.getString(
+                                                    R.string.git_commit_add_text,
+                                                    getLongName(fullPath, repoPath, editName)
+                                                ),
+                                            )
+                                            setResult(RESULT_OK, returnIntent)
+                                            finish()
+                                        }
+                                    }
+                                } else {
+                                    lifecycleScope.launch {
+                                        commitChange(
+                                            resources.getString(
+                                                R.string.git_commit_add_text,
+                                                getLongName(fullPath, repoPath, editName)
+                                            ),
+                                        )
                                         setResult(RESULT_OK, returnIntent)
                                         finish()
                                     }
-                                } else {
-                                    setResult(RESULT_OK, returnIntent)
-                                    finish()
                                 }
 
                             } catch (e: Exception) {

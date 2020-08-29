@@ -15,9 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
@@ -26,9 +24,7 @@ import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.commitChange
 import java.io.File
-import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillSaveActivity : AppCompatActivity() {
@@ -119,7 +115,6 @@ class AutofillSaveActivity : AppCompatActivity() {
                 formOrigin?.let {
                     AutofillMatcher.addMatchFor(this, it, File(createdPath))
                 }
-                val longName = data.getStringExtra("LONG_NAME")!!
                 val password = data.getStringExtra("PASSWORD")
                 val resultIntent = if (password != null) {
                     // Password was generated and should be filled into a form.
@@ -144,14 +139,8 @@ class AutofillSaveActivity : AppCompatActivity() {
                     // Password was extracted from a form, there is nothing to fill.
                     Intent()
                 }
-                // PasswordCreationActivity delegates committing the added file to PasswordStore. Since
-                // PasswordStore is not involved in an AutofillScenario, we have to commit the file ourselves.
-                lifecycleScope.launch {
-                    commitChange(
-                        getString(R.string.git_commit_add_text, longName),
-                    )
-                }
-                // GitAsyncTask will finish the activity for us.
+                setResult(RESULT_OK, resultIntent)
+                finish()
             }
         }.launch(saveIntent)
     }

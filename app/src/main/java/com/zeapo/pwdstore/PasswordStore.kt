@@ -577,11 +577,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                lifecycleScope.launch {
-                    commitChange(
-                        resources.getString(R.string.git_commit_add_text, result.data?.extras?.getString("LONG_NAME")),
-                    )
-                }
                 refreshPasswordList()
             }
         }.launch(intent)

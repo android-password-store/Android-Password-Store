@@ -12,4 +12,8 @@ class PullOperation(callingActivity: AppCompatActivity) : GitOperation(callingAc
     override val commands: Array<GitCommand<out Any>> = arrayOf(
         git.pull().setRebase(true).setRemote("origin"),
     )
+
+    override fun onSuccess() {
+        callingActivity.finish()
+    }
 }
