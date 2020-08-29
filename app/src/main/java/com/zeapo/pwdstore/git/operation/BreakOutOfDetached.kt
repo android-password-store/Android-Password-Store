@@ -27,7 +27,7 @@ class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(call
     override fun preExecute() = if (!git.repository.repositoryState.isRebasing) {
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
-            .setMessage("The repository is not rebasing, no need to push to another branch")
+            .setMessage(callingActivity.resources.getString(R.string.git_break_out_of_detached_unneeded))
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()
             }.show()
@@ -39,9 +39,11 @@ class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(call
     override fun onSuccess() {
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
-            .setMessage("There was a conflict when trying to rebase. " +
-                "Your local $remoteBranch branch was pushed to another branch named conflicting-$remoteBranch-....\n" +
-                "Use this branch to resolve conflict on your computer")
+            .setMessage(callingActivity.resources.getString(
+                R.string.git_break_out_of_detached_success,
+                remoteBranch,
+                branchName,
+            ))
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
                 callingActivity.finish()
             }.show()
