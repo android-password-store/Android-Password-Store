@@ -46,7 +46,6 @@
     <string name="clone">Clonar desde servidor</string>
     <string name="initialize">Usar directorio local</string>
     <string name="location_dialog_title">Ubicación del repositorio</string>
-    <string name="location_dialog_text">Selecciona dónde crear o clonar tu repositorio de contraseñas.</string>
     <string name="location_sdcard">Tarjeta SD</string>
     <string name="location_hidden">Oculto (Recomendado)</string>
     <string name="external_repository_dialog_title">Selecciona dónde almacenar tus contraseñas</string>

@@ -61,7 +61,6 @@
     <string name="clone">Clonar do servidor</string>
     <string name="initialize">Usar diretório local</string>
     <string name="location_dialog_title">Local do repositório</string>
-    <string name="location_dialog_text">Selecione onde criar ou clonar o repositório da sua senha.</string>
     <string name="location_sdcard">Cartão SD</string>
     <string name="location_hidden">Oculto (preferencial)</string>
     <string name="external_repository_dialog_title">Escolha onde armazenar as senhas</string>

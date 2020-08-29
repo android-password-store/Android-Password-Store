@@ -54,7 +54,6 @@
     <string name="clone">Клонировать с сервера</string>
     <string name="initialize">Использовать локальную директорию</string>
     <string name="location_dialog_title">Расположение репозитория</string>
-    <string name="location_dialog_text">Укажите где создать/клонироввать ваш репозиторий с паролями.</string>
     <string name="location_sdcard">SD-Карта</string>
     <string name="location_hidden">Скрытый (Предпочтительно)</string>
     <string name="external_repository_dialog_title">Выберете где хранить пароли</string>
