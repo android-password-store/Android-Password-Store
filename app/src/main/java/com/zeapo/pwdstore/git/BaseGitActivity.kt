@@ -46,9 +46,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
             return
         }
         try {
-            val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
             val op = when (operation) {
-                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(GitSettings.url!!, this)
+                REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(this, GitSettings.url!!)
                 REQUEST_PULL -> PullOperation(this)
                 REQUEST_PUSH -> PushOperation(this)
                 REQUEST_SYNC -> SyncOperation(this)
