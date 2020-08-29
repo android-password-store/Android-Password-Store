@@ -441,13 +441,15 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
                                 if (editing) {
                                     lifecycleScope.launch {
-                                        commitChange(
-                                            getString(
-                                                R.string.git_commit_edit_text,
-                                                getLongName(fullPath, repoPath, editName)
-                                            )
-                                        )
+                                        commitChange(getString(
+                                            R.string.git_commit_edit_text,
+                                            getLongName(fullPath, repoPath, editName)
+                                        )) {
+                                            setResult(RESULT_OK, returnIntent)
+                                            finish()
+                                        }
                                     }
+                                    return@executeApiAsync
                                 }
 
                                 if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
