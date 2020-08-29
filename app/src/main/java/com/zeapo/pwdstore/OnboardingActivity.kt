@@ -56,7 +56,11 @@ class OnboardingActivity : AppCompatActivity() {
 
     private val externalDirectorySelectAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            if (checkExternalDirectory()) return@registerForActivityResult
+            if (checkExternalDirectory()) {
+                finish()
+            } else {
+                createRepository()
+            }
         }
     }
 
@@ -233,7 +237,7 @@ class OnboardingActivity : AppCompatActivity() {
         }
         val localDir = PasswordRepository.getRepositoryDirectory()
         try {
-            check(localDir.mkdir()) { "Failed to create directory!" }
+            check(localDir.exists() && !localDir.mkdir()) { "Failed to create directory!" }
             PasswordRepository.createRepository(localDir)
             if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
                 settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
@@ -257,13 +261,7 @@ class OnboardingActivity : AppCompatActivity() {
             return
         }
         if (externalRepo && externalRepoPath != null) {
-            val dir = File(externalRepoPath)
-            if (dir.exists() && dir.isDirectory &&
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(), sortOrder).isNotEmpty()) {
-                PasswordRepository.closeRepository()
-                // checkLocalRepository()
-                return // if not empty, just show me the passwords!
-            }
+            if (checkExternalDirectory()) return
         }
         createRepository()
     }
