@@ -22,6 +22,8 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -159,8 +161,10 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
      */
     open fun preExecute() = true
 
-    private fun postExecute() {
-        sshSessionFactory?.close()
+    private suspend fun postExecute() {
+        withContext(Dispatchers.IO) {
+            sshSessionFactory?.close()
+        }
     }
 
     /**
