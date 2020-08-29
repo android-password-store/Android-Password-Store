@@ -105,6 +105,7 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 
 suspend fun FragmentActivity.commitChange(
     message: String,
+    onSuccess: () -> Unit = {},
 ) {
     if (!PasswordRepository.isGitRepo()) {
         return
@@ -122,6 +123,10 @@ suspend fun FragmentActivity.commitChange(
         override fun preExecute(): Boolean {
             d { "Comitting with message: '$message'" }
             return true
+        }
+
+        override fun onSuccess() {
+            onSuccess.invoke()
         }
     }.execute()
 }

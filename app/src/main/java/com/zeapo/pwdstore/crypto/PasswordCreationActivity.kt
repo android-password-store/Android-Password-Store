@@ -331,14 +331,13 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                             lifecycleScope.launch {
-                                commitChange(
-                                    getString(
-                                        R.string.git_commit_gpg_id,
-                                        getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                    )
-                                )
+                                commitChange(getString(
+                                    R.string.git_commit_gpg_id,
+                                    getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                                )) {
+                                    encrypt(data)
+                                }
                             }
-                            encrypt(data)
                         }
                     }
                 }.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
@@ -465,26 +464,24 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                             .show()
                                     } else {
                                         lifecycleScope.launch {
-                                            commitChange(
-                                                resources.getString(
-                                                    R.string.git_commit_add_text,
-                                                    getLongName(fullPath, repoPath, editName)
-                                                ),
-                                            )
-                                            setResult(RESULT_OK, returnIntent)
-                                            finish()
+                                            commitChange(resources.getString(
+                                                R.string.git_commit_add_text,
+                                                getLongName(fullPath, repoPath, editName)
+                                            )) {
+                                                setResult(RESULT_OK, returnIntent)
+                                                finish()
+                                            }
                                         }
                                     }
                                 } else {
                                     lifecycleScope.launch {
-                                        commitChange(
-                                            resources.getString(
-                                                R.string.git_commit_add_text,
-                                                getLongName(fullPath, repoPath, editName)
-                                            ),
-                                        )
-                                        setResult(RESULT_OK, returnIntent)
-                                        finish()
+                                        commitChange(resources.getString(
+                                            R.string.git_commit_add_text,
+                                            getLongName(fullPath, repoPath, editName)
+                                        )) {
+                                            setResult(RESULT_OK, returnIntent)
+                                            finish()
+                                        }
                                     }
                                 }
 
