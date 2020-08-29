@@ -6,7 +6,6 @@ package com.zeapo.pwdstore.utils
 
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.util.Base64
@@ -107,14 +106,8 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 
 suspend fun FragmentActivity.commitChange(
     message: String,
-    finishWithResultOnEnd: Intent? = null,
-    finishActivityOnEnd: Boolean = true,
 ) {
     if (!PasswordRepository.isGitRepo()) {
-        if (finishWithResultOnEnd != null) {
-            setResult(FragmentActivity.RESULT_OK, finishWithResultOnEnd)
-            finish()
-        }
         return
     }
     object : GitOperation(this@commitChange) {
@@ -126,9 +119,6 @@ suspend fun FragmentActivity.commitChange(
             // Commit everything! If anything changed, that is.
             git.commit().setAll(true).setMessage(message),
         )
-
-        override val finishActivityOnEnd = finishActivityOnEnd
-        override val finishWithResultOnEnd = finishWithResultOnEnd
 
         override fun preExecute(): Boolean {
             d { "Comitting with message: '$message'" }

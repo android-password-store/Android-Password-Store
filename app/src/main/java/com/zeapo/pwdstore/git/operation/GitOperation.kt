@@ -41,8 +41,6 @@ import org.eclipse.jgit.transport.URIish
 abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
     abstract val commands: Array<GitCommand<out Any>>
-    open val finishActivityOnEnd = true
-    open val finishWithResultOnEnd: Intent? = null
 
     private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
@@ -117,8 +115,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         GitCommandExecutor(
             callingActivity,
             this,
-            finishActivityOnEnd = finishActivityOnEnd,
-            finishWithResultOnEnd = finishWithResultOnEnd).execute()
+        )
         postExecute()
     }
 
@@ -181,7 +178,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
             .setMessage(ErrorMessages[err])
             .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                if (finishActivityOnEnd) callingActivity.finish()
+                callingActivity.finish()
             }.show()
     }
 

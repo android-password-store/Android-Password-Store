@@ -5,8 +5,6 @@
 
 package com.zeapo.pwdstore.git
 
-import android.app.Activity
-import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.e
@@ -36,8 +34,6 @@ import org.eclipse.jgit.transport.SshSessionFactory
 class GitCommandExecutor(
     private val activity: FragmentActivity,
     private val operation: GitOperation,
-    private val finishWithResultOnEnd: Intent? = Intent(),
-    private val finishActivityOnEnd: Boolean = true,
 ) {
 
     suspend fun execute() {
@@ -128,11 +124,9 @@ class GitCommandExecutor(
         }
         when (operationResult) {
             is Result.Err -> {
-                activity.setResult(Activity.RESULT_CANCELED)
                 if (isExplicitlyUserInitiatedError(operationResult.err)) {
                     // Currently, this is only executed when the user cancels a password prompt
                     // during authentication.
-                    if (finishActivityOnEnd) activity.finish()
                 } else {
                     e(operationResult.err)
                     operation.onError(rootCauseException(operationResult.err))
@@ -140,8 +134,6 @@ class GitCommandExecutor(
             }
             is Result.Ok -> {
                 operation.onSuccess()
-                activity.setResult(Activity.RESULT_OK, finishWithResultOnEnd)
-                if (finishActivityOnEnd) activity.finish()
             }
         }
         snackbar.dismiss()

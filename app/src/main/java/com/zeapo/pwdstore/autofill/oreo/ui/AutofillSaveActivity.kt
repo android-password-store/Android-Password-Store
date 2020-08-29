@@ -149,7 +149,6 @@ class AutofillSaveActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     commitChange(
                         getString(R.string.git_commit_add_text, longName),
-                        finishWithResultOnEnd = resultIntent
                     )
                 }
                 // GitAsyncTask will finish the activity for us.

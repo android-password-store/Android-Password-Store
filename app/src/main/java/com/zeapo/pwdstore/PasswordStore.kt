@@ -580,7 +580,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 lifecycleScope.launch {
                     commitChange(
                         resources.getString(R.string.git_commit_add_text, result.data?.extras?.getString("LONG_NAME")),
-                        finishActivityOnEnd = false,
                     )
                 }
                 refreshPasswordList()
@@ -625,7 +624,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 lifecycleScope.launch {
                     commitChange(
                         resources.getString(R.string.git_commit_remove_text, fmt),
-                        finishActivityOnEnd = false,
                     )
                 }
             }
@@ -695,7 +693,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName),
-                                finishActivityOnEnd = false,
                             )
                         }
                     }
@@ -705,7 +702,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_multiple_text, relativePath),
-                                finishActivityOnEnd = false,
                             )
                         }
                     }
@@ -770,7 +766,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name),
-                                finishActivityOnEnd = false,
                             )
                         }
                     }
