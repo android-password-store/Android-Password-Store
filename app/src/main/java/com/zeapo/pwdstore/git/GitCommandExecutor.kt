@@ -124,10 +124,7 @@ class GitCommandExecutor(
         }
         when (operationResult) {
             is Result.Err -> {
-                if (isExplicitlyUserInitiatedError(operationResult.err)) {
-                    // Currently, this is only executed when the user cancels a password prompt
-                    // during authentication.
-                } else {
+                if (!isExplicitlyUserInitiatedError(operationResult.err)) {
                     e(operationResult.err)
                     operation.onError(rootCauseException(operationResult.err))
                 }
