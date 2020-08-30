@@ -134,9 +134,6 @@ class GitCommandExecutor(
             }
         }
         snackbar.dismiss()
-        withContext(Dispatchers.IO) {
-            (SshSessionFactory.getInstance() as? SshjSessionFactory)?.close()
-        }
     }
 
     private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
