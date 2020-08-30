@@ -105,12 +105,11 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 
 suspend fun FragmentActivity.commitChange(
     message: String,
-    onSuccess: () -> Unit = {},
-) {
+): Result {
     if (!PasswordRepository.isGitRepo()) {
-        return
+        return Result.Ok
     }
-    object : GitOperation(this@commitChange) {
+    return object : GitOperation(this@commitChange) {
         override val commands = arrayOf(
             // Stage all files
             git.add().addFilepattern("."),
@@ -121,12 +120,8 @@ suspend fun FragmentActivity.commitChange(
         )
 
         override fun preExecute(): Boolean {
-            d { "Comitting with message: '$message'" }
+            d { "Committing with message: '$message'" }
             return true
-        }
-
-        override fun onSuccess() {
-            onSuccess.invoke()
         }
     }.execute()
 }

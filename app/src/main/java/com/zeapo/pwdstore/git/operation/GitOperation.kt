@@ -9,6 +9,7 @@ import androidx.annotation.CallSuper
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.Timber.d
+import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
@@ -20,10 +21,14 @@ import com.zeapo.pwdstore.git.sshj.SshAuthData
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.Result
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import net.schmizz.sshj.common.DisconnectReason
+import net.schmizz.sshj.common.SSHException
+import net.schmizz.sshj.userauth.UserAuthException
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -111,15 +116,55 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     /**
      * Executes the GitCommand in an async task.
      */
-    suspend fun execute() {
+    suspend fun execute(): Result {
         if (!preExecute()) {
-            return
+            return Result.Ok
         }
-        GitCommandExecutor(
+        val operationResult = GitCommandExecutor(
             callingActivity,
             this,
         ).execute()
         postExecute()
+        return operationResult
+    }
+
+    fun handleResult(operationResult: Result) {
+        when (operationResult) {
+            is Result.Err -> {
+                if (!isExplicitlyUserInitiatedError(operationResult.err)) {
+                    e(operationResult.err)
+                    onError(rootCauseException(operationResult.err))
+                }
+            }
+            is Result.Ok -> {
+                onSuccess()
+            }
+        }
+    }
+
+    private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
+        var cause: Exception? = e
+        while (cause != null) {
+            if (cause is SSHException &&
+                cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
+                return true
+            cause = cause.cause as? Exception
+        }
+        return false
+    }
+
+    private fun rootCauseException(e: Exception): Exception {
+        var rootCause = e
+        // JGit's TransportException hides the more helpful SSHJ exceptions.
+        // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
+        // more useful exceptions.
+        while ((rootCause is org.eclipse.jgit.errors.TransportException ||
+                rootCause is org.eclipse.jgit.api.errors.TransportException ||
+                (rootCause is UserAuthException &&
+                    rootCause.message == "Exhausted available authentication methods"))) {
+            rootCause = rootCause.cause as? Exception ?: break
+        }
+        return rootCause
     }
 
     suspend fun executeAfterAuthentication(authMode: AuthMode) {

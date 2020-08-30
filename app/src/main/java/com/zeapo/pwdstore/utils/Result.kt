@@ -13,4 +13,6 @@ sealed class Result {
 
     object Ok : Result()
     data class Err(val err: Exception) : Result()
+
+    fun isOk() = this is Ok
 }

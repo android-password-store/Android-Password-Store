@@ -331,10 +331,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                             lifecycleScope.launch {
-                                commitChange(getString(
+                                if (commitChange(getString(
                                     R.string.git_commit_gpg_id,
                                     getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                )) {
+                                )).isOk()) {
                                     encrypt(data)
                                 }
                             }
@@ -455,12 +455,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     }
                                 }
 
-                                val commmitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
+                                val commitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
                                 lifecycleScope.launch {
-                                    commitChange(resources.getString(
-                                        commmitMessageRes,
+                                    if (commitChange(resources.getString(
+                                        commitMessageRes,
                                         getLongName(fullPath, repoPath, editName)
-                                    )) {
+                                    )).isOk()) {
                                         setResult(RESULT_OK, returnIntent)
                                         finish()
                                     }

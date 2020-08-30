@@ -7,14 +7,12 @@ package com.zeapo.pwdstore.git
 
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import com.github.ajalt.timberkt.e
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
 import com.zeapo.pwdstore.git.GitException.PushException
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.operation.GitOperation
-import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.Result
 import com.zeapo.pwdstore.utils.snackbar
 import kotlinx.coroutines.Dispatchers
@@ -29,14 +27,13 @@ import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.RemoteRefUpdate
-import org.eclipse.jgit.transport.SshSessionFactory
 
 class GitCommandExecutor(
     private val activity: FragmentActivity,
     private val operation: GitOperation,
 ) {
 
-    suspend fun execute() {
+    suspend fun execute(): Result {
         val snackbar = activity.snackbar(
             message = activity.resources.getString(R.string.git_operation_running),
             length = Snackbar.LENGTH_INDEFINITE,
@@ -122,42 +119,7 @@ class GitCommandExecutor(
         } catch (e: Exception) {
             operationResult = Result.Err(e)
         }
-        when (operationResult) {
-            is Result.Err -> {
-                if (!isExplicitlyUserInitiatedError(operationResult.err)) {
-                    e(operationResult.err)
-                    operation.onError(rootCauseException(operationResult.err))
-                }
-            }
-            is Result.Ok -> {
-                operation.onSuccess()
-            }
-        }
         snackbar.dismiss()
-    }
-
-    private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
-        var cause: Exception? = e
-        while (cause != null) {
-            if (cause is SSHException &&
-                cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
-                return true
-            cause = cause.cause as? Exception
-        }
-        return false
-    }
-
-    private fun rootCauseException(e: Exception): Exception {
-        var rootCause = e
-        // JGit's TransportException hides the more helpful SSHJ exceptions.
-        // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
-        // more useful exceptions.
-        while ((rootCause is org.eclipse.jgit.errors.TransportException ||
-                rootCause is org.eclipse.jgit.api.errors.TransportException ||
-                (rootCause is UserAuthException &&
-                    rootCause.message == "Exhausted available authentication methods"))) {
-            rootCause = rootCause.cause as? Exception ?: break
-        }
-        return rootCause
+        return operationResult
     }
 }
