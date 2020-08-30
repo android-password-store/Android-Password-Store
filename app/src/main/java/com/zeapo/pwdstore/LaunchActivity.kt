@@ -41,12 +41,13 @@ class LaunchActivity : AppCompatActivity() {
 
     private fun startTargetActivity(noAuth: Boolean) {
         if (intent.action == ACTION_DECRYPT_PASS) {
-            val decryptIntent = Intent(this, DecryptActivity::class.java)
-            decryptIntent.putExtra("NAME", intent.getStringExtra("NAME"))
-            decryptIntent.putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
-            decryptIntent.putExtra("REPO_PATH", intent.getStringExtra("REPO_PATH"))
-            decryptIntent.putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
-            startActivity(decryptIntent)
+            Intent(this, DecryptActivity::class.java).apply {
+                putExtra("NAME", intent.getStringExtra("NAME"))
+                putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
+                putExtra("REPO_PATH", intent.getStringExtra("REPO_PATH"))
+                putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
+                startActivity(this)
+            }
         } else {
             startActivity(Intent(this, PasswordStore::class.java))
         }
