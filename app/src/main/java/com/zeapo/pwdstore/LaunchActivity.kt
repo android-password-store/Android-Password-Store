@@ -40,17 +40,17 @@ class LaunchActivity : AppCompatActivity() {
     }
 
     private fun startTargetActivity(noAuth: Boolean) {
-        if (intent.action == ACTION_DECRYPT_PASS) {
-            val decryptIntent = Intent(this, DecryptActivity::class.java).apply {
+        val intentToStart = if (intent.action == ACTION_DECRYPT_PASS)
+            Intent(this, DecryptActivity::class.java).apply {
                 putExtra("NAME", intent.getStringExtra("NAME"))
                 putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
                 putExtra("REPO_PATH", intent.getStringExtra("REPO_PATH"))
                 putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
             }
-            startActivity(decryptIntent)
-        } else {
-            startActivity(Intent(this, PasswordStore::class.java))
-        }
+        else
+            Intent(this, PasswordStore::class.java)
+        startActivity(intentToStart)
+
         Handler().postDelayed({ finish() }, if (noAuth) 0L else 500L)
     }
 
