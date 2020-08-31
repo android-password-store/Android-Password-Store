@@ -230,7 +230,7 @@ object SshKey {
         delete()
 
         val encryptedPrivateKeyFile = getOrCreateWrappedPrivateKeyFile(requireAuthentication)
-        // Generate the ed255519 key pair and encrypt the private key.
+        // Generate the ed25519 key pair and encrypt the private key.
         val keyPair = net.i2p.crypto.eddsa.KeyPairGenerator().generateKeyPair()
         encryptedPrivateKeyFile.openFileOutput().use { os ->
             os.write((keyPair.private as EdDSAPrivateKey).seed)
@@ -278,14 +278,14 @@ object SshKey {
 
         override fun getPublic(): PublicKey = try {
             androidKeystore.sshPublicKey!!
-        } catch (error: Exception) {
+        } catch (error: Throwable) {
             e(error)
             throw IOException("Failed to get public key '$KEYSTORE_ALIAS' from Android Keystore", error)
         }
 
         override fun getPrivate(): PrivateKey = try {
             androidKeystore.sshPrivateKey!!
-        } catch (error: Exception) {
+        } catch (error: Throwable) {
             e(error)
             throw IOException("Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore", error)
         }
@@ -297,7 +297,7 @@ object SshKey {
 
         override fun getPublic(): PublicKey = try {
             parseSshPublicKey(sshPublicKey!!)!!
-        } catch (error: Exception) {
+        } catch (error: Throwable) {
             e(error)
             throw IOException("Failed to get the public key for wrapped ed25519 key", error)
         }
@@ -311,7 +311,7 @@ object SshKey {
             }
             val rawPrivateKey = encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
             EdDSAPrivateKey(EdDSAPrivateKeySpec(rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC))
-        } catch (error: Exception) {
+        } catch (error: Throwable) {
             e(error)
             throw IOException("Failed to unwrap wrapped ed25519 key", error)
         }
