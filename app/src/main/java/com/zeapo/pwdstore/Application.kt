@@ -45,7 +45,8 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     }
 
     private fun setNightMode() {
-        AppCompatDelegate.setDefaultNightMode(when (sharedPrefs.getString(PreferenceKeys.APP_THEME) ?: getString(R.string.app_theme_def)) {
+        AppCompatDelegate.setDefaultNightMode(when (sharedPrefs.getString(PreferenceKeys.APP_THEME)
+            ?: getString(R.string.app_theme_def)) {
             "light" -> MODE_NIGHT_NO
             "dark" -> MODE_NIGHT_YES
             "follow_system" -> MODE_NIGHT_FOLLOW_SYSTEM

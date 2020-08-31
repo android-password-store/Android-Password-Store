@@ -19,6 +19,7 @@ sealed class GitException(@StringRes res: Int, vararg fmt: String) : Exception(b
     override val message = super.message!!
 
     companion object {
+
         private fun buildMessage(@StringRes res: Int, vararg fmt: String) = Application.instance.resources.getString(res, *fmt)
     }
 
@@ -26,6 +27,7 @@ sealed class GitException(@StringRes res: Int, vararg fmt: String) : Exception(b
      * Encapsulates possible errors from a [org.eclipse.jgit.api.PullCommand].
      */
     sealed class PullException(@StringRes res: Int, vararg fmt: String) : GitException(res, *fmt) {
+
         object PullRebaseFailed : PullException(R.string.git_pull_fail_error)
     }
 

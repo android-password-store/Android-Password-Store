@@ -44,7 +44,7 @@ class OpenKeychainKeyProvider private constructor(private val activity: Fragment
     companion object {
 
         suspend fun prepareAndUse(activity: FragmentActivity, block: (provider: OpenKeychainKeyProvider) -> Unit) {
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 OpenKeychainKeyProvider(activity)
             }.prepareAndUse(block)
         }
@@ -116,8 +116,8 @@ class OpenKeychainKeyProvider private constructor(private val activity: Fragment
             is ApiResponse.Success -> {
                 val response = sshPublicKeyResponse.response as SshPublicKeyResponse
                 val sshPublicKey = response.sshPublicKey!!
-                publicKey = parseSshPublicKey(sshPublicKey) ?:
-                    throw IllegalStateException("OpenKeychain API returned invalid SSH key")
+                publicKey = parseSshPublicKey(sshPublicKey)
+                    ?: throw IllegalStateException("OpenKeychain API returned invalid SSH key")
             }
             is ApiResponse.NoSuchKey -> if (isRetry) {
                 throw sshPublicKeyResponse.exception

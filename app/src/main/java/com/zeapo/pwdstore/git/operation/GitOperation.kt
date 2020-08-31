@@ -69,9 +69,10 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                 when (item) {
                     is CredentialItem.Username -> item.value = uri?.user
                     is CredentialItem.Password -> {
-                        item.value = cachedPassword?.clone() ?: passwordFinder.reqPassword(null).also {
-                            cachedPassword = it.clone()
-                        }
+                        item.value = cachedPassword?.clone()
+                            ?: passwordFinder.reqPassword(null).also {
+                                cachedPassword = it.clone()
+                            }
                     }
                     else -> UnsupportedCredentialItem(uri, item.javaClass.name)
                 }
