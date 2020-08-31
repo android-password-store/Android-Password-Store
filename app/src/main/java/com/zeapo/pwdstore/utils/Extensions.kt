@@ -48,6 +48,8 @@ fun String.base64(): String {
     return Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
 }
 
+fun Result.Companion.success(): Result<Unit> = success(Unit)
+
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
 fun FragmentActivity.snackbar(
@@ -105,9 +107,9 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 
 suspend fun FragmentActivity.commitChange(
     message: String,
-): Result {
+): Result<Unit> {
     if (!PasswordRepository.isGitRepo()) {
-        return Result.Ok
+        return Result.success()
     }
     return object : GitOperation(this@commitChange) {
         override val commands = arrayOf(

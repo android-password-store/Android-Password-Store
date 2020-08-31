@@ -21,9 +21,9 @@ import com.zeapo.pwdstore.git.sshj.SshAuthData
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.Result
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
+import com.zeapo.pwdstore.utils.success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
@@ -116,9 +116,9 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     /**
      * Executes the GitCommand in an async task.
      */
-    suspend fun execute(): Result {
+    suspend fun execute(): Result<Unit> {
         if (!preExecute()) {
-            return Result.Ok
+            return Result.success()
         }
         val operationResult = GitCommandExecutor(
             callingActivity,
@@ -128,32 +128,30 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         return operationResult
     }
 
-    fun handleResult(operationResult: Result) {
-        when (operationResult) {
-            is Result.Err -> {
-                if (!isExplicitlyUserInitiatedError(operationResult.err)) {
-                    e(operationResult.err)
-                    onError(rootCauseException(operationResult.err))
+    fun handleResult(operationResult: Result<Unit>) {
+        operationResult.fold(
+            onSuccess = { onSuccess() },
+            onFailure = { err ->
+                if (!isExplicitlyUserInitiatedError(err)) {
+                    e(err)
+                    onError(rootCauseException(err))
                 }
             }
-            is Result.Ok -> {
-                onSuccess()
-            }
-        }
+        )
     }
 
-    private fun isExplicitlyUserInitiatedError(e: Exception): Boolean {
-        var cause: Exception? = e
+    private fun isExplicitlyUserInitiatedError(e: Throwable): Boolean {
+        var cause: Throwable? = e
         while (cause != null) {
             if (cause is SSHException &&
                 cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
                 return true
-            cause = cause.cause as? Exception
+            cause = cause.cause
         }
         return false
     }
 
-    private fun rootCauseException(e: Exception): Exception {
+    private fun rootCauseException(e: Throwable): Throwable {
         var rootCause = e
         // JGit's TransportException hides the more helpful SSHJ exceptions.
         // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
@@ -162,7 +160,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 rootCause is org.eclipse.jgit.api.errors.TransportException ||
                 (rootCause is UserAuthException &&
                     rootCause.message == "Exhausted available authentication methods"))) {
-            rootCause = rootCause.cause as? Exception ?: break
+            rootCause = rootCause.cause ?: break
         }
         return rootCause
     }
@@ -217,7 +215,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
      * Action to execute on error
      */
     @CallSuper
-    open fun onError(err: Exception) {
+    open fun onError(err: Throwable) {
         // Clear various auth related fields on failure
         callingActivity.getEncryptedPrefs("git_operation").edit {
             remove(PreferenceKeys.HTTPS_PASSWORD)

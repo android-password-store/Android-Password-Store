@@ -334,7 +334,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 if (commitChange(getString(
                                     R.string.git_commit_gpg_id,
                                     getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                )).isOk()) {
+                                )).isSuccess) {
                                     encrypt(data)
                                 }
                             }
@@ -460,7 +460,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     if (commitChange(resources.getString(
                                         commitMessageRes,
                                         getLongName(fullPath, repoPath, editName)
-                                    )).isOk()) {
+                                    )).isSuccess) {
                                         setResult(RESULT_OK, returnIntent)
                                         finish()
                                     }
