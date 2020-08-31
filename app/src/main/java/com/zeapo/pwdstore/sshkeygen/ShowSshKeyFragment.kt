@@ -18,7 +18,6 @@ class ShowSshKeyFragment : DialogFragment() {
         val activity = requireActivity()
         val publicKey = SshKey.sshPublicKey
         return MaterialAlertDialogBuilder(requireActivity()).run {
-            setView(view)
             setMessage(getString(R.string.ssh_keygen_message, publicKey))
             setTitle(R.string.your_public_key)
             setNegativeButton(R.string.ssh_keygen_later) { _, _ ->
