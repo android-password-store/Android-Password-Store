@@ -5,12 +5,12 @@
 package com.zeapo.pwdstore.utils
 
 import android.app.KeyguardManager
-import android.os.Handler
 import androidx.annotation.StringRes
 import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.Timber.tag
@@ -20,7 +20,6 @@ import com.zeapo.pwdstore.R
 object BiometricAuthenticator {
 
     private const val TAG = "BiometricAuthenticator"
-    private val handler = Handler()
 
     sealed class Result {
         data class Success(val cryptoObject: BiometricPrompt.CryptoObject?) : Result()
@@ -69,7 +68,7 @@ object BiometricAuthenticator {
                 .setTitle(activity.getString(dialogTitleRes))
                 .setAllowedAuthenticators(validAuthenticators)
                 .build()
-            BiometricPrompt(activity, { handler.post(it) }, authCallback).authenticate(promptInfo)
+            BiometricPrompt(activity, ContextCompat.getMainExecutor(activity.applicationContext), authCallback).authenticate(promptInfo)
         } else {
             callback(Result.HardwareUnavailableOrDisabled)
         }

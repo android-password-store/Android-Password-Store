@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.git.operation
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
@@ -17,12 +18,18 @@ import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.sshj.InteractivePasswordFinder
 import com.zeapo.pwdstore.git.sshj.SshAuthData
+import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
+import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -32,6 +39,8 @@ import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
+
+const val ANDROID_KEYSTORE_ALIAS_SSH_KEY = "ssh_key"
 
 /**
  * Creates a new git operation
@@ -43,7 +52,6 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
 
     abstract val commands: Array<GitCommand<out Any>>
     private var provider: CredentialsProvider? = null
-    private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     protected var finishFromErrorDialog = true
     protected val repository = PasswordRepository.getRepository(gitDir)
@@ -61,9 +69,10 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
                 when (item) {
                     is CredentialItem.Username -> item.value = uri?.user
                     is CredentialItem.Password -> {
-                        item.value = cachedPassword?.clone() ?: passwordFinder.reqPassword(null).also {
-                            cachedPassword = it.clone()
-                        }
+                        item.value = cachedPassword?.clone()
+                            ?: passwordFinder.reqPassword(null).also {
+                                cachedPassword = it.clone()
+                            }
                     }
                     else -> UnsupportedCredentialItem(uri, item.javaClass.name)
                 }
@@ -88,8 +97,8 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
         return this
     }
 
-    private fun withPublicKeyAuthentication(passphraseFinder: InteractivePasswordFinder): GitOperation {
-        val sessionFactory = SshjSessionFactory(SshAuthData.PublicKeyFile(sshKeyFile, passphraseFinder), hostKeyFile)
+    private fun withSshKeyAuthentication(passphraseFinder: InteractivePasswordFinder): GitOperation {
+        val sessionFactory = SshjSessionFactory(SshAuthData.SshKey(passphraseFinder), hostKeyFile)
         SshSessionFactory.setInstance(sessionFactory)
         this.provider = null
         return this
@@ -126,27 +135,58 @@ abstract class GitOperation(gitDir: File, internal val callingActivity: Fragment
      */
     abstract suspend fun execute()
 
+    private fun onMissingSshKeyFile() {
+        MaterialAlertDialogBuilder(callingActivity)
+            .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
+            .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
+            .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
+                getSshKey(false)
+            }
+            .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
+                getSshKey(true)
+            }
+            .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
+                // Finish the blank GitActivity so user doesn't have to press back
+                callingActivity.finish()
+            }.show()
+    }
+
     suspend fun executeAfterAuthentication(
         authMode: AuthMode,
     ) {
         when (authMode) {
-            AuthMode.SshKey -> if (!sshKeyFile.exists()) {
-                MaterialAlertDialogBuilder(callingActivity)
-                    .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
-                    .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
-                    .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
-                        getSshKey(false)
+            AuthMode.SshKey -> if (SshKey.exists) {
+                if (SshKey.mustAuthenticate) {
+                    val result = withContext(Dispatchers.Main) {
+                        suspendCoroutine<BiometricAuthenticator.Result> { cont ->
+                            BiometricAuthenticator.authenticate(callingActivity, R.string.biometric_prompt_title_ssh_auth) {
+                                if (it !is BiometricAuthenticator.Result.Failure)
+                                    cont.resume(it)
+                            }
+                        }
                     }
-                    .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
-                        getSshKey(true)
+                    when (result) {
+                        is BiometricAuthenticator.Result.Success -> {
+                            withSshKeyAuthentication(CredentialFinder(callingActivity, authMode)).execute()
+                        }
+                        is BiometricAuthenticator.Result.Cancelled -> callingActivity.finish()
+                        is BiometricAuthenticator.Result.Failure -> {
+                            throw IllegalStateException("Biometric authentication failures should be ignored")
+                        }
+                        else -> {
+                            // There is a chance we succeed if the user recently confirmed
+                            // their screen lock. Doing so would have a potential to confuse
+                            // users though, who might deduce that the screen lock
+                            // protection is not effective. Hence, we fail with an error.
+                            Toast.makeText(callingActivity.applicationContext, R.string.biometric_auth_generic_failure, Toast.LENGTH_LONG).show()
+                            callingActivity.finish()
+                        }
                     }
-                    .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                        // Finish the blank GitActivity so user doesn't have to press back
-                        callingActivity.finish()
-                    }.show()
+                } else {
+                    withSshKeyAuthentication(CredentialFinder(callingActivity, authMode)).execute()
+                }
             } else {
-                withPublicKeyAuthentication(
-                    CredentialFinder(callingActivity, authMode)).execute()
+                onMissingSshKeyFile()
             }
             AuthMode.OpenKeychain -> withOpenKeychainAuthentication(callingActivity).execute()
             AuthMode.Password -> withPasswordAuthentication(

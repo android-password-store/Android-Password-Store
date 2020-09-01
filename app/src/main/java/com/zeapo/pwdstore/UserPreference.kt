@@ -15,7 +15,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
@@ -45,6 +44,7 @@ import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportL
 import com.zeapo.pwdstore.crypto.BasePgpActivity
 import com.zeapo.pwdstore.git.GitConfigActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
+import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
@@ -56,7 +56,6 @@ import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
-import java.io.IOException
 
 typealias ClickListener = Preference.OnPreferenceClickListener
 typealias ChangeListener = Preference.OnPreferenceChangeListener
@@ -69,6 +68,7 @@ class UserPreference : AppCompatActivity() {
 
         private var autoFillEnablePreference: SwitchPreferenceCompat? = null
         private var clearSavedPassPreference: Preference? = null
+        private var viewSshKeyPreference: Preference? = null
         private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var prefsActivity: UserPreference
@@ -89,8 +89,8 @@ class UserPreference : AppCompatActivity() {
             val gitConfigPreference = findPreference<Preference>(PreferenceKeys.GIT_CONFIG)
             val sshKeyPreference = findPreference<Preference>(PreferenceKeys.SSH_KEY)
             val sshKeygenPreference = findPreference<Preference>(PreferenceKeys.SSH_KEYGEN)
+            viewSshKeyPreference = findPreference<Preference>(PreferenceKeys.SSH_SEE_KEY)
             clearSavedPassPreference = findPreference(PreferenceKeys.CLEAR_SAVED_PASS)
-            val viewSshKeyPreference = findPreference<Preference>(PreferenceKeys.SSH_SEE_KEY)
             val deleteRepoPreference = findPreference<Preference>(PreferenceKeys.GIT_DELETE_REPO)
             val externalGitRepositoryPreference = findPreference<Preference>(PreferenceKeys.GIT_EXTERNAL)
             val selectExternalGitRepositoryPreference = findPreference<Preference>(PreferenceKeys.PREF_SELECT_EXTERNAL)
@@ -141,8 +141,8 @@ class UserPreference : AppCompatActivity() {
             // Misc preferences
             val appVersionPreference = findPreference<Preference>(PreferenceKeys.APP_VERSION)
 
-            selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO) ?: getString(R.string.no_repo_selected)
-            viewSshKeyPreference?.isVisible = sharedPreferences.getBoolean(PreferenceKeys.USE_GENERATED_KEY, false)
+            selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
+                ?: getString(R.string.no_repo_selected)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toInt() != 0
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID)?.isNotEmpty()
@@ -226,7 +226,8 @@ class UserPreference : AppCompatActivity() {
             }
 
             selectExternalGitRepositoryPreference?.summary =
-                sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO) ?: context.getString(R.string.no_repo_selected)
+                sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
+                    ?: context.getString(R.string.no_repo_selected)
             selectExternalGitRepositoryPreference?.onPreferenceClickListener = ClickListener {
                 prefsActivity.selectExternalGitRepository()
                 true
@@ -393,6 +394,10 @@ class UserPreference : AppCompatActivity() {
             }
         }
 
+        private fun updateViewSshPubkeyPref() {
+            viewSshKeyPreference?.isVisible = SshKey.canShowSshPublicKey
+        }
+
         private fun onEnableAutofillClick() {
             if (prefsActivity.isAccessibilityServiceEnabled) {
                 startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
@@ -451,6 +456,7 @@ class UserPreference : AppCompatActivity() {
             super.onResume()
             updateAutofillSettings()
             updateClearSavedPassphrasePrefs()
+            updateViewSshPubkeyPref()
         }
     }
 
@@ -532,29 +538,18 @@ class UserPreference : AppCompatActivity() {
         }
     }
 
-    /**
-     * Opens a file explorer to import the private key
-     */
-    private fun getSshKey() {
+    private fun importSshKey() {
         registerForActivityResult(OpenDocument()) { uri: Uri? ->
             if (uri == null) return@registerForActivityResult
             try {
-                copySshKey(uri)
+                SshKey.import(uri)
 
                 Toast.makeText(
                     this,
                     this.resources.getString(R.string.ssh_key_success_dialog_title),
                     Toast.LENGTH_LONG
                 ).show()
-                val prefs = sharedPrefs
-
-                prefs.edit { putBoolean(PreferenceKeys.USE_GENERATED_KEY, false) }
-                getEncryptedPrefs("git_operation").edit { remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE) }
-
-                // Delete the public key from generation
-                File("""$filesDir/.ssh_key.pub""").delete()
                 setResult(RESULT_OK)
-
                 finish()
             } catch (e: Exception) {
                 MaterialAlertDialogBuilder(this)
@@ -564,6 +559,25 @@ class UserPreference : AppCompatActivity() {
                     .show()
             }
         }.launch(arrayOf("*/*"))
+    }
+
+    /**
+     * Opens a file explorer to import the private key
+     */
+    private fun getSshKey() {
+        if (SshKey.exists) {
+            MaterialAlertDialogBuilder(this).run {
+                setTitle(R.string.ssh_keygen_existing_title)
+                setMessage(R.string.ssh_keygen_existing_message)
+                setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ ->
+                    importSshKey()
+                }
+                setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> }
+                show()
+            }
+        } else {
+            importSshKey()
+        }
     }
 
     /**
@@ -636,36 +650,6 @@ class UserPreference : AppCompatActivity() {
 
             setResult(RESULT_OK)
         }.launch(arrayOf("*/*"))
-    }
-
-    @Throws(IllegalArgumentException::class, IOException::class)
-    private fun copySshKey(uri: Uri) {
-        // First check whether the content at uri is likely an SSH private key.
-        val fileSize = contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
-            ?.use { cursor ->
-                // Cursor returns only a single row.
-                cursor.moveToFirst()
-                cursor.getInt(0)
-            } ?: throw IOException(getString(R.string.ssh_key_does_not_exist))
-
-        // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
-        if (fileSize > 100_000 || fileSize == 0)
-            throw IllegalArgumentException(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
-
-        val sshKeyInputStream = contentResolver.openInputStream(uri)
-            ?: throw IOException(getString(R.string.ssh_key_does_not_exist))
-        val lines = sshKeyInputStream.bufferedReader().readLines()
-
-        // The file must have more than 2 lines, and the first and last line must have private key
-        // markers.
-        if (lines.size < 2 ||
-            !Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) ||
-            !Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
-        )
-            throw IllegalArgumentException(getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
-
-        // Canonicalize line endings to '\n'.
-        File("$filesDir/.ssh_key").writeText(lines.joinToString("\n"))
     }
 
     private val isAccessibilityServiceEnabled: Boolean

@@ -135,8 +135,6 @@
     <string name="ssh_keygen_passphrase">Mot de passe</string>
     <string name="ssh_keygen_comment">Commentaire</string>
     <string name="ssh_keygen_generate">Générer</string>
-    <string name="ssh_keygen_copy">Copier</string>
-    <string name="ssh_keygen_tip">Enregistrez cette clef publique sur votre serveur Git.</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>

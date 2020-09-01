@@ -130,8 +130,6 @@
     <string name="ssh_keygen_passphrase">Bezpečnostní fráze</string>
     <string name="ssh_keygen_comment">Komentář</string>
     <string name="ssh_keygen_generate">Generovat</string>
-    <string name="ssh_keygen_copy">Kopírovat</string>
-    <string name="ssh_keygen_tip">Přidat tento veřejný klíč na Git server.</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>

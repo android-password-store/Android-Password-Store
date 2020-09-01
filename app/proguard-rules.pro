@@ -18,7 +18,6 @@
 -keepattributes SourceFile,LineNumberTable
 -dontobfuscate
 
--keep class com.jcraft.jsch.**
 -keep class org.eclipse.jgit.internal.JGitText { *; }
 -keep class org.bouncycastle.jcajce.provider.** { *; }
 -keep class org.bouncycastle.jce.provider.** { *; }

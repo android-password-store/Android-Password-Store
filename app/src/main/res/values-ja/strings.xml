@@ -94,8 +94,6 @@
     <string name="ssh_keygen_passphrase">パスフレーズ</string>
     <string name="ssh_keygen_comment">コメント</string>
     <string name="ssh_keygen_generate">生成</string>
-    <string name="ssh_keygen_copy">コピー</string>
-    <string name="ssh_keygen_tip">この公開鍵を Git サーバーに提供してください。</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
