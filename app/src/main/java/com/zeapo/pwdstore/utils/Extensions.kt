@@ -24,6 +24,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.google.android.material.snackbar.Snackbar
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
@@ -59,6 +60,7 @@ fun FragmentActivity.snackbar(
     length: Int = Snackbar.LENGTH_SHORT,
 ): Snackbar {
     val snackbar = Snackbar.make(view, message, length)
+    snackbar.anchorView = findViewById(R.id.fab)
     snackbar.show()
     return snackbar
 }
