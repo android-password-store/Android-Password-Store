@@ -5,6 +5,7 @@
 package com.zeapo.pwdstore.git.operation
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
@@ -18,12 +19,17 @@ import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.sshj.SshAuthData
+import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
+import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.success
+import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
@@ -40,6 +46,8 @@ import org.eclipse.jgit.transport.SshTransport
 import org.eclipse.jgit.transport.Transport
 import org.eclipse.jgit.transport.URIish
 
+const val ANDROID_KEYSTORE_ALIAS_SSH_KEY = "ssh_key"
+
 /**
  * Creates a new git operation
  *
@@ -48,8 +56,6 @@ import org.eclipse.jgit.transport.URIish
 abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
     abstract val commands: Array<GitCommand<out Any>>
-
-    private val sshKeyFile = callingActivity.filesDir.resolve(".ssh_key")
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     private var sshSessionFactory: SshjSessionFactory? = null
 
@@ -165,25 +171,57 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         return rootCause
     }
 
+    private fun onMissingSshKeyFile() {
+        MaterialAlertDialogBuilder(callingActivity)
+            .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
+            .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
+            .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
+                getSshKey(false)
+            }
+            .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
+                getSshKey(true)
+            }
+            .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
+                // Finish the blank GitActivity so user doesn't have to press back
+                callingActivity.finish()
+            }.show()
+    }
+
     suspend fun executeAfterAuthentication(authMode: AuthMode) {
         when (authMode) {
-            AuthMode.SshKey -> if (!sshKeyFile.exists()) {
-                MaterialAlertDialogBuilder(callingActivity)
-                    .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
-                    .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
-                    .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
-                        getSshKey(false)
+            AuthMode.SshKey -> if (SshKey.exists) {
+                if (SshKey.mustAuthenticate) {
+                    val result = withContext(Dispatchers.Main) {
+                        suspendCoroutine<BiometricAuthenticator.Result> { cont ->
+                            BiometricAuthenticator.authenticate(callingActivity, R.string.biometric_prompt_title_ssh_auth) {
+                                if (it !is BiometricAuthenticator.Result.Failure)
+                                    cont.resume(it)
+                            }
+                        }
                     }
-                    .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
-                        getSshKey(true)
+                    when (result) {
+                        is BiometricAuthenticator.Result.Success -> {
+                            registerAuthProviders(
+                                SshAuthData.SshKey(CredentialFinder(callingActivity, AuthMode.SshKey)))
+                        }
+                        is BiometricAuthenticator.Result.Cancelled -> callingActivity.finish()
+                        is BiometricAuthenticator.Result.Failure -> {
+                            throw IllegalStateException("Biometric authentication failures should be ignored")
+                        }
+                        else -> {
+                            // There is a chance we succeed if the user recently confirmed
+                            // their screen lock. Doing so would have a potential to confuse
+                            // users though, who might deduce that the screen lock
+                            // protection is not effective. Hence, we fail with an error.
+                            Toast.makeText(callingActivity.applicationContext, R.string.biometric_auth_generic_failure, Toast.LENGTH_LONG).show()
+                            callingActivity.finish()
+                        }
                     }
-                    .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
-                        // Finish the blank GitActivity so user doesn't have to press back
-                        callingActivity.finish()
-                    }.show()
+                } else {
+                    registerAuthProviders(SshAuthData.SshKey(CredentialFinder(callingActivity, AuthMode.SshKey)))
+                }
             } else {
-                registerAuthProviders(
-                    SshAuthData.PublicKeyFile(sshKeyFile, CredentialFinder(callingActivity, AuthMode.SshKey)))
+                onMissingSshKeyFile()
             }
             AuthMode.OpenKeychain -> registerAuthProviders(SshAuthData.OpenKeychain(callingActivity))
             AuthMode.Password -> {

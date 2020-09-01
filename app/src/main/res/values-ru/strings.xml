@@ -164,8 +164,6 @@
     <string name="ssh_keygen_passphrase">Пароль</string>
     <string name="ssh_keygen_comment">Комментарий</string>
     <string name="ssh_keygen_generate">Сгенерировать</string>
-    <string name="ssh_keygen_copy">Скоприровать</string>
-    <string name="ssh_keygen_tip">Поместите публичный ключ на сервер Git</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>

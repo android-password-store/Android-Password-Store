@@ -9,12 +9,15 @@ All notable changes to this project will be documented in this file.
 -   Allow sorting by recently used
 -   Add [Bromite](https://www.bromite.org/) and [Ungoogled Chromium](https://git.droidware.info/wchen342/ungoogled-chromium-android) to supported browsers list for Autofill
 -   Add ability to view the Git commit log
+-   Allow generating ECDSA and ED25519 keys for SSH
 
 ### Changed
 
 -   A descriptive error message is shown if no username is specified in the Git server settings
 -   Remove explicit protocol choice from Git server settings, it is now inferred from your URL
 -   'Show hidden folders' is now 'Show hidden files and folders'
+-   Generated SSH keys are now stored in the Android Keystore if available, and encrypted at rest otherwise
+-   Allow using device's screen lock credentials to secure generated SSH key
 
 ### Fixed
 

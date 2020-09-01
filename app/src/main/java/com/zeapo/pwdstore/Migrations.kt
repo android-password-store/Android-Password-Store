@@ -45,8 +45,8 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
                 if (!serverPath.startsWith('/'))
                     null
                 else
-                    // We have to specify the ssh scheme as this is the only way to pass a custom
-                    // port.
+                // We have to specify the ssh scheme as this is the only way to pass a custom
+                // port.
                     "ssh://$userPart$hostnamePart$portPart$serverPath"
             }
         }

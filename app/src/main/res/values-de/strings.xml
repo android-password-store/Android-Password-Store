@@ -111,8 +111,6 @@
     <string name="ssh_keygen_passphrase">Passwort</string>
     <string name="ssh_keygen_comment">Kommentar</string>
     <string name="ssh_keygen_generate">Generieren</string>
-    <string name="ssh_keygen_copy">Kopieren</string>
-    <string name="ssh_keygen_tip">Füge den Public-Key zu deinem Git-Server hinzu.</string>
 
     <!-- Misc -->
     <string name="dialog_ok">OK</string>

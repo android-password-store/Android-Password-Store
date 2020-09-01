@@ -46,7 +46,8 @@ class ClipboardService : Service() {
 
                 ACTION_START -> {
                     val time = try {
-                        Integer.parseInt(settings.getString(PreferenceKeys.GENERAL_SHOW_TIME) ?: "45")
+                        Integer.parseInt(settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)
+                            ?: "45")
                     } catch (e: NumberFormatException) {
                         45
                     }

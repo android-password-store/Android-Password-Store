@@ -169,8 +169,6 @@
     <string name="ssh_keygen_passphrase">Frase Secreta</string>
     <string name="ssh_keygen_comment">Comentário</string>
     <string name="ssh_keygen_generate">Gerar</string>
-    <string name="ssh_keygen_copy">Copiar</string>
-    <string name="ssh_keygen_tip">Forneça esta chave pública para seu servidor Git.</string>
     <string name="ssh_key_gen_generating_progress">Gerando chaves…</string>
     <string name="ssh_keygen_generating_done">Concluído!</string>
     <!-- Misc -->
