@@ -152,7 +152,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                             registerAuthProviders(
                                 SshAuthData.SshKey(CredentialFinder(callingActivity, AuthMode.SshKey)))
                         }
-                        is BiometricAuthenticator.Result.Cancelled -> callingActivity.finish()
+                        is BiometricAuthenticator.Result.Cancelled -> return Result.success()
                         is BiometricAuthenticator.Result.Failure -> {
                             throw IllegalStateException("Biometric authentication failures should be ignored")
                         }
