@@ -6,15 +6,10 @@ package com.zeapo.pwdstore.git.operation
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.annotation.CallSuper
-import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
-import com.github.ajalt.timberkt.Timber.d
-import com.github.ajalt.timberkt.e
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
-import com.zeapo.pwdstore.git.ErrorMessages
 import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
@@ -23,18 +18,11 @@ import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
-import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.success
-import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.schmizz.sshj.common.DisconnectReason
-import net.schmizz.sshj.common.SSHException
-import net.schmizz.sshj.userauth.UserAuthException
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -45,8 +33,6 @@ import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshTransport
 import org.eclipse.jgit.transport.Transport
 import org.eclipse.jgit.transport.URIish
-
-const val ANDROID_KEYSTORE_ALIAS_SSH_KEY = "ssh_key"
 
 /**
  * Creates a new git operation
@@ -62,7 +48,6 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     protected val repository = PasswordRepository.getRepository(null)!!
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
-    protected var finishFromErrorDialog = true
 
     private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
 
@@ -134,43 +119,6 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         return operationResult
     }
 
-    fun handleResult(operationResult: Result<Unit>) {
-        operationResult.fold(
-            onSuccess = { onSuccess() },
-            onFailure = { err ->
-                if (!isExplicitlyUserInitiatedError(err)) {
-                    e(err)
-                    onError(rootCauseException(err))
-                }
-            }
-        )
-    }
-
-    private fun isExplicitlyUserInitiatedError(e: Throwable): Boolean {
-        var cause: Throwable? = e
-        while (cause != null) {
-            if (cause is SSHException &&
-                cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
-                return true
-            cause = cause.cause
-        }
-        return false
-    }
-
-    private fun rootCauseException(e: Throwable): Throwable {
-        var rootCause = e
-        // JGit's TransportException hides the more helpful SSHJ exceptions.
-        // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
-        // more useful exceptions.
-        while ((rootCause is org.eclipse.jgit.errors.TransportException ||
-                rootCause is org.eclipse.jgit.api.errors.TransportException ||
-                (rootCause is UserAuthException &&
-                    rootCause.message == "Exhausted available authentication methods"))) {
-            rootCause = rootCause.cause ?: break
-        }
-        return rootCause
-    }
-
     private fun onMissingSshKeyFile() {
         MaterialAlertDialogBuilder(callingActivity)
             .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
@@ -187,7 +135,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             }.show()
     }
 
-    suspend fun executeAfterAuthentication(authMode: AuthMode) {
+    suspend fun executeAfterAuthentication(authMode: AuthMode): Result<Unit> {
         when (authMode) {
             AuthMode.SshKey -> if (SshKey.exists) {
                 if (SshKey.mustAuthenticate) {
@@ -234,7 +182,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             AuthMode.None -> {
             }
         }
-        execute()
+        return execute()
     }
 
     /**
@@ -248,30 +196,6 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             sshSessionFactory?.close()
         }
     }
-
-    /**
-     * Action to execute on error
-     */
-    @CallSuper
-    open fun onError(err: Throwable) {
-        // Clear various auth related fields on failure
-        callingActivity.getEncryptedPrefs("git_operation").edit {
-            remove(PreferenceKeys.HTTPS_PASSWORD)
-        }
-        callingActivity.sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
-        d(err)
-        MaterialAlertDialogBuilder(callingActivity)
-            .setTitle(callingActivity.resources.getString(R.string.jgit_error_dialog_title))
-            .setMessage(ErrorMessages[err])
-            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                if (finishFromErrorDialog) callingActivity.finish()
-            }.show()
-    }
-
-    /**
-     * Action to execute on success
-     */
-    open fun onSuccess() {}
 
     companion object {
 

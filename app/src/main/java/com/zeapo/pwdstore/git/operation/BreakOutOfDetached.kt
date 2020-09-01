@@ -11,13 +11,11 @@ import org.eclipse.jgit.api.RebaseCommand
 
 class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
-    private val branchName = "conflicting-$remoteBranch-${System.currentTimeMillis()}"
-
     override val commands = arrayOf(
         // abort the rebase
         git.rebase().setOperation(RebaseCommand.Operation.ABORT),
         // git checkout -b conflict-branch
-        git.checkout().setCreateBranch(true).setName(branchName),
+        git.checkout().setCreateBranch(true).setName("conflicting-$remoteBranch-${System.currentTimeMillis()}"),
         // push the changes
         git.push().setRemote("origin"),
         // switch back to ${gitBranch}
@@ -34,18 +32,5 @@ class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(call
         false
     } else {
         true
-    }
-
-    override fun onSuccess() {
-        MaterialAlertDialogBuilder(callingActivity)
-            .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
-            .setMessage(callingActivity.resources.getString(
-                R.string.git_break_out_of_detached_success,
-                remoteBranch,
-                branchName,
-            ))
-            .setPositiveButton(callingActivity.resources.getString(R.string.dialog_ok)) { _, _ ->
-                callingActivity.finish()
-            }.show()
     }
 }

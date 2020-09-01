@@ -12,8 +12,4 @@ class PushOperation(callingActivity: AppCompatActivity) : GitOperation(callingAc
     override val commands: Array<GitCommand<out Any>> = arrayOf(
         git.push().setPushAll().setRemote("origin"),
     )
-
-    override fun onSuccess() {
-        callingActivity.finish()
-    }
 }

@@ -20,8 +20,4 @@ class SyncOperation(callingActivity: AppCompatActivity) : GitOperation(callingAc
         // Push it all back
         git.push().setPushAll().setRemote("origin"),
     )
-
-    override fun onSuccess() {
-        callingActivity.finish()
-    }
 }

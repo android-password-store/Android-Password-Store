@@ -20,8 +20,4 @@ class ResetToRemoteOperation(callingActivity: AppCompatActivity) : GitOperation(
         // branches from 'master' to anything else.
         git.branchCreate().setName(remoteBranch).setForce(true),
     )
-
-    override fun onSuccess() {
-        callingActivity.finish()
-    }
 }

@@ -19,13 +19,4 @@ class CloneOperation(callingActivity: AppCompatActivity, uri: String) : GitOpera
     override val commands: Array<GitCommand<out Any>> = arrayOf(
         Git.cloneRepository().setBranch(remoteBranch).setDirectory(repository.workTree).setURI(uri),
     )
-
-    override fun onSuccess() {
-        callingActivity.finish()
-    }
-
-    override fun onError(err: Throwable) {
-        finishFromErrorDialog = false
-        super.onError(err)
-    }
 }
