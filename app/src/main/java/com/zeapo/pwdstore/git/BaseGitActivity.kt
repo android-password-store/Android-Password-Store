@@ -22,8 +22,10 @@ import com.zeapo.pwdstore.git.operation.ResetToRemoteOperation
 import com.zeapo.pwdstore.git.operation.SyncOperation
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
-import com.zeapo.pwdstore.utils.isExplicitlyUserInitiatedError
 import com.zeapo.pwdstore.utils.sharedPrefs
+import net.schmizz.sshj.common.DisconnectReason
+import net.schmizz.sshj.common.SSHException
+import net.schmizz.sshj.userauth.UserAuthException
 
 /**
  * Abstract AppCompatActivity that holds some information that is commonly shared across git-related
@@ -69,19 +71,53 @@ abstract class BaseGitActivity : AppCompatActivity() {
     }
 
     fun defaultErrorHandler(err: Throwable) {
-        if (!err.isExplicitlyUserInitiatedError()) {
+        val error = rootCauseException(err)
+        if (!isExplicitlyUserInitiatedError(error)) {
             getEncryptedPrefs("git_operation").edit {
                 remove(PreferenceKeys.HTTPS_PASSWORD)
             }
             sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
-            d(err)
+            d(error)
             MaterialAlertDialogBuilder(this)
                 .setTitle(resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage(ErrorMessages[err])
+                .setMessage(ErrorMessages[error])
                 .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
                     finish()
                 }.show()
         }
+    }
+
+    /**
+     * Check if a given [Throwable] is the result of an error caused by the user cancelling the
+     * operation.
+     */
+    private fun isExplicitlyUserInitiatedError(throwable: Throwable): Boolean {
+        var cause: Throwable? = throwable
+        while (cause != null) {
+            if (cause is SSHException &&
+                cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
+                return true
+            cause = cause.cause
+        }
+        return false
+    }
+
+    /**
+     * Get the real root cause of a [Throwable] by traversing until known wrapping exceptions are no
+     * longer found.
+     */
+    private fun rootCauseException(throwable: Throwable): Throwable {
+        var rootCause = throwable
+        // JGit's TransportException hides the more helpful SSHJ exceptions.
+        // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
+        // more useful exceptions.
+        while ((rootCause is org.eclipse.jgit.errors.TransportException ||
+                rootCause is org.eclipse.jgit.api.errors.TransportException ||
+                (rootCause is UserAuthException &&
+                    rootCause.message == "Exhausted available authentication methods"))) {
+            rootCause = rootCause.cause ?: break
+        }
+        return rootCause
     }
 
     companion object {

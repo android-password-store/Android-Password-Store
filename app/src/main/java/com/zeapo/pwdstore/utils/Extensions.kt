@@ -28,9 +28,6 @@ import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
 import java.util.Date
-import net.schmizz.sshj.common.DisconnectReason
-import net.schmizz.sshj.common.SSHException
-import net.schmizz.sshj.userauth.UserAuthException
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 
@@ -160,39 +157,6 @@ val Context.keyguardManager: KeyguardManager
 
 fun File.isInsideRepository(): Boolean {
     return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
-}
-
-/**
- * Check if a given [Throwable] is the result of an error caused by the user cancelling the
- * operation.
- */
-fun Throwable.isExplicitlyUserInitiatedError(): Boolean {
-    var cause: Throwable? = this
-    while (cause != null) {
-        if (cause is SSHException &&
-            cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER)
-            return true
-        cause = cause.cause
-    }
-    return false
-}
-
-/**
- * Get the real root cause of a [Throwable] by traversing until known wrapping exceptions are no
- * longer found.
- */
-fun Throwable.rootCauseException(): Throwable {
-    var rootCause = this
-    // JGit's TransportException hides the more helpful SSHJ exceptions.
-    // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
-    // more useful exceptions.
-    while ((rootCause is org.eclipse.jgit.errors.TransportException ||
-            rootCause is org.eclipse.jgit.api.errors.TransportException ||
-            (rootCause is UserAuthException &&
-                rootCause.message == "Exhausted available authentication methods"))) {
-        rootCause = rootCause.cause ?: break
-    }
-    return rootCause
 }
 
 /**
