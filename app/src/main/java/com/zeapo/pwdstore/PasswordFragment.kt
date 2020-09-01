@@ -100,14 +100,16 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     AuthMode.None -> BaseGitActivity.REQUEST_PULL
                     else -> BaseGitActivity.REQUEST_SYNC
                 }
-                lifecycleScope.launch {
-                    requireStore().launchGitOperation(operationId).fold(
-                        onSuccess = {
-                            binding.swipeRefresher.isRefreshing = false
-                            requireStore().refreshPasswordList()
-                        },
-                        onFailure = { err -> requireStore().defaultErrorHandler(err) },
-                    )
+                requireStore().apply {
+                    lifecycleScope.launch {
+                        launchGitOperation(operationId).fold(
+                            onSuccess = {
+                                binding.swipeRefresher.isRefreshing = false
+                                refreshPasswordList()
+                            },
+                            onFailure = ::defaultErrorHandler,
+                        )
+                    }
                 }
             }
         }
