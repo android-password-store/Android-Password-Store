@@ -122,7 +122,10 @@ class GitServerConfigActivity : BaseGitActivity() {
                                 localDir.deleteRecursively()
                             }
                             snackbar.dismiss()
-                            launchGitOperation(REQUEST_CLONE)
+                            launchGitOperation(REQUEST_CLONE).fold(
+                                onSuccess = ::defaultSuccessHandler,
+                                onFailure = ::defaultErrorHandler,
+                            )
                         }
                     } catch (e: IOException) {
                         // TODO Handle the exception correctly if we are unable to delete the directory...
@@ -153,7 +156,12 @@ class GitServerConfigActivity : BaseGitActivity() {
                 e.printStackTrace()
                 MaterialAlertDialogBuilder(this).setMessage(e.message).show()
             }
-            lifecycleScope.launch { launchGitOperation(REQUEST_CLONE) }
+            lifecycleScope.launch {
+                launchGitOperation(REQUEST_CLONE).fold(
+                    onSuccess = ::defaultSuccessHandler,
+                    onFailure = ::defaultErrorHandler,
+                )
+            }
         }
     }
 }
