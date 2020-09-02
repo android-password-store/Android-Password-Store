@@ -23,6 +23,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import net.schmizz.sshj.common.DisconnectReason
+import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
@@ -152,7 +154,9 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                             registerAuthProviders(
                                 SshAuthData.SshKey(CredentialFinder(callingActivity, AuthMode.SshKey)))
                         }
-                        is BiometricAuthenticator.Result.Cancelled -> return Result.success()
+                        is BiometricAuthenticator.Result.Cancelled -> {
+                            return Result.failure(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
+                        }
                         is BiometricAuthenticator.Result.Failure -> {
                             throw IllegalStateException("Biometric authentication failures should be ignored")
                         }
