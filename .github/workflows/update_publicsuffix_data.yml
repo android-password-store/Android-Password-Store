@@ -21,19 +21,12 @@ jobs:
       - name: Compare list changes
         run: if [[ $(git diff --binary --stat) != '' ]]; then echo "::set-env name=UPDATED::true"; fi
 
-      - name: Commit changes
-        if: env.UPDATED == 'true'
-        run: |
-          git checkout -b bot/update-psl
-          git add app/src/main/assets/publicsuffixes
-          git commit --message "Update Public Suffix List data"
-
-      - name: Create update PR
-        uses: thomaseizinger/create-pull-request@1.0.0
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
         if: env.UPDATED == 'true'
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          head: bot/update-psl
+          commit-message: Update Public Suffix List data
+          branch: bot/update-psl
           base: develop
           title: 'Update Public Suffix List data'
-          body: 'Updates Public Suffix List from https://publicsuffix.org/list/'
+          assignees: msfjarvis
