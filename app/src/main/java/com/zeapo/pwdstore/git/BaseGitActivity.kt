@@ -66,11 +66,11 @@ abstract class BaseGitActivity : AppCompatActivity() {
         return op.executeAfterAuthentication(GitSettings.authMode)
     }
 
-    fun defaultSuccessHandler(@Suppress("UNUSED_PARAMETER") nothing: Unit) {
+    fun finishOnSuccessHandler(@Suppress("UNUSED_PARAMETER") nothing: Unit) {
         finish()
     }
 
-    fun defaultErrorHandler(err: Throwable) {
+    fun finishAfterPromptOnErrorHandler(err: Throwable) {
         val error = rootCauseException(err)
         if (!isExplicitlyUserInitiatedError(error)) {
             getEncryptedPrefs("git_operation").edit {

@@ -91,15 +91,15 @@ class GitConfigActivity : BaseGitActivity() {
                                 finish()
                             }.show()
                     },
-                    onFailure = ::defaultErrorHandler,
+                    onFailure = ::finishAfterPromptOnErrorHandler,
                 )
             }
         }
         binding.gitResetToRemote.setOnClickListener {
             lifecycleScope.launch {
                 launchGitOperation(REQUEST_RESET).fold(
-                    onSuccess = ::defaultSuccessHandler,
-                    onFailure = ::defaultErrorHandler,
+                    onSuccess = ::finishOnSuccessHandler,
+                    onFailure = ::finishAfterPromptOnErrorHandler,
                 )
             }
         }

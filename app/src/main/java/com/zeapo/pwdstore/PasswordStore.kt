@@ -404,7 +404,7 @@ class PasswordStore : BaseGitActivity() {
     private fun runGitOperation(operation: Int) = lifecycleScope.launch {
         launchGitOperation(operation).fold(
             onSuccess = { refreshPasswordList() },
-            onFailure = ::defaultErrorHandler,
+            onFailure = ::finishAfterPromptOnErrorHandler,
         )
     }
 

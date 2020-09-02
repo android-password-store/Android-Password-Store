@@ -123,8 +123,8 @@ class GitServerConfigActivity : BaseGitActivity() {
                             }
                             snackbar.dismiss()
                             launchGitOperation(REQUEST_CLONE).fold(
-                                onSuccess = ::defaultSuccessHandler,
-                                onFailure = ::defaultErrorHandler,
+                                onSuccess = ::finishOnSuccessHandler,
+                                onFailure = ::finishAfterPromptOnErrorHandler,
                             )
                         }
                     } catch (e: IOException) {
@@ -158,8 +158,8 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
             lifecycleScope.launch {
                 launchGitOperation(REQUEST_CLONE).fold(
-                    onSuccess = ::defaultSuccessHandler,
-                    onFailure = ::defaultErrorHandler,
+                    onSuccess = ::finishOnSuccessHandler,
+                    onFailure = ::finishAfterPromptOnErrorHandler,
                 )
             }
         }
