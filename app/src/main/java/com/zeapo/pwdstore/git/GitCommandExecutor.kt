@@ -7,8 +7,6 @@ package com.zeapo.pwdstore.git
 
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
@@ -39,8 +37,7 @@ class GitCommandExecutor(
         )
         // Count the number of uncommitted files
         var nbChanges = 0
-        var operationResult: Result<Unit, Throwable> = Ok(Unit)
-        try {
+        return com.github.michaelbull.result.runCatching {
             for (command in operation.commands) {
                 when (command) {
                     is StatusCommand -> {
@@ -65,7 +62,7 @@ class GitCommandExecutor(
                         }
                         val rr = result.rebaseResult
                         if (rr.status === RebaseResult.Status.STOPPED) {
-                            operationResult = Err(PullException.PullRebaseFailed)
+                            throw PullException.PullRebaseFailed
                         }
                     }
                     is PushCommand -> {
@@ -75,15 +72,15 @@ class GitCommandExecutor(
                         for (result in results) {
                             // Code imported (modified) from Gerrit PushOp, license Apache v2
                             for (rru in result.remoteUpdates) {
-                                val error = when (rru.status) {
-                                    RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD -> PushException.NonFastForward
+                                when (rru.status) {
+                                    RemoteRefUpdate.Status.REJECTED_NONFASTFORWARD -> throw PushException.NonFastForward
                                     RemoteRefUpdate.Status.REJECTED_NODELETE,
                                     RemoteRefUpdate.Status.REJECTED_REMOTE_CHANGED,
                                     RemoteRefUpdate.Status.NON_EXISTING,
                                     RemoteRefUpdate.Status.NOT_ATTEMPTED,
-                                    -> PushException.Generic(rru.status.name)
+                                    -> throw PushException.Generic(rru.status.name)
                                     RemoteRefUpdate.Status.REJECTED_OTHER_REASON -> {
-                                        if ("non-fast-forward" == rru.message) {
+                                        throw if ("non-fast-forward" == rru.message) {
                                             PushException.RemoteRejected
                                         } else {
                                             PushException.Generic(rru.message)
@@ -97,13 +94,7 @@ class GitCommandExecutor(
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
-                                        null
                                     }
-                                    else -> null
-
-                                }
-                                if (error != null) {
-                                    operationResult = Err(error)
                                 }
                             }
                         }
@@ -115,10 +106,8 @@ class GitCommandExecutor(
                     }
                 }
             }
-        } catch (e: Exception) {
-            operationResult = Err(e)
+        }.also {
+            snackbar.dismiss()
         }
-        snackbar.dismiss()
-        return operationResult
     }
 }
