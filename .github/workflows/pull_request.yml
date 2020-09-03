@@ -22,7 +22,7 @@ jobs:
             pull_number: context.payload.number,
             per_page: 100
           })
-          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.endsWith("gradle") || f.filename.startsWith(".github/workflows/pull_request.yml") || f.filename.startsWith("gradle") || f.filename.endsWith("properties")).length > 0
+          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.startsWith("buildSrc/") || f.filename.endsWith("gradle") || f.filename.startsWith(".github/workflows/pull_request.yml") || f.filename.startsWith("gradle") || f.filename.endsWith("properties")).length > 0
           console.log(serviceChanged)
           return serviceChanged
 
