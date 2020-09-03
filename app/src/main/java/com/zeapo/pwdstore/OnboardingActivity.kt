@@ -36,12 +36,14 @@ class OnboardingActivity : AppCompatActivity() {
     private val cloneAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
+            finish()
         }
     }
 
     private val repositoryInitAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             initializeRepositoryInfo()
+            finish()
         }
     }
 
@@ -224,7 +226,6 @@ class OnboardingActivity : AppCompatActivity() {
                 PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(), sortOrder).isNotEmpty()
             ) {
                 PasswordRepository.closeRepository()
-                //checkLocalRepository()
                 return true
             }
         }
@@ -251,7 +252,6 @@ class OnboardingActivity : AppCompatActivity() {
             }
             return
         }
-        // checkLocalRepository()
     }
 
     private fun initializeRepositoryInfo() {
