@@ -7,6 +7,9 @@ package com.zeapo.pwdstore.git.operation
 import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
@@ -18,7 +21,6 @@ import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.success
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -109,9 +111,9 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     /**
      * Executes the GitCommand in an async task.
      */
-    suspend fun execute(): Result<Unit> {
+    suspend fun execute(): Result<Unit, Throwable> {
         if (!preExecute()) {
-            return Result.success()
+            return Ok(Unit)
         }
         val operationResult = GitCommandExecutor(
             callingActivity,
@@ -137,7 +139,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             }.show()
     }
 
-    suspend fun executeAfterAuthentication(authMode: AuthMode): Result<Unit> {
+    suspend fun executeAfterAuthentication(authMode: AuthMode): Result<Unit, Throwable> {
         when (authMode) {
             AuthMode.SshKey -> if (SshKey.exists) {
                 if (SshKey.mustAuthenticate) {
@@ -155,7 +157,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                                 SshAuthData.SshKey(CredentialFinder(callingActivity, AuthMode.SshKey)))
                         }
                         is BiometricAuthenticator.Result.Cancelled -> {
-                            return Result.failure(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
+                            return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
                         }
                         is BiometricAuthenticator.Result.Failure -> {
                             throw IllegalStateException("Biometric authentication failures should be ignored")

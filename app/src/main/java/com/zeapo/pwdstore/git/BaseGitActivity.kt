@@ -10,7 +10,9 @@ import androidx.core.content.edit
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.Err
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.github.michaelbull.result.Result
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.operation.BreakOutOfDetached
@@ -28,7 +30,7 @@ import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.UserAuthException
 
 /**
- * Abstract AppCompatActivity that holds some information that is commonly shared across git-related
+ * Abstract [AppCompatActivity] that holds some information that is commonly shared across git-related
  * tasks and makes sense to be held here.
  */
 abstract class BaseGitActivity : AppCompatActivity() {
@@ -47,9 +49,9 @@ abstract class BaseGitActivity : AppCompatActivity() {
      * Attempt to launch the requested Git operation.
      * @param operation The type of git operation to launch
      */
-    suspend fun launchGitOperation(operation: Int): Result<Unit> {
+    suspend fun launchGitOperation(operation: Int): Result<Unit, Throwable> {
         if (GitSettings.url == null) {
-            return Result.failure(IllegalStateException("Git url is not set!"))
+            return Err(IllegalStateException("Git url is not set!"))
         }
         val op = when (operation) {
             REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(this, GitSettings.url!!)
@@ -60,7 +62,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
             REQUEST_RESET -> ResetToRemoteOperation(this)
             else -> {
                 tag(TAG).e { "Operation not recognized : $operation" }
-                return Result.failure(IllegalArgumentException("$operation is not a valid Git operation"))
+                return Err(IllegalArgumentException("$operation is not a valid Git operation"))
             }
         }
         return op.executeAfterAuthentication(GitSettings.authMode)

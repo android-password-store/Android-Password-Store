@@ -23,6 +23,8 @@ import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.operation.GitOperation
@@ -49,8 +51,6 @@ fun String.splitLines(): Array<String> {
 fun String.base64(): String {
     return Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
 }
-
-fun Result.Companion.success(): Result<Unit> = success(Unit)
 
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
@@ -110,9 +110,9 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 
 suspend fun FragmentActivity.commitChange(
     message: String,
-): Result<Unit> {
+): Result<Unit, Throwable> {
     if (!PasswordRepository.isGitRepo()) {
-        return Result.success()
+        return Ok(Unit)
     }
     return object : GitOperation(this@commitChange) {
         override val commands = arrayOf(

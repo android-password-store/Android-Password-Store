@@ -9,6 +9,7 @@ import android.os.Handler
 import android.view.View
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
+import com.github.michaelbull.result.fold
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -123,8 +124,8 @@ class GitServerConfigActivity : BaseGitActivity() {
                             }
                             snackbar.dismiss()
                             launchGitOperation(REQUEST_CLONE).fold(
-                                onSuccess = ::finishOnSuccessHandler,
-                                onFailure = ::finishAfterPromptOnErrorHandler,
+                                success = ::finishOnSuccessHandler,
+                                failure = ::finishAfterPromptOnErrorHandler,
                             )
                         }
                     } catch (e: IOException) {
@@ -158,8 +159,8 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
             lifecycleScope.launch {
                 launchGitOperation(REQUEST_CLONE).fold(
-                    onSuccess = ::finishOnSuccessHandler,
-                    onFailure = ::finishAfterPromptOnErrorHandler,
+                    success = ::finishOnSuccessHandler,
+                    failure = ::finishAfterPromptOnErrorHandler,
                 )
             }
         }

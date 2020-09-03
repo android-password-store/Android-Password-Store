@@ -11,6 +11,7 @@ import android.util.Patterns
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.fold
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -78,7 +79,7 @@ class GitConfigActivity : BaseGitActivity() {
         binding.gitAbortRebase.setOnClickListener {
             lifecycleScope.launch {
                 launchGitOperation(BREAK_OUT_OF_DETACHED).fold(
-                    onSuccess = {
+                    success = {
                         MaterialAlertDialogBuilder(this@GitConfigActivity)
                             .setTitle(resources.getString(R.string.git_abort_and_push_title))
                             .setMessage(resources.getString(
@@ -91,15 +92,15 @@ class GitConfigActivity : BaseGitActivity() {
                                 finish()
                             }.show()
                     },
-                    onFailure = ::finishAfterPromptOnErrorHandler,
+                    failure = ::finishAfterPromptOnErrorHandler,
                 )
             }
         }
         binding.gitResetToRemote.setOnClickListener {
             lifecycleScope.launch {
                 launchGitOperation(REQUEST_RESET).fold(
-                    onSuccess = ::finishOnSuccessHandler,
-                    onFailure = ::finishAfterPromptOnErrorHandler,
+                    success = ::finishOnSuccessHandler,
+                    failure = ::finishAfterPromptOnErrorHandler,
                 )
             }
         }

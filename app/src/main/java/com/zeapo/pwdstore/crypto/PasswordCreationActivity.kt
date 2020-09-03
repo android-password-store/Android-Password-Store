@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.onSuccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
@@ -331,10 +332,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                             lifecycleScope.launch {
-                                if (commitChange(getString(
+                                commitChange(getString(
                                     R.string.git_commit_gpg_id,
                                     getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                )).isSuccess) {
+                                )).onSuccess {
                                     encrypt(data)
                                 }
                             }
@@ -457,10 +458,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
                                 val commitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
                                 lifecycleScope.launch {
-                                    if (commitChange(resources.getString(
+                                    commitChange(resources.getString(
                                         commitMessageRes,
                                         getLongName(fullPath, repoPath, editName)
-                                    )).isSuccess) {
+                                    )).onSuccess {
                                         setResult(RESULT_OK, returnIntent)
                                         finish()
                                     }

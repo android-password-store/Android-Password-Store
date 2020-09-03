@@ -118,6 +118,7 @@ dependencies {
     implementation(Dependencies.ThirdParty.jgit) {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
+    implementation(Dependencies.ThirdParty.kotlin_result)
     implementation(Dependencies.ThirdParty.sshj)
     implementation(Dependencies.ThirdParty.bouncycastle)
     implementation(Dependencies.ThirdParty.plumber)

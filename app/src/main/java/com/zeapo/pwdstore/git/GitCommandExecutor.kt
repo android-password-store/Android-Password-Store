@@ -7,6 +7,8 @@ package com.zeapo.pwdstore.git
 
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
@@ -14,7 +16,7 @@ import com.zeapo.pwdstore.git.GitException.PushException
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.snackbar
-import com.zeapo.pwdstore.utils.success
+import com.github.michaelbull.result.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.CommitCommand
@@ -30,14 +32,14 @@ class GitCommandExecutor(
     private val operation: GitOperation,
 ) {
 
-    suspend fun execute(): Result<Unit> {
+    suspend fun execute(): Result<Unit, Throwable> {
         val snackbar = activity.snackbar(
             message = activity.resources.getString(R.string.git_operation_running),
             length = Snackbar.LENGTH_INDEFINITE,
         )
         // Count the number of uncommitted files
         var nbChanges = 0
-        var operationResult: Result<Unit> = Result.success()
+        var operationResult: Result<Unit, Throwable> = Ok(Unit)
         try {
             for (command in operation.commands) {
                 when (command) {
@@ -63,7 +65,7 @@ class GitCommandExecutor(
                         }
                         val rr = result.rebaseResult
                         if (rr.status === RebaseResult.Status.STOPPED) {
-                            operationResult = Result.failure(PullException.PullRebaseFailed)
+                            operationResult = Err(PullException.PullRebaseFailed)
                         }
                     }
                     is PushCommand -> {
@@ -101,7 +103,7 @@ class GitCommandExecutor(
 
                                 }
                                 if (error != null) {
-                                    operationResult = Result.failure(error)
+                                    operationResult = Err(error)
                                 }
                             }
                         }
@@ -114,7 +116,7 @@ class GitCommandExecutor(
                 }
             }
         } catch (e: Exception) {
-            operationResult = Result.failure(e)
+            operationResult = Err(e)
         }
         snackbar.dismiss()
         return operationResult

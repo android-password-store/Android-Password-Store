@@ -22,6 +22,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.michaelbull.result.fold
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
@@ -103,11 +104,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 requireStore().apply {
                     lifecycleScope.launch {
                         launchGitOperation(operationId).fold(
-                            onSuccess = {
+                            success = {
                                 binding.swipeRefresher.isRefreshing = false
                                 refreshPasswordList()
                             },
-                            onFailure = ::finishAfterPromptOnErrorHandler,
+                            failure = ::finishAfterPromptOnErrorHandler,
                         )
                     }
                 }

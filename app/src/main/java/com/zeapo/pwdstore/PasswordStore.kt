@@ -37,6 +37,7 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
+import com.github.michaelbull.result.fold
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -403,8 +404,8 @@ class PasswordStore : BaseGitActivity() {
 
     private fun runGitOperation(operation: Int) = lifecycleScope.launch {
         launchGitOperation(operation).fold(
-            onSuccess = { refreshPasswordList() },
-            onFailure = ::finishAfterPromptOnErrorHandler,
+            success = { refreshPasswordList() },
+            failure = ::finishAfterPromptOnErrorHandler,
         )
     }
 
