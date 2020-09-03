@@ -40,7 +40,7 @@ object Dependencies {
         const val material = "com.google.android.material:material:1.3.0-alpha02"
         const val preference = "androidx.preference:preference:1.1.1"
         const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-alpha05"
-        const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
+        const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0-rc02"
         const val security = "androidx.security:security-crypto:1.1.0-alpha02"
         const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
     }
