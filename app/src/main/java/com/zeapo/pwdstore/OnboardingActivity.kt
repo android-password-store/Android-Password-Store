@@ -95,8 +95,12 @@ class OnboardingActivity : AppCompatActivity() {
      * Initializes an empty repository in the app's private directory
      */
     private fun createRepoInHiddenDir() {
-        settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
+        settings.edit {
+            putBoolean(PreferenceKeys.GIT_EXTERNAL, false)
+            remove(PreferenceKeys.GIT_EXTERNAL_REPO)
+        }
         initializeRepositoryInfo()
+        finish()
     }
 
     /**
@@ -165,13 +169,13 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun createRepository() {
-        if (!PasswordRepository.isInitialized) {
-            PasswordRepository.initialize()
-        }
         val localDir = PasswordRepository.getRepositoryDirectory()
         try {
-            check(localDir.exists() && !localDir.mkdir()) { "Failed to create directory!" }
+            check(localDir.exists() || localDir.mkdir()) { "Failed to create directory!" }
             PasswordRepository.createRepository(localDir)
+            if (!PasswordRepository.isInitialized) {
+                PasswordRepository.initialize()
+            }
             if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
                 settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
             } else {
@@ -180,9 +184,8 @@ class OnboardingActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
             if (!localDir.delete()) {
-                d { "Failed to delete local repository" }
+                d { "Failed to delete local repository: $localDir" }
             }
-            return
         }
     }
 
