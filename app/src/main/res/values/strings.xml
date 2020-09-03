@@ -402,6 +402,8 @@
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>
     <string name="git_unknown_host">Unknown host: %1$s</string>
     <string name="git_operation_running">Running git operation…</string>
+    <string name="git_break_out_of_detached_success">There was a conflict when trying to rebase. Your local %1$s branch was pushed to another branch named %2$s\n Use this branch to resolve conflict on your computer</string>
+    <string name="git_break_out_of_detached_unneeded">The repository is not rebasing, no need to push to another branch</string>
 
     <!-- OpenKeychain not installed -->
     <string name="openkeychain_not_installed_title">OpenKeychain not installed</string>

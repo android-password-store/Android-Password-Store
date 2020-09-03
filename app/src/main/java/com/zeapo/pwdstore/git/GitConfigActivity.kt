@@ -11,6 +11,7 @@ import android.util.Patterns
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.fold
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -75,8 +76,34 @@ class GitConfigActivity : BaseGitActivity() {
                 e(ex) { "Failed to start GitLogActivity" }
             }
         }
-        binding.gitAbortRebase.setOnClickListener { lifecycleScope.launch { launchGitOperation(BREAK_OUT_OF_DETACHED) } }
-        binding.gitResetToRemote.setOnClickListener { lifecycleScope.launch { launchGitOperation(REQUEST_RESET) } }
+        binding.gitAbortRebase.setOnClickListener {
+            lifecycleScope.launch {
+                launchGitOperation(BREAK_OUT_OF_DETACHED).fold(
+                    success = {
+                        MaterialAlertDialogBuilder(this@GitConfigActivity)
+                            .setTitle(resources.getString(R.string.git_abort_and_push_title))
+                            .setMessage(resources.getString(
+                                R.string.git_break_out_of_detached_success,
+                                GitSettings.branch,
+                                "conflicting-${GitSettings.branch}-...",
+                            ))
+                            .setOnCancelListener { finish() }
+                            .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
+                                finish()
+                            }.show()
+                    },
+                    failure = ::finishAfterPromptOnErrorHandler,
+                )
+            }
+        }
+        binding.gitResetToRemote.setOnClickListener {
+            lifecycleScope.launch {
+                launchGitOperation(REQUEST_RESET).fold(
+                    success = ::finishOnSuccessHandler,
+                    failure = ::finishAfterPromptOnErrorHandler,
+                )
+            }
+        }
     }
 
     /**

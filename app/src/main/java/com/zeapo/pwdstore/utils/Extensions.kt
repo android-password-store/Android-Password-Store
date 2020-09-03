@@ -7,7 +7,6 @@ package com.zeapo.pwdstore.utils
 import android.app.KeyguardManager
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.util.Base64
@@ -24,8 +23,10 @@ import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.google.android.material.snackbar.Snackbar
-import com.zeapo.pwdstore.git.GitCommandExecutor
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
@@ -59,6 +60,7 @@ fun FragmentActivity.snackbar(
     length: Int = Snackbar.LENGTH_SHORT,
 ): Snackbar {
     val snackbar = Snackbar.make(view, message, length)
+    snackbar.anchorView = findViewById(R.id.fab)
     snackbar.show()
     return snackbar
 }
@@ -108,17 +110,11 @@ fun SharedPreferences.getString(key: String): String? = getString(key, null)
 
 suspend fun FragmentActivity.commitChange(
     message: String,
-    finishWithResultOnEnd: Intent? = null,
-    finishActivityOnEnd: Boolean = true,
-) {
+): Result<Unit, Throwable> {
     if (!PasswordRepository.isGitRepo()) {
-        if (finishWithResultOnEnd != null) {
-            setResult(FragmentActivity.RESULT_OK, finishWithResultOnEnd)
-            finish()
-        }
-        return
+        return Ok(Unit)
     }
-    object : GitOperation(getRepositoryDirectory(), this@commitChange) {
+    return object : GitOperation(this@commitChange) {
         override val commands = arrayOf(
             // Stage all files
             git.add().addFilepattern("."),
@@ -128,14 +124,9 @@ suspend fun FragmentActivity.commitChange(
             git.commit().setAll(true).setMessage(message),
         )
 
-        override suspend fun execute() {
-            d { "Comitting with message: '$message'" }
-            GitCommandExecutor(
-                this@commitChange,
-                this,
-                finishWithResultOnEnd,
-                finishActivityOnEnd,
-            ).execute()
+        override fun preExecute(): Boolean {
+            d { "Committing with message: '$message'" }
+            return true
         }
     }.execute()
 }

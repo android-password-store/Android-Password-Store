@@ -52,10 +52,6 @@
             tools:node="replace" />
 
         <activity
-            android:name=".git.GitOperationActivity"
-            android:theme="@style/NoBackgroundTheme" />
-
-        <activity
             android:name=".git.GitServerConfigActivity"
             android:label="@string/title_activity_git_clone"
             android:windowSoftInputMode="adjustResize" />

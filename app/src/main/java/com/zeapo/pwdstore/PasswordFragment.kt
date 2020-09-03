@@ -19,12 +19,13 @@ import androidx.appcompat.view.ActionMode
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.michaelbull.result.fold
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
@@ -39,6 +40,7 @@ import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
+import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
@@ -99,9 +101,17 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     AuthMode.None -> BaseGitActivity.REQUEST_PULL
                     else -> BaseGitActivity.REQUEST_SYNC
                 }
-                val intent = Intent(context, GitOperationActivity::class.java)
-                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, operationId)
-                swipeResult.launch(intent)
+                requireStore().apply {
+                    lifecycleScope.launch {
+                        launchGitOperation(operationId).fold(
+                            success = {
+                                binding.swipeRefresher.isRefreshing = false
+                                refreshPasswordList()
+                            },
+                            failure = ::finishAfterPromptOnErrorHandler,
+                        )
+                    }
+                }
             }
         }
 

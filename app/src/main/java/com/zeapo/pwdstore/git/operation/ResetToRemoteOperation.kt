@@ -5,17 +5,9 @@
 package com.zeapo.pwdstore.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
-import com.zeapo.pwdstore.git.GitCommandExecutor
-import java.io.File
 import org.eclipse.jgit.api.ResetCommand
 
-/**
- * Creates a new git operation
- *
- * @param fileDir the git working tree directory
- * @param callingActivity the calling activity
- */
-class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
+class ResetToRemoteOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
     override val commands = arrayOf(
         // Stage all files
@@ -28,8 +20,4 @@ class ResetToRemoteOperation(fileDir: File, callingActivity: AppCompatActivity) 
         // branches from 'master' to anything else.
         git.branchCreate().setName(remoteBranch).setForce(true),
     )
-
-    override suspend fun execute() {
-        GitCommandExecutor(callingActivity, this).execute()
-    }
 }

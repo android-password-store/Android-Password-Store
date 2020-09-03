@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.onSuccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
@@ -331,14 +332,13 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                             gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                             lifecycleScope.launch {
-                                commitChange(
-                                    getString(
-                                        R.string.git_commit_gpg_id,
-                                        getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                    )
-                                )
+                                commitChange(getString(
+                                    R.string.git_commit_gpg_id,
+                                    getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                                )).onSuccess {
+                                    encrypt(data)
+                                }
                             }
-                            encrypt(data)
                         }
                     }
                 }.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
@@ -440,17 +440,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
                                 }
 
-                                if (editing) {
-                                    lifecycleScope.launch {
-                                        commitChange(
-                                            getString(
-                                                R.string.git_commit_edit_text,
-                                                getLongName(fullPath, repoPath, editName)
-                                            )
-                                        )
-                                    }
-                                }
-
                                 if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
                                     val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
                                     if (oldFile.path != file.path && !oldFile.delete()) {
@@ -463,13 +452,19 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                                 finish()
                                             }
                                             .show()
-                                    } else {
+                                        return@executeApiAsync
+                                    }
+                                }
+
+                                val commitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
+                                lifecycleScope.launch {
+                                    commitChange(resources.getString(
+                                        commitMessageRes,
+                                        getLongName(fullPath, repoPath, editName)
+                                    )).onSuccess {
                                         setResult(RESULT_OK, returnIntent)
                                         finish()
                                     }
-                                } else {
-                                    setResult(RESULT_OK, returnIntent)
-                                    finish()
                                 }
 
                             } catch (e: Exception) {

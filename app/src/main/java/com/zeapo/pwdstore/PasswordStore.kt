@@ -23,7 +23,6 @@ import android.view.MenuItem.OnActionExpandListener
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -38,6 +37,7 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
+import com.github.michaelbull.result.fold
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -48,7 +48,6 @@ import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitOperationActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
@@ -81,7 +80,7 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.revwalk.RevCommit
 
-class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
+class PasswordStore : BaseGitActivity() {
 
     private lateinit var activity: PasswordStore
     private lateinit var searchItem: MenuItem
@@ -98,12 +97,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private val cloneAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-        }
-    }
-
-    private val listRefreshAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            refreshPasswordList()
         }
     }
 
@@ -136,7 +129,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     private val checkPermissionsAndCloneAction = registerForActivityResult(RequestPermission()) { granted ->
         if (granted) {
             val intent = Intent(activity, GitServerConfigActivity::class.java)
-            intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+            intent.putExtra(REQUEST_ARG_OP, REQUEST_CLONE)
             cloneAction.launch(intent)
         }
     }
@@ -163,10 +156,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         activity = this
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager = getSystemService()
-        }
-
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
         var savedInstance = savedInstanceState
@@ -177,6 +166,10 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             savedInstance = null
         }
         super.onCreate(savedInstance)
+        setContentView(R.layout.activity_pwdstore)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            shortcutManager = getSystemService()
+        }
 
         // If user is eligible for Oreo autofill, prompt them to switch.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -328,9 +321,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitOperationActivity::class.java)
-                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PUSH)
-                startActivity(intent)
+                runGitOperation(REQUEST_PUSH)
                 return true
             }
             R.id.git_pull -> {
@@ -338,9 +329,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitOperationActivity::class.java)
-                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_PULL)
-                listRefreshAction.launch(intent)
+                runGitOperation(REQUEST_PULL)
                 return true
             }
             R.id.git_sync -> {
@@ -348,9 +337,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     initBefore.show()
                     return false
                 }
-                intent = Intent(this, GitOperationActivity::class.java)
-                intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_SYNC)
-                listRefreshAction.launch(intent)
+                runGitOperation(REQUEST_SYNC)
                 return true
             }
             R.id.refresh -> {
@@ -413,6 +400,13 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
             }
         }
         createRepository()
+    }
+
+    private fun runGitOperation(operation: Int) = lifecycleScope.launch {
+        launchGitOperation(operation).fold(
+            success = { refreshPasswordList() },
+            failure = ::finishAfterPromptOnErrorHandler,
+        )
     }
 
     /**
@@ -576,12 +570,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                lifecycleScope.launch {
-                    commitChange(
-                        resources.getString(R.string.git_commit_add_text, result.data?.extras?.getString("LONG_NAME")),
-                        finishActivityOnEnd = false,
-                    )
-                }
                 refreshPasswordList()
             }
         }.launch(intent)
@@ -624,7 +612,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                 lifecycleScope.launch {
                     commitChange(
                         resources.getString(R.string.git_commit_remove_text, fmt),
-                        finishActivityOnEnd = false,
                     )
                 }
             }
@@ -636,7 +623,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
         val intent = Intent(this, SelectFolderActivity::class.java)
         val fileLocations = values.map { it.file.absolutePath }.toTypedArray()
         intent.putExtra("Files", fileLocations)
-        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, "SELECTFOLDER")
+        intent.putExtra(REQUEST_ARG_OP, "SELECTFOLDER")
         registerForActivityResult(StartActivityForResult()) { result ->
             val intentData = result.data ?: return@registerForActivityResult
             val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
@@ -694,7 +681,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName),
-                                finishActivityOnEnd = false,
                             )
                         }
                     }
@@ -704,7 +690,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_multiple_text, relativePath),
-                                finishActivityOnEnd = false,
                             )
                         }
                     }
@@ -769,7 +754,6 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                         withContext(Dispatchers.Main) {
                             commitChange(
                                 resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name),
-                                finishActivityOnEnd = false,
                             )
                         }
                     }
@@ -848,7 +832,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                     NEW_REPO_BUTTON -> initializeRepositoryInfo()
                     CLONE_REPO_BUTTON -> {
                         val intent = Intent(activity, GitServerConfigActivity::class.java)
-                        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                        intent.putExtra(REQUEST_ARG_OP, REQUEST_CLONE)
                         cloneAction.launch(intent)
                     }
                 }
@@ -872,7 +856,7 @@ class PasswordStore : AppCompatActivity(R.layout.activity_pwdstore) {
                                 NEW_REPO_BUTTON -> initializeRepositoryInfo()
                                 CLONE_REPO_BUTTON -> {
                                     val intent = Intent(activity, GitServerConfigActivity::class.java)
-                                    intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
+                                    intent.putExtra(REQUEST_ARG_OP, REQUEST_CLONE)
                                     cloneAction.launch(intent)
                                 }
                             }

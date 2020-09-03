@@ -5,16 +5,8 @@
 package com.zeapo.pwdstore.git.operation
 
 import androidx.appcompat.app.AppCompatActivity
-import com.zeapo.pwdstore.git.GitCommandExecutor
-import java.io.File
 
-/**
- * Creates a new git operation
- *
- * @param fileDir the git working tree directory
- * @param callingActivity the calling activity
- */
-class SyncOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOperation(fileDir, callingActivity) {
+class SyncOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
 
     override val commands = arrayOf(
         // Stage all files
@@ -28,8 +20,4 @@ class SyncOperation(fileDir: File, callingActivity: AppCompatActivity) : GitOper
         // Push it all back
         git.push().setPushAll().setRemote("origin"),
     )
-
-    override suspend fun execute() {
-        GitCommandExecutor(callingActivity, this).execute()
-    }
 }

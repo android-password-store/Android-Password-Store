@@ -9,6 +9,7 @@ import android.os.Handler
 import android.view.View
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
+import com.github.michaelbull.result.fold
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -122,7 +123,10 @@ class GitServerConfigActivity : BaseGitActivity() {
                                 localDir.deleteRecursively()
                             }
                             snackbar.dismiss()
-                            launchGitOperation(REQUEST_CLONE)
+                            launchGitOperation(REQUEST_CLONE).fold(
+                                success = ::finishOnSuccessHandler,
+                                failure = ::finishAfterPromptOnErrorHandler,
+                            )
                         }
                     } catch (e: IOException) {
                         // TODO Handle the exception correctly if we are unable to delete the directory...
@@ -153,7 +157,12 @@ class GitServerConfigActivity : BaseGitActivity() {
                 e.printStackTrace()
                 MaterialAlertDialogBuilder(this).setMessage(e.message).show()
             }
-            lifecycleScope.launch { launchGitOperation(REQUEST_CLONE) }
+            lifecycleScope.launch {
+                launchGitOperation(REQUEST_CLONE).fold(
+                    success = ::finishOnSuccessHandler,
+                    failure = ::finishAfterPromptOnErrorHandler,
+                )
+            }
         }
     }
 }

@@ -77,7 +77,6 @@ class FolderCreationDialogFragment : DialogFragment() {
                                         R.string.git_commit_gpg_id,
                                         BasePgpActivity.getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
                                     ),
-                                    finishActivityOnEnd = false,
                                 )
                                 dismiss()
                             }
