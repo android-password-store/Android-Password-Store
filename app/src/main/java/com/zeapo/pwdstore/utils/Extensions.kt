@@ -55,11 +55,12 @@ fun String.base64(): String {
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
 fun FragmentActivity.snackbar(
-    view: View = findViewById(R.id.coordinatorLayout) ?: findViewById(android.R.id.content),
+    view: View = findViewById(android.R.id.content),
     message: String,
     length: Int = Snackbar.LENGTH_SHORT,
 ): Snackbar {
     val snackbar = Snackbar.make(view, message, length)
+    snackbar.anchorView = findViewById(R.id.fab)
     snackbar.show()
     return snackbar
 }
