@@ -47,15 +47,6 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private val cloneToExternalAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            if (checkExternalDirectory()) return@registerForActivityResult
-            cloneAction.launch(Intent(this, GitServerConfigActivity::class.java).apply {
-                putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-            })
-        }
-    }
-
     private val externalDirectorySelectAction = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             if (checkExternalDirectory()) {
@@ -86,16 +77,7 @@ class OnboardingActivity : AppCompatActivity() {
                 .show()
         }
         binding.cloneFromServerButton.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(resources.getString(R.string.location_dialog_title))
-                .setMessage(resources.getString(R.string.location_dialog_clone_text))
-                .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
-                    cloneToHiddenDir()
-                }
-                .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
-                    cloneToExternalStorage()
-                }
-                .show()
+            cloneToHiddenDir()
         }
     }
 
@@ -107,56 +89,6 @@ class OnboardingActivity : AppCompatActivity() {
         cloneAction.launch(Intent(this, GitServerConfigActivity::class.java).apply {
             putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
         })
-    }
-
-    /**
-     * Clones a remote Git repository to a selected directory on the external storage
-     */
-    private fun cloneToExternalStorage() {
-        settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, true) }
-        val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-        if (externalRepo == null) {
-            if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                registerForActivityResult(RequestPermission()) { granted ->
-                    if (granted) {
-                        cloneToExternalAction.launch(Intent(this, UserPreference::class.java).apply {
-                            putExtra("operation", "git_external")
-                        })
-                    }
-                }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            }
-        } else {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(resources.getString(R.string.directory_selected_title))
-                .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
-                .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
-                    if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        registerForActivityResult(RequestPermission()) { granted ->
-                            if (granted) {
-                                cloneAction.launch(Intent(this, GitServerConfigActivity::class.java).apply {
-                                    putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                                })
-                            }
-                        }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    } else {
-                        cloneAction.launch(Intent(this, GitServerConfigActivity::class.java).apply {
-                            putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                        })
-                    }
-                }
-                .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
-                    if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        registerForActivityResult(RequestPermission()) { granted ->
-                            if (granted) {
-                                cloneToExternalAction.launch(Intent(this, UserPreference::class.java).apply {
-                                    putExtra("operation", "git_external")
-                                })
-                            }
-                        }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    }
-                }
-                .show()
-        }
     }
 
     /**
