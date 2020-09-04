@@ -8,18 +8,22 @@ package com.zeapo.pwdstore
 
 import android.content.Context
 import androidx.core.content.edit
+import androidx.documentfile.provider.DocumentFile
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.Protocol
+import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
+import java.io.File
 import java.net.URI
 
 fun runMigrations(context: Context) {
     migrateToGitUrlBasedConfig(context)
     migrateToHideAll(context)
+    migrateToSshKey(context)
 }
 
 private fun migrateToGitUrlBasedConfig(context: Context) {
@@ -92,5 +96,19 @@ private fun migrateToHideAll(context: Context) {
     context.sharedPrefs.edit {
         remove(PreferenceKeys.SHOW_HIDDEN_FOLDERS)
         putBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, isHidden)
+    }
+}
+
+private fun migrateToSshKey(context: Context) {
+    val privateKeyFile = File(context.filesDir, ".ssh_key")
+    if (!SshKey.exists && privateKeyFile.exists()) {
+        // Currently uses a private key imported or generated with an old version of Password Store.
+        // Generated keys come with a public key which the user should still be able to view after
+        // the migration (not possible for regular imported keys), hence the special case.
+        val isLegacyGeneratedKey = context.sharedPrefs.getBoolean("use_generated_key", false)
+        SshKey.import(DocumentFile.fromFile(privateKeyFile).uri, isLegacyGeneratedKey)
+        context.sharedPrefs.edit {
+            remove("use_generated_key")
+        }
     }
 }

@@ -76,7 +76,7 @@ object SshKey {
     val sshPublicKey
         get() = if (publicKeyFile.exists()) publicKeyFile.readText() else null
     val canShowSshPublicKey
-        get() = type in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)
+        get() = type in listOf(Type.LegacyGenerated, Type.KeystoreNative, Type.KeystoreWrappedEd25519)
     val exists
         get() = type != null
     val mustAuthenticate: Boolean
@@ -128,6 +128,8 @@ object SshKey {
         Imported("imported"),
         KeystoreNative("keystore_native"),
         KeystoreWrappedEd25519("keystore_wrapped_ed25519"),
+        // Behaves like `Imported`, but allows to view the public key.
+        LegacyGenerated("legacy_generated"),
         ;
 
         companion object {
@@ -170,7 +172,7 @@ object SshKey {
         type = null
     }
 
-    fun import(uri: Uri) {
+    fun import(uri: Uri, isLegacyGeneratedKey: Boolean = false) {
         // First check whether the content at uri is likely an SSH private key.
         val fileSize = context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
             ?.use { cursor ->
@@ -201,7 +203,7 @@ object SshKey {
         // Canonicalize line endings to '\n'.
         privateKeyFile.writeText(lines.joinToString("\n"))
 
-        type = Type.Imported
+        type = if (isLegacyGeneratedKey) Type.LegacyGenerated else Type.Imported
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
@@ -268,7 +270,7 @@ object SshKey {
     }
 
     fun provide(client: SSHClient, passphraseFinder: InteractivePasswordFinder): KeyProvider? = when (type) {
-        Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
+        Type.LegacyGenerated, Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
         Type.KeystoreNative -> KeystoreNativeKeyProvider
         Type.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider
         null -> null
