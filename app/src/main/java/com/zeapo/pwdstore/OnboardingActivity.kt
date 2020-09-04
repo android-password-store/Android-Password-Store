@@ -13,6 +13,8 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.d
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.databinding.ActivityOnboardingBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
@@ -174,7 +176,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun createRepository() {
         val localDir = PasswordRepository.getRepositoryDirectory()
-        try {
+        runCatching {
             check(localDir.exists() || localDir.mkdir()) { "Failed to create directory!" }
             PasswordRepository.createRepository(localDir)
             if (!PasswordRepository.isInitialized) {
@@ -185,7 +187,7 @@ class OnboardingActivity : AppCompatActivity() {
             } else {
                 throw IllegalStateException("Failed to initialize repository state.")
             }
-        } catch (e: Exception) {
+        }.onFailure { e ->
             e.printStackTrace()
             if (!localDir.delete()) {
                 d { "Failed to delete local repository: $localDir" }
