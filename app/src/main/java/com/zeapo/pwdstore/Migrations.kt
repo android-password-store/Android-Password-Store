@@ -7,6 +7,7 @@
 package com.zeapo.pwdstore
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
@@ -20,19 +21,20 @@ import java.io.File
 import java.net.URI
 
 fun runMigrations(context: Context) {
-    migrateToGitUrlBasedConfig(context)
-    migrateToHideAll(context)
-    migrateToSshKey(context)
+    val sharedPrefs = context.sharedPrefs
+    migrateToGitUrlBasedConfig(sharedPrefs)
+    migrateToHideAll(sharedPrefs)
+    migrateToSshKey(context, sharedPrefs)
 }
 
-private fun migrateToGitUrlBasedConfig(context: Context) {
-    val serverHostname = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_SERVER)
+private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
+    val serverHostname = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_SERVER)
         ?: return
     i { "Migrating to URL-based Git config" }
-    val serverPort = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PORT) ?: ""
-    val serverUser = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_USERNAME) ?: ""
-    val serverPath = context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION) ?: ""
-    val protocol = Protocol.fromString(context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
+    val serverPort = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PORT) ?: ""
+    val serverUser = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_USERNAME) ?: ""
+    val serverPath = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION) ?: ""
+    val protocol = Protocol.fromString(sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PROTOCOL))
 
     // Whether we need the leading ssh:// depends on the use of a custom port.
     val hostnamePart = serverHostname.removePrefix("ssh://")
@@ -74,7 +76,7 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
         }
     }
 
-    context.sharedPrefs.edit {
+    sharedPrefs.edit {
         remove(PreferenceKeys.GIT_REMOTE_LOCATION)
         remove(PreferenceKeys.GIT_REMOTE_PORT)
         remove(PreferenceKeys.GIT_REMOTE_SERVER)
@@ -89,26 +91,26 @@ private fun migrateToGitUrlBasedConfig(context: Context) {
     }
 }
 
-private fun migrateToHideAll(context: Context) {
-    context.sharedPrefs.all[PreferenceKeys.SHOW_HIDDEN_FOLDERS] ?: return
-    val isHidden = context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
-    context.sharedPrefs.edit {
+private fun migrateToHideAll(sharedPrefs: SharedPreferences) {
+    sharedPrefs.all[PreferenceKeys.SHOW_HIDDEN_FOLDERS] ?: return
+    val isHidden = sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false)
+    sharedPrefs.edit {
         remove(PreferenceKeys.SHOW_HIDDEN_FOLDERS)
         putBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, isHidden)
     }
 }
 
-private fun migrateToSshKey(context: Context) {
+private fun migrateToSshKey(context: Context, sharedPrefs: SharedPreferences) {
     val privateKeyFile = File(context.filesDir, ".ssh_key")
-    if (context.sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
+    if (sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
         !SshKey.exists &&
         privateKeyFile.exists()) {
         // Currently uses a private key imported or generated with an old version of Password Store.
         // Generated keys come with a public key which the user should still be able to view after
         // the migration (not possible for regular imported keys), hence the special case.
-        val isGeneratedKey = context.sharedPrefs.getBoolean(PreferenceKeys.USE_GENERATED_KEY, false)
+        val isGeneratedKey = sharedPrefs.getBoolean(PreferenceKeys.USE_GENERATED_KEY, false)
         SshKey.useLegacyKey(isGeneratedKey)
-        context.sharedPrefs.edit {
+        sharedPrefs.edit {
             remove(PreferenceKeys.USE_GENERATED_KEY)
         }
     }
