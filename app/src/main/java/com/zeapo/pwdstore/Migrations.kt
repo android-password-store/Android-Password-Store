@@ -8,7 +8,6 @@ package com.zeapo.pwdstore
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.documentfile.provider.DocumentFile
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.zeapo.pwdstore.git.config.GitSettings
