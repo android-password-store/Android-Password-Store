@@ -52,7 +52,6 @@
     <string name="clone">Cloner depuis le serveur</string>
     <string name="initialize">Utiliser un répertoire local</string>
     <string name="location_dialog_title">Location du répertoire</string>
-    <string name="location_dialog_text">Sélectionnez l\'emplacement de création ou de clonage de votre répertoire de mots de passe.</string>
     <string name="location_sdcard">Carte SD</string>
     <string name="location_hidden">Caché (Préféré)</string>
     <string name="external_repository_dialog_title">Choisissez où sauvegarder les mots de passe</string>

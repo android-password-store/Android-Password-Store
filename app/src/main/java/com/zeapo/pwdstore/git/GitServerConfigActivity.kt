@@ -124,7 +124,10 @@ class GitServerConfigActivity : BaseGitActivity() {
                             }
                             snackbar.dismiss()
                             launchGitOperation(REQUEST_CLONE).fold(
-                                success = ::finishOnSuccessHandler,
+                                success = {
+                                    setResult(RESULT_OK)
+                                    finish()
+                                },
                                 failure = ::finishAfterPromptOnErrorHandler,
                             )
                         }
@@ -159,7 +162,10 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
             lifecycleScope.launch {
                 launchGitOperation(REQUEST_CLONE).fold(
-                    success = ::finishOnSuccessHandler,
+                    success = {
+                        setResult(RESULT_OK)
+                        finish()
+                    },
                     failure = ::finishAfterPromptOnErrorHandler,
                 )
             }

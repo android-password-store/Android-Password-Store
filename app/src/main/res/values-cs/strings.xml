@@ -51,7 +51,6 @@
     <string name="clone">Klonovat ze serveru</string>
     <string name="initialize">Použít místní adresář</string>
     <string name="location_dialog_title">Umístění úložiště</string>
-    <string name="location_dialog_text">Zvolte kde vytvořit, nebo kam klonovat vaše úložiště hesel.</string>
     <string name="location_sdcard">SD-Karta</string>
     <string name="location_hidden">Skryté (Preferováno)</string>
     <string name="external_repository_dialog_title">Vyberte kam ukládat hesla</string>

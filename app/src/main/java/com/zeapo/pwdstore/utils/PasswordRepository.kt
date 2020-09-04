@@ -20,7 +20,6 @@ import org.eclipse.jgit.transport.URIish
 
 open class PasswordRepository protected constructor() {
 
-    @Suppress("Unused")
     enum class PasswordSortOrder(val comparator: Comparator<PasswordItem>) {
 
         FOLDER_FIRST(Comparator { p1: PasswordItem, p2: PasswordItem ->
@@ -93,10 +92,7 @@ open class PasswordRepository protected constructor() {
         @JvmStatic
         fun isGitRepo(): Boolean {
             if (repository != null) {
-                // Check if remote exists
-                return repository!!.config.getSubsections("remote").isNotEmpty() &&
-                    repository!!.objectDatabase.exists() &&
-                    repository!!.allRefs.isNotEmpty()
+                return repository!!.objectDatabase.exists()
             }
             return false
         }
