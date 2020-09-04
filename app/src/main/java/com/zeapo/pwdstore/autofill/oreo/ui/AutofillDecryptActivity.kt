@@ -18,6 +18,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.autofill.oreo.AutofillAction
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.Credentials
@@ -27,10 +31,8 @@ import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.InputStream
 import java.io.OutputStream
-import java.io.UnsupportedEncodingException
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -162,77 +164,80 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
         val command = resumeIntent ?: Intent().apply {
             action = OpenPgpApi.ACTION_DECRYPT_VERIFY
         }
-        val encryptedInput = try {
+        runCatching {
             file.inputStream()
-        } catch (e: FileNotFoundException) {
+        }.onFailure { e ->
             e(e) { "File to decrypt not found" }
             return null
-        }
-        val decryptedOutput = ByteArrayOutputStream()
-        val result = try {
-            executeOpenPgpApi(command, encryptedInput, decryptedOutput)
-        } catch (e: Exception) {
-            e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed" }
-            return null
-        }
-        return when (val resultCode =
-            result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-            OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                try {
-                    val entry = withContext(Dispatchers.IO) {
-                        @Suppress("BlockingMethodInNonBlockingContext")
-                        PasswordEntry(decryptedOutput)
-                    }
-                    Credentials.fromStoreEntry(this, file, entry, directoryStructure)
-                } catch (e: UnsupportedEncodingException) {
-                    e(e) { "Failed to parse password entry" }
-                    null
-                }
-            }
-            OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                val pendingIntent: PendingIntent =
-                    result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)!!
-                try {
-                    val intentToResume = withContext(Dispatchers.Main) {
-                        suspendCoroutine<Intent> { cont ->
-                            continueAfterUserInteraction = cont
-                            registerForActivityResult(StartIntentSenderForResult()) { result ->
-                                if (continueAfterUserInteraction != null) {
-                                    val data = result.data
-                                    if (result.resultCode == RESULT_OK && data != null) {
-                                        continueAfterUserInteraction?.resume(data)
-                                    } else {
-                                        continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))
-                                    }
-                                    continueAfterUserInteraction = null
-                                }
-                            }.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
+        }.onSuccess { encryptedInput ->
+            val decryptedOutput = ByteArrayOutputStream()
+            runCatching {
+                executeOpenPgpApi(command, encryptedInput, decryptedOutput)
+            }.onFailure { e ->
+                e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed" }
+                return null
+            }.onSuccess { result ->
+                return when (val resultCode =
+                    result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+                    OpenPgpApi.RESULT_CODE_SUCCESS -> {
+                        runCatching {
+                            val entry = withContext(Dispatchers.IO) {
+                                @Suppress("BlockingMethodInNonBlockingContext")
+                                PasswordEntry(decryptedOutput)
+                            }
+                            Credentials.fromStoreEntry(this, file, entry, directoryStructure)
+                        }.getOrElse { e ->
+                            e(e) { "Failed to parse password entry" }
+                            return null
                         }
                     }
-                    decryptCredential(file, intentToResume)
-                } catch (e: Exception) {
-                    e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction" }
-                    null
-                }
-            }
-            OpenPgpApi.RESULT_CODE_ERROR -> {
-                val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
-                if (error != null) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            applicationContext,
-                            "Error from OpenKeyChain: ${error.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
+                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+                        val pendingIntent: PendingIntent =
+                            result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)!!
+                        runCatching {
+                            val intentToResume = withContext(Dispatchers.Main) {
+                                suspendCoroutine<Intent> { cont ->
+                                    continueAfterUserInteraction = cont
+                                    registerForActivityResult(StartIntentSenderForResult()) { result ->
+                                        if (continueAfterUserInteraction != null) {
+                                            val data = result.data
+                                            if (result.resultCode == RESULT_OK && data != null) {
+                                                continueAfterUserInteraction?.resume(data)
+                                            } else {
+                                                continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))
+                                            }
+                                            continueAfterUserInteraction = null
+                                        }
+                                    }.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
+                                }
+                            }
+                            decryptCredential(file, intentToResume)
+                        }.getOrElse { e ->
+                            e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction" }
+                            return null
+                        }
                     }
-                    e { "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}" }
+                    OpenPgpApi.RESULT_CODE_ERROR -> {
+                        val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
+                        if (error != null) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Error from OpenKeyChain: ${error.message}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            e { "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}" }
+                        }
+                        null
+                    }
+                    else -> {
+                        e { "Unrecognized OpenPgpApi result: $resultCode" }
+                        null
+                    }
                 }
-                null
-            }
-            else -> {
-                e { "Unrecognized OpenPgpApi result: $resultCode" }
-                null
             }
         }
+        return null
     }
 }
