@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.core.content.edit
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -61,8 +62,11 @@ class CredentialFinder(
             editCredential.setHint(hintRes)
             val rememberCredential = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
             rememberCredential.setText(rememberRes)
-            if (isRetry)
+            if (isRetry) {
                 credentialLayout.error = callingActivity.resources.getString(errorRes)
+                // Reset error when user starts entering a password
+                editCredential.doOnTextChanged { _, _, _, _ -> credentialLayout.error = null }
+            }
             MaterialAlertDialogBuilder(callingActivity).run {
                 setTitle(R.string.passphrase_dialog_title)
                 setMessage(messageRes)
