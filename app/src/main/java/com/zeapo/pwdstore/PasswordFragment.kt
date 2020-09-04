@@ -23,6 +23,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.runCatching
+import com.github.michaelbull.result.onFailure
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
@@ -254,7 +256,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        try {
+        runCatching {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
                     if (settings.getString(PreferenceKeys.SORT_ORDER) == PasswordRepository.PasswordSortOrder.RECENTLY_USED.name) {
@@ -276,7 +278,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                     }
                 }
             }
-        } catch (e: ClassCastException) {
+        }.onFailure {
             throw ClassCastException("$context must implement OnFragmentInteractionListener")
         }
     }
