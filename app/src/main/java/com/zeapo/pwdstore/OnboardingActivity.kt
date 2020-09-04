@@ -81,6 +81,10 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finishAffinity()
+    }
+
     /**
      * Clones a remote Git repository to the app's private directory
      */

@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 -   Git server protocol and authentication mode are only updated when explicitly saved
 -   Remember HTTPS password during a sync operation
+-   Unable to use show/hide password option for password/passphrase after first attempt was wrong
 
 ## [1.11.3] - 2020-08-27
 
