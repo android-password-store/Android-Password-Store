@@ -37,6 +37,9 @@ import androidx.preference.SwitchPreferenceCompat
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
+import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
@@ -89,7 +92,7 @@ class UserPreference : AppCompatActivity() {
             val gitConfigPreference = findPreference<Preference>(PreferenceKeys.GIT_CONFIG)
             val sshKeyPreference = findPreference<Preference>(PreferenceKeys.SSH_KEY)
             val sshKeygenPreference = findPreference<Preference>(PreferenceKeys.SSH_KEYGEN)
-            viewSshKeyPreference = findPreference<Preference>(PreferenceKeys.SSH_SEE_KEY)
+            viewSshKeyPreference = findPreference(PreferenceKeys.SSH_SEE_KEY)
             clearSavedPassPreference = findPreference(PreferenceKeys.CLEAR_SAVED_PASS)
             val deleteRepoPreference = findPreference<Preference>(PreferenceKeys.GIT_DELETE_REPO)
             val externalGitRepositoryPreference = findPreference<Preference>(PreferenceKeys.GIT_EXTERNAL)
@@ -203,10 +206,10 @@ class UserPreference : AppCompatActivity() {
                     .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
-                        try {
+                        runCatching {
                             PasswordRepository.getRepositoryDirectory().deleteRecursively()
                             PasswordRepository.closeRepository()
-                        } catch (ignored: Exception) {
+                        }.onFailure {
                             // TODO Handle the different cases of exceptions
                         }
 
@@ -263,13 +266,11 @@ class UserPreference : AppCompatActivity() {
             }
 
             showTimePreference?.onPreferenceChangeListener = ChangeListener { _, newValue: Any? ->
-                try {
+                runCatching {
                     val isEnabled = newValue.toString().toInt() != 0
                     clearClipboard20xPreference?.isVisible = isEnabled
                     true
-                } catch (e: NumberFormatException) {
-                    false
-                }
+                }.getOr(false)
             }
 
             showTimePreference?.summaryProvider = Preference.SummaryProvider<Preference> {
@@ -541,7 +542,7 @@ class UserPreference : AppCompatActivity() {
     private fun importSshKey() {
         registerForActivityResult(OpenDocument()) { uri: Uri? ->
             if (uri == null) return@registerForActivityResult
-            try {
+            runCatching {
                 SshKey.import(uri)
 
                 Toast.makeText(
@@ -551,7 +552,7 @@ class UserPreference : AppCompatActivity() {
                 ).show()
                 setResult(RESULT_OK)
                 finish()
-            } catch (e: Exception) {
+            }.onFailure { e ->
                 MaterialAlertDialogBuilder(this)
                     .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
                     .setMessage(e.message)
