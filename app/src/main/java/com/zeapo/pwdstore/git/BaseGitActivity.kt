@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore.git
 
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.Timber.tag
@@ -34,16 +33,6 @@ import net.schmizz.sshj.userauth.UserAuthException
  * tasks and makes sense to be held here.
  */
 abstract class BaseGitActivity : AppCompatActivity() {
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
     /**
      * Attempt to launch the requested Git operation.
