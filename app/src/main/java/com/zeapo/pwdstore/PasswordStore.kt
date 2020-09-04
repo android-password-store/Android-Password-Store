@@ -36,6 +36,9 @@ import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -71,8 +74,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.api.errors.GitAPIException
-import org.eclipse.jgit.revwalk.RevCommit
 
 class PasswordStore : BaseGitActivity() {
 
@@ -254,16 +255,14 @@ class PasswordStore : BaseGitActivity() {
     // as you specify a parent activity in AndroidManifest.xml.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        val intent: Intent
         val initBefore = MaterialAlertDialogBuilder(this)
             .setMessage(resources.getString(R.string.creation_dialog_text))
             .setPositiveButton(resources.getString(R.string.dialog_ok), null)
         when (id) {
             R.id.user_pref -> {
-                try {
-                    intent = Intent(this, UserPreference::class.java)
-                    startActivity(intent)
-                } catch (e: Exception) {
+                runCatching {
+                    startActivity(Intent(this, UserPreference::class.java))
+                }.onFailure { e ->
                     e.printStackTrace()
                 }
                 return true
@@ -408,18 +407,14 @@ class PasswordStore : BaseGitActivity() {
         }
         val git = Git(repository)
         val relativePath = getRelativePath(fullPath, repoPath.absolutePath).substring(1) // Removes leading '/'
-        val iterator: Iterator<RevCommit>
-        iterator = try {
-            git.log().addPath(relativePath).call().iterator()
-        } catch (e: GitAPIException) {
-            e(e) { "getLastChangedTimestamp: GITAPIException" }
-            return -1
-        }
-        if (!iterator.hasNext()) {
-            w { "getLastChangedTimestamp: No commits for file: $relativePath" }
-            return -1
-        }
-        return iterator.next().commitTime.toLong() * 1000
+        return runCatching {
+            val iterator = git.log().addPath(relativePath).call().iterator()
+            if (!iterator.hasNext()) {
+                w { "getLastChangedTimestamp: No commits for file: $relativePath" }
+                return -1
+            }
+            iterator.next().commitTime.toLong() * 1000
+        }.getOr(-1)
     }
 
     fun decryptPassword(item: PasswordItem) {
