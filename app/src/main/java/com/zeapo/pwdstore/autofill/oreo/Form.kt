@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.fold
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillDecryptActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillFilterView
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity
@@ -369,13 +370,14 @@ class FillableForm private constructor(
      * Creates and returns a suitable [FillResponse] to the Autofill framework.
      */
     fun fillCredentials(context: Context, callback: FillCallback) {
-        val matchedFiles = try {
-            AutofillMatcher.getMatchesFor(context, formOrigin)
-        } catch (publisherChangedException: AutofillPublisherChangedException) {
-            e(publisherChangedException)
-            callback.onSuccess(makePublisherChangedResponse(context, publisherChangedException))
-            return
-        }
-        callback.onSuccess(makeFillResponse(context, matchedFiles))
+        AutofillMatcher.getMatchesFor(context, formOrigin).fold(
+            success = { matchedFiles ->
+                callback.onSuccess(makeFillResponse(context, matchedFiles))
+            },
+            failure = { e ->
+                e(e)
+                callback.onSuccess(makePublisherChangedResponse(context, e))
+            }
+        )
     }
 }

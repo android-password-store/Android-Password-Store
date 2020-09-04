@@ -11,6 +11,9 @@ import androidx.core.content.edit
 import com.github.ajalt.timberkt.Timber.e
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.zeapo.pwdstore.R
 import java.io.File
 
@@ -94,18 +97,18 @@ class AutofillMatcher {
          * first time the user associated an entry with it, an [AutofillPublisherChangedException]
          * will be thrown.
          */
-        fun getMatchesFor(context: Context, formOrigin: FormOrigin): List<File> {
+        fun getMatchesFor(context: Context, formOrigin: FormOrigin): Result<List<File>, AutofillPublisherChangedException> {
             if (hasFormOriginHashChanged(context, formOrigin)) {
-                throw AutofillPublisherChangedException(formOrigin)
+                return Err(AutofillPublisherChangedException(formOrigin))
             }
             val matchPreferences = context.matchPreferences(formOrigin)
             val matchedFiles =
                 matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
-            return matchedFiles.filter { it.exists() }.also { validFiles ->
+            return Ok(matchedFiles.filter { it.exists() }.also { validFiles ->
                 matchPreferences.edit {
                     putStringSet(matchesKey(formOrigin), validFiles.map { it.absolutePath }.toSet())
                 }
-            }
+            })
         }
 
         fun clearMatchesFor(context: Context, formOrigin: FormOrigin) {
