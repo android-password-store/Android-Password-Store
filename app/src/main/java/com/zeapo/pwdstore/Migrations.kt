@@ -11,6 +11,8 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
+import com.github.michaelbull.result.get
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.git.sshj.SshKey
@@ -65,14 +67,12 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
                 urlWithFreeEntryScheme.startsWith("http://") -> urlWithFreeEntryScheme.replaceFirst("http", "https")
                 else -> "https://$urlWithFreeEntryScheme"
             }
-            try {
+            runCatching {
                 if (URI(url).rawAuthority != null)
                     url
                 else
                     null
-            } catch (_: Exception) {
-                null
-            }
+            }.get()
         }
     }
 
