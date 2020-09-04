@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.git
 
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.github.michaelbull.result.Result
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
@@ -14,7 +15,6 @@ import com.zeapo.pwdstore.git.GitException.PushException
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.utils.snackbar
-import com.github.michaelbull.result.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.CommitCommand

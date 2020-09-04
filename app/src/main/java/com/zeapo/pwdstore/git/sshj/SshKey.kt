@@ -76,7 +76,7 @@ object SshKey {
     val sshPublicKey
         get() = if (publicKeyFile.exists()) publicKeyFile.readText() else null
     val canShowSshPublicKey
-        get() = type in listOf(Type.KeystoreNative, Type.KeystoreWrappedEd25519)
+        get() = type in listOf(Type.LegacyGenerated, Type.KeystoreNative, Type.KeystoreWrappedEd25519)
     val exists
         get() = type != null
     val mustAuthenticate: Boolean
@@ -128,6 +128,9 @@ object SshKey {
         Imported("imported"),
         KeystoreNative("keystore_native"),
         KeystoreWrappedEd25519("keystore_wrapped_ed25519"),
+
+        // Behaves like `Imported`, but allows to view the public key.
+        LegacyGenerated("legacy_generated"),
         ;
 
         companion object {
@@ -204,6 +207,11 @@ object SshKey {
         type = Type.Imported
     }
 
+    @Deprecated("To be used only in Migrations.kt")
+    fun useLegacyKey(isGenerated: Boolean) {
+        type = if (isGenerated) Type.LegacyGenerated else Type.Imported
+    }
+
     @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun getOrCreateWrappingMasterKey(requireAuthentication: Boolean) = withContext(Dispatchers.IO) {
         MasterKey.Builder(context, KEYSTORE_ALIAS).run {
@@ -268,7 +276,7 @@ object SshKey {
     }
 
     fun provide(client: SSHClient, passphraseFinder: InteractivePasswordFinder): KeyProvider? = when (type) {
-        Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
+        Type.LegacyGenerated, Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
         Type.KeystoreNative -> KeystoreNativeKeyProvider
         Type.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider
         null -> null

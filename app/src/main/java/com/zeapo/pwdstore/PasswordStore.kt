@@ -46,7 +46,6 @@ import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.git.BaseGitActivity
-import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
@@ -87,12 +86,6 @@ class PasswordStore : BaseGitActivity() {
 
     private val model: SearchableRepositoryViewModel by viewModels {
         ViewModelProvider.AndroidViewModelFactory(application)
-    }
-
-    private val listRefreshAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            refreshPasswordList()
-        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
