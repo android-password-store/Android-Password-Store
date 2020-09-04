@@ -5,12 +5,13 @@
 package com.zeapo.pwdstore.pwgenxkpwd
 
 import android.content.Context
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorException
 import com.zeapo.pwdstore.pwgen.secureRandomCharacter
 import com.zeapo.pwdstore.pwgen.secureRandomElement
 import com.zeapo.pwdstore.pwgen.secureRandomNumber
-import java.io.IOException
 import java.util.Locale
 
 class PasswordBuilder(ctx: Context) {
@@ -83,8 +84,7 @@ class PasswordBuilder(ctx: Context) {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    @Throws(PasswordGeneratorException::class)
-    fun create(): String {
+    fun create(): Result<String, Throwable> {
         val wordBank = mutableListOf<String>()
         val password = StringBuilder()
 
@@ -94,7 +94,7 @@ class PasswordBuilder(ctx: Context) {
                 password.append(separator)
             }
         }
-        try {
+        return runCatching {
             val dictionary = XkpwdDictionary(context)
             val words = dictionary.words
             for (wordLength in minWordLength..maxWordLength) {
@@ -119,22 +119,20 @@ class PasswordBuilder(ctx: Context) {
                     password.append(separator)
                 }
             }
-        } catch (e: IOException) {
-            throw PasswordGeneratorException("Failed generating password!")
-        }
-        if (numDigits != 0) {
-            if (isAppendNumberSeparator) {
-                password.append(separator)
+            if (numDigits != 0) {
+                if (isAppendNumberSeparator) {
+                    password.append(separator)
+                }
+                password.append(generateRandomNumberSequence(numDigits))
             }
-            password.append(generateRandomNumberSequence(numDigits))
-        }
-        if (numSymbols != 0) {
-            if (isAppendSymbolsSeparator) {
-                password.append(separator)
+            if (numSymbols != 0) {
+                if (isAppendSymbolsSeparator) {
+                    password.append(separator)
+                }
+                password.append(generateRandomSymbolSequence(numSymbols))
             }
-            password.append(generateRandomSymbolSequence(numSymbols))
+            password.toString()
         }
-        return password.toString()
     }
 
     companion object {

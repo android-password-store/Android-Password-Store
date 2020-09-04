@@ -16,12 +16,15 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import com.github.ajalt.timberkt.Timber.tag
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentXkpwgenBinding
-import com.zeapo.pwdstore.pwgen.PasswordGenerator
 import com.zeapo.pwdstore.pwgenxkpwd.CapsType
 import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
+import com.zeapo.pwdstore.utils.getString
 
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
@@ -41,19 +44,13 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
         prefs = callingActivity.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        val previousStoredCapStyle: String = try {
-            prefs.getString(PREF_KEY_CAPITALS_STYLE, DEFAULT_CAPS_STYLE)!!
-        } catch (e: Exception) {
-            tag("xkpw").e(e)
-            DEFAULT_CAPS_STYLE
-        }
+        val previousStoredCapStyle: String = runCatching {
+            prefs.getString(PREF_KEY_CAPITALS_STYLE)!!
+        }.getOr(DEFAULT_CAPS_STYLE)
 
-        val lastCapitalsStyleIndex: Int = try {
+        val lastCapitalsStyleIndex: Int = runCatching {
             CapsType.valueOf(previousStoredCapStyle).ordinal
-        } catch (e: Exception) {
-            tag("xkpw").e(e)
-            DEFAULT_CAPS_INDEX
-        }
+        }.getOr(DEFAULT_CAPS_INDEX)
         binding.xkCapType.setSelection(lastCapitalsStyleIndex)
         binding.xkNumWords.setText(prefs.getString(PREF_KEY_NUM_WORDS, DEFAULT_NUMBER_OF_WORDS))
 
@@ -87,20 +84,22 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
     }
 
     private fun makeAndSetPassword(passwordText: AppCompatTextView) {
-        try {
-            passwordText.text = PasswordBuilder(requireContext())
-                .setNumberOfWords(Integer.valueOf(binding.xkNumWords.text.toString()))
-                .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
-                .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
-                .setSeparator(binding.xkSeparator.text.toString())
-                .appendNumbers(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_DIGIT })
-                .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL })
-                .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
-        } catch (e: PasswordGenerator.PasswordGeneratorException) {
-            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-            tag("xkpw").e(e, "failure generating xkpasswd")
-            passwordText.text = FALLBACK_ERROR_PASS
-        }
+        PasswordBuilder(requireContext())
+            .setNumberOfWords(Integer.valueOf(binding.xkNumWords.text.toString()))
+            .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
+            .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
+            .setSeparator(binding.xkSeparator.text.toString())
+            .appendNumbers(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_DIGIT })
+            .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL })
+            .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
+            .fold(
+                success = { passwordText.text = it },
+                failure = { e ->
+                    Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+                    tag("xkpw").e(e, "failure generating xkpasswd")
+                    passwordText.text = FALLBACK_ERROR_PASS
+                },
+            )
     }
 
     private fun setPreferences() {
