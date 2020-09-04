@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.w
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.gms.auth.api.phone.SmsCodeRetriever
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.ConnectionResult
@@ -124,18 +126,18 @@ class AutofillSmsActivity : AppCompatActivity() {
 
     private suspend fun waitForSms() {
         val smsClient = SmsCodeRetriever.getAutofillClient(this@AutofillSmsActivity)
-        try {
+        runCatching {
             withContext(Dispatchers.IO) {
                 smsClient.startSmsCodeRetriever().suspendableAwait()
             }
-        } catch (e: ResolvableApiException) {
-            withContext(Dispatchers.Main) {
+        }.onFailure { e ->
+            if (e is ResolvableApiException) {
                 e.startResolutionForResult(this@AutofillSmsActivity, 1)
-            }
-        } catch (e: Exception) {
-            e(e)
-            withContext(Dispatchers.Main) {
-                finish()
+            } else {
+                e(e)
+                withContext(Dispatchers.Main) {
+                    finish()
+                }
             }
         }
     }
