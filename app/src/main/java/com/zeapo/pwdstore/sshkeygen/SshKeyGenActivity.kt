@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.lifecycle.lifecycleScope
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivitySshKeygenBinding
@@ -109,7 +111,7 @@ class SshKeyGenActivity : AppCompatActivity() {
             isEnabled = false
         }
         binding.generate.text = getString(R.string.ssh_key_gen_generating_progress)
-        val e = try {
+        val result = runCatching {
             withContext(Dispatchers.IO) {
                 val requireAuthentication = binding.keyRequireAuthentication.isChecked
                 if (requireAuthentication) {
@@ -125,31 +127,29 @@ class SshKeyGenActivity : AppCompatActivity() {
                 }
                 keyGenType.generateKey(requireAuthentication)
             }
-            null
-        } catch (e: Exception) {
-            e.printStackTrace()
-            e
-        } finally {
-            getEncryptedPrefs("git_operation").edit {
-                remove("ssh_key_local_passphrase")
-            }
+        }
+        getEncryptedPrefs("git_operation").edit {
+            remove("ssh_key_local_passphrase")
         }
         binding.generate.apply {
             text = getString(R.string.ssh_keygen_generate)
             isEnabled = true
         }
-        if (e == null) {
-            val df = ShowSshKeyFragment()
-            df.show(supportFragmentManager, "public_key")
-        } else {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.error_generate_ssh_key))
-                .setMessage(getString(R.string.ssh_key_error_dialog_text) + e.message)
-                .setPositiveButton(getString(R.string.dialog_ok)) { _, _ ->
-                    finish()
-                }
-                .show()
-        }
+        result.fold(
+            success = {
+                ShowSshKeyFragment().show(supportFragmentManager, "public_key")
+            },
+            failure = { e ->
+                e.printStackTrace()
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.error_generate_ssh_key))
+                    .setMessage(getString(R.string.ssh_key_error_dialog_text) + e.message)
+                    .setPositiveButton(getString(R.string.dialog_ok)) { _, _ ->
+                        finish()
+                    }
+                    .show()
+            },
+        )
         hideKeyboard()
     }
 
