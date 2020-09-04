@@ -101,14 +101,16 @@ private fun migrateToHideAll(context: Context) {
 
 private fun migrateToSshKey(context: Context) {
     val privateKeyFile = File(context.filesDir, ".ssh_key")
-    if (!SshKey.exists && privateKeyFile.exists()) {
+    if (context.sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
+        !SshKey.exists &&
+        privateKeyFile.exists()) {
         // Currently uses a private key imported or generated with an old version of Password Store.
         // Generated keys come with a public key which the user should still be able to view after
         // the migration (not possible for regular imported keys), hence the special case.
-        val isLegacyGeneratedKey = context.sharedPrefs.getBoolean("use_generated_key", false)
-        SshKey.import(DocumentFile.fromFile(privateKeyFile).uri, isLegacyGeneratedKey)
+        val isGeneratedKey = context.sharedPrefs.getBoolean(PreferenceKeys.USE_GENERATED_KEY, false)
+        SshKey.useLegacyKey(isGeneratedKey)
         context.sharedPrefs.edit {
-            remove("use_generated_key")
+            remove(PreferenceKeys.USE_GENERATED_KEY)
         }
     }
 }

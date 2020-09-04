@@ -172,7 +172,7 @@ object SshKey {
         type = null
     }
 
-    fun import(uri: Uri, isLegacyGeneratedKey: Boolean = false) {
+    fun import(uri: Uri) {
         // First check whether the content at uri is likely an SSH private key.
         val fileSize = context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)
             ?.use { cursor ->
@@ -203,7 +203,12 @@ object SshKey {
         // Canonicalize line endings to '\n'.
         privateKeyFile.writeText(lines.joinToString("\n"))
 
-        type = if (isLegacyGeneratedKey) Type.LegacyGenerated else Type.Imported
+        type = Type.Imported
+    }
+
+    @Deprecated("To be used only in Migrations.kt")
+    fun useLegacyKey(isGenerated: Boolean) {
+        type = if (isGenerated) Type.LegacyGenerated else Type.Imported
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
