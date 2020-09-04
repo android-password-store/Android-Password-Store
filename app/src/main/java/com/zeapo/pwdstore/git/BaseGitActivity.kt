@@ -10,8 +10,8 @@ import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.Err
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.github.michaelbull.result.Result
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.operation.BreakOutOfDetached

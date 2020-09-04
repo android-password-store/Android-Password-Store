@@ -178,7 +178,7 @@ open class PasswordRepository protected constructor() {
             val dir = getRepositoryDirectory()
             // uninitialize the repo if the dir does not exist or is absolutely empty
             settings.edit {
-                if (!dir.exists() || !dir.isDirectory || dir.listFiles()?.isEmpty() == true) {
+                if (!dir.exists() || !dir.isDirectory || requireNotNull(dir.listFiles()).isEmpty()) {
                     putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
                 } else {
                     putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)
