@@ -176,6 +176,9 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 }
             } else {
                 onMissingSshKeyFile()
+                // This would correctly cancel the operation but won't surface a user-visible
+                // error, allowing users to make the SSH key selection.
+                return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
             }
             AuthMode.OpenKeychain -> registerAuthProviders(SshAuthData.OpenKeychain(callingActivity))
             AuthMode.Password -> {
