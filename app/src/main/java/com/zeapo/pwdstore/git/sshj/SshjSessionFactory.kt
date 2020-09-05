@@ -8,11 +8,12 @@ import android.util.Base64
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.security.GeneralSecurityException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
@@ -80,9 +81,9 @@ class SshjSessionFactory(private val authData: SshAuthData, private val hostKeyF
 private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
     if (!hostKeyFile.exists()) {
         return HostKeyVerifier { _, _, key ->
-            val digest = try {
+            val digest = runCatching {
                 SecurityUtils.getMessageDigest("SHA-256")
-            } catch (e: GeneralSecurityException) {
+            }.getOrElse { e ->
                 throw SSHRuntimeException(e)
             }
             digest.update(PlainBuffer().putPublicKey(key).compactData)
