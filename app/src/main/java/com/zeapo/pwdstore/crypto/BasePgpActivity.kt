@@ -6,12 +6,10 @@
 package com.zeapo.pwdstore.crypto
 
 import android.app.PendingIntent
-import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -23,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
+import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.ClipboardService
@@ -142,34 +142,30 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      * Method for subclasses to initiate binding with [OpenPgpServiceConnection].
      */
     fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
-        val installed = try {
+        val installed = runCatching {
             packageManager.getPackageInfo(OPENPGP_PROVIDER, 0)
             true
-        } catch (_: PackageManager.NameNotFoundException) {
-            false
-        }
+        }.getOr(false)
         if (!installed) {
             previousListener = onBoundListener
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.openkeychain_not_installed_title))
                 .setMessage(getString(R.string.openkeychain_not_installed_message))
                 .setPositiveButton(getString(R.string.openkeychain_not_installed_google_play)) { _, _ ->
-                    try {
+                    runCatching {
                         val intent = Intent(Intent.ACTION_VIEW).apply {
                             data = Uri.parse(getString(R.string.play_deeplink_template, OPENPGP_PROVIDER))
                             setPackage("com.android.vending")
                         }
                         startActivity(intent)
-                    } catch (_: ActivityNotFoundException) {
                     }
                 }
                 .setNeutralButton(getString(R.string.openkeychain_not_installed_fdroid)) { _, _ ->
-                    try {
+                    runCatching {
                         val intent = Intent(Intent.ACTION_VIEW).apply {
                             data = Uri.parse(getString(R.string.fdroid_deeplink_template, OPENPGP_PROVIDER))
                         }
                         startActivity(intent)
-                    } catch (_: ActivityNotFoundException) {
                     }
                 }
                 .setOnCancelListener { finish() }
@@ -253,11 +249,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     fun copyPasswordToClipboard(password: String?) {
         copyTextToClipboard(password, showSnackbar = false)
 
-        var clearAfter = 45
-        try {
-            clearAfter = (settings.getString(PreferenceKeys.GENERAL_SHOW_TIME) ?: "45").toInt()
-        } catch (_: NumberFormatException) {
-        }
+        val clearAfter = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
 
         if (clearAfter != 0) {
             val service = Intent(this, ClipboardService::class.java).apply {
