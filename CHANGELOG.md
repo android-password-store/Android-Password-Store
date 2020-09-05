@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 -   Git server protocol and authentication mode are only updated when explicitly saved
 -   Remember HTTPS password during a sync operation
 -   Unable to use show/hide password option for password/passphrase after first attempt was wrong
+-   TOTP values shown might some times be stale and considered invalid by sites
 
 ## [1.11.3] - 2020-08-27
 
