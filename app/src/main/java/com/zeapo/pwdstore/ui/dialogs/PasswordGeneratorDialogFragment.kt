@@ -17,10 +17,11 @@ import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.pwgen.PasswordGenerator
-import com.zeapo.pwdstore.pwgen.PasswordGenerator.PasswordGeneratorException
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.generate
 import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
 import com.zeapo.pwdstore.pwgen.PasswordOption
@@ -71,11 +72,11 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
 
     private fun generate(passwordField: AppCompatTextView) {
         setPreferences()
-        try {
-            passwordField.text = generate(requireContext().applicationContext)
-        } catch (e: PasswordGeneratorException) {
+        passwordField.text = runCatching {
+            generate(requireContext().applicationContext)
+        }.getOrElse { e ->
             Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-            passwordField.text = ""
+            ""
         }
     }
 
