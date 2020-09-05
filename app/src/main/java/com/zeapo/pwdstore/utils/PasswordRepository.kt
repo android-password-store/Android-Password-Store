@@ -9,6 +9,9 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import com.github.michaelbull.result.runCatching
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onFailure
 import com.zeapo.pwdstore.Application
 import java.io.File
 import java.io.FileFilter
@@ -105,14 +108,14 @@ open class PasswordRepository protected constructor() {
         fun getRepository(localDir: File?): Repository? {
             if (repository == null && localDir != null) {
                 val builder = FileRepositoryBuilder()
-                try {
-                    repository = builder.setGitDir(localDir)
+                repository = runCatching {
+                    builder.setGitDir(localDir)
                         .setFS(Java7FSFactory().detect(null))
                         .readEnvironment()
                         .build()
-                } catch (e: Exception) {
+                }.getOrElse { e ->
                     e.printStackTrace()
-                    return null
+                    null
                 }
             }
             return repository
@@ -146,7 +149,7 @@ open class PasswordRepository protected constructor() {
             val remotes = storedConfig.getSubsections("remote")
 
             if (!remotes.contains(name)) {
-                try {
+                runCatching {
                     val uri = URIish(url)
                     val refSpec = RefSpec("+refs/head/*:refs/remotes/$name/*")
 
@@ -159,11 +162,11 @@ open class PasswordRepository protected constructor() {
                     remoteConfig.update(storedConfig)
 
                     storedConfig.save()
-                } catch (e: Exception) {
+                }.onFailure { e ->
                     e.printStackTrace()
                 }
             } else if (replace) {
-                try {
+                runCatching {
                     val uri = URIish(url)
 
                     val remoteConfig = RemoteConfig(storedConfig, name)
@@ -181,7 +184,7 @@ open class PasswordRepository protected constructor() {
                     remoteConfig.update(storedConfig)
 
                     storedConfig.save()
-                } catch (e: Exception) {
+                }.onFailure { e ->
                     e.printStackTrace()
                 }
             }
