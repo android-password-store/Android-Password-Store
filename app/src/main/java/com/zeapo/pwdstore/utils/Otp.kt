@@ -5,10 +5,9 @@
 
 package com.zeapo.pwdstore.utils
 
-import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.runCatching
 import java.nio.ByteBuffer
-import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
 import java.util.Locale
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -24,26 +23,13 @@ object Otp {
         check(STEAM_ALPHABET.size == 26)
     }
 
-    fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String): String? {
+    fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String) = runCatching {
         val algo = "Hmac${algorithm.toUpperCase(Locale.ROOT)}"
-        val decodedSecret = try {
-            BASE_32.decode(secret)
-        } catch (e: Exception) {
-            e(e) { "Failed to decode secret" }
-            return null
-        }
+        val decodedSecret = BASE_32.decode(secret)
         val secretKey = SecretKeySpec(decodedSecret, algo)
-        val digest = try {
-            Mac.getInstance(algo).run {
-                init(secretKey)
-                doFinal(ByteBuffer.allocate(8).putLong(counter).array())
-            }
-        } catch (e: NoSuchAlgorithmException) {
-            e(e)
-            return null
-        } catch (e: InvalidKeyException) {
-            e(e) { "Key is malformed" }
-            return null
+        val digest = Mac.getInstance(algo).run {
+            init(secretKey)
+            doFinal(ByteBuffer.allocate(8).putLong(counter).array())
         }
         // Least significant 4 bits are used as an offset into the digest.
         val offset = (digest.last() and 0xf).toInt()
@@ -52,7 +38,7 @@ object Otp {
         code[0] = (0x7f and code[0].toInt()).toByte()
         val codeInt = ByteBuffer.wrap(code).int
         check(codeInt > 0)
-        return if (digits == "s") {
+        if (digits == "s") {
             // Steam
             var remainingCodeInt = codeInt
             buildString {
@@ -66,16 +52,13 @@ object Otp {
             val numDigits = digits.toIntOrNull()
             when {
                 numDigits == null -> {
-                    e { "Digits specifier has to be either 's' or numeric" }
-                    return null
+                    return Err(IllegalArgumentException("Digits specifier has to be either 's' or numeric"))
                 }
                 numDigits < 6 -> {
-                    e { "TOTP codes have to be at least 6 digits long" }
-                    return null
+                    return Err(IllegalArgumentException("TOTP codes have to be at least 6 digits long"))
                 }
                 numDigits > 10 -> {
-                    e { "TOTP codes can be at most 10 digits long" }
-                    return null
+                    return Err(IllegalArgumentException("TOTP codes can be at most 10 digits long"))
                 }
                 else -> {
                     // 2^31 = 2_147_483_648, so we can extract at most 10 digits with the first one

@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.model
 
+import com.github.michaelbull.result.get
 import com.zeapo.pwdstore.utils.Otp
 import com.zeapo.pwdstore.utils.TotpFinder
 import com.zeapo.pwdstore.utils.UriTotpFinder
@@ -55,7 +56,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     fun calculateTotpCode(): String? {
         if (totpSecret == null)
             return null
-        return Otp.calculateCode(totpSecret, Date().time / (1000 * totpPeriod), totpAlgorithm, digits)
+        return Otp.calculateCode(totpSecret, Date().time / (1000 * totpPeriod), totpAlgorithm, digits).get()
     }
 
     val extraContentWithoutAuthData by lazy {

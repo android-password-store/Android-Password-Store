@@ -5,6 +5,7 @@
 
 package com.zeapo.pwdstore.model
 
+import com.github.michaelbull.result.get
 import com.zeapo.pwdstore.utils.Otp
 import com.zeapo.pwdstore.utils.UriTotpFinder
 import java.util.Date
@@ -78,7 +79,7 @@ class PasswordEntryAndroidTest {
             Date(8640000).time / (1000 * entry.totpPeriod),
             entry.totpAlgorithm,
             entry.digits
-        )
+        ).get()
         assertNotNull(code) { "Generated OTP cannot be null" }
         assertEquals(entry.digits.toInt(), code.length)
         assertEquals("545293", code)
@@ -94,7 +95,7 @@ class PasswordEntryAndroidTest {
             Date(8640000).time / (1000 * entry.totpPeriod),
             entry.totpAlgorithm,
             entry.digits
-        )
+        ).get()
         assertNotNull(code) { "Generated OTP cannot be null" }
         assertEquals(entry.digits.toInt(), code.length)
         assertEquals("545293", code)
