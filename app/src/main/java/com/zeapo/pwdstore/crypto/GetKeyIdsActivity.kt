@@ -11,6 +11,8 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -51,14 +53,14 @@ class GetKeyIdsActivity : BasePgpActivity() {
             api?.executeApiAsync(data, null, null) { result ->
                 when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                        try {
+                        runCatching {
                             val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map {
                                 OpenPgpUtils.convertKeyIdToHex(it)
                             } ?: emptyList()
                             val keyResult = Intent().putExtra(OpenPgpApi.EXTRA_KEY_IDS, ids.toTypedArray())
                             setResult(RESULT_OK, keyResult)
                             finish()
-                        } catch (e: Exception) {
+                        }.onFailure { e ->
                             e(e)
                         }
                     }
