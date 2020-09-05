@@ -16,6 +16,8 @@ import android.text.format.DateUtils
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPublisherChangedException
@@ -76,7 +78,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
     }
 
     private fun showPackageInfo() {
-        try {
+        runCatching {
             with(binding) {
                 val packageInfo =
                     packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
@@ -94,8 +96,8 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
                     currentHash
                 )
             }
-        } catch (exception: Exception) {
-            e(exception) { "Failed to retrieve package info for $appPackage" }
+        }.onFailure { e ->
+            e(e) { "Failed to retrieve package info for $appPackage" }
             finish()
         }
     }
