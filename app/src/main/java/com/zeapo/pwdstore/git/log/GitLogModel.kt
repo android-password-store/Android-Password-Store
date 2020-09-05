@@ -6,6 +6,8 @@
 package com.zeapo.pwdstore.git.log
 
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.hash
 import com.zeapo.pwdstore.utils.time
@@ -18,10 +20,10 @@ private fun commits(): Iterable<RevCommit> {
         e { "Could not access git repository" }
         return listOf()
     }
-    return try {
+    return runCatching {
         Git(repo).log().call()
-    } catch (exc: Exception) {
-        e(exc) { "Failed to obtain git commits" }
+    }.getOrElse { e ->
+        e(e) { "Failed to obtain git commits" }
         listOf()
     }
 }
