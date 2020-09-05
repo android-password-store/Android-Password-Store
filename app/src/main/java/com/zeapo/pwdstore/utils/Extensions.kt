@@ -27,6 +27,8 @@ import androidx.security.crypto.MasterKey
 import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.operation.GitOperation
@@ -77,9 +79,9 @@ fun File.contains(other: File): Boolean {
         return false
     if (!other.exists())
         return false
-    val relativePath = try {
+    val relativePath = runCatching {
         other.relativeTo(this)
-    } catch (e: Exception) {
+    }.getOrElse {
         return false
     }
     // Direct containment is equivalent to the relative path being equal to the filename.
