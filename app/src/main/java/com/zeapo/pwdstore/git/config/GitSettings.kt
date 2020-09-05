@@ -5,6 +5,8 @@
 package com.zeapo.pwdstore.git.config
 
 import androidx.core.content.edit
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.Application
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
@@ -105,9 +107,9 @@ object GitSettings {
     }
 
     fun updateConnectionSettingsIfValid(newAuthMode: AuthMode, newUrl: String, newBranch: String): UpdateConnectionSettingsResult {
-        val parsedUrl = try {
+        val parsedUrl = runCatching {
             URIish(newUrl)
-        } catch (_: Exception) {
+        }.getOrElse {
             return UpdateConnectionSettingsResult.FailedToParseUrl
         }
         val newProtocol = when (parsedUrl.scheme) {
