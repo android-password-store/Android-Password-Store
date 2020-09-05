@@ -20,7 +20,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
@@ -383,7 +385,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 api?.executeApiAsync(data, inputStream, outputStream) { result ->
                     when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                         OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                            try {
+                            runCatching {
                                 val file = File(path)
                                 // If we're not editing, this file should not already exist!
                                 if (!editing && file.exists()) {
@@ -396,22 +398,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     return@executeApiAsync
                                 }
 
-                                try {
-                                    file.outputStream().use {
-                                        it.write(outputStream.toByteArray())
-                                    }
-                                } catch (e: IOException) {
-                                    e(e) { "Failed to write password file" }
-                                    setResult(RESULT_CANCELED)
-                                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                                        .setTitle(getString(R.string.password_creation_file_fail_title))
-                                        .setMessage(getString(R.string.password_creation_file_write_fail_message))
-                                        .setCancelable(false)
-                                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                                            finish()
-                                        }
-                                        .show()
-                                    return@executeApiAsync
+                                file.outputStream().use {
+                                    it.write(outputStream.toByteArray())
                                 }
 
                                 //associate the new password name with the last name's timestamp in history
@@ -467,8 +455,21 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                     }
                                 }
 
-                            } catch (e: Exception) {
-                                e(e) { "An Exception occurred" }
+                            }.onFailure { e ->
+                                if (e is IOException) {
+                                    e(e) { "Failed to write password file" }
+                                    setResult(RESULT_CANCELED)
+                                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                                        .setTitle(getString(R.string.password_creation_file_fail_title))
+                                        .setMessage(getString(R.string.password_creation_file_write_fail_message))
+                                        .setCancelable(false)
+                                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                                            finish()
+                                        }
+                                        .show()
+                                } else {
+                                    e(e)
+                                }
                             }
                         }
                         OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
