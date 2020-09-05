@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -51,7 +53,7 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        try {
+        runCatching {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
                     if (item.type == PasswordItem.TYPE_CATEGORY) {
@@ -60,9 +62,8 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
                     }
                 }
             }
-        } catch (e: ClassCastException) {
-            throw ClassCastException(
-                "$context must implement OnFragmentInteractionListener")
+        }.onFailure {
+            throw ClassCastException("$context must implement OnFragmentInteractionListener")
         }
     }
 
