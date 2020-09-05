@@ -7,9 +7,12 @@ package com.zeapo.pwdstore.git.operation
 import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.UserPreference
@@ -86,15 +89,13 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     }
 
     private fun getSshKey(make: Boolean) {
-        try {
+        runCatching {
             // Ask the UserPreference to provide us with the ssh-key
-            // onResult has to be handled by the callingActivity
             val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
             intent.putExtra("operation", if (make) "make_ssh_key" else "get_ssh_key")
-            callingActivity.startActivityForResult(intent, GET_SSH_KEY_FROM_CLONE)
-        } catch (e: Exception) {
-            println("Exception caught :(")
-            e.printStackTrace()
+            callingActivity.startActivity(intent)
+        }.onFailure { e ->
+            e(e)
         }
     }
 
