@@ -9,7 +9,10 @@ import android.os.Handler
 import android.view.View
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -20,7 +23,6 @@ import com.zeapo.pwdstore.git.config.Protocol
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
-import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -116,7 +118,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                 .setMessage(resources.getString(R.string.dialog_delete_msg, localDir.toString()))
                 .setCancelable(false)
                 .setPositiveButton(R.string.dialog_delete) { dialog, _ ->
-                    try {
+                    runCatching {
                         lifecycleScope.launch {
                             val snackbar = snackbar(message = getString(R.string.delete_directory_progress_text), length = Snackbar.LENGTH_INDEFINITE)
                             withContext(Dispatchers.IO) {
@@ -131,33 +133,25 @@ class GitServerConfigActivity : BaseGitActivity() {
                                 failure = ::finishAfterPromptOnErrorHandler,
                             )
                         }
-                    } catch (e: IOException) {
-                        // TODO Handle the exception correctly if we are unable to delete the directory...
+                    }.onFailure { e ->
                         e.printStackTrace()
                         MaterialAlertDialogBuilder(this).setMessage(e.message).show()
-                    } finally {
-                        dialog.cancel()
                     }
+                    dialog.cancel()
                 }
                 .setNegativeButton(R.string.dialog_do_not_delete) { dialog, _ ->
                     dialog.cancel()
                 }
                 .show()
         } else {
-            try {
+            runCatching {
                 // Silently delete & replace the lone .git folder if it exists
                 if (localDir.exists() && localDirFiles.size == 1 && localDirFiles[0].name == ".git") {
-                    try {
-                        localDir.deleteRecursively()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        MaterialAlertDialogBuilder(this).setMessage(e.message).show()
-                    }
+                    localDir.deleteRecursively()
+
                 }
-            } catch (e: Exception) {
-                // This is what happens when JGit fails :(
-                // TODO Handle the different cases of exceptions
-                e.printStackTrace()
+            }.onFailure { e ->
+                e(e)
                 MaterialAlertDialogBuilder(this).setMessage(e.message).show()
             }
             lifecycleScope.launch {
