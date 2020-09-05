@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.git.sshj
 
 import com.github.ajalt.timberkt.Timber
 import com.github.ajalt.timberkt.d
+import com.github.michaelbull.result.runCatching
 import com.hierynomus.sshj.key.KeyAlgorithms
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
 import com.hierynomus.sshj.transport.kex.ExtInfoClientFactory
@@ -46,10 +47,7 @@ fun setUpBouncyCastleForSshj() {
         // Replace Android BC with Java BC, inserted at the same position.
         Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
         // May be needed on Android Pie+ as per https://stackoverflow.com/a/57897224/297261
-        try {
-            Class.forName("sun.security.jca.Providers")
-        } catch (e: ClassNotFoundException) {
-        }
+        runCatching { Class.forName("sun.security.jca.Providers") }
         Security.insertProviderAt(BouncyCastleProvider(), bcIndex + 1)
     }
     d { "JCE providers: ${Security.getProviders().joinToString { "${it.name} (${it.version})" }}" }
