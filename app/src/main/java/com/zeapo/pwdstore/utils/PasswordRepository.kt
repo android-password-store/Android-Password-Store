@@ -6,10 +6,14 @@ package com.zeapo.pwdstore.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.zeapo.pwdstore.Application
 import java.io.File
 import java.io.FileFilter
+import java.nio.file.Files
+import java.nio.file.LinkOption
 import java.util.Comparator
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
@@ -17,8 +21,36 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
+import org.eclipse.jgit.util.FS
+import org.eclipse.jgit.util.FS_POSIX_Java6
 
 open class PasswordRepository protected constructor() {
+
+    private class FS_POSIX_Java6_with_optional_symlinks : FS_POSIX_Java6() {
+
+        override fun supportsSymlinks() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun isSymLink(file: File) = Files.isSymbolicLink(file.toPath())
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun readSymLink(file: File) = Files.readSymbolicLink(file.toPath()).toString()
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun createSymLink(source: File, target: String) {
+            val sourcePath = source.toPath()
+            if (Files.exists(sourcePath, LinkOption.NOFOLLOW_LINKS))
+                Files.delete(sourcePath)
+            Files.createSymbolicLink(sourcePath, File(target).toPath())
+        }
+    }
+
+    private class Java7FSFactory : FS.FSFactory() {
+
+        override fun detect(cygwinUsed: Boolean?): FS {
+            return FS_POSIX_Java6_with_optional_symlinks()
+        }
+    }
 
     enum class PasswordSortOrder(val comparator: Comparator<PasswordItem>) {
 
@@ -75,6 +107,7 @@ open class PasswordRepository protected constructor() {
                 val builder = FileRepositoryBuilder()
                 try {
                     repository = builder.setGitDir(localDir)
+                        .setFS(Java7FSFactory().detect(null))
                         .readEnvironment()
                         .build()
                 } catch (e: Exception) {
