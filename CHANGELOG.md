@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 -   Remember HTTPS password during a sync operation
 -   Unable to use show/hide password option for password/passphrase after first attempt was wrong
 -   TOTP values shown might some times be stale and considered invalid by sites
+-   Symlinks are no longer clobbered by the app (only available on Android 8 and above)
 
 ## [1.11.3] - 2020-08-27
 
