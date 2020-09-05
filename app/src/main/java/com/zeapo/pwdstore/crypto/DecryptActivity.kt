@@ -16,6 +16,8 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.DecryptLayoutBinding
 import com.zeapo.pwdstore.model.PasswordEntry
@@ -68,10 +70,12 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                 copyTextToClipboard(name)
                 true
             }
-            try {
-                passwordLastChanged.text = resources.getString(R.string.last_changed, lastChangedString)
-            } catch (e: RuntimeException) {
-                passwordLastChanged.visibility = View.GONE
+            passwordLastChanged.run {
+                runCatching {
+                    text = resources.getString(R.string.last_changed, lastChangedString)
+                }.onFailure {
+                    visibility = View.GONE
+                }
             }
         }
     }
@@ -142,7 +146,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             api?.executeApiAsync(data, inputStream, outputStream) { result ->
                 when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                        try {
+                        runCatching {
                             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
                             val showExtraContent = settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
                             val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
@@ -198,7 +202,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                             // then return to the standard 30 second affair.
                                             val remainingTime = entry.totpPeriod - (System.currentTimeMillis() % entry.totpPeriod)
                                             withContext(Dispatchers.Main) {
-                                                otpText.setText(entry.calculateTotpCode() ?: "Error")
+                                                otpText.setText(entry.calculateTotpCode()
+                                                    ?: "Error")
                                             }
                                             delay(remainingTime.seconds)
                                             repeat(Int.MAX_VALUE) {
@@ -216,7 +221,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                             if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
                                 copyPasswordToClipboard(entry.password)
                             }
-                        } catch (e: Exception) {
+                        }.onFailure { e ->
                             e(e)
                         }
                     }
