@@ -12,6 +12,9 @@ import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
@@ -69,10 +72,9 @@ class GitConfigActivity : BaseGitActivity() {
             binding.gitAbortRebase.alpha = if (isRebasing) 1.0f else 0.5f
         }
         binding.gitLog.setOnClickListener {
-            try {
-                intent = Intent(this, GitLogActivity::class.java)
-                startActivity(intent)
-            } catch (ex: Exception) {
+            runCatching {
+                startActivity(Intent(this, GitLogActivity::class.java))
+            }.onFailure { ex ->
                 e(ex) { "Failed to start GitLogActivity" }
             }
         }
@@ -112,7 +114,7 @@ class GitConfigActivity : BaseGitActivity() {
      * The state is recognized to be either pointing to a branch or detached.
      */
     private fun headStatusMsg(repo: Repository): String {
-        return try {
+        return runCatching {
             val headRef = repo.getRef(Constants.HEAD)
             if (headRef.isSymbolic) {
                 val branchName = headRef.target.name
@@ -122,7 +124,7 @@ class GitConfigActivity : BaseGitActivity() {
                 val commitHash = headRef.objectId.abbreviate(8).name()
                 getString(R.string.git_head_detached, commitHash)
             }
-        } catch (ex: Exception) {
+        }.getOrElse { ex ->
             e(ex) { "Error getting HEAD reference" }
             getString(R.string.git_head_missing)
         }
