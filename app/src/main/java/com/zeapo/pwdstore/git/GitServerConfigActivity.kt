@@ -73,22 +73,14 @@ class GitServerConfigActivity : BaseGitActivity() {
 
         binding.serverUrl.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) return@doOnTextChanged
-            when {
-                text.startsWith("http") -> {
-                    binding.authModeSshKey.isVisible = false
-                    binding.authModeOpenKeychain.isVisible = false
-                    binding.authModePassword.isVisible = true
-                }
-                text.startsWith("ssh") -> {
-                    binding.authModeSshKey.isVisible = true
-                    binding.authModeOpenKeychain.isVisible = true
-                    binding.authModePassword.isVisible = true
-                }
-                else -> {
-                    binding.authModeSshKey.isVisible = false
-                    binding.authModeOpenKeychain.isVisible = false
-                    binding.authModePassword.isVisible = false
-                }
+            if (text.startsWith("http://") || text.startsWith("https://")) {
+                binding.authModeSshKey.isVisible = false
+                binding.authModeOpenKeychain.isVisible = false
+                binding.authModePassword.isVisible = true
+            } else {
+                binding.authModeSshKey.isVisible = true
+                binding.authModeOpenKeychain.isVisible = true
+                binding.authModePassword.isVisible = true
             }
         }
 
