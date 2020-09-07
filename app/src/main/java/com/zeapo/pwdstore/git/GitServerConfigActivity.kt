@@ -9,6 +9,8 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.postDelayed
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.fold
@@ -68,6 +70,27 @@ class GitServerConfigActivity : BaseGitActivity() {
 
         binding.serverUrl.setText(GitSettings.url)
         binding.serverBranch.setText(GitSettings.branch)
+
+        binding.serverUrl.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) return@doOnTextChanged
+            when {
+                text.startsWith("http") -> {
+                    binding.authModeSshKey.isVisible = false
+                    binding.authModeOpenKeychain.isVisible = false
+                    binding.authModePassword.isVisible = true
+                }
+                text.startsWith("ssh") -> {
+                    binding.authModeSshKey.isVisible = true
+                    binding.authModeOpenKeychain.isVisible = true
+                    binding.authModePassword.isVisible = true
+                }
+                else -> {
+                    binding.authModeSshKey.isVisible = false
+                    binding.authModeOpenKeychain.isVisible = false
+                    binding.authModePassword.isVisible = false
+                }
+            }
+        }
 
         binding.saveButton.setOnClickListener {
             when (val updateResult = GitSettings.updateConnectionSettingsIfValid(
