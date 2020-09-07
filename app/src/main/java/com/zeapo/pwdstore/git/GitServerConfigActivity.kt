@@ -130,7 +130,11 @@ class GitServerConfigActivity : BaseGitActivity() {
                                     setResult(RESULT_OK)
                                     finish()
                                 },
-                                failure = ::finishAfterPromptOnErrorHandler,
+                                failure = { err ->
+                                    promptOnErrorHandler(err) {
+                                        finish()
+                                    }
+                                }
                             )
                         }
                     }.onFailure { e ->
@@ -160,7 +164,11 @@ class GitServerConfigActivity : BaseGitActivity() {
                         setResult(RESULT_OK)
                         finish()
                     },
-                    failure = ::finishAfterPromptOnErrorHandler,
+                    failure = { err ->
+                        promptOnErrorHandler(err) {
+                            finish()
+                        }
+                    },
                 )
             }
         }
