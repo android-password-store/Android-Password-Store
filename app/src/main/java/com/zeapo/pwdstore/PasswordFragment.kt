@@ -110,7 +110,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                                 binding.swipeRefresher.isRefreshing = false
                                 refreshPasswordList()
                             },
-                            failure = ::finishAfterPromptOnErrorHandler,
+                            failure = { err ->
+                                promptOnErrorHandler(err) {
+                                    binding.swipeRefresher.isRefreshing = false
+                                }
+                            },
                         )
                     }
                 }

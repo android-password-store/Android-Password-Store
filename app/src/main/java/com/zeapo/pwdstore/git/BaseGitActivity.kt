@@ -61,7 +61,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         finish()
     }
 
-    fun finishAfterPromptOnErrorHandler(err: Throwable) {
+    fun promptOnErrorHandler(err: Throwable, onPromptDone: () -> Unit = {}) {
         val error = rootCauseException(err)
         if (!isExplicitlyUserInitiatedError(error)) {
             getEncryptedPrefs("git_operation").edit {
@@ -69,12 +69,17 @@ abstract class BaseGitActivity : AppCompatActivity() {
             }
             sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
             d(error)
-            MaterialAlertDialogBuilder(this)
-                .setTitle(resources.getString(R.string.jgit_error_dialog_title))
-                .setMessage(ErrorMessages[error])
-                .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
-                    finish()
-                }.show()
+            MaterialAlertDialogBuilder(this).run {
+                setTitle(resources.getString(R.string.jgit_error_dialog_title))
+                setMessage(ErrorMessages[error])
+                setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
+                setOnDismissListener {
+                    onPromptDone()
+                }
+                show()
+            }
+        } else {
+            onPromptDone()
         }
     }
 
