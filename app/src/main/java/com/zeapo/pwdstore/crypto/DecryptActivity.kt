@@ -82,6 +82,15 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.pgp_handler, menu)
+        passwordEntry?.let { entry ->
+            if (menu != null) {
+                menu.findItem(R.id.edit_password).isVisible = true
+                if (entry.password.isNotEmpty()) {
+                    menu.findItem(R.id.share_password_as_plaintext).isVisible = true
+                    menu.findItem(R.id.copy_password).isVisible = true
+                }
+            }
+        }
         return true
     }
 
@@ -153,6 +162,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                             val entry = PasswordEntry(outputStream)
 
                             passwordEntry = entry
+                            invalidateOptionsMenu()
 
                             with(binding) {
                                 if (entry.password.isEmpty()) {
