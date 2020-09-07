@@ -6,6 +6,7 @@
 package com.zeapo.pwdstore.git.log
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zeapo.pwdstore.databinding.ActivityGitLogBinding
@@ -26,6 +27,16 @@ class GitLogActivity : BaseGitActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         createRecyclerView()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun createRecyclerView() {
