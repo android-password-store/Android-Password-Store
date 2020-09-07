@@ -340,29 +340,29 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.3...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.3...HEAD
 
-[1.11.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.2...1.11.3
+[1.11.3]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.2...v1.11.3
 
-[1.11.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.1...1.11.2
+[1.11.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.1...v1.11.2
 
-[1.11.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.11.0...1.11.1
+[1.11.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.0...v1.11.1
 
-[1.11.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.3...1.11.0
+[1.11.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.10.3...v1.11.0
 
-[1.10.3]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.2...1.10.3
+[1.10.3]: https://github.com/android-password-store/Android-Password-Store/compare/v1.10.2...v1.10.3
 
-[1.10.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.1...1.10.2
+[1.10.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.10.1...v1.10.2
 
-[1.10.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.10.0...1.10.1
+[1.10.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.10.0...v1.10.1
 
-[1.10.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.2...1.10.0
+[1.10.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.9.2...v1.10.0
 
-[1.9.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.1...1.9.2
+[1.9.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.9.1...v1.9.2
 
-[1.9.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.9.0...1.9.1
+[1.9.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.9.0...v1.9.1
 
-[1.9.0]: https://github.com/android-password-store/Android-Password-Store/compare/1.8.1...1.9.0
+[1.9.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.8.1...v1.9.0
 
 [1.8.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.8.0..v1.8.1
 

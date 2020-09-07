@@ -23,7 +23,7 @@ jobs:
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.1.0
         with:
-          version: ${{ env.RELEASE_VERSION }}
+          version: v${{ env.RELEASE_VERSION }}
 
       - name: Initialize git config
         run: |
