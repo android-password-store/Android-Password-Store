@@ -11,15 +11,18 @@
         android:id="@+id/share_password_as_plaintext"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/share_as_plaintext"
+        android:visible="false"
         pwstore:showAsAction="ifRoom" />
     <item
         android:id="@+id/copy_password"
         android:icon="@drawable/ic_content_copy"
         android:title="@string/copy_password"
+        android:visible="false"
         pwstore:showAsAction="ifRoom" />
     <item
         android:id="@+id/edit_password"
         android:icon="@drawable/ic_edit_24dp"
         android:title="@string/edit_password"
+        android:visible="false"
         pwstore:showAsAction="ifRoom" />
 </menu>

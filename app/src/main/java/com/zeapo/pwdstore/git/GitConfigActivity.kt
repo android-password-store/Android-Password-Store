@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Patterns
+import android.view.MenuItem
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
@@ -56,6 +57,16 @@ class GitConfigActivity : BaseGitActivity() {
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
                 Handler().postDelayed(500) { finish() }
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

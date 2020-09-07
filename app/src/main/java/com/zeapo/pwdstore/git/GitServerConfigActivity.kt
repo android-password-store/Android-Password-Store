@@ -6,8 +6,11 @@ package com.zeapo.pwdstore.git
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.MenuItem
 import android.view.View
 import androidx.core.os.postDelayed
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.fold
@@ -68,6 +71,19 @@ class GitServerConfigActivity : BaseGitActivity() {
         binding.serverUrl.setText(GitSettings.url)
         binding.serverBranch.setText(GitSettings.branch)
 
+        binding.serverUrl.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) return@doOnTextChanged
+            if (text.startsWith("http://") || text.startsWith("https://")) {
+                binding.authModeSshKey.isVisible = false
+                binding.authModeOpenKeychain.isVisible = false
+                binding.authModePassword.isVisible = true
+            } else {
+                binding.authModeSshKey.isVisible = true
+                binding.authModeOpenKeychain.isVisible = true
+                binding.authModePassword.isVisible = true
+            }
+        }
+
         binding.saveButton.setOnClickListener {
             when (val updateResult = GitSettings.updateConnectionSettingsIfValid(
                 newAuthMode = newAuthMode,
@@ -101,6 +117,16 @@ class GitServerConfigActivity : BaseGitActivity() {
                     Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -164,11 +190,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                         setResult(RESULT_OK)
                         finish()
                     },
-                    failure = { err ->
-                        promptOnErrorHandler(err) {
-                            finish()
-                        }
-                    },
+                    failure = ::promptOnErrorHandler,
                 )
             }
         }

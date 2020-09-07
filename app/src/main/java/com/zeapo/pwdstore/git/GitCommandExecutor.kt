@@ -8,6 +8,7 @@ package com.zeapo.pwdstore.git
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.GitException.PullException
@@ -37,7 +38,7 @@ class GitCommandExecutor(
         )
         // Count the number of uncommitted files
         var nbChanges = 0
-        return com.github.michaelbull.result.runCatching {
+        return runCatching {
             for (command in operation.commands) {
                 when (command) {
                     is StatusCommand -> {
@@ -94,6 +95,8 @@ class GitCommandExecutor(
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
+                                    }
+                                    else -> {
                                     }
                                 }
                             }
