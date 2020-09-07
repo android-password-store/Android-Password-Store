@@ -10,6 +10,8 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
+import com.zeapo.pwdstore.git.config.AuthMode
+import com.zeapo.pwdstore.git.operation.CredentialFinder
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -28,6 +30,8 @@ import net.schmizz.sshj.common.SecurityUtils
 import net.schmizz.sshj.connection.channel.direct.Session
 import net.schmizz.sshj.transport.verification.FingerprintVerifier
 import net.schmizz.sshj.transport.verification.HostKeyVerifier
+import net.schmizz.sshj.userauth.method.AuthPassword
+import net.schmizz.sshj.userauth.method.AuthPublickey
 import net.schmizz.sshj.userauth.password.PasswordFinder
 import net.schmizz.sshj.userauth.password.Resource
 import org.eclipse.jgit.transport.CredentialsProvider
@@ -36,10 +40,10 @@ import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
 
-sealed class SshAuthData {
-    class Password(val passwordFinder: InteractivePasswordFinder) : SshAuthData()
-    class SshKey(val passphraseFinder: InteractivePasswordFinder) : SshAuthData()
-    class OpenKeychain(val activity: FragmentActivity) : SshAuthData()
+sealed class SshAuthMethod(val activity: FragmentActivity) {
+    class Password(activity: FragmentActivity) : SshAuthMethod(activity)
+    class SshKey(activity: FragmentActivity) : SshAuthMethod(activity)
+    class OpenKeychain(activity: FragmentActivity) : SshAuthMethod(activity)
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
@@ -62,12 +66,12 @@ abstract class InteractivePasswordFinder : PasswordFinder {
     final override fun shouldRetry(resource: Resource<*>?) = true
 }
 
-class SshjSessionFactory(private val authData: SshAuthData, private val hostKeyFile: File) : SshSessionFactory() {
+class SshjSessionFactory(private val authMethod: SshAuthMethod, private val hostKeyFile: File) : SshSessionFactory() {
 
     private var currentSession: SshjSession? = null
 
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
-        return currentSession ?: SshjSession(uri, uri.user, authData, hostKeyFile).connect().also {
+        return currentSession ?: SshjSession(uri, uri.user, authMethod, hostKeyFile).connect().also {
             d { "New SSH connection created" }
             currentSession = it
         }
@@ -100,7 +104,7 @@ private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
     }
 }
 
-private class SshjSession(uri: URIish, private val username: String, private val authData: SshAuthData, private val hostKeyFile: File) : RemoteSession {
+private class SshjSession(uri: URIish, private val username: String, private val authMethod: SshAuthMethod, private val hostKeyFile: File) : RemoteSession {
 
     private lateinit var ssh: SSHClient
     private var currentCommand: Session? = null
@@ -124,17 +128,20 @@ private class SshjSession(uri: URIish, private val username: String, private val
         ssh.connect(uri.host, uri.port.takeUnless { it == -1 } ?: 22)
         if (!ssh.isConnected)
             throw IOException()
-        when (authData) {
-            is SshAuthData.Password -> {
-                ssh.authPassword(username, authData.passwordFinder)
+        val passwordAuth = AuthPassword(CredentialFinder(authMethod.activity, AuthMode.Password))
+        when (authMethod) {
+            is SshAuthMethod.Password -> {
+                ssh.auth(username, passwordAuth)
             }
-            is SshAuthData.SshKey -> {
-                ssh.authPublickey(username, SshKey.provide(ssh, authData.passphraseFinder))
+            is SshAuthMethod.SshKey -> {
+                val pubkeyAuth = AuthPublickey(SshKey.provide(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
+                ssh.auth(username, pubkeyAuth, passwordAuth)
             }
-            is SshAuthData.OpenKeychain -> {
+            is SshAuthMethod.OpenKeychain -> {
                 runBlocking {
-                    OpenKeychainKeyProvider.prepareAndUse(authData.activity) { provider ->
-                        ssh.authPublickey(username, provider)
+                    OpenKeychainKeyProvider.prepareAndUse(authMethod.activity) { provider ->
+                        val openKeychainAuth = AuthPublickey(provider)
+                        ssh.auth(username, openKeychainAuth, passwordAuth)
                     }
                 }
             }
