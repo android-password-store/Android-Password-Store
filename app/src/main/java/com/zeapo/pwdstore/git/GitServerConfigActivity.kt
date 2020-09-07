@@ -190,11 +190,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                         setResult(RESULT_OK)
                         finish()
                     },
-                    failure = { err ->
-                        promptOnErrorHandler(err) {
-                            finish()
-                        }
-                    },
+                    failure = ::promptOnErrorHandler,
                 )
             }
         }
