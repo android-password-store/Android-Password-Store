@@ -6,6 +6,7 @@ package com.zeapo.pwdstore.git
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.MenuItem
 import android.view.View
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
@@ -101,6 +102,16 @@ class GitServerConfigActivity : BaseGitActivity() {
                     Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
