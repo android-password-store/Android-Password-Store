@@ -21,7 +21,7 @@ import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.checkRuntimePermission
+import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.sharedPrefs
@@ -116,7 +116,7 @@ class OnboardingActivity : AppCompatActivity() {
         settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, true) }
         val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
         if (externalRepo == null) {
-            if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 registerForActivityResult(RequestPermission()) { granted ->
                     if (granted) {
                         externalDirectorySelectAction.launch(Intent(this, UserPreference::class.java).apply {
@@ -130,7 +130,7 @@ class OnboardingActivity : AppCompatActivity() {
                 .setTitle(resources.getString(R.string.directory_selected_title))
                 .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
                 .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
-                    if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         registerForActivityResult(RequestPermission()) { granted ->
                             if (granted) {
                                 initializeRepositoryInfo()
@@ -141,7 +141,7 @@ class OnboardingActivity : AppCompatActivity() {
                     }
                 }
                 .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
-                    if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         registerForActivityResult(RequestPermission()) { granted ->
                             if (granted) {
                                 repositoryInitAction.launch(Intent(this, UserPreference::class.java).apply {
@@ -202,7 +202,7 @@ class OnboardingActivity : AppCompatActivity() {
     private fun initializeRepositoryInfo() {
         val externalRepo = settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
         val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-        if (externalRepo && !checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (externalRepo && !isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             return
         }
         if (externalRepo && externalRepoPath != null) {
