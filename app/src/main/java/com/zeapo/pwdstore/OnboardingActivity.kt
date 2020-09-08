@@ -149,6 +149,10 @@ class OnboardingActivity : AppCompatActivity() {
                                 })
                             }
                         }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    } else {
+                        repositoryInitAction.launch(Intent(this, UserPreference::class.java).apply {
+                            putExtra("operation", "git_external")
+                        })
                     }
                 }
                 .show()
