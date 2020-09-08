@@ -20,6 +20,7 @@ import com.zeapo.pwdstore.R
 object BiometricAuthenticator {
 
     private const val TAG = "BiometricAuthenticator"
+    private const val validAuthenticators = Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
 
     sealed class Result {
         data class Success(val cryptoObject: BiometricPrompt.CryptoObject?) : Result()
@@ -28,10 +29,14 @@ object BiometricAuthenticator {
         object Cancelled : Result()
     }
 
+    fun canAuthenticate(activity: FragmentActivity): Boolean {
+        return BiometricManager.from(activity).canAuthenticate(validAuthenticators) == BiometricManager.BIOMETRIC_SUCCESS
+    }
+
     fun authenticate(
-        activity: FragmentActivity,
-        @StringRes dialogTitleRes: Int = R.string.biometric_prompt_title,
-        callback: (Result) -> Unit
+      activity: FragmentActivity,
+      @StringRes dialogTitleRes: Int = R.string.biometric_prompt_title,
+      callback: (Result) -> Unit
     ) {
         val authCallback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -60,14 +65,12 @@ object BiometricAuthenticator {
                 callback(Result.Success(result.cryptoObject))
             }
         }
-        val validAuthenticators = Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
-        val canAuth = BiometricManager.from(activity).canAuthenticate(validAuthenticators) == BiometricManager.BIOMETRIC_SUCCESS
         val deviceHasKeyguard = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
-        if (canAuth || deviceHasKeyguard) {
+        if (canAuthenticate(activity) || deviceHasKeyguard) {
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle(activity.getString(dialogTitleRes))
-                .setAllowedAuthenticators(validAuthenticators)
-                .build()
+              .setTitle(activity.getString(dialogTitleRes))
+              .setAllowedAuthenticators(validAuthenticators)
+              .build()
             BiometricPrompt(activity, ContextCompat.getMainExecutor(activity.applicationContext), authCallback).authenticate(promptInfo)
         } else {
             callback(Result.HardwareUnavailableOrDisabled)
