@@ -24,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.biometric.BiometricManager
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
@@ -281,9 +280,9 @@ class UserPreference : AppCompatActivity() {
             findPreference<CheckBoxPreference>(PreferenceKeys.ENABLE_DEBUG_LOGGING)?.isVisible = !BuildConfig.ENABLE_DEBUG_FEATURES
 
             findPreference<CheckBoxPreference>(PreferenceKeys.BIOMETRIC_AUTH)?.apply {
-                val isFingerprintSupported = BiometricManager.from(requireContext())
-                    .canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS
-                if (!isFingerprintSupported) {
+                val canAuthenticate = BiometricAuthenticator.canAuthenticate(prefsActivity)
+
+                if (!canAuthenticate) {
                     isEnabled = false
                     isChecked = false
                     summary = getString(R.string.biometric_auth_summary_error)
