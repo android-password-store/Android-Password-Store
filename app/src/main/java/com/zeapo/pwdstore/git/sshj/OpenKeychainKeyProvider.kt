@@ -39,7 +39,7 @@ import org.openintents.ssh.authentication.response.Response
 import org.openintents.ssh.authentication.response.SigningResponse
 import org.openintents.ssh.authentication.response.SshPublicKeyResponse
 
-class OpenKeychainKeyProvider private constructor(private val activity: FragmentActivity) : KeyProvider, Closeable {
+class OpenKeychainKeyProvider private constructor(activity: FragmentActivity) : KeyProvider, Closeable {
 
     companion object {
 
