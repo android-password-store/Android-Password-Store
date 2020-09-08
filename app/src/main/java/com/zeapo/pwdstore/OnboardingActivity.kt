@@ -119,9 +119,7 @@ class OnboardingActivity : AppCompatActivity() {
             if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 registerForActivityResult(RequestPermission()) { granted ->
                     if (granted) {
-                        externalDirectorySelectAction.launch(Intent(this, UserPreference::class.java).apply {
-                            putExtra("operation", "git_external")
-                        })
+                        externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
                     }
                 }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
@@ -144,15 +142,11 @@ class OnboardingActivity : AppCompatActivity() {
                     if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         registerForActivityResult(RequestPermission()) { granted ->
                             if (granted) {
-                                repositoryInitAction.launch(Intent(this, UserPreference::class.java).apply {
-                                    putExtra("operation", "git_external")
-                                })
+                                repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(this))
                             }
                         }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     } else {
-                        repositoryInitAction.launch(Intent(this, UserPreference::class.java).apply {
-                            putExtra("operation", "git_external")
-                        })
+                        repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(this))
                     }
                 }
                 .show()

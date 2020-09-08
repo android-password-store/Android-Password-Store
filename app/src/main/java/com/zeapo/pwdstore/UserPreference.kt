@@ -678,6 +678,12 @@ class UserPreference : AppCompatActivity() {
 
         private const val TAG = "UserPreference"
 
+        fun createDirectorySelectionIntent(context: Context): Intent {
+            return Intent(context, UserPreference::class.java).run {
+                putExtra("operation", "git_external")
+            }
+        }
+
         /**
          * Set custom dictionary summary
          */

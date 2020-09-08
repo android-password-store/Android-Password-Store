@@ -348,13 +348,11 @@ class PasswordStore : BaseGitActivity() {
     private fun checkLocalRepository() {
         val repo = initialize()
         if (repo == null) {
-            val intent = Intent(activity, UserPreference::class.java)
-            intent.putExtra("operation", "git_external")
             registerForActivityResult(StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     checkLocalRepository()
                 }
-            }.launch(intent)
+            }.launch(UserPreference.createDirectorySelectionIntent(this))
         } else {
             checkLocalRepository(getRepositoryDirectory())
         }
