@@ -24,7 +24,6 @@ import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.biometric.BiometricManager
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
