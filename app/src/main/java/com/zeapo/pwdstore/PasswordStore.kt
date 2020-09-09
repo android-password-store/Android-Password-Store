@@ -60,7 +60,7 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
-import com.zeapo.pwdstore.utils.checkRuntimePermission
+import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.getString
@@ -115,7 +115,7 @@ class PasswordStore : BaseGitActivity() {
         // prevent attempt to create password list fragment
         var savedInstance = savedInstanceState
         if (savedInstanceState != null && (!settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false) ||
-                !checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+                !isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             savedInstance = null
         }
         super.onCreate(savedInstance)
@@ -324,7 +324,7 @@ class PasswordStore : BaseGitActivity() {
      * is true if the permission has been granted.
      */
     private fun hasRequiredStoragePermissions(): Boolean {
-        return if (!checkRuntimePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        return if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Snackbar.make(
                 findViewById(R.id.main_layout),
                 getString(R.string.access_sdcard_text),
@@ -348,13 +348,11 @@ class PasswordStore : BaseGitActivity() {
     private fun checkLocalRepository() {
         val repo = initialize()
         if (repo == null) {
-            val intent = Intent(activity, UserPreference::class.java)
-            intent.putExtra("operation", "git_external")
             registerForActivityResult(StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     checkLocalRepository()
                 }
-            }.launch(intent)
+            }.launch(UserPreference.createDirectorySelectionIntent(this))
         } else {
             checkLocalRepository(getRepositoryDirectory())
         }

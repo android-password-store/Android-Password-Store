@@ -135,7 +135,7 @@ suspend fun FragmentActivity.commitChange(
     }.execute()
 }
 
-fun FragmentActivity.checkRuntimePermission(permission: String): Boolean {
+fun FragmentActivity.isPermissionGranted(permission: String): Boolean {
     return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 }
 
