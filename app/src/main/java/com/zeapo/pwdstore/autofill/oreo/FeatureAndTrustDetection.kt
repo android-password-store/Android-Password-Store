@@ -78,6 +78,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "org.torproject.torbrowser" to "IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg=",
     "org.ungoogled.chromium.stable" to "29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk=",
     "org.ungoogled.chromium.extensions.stable" to "29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk=",
+    "com.kiwibrowser.browser" to "wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig=",
 )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
@@ -168,6 +169,7 @@ private val FLAKY_BROWSERS = listOf(
     "com.chrome.dev",
     "org.bromite.bromite",
     "org.ungoogled.chromium.stable",
+    "com.kiwibrowser.browser",
 )
 
 enum class BrowserAutofillSupportLevel {

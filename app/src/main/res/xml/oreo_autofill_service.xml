@@ -25,4 +25,5 @@
         android:name="org.mozilla.firefox_beta"
         android:maxLongVersionCode="679999" />
     <compatibility-package android:name="org.ungoogled.chromium.stable" />
+    <compatibility-package android:name="com.kiwibrowser.browser" />
 </autofill-service>
