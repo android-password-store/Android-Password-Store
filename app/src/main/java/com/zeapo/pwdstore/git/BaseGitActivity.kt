@@ -11,6 +11,8 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.andThen
+import com.github.michaelbull.result.mapError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.GitSettings
@@ -42,6 +44,11 @@ abstract class BaseGitActivity : AppCompatActivity() {
         if (GitSettings.url == null) {
             return Err(IllegalStateException("Git url is not set!"))
         }
+        if (operation == REQUEST_SYNC && !GitSettings.useMultiplexing) {
+            // If the server does not support multiple SSH channels per connection, we cannot run
+            // a sync operation without reconnecting and thus break sync into its two parts.
+            return launchGitOperation(REQUEST_PULL).andThen { launchGitOperation(REQUEST_PUSH) }
+        }
         val op = when (operation) {
             REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(this, GitSettings.url!!)
             REQUEST_PULL -> PullOperation(this)
@@ -54,7 +61,14 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 return Err(IllegalArgumentException("$operation is not a valid Git operation"))
             }
         }
-        return op.executeAfterAuthentication(GitSettings.authMode)
+        return op.executeAfterAuthentication(GitSettings.authMode).mapError { err ->
+            if (err.message?.contains("cannot open additional channels") == true) {
+                GitSettings.useMultiplexing = false
+                SSHException(DisconnectReason.TOO_MANY_CONNECTIONS, "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used.")
+            } else {
+                err
+            }
+        }
     }
 
     fun finishOnSuccessHandler(@Suppress("UNUSED_PARAMETER") nothing: Unit) {

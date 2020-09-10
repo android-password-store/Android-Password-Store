@@ -73,7 +73,9 @@ object GitSettings {
             }
             if (PasswordRepository.isInitialized)
                 PasswordRepository.addRemote("origin", value, true)
-            // When the server changes, remote password and host key file should be deleted.
+            // When the server changes, remote password, multiplexing support and host key file
+            // should be deleted/reset.
+            useMultiplexing = true
             encryptedSettings.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
             File("${Application.instance.filesDir}/.host_key").delete()
         }
@@ -96,6 +98,13 @@ object GitSettings {
         private set(value) {
             settings.edit {
                 putString(PreferenceKeys.GIT_BRANCH_NAME, value)
+            }
+        }
+    var useMultiplexing
+        get() = settings.getBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, true)
+        set(value) {
+            settings.edit {
+                putBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, value)
             }
         }
 
