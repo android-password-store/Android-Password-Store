@@ -61,7 +61,8 @@ abstract class BaseGitActivity : AppCompatActivity() {
                 return Err(IllegalArgumentException("$operation is not a valid Git operation"))
             }
         }
-        return op.executeAfterAuthentication(GitSettings.authMode).mapError { err ->
+        return op.executeAfterAuthentication(GitSettings.authMode).mapError { throwable ->
+            val err = rootCauseException(throwable)
             if (err.message?.contains("cannot open additional channels") == true) {
                 GitSettings.useMultiplexing = false
                 SSHException(DisconnectReason.TOO_MANY_CONNECTIONS, "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used.")
