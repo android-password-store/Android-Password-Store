@@ -32,6 +32,7 @@ object PreferenceKeys {
 
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_LOCATION = "git_remote_location"
+    const val GIT_REMOTE_USE_MULTIPLEXING = "git_remote_use_multiplexing"
 
     @Deprecated("Use GIT_REMOTE_URL instead")
     const val GIT_REMOTE_PORT = "git_remote_port"
