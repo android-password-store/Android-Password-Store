@@ -17,9 +17,6 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.SearchableRepositoryAdapter
 import com.zeapo.pwdstore.stableId
 import com.zeapo.pwdstore.utils.PasswordItem
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.sharedPrefs
-import java.io.File
 
 open class PasswordItemRecyclerAdapter :
     SearchableRepositoryAdapter<PasswordItemRecyclerAdapter.PasswordItemViewHolder>(
@@ -49,8 +46,6 @@ open class PasswordItemRecyclerAdapter :
         lateinit var itemDetails: ItemDetailsLookup.ItemDetails<String>
 
         fun bind(item: PasswordItem) {
-            val settings = itemView.context.sharedPrefs
-            val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
             val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
             val source = if (parentPath.isNotEmpty()) {
                 "$parentPath\n$item"
@@ -62,10 +57,7 @@ open class PasswordItemRecyclerAdapter :
             name.text = spannable
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 folderIndicator.visibility = View.VISIBLE
-                val children = with(item.file) {
-                    if (showHidden) listFiles() else listFiles { pathname -> pathname.isDirectory && !pathname.isHidden }
-                } ?: emptyArray<File>()
-                val count = children.size
+                val count = item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
                 childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
                 childCount.text = "$count"
             } else {
