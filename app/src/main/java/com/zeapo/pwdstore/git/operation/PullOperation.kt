@@ -15,9 +15,8 @@ class PullOperation(callingActivity: AppCompatActivity) : GitOperation(callingAc
      * aware that Bitbucket is actually bad, and disables a neat OpenSSH feature called multiplexing.
      * So now, rather than being able to do a [SyncOperation], we'd have to first do a [PullOperation]
      * and then a [PushOperation]. To make the behavior identical despite this suboptimal situation,
-     * we opted to replicate [SyncOperation]'s committing flow within [PullOperation] so it can be
-     * safely executed in tandem with [PullOperation], almost exactly replicating [SyncOperation]
-     * but running two consecutive SSH connections as opposed to just one.
+     * we opted to replicate [SyncOperation]'s committing flow within [PullOperation], almost exactly
+     * replicating [SyncOperation] but leaving the pushing part to [PushOperation].
      */
     override val commands: Array<GitCommand<out Any>> = arrayOf(
         // Stage all files
