@@ -70,6 +70,7 @@ dependencies {
 
     implementation(Dependencies.ThirdParty.commons_codec)
     implementation(Dependencies.ThirdParty.eddsa)
+    implementation(Dependencies.ThirdParty.documentfilex)
     implementation(Dependencies.ThirdParty.fastscroll)
     implementation(Dependencies.ThirdParty.jgit) {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")

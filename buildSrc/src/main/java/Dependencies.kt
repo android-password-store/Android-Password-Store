@@ -49,6 +49,7 @@ object Dependencies {
         const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.67"
         const val commons_codec = "commons-codec:commons-codec:1.14"
         const val eddsa = "net.i2p.crypto:eddsa:0.3.0"
+        const val documentfilex = "xyz.quaver:documentfilex:0.2.15"
         const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
         const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
