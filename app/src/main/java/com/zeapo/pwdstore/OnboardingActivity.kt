@@ -122,6 +122,10 @@ class OnboardingActivity : AppCompatActivity() {
                         externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
                     }
                 }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            } else {
+                // Unlikely we have storage permissions without user ever selecting a directory,
+                // but let's not assume.
+                externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
             }
         } else {
             MaterialAlertDialogBuilder(this)
