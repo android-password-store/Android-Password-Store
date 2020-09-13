@@ -29,17 +29,15 @@ import org.eclipse.jgit.util.FS_POSIX_Java6
 
 open class PasswordRepository protected constructor() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private class FS_POSIX_Java6_with_optional_symlinks : FS_POSIX_Java6() {
 
         override fun supportsSymlinks() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
-        @RequiresApi(Build.VERSION_CODES.O)
         override fun isSymLink(file: File) = Files.isSymbolicLink(file.toPath())
 
-        @RequiresApi(Build.VERSION_CODES.O)
         override fun readSymLink(file: File) = Files.readSymbolicLink(file.toPath()).toString()
 
-        @RequiresApi(Build.VERSION_CODES.O)
         override fun createSymLink(source: File, target: String) {
             val sourcePath = source.toPath()
             if (Files.exists(sourcePath, LinkOption.NOFOLLOW_LINKS))
@@ -48,6 +46,7 @@ open class PasswordRepository protected constructor() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private class Java7FSFactory : FS.FSFactory() {
 
         override fun detect(cygwinUsed: Boolean?): FS {
@@ -109,10 +108,13 @@ open class PasswordRepository protected constructor() {
             if (repository == null && localDir != null) {
                 val builder = FileRepositoryBuilder()
                 repository = runCatching {
-                    builder.setGitDir(localDir)
-                        .setFS(Java7FSFactory().detect(null))
-                        .readEnvironment()
-                        .build()
+                    builder.run {
+                        gitDir = localDir
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            fs = Java7FSFactory().detect(null)
+                        }
+                        readEnvironment()
+                    }.build()
                 }.getOrElse { e ->
                     e.printStackTrace()
                     null
