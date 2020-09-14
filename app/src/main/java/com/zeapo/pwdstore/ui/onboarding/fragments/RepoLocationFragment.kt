@@ -76,11 +76,11 @@ class RepoLocationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnHidden.setOnClickListener {
+        binding.hidden.setOnClickListener {
             createRepoInHiddenDir()
         }
 
-        binding.btnSdcard.setOnClickListener {
+        binding.sdcard.setOnClickListener {
             createRepoFromExternalDir()
         }
     }

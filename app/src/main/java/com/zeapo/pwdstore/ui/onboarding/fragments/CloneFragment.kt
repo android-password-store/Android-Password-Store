@@ -43,10 +43,10 @@ class CloneFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnCloneRemote.setOnClickListener {
+        binding.cloneRemote.setOnClickListener {
             cloneToHiddenDir()
         }
-        binding.btnCreateLocal.setOnClickListener {
+        binding.createLocal.setOnClickListener {
             parentFragmentManager.performTransactionWithBackStack(RepoLocationFragment.newInstance())
         }
     }

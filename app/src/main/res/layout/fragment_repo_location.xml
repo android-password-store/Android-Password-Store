@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_app_icon"
+        android:id="@+id/app_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginStart="32dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_app_name"
+        android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -27,12 +27,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="@color/color_control_normal"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/iv_app_icon"
-        app:layout_constraintTop_toTopOf="@+id/iv_app_icon"
-        app:layout_constraintBottom_toBottomOf="@id/iv_app_icon"/>
+        app:layout_constraintStart_toEndOf="@id/app_icon"
+        app:layout_constraintTop_toTopOf="@+id/app_icon"
+        app:layout_constraintBottom_toBottomOf="@id/app_icon"/>
 
     <TextView
-        android:id="@+id/tv_repo_location"
+        android:id="@+id/repo_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -40,11 +40,11 @@
         android:textStyle="bold"
         android:textColor="@color/color_control_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintStart_toStartOf="@id/iv_app_icon"
-        app:layout_constraintTop_toBottomOf="@id/iv_app_icon" />
+        app:layout_constraintStart_toStartOf="@id/app_icon"
+        app:layout_constraintTop_toBottomOf="@id/app_icon" />
 
     <TextView
-        android:id="@+id/tv_repo_location_text"
+        android:id="@+id/repo_location_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -53,12 +53,12 @@
         android:textStyle="bold"
         android:textColor="@color/color_control_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@id/tv_repo_location"
+        app:layout_constraintStart_toStartOf="@id/repo_location"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_repo_location" />
+        app:layout_constraintTop_toBottomOf="@id/repo_location" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_hidden"
+        android:id="@+id/hidden"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -67,11 +67,11 @@
         android:minWidth="100dp"
         android:text="@string/location_hidden"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_sdcard"
+        app:layout_constraintBottom_toTopOf="@id/sdcard"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_sdcard"
+        android:id="@+id/sdcard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
@@ -79,7 +79,7 @@
         android:maxWidth="300dp"
         android:text="@string/location_sdcard"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/btn_hidden"
-        app:layout_constraintEnd_toEndOf="@id/btn_hidden" />
+        app:layout_constraintStart_toStartOf="@id/hidden"
+        app:layout_constraintEnd_toEndOf="@id/hidden" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_app_icon"
+        android:id="@+id/app_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginStart="32dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_app_name"
+        android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -27,12 +27,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="@color/color_control_normal"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/iv_app_icon"
-        app:layout_constraintTop_toTopOf="@+id/iv_app_icon"
-        app:layout_constraintBottom_toBottomOf="@id/iv_app_icon"/>
+        app:layout_constraintStart_toEndOf="@id/app_icon"
+        app:layout_constraintTop_toTopOf="@+id/app_icon"
+        app:layout_constraintBottom_toBottomOf="@id/app_icon"/>
 
     <TextView
-        android:id="@+id/tv_repo_type"
+        android:id="@+id/repo_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -41,9 +41,9 @@
         android:textColor="@color/color_control_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/iv_app_icon"
+        app:layout_constraintStart_toStartOf="@id/app_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_app_icon" />
+        app:layout_constraintTop_toBottomOf="@id/app_icon" />
 
     <TextView
         android:id="@+id/tv_repo_type_text"
@@ -55,12 +55,12 @@
         android:textStyle="bold"
         android:textColor="@color/color_control_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@id/tv_repo_type"
+        app:layout_constraintStart_toStartOf="@id/repo_type"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_repo_type" />
+        app:layout_constraintTop_toBottomOf="@id/repo_type" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_clone_remote"
+        android:id="@+id/clone_remote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -69,11 +69,11 @@
         android:minWidth="100dp"
         android:text="@string/clone_remote_repo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_create_local"
+        app:layout_constraintBottom_toTopOf="@id/create_local"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_create_local"
+        android:id="@+id/create_local"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
@@ -81,7 +81,7 @@
         android:maxWidth="300dp"
         android:text="@string/create_local_repo"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/btn_clone_remote"
-        app:layout_constraintEnd_toEndOf="@id/btn_clone_remote" />
+        app:layout_constraintStart_toStartOf="@id/clone_remote"
+        app:layout_constraintEnd_toEndOf="@id/clone_remote" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
