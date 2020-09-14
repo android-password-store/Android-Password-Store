@@ -33,7 +33,7 @@
             android:label="@string/app_name" />
 
         <activity
-            android:name=".ui.onboarding.OnboardingActivity"
+            android:name="com.zeapo.pwdstore.ui.onboarding.activity.OnboardingActivity"
             android:configChanges="orientation|screenSize" />
 
         <activity
@@ -153,7 +153,6 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogLikeTheme"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name="com.zeapo.pwdstore.ui.onboarding.activity.OnboardingActivity" />
     </application>
 
 </manifest>
