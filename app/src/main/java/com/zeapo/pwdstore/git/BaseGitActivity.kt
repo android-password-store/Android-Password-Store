@@ -52,7 +52,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
             return launchGitOperation(REQUEST_PULL).andThen { launchGitOperation(REQUEST_PUSH) }
         }
         val op = when (operation) {
-            REQUEST_CLONE, GitOperation.GET_SSH_KEY_FROM_CLONE -> CloneOperation(this, GitSettings.url!!)
+            REQUEST_CLONE -> CloneOperation(this, GitSettings.url!!)
             REQUEST_PULL -> PullOperation(this)
             REQUEST_PUSH -> PushOperation(this)
             REQUEST_SYNC -> SyncOperation(this)
