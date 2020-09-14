@@ -6,9 +6,7 @@ package com.zeapo.pwdstore.git
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
@@ -18,7 +16,6 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.operation.BreakOutOfDetached
 import com.zeapo.pwdstore.git.operation.CloneOperation
-import com.zeapo.pwdstore.git.operation.GitOperation
 import com.zeapo.pwdstore.git.operation.PullOperation
 import com.zeapo.pwdstore.git.operation.PushOperation
 import com.zeapo.pwdstore.git.operation.ResetToRemoteOperation
@@ -39,29 +36,37 @@ import net.schmizz.sshj.userauth.UserAuthException
 abstract class BaseGitActivity : AppCompatActivity() {
 
     /**
+     * Enum of possible Git operations than can be run through [launchGitOperation].
+     */
+    enum class GitOp {
+        BREAK_OUT_OF_DETACHED,
+        CLONE,
+        PULL,
+        PUSH,
+        RESET,
+        SYNC,
+    }
+
+    /**
      * Attempt to launch the requested Git operation.
      * @param operation The type of git operation to launch
      */
-    suspend fun launchGitOperation(operation: Int): Result<Unit, Throwable> {
+    suspend fun launchGitOperation(operation: GitOp): Result<Unit, Throwable> {
         if (GitSettings.url == null) {
             return Err(IllegalStateException("Git url is not set!"))
         }
-        if (operation == REQUEST_SYNC && !GitSettings.useMultiplexing) {
+        if (operation == GitOp.SYNC && !GitSettings.useMultiplexing) {
             // If the server does not support multiple SSH channels per connection, we cannot run
             // a sync operation without reconnecting and thus break sync into its two parts.
-            return launchGitOperation(REQUEST_PULL).andThen { launchGitOperation(REQUEST_PUSH) }
+            return launchGitOperation(GitOp.PULL).andThen { launchGitOperation(GitOp.PUSH) }
         }
         val op = when (operation) {
-            REQUEST_CLONE -> CloneOperation(this, GitSettings.url!!)
-            REQUEST_PULL -> PullOperation(this)
-            REQUEST_PUSH -> PushOperation(this)
-            REQUEST_SYNC -> SyncOperation(this)
-            BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
-            REQUEST_RESET -> ResetToRemoteOperation(this)
-            else -> {
-                tag(TAG).e { "Operation not recognized : $operation" }
-                return Err(IllegalArgumentException("$operation is not a valid Git operation"))
-            }
+            GitOp.CLONE -> CloneOperation(this, GitSettings.url!!)
+            GitOp.PULL -> PullOperation(this)
+            GitOp.PUSH -> PushOperation(this)
+            GitOp.SYNC -> SyncOperation(this)
+            GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
+            GitOp.RESET -> ResetToRemoteOperation(this)
         }
         return op.executeAfterAuthentication(GitSettings.authMode).mapError { throwable ->
             val err = rootCauseException(throwable)
@@ -133,17 +138,5 @@ abstract class BaseGitActivity : AppCompatActivity() {
             rootCause = rootCause.cause ?: break
         }
         return rootCause
-    }
-
-    companion object {
-
-        const val REQUEST_ARG_OP = "OPERATION"
-        const val REQUEST_PULL = 101
-        const val REQUEST_PUSH = 102
-        const val REQUEST_CLONE = 103
-        const val REQUEST_SYNC = 104
-        const val BREAK_OUT_OF_DETACHED = 105
-        const val REQUEST_RESET = 106
-        const val TAG = "AbstractGitActivity"
     }
 }

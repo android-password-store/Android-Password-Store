@@ -17,7 +17,6 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.databinding.ActivityOnboardingBinding
-import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
@@ -92,9 +91,7 @@ class OnboardingActivity : AppCompatActivity() {
      */
     private fun cloneToHiddenDir() {
         settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
-        cloneAction.launch(Intent(this, GitServerConfigActivity::class.java).apply {
-            putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-        })
+        cloneAction.launch(GitServerConfigActivity.createCloneIntent(this))
     }
 
     /**
