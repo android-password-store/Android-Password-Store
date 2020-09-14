@@ -1,8 +1,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
@@ -24,12 +24,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="16dp"
         android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:textColor="@color/color_control_normal"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/app_icon"
         app:layout_constraintStart_toEndOf="@id/app_icon"
-        app:layout_constraintTop_toTopOf="@+id/app_icon"
-        app:layout_constraintBottom_toBottomOf="@id/app_icon"/>
+        app:layout_constraintTop_toTopOf="@+id/app_icon" />
 
     <TextView
         android:id="@+id/repo_location"
@@ -37,9 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/repository_n_location"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
         android:textColor="@color/color_control_normal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/app_icon"
         app:layout_constraintTop_toBottomOf="@id/app_icon" />
 
@@ -47,14 +49,14 @@
         android:id="@+id/repo_location_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="48dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/location_dialog_create_text"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:textColor="@color/color_control_normal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@id/repo_location"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/repo_location"
         app:layout_constraintTop_toBottomOf="@id/repo_location" />
 
     <com.google.android.material.button.MaterialButton
@@ -66,8 +68,8 @@
         android:maxWidth="300dp"
         android:minWidth="100dp"
         android:text="@string/location_hidden"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/sdcard"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
@@ -75,11 +77,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
-        android:minWidth="100dp"
         android:maxWidth="300dp"
+        android:minWidth="100dp"
         android:text="@string/location_sdcard"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/hidden"
-        app:layout_constraintEnd_toEndOf="@id/hidden" />
+        app:layout_constraintEnd_toEndOf="@id/hidden"
+        app:layout_constraintStart_toStartOf="@id/hidden" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

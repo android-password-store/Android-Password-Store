@@ -33,7 +33,7 @@
             android:label="@string/app_name" />
 
         <activity
-            android:name="com.zeapo.pwdstore.ui.onboarding.activity.OnboardingActivity"
+            android:name=".ui.onboarding.activity.OnboardingActivity"
             android:configChanges="orientation|screenSize" />
 
         <activity

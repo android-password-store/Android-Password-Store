@@ -2,6 +2,7 @@
  * Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+
 package com.zeapo.pwdstore.ui.onboarding.fragments
 
 import android.os.Bundle
