@@ -26,6 +26,8 @@ import com.zeapo.pwdstore.git.operation.SyncOperation
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.UserAuthException
@@ -76,7 +78,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
         finish()
     }
 
-    fun promptOnErrorHandler(err: Throwable, onPromptDone: () -> Unit = {}) {
+    suspend fun promptOnErrorHandler(err: Throwable, onPromptDone: () -> Unit = {}) {
         val error = rootCauseException(err)
         if (!isExplicitlyUserInitiatedError(error)) {
             getEncryptedPrefs("git_operation").edit {
@@ -84,14 +86,16 @@ abstract class BaseGitActivity : AppCompatActivity() {
             }
             sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
             d(error)
-            MaterialAlertDialogBuilder(this).run {
-                setTitle(resources.getString(R.string.jgit_error_dialog_title))
-                setMessage(ErrorMessages[error])
-                setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
-                setOnDismissListener {
-                    onPromptDone()
+            withContext(Dispatchers.Main) {
+                MaterialAlertDialogBuilder(this@BaseGitActivity).run {
+                    setTitle(resources.getString(R.string.jgit_error_dialog_title))
+                    setMessage(ErrorMessages[error])
+                    setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
+                    setOnDismissListener {
+                        onPromptDone()
+                    }
+                    show()
                 }
-                show()
             }
         } else {
             onPromptDone()
