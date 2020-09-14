@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -185,7 +184,7 @@ class RepoLocationFragment : Fragment() {
         createRepository()
     }
 
-    private fun createPermGrantedAction(block: () -> Unit): ActivityResultLauncher<String> =
+    private fun createPermGrantedAction(block: () -> Unit) =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
                 block.invoke()

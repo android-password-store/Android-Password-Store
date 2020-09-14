@@ -166,8 +166,9 @@ val Context.autofillManager: AutofillManager?
 val Context.keyguardManager: KeyguardManager
     get() = getSystemService()!!
 
-fun File.isInsideRepository(): Boolean =
-    canonicalPath.contains(getRepositoryDirectory().canonicalPath)
+fun File.isInsideRepository(): Boolean {
+    return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
+}
 
 /**
  * Unique SHA-1 hash of this commit as hexadecimal string.
