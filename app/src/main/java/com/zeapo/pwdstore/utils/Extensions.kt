@@ -20,7 +20,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
@@ -40,21 +43,14 @@ import org.eclipse.jgit.revwalk.RevCommit
 
 const val OPENPGP_PROVIDER = "org.sufficientlysecure.keychain"
 
-fun Int.clearFlag(flag: Int): Int {
-    return this and flag.inv()
-}
+fun Int.clearFlag(flag: Int): Int = this and flag.inv()
 
-infix fun Int.hasFlag(flag: Int): Boolean {
-    return this and flag == flag
-}
+infix fun Int.hasFlag(flag: Int): Boolean = this and flag == flag
 
-fun String.splitLines(): Array<String> {
-    return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-}
+fun String.splitLines(): Array<String> =
+    split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-fun String.base64(): String {
-    return Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
-}
+fun String.base64(): String = Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
 
 val Context.clipboard get() = getSystemService<ClipboardManager>()
 
@@ -135,9 +131,14 @@ suspend fun FragmentActivity.commitChange(
     }.execute()
 }
 
-fun FragmentActivity.isPermissionGranted(permission: String): Boolean {
-    return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-}
+fun FragmentActivity.isPermissionGranted(permission: String): Boolean =
+    ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
+
+fun Fragment.isPermissionGranted(permission: String): Boolean =
+    ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED
+
+fun Fragment.finish() = requireActivity().finish()
 
 /**
  * Extension function for [AlertDialog] that requests focus for the
@@ -165,9 +166,8 @@ val Context.autofillManager: AutofillManager?
 val Context.keyguardManager: KeyguardManager
     get() = getSystemService()!!
 
-fun File.isInsideRepository(): Boolean {
-    return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
-}
+fun File.isInsideRepository(): Boolean =
+    canonicalPath.contains(getRepositoryDirectory().canonicalPath)
 
 /**
  * Unique SHA-1 hash of this commit as hexadecimal string.
@@ -188,3 +188,39 @@ val RevCommit.time: Date
         val epochMilliseconds = epochSeconds * 1000
         return Date(epochMilliseconds)
     }
+
+fun FragmentManager.performTransaction(destinationFragment: Fragment, @IdRes containerViewId: Int = android.R.id.content) {
+    this.commit {
+        beginTransaction()
+        setCustomAnimations(
+            R.animator.slide_in_left,
+            R.animator.slide_out_left,
+            R.animator.slide_in_right,
+            R.animator.slide_out_right)
+        replace(containerViewId, destinationFragment)
+    }
+}
+
+fun FragmentManager.performTransactionWithBackStack(destinationFragment: Fragment, @IdRes containerViewId: Int = android.R.id.content) {
+    this.commit {
+        beginTransaction()
+        addToBackStack(destinationFragment.tag)
+        setCustomAnimations(
+            R.animator.slide_in_left,
+            R.animator.slide_out_left,
+            R.animator.slide_in_right,
+            R.animator.slide_out_right)
+        replace(containerViewId, destinationFragment)
+    }
+}
+
+fun FragmentManager.performSharedElementTransaction(destinationFragment: Fragment, views: List<View>, @IdRes containerViewId: Int = android.R.id.content) {
+    this.commit {
+        beginTransaction()
+        for (view in views) {
+            addSharedElement(view, view.transitionName)
+        }
+        addToBackStack(destinationFragment.tag)
+        replace(containerViewId, destinationFragment)
+    }
+}

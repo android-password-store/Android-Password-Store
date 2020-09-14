@@ -1,0 +1,87 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_app_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="100dp"
+        android:contentDescription="@string/app_icon_hint"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="@color/color_control_normal"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/iv_app_icon"
+        app:layout_constraintTop_toTopOf="@+id/iv_app_icon"
+        app:layout_constraintBottom_toBottomOf="@id/iv_app_icon"/>
+
+    <TextView
+        android:id="@+id/tv_repo_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/select_n_repository_type"
+        android:textStyle="bold"
+        android:textColor="@color/color_control_normal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/iv_app_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_app_icon" />
+
+    <TextView
+        android:id="@+id/tv_repo_type_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/select_repo_type_text"
+        android:textStyle="bold"
+        android:textColor="@color/color_control_normal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@id/tv_repo_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_repo_type" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_clone_remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:maxWidth="300dp"
+        android:minWidth="100dp"
+        android:text="@string/clone_remote_repo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_create_local"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_create_local"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="128dp"
+        android:minWidth="100dp"
+        android:maxWidth="300dp"
+        android:text="@string/create_local_repo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/btn_clone_remote"
+        app:layout_constraintEnd_toEndOf="@id/btn_clone_remote" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
