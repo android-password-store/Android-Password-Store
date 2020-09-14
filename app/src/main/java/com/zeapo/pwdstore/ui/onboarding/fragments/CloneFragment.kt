@@ -19,6 +19,7 @@ import com.zeapo.pwdstore.databinding.FragmentCloneBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.finish
 import com.zeapo.pwdstore.utils.performTransactionWithBackStack
 import com.zeapo.pwdstore.utils.sharedPrefs
 
@@ -30,7 +31,7 @@ class CloneFragment : Fragment() {
     private val cloneAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-            requireActivity().finish()
+            finish()
         }
     }
 

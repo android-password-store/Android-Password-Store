@@ -5,7 +5,7 @@
     android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_first_run"
         android:name="com.zeapo.pwdstore.ui.onboarding.fragments.WelcomeFragment"
         android:layout_width="match_parent"
