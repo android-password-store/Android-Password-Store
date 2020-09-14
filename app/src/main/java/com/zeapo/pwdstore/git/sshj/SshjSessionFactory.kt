@@ -71,10 +71,11 @@ class SshjSessionFactory(private val authMethod: SshAuthMethod, private val host
     private var currentSession: SshjSession? = null
 
     override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
-        return currentSession ?: SshjSession(uri, uri.user, authMethod, hostKeyFile).connect().also {
-            d { "New SSH connection created" }
-            currentSession = it
-        }
+        return currentSession
+            ?: SshjSession(uri, uri.user, authMethod, hostKeyFile).connect().also {
+                d { "New SSH connection created" }
+                currentSession = it
+            }
     }
 
     fun close() {

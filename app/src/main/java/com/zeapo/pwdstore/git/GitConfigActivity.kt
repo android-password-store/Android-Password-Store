@@ -92,36 +92,36 @@ class GitConfigActivity : BaseGitActivity() {
         binding.gitAbortRebase.setOnClickListener {
             lifecycleScope.launch {
                 launchGitOperation(BREAK_OUT_OF_DETACHED).fold(
-                  success = {
-                      MaterialAlertDialogBuilder(this@GitConfigActivity).run {
-                          setTitle(resources.getString(R.string.git_abort_and_push_title))
-                          setMessage(resources.getString(
-                            R.string.git_break_out_of_detached_success,
-                            GitSettings.branch,
-                            "conflicting-${GitSettings.branch}-...",
-                          ))
-                          setOnDismissListener() { finish() }
-                          setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
-                          show()
-                      }
-                  },
-                  failure = { err ->
-                      promptOnErrorHandler(err) {
-                          finish()
-                      }
-                  },
+                    success = {
+                        MaterialAlertDialogBuilder(this@GitConfigActivity).run {
+                            setTitle(resources.getString(R.string.git_abort_and_push_title))
+                            setMessage(resources.getString(
+                                R.string.git_break_out_of_detached_success,
+                                GitSettings.branch,
+                                "conflicting-${GitSettings.branch}-...",
+                            ))
+                            setOnDismissListener() { finish() }
+                            setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ -> }
+                            show()
+                        }
+                    },
+                    failure = { err ->
+                        promptOnErrorHandler(err) {
+                            finish()
+                        }
+                    },
                 )
             }
         }
         binding.gitResetToRemote.setOnClickListener {
             lifecycleScope.launch {
                 launchGitOperation(REQUEST_RESET).fold(
-                  success = ::finishOnSuccessHandler,
-                  failure = { err ->
-                      promptOnErrorHandler(err) {
-                          finish()
-                      }
-                  },
+                    success = ::finishOnSuccessHandler,
+                    failure = { err ->
+                        promptOnErrorHandler(err) {
+                            finish()
+                        }
+                    },
                 )
             }
         }

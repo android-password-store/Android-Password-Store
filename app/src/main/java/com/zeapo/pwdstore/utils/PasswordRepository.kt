@@ -9,9 +9,9 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
-import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.Application
 import java.io.File
 import java.io.FileFilter

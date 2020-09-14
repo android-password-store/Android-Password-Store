@@ -61,11 +61,11 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
-import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isInsideRepository
+import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import com.zeapo.pwdstore.utils.sharedPrefs
