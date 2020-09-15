@@ -27,6 +27,7 @@ object Dependencies {
 
         const val activity_ktx = "androidx.activity:activity-ktx:1.2.0-alpha08"
         const val annotation = "androidx.annotation:annotation:1.2.0-alpha01"
+        const val autofill = "androidx.autofill:autofill:1.1.0-alpha02"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val biometric = "androidx.biometric:biometric:1.1.0-alpha02"
         const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.1"

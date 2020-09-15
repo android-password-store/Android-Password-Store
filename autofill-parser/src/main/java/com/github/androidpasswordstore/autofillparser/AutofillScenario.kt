@@ -12,8 +12,6 @@ import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.e
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
 
 enum class AutofillAction {
     Match, Search, Generate, FillOtpFromSms
@@ -38,7 +36,7 @@ sealed class AutofillScenario<out T : Any> {
         const val BUNDLE_KEY_GENERIC_PASSWORD_IDS = "genericPasswordIds"
 
         fun fromBundle(clientState: Bundle): AutofillScenario<AutofillId>? {
-            return runCatching {
+            return try {
                 Builder<AutofillId>().apply {
                     username = clientState.getParcelable(BUNDLE_KEY_USERNAME_ID)
                     fillUsername = clientState.getBoolean(BUNDLE_KEY_FILL_USERNAME)
@@ -59,7 +57,7 @@ sealed class AutofillScenario<out T : Any> {
                         ) ?: emptyList()
                     )
                 }.build()
-            }.getOrElse { e ->
+            } catch(e: Throwable) {
                 e(e)
                 null
             }
