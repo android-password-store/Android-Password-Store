@@ -6,18 +6,20 @@
 package com.zeapo.pwdstore.ui.onboarding.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentWelcomeBinding
 import com.zeapo.pwdstore.utils.performTransactionWithBackStack
+import com.zeapo.pwdstore.utils.viewBinding
 
-class WelcomeFragment : Fragment() {
+@Suppress("unused")
+class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentWelcomeBinding.inflate(layoutInflater)
+    private val binding by viewBinding(FragmentWelcomeBinding::bind)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.letsGo.setOnClickListener { parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance()) }
-        return binding.root
     }
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright © 2019-2020 The Android Password Store Authors. All Rights Reserved.
- *  SPDX-License-Identifier: GPL-3.0-only
+ * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+ * SPDX-License-Identifier: GPL-3.0-only
  *
  */
 
@@ -8,9 +8,7 @@ package com.zeapo.pwdstore.ui.onboarding.fragments
 
 import android.Manifest
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -29,13 +27,14 @@ import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.sharedPrefs
+import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
 
-class RepoLocationFragment : Fragment() {
+class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
     private val firstRunActivity by lazy { requireActivity() }
     private val settings by lazy { firstRunActivity.applicationContext.sharedPrefs }
-    private lateinit var binding: FragmentRepoLocationBinding
+    private val binding by viewBinding(FragmentRepoLocationBinding::bind)
     private val sortOrder: PasswordRepository.PasswordSortOrder
         get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
 
@@ -65,12 +64,6 @@ class RepoLocationFragment : Fragment() {
 
     private val repositoryChangePermGrantedAction = createPermGrantedAction {
         repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentRepoLocationBinding.inflate(inflater)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
