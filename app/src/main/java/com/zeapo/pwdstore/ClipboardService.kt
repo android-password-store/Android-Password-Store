@@ -45,8 +45,7 @@ class ClipboardService : Service() {
                 }
 
                 ACTION_START -> {
-                    val time = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull()
-                        ?: 45
+                    val time = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
 
                     if (time == 0) {
                         stopSelf()

@@ -57,8 +57,7 @@ open class PasswordItemRecyclerAdapter :
             name.text = spannable
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 folderIndicator.visibility = View.VISIBLE
-                val count = item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size
-                    ?: 0
+                val count = item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
                 childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
                 childCount.text = "$count"
             } else {
