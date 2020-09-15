@@ -1,55 +1,51 @@
 /*
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
+ *
  */
 
-package com.zeapo.pwdstore
+package com.zeapo.pwdstore.ui.onboarding.fragments
 
 import android.Manifest
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.zeapo.pwdstore.databinding.ActivityOnboardingBinding
-import com.zeapo.pwdstore.git.GitServerConfigActivity
+import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.databinding.FragmentRepoLocationBinding
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.isPermissionGranted
+import com.zeapo.pwdstore.utils.finish
 import com.zeapo.pwdstore.utils.getString
+import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
 
-class OnboardingActivity : AppCompatActivity() {
+class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
-    private val binding by viewBinding(ActivityOnboardingBinding::inflate)
-    private val settings by lazy { applicationContext.sharedPrefs }
+    private val firstRunActivity by lazy { requireActivity() }
+    private val settings by lazy { firstRunActivity.applicationContext.sharedPrefs }
+    private val binding by viewBinding(FragmentRepoLocationBinding::bind)
     private val sortOrder: PasswordRepository.PasswordSortOrder
         get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
 
-    private val cloneAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-            finish()
-        }
-    }
-
-    private val repositoryInitAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
+    private val repositoryInitAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
             initializeRepositoryInfo()
-            finish()
         }
     }
 
-    private val externalDirectorySelectAction = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
+    private val externalDirectorySelectAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
             if (checkExternalDirectory()) {
                 finish()
             } else {
@@ -58,40 +54,27 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-        setContentView(binding.root)
-        binding.settingsButton.setOnClickListener {
-            startActivity(Intent(this, UserPreference::class.java))
-        }
-        binding.localDirectoryButton.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(resources.getString(R.string.location_dialog_title))
-                .setMessage(resources.getString(R.string.location_dialog_create_text))
-                .setPositiveButton(resources.getString(R.string.location_hidden)) { _, _ ->
-                    createRepoInHiddenDir()
-                }
-                .setNegativeButton(resources.getString(R.string.location_sdcard)) { _, _ ->
-                    createRepoFromExternalDir()
-                }
-                .show()
-        }
-        binding.cloneFromServerButton.setOnClickListener {
-            cloneToHiddenDir()
-        }
+    private val externalDirPermGrantedAction = createPermGrantedAction {
+        externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
     }
 
-    override fun onBackPressed() {
-        finishAffinity()
+    private val repositoryUsePermGrantedAction = createPermGrantedAction {
+        initializeRepositoryInfo()
     }
 
-    /**
-     * Clones a remote Git repository to the app's private directory
-     */
-    private fun cloneToHiddenDir() {
-        settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
-        cloneAction.launch(GitServerConfigActivity.createCloneIntent(this))
+    private val repositoryChangePermGrantedAction = createPermGrantedAction {
+        repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.hidden.setOnClickListener {
+            createRepoInHiddenDir()
+        }
+
+        binding.sdcard.setOnClickListener {
+            createRepoFromExternalDir()
+        }
     }
 
     /**
@@ -103,7 +86,6 @@ class OnboardingActivity : AppCompatActivity() {
             remove(PreferenceKeys.GIT_EXTERNAL_REPO)
         }
         initializeRepositoryInfo()
-        finish()
     }
 
     /**
@@ -114,40 +96,28 @@ class OnboardingActivity : AppCompatActivity() {
         val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
         if (externalRepo == null) {
             if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                registerForActivityResult(RequestPermission()) { granted ->
-                    if (granted) {
-                        externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
-                    }
-                }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                externalDirPermGrantedAction.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             } else {
                 // Unlikely we have storage permissions without user ever selecting a directory,
                 // but let's not assume.
-                externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
+                externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
             }
         } else {
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(resources.getString(R.string.directory_selected_title))
                 .setMessage(resources.getString(R.string.directory_selected_message, externalRepo))
                 .setPositiveButton(resources.getString(R.string.use)) { _, _ ->
                     if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        registerForActivityResult(RequestPermission()) { granted ->
-                            if (granted) {
-                                initializeRepositoryInfo()
-                            }
-                        }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        repositoryUsePermGrantedAction.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     } else {
                         initializeRepositoryInfo()
                     }
                 }
                 .setNegativeButton(resources.getString(R.string.change)) { _, _ ->
                     if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        registerForActivityResult(RequestPermission()) { granted ->
-                            if (granted) {
-                                repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(this))
-                            }
-                        }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        repositoryChangePermGrantedAction.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     } else {
-                        repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(this))
+                        repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
                     }
                 }
                 .show()
@@ -192,6 +162,7 @@ class OnboardingActivity : AppCompatActivity() {
                 d { "Failed to delete local repository: $localDir" }
             }
         }
+        finish()
     }
 
     private fun initializeRepositoryInfo() {
@@ -204,5 +175,17 @@ class OnboardingActivity : AppCompatActivity() {
             if (checkExternalDirectory()) return
         }
         createRepository()
+    }
+
+    private fun createPermGrantedAction(block: () -> Unit) =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                block.invoke()
+            }
+        }
+
+    companion object {
+
+        fun newInstance(): RepoLocationFragment = RepoLocationFragment()
     }
 }
