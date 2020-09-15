@@ -24,6 +24,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.e
+import com.github.androidpasswordstore.autofillparser.FormOrigin
 import com.zeapo.pwdstore.FilterMode
 import com.zeapo.pwdstore.ListMode
 import com.zeapo.pwdstore.R
@@ -33,7 +34,6 @@ import com.zeapo.pwdstore.SearchableRepositoryViewModel
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
-import com.zeapo.pwdstore.autofill.oreo.FormOrigin
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillFilterBinding
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.viewBinding

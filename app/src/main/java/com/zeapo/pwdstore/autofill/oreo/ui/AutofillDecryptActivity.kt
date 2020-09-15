@@ -22,11 +22,11 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
-import com.zeapo.pwdstore.autofill.oreo.AutofillAction
+import com.github.androidpasswordstore.autofillparser.AutofillAction
+import com.github.androidpasswordstore.autofillparser.Credentials
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
-import com.zeapo.pwdstore.autofill.oreo.Credentials
+import com.zeapo.pwdstore.autofill.oreo.AutofillResponseBuilder
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
-import com.zeapo.pwdstore.autofill.oreo.FillableForm
 import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import java.io.ByteArrayOutputStream
@@ -109,7 +109,7 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                 setResult(RESULT_CANCELED)
             } else {
                 val fillInDataset =
-                    FillableForm.makeFillInDataset(
+                    AutofillResponseBuilder.makeFillInDataset(
                         this@AutofillDecryptActivity,
                         credentials,
                         clientState,
@@ -185,7 +185,7 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                                 @Suppress("BlockingMethodInNonBlockingContext")
                                 PasswordEntry(decryptedOutput)
                             }
-                            Credentials.fromStoreEntry(this, file, entry, directoryStructure)
+                            AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
                         }.getOrElse { e ->
                             e(e) { "Failed to parse password entry" }
                             return null

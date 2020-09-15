@@ -16,12 +16,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.autofill.oreo.AutofillAction
+import com.github.androidpasswordstore.autofillparser.AutofillAction
+import com.github.androidpasswordstore.autofillparser.Credentials
+import com.github.androidpasswordstore.autofillparser.FormOrigin
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
-import com.zeapo.pwdstore.autofill.oreo.Credentials
-import com.zeapo.pwdstore.autofill.oreo.FillableForm
-import com.zeapo.pwdstore.autofill.oreo.FormOrigin
+import com.zeapo.pwdstore.autofill.oreo.AutofillResponseBuilder
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
 import java.io.File
@@ -126,7 +126,7 @@ class AutofillSaveActivity : AppCompatActivity() {
                             return@registerForActivityResult
                         }
                     val credentials = Credentials(username, password, null)
-                    val fillInDataset = FillableForm.makeFillInDataset(
+                    val fillInDataset = AutofillResponseBuilder.makeFillInDataset(
                         this,
                         credentials,
                         clientState,

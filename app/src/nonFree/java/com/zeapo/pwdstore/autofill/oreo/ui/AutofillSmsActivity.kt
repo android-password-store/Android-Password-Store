@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.w
+import com.github.androidpasswordstore.autofillparser.AutofillAction
+import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.gms.auth.api.phone.SmsCodeRetriever
@@ -27,9 +29,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
-import com.zeapo.pwdstore.autofill.oreo.AutofillAction
-import com.zeapo.pwdstore.autofill.oreo.Credentials
-import com.zeapo.pwdstore.autofill.oreo.FillableForm
+import com.zeapo.pwdstore.autofill.oreo.AutofillResponseBuilder
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillSmsBinding
 import com.zeapo.pwdstore.utils.viewBinding
 import java.util.concurrent.ExecutionException
@@ -145,13 +145,12 @@ class AutofillSmsActivity : AppCompatActivity() {
     private val smsCodeRetrievedReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val smsCode = intent.getStringExtra(SmsCodeRetriever.EXTRA_SMS_CODE)
-            val fillInDataset =
-                FillableForm.makeFillInDataset(
-                    this@AutofillSmsActivity,
-                    Credentials(null, null, smsCode),
-                    clientState,
-                    AutofillAction.FillOtpFromSms
-                )
+            val fillInDataset = AutofillResponseBuilder.makeFillInDataset(
+                this@AutofillSmsActivity,
+                Credentials(null, null, smsCode),
+                clientState,
+                AutofillAction.FillOtpFromSms
+            )
             setResult(RESULT_OK, Intent().apply {
                 putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
             })

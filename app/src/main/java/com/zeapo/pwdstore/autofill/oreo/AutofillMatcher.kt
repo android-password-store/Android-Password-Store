@@ -14,6 +14,8 @@ import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.androidpasswordstore.autofillparser.FormOrigin
+import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
 import com.zeapo.pwdstore.R
 import java.io.File
 

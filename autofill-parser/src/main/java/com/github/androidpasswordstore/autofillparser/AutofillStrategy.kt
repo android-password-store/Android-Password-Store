@@ -1,13 +1,13 @@
 /*
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: LGPL-3.0-only
  */
-package com.zeapo.pwdstore.autofill.oreo
+package com.github.androidpasswordstore.autofillparser
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.zeapo.pwdstore.autofill.oreo.CertaintyLevel.Certain
-import com.zeapo.pwdstore.autofill.oreo.CertaintyLevel.Likely
+import com.github.androidpasswordstore.autofillparser.CertaintyLevel.Certain
+import com.github.androidpasswordstore.autofillparser.CertaintyLevel.Likely
 
 private inline fun <T> Pair<T, T>.all(predicate: T.() -> Boolean) =
     predicate(first) && predicate(second)
