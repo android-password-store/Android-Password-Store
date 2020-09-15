@@ -273,7 +273,7 @@ class PasswordStore : BaseGitActivity() {
                     initBefore.show()
                     return false
                 }
-                runGitOperation(REQUEST_PUSH)
+                runGitOperation(GitOp.PUSH)
                 return true
             }
             R.id.git_pull -> {
@@ -281,7 +281,7 @@ class PasswordStore : BaseGitActivity() {
                     initBefore.show()
                     return false
                 }
-                runGitOperation(REQUEST_PULL)
+                runGitOperation(GitOp.PULL)
                 return true
             }
             R.id.git_sync -> {
@@ -289,7 +289,7 @@ class PasswordStore : BaseGitActivity() {
                     initBefore.show()
                     return false
                 }
-                runGitOperation(REQUEST_SYNC)
+                runGitOperation(GitOp.SYNC)
                 return true
             }
             R.id.refresh -> {
@@ -313,10 +313,10 @@ class PasswordStore : BaseGitActivity() {
             searchItem.collapseActionView()
     }
 
-    private fun runGitOperation(operation: Int) = lifecycleScope.launch {
+    private fun runGitOperation(operation: GitOp) = lifecycleScope.launch {
         launchGitOperation(operation).fold(
             success = { refreshPasswordList() },
-            failure = ::promptOnErrorHandler
+            failure = { promptOnErrorHandler(it) },
         )
     }
 
@@ -521,7 +521,6 @@ class PasswordStore : BaseGitActivity() {
         val intent = Intent(this, SelectFolderActivity::class.java)
         val fileLocations = values.map { it.file.absolutePath }.toTypedArray()
         intent.putExtra("Files", fileLocations)
-        intent.putExtra(REQUEST_ARG_OP, "SELECTFOLDER")
         registerForActivityResult(StartActivityForResult()) { result ->
             val intentData = result.data ?: return@registerForActivityResult
             val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))

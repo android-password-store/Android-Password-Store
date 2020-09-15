@@ -6,7 +6,6 @@
 
 package com.zeapo.pwdstore.ui.onboarding.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.zeapo.pwdstore.databinding.FragmentCloneBinding
-import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.finish
@@ -56,9 +54,7 @@ class CloneFragment : Fragment() {
      */
     private fun cloneToHiddenDir() {
         settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
-        cloneAction.launch(Intent(requireActivity(), GitServerConfigActivity::class.java).apply {
-            putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-        })
+        cloneAction.launch(GitServerConfigActivity.createCloneIntent(requireContext()))
     }
 
     companion object {

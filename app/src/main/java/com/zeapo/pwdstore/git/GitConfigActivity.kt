@@ -91,7 +91,7 @@ class GitConfigActivity : BaseGitActivity() {
         }
         binding.gitAbortRebase.setOnClickListener {
             lifecycleScope.launch {
-                launchGitOperation(BREAK_OUT_OF_DETACHED).fold(
+                launchGitOperation(GitOp.BREAK_OUT_OF_DETACHED).fold(
                     success = {
                         MaterialAlertDialogBuilder(this@GitConfigActivity).run {
                             setTitle(resources.getString(R.string.git_abort_and_push_title))
@@ -115,7 +115,7 @@ class GitConfigActivity : BaseGitActivity() {
         }
         binding.gitResetToRemote.setOnClickListener {
             lifecycleScope.launch {
-                launchGitOperation(REQUEST_RESET).fold(
+                launchGitOperation(GitOp.RESET).fold(
                     success = ::finishOnSuccessHandler,
                     failure = { err ->
                         promptOnErrorHandler(err) {

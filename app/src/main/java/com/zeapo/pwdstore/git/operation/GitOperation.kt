@@ -202,9 +202,4 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             sshSessionFactory?.close()
         }
     }
-
-    companion object {
-
-        const val GET_SSH_KEY_FROM_CLONE = 201
-    }
 }

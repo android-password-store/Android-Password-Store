@@ -4,6 +4,8 @@
  */
 package com.zeapo.pwdstore.git
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
@@ -42,7 +44,7 @@ class GitServerConfigActivity : BaseGitActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val isClone = intent?.extras?.getInt(REQUEST_ARG_OP) ?: -1 == REQUEST_CLONE
+        val isClone = intent?.extras?.getBoolean("cloning") ?: false
         if (isClone) {
             binding.saveButton.text = getString(R.string.clone_button)
         }
@@ -151,7 +153,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                                 localDir.deleteRecursively()
                             }
                             snackbar.dismiss()
-                            launchGitOperation(REQUEST_CLONE).fold(
+                            launchGitOperation(GitOp.CLONE).fold(
                                 success = {
                                     setResult(RESULT_OK)
                                     finish()
@@ -185,13 +187,21 @@ class GitServerConfigActivity : BaseGitActivity() {
                 MaterialAlertDialogBuilder(this).setMessage(e.message).show()
             }
             lifecycleScope.launch {
-                launchGitOperation(REQUEST_CLONE).fold(
+                launchGitOperation(GitOp.CLONE).fold(
                     success = {
                         setResult(RESULT_OK)
                         finish()
                     },
-                    failure = ::promptOnErrorHandler,
+                    failure = { promptOnErrorHandler(it) },
                 )
+            }
+        }
+    }
+
+    companion object {
+        fun createCloneIntent(context: Context): Intent {
+            return Intent(context, GitServerConfigActivity::class.java).apply {
+                putExtra("cloning", true)
             }
         }
     }

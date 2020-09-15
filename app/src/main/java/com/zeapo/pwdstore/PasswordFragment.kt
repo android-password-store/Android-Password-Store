@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
@@ -90,9 +89,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             } else if (!PasswordRepository.isGitRepo()) {
                 Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.clone_button) {
-                        val intent = Intent(context, GitServerConfigActivity::class.java)
-                        intent.putExtra(BaseGitActivity.REQUEST_ARG_OP, BaseGitActivity.REQUEST_CLONE)
-                        swipeResult.launch(intent)
+                        swipeResult.launch(GitServerConfigActivity.createCloneIntent(requireContext()))
                     }
                     .show()
                 binding.swipeRefresher.isRefreshing = false
@@ -100,8 +97,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 // When authentication is set to AuthMode.None then the only git operation we can
                 // run is a pull, so automatically fallback to that.
                 val operationId = when (GitSettings.authMode) {
-                    AuthMode.None -> BaseGitActivity.REQUEST_PULL
-                    else -> BaseGitActivity.REQUEST_SYNC
+                    AuthMode.None -> BaseGitActivity.GitOp.PULL
+                    else -> BaseGitActivity.GitOp.SYNC
                 }
                 requireStore().apply {
                     lifecycleScope.launch {
