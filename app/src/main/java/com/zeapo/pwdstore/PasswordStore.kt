@@ -52,6 +52,7 @@ import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
+import com.zeapo.pwdstore.ui.onboarding.activity.OnboardingActivity
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepository

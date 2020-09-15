@@ -77,7 +77,7 @@
     <string name="clone">Clone from server</string>
     <string name="initialize">Use local directory</string>
     <string name="location_dialog_title">Repository location</string>
-    <string name="location_dialog_create_text">Select where to create your password repository</string>
+    <string name="location_dialog_create_text">Select where do you want to create your password repository</string>
     <string name="location_sdcard">SD-Card</string>
     <string name="location_hidden">Hidden (Preferred)</string>
     <string name="external_repository_dialog_title">Choose where to store the passwords</string>
@@ -418,4 +418,22 @@
     <string name="folder_creation_err_folder_exists">A folder by that name already exists</string>
     <string name="xkpwgen_extrachars_label">Digits/Symbols (d/s)</string>
     <string name="xk_numbers_symbols_append_default">ds</string>
+
+    <!-- Onboarding flow -->
+    <string name="repository_n_location">Repository \nLocation</string>
+    <string name="select_n_openpgp_provider">Select \nOpenPGP Provider</string>
+    <string name="let_s_go">Let\'s Go</string>
+    <string name="select_n_repository_type">Select \nRepository Type</string>
+    <string name="select_repo_type_text">Select if you want to create a local repo or clone a remote repo.</string>
+    <string name="clone_remote_repo">Clone Remote Repo</string>
+    <string name="create_local_repo">Create Local Repo</string>
+    <string name="error_directory_uri">Error getting directory uri</string>
+    <string name="select_directory_passwords">Select a directory to store passwords</string>
+    <string name="select_n_store_name">Select \nStore Name</string>
+    <string name="select_n_store_text">Select a name for your password store.</string>
+    <string name="store_name">Store Name</string>
+    <string name="select_empty_directory">Select an empty directory for password store</string>
+    <string name="err_enter_store_name">Enter a store name to continue</string>
+    <string name="exception_cannot_create_directory">Cannot create new directory.</string>
+
 </resources>

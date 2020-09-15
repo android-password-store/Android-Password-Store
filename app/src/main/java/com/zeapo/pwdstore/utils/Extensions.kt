@@ -56,7 +56,8 @@ fun String.base64(): String {
     return Base64.encodeToString(encodeToByteArray(), Base64.NO_WRAP)
 }
 
-val Context.clipboard get() = getSystemService<ClipboardManager>()
+val Context.clipboard
+    get() = getSystemService<ClipboardManager>()
 
 fun FragmentActivity.snackbar(
     view: View = findViewById(android.R.id.content),
