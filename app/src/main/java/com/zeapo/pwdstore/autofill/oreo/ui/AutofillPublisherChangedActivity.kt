@@ -16,13 +16,13 @@ import android.text.format.DateUtils
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
+import com.github.androidpasswordstore.autofillparser.FormOrigin
+import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.autofill.oreo.AutofillPublisherChangedException
-import com.zeapo.pwdstore.autofill.oreo.FormOrigin
-import com.zeapo.pwdstore.autofill.oreo.computeCertificatesHash
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillPublisherChangedBinding
 import com.zeapo.pwdstore.utils.viewBinding
 

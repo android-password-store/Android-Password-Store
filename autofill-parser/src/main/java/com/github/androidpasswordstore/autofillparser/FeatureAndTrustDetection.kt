@@ -1,8 +1,8 @@
 /*
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: LGPL-3.0-only WITH LGPL-3.0-linking-exception
  */
-package com.zeapo.pwdstore.autofill.oreo
+package com.github.androidpasswordstore.autofillparser
 
 import android.content.Context
 import android.content.Intent

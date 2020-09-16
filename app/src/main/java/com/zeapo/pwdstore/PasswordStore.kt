@@ -35,6 +35,8 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
+import com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel
+import com.github.androidpasswordstore.autofillparser.getInstalledBrowsersWithAutofillSupportLevel
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.onFailure
@@ -43,8 +45,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
-import com.zeapo.pwdstore.autofill.oreo.BrowserAutofillSupportLevel
-import com.zeapo.pwdstore.autofill.oreo.getInstalledBrowsersWithAutofillSupportLevel
 import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.crypto.PasswordCreationActivity

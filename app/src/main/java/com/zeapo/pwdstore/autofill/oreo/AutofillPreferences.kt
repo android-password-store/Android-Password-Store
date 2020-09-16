@@ -7,6 +7,8 @@ package com.zeapo.pwdstore.autofill.oreo
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.github.androidpasswordstore.autofillparser.Credentials
+import com.zeapo.pwdstore.model.PasswordEntry
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
 import java.nio.file.Paths
@@ -120,5 +122,18 @@ object AutofillPreferences {
     fun directoryStructure(context: Context): DirectoryStructure {
         val value = context.sharedPrefs.getString(DirectoryStructure.PREFERENCE, null)
         return DirectoryStructure.fromValue(value)
+    }
+
+    fun credentialsFromStoreEntry(
+        context: Context,
+        file: File,
+        entry: PasswordEntry,
+        directoryStructure: DirectoryStructure
+    ): Credentials {
+        // Always give priority to a username stored in the encrypted extras
+        val username = entry.username
+            ?: directoryStructure.getUsernameFor(file)
+            ?: context.getDefaultUsername()
+        return Credentials(username, entry.password, entry.calculateTotpCode())
     }
 }

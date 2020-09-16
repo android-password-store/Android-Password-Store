@@ -1,8 +1,8 @@
 /*
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: LGPL-3.0-only WITH LGPL-3.0-linking-exception
  */
-package com.zeapo.pwdstore.autofill.oreo
+package com.github.androidpasswordstore.autofillparser
 
 import android.annotation.SuppressLint
 import android.app.assist.AssistStructure
@@ -13,18 +13,10 @@ import android.os.Build
 import android.service.autofill.SaveCallback
 import android.util.Base64
 import android.view.autofill.AutofillId
-import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.ajalt.timberkt.e
-import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.model.PasswordEntry
-import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getString
-import com.zeapo.pwdstore.utils.sharedPrefs
-import java.io.File
 import java.security.MessageDigest
 
 private fun ByteArray.sha256(): ByteArray {
@@ -37,8 +29,6 @@ private fun ByteArray.sha256(): ByteArray {
 private fun ByteArray.base64(): String {
     return Base64.encodeToString(this, Base64.NO_WRAP)
 }
-
-private fun Context.getDefaultUsername() = sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
 
 private fun stableHash(array: Collection<ByteArray>): String {
     val hashes = array.map { it.sha256().base64() }
@@ -83,79 +73,6 @@ val AssistStructure.ViewNode.webOrigin: String?
         val scheme = (if (Build.VERSION.SDK_INT >= 28) webScheme else null) ?: "https"
         "$scheme://$domain"
     }
-
-data class Credentials(val username: String?, val password: String?, val otp: String?) {
-    companion object {
-
-        fun fromStoreEntry(
-            context: Context,
-            file: File,
-            entry: PasswordEntry,
-            directoryStructure: DirectoryStructure
-        ): Credentials {
-            // Always give priority to a username stored in the encrypted extras
-            val username = entry.username
-                ?: directoryStructure.getUsernameFor(file)
-                ?: context.getDefaultUsername()
-            return Credentials(username, entry.password, entry.calculateTotpCode())
-        }
-    }
-}
-
-private fun makeRemoteView(
-    context: Context,
-    title: String,
-    summary: String,
-    iconRes: Int
-): RemoteViews {
-    return RemoteViews(context.packageName, R.layout.oreo_autofill_dataset).apply {
-        setTextViewText(R.id.title, title)
-        setTextViewText(R.id.summary, summary)
-        setImageViewResource(R.id.icon, iconRes)
-    }
-}
-
-fun makeFillMatchRemoteView(context: Context, file: File, formOrigin: FormOrigin): RemoteViews {
-    val title = formOrigin.getPrettyIdentifier(context, untrusted = false)
-    val directoryStructure = AutofillPreferences.directoryStructure(context)
-    val relativeFile = file.relativeTo(PasswordRepository.getRepositoryDirectory())
-    val summary = directoryStructure.getUsernameFor(relativeFile)
-        ?: directoryStructure.getPathToIdentifierFor(relativeFile) ?: ""
-    val iconRes = R.drawable.ic_person_black_24dp
-    return makeRemoteView(context, title, summary, iconRes)
-}
-
-fun makeSearchAndFillRemoteView(context: Context, formOrigin: FormOrigin): RemoteViews {
-    val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
-    val summary = context.getString(R.string.oreo_autofill_search_in_store)
-    val iconRes = R.drawable.ic_search_black_24dp
-    return makeRemoteView(context, title, summary, iconRes)
-}
-
-fun makeGenerateAndFillRemoteView(context: Context, formOrigin: FormOrigin): RemoteViews {
-    val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
-    val summary = context.getString(R.string.oreo_autofill_generate_password)
-    val iconRes = R.drawable.ic_autofill_new_password
-    return makeRemoteView(context, title, summary, iconRes)
-}
-
-fun makeFillOtpFromSmsRemoteView(context: Context, formOrigin: FormOrigin): RemoteViews {
-    val title = formOrigin.getPrettyIdentifier(context, untrusted = true)
-    val summary = context.getString(R.string.oreo_autofill_fill_otp_from_sms)
-    val iconRes = R.drawable.ic_autofill_sms
-    return makeRemoteView(context, title, summary, iconRes)
-}
-
-fun makePlaceholderRemoteView(context: Context): RemoteViews {
-    return makeRemoteView(context, "PLACEHOLDER", "PLACEHOLDER", R.mipmap.ic_launcher)
-}
-
-fun makeWarningRemoteView(context: Context): RemoteViews {
-    val title = context.getString(R.string.oreo_autofill_warning_publisher_dataset_title)
-    val summary = context.getString(R.string.oreo_autofill_warning_publisher_dataset_summary)
-    val iconRes = R.drawable.ic_warning_red_24dp
-    return makeRemoteView(context, title, summary, iconRes)
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 class FixedSaveCallback(context: Context, private val callback: SaveCallback) {

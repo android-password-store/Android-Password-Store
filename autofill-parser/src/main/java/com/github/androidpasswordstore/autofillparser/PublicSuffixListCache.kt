@@ -1,14 +1,11 @@
 /*
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: LGPL-3.0-only WITH LGPL-3.0-linking-exception
  */
-package com.zeapo.pwdstore.autofill.oreo
+package com.github.androidpasswordstore.autofillparser
 
 import android.content.Context
 import android.util.Patterns
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getString
-import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.runBlocking
 import mozilla.components.lib.publicsuffixlist.PublicSuffixList
 
@@ -38,7 +35,7 @@ fun cachePublicSuffixList(context: Context) {
  * Note: Invalid domains, such as IP addresses, are returned unchanged and thus never collide with
  * the return value for valid domains.
  */
-fun getPublicSuffixPlusOne(context: Context, domain: String) = runBlocking {
+fun getPublicSuffixPlusOne(context: Context, domain: String, customSuffixes: Sequence<String>) = runBlocking {
     // We only feed valid domain names which are not IP addresses into getPublicSuffixPlusOne.
     // We do not check whether the domain actually exists (actually, not even whether its TLD
     // exists). As long as we restrict ourselves to syntactically valid domain names,
@@ -48,7 +45,7 @@ fun getPublicSuffixPlusOne(context: Context, domain: String) = runBlocking {
     ) {
         domain
     } else {
-        getCanonicalSuffix(context, domain)
+        getCanonicalSuffix(context, domain, customSuffixes)
     }
 }
 
@@ -68,19 +65,12 @@ fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
     return "$lastPrefixPart.$suffix"
 }
 
-fun getCustomSuffixes(context: Context): Sequence<String> {
-    return context.sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
-        ?.splitToSequence('\n')
-        ?.filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
-        ?: emptySequence()
-}
-
-suspend fun getCanonicalSuffix(context: Context, domain: String): String {
+suspend fun getCanonicalSuffix(context: Context, domain: String, customSuffixes: Sequence<String>): String {
     val publicSuffixList = PublicSuffixListCache.getOrCachePublicSuffixList(context)
     val publicSuffixPlusOne = publicSuffixList.getPublicSuffixPlusOne(domain).await()
         ?: return domain
     var longestSuffix = publicSuffixPlusOne
-    for (customSuffix in getCustomSuffixes(context)) {
+    for (customSuffix in customSuffixes) {
         val suffixPlusUpToOne = getSuffixPlusUpToOne(domain, customSuffix) ?: continue
         // A shorter suffix is automatically a substring.
         if (suffixPlusUpToOne.length > longestSuffix.length)

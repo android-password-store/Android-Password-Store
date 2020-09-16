@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.autofill.oreo
 
+import android.content.Context
 import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
@@ -15,10 +16,22 @@ import android.service.autofill.SaveRequest
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
+import com.github.androidpasswordstore.autofillparser.AutofillScenario
+import com.github.androidpasswordstore.autofillparser.Credentials
+import com.github.androidpasswordstore.autofillparser.FillableForm
+import com.github.androidpasswordstore.autofillparser.FixedSaveCallback
+import com.github.androidpasswordstore.autofillparser.FormOrigin
+import com.github.androidpasswordstore.autofillparser.cachePublicSuffixList
+import com.github.androidpasswordstore.autofillparser.passwordValue
+import com.github.androidpasswordstore.autofillparser.recoverNodes
+import com.github.androidpasswordstore.autofillparser.usernameValue
 import com.zeapo.pwdstore.BuildConfig
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSaveActivity
+import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.hasFlag
+import com.zeapo.pwdstore.utils.sharedPrefs
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OreoAutofillService : AutofillService() {
@@ -66,13 +79,14 @@ class OreoAutofillService : AutofillService() {
         }
         val formToFill = FillableForm.parseAssistStructure(
             this, structure,
-            isManualRequest = request.flags hasFlag FillRequest.FLAG_MANUAL_REQUEST
+            isManualRequest = request.flags hasFlag FillRequest.FLAG_MANUAL_REQUEST,
+            getCustomSuffixes(),
         ) ?: run {
             d { "Form cannot be filled" }
             callback.onSuccess(null)
             return
         }
-        formToFill.fillCredentials(this, callback)
+        AutofillResponseBuilder(formToFill).fillCredentials(this, callback)
     }
 
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
@@ -112,4 +126,13 @@ class OreoAutofillService : AutofillService() {
             )
         )
     }
+}
+
+fun Context.getDefaultUsername() = sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
+
+fun Context.getCustomSuffixes(): Sequence<String> {
+    return sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
+        ?.splitToSequence('\n')
+        ?.filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
+        ?: emptySequence()
 }
