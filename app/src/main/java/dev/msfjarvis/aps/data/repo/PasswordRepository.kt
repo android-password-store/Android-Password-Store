@@ -212,32 +212,4 @@ object PasswordRepository {
 
         return items
     }
-
-    /**
-     * Gets the passwords (PasswordItem) in a directory
-     *
-     * @param path the directory path
-     * @return a list of password items
-     */
-    @JvmStatic
-    fun getPasswords(path: File, rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
-        // We need to recover the passwords then parse the files
-        val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
-        val passwordList = ArrayList<PasswordItem>()
-        val showHidden = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
-
-        if (passList.size == 0) return passwordList
-        if (!showHidden) {
-            passList.filter { !it.isHidden }.toCollection(passList.apply { clear() })
-        }
-        passList.forEach { file ->
-            passwordList.add(if (file.isFile) {
-                PasswordItem.newPassword(file.name, file, rootDir)
-            } else {
-                PasswordItem.newCategory(file.name, file, rootDir)
-            })
-        }
-        passwordList.sortWith(sortOrder.comparator)
-        return passwordList
-    }
 }

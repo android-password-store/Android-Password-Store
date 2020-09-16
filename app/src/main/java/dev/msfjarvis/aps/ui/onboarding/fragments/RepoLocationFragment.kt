@@ -21,7 +21,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.ui.settings.UserPreference
 import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.data.repo.PasswordRepository
-import dev.msfjarvis.aps.util.settings.PasswordSortOrder
+import dev.msfjarvis.aps.injection.Graph
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.getString
@@ -35,8 +35,6 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
     private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
     private val binding by viewBinding(FragmentRepoLocationBinding::bind)
-    private val sortOrder: PasswordSortOrder
-        get() = PasswordSortOrder.getSortOrder(settings)
 
     private val repositoryInitAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -103,12 +101,12 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
             settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO) != null) {
             val externalRepoPath = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
             val dir = externalRepoPath?.let { File(it) }
-            if (dir != null && // The directory could be opened
-                dir.exists() && // The directory exists
+            if (dir != null) Graph.buildStoreImpl(dir, true) else return false
+            if (dir.exists() && // The directory exists
                 dir.isDirectory && // The directory, is really a directory
                 dir.listFilesRecursively().isNotEmpty() && // The directory contains files
                 // The directory contains a non-zero number of password files
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(), sortOrder).isNotEmpty()
+                Graph.store.listRootPasswords().any { it.extension == "gpg" }
             ) {
                 PasswordRepository.closeRepository()
                 return true
