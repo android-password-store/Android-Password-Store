@@ -16,7 +16,7 @@ jobs:
           git config user.email noreply@github.com
 
       - name: Download new publicsuffix data
-        run: curl -L https://github.com/mozilla-mobile/android-components/raw/master/components/lib/publicsuffixlist/src/main/assets/publicsuffixes -o app/src/main/assets/publicsuffixes
+        run: curl -L https://github.com/mozilla-mobile/android-components/raw/master/components/lib/publicsuffixlist/src/main/assets/publicsuffixes -o autofill-parser/src/main/assets/publicsuffixes
 
       - name: Compare list changes
         run: if [[ $(git diff --binary --stat) != '' ]]; then echo "::set-env name=UPDATED::true"; fi
