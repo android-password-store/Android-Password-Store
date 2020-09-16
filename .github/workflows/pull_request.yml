@@ -7,7 +7,6 @@ jobs:
     strategy:
       matrix:
         api-level: [23, 29]
-        variant: [freeDebug, nonFreeDebug]
     steps:
 
     - name: Check if relevant files have changed
@@ -67,10 +66,10 @@ jobs:
 
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      run: ./gradlew test${{ matrix.variant }} lint${{ matrix.variant}} -Dpre-dex=false
+      run: ./gradlew testFreeDebug lintFreeDebug
 
-    - name: Run instrumentation tests on free flavor
-      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'freeDebug' }}
+    - name: Run instrumentation tests
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: reactivecircus/android-emulator-runner@v2.11.0
       with:
         api-level: ${{ matrix.api-level }}
@@ -80,18 +79,6 @@ jobs:
           adb shell settings put global transition_animation_scale 0
           adb shell settings put global window_animation_scale 0
           ./gradlew :app:connectedFreeDebugAndroidTest
-
-    - name: Run instrumentation tests on nonFree flavor
-      if: ${{ steps.service-changed.outputs.result == 'true' && matrix.variant == 'nonFreeDebug' }}
-      uses: reactivecircus/android-emulator-runner@v2.11.0
-      with:
-        api-level: ${{ matrix.api-level }}
-        target: default
-        script: |
-          adb shell settings put global animator_duration_scale 0
-          adb shell settings put global transition_animation_scale 0
-          adb shell settings put global window_animation_scale 0
-          ./gradlew :app:connectedNonFreeDebugAndroidTest
 
     - name: (Fail-only) upload test report
       if: failure()
