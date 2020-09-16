@@ -1,6 +1,6 @@
 /*
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: LGPL-3.0-only
+ * SPDX-License-Identifier: GPL-3.0-only OR (LGPL-3.0-only WITH LGPL-3.0-linking-exception)
  */
 package com.github.androidpasswordstore.autofillparser
 

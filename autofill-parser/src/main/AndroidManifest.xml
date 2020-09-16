@@ -1,2 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only OR (LGPL-3.0-only WITH LGPL-3.0-linking-exception)
+  -->
+
 <manifest package="com.github.androidpasswordstore.autofillparser">
 </manifest>
