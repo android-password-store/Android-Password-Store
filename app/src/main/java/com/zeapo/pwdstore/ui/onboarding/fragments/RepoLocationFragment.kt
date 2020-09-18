@@ -172,7 +172,10 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
             return
         }
         if (externalRepo && externalRepoPath != null) {
-            if (checkExternalDirectory()) return
+            if (checkExternalDirectory()) {
+                finish()
+                return
+            }
         }
         createRepository()
     }
