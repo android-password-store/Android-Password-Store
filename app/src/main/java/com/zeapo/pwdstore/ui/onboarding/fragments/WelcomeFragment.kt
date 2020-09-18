@@ -7,12 +7,14 @@ package com.zeapo.pwdstore.ui.onboarding.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentWelcomeBinding
 import com.zeapo.pwdstore.utils.performTransactionWithBackStack
 import com.zeapo.pwdstore.utils.viewBinding
 
+@Keep
 @Suppress("unused")
 class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
