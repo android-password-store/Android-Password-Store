@@ -141,9 +141,6 @@ dependencies {
     androidTestImplementation(Dependencies.Testing.kotlin_test_junit)
     androidTestImplementation(Dependencies.Testing.AndroidX.runner)
     androidTestImplementation(Dependencies.Testing.AndroidX.rules)
-    androidTestImplementation(Dependencies.Testing.AndroidX.junit)
-    androidTestImplementation(Dependencies.Testing.AndroidX.espresso_core)
-    androidTestImplementation(Dependencies.Testing.AndroidX.espresso_intents)
 
     testImplementation(Dependencies.Testing.junit)
     testImplementation(Dependencies.Testing.kotlin_test_junit)
