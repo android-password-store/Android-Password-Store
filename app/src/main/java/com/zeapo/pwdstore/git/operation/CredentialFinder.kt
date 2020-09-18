@@ -14,7 +14,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.sshj.InteractivePasswordFinder
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -25,7 +25,7 @@ class CredentialFinder(
 ) : InteractivePasswordFinder() {
 
     override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
-        val gitOperationPrefs = callingActivity.getEncryptedPrefs("git_operation")
+        val gitOperationPrefs = callingActivity.getEncryptedGitPrefs()
         val credentialPref: String
         @StringRes val messageRes: Int
         @StringRes val hintRes: Int

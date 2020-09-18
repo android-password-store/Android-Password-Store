@@ -20,7 +20,7 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivitySshKeygenBinding
 import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.keyguardManager
 import com.zeapo.pwdstore.utils.viewBinding
 import kotlin.coroutines.resume
@@ -128,7 +128,7 @@ class SshKeyGenActivity : AppCompatActivity() {
                 keyGenType.generateKey(requireAuthentication)
             }
         }
-        getEncryptedPrefs("git_operation").edit {
+        getEncryptedGitPrefs().edit {
             remove("ssh_key_local_passphrase")
         }
         binding.generate.apply {
