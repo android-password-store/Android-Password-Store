@@ -10,7 +10,7 @@ import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.Application
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
@@ -53,7 +53,7 @@ object GitSettings {
     private const val DEFAULT_BRANCH = "master"
 
     private val settings by lazy { Application.instance.sharedPrefs }
-    private val encryptedSettings by lazy { Application.instance.getEncryptedPrefs("git_operation") }
+    private val encryptedSettings by lazy { Application.instance.getEncryptedGitPrefs() }
 
     var authMode
         get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))

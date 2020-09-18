@@ -54,7 +54,7 @@ import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.autofillManager
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
@@ -81,7 +81,7 @@ class UserPreference : AppCompatActivity() {
             prefsActivity = requireActivity() as UserPreference
             val context = requireContext()
             sharedPreferences = preferenceManager.sharedPreferences
-            encryptedPreferences = requireActivity().getEncryptedPrefs("git_operation")
+            encryptedPreferences = requireActivity().getEncryptedGitPrefs()
 
             addPreferencesFromResource(R.xml.preference)
 

@@ -23,7 +23,7 @@ import com.github.michaelbull.result.runCatching
 import com.zeapo.pwdstore.Application
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
@@ -169,7 +169,7 @@ object SshKey {
         if (publicKeyFile.isFile) {
             publicKeyFile.delete()
         }
-        context.getEncryptedPrefs("git_operation").edit {
+        context.getEncryptedGitPrefs().edit {
             remove(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
         }
         type = null

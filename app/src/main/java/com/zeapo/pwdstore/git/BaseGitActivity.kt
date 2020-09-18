@@ -21,7 +21,7 @@ import com.zeapo.pwdstore.git.operation.PushOperation
 import com.zeapo.pwdstore.git.operation.ResetToRemoteOperation
 import com.zeapo.pwdstore.git.operation.SyncOperation
 import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.getEncryptedPrefs
+import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -86,7 +86,7 @@ abstract class BaseGitActivity : AppCompatActivity() {
     suspend fun promptOnErrorHandler(err: Throwable, onPromptDone: () -> Unit = {}) {
         val error = rootCauseException(err)
         if (!isExplicitlyUserInitiatedError(error)) {
-            getEncryptedPrefs("git_operation").edit {
+            getEncryptedGitPrefs().edit {
                 remove(PreferenceKeys.HTTPS_PASSWORD)
             }
             sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
