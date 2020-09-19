@@ -25,6 +25,7 @@ import com.zeapo.pwdstore.databinding.ActivityGitCloneBinding
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.config.Protocol
+import com.zeapo.pwdstore.ui.dialogs.BasicBottomSheet
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
@@ -87,6 +88,22 @@ class GitServerConfigActivity : BaseGitActivity() {
         }
 
         binding.saveButton.setOnClickListener {
+            val newUrl = binding.serverUrl.text.toString().trim()
+            // If url is of type john_doe@example.org:12435/path/to/repo, then not adding `ssh://`
+            // in the beginning will cause the port to be seen as part of the path. Let users know
+            // about it and offer a quickfix.
+            if (newUrl.contains(":[0-9]{1,5}/".toRegex()) && !newUrl.startsWith("ssh://")) {
+                BasicBottomSheet.Builder(this)
+                    .setTitleRes(R.string.ssh_scheme_needed_title)
+                    .setMessageRes(R.string.ssh_scheme_needed_message)
+                    .setPositiveButtonClickListener {
+                        @Suppress("SetTextI18n")
+                        binding.serverUrl.setText("ssh://$newUrl")
+                    }
+                    .build()
+                    .show(supportFragmentManager, "SSH_SCHEME_WARNING")
+                return@setOnClickListener
+            }
             when (val updateResult = GitSettings.updateConnectionSettingsIfValid(
                 newAuthMode = newAuthMode,
                 newUrl = binding.serverUrl.text.toString().trim(),

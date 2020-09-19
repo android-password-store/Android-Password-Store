@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 -   Add ability to view the Git commit log
 -   Allow generating ECDSA and ED25519 keys for SSH
 -   Add support for multiple/fallback authentication methods for SSH
+-   Add warning when the custom SSH port in a URL could potentially be ignored
 
 ### Changed
 
