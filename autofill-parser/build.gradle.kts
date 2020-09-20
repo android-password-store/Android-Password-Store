@@ -49,6 +49,7 @@ afterEvaluate {
 }
 
 dependencies {
+    compileOnly(Dependencies.AndroidX.annotation)
     implementation(Dependencies.AndroidX.autofill)
     implementation(Dependencies.Kotlin.Coroutines.android)
     implementation(Dependencies.Kotlin.Coroutines.core)
