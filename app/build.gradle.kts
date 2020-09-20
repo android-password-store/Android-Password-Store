@@ -27,6 +27,7 @@ android {
     adbOptions.installOptions("--user 0")
 
     buildFeatures.viewBinding = true
+    buildFeatures.buildConfig = true
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
