@@ -49,7 +49,6 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation(Dependencies.AndroidX.core_ktx)
     implementation(Dependencies.AndroidX.autofill)
     implementation(Dependencies.Kotlin.Coroutines.android)
     implementation(Dependencies.Kotlin.Coroutines.core)

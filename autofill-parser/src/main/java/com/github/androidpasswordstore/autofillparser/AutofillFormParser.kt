@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
-import androidx.core.os.bundleOf
 import com.github.ajalt.timberkt.d
 
 /**
@@ -49,9 +48,11 @@ sealed class FormOrigin(open val identifier: String) {
         }
     }
 
-    fun toBundle() = when (this) {
-        is Web -> bundleOf(BUNDLE_KEY_WEB_IDENTIFIER to identifier)
-        is App -> bundleOf(BUNDLE_KEY_APP_IDENTIFIER to identifier)
+    fun toBundle() = Bundle().apply {
+        when (this@FormOrigin) {
+            is Web -> putString(BUNDLE_KEY_WEB_IDENTIFIER, identifier)
+            is App -> putString(BUNDLE_KEY_APP_IDENTIFIER, identifier)
+        }
     }
 }
 
