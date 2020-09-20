@@ -29,10 +29,6 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/checkout@v2
 
-    - name: Copy CI gradle.properties
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
     - name: Generate cache key
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: ./.github/checksum.sh checksum.txt

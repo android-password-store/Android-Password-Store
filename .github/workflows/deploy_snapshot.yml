@@ -17,9 +17,6 @@ jobs:
       env:
         ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
-    - name: Copy CI gradle.properties
-      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-
     - name: Generate cache key
       run: ./.github/checksum.sh checksum.txt
 
