@@ -38,7 +38,7 @@ android {
     lintOptions {
         isAbortOnError = true
         isCheckReleaseBuilds = false
-        disable("MissingTranslation", "PluralsCandidate")
+        disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
     }
 
     packagingOptions {
