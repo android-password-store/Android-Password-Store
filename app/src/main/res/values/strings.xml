@@ -59,12 +59,9 @@
     <string name="empty_toast_text">You cannot use an empty password or empty extra content</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Running command…</string>
     <string name="jgit_error_dialog_title">An error occurred during a Git operation</string>
-    <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
-    <string name="set_information_dialog_text">Please fix the remote server configuration in settings before proceeding</string>
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
     <string name="ssh_preferences_dialog_title">No SSH key</string>
     <string name="ssh_preferences_dialog_import">Import</string>
@@ -74,9 +71,6 @@
     <string name="password_dialog_text">Please provide the password for this repository</string>
 
     <!-- Clone fragment -->
-    <string name="clone">Clone from server</string>
-    <string name="initialize">Use local directory</string>
-    <string name="location_dialog_title">Repository location</string>
     <string name="location_dialog_create_text">Select where do you want to create your password repository</string>
     <string name="location_sdcard">SD-Card</string>
     <string name="location_hidden">Hidden (Preferred)</string>
@@ -84,7 +78,6 @@
     <string name="external_repository_dialog_text">You must select a directory where to store your passwords. If you want to store your passwords within the hidden storage of the application, cancel this dialog and disable the \"External Repository\" option.</string>
 
     <string name="server_name">Server</string>
-    <string name="server_protocol">Protocol</string>
     <string name="server_url">Repository URL</string>
     <string name="server_branch">Branch</string>
 
@@ -195,17 +188,13 @@
     <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
 
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Length</string>
     <string name="ssh_keygen_passphrase">Passphrase</string>
-    <string name="ssh_keygen_comment">Comment</string>
     <string name="ssh_keygen_generate">Generate</string>
     <string name="ssh_keygen_share">Share</string>
     <string name="ssh_keygen_later">Later</string>
     <string name="ssh_keygen_message">%1$s\n\nProvide this public key to your Git server.</string>
     <string name="ssh_key_gen_generating_progress">Generating keys…</string>
-    <string name="ssh_keygen_generating_done">Done!</string>
     <string name="ssh_keygen_require_authentication">Protect with screen lock credential</string>
-    <string name="ssh_keygen_copied_key">Public key copied to clipboard</string>
     <string name="ssh_keygen_label_rsa">RSA</string>
     <string name="ssh_keygen_label_ecdsa">ECDSA</string>
     <string name="ssh_keygen_label_ed25519">Ed25519</string>
@@ -227,8 +216,6 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_positive">Go to Settings</string>
-    <string name="dialog_negative">Go back</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_skip">Skip</string>
     <string name="git_sync">Synchronize repository</string>
@@ -296,7 +283,6 @@
     <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
     <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
     <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>
-    <string name="jgit_error_push_dialog_text">Error occurred during the push operation:</string>
     <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
     <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
     <string name="git_operation_remember_passphrase">Remember key passphrase</string>
@@ -306,10 +292,6 @@
     <string name="git_head_on_branch">On branch %1$s</string>
     <string name="git_head_detached">HEAD detached at %1$s</string>
     <string name="git_head_missing">Unable to locate HEAD</string>
-    <string name="openkeychain_ssh_api_connect_fail">Failed to connect to OpenKeychain SSH API service.</string>
-    <string name="no_ssh_api_provider">No SSH API provider found. Is OpenKeychain installed?</string>
-    <string name="ssh_api_pending_intent_failed">SSH API pending intent failed</string>
-    <string name="ssh_api_unknown_error">Unknown SSH API Error</string>
     <string name="sdcard_root_warning_title">SD-Card root selected</string>
     <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
     <string name="git_abort_and_push_title">Abort and Push</string>
@@ -342,8 +324,6 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_battery_saver">Set by Battery Saver</string>
     <string name="theme_follow_system">System default</string>
-    <string name="clone_protocol_ssh" translatable="false">SSH</string>
-    <string name="clone_protocol_https" translatable="false">HTTPS</string>
     <string name="connection_mode_ssh_key">SSH key</string>
     <string name="connection_mode_basic_authentication">Password</string>
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
@@ -352,10 +332,6 @@
     <string name="git_server_config_save_missing_username_https">Please specify the HTTPS username in the form https://username@example.com/…</string>
     <string name="git_server_config_save_missing_username_ssh">Please specify the SSH username in the form username@example.com:…</string>
     <string name="git_server_config_save_auth_mode_mismatch">Valid authentication modes for %1$s: %2$s</string>
-    <string name="git_config_error_hostname_empty">empty hostname</string>
-    <string name="git_config_error_generic">please verify your settings and try again</string>
-    <string name="git_config_error_nonnumeric_port">port must be numeric</string>
-    <string name="git_config_error_custom_port_absolute">path must be absolute (start with \'/\') when using a custom port</string>
     <string name="git_operation_wrong_passphrase">Wrong passphrase</string>
     <string name="git_operation_wrong_password">Wrong password</string>
     <string name="bottom_sheet_create_new_folder">Create new folder</string>
@@ -419,20 +395,11 @@
 
     <!-- Onboarding flow -->
     <string name="repository_n_location">Repository \nLocation</string>
-    <string name="select_n_openpgp_provider">Select \nOpenPGP Provider</string>
     <string name="let_s_go">Let\'s Go</string>
     <string name="select_n_repository_type">Select \nRepository Type</string>
     <string name="select_repo_type_text">Select if you want to create a local repo or clone a remote repo.</string>
     <string name="clone_remote_repo">Clone Remote Repo</string>
     <string name="create_local_repo">Create Local Repo</string>
-    <string name="error_directory_uri">Error getting directory uri</string>
-    <string name="select_directory_passwords">Select a directory to store passwords</string>
-    <string name="select_n_store_name">Select \nStore Name</string>
-    <string name="select_n_store_text">Select a name for your password store.</string>
-    <string name="store_name">Store Name</string>
-    <string name="select_empty_directory">Select an empty directory for password store</string>
-    <string name="err_enter_store_name">Enter a store name to continue</string>
-    <string name="exception_cannot_create_directory">Cannot create new directory.</string>
 
     <!-- SSH port validation -->
     <string name="ssh_scheme_needed_title">Potentially incorrect URL</string>

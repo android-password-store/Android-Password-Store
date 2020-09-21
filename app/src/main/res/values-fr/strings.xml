@@ -35,9 +35,7 @@
     <string name="empty_toast_text">Vous ne pouvez pas utiliser un mot de passe vide ou des données supplémentaires vide</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Commande en cours…</string>
     <string name="jgit_error_dialog_title">Une erreur c\'est produite lors d\'une opération Git</string>
-    <string name="jgit_error_dialog_text">Message de jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">Vous devez importer ou générer votre fichier de clef SSH dans les préférences</string>
@@ -49,16 +47,12 @@
     <string name="password_dialog_text">Renseignez le mot de passe pour ce dépôt</string>
 
     <!-- Clone fragment -->
-    <string name="clone">Cloner depuis le serveur</string>
-    <string name="initialize">Utiliser un répertoire local</string>
-    <string name="location_dialog_title">Location du répertoire</string>
     <string name="location_sdcard">Carte SD</string>
     <string name="location_hidden">Caché (Préféré)</string>
     <string name="external_repository_dialog_title">Choisissez où sauvegarder les mots de passe</string>
     <string name="external_repository_dialog_text">Vous devez sélectionner un répertoire où sauvegarder vos mots de passe. Si vous souhaitez sauvegarder vos mots de passe dans la mémoire cachée de l\'application, annulez cette boîte de dialogue et désactivez l\'option \"Répertoire externe\".</string>
 
     <string name="server_name">Serveur</string>
-    <string name="server_protocol">Protocole</string>
 
     <string name="connection_mode">Méthode d\'authentification</string>
 
@@ -130,9 +124,7 @@
     <string name="pwgen_ambiguous">Ambigus</string>
     <string name="pwgen_pronounceable">Prononçable</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Taille</string>
     <string name="ssh_keygen_passphrase">Mot de passe</string>
-    <string name="ssh_keygen_comment">Commentaire</string>
     <string name="ssh_keygen_generate">Générer</string>
 
     <!-- Misc -->
@@ -173,6 +165,5 @@
     <string name="git_push_nff_error">La poussée a été rejetée par le dépôt distant, exécutez une tirée avant de pousser à nouveau. Vous pouvez utiliser Synchroniser plutôt que de tirer/pousser car il implémente les deux.</string>
     <string name="git_push_generic_error">Poussée rejetée par le dépôt distant, raison:</string>
     <string name="git_push_other_error">Pousser au dépôt distant sans avance rapide rejetée. Vérifiez la variable receive.denyNonFastForwards dans le fichier de configuration du répertoire de destination.</string>
-    <string name="jgit_error_push_dialog_text">Une erreur s\'est produite lors de l\'opération de poussée:</string>
     <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
 </resources>

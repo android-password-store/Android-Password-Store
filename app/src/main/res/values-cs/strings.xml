@@ -34,9 +34,7 @@
     <string name="empty_toast_text">Nelze zadat prázdné heslo nebo další obsah</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Příkaz běží…</string>
     <string name="jgit_error_dialog_title">Došlo k vnitřní výjimce</string>
-    <string name="jgit_error_dialog_text">Zpráva od jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">Importujte nebo si prosím vygenerujte svůj SSH klíč v nastavení aplikace</string>
@@ -48,14 +46,10 @@
     <string name="password_dialog_text">Zadejte prosím heslo k tomuto repozitáři</string>
 
     <!-- Clone fragment -->
-    <string name="clone">Klonovat ze serveru</string>
-    <string name="initialize">Použít místní adresář</string>
-    <string name="location_dialog_title">Umístění úložiště</string>
     <string name="location_sdcard">SD-Karta</string>
     <string name="location_hidden">Skryté (Preferováno)</string>
     <string name="external_repository_dialog_title">Vyberte kam ukládat hesla</string>
     <string name="server_name">Server</string>
-    <string name="server_protocol">Protokol</string>
 
     <string name="connection_mode">Mód ověření</string>
 
@@ -125,9 +119,7 @@
     <string name="pwgen_uppercase">Velká písmena</string>
     <string name="pwgen_ambiguous">Dvouznačné</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Délka</string>
     <string name="ssh_keygen_passphrase">Bezpečnostní fráze</string>
-    <string name="ssh_keygen_comment">Komentář</string>
     <string name="ssh_keygen_generate">Generovat</string>
 
     <!-- Misc -->

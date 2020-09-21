@@ -45,11 +45,8 @@
     <string name="path_toast_text">Por favor, forneça o caminho do arquivo</string>
     <string name="empty_toast_text">Você não pode usar uma senha vazia ou conteúdo extra vazio</string>
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Executando comando…</string>
     <string name="jgit_error_dialog_title">Ocorreu um erro durante uma operação do Git</string>
-    <string name="jgit_error_dialog_text">Mensagem do jgit: \n</string>
     <!-- Git Handler -->
-    <string name="set_information_dialog_text">Por favor, corrija a configuração do servidor remoto nas configurações antes de prosseguir</string>
     <string name="ssh_preferences_dialog_text">Por favor, importe ou gere seu arquivo de chave SSH nas preferências</string>
     <string name="ssh_preferences_dialog_title">Nenhuma chave SSH</string>
     <string name="ssh_preferences_dialog_import">Importar</string>
@@ -58,15 +55,11 @@
     <string name="passphrase_dialog_text">Por favor, forneça a senha para a sua chave SSH</string>
     <string name="password_dialog_text">Por favor, forneça a senha para este repositório</string>
     <!-- Clone fragment -->
-    <string name="clone">Clonar do servidor</string>
-    <string name="initialize">Usar diretório local</string>
-    <string name="location_dialog_title">Local do repositório</string>
     <string name="location_sdcard">Cartão SD</string>
     <string name="location_hidden">Oculto (preferencial)</string>
     <string name="external_repository_dialog_title">Escolha onde armazenar as senhas</string>
     <string name="external_repository_dialog_text">Você deve selecionar um diretório onde armazenar suas senhas. Se você deseja armazenar suas senhas dentro do armazenamento oculto do aplicativo, cancele esta caixa de diálogo e desative a opção \"Repositório Externo\".</string>
     <string name="server_name">Servidor</string>
-    <string name="server_protocol">Protocolo</string>
     <string name="connection_mode">Modo de autenticação</string>
     <!-- Git Config fragment -->
     <string name="git_user_name_hint">Usuário</string>
@@ -164,18 +157,13 @@
     <string name="xkpwgen_pref_custom_dict_picker_title">Lista de palavras personalizadas</string>
     <string name="xkpwgen_pref_custom_dict_picker_summary">Toque para escolher um arquivo personalizado de lista de palavras contendo uma palavra por linha</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Tamanho</string>
     <string name="ssh_keygen_passphrase">Frase Secreta</string>
-    <string name="ssh_keygen_comment">Comentário</string>
     <string name="ssh_keygen_generate">Gerar</string>
     <string name="ssh_key_gen_generating_progress">Gerando chaves…</string>
-    <string name="ssh_keygen_generating_done">Concluído!</string>
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Sim</string>
     <string name="dialog_no">Não</string>
-    <string name="dialog_positive">Ir para configurações</string>
-    <string name="dialog_negative">Voltar</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_skip">Pular</string>
     <string name="git_sync">Sincronizar repositório</string>
@@ -241,16 +229,11 @@
     <string name="git_push_nff_error">Push rejeitado pelo remoto, execute o pull antes de fazer push novamente. Você pode usar Sincronização em vez de pull/push conforme implementa ambos</string>
     <string name="git_push_generic_error">Push rejeitado pelo remoto, razão:</string>
     <string name="git_push_other_error">O remoto rejeito o push non-fast-foward. Cheque a variável receive.denyNonFastForwards no arquivo de configuração do repositório de destino.</string>
-    <string name="jgit_error_push_dialog_text">Ocorreu um erro durante a operação de push:</string>
     <string name="clear_saved_passphrase_ssh">Limpar a frase secreta salva para chave SSH local</string>
     <string name="clear_saved_passphrase_https">Limpar senha HTTPS salva</string>
     <string name="git_operation_remember_passphrase">Lembrar senha da chave</string>
     <string name="abort_rebase">Abortar rebase e realizar push do novo branch</string>
     <string name="reset_to_remote">Hard reset no branch remoto</string>
-    <string name="openkeychain_ssh_api_connect_fail">Falha ao conectar ao serviço de API SSH do OpenKeychain.</string>
-    <string name="no_ssh_api_provider">Nenhum provedor de API SSH encontrado. O OpenKeychain está instalado?</string>
-    <string name="ssh_api_pending_intent_failed">SSH API pendente falhou</string>
-    <string name="ssh_api_unknown_error">Erro desconhecido de API SSH</string>
     <string name="sdcard_root_warning_title">Raiz do cartão SD selecionada</string>
     <string name="sdcard_root_warning_message">Você selecionou a raiz do seu cartão SD para armazenar. Isto é extremamente perigoso e você perderá seus dados, pois seu conteúdo será eventualmente apagado</string>
     <string name="git_abort_and_push_title">Abortar e executar Push</string>
@@ -284,16 +267,10 @@
     <string name="connection_mode_ssh_key">Chave SSH</string>
     <string name="connection_mode_basic_authentication">Senha</string>
     <string name="git_server_config_save_success">Configuração salva com sucesso</string>
-    <string name="git_config_error_hostname_empty">hostname vazio</string>
-    <string name="git_config_error_generic">por favor, verifique suas configurações e tente novamente</string>
-    <string name="git_config_error_nonnumeric_port">porta deve ser numérica</string>
-    <string name="git_config_error_custom_port_absolute">caminho deve ser absoluto (começar com \'/\') ao usar uma porta personalizada</string>
     <string name="git_operation_wrong_passphrase">Frase segura incorreta</string>
     <string name="git_operation_wrong_password">Senha incorreta</string>
     <string name="bottom_sheet_create_new_folder">Criar nova pasta</string>
     <string name="bottom_sheet_create_new_password">Criar nova senha</string>
-    <string name="autofill_onboarding_dialog_title">Novo, autopreenchimento renovado!</string>
-    <string name="autofill_onboarding_dialog_message">Nesta versão, o suporte ao preenchimento automático foi aprimorado enormemente com recursos avançados, como proteção antiphishing e confiabilidade aprimorada. Se você não conseguiu usá-lo devido às deficiências da versão anterior, provavelmente adorará a nova iteração. Experimente!</string>
     <string name="snackbar_action_grant">Conceder</string>
     <string name="pref_debug_logging_summary">Ativar log de depuração (requer reinicialização da aplicação)</string>
     <string name="pref_debug_logging_title">Debug log</string>

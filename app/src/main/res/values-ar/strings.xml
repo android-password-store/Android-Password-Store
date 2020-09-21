@@ -16,8 +16,6 @@
     <!-- PGPHandler -->
     <string name="file_toast_text">الرجاء إدخال إسم ملف</string>
     <!-- Git Async Task -->
-    <string name="running_dialog_text">جاري تنفيذ الأمر ...</string>
-    <string name="jgit_error_dialog_text">رسالة مِن jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_title">خال من مفاتيح الـ SSH</string>
@@ -25,10 +23,7 @@
     <string name="ssh_preferences_dialog_generate">توليد</string>
     <string name="passphrase_dialog_title">المصادقة</string>
     <!-- Clone fragment -->
-    <string name="clone">أنسخ مِن الخادوم</string>
-    <string name="initialize">إستخدام مجلد محلي</string>
     <string name="server_name">الخادوم</string>
-    <string name="server_protocol">البروتوكول</string>
 
     <string name="connection_mode">نوع المصادقة</string>
 
@@ -83,9 +78,7 @@
     <string name="pwgen_ambiguous">مبهمة</string>
     <string name="pwgen_pronounceable">منطوقة</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">الطول</string>
     <string name="ssh_keygen_passphrase">العبارة السرية</string>
-    <string name="ssh_keygen_comment">تعليق</string>
     <string name="ssh_keygen_generate">توليد</string>
 
     <!-- Misc -->
