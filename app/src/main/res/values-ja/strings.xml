@@ -2,9 +2,8 @@
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
-
 <resources>
-
+    <!-- Activity names -->
     <string name="action_settings">設定</string>
     <string name="dialog_delete_title">ディレクトリーはすでに存在します</string>
     <string name="dialog_delete_msg">対象のディレクトリーはすでに存在します。 現在のバージョンは1つのストアのみをサポートしています。 現在のパスワードストアのディレクトリーを削除しますか\n(%1$s)</string>
@@ -21,10 +20,8 @@
     <string name="clipboard_password_toast_text">パスワードをクリップボードにコピーしました %d 秒以内に貼り付けしてください。</string>
     <string name="file_toast_text">ファイル名を入力してください</string>
     <string name="empty_toast_text">空のパスワードを使用したり、追加のコンテンツを空にすることはできません</string>
-
     <!-- Git Async Task -->
     <string name="jgit_error_dialog_title">Git 操作中にエラーが発生しました</string>
-
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">プリファレンスで SSH 鍵ファイルをインポートまたは生成してください</string>
     <string name="ssh_preferences_dialog_title">SSH 鍵がありませんkey</string>
@@ -33,12 +30,10 @@
     <string name="passphrase_dialog_title">認証</string>
     <string name="passphrase_dialog_text">SSH 鍵のパスフレーズを入力してください。 パスフレーズがない場合は空のままにします。</string>
     <string name="password_dialog_text">このリポジトリのパスワードを入力してください</string>
-
     <!-- Clone fragment -->
     <string name="server_name">サーバー</string>
-
     <string name="connection_mode">認証モード</string>
-
+    <!-- Git Config fragment -->
     <string name="git_user_name_hint">ユーザー名</string>
     <!-- PGP Handler -->
     <string name="crypto_name_hint">名前</string>
@@ -47,7 +42,6 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">検索</string>
     <!-- Preferences -->
-    <string name="pref_edit_server_info">git サーバー設定を編集</string>
     <string name="pref_ssh_title">SSH 鍵のインポート</string>
     <string name="pref_ssh_keygen_title">SSH 鍵ペアを生成</string>
     <string name="pref_ssh_see_key_title">生成した公開 SSH 鍵を表示</string>
@@ -76,6 +70,7 @@
     <string name="pref_external_repository">外部リポジトリ</string>
     <string name="pref_external_repository_summary">外部パスワードリポジトリを使用する</string>
     <string name="pref_select_external_repository">外部リポジトリを選択</string>
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">生成</string>
     <string name="pwgen_include">含める</string>
     <string name="pwgen_length">長さ</string>
@@ -84,12 +79,13 @@
     <string name="pwgen_uppercase">大文字</string>
     <string name="pwgen_ambiguous">あいまい</string>
     <string name="pwgen_pronounceable">発音可能</string>
+    <!-- XKPWD password generator -->
+    <!-- XKPWD prefs -->
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">パスフレーズ</string>
     <string name="ssh_keygen_generate">生成</string>
-
+    <!-- SSH Android Keystore auth -->
     <!-- Misc -->
-    <string name="dialog_ok">OK</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
     <string name="dialog_cancel">キャンセル</string>
@@ -102,6 +98,7 @@
     <string name="refresh_list">リストを更新</string>
     <string name="no_repo_selected">外部リポジトリが選択されていません</string>
     <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
+    <!-- Oreo Autofill -->
     <!-- Autofill -->
     <string name="autofill_description">アプリのパスワードフィールドを自動入力します。 Android バージョン 4.3 以降でのみ動作します。 Android 5.0 以降のクリップボードには依存しません。</string>
     <string name="autofill_apps_default">デフォルト設定を使用する</string>
@@ -110,4 +107,11 @@
     <string name="autofill_apps_match">一致</string>
     <string name="autofill_apps_never">一致しない</string>
     <string name="autofill_apps_delete">削除</string>
+    <!-- OpenKeychain errors -->
+    <!-- Password creation failure -->
+    <!-- GitException messages -->
+    <!-- OpenKeychain not installed -->
+    <!-- GPG key selection in folder creation -->
+    <!-- Onboarding flow -->
+    <!-- SSH port validation -->
 </resources>

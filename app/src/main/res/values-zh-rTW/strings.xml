@@ -2,9 +2,8 @@
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
-
 <resources>
-
+    <!-- Activity names -->
     <string name="action_settings">設定</string>
     <string name="dialog_delete_title">目錄已存在</string>
     <string name="dialog_delete_msg">目標目錄已存在. 目前版本僅支援單一儲存區. 真的要刪除現有的 Password Store 目錄嗎\n(%1$s)</string>
@@ -14,14 +13,13 @@
     <!-- Password Store -->
     <string name="creation_dialog_text">在嘗試新增密碼或任何同步操作之前請在下方 clone 或新增一個新的 Repo</string>
     <string name="delete">刪除</string>
+    <!-- git commits -->
     <!-- PGPHandler -->
     <string name="clipboard_password_toast_text">密碼已複製到剪貼簿, 你有 %d 秒的時間將其貼上到其他地方.</string>
     <string name="file_toast_text">請填寫文件名稱</string>
     <string name="empty_toast_text">不能使用空白密碼或者空白的備註</string>
-
     <!-- Git Async Task -->
     <string name="jgit_error_dialog_title">内部錯誤</string>
-
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">請在設定中匯入或產生你的 SSH 金鑰</string>
     <string name="ssh_preferences_dialog_title">無 SSH 金鑰</string>
@@ -30,12 +28,10 @@
     <string name="passphrase_dialog_title">認證</string>
     <string name="passphrase_dialog_text">請為你的 SSH 金鑰設定密碼. 若密碼為空請留空</string>
     <string name="password_dialog_text">請提供目前 Repo 的密碼</string>
-
     <!-- Clone fragment -->
     <string name="server_name">伺服器</string>
-
     <string name="connection_mode">認證模式</string>
-
+    <!-- Git Config fragment -->
     <string name="git_user_name_hint">使用者名稱</string>
     <!-- PGP Handler -->
     <string name="crypto_name_hint">名稱</string>
@@ -44,7 +40,6 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">搜尋</string>
     <!-- Preferences -->
-    <string name="pref_edit_server_info">修改 Git 伺服器設定</string>
     <string name="pref_ssh_title">匯入 SSH 私鑰</string>
     <string name="pref_ssh_keygen_title">生成 SSH 金鑰</string>
     <string name="pref_ssh_see_key_title">顯示生成的 SSH 公鑰</string>
@@ -71,6 +66,7 @@
     <string name="pref_external_repository">外部 Repo</string>
     <string name="pref_external_repository_summary">使用外部的 Repo</string>
     <string name="pref_select_external_repository">選擇外部 Repo</string>
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">產生</string>
     <string name="pwgen_include">包括</string>
     <string name="pwgen_length">長度</string>
@@ -78,10 +74,12 @@
     <string name="pwgen_symbols">特殊符號</string>
     <string name="pwgen_uppercase">大寫</string>
     <string name="pwgen_ambiguous">混淆</string>
+    <!-- XKPWD password generator -->
+    <!-- XKPWD prefs -->
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">密碼</string>
     <string name="ssh_keygen_generate">產生</string>
-
+    <!-- SSH Android Keystore auth -->
     <!-- Misc -->
     <string name="dialog_ok">確定</string>
     <string name="dialog_yes">確定</string>
@@ -96,6 +94,7 @@
     <string name="refresh_list">重新整理</string>
     <string name="no_repo_selected">未選擇外部 Repo</string>
     <string name="send_plaintext_password_to">將密碼以純文字傳送…</string>
+    <!-- Oreo Autofill -->
     <!-- Autofill -->
     <string name="autofill_description">在app中自動填入密碼. 此功能只能在 Andorid 4.3 及以上版本中使用. 在 Andorid 5.0 及以上版本中不需要剪貼簿</string>
     <string name="autofill_apps_default">使用預設值</string>
@@ -104,4 +103,11 @@
     <string name="autofill_apps_match">自動填入</string>
     <string name="autofill_apps_never">手動</string>
     <string name="autofill_apps_delete">刪除</string>
+    <!-- OpenKeychain errors -->
+    <!-- Password creation failure -->
+    <!-- GitException messages -->
+    <!-- OpenKeychain not installed -->
+    <!-- GPG key selection in folder creation -->
+    <!-- Onboarding flow -->
+    <!-- SSH port validation -->
 </resources>

@@ -20,6 +20,7 @@
         <item quantity="one">Tem certeza que deseja excluir a senha %d?</item>
         <item quantity="other">Tem certeza que deseja excluir a senha %d?</item>
     </plurals>
+    <string name="delete_directory_progress_text">Excluindo…</string>
     <string name="move">Mover</string>
     <string name="edit">Editar</string>
     <string name="delete">Excluir</string>
@@ -37,10 +38,12 @@
     <string name="git_commit_remove_text">Remova %1$s do armazenamento.</string>
     <string name="git_commit_move_text">Renomear %1$s para %2$s.</string>
     <string name="git_commit_move_multiple_text">Mova múltiplas senhas para %1$s.</string>
+    <string name="git_commit_gpg_id">Inicializar IDs GPG em %1$s.</string>
     <!-- PGPHandler -->
     <string name="clipboard_password_toast_text">Senha copiada para área de transferência, você tem %d segundos para colá-la em algum lugar.</string>
     <string name="clipboard_password_no_clear_toast_text">Senha copiada para área de transferência</string>
     <string name="clipboard_copied_text">Copiado para a área de transferência</string>
+    <string name="clipboard_otp_copied_text">Código OTP copiado para a área de transferência</string>
     <string name="file_toast_text">Por favor, informe um nome de arquivo</string>
     <string name="path_toast_text">Por favor, forneça o caminho do arquivo</string>
     <string name="empty_toast_text">Você não pode usar uma senha vazia ou conteúdo extra vazio</string>
@@ -60,6 +63,8 @@
     <string name="external_repository_dialog_title">Escolha onde armazenar as senhas</string>
     <string name="external_repository_dialog_text">Você deve selecionar um diretório onde armazenar suas senhas. Se você deseja armazenar suas senhas dentro do armazenamento oculto do aplicativo, cancele esta caixa de diálogo e desative a opção \"Repositório Externo\".</string>
     <string name="server_name">Servidor</string>
+    <string name="server_url">URL do repositório</string>
+    <string name="server_branch">Branch</string>
     <string name="connection_mode">Modo de autenticação</string>
     <!-- Git Config fragment -->
     <string name="git_user_name_hint">Usuário</string>
@@ -77,6 +82,7 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">Pesquisar</string>
     <string name="password">Senha:</string>
+    <string name="otp">OTP:</string>
     <string name="extra_content">Conteúdo extra:</string>
     <string name="username">Usuário:</string>
     <string name="edit_password">Editar senha</string>
@@ -85,8 +91,6 @@
     <string name="last_changed">Última alteração %s</string>
     <!-- Preferences -->
     <string name="pref_repository_title">Repositório</string>
-    <string name="pref_edit_server_info">Editar configurações do servidor git</string>
-    <string name="pref_edit_git_config">Git utils</string>
     <string name="pref_ssh_title">Importar chave SSH</string>
     <string name="pref_ssh_keygen_title">Gerar um par de chave SSH</string>
     <string name="pref_ssh_see_key_title">Ver a chave SSH pública gerada</string>
@@ -108,6 +112,7 @@
     <string name="pref_folder_first_sort_order">Pastas primeiro</string>
     <string name="pref_file_first_sort_order">Arquivos primeiro</string>
     <string name="pref_type_independent_sort_order">Tipo independente</string>
+    <string name="pref_recently_used_sort_order">Usado recentemente</string>
     <string name="pref_autofill_title">Preenchimento Automático</string>
     <string name="pref_autofill_enable_title">Ativar preenchimento automático</string>
     <string name="pref_autofill_enable_msg">Toque em OK para ir para as Configurações de Acessibilidade. Lá, toque em Password Store nos Serviços e toque na chave no canto superior direito para ligar ou desligar.</string>
@@ -160,6 +165,7 @@
     <string name="ssh_keygen_passphrase">Frase Secreta</string>
     <string name="ssh_keygen_generate">Gerar</string>
     <string name="ssh_key_gen_generating_progress">Gerando chaves…</string>
+    <!-- SSH Android Keystore auth -->
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Sim</string>
@@ -169,6 +175,7 @@
     <string name="git_sync">Sincronizar repositório</string>
     <string name="git_pull">Pull do remoto</string>
     <string name="git_push">Push do remoto</string>
+    <string name="git_push_up_to_date">Tudo atualizado</string>
     <string name="show_password_pref_title">Mostrar a senha</string>
     <string name="show_password_pref_summary">Controle a visibilidade das senhas quando descriptografadas. Isso não desativa a cópia para a área de transferência.</string>
     <string name="show_extra_content_pref_title">Exibir conteúdo extra</string>
@@ -188,6 +195,7 @@
     <string name="oreo_autofill_save_app_not_supported">Este app não é suportado no momento</string>
     <string name="oreo_autofill_save_passwords_dont_match">As senhas não coincidem</string>
     <string name="oreo_autofill_generate_password">Gerar senha…</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Extrair código do SMS…</string>
     <string name="oreo_autofill_max_matches_reached">Número máximo de correspondências (%1$d) atingidas; limpar correspondências antes de adicionar novas.</string>
     <string name="oreo_autofill_warning_publisher_header">O editor deste aplicativo mudou desde a primeira vez que você associou uma entrada no Password Store:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>O aplicativo atualmente instalado pode estar tentando roubar suas credenciais fingindo ser um aplicativo confiável.</b>\n\nTente desinstalar e reinstalar o aplicativo de uma fonte confiável, como a Play Store, Amazon Appstore, F-Droid ou a loja do fabricante do seu telefone.</string>
@@ -225,10 +233,6 @@
     <string name="autofill_ins_1_hint">Captura de tela de serviços de acessibilidade</string>
     <string name="autofill_ins_2_hint">Captura de tela de alternância nos serviços de acessibilidade</string>
     <string name="autofill_ins_3_hint">Captura de tela do serviço de preenchimento automático em ação</string>
-    <string name="git_pull_fail_error">O pull falhou, você está em uma Head avulsa. Usando \"configurações &gt; utils\" do git, salve suas alterações no remoto em uma nova branch e resolva o conflito no seu computador.</string>
-    <string name="git_push_nff_error">Push rejeitado pelo remoto, execute o pull antes de fazer push novamente. Você pode usar Sincronização em vez de pull/push conforme implementa ambos</string>
-    <string name="git_push_generic_error">Push rejeitado pelo remoto, razão:</string>
-    <string name="git_push_other_error">O remoto rejeito o push non-fast-foward. Cheque a variável receive.denyNonFastForwards no arquivo de configuração do repositório de destino.</string>
     <string name="clear_saved_passphrase_ssh">Limpar a frase secreta salva para chave SSH local</string>
     <string name="clear_saved_passphrase_https">Limpar senha HTTPS salva</string>
     <string name="git_operation_remember_passphrase">Lembrar senha da chave</string>
@@ -267,6 +271,7 @@
     <string name="connection_mode_ssh_key">Chave SSH</string>
     <string name="connection_mode_basic_authentication">Senha</string>
     <string name="git_server_config_save_success">Configuração salva com sucesso</string>
+    <string name="git_server_config_save_error">A URL do repositório fornecido não é válida</string>
     <string name="git_operation_wrong_passphrase">Frase segura incorreta</string>
     <string name="git_operation_wrong_password">Senha incorreta</string>
     <string name="bottom_sheet_create_new_folder">Criar nova pasta</string>
@@ -290,4 +295,36 @@
     <string name="password_creation_file_write_fail_message">Falha ao armazenar o arquivo de senha. Por favor, tente novamente.</string>
     <string name="password_creation_file_delete_fail_message">Falha ao excluir o arquivo de senha %1$s da loja. Por favor, apague-o manualmente.</string>
     <string name="password_creation_duplicate_error">O arquivo já existe, por favor use um nome diferente</string>
+    <string name="add_otp">Adicionar OTP</string>
+    <string name="otp_import_success">Configuração TOTP importada com sucesso</string>
+    <string name="otp_import_failure">Falha ao importar a configuração TOTP</string>
+    <string name="exporting_passwords">Exportando senhas…</string>
+    <string name="failed_to_find_key_id">Falha ao localizar .gpg-id, seu store está configurado corretamente?</string>
+    <string name="invalid_gpg_id">Encontrado .gpg-id, mas contém uma ID de chave inválida, fingerprint ou ID de usuário</string>
+    <string name="short_key_ids_unsupported">O ID de chave em .gpg-id é muito curto, por favor utilize os IDs de chaves longos (16 caracteres) ou fingerprints (40 caracteres)</string>
+    <string name="invalid_filename_text">Nome do arquivo não deve conter \'/\', defina o diretório acima</string>
+    <string name="directory_hint">Diretório</string>
+    <string name="new_folder_set_gpg_key">Definir chave GPG para diretório</string>
+    <!-- GitException messages -->
+    <string name="git_unknown_error">Erro desconhecido</string>
+    <string name="git_pull_fail_error">O pull falhou, você está em uma Head avulsa. Usando \"configurações &gt; utils\" do git, salve suas alterações no remoto em uma nova branch e resolva o conflito no seu computador.</string>
+    <string name="git_push_nff_error">Push rejeitado pelo remoto, execute o pull antes de fazer push novamente. Você pode usar Sincronização em vez de pull/push conforme implementa ambos</string>
+    <string name="git_push_generic_error">Push rejeitado pelo remoto, razão: %1$s</string>
+    <string name="git_push_other_error">O remoto rejeito o push non-fast-foward. Cheque a variável receive.denyNonFastForwards no arquivo de configuração do repositório de destino.</string>
+    <string name="git_unknown_host">Host desconhecido: %1$s</string>
+    <string name="git_operation_running">Executando operação do git…</string>
+    <!-- OpenKeychain not installed -->
+    <string name="openkeychain_not_installed_title">OpenKeychain não instalado</string>
+    <string name="openkeychain_not_installed_message">OpenKeychain é necessário para que o Password Store funcione, por favor, instale-o a partir das lojas abaixo</string>
+    <string name="openkeychain_not_installed_google_play">Google Play</string>
+    <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="openkeychain_not_installed_fdroid">F-Droid</string>
+    <string name="fdroid_deeplink_template">https://f-droid.org/pt/pacotes/%1$s/</string>
+    <!-- GPG key selection in folder creation -->
+    <string name="folder_creation_err_file_exists">Já existe um arquivo com esse nome</string>
+    <string name="folder_creation_err_folder_exists">Já existe uma pasta com esse nome</string>
+    <string name="xkpwgen_extrachars_label">Dígitos/Símbolos (d/s)</string>
+    <string name="xk_numbers_symbols_append_default">ds</string>
+    <!-- Onboarding flow -->
+    <!-- SSH port validation -->
 </resources>
