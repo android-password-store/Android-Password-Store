@@ -56,16 +56,16 @@ class GitServerConfigActivity : BaseGitActivity() {
 
         binding.authModeGroup.apply {
             when (newAuthMode) {
-                AuthMode.SshKey -> check(R.id.auth_mode_ssh_key)
-                AuthMode.Password -> check(R.id.auth_mode_password)
-                AuthMode.OpenKeychain -> check(R.id.auth_mode_open_keychain)
-                AuthMode.None -> uncheck(checkedButtonId)
+                AuthMode.SshKey -> check(binding.authModeSshKey.id)
+                AuthMode.Password -> check(binding.authModePassword.id)
+                AuthMode.OpenKeychain -> check(binding.authModeOpenKeychain.id)
+                AuthMode.None -> check(View.NO_ID)
             }
             addOnButtonCheckedListener { _, _, _ ->
                 when (checkedButtonId) {
-                    R.id.auth_mode_ssh_key -> newAuthMode = AuthMode.SshKey
-                    R.id.auth_mode_open_keychain -> newAuthMode = AuthMode.OpenKeychain
-                    R.id.auth_mode_password -> newAuthMode = AuthMode.Password
+                    binding.authModeSshKey.id -> newAuthMode = AuthMode.SshKey
+                    binding.authModeOpenKeychain.id -> newAuthMode = AuthMode.OpenKeychain
+                    binding.authModePassword.id -> newAuthMode = AuthMode.Password
                     View.NO_ID -> newAuthMode = AuthMode.None
                 }
             }
@@ -80,10 +80,14 @@ class GitServerConfigActivity : BaseGitActivity() {
                 binding.authModeSshKey.isVisible = false
                 binding.authModeOpenKeychain.isVisible = false
                 binding.authModePassword.isVisible = true
+                if (binding.authModeGroup.checkedButtonId != binding.authModePassword.id)
+                    binding.authModeGroup.check(View.NO_ID)
             } else {
                 binding.authModeSshKey.isVisible = true
                 binding.authModeOpenKeychain.isVisible = true
                 binding.authModePassword.isVisible = true
+                if (binding.authModeGroup.checkedButtonId == View.NO_ID)
+                    binding.authModeGroup.check(binding.authModeSshKey.id)
             }
         }
 
