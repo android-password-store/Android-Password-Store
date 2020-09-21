@@ -11,10 +11,8 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo.Builder
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -22,7 +20,6 @@ import android.view.MenuItem.OnActionExpandListener
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.content.edit
@@ -35,8 +32,6 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.github.ajalt.timberkt.w
-import com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel
-import com.github.androidpasswordstore.autofillparser.getInstalledBrowsersWithAutofillSupportLevel
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.onFailure
@@ -61,11 +56,11 @@ import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
-import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.contains
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isInsideRepository
+import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.listFilesRecursively
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import com.zeapo.pwdstore.utils.sharedPrefs
@@ -123,45 +118,6 @@ class PasswordStore : BaseGitActivity() {
         setContentView(R.layout.activity_pwdstore)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             shortcutManager = getSystemService()
-        }
-
-        // If user is eligible for Oreo autofill, prompt them to switch.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            !settings.getBoolean(PREFERENCE_SEEN_AUTOFILL_ONBOARDING, false)) {
-            MaterialAlertDialogBuilder(this).run {
-                @SuppressLint("InflateParams")
-                val layout =
-                    layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
-                layout.findViewById<AppCompatTextView>(R.id.intro_text).setText(R.string.autofill_onboarding_dialog_message)
-                val supportedBrowsersTextView =
-                    layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
-                supportedBrowsersTextView.text =
-                    getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
-                        separator = "\n"
-                    ) {
-                        val appLabel = it.first
-                        val supportDescription = when (it.second) {
-                            BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
-                            BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
-                            BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
-                            BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
-                            BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
-                        }
-                        "$appLabel: $supportDescription"
-                    }
-                setView(layout)
-                setTitle(R.string.autofill_onboarding_dialog_title)
-                setPositiveButton(R.string.dialog_ok) { _, _ ->
-                    startActivity(Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
-                        data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-                    })
-                }
-                setNegativeButton(R.string.dialog_cancel) { _, _ -> }
-                setOnDismissListener {
-                    settings.edit { putBoolean(PREFERENCE_SEEN_AUTOFILL_ONBOARDING, true) }
-                }
-                show()
-            }
         }
 
         model.currentDir.observe(this) { dir ->
@@ -737,7 +693,5 @@ class PasswordStore : BaseGitActivity() {
             return (!Character.isISOControl(c) &&
                 block != null && block !== UnicodeBlock.SPECIALS)
         }
-
-        private const val PREFERENCE_SEEN_AUTOFILL_ONBOARDING = "seen_autofill_onboarding"
     }
 }

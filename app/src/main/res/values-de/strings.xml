@@ -23,9 +23,7 @@
     <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Befehl läuft…</string>
     <string name="jgit_error_dialog_title">Internal Exception occurred</string>
-    <string name="jgit_error_dialog_text">Message from jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">Please import or generate your SSH key file in the preferences</string>
@@ -37,10 +35,7 @@
     <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
 
     <!-- Clone fragment -->
-    <string name="clone">Klone von Server</string>
-    <string name="initialize">Nutze lokalen Ordner</string>
     <string name="server_name">Server</string>
-    <string name="server_protocol">Protokoll</string>
 
     <string name="connection_mode">Authentifizierungsmethode</string>
 
@@ -107,9 +102,7 @@
     <string name="pwgen_ambiguous">Zweideutig</string>
     <string name="pwgen_pronounceable">Aussprechbar</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Länge</string>
     <string name="ssh_keygen_passphrase">Passwort</string>
-    <string name="ssh_keygen_comment">Kommentar</string>
     <string name="ssh_keygen_generate">Generieren</string>
 
     <!-- Misc -->

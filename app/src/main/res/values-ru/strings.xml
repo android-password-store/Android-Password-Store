@@ -37,9 +37,7 @@
     <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Выполняется команда…</string>
     <string name="jgit_error_dialog_title">Произошла ошибка выполнения операции Git</string>
-    <string name="jgit_error_dialog_text">Сообщение от jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">Пожалуйста, импортируйте или сгенерируйте новый SSH ключ в настройках</string>
@@ -51,16 +49,12 @@
     <string name="password_dialog_text">Пожалуйста, введите пароль для репозитория</string>
 
     <!-- Clone fragment -->
-    <string name="clone">Клонировать с сервера</string>
-    <string name="initialize">Использовать локальную директорию</string>
-    <string name="location_dialog_title">Расположение репозитория</string>
     <string name="location_sdcard">SD-Карта</string>
     <string name="location_hidden">Скрытый (Предпочтительно)</string>
     <string name="external_repository_dialog_title">Выберете где хранить пароли</string>
     <string name="external_repository_dialog_text">Вы должны выбрать директорию где хранить пароли. Если вы хотите хранить пароли в скрытом хранилище приложения, тогда отмените этот диалог и отключите настройку \"Внешний репозиторий\".</string>
 
     <string name="server_name">Сервер</string>
-    <string name="server_protocol">Протокол</string>
 
     <string name="connection_mode">Тип авторизации</string>
 
@@ -159,9 +153,7 @@
     <string name="xkpwgen_pref_custom_dict_picker_summary">Нажмите чтобы выбрать файл пользовательского списка слов содержащий одно слово на строку</string>
 
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Длина</string>
     <string name="ssh_keygen_passphrase">Пароль</string>
-    <string name="ssh_keygen_comment">Комментарий</string>
     <string name="ssh_keygen_generate">Сгенерировать</string>
 
     <!-- Misc -->
@@ -228,14 +220,9 @@
     <string name="git_push_nff_error">Запись изменений была отклонена удаленным репозиторием, сначала пполучите изменения перед повторной записью. Вы можете использовать Синхронизацию вместо получения/записи изменений, т.к. она реализует оба подхда.</string>
     <string name="git_push_generic_error">Запись изменений была отклонена удаленным репозиторием, причина:</string>
     <string name="git_push_other_error">Удаленный репозиторий отклонил запись изменений без быстрой перемотки вперед. Проверьте переменную receive.denyNonFastForwards в файле конфигурации репозитория назначения.</string>
-    <string name="jgit_error_push_dialog_text">В хоте операции записи изменений возникла ошибка:</string>
     <string name="git_operation_remember_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
     <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
     <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
-    <string name="openkeychain_ssh_api_connect_fail">Ошибка при подключении к сервису OpenKeychain SSH API</string>
-    <string name="no_ssh_api_provider">Не найдено SSH API провайдеров. OpenKeychain установлен?</string>
-    <string name="ssh_api_pending_intent_failed">Ожидаемое намерение SSH API не удалось</string>
-    <string name="ssh_api_unknown_error">Незвестная ошибка SSH API</string>
     <string name="sdcard_root_warning_title">Выбран корень SD-Карты</string>
     <string name="sdcard_root_warning_message">Вы выбрали корень вашей sd-карты для хранения. Это очень опасно и вы потеряете ваши данные, поскольку они будут в конечном итоге удалены</string>
     <string name="git_abort_and_push_title">Прервать и записать изменения</string>

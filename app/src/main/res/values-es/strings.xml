@@ -29,9 +29,7 @@
     <string name="empty_toast_text">No puedes dejar la contraseña y el contenido extra ambos vacíos</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">Ejecutando comando…</string>
     <string name="jgit_error_dialog_title">Ocurrió un error durante la operación de Git</string>
-    <string name="jgit_error_dialog_text">Mensaje de jgit: \n</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">Por favor importa o genera tu llave SSH en los ajustes</string>
@@ -43,16 +41,12 @@
     <string name="password_dialog_text">Por favor ingresa una contraseña para este repositorio</string>
 
     <!-- Clone fragment -->
-    <string name="clone">Clonar desde servidor</string>
-    <string name="initialize">Usar directorio local</string>
-    <string name="location_dialog_title">Ubicación del repositorio</string>
     <string name="location_sdcard">Tarjeta SD</string>
     <string name="location_hidden">Oculto (Recomendado)</string>
     <string name="external_repository_dialog_title">Selecciona dónde almacenar tus contraseñas</string>
     <string name="external_repository_dialog_text">Debes seleccionar un directorio para almacenar tus contraseñas. Si quieres guardarlas dentro del almacenamiento oculto de la aplicación, cancela este diálogo y deshabilita la opción \"Repositorio externo\".</string>
 
     <string name="server_name">Servidor</string>
-    <string name="server_protocol">Protocolo</string>
 
     <string name="connection_mode">Modo de autenticación</string>
 
@@ -130,9 +124,7 @@
     <string name="pwgen_length_too_short_error">Longitud demasiado corta para el criterio seleccionado</string>
 
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">Longitud</string>
     <string name="ssh_keygen_passphrase">Contraseña</string>
-    <string name="ssh_keygen_comment">Comentario</string>
     <string name="ssh_keygen_generate">Generar</string>
 
     <!-- Misc -->
@@ -173,7 +165,6 @@
     <string name="autofill_ins_3_hint">Pantalla de servicio de autollenado en acción</string>
     <string name="git_push_nff_error">La subida fue rechazada por el servidor, Ejecuta \'Descargar desde servidor\' antes de subir o pulsa \'Sincronizar con servidor\' para realizar ambas acciones.</string>
     <string name="git_push_generic_error">El envío fue rechazado por el servidor, la razón:</string>
-    <string name="jgit_error_push_dialog_text">Ocurrió un error durante el envío:</string>
     <string name="git_operation_remember_passphrase">Recordar contraseñagit  (inseguro)</string>
     <string name="abort_rebase">Abortar rebase</string>
 </resources>

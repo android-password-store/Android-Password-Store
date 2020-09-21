@@ -23,9 +23,7 @@
     <string name="empty_toast_text">无法使用空白密码或者空白的额外内容</string>
 
     <!-- Git Async Task -->
-    <string name="running_dialog_text">执行命令中…</string>
     <string name="jgit_error_dialog_title">内部错误</string>
-    <string name="jgit_error_dialog_text">Message from jgit:</string>
 
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">请在设置中导入或生成你的SSH密钥文件</string>
@@ -37,10 +35,7 @@
     <string name="password_dialog_text">请提供当前 Repo 的密码</string>
 
     <!-- Clone fragment -->
-    <string name="clone">从服务器Clone</string>
-    <string name="initialize">使用本地目录</string>
     <string name="server_name">服务器</string>
-    <string name="server_protocol">接口</string>
 
     <string name="connection_mode">认证模式</string>
 
@@ -87,9 +82,7 @@
     <string name="pwgen_uppercase">大写</string>
     <string name="pwgen_ambiguous">混淆</string>
     <!-- ssh keygen fragment -->
-    <string name="ssh_keygen_length">长度</string>
     <string name="ssh_keygen_passphrase">口令</string>
-    <string name="ssh_keygen_comment">备注</string>
     <string name="ssh_keygen_generate">生成</string>
 
     <!-- Misc -->
