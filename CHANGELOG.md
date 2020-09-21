@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 -   Generated SSH keys are now stored in the Android Keystore if available, and encrypted at rest otherwise
 -   Allow using device's screen lock credentials to secure generated SSH key
 -   Update onboarding UI
+-   Update translations
 
 ### Fixed
 
