@@ -2,9 +2,8 @@
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
-
 <resources>
-
+    <!-- Activity names -->
     <string name="action_settings">Nastavení</string>
     <string name="dialog_delete_title">Adresář již existuje</string>
     <string name="dialog_delete_msg">Cílový adresář již existuje. Aktuální verze podporuje pouze jedno úložiště. Opravdu smazat aktuální adresář úložiště hesel\n(%1$s)</string>
@@ -21,7 +20,6 @@
     <string name="directory_selected_title">Tento adresář je již vybrán</string>
     <string name="password_exists_title">Heslo již existuje!</string>
     <string name="password_exists_message">Toto přepíše%1$s %2$s .</string>
-
     <!-- git commits -->
     <string name="git_commit_add_text">Přídat generované heslo pro %1$s s použítím Android Password Store.</string>
     <string name="git_commit_edit_text">Upravit heslo %1$s s použítím Android Password Store.</string>
@@ -32,32 +30,24 @@
     <string name="file_toast_text">Zadejte prosím jméno souboru</string>
     <string name="path_toast_text">Prosím zadejte cestu k souboru</string>
     <string name="empty_toast_text">Nelze zadat prázdné heslo nebo další obsah</string>
-
     <!-- Git Async Task -->
     <string name="jgit_error_dialog_title">Došlo k vnitřní výjimce</string>
-
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_text">Importujte nebo si prosím vygenerujte svůj SSH klíč v nastavení aplikace</string>
     <string name="ssh_preferences_dialog_title">Žádný SSH klíč</string>
-    <string name="ssh_preferences_dialog_import">Import</string>
     <string name="ssh_preferences_dialog_generate">Generovat</string>
     <string name="passphrase_dialog_title">Ověření</string>
     <string name="passphrase_dialog_text">Zadejte prosím heslo pro svůj SSH klíč. Nechte prázdné pokud je bez hesla.</string>
     <string name="password_dialog_text">Zadejte prosím heslo k tomuto repozitáři</string>
-
     <!-- Clone fragment -->
     <string name="location_sdcard">SD-Karta</string>
     <string name="location_hidden">Skryté (Preferováno)</string>
     <string name="external_repository_dialog_title">Vyberte kam ukládat hesla</string>
-    <string name="server_name">Server</string>
-
     <string name="connection_mode">Mód ověření</string>
-
+    <!-- Git Config fragment -->
     <string name="git_user_name_hint">Jméno</string>
-    <string name="git_user_email">Email</string>
     <string name="invalid_email_dialog_text">Zadejte prosím platnou emailovou adresu</string>
     <string name="clone_button">Klonovat!</string>
-
     <!-- PGP Handler -->
     <string name="crypto_name_hint">jméno</string>
     <string name="crypto_pass_label">Heslo</string>
@@ -66,7 +56,6 @@
     <string name="crypto_select">Vybrat</string>
     <string name="crypto_save">Uložit</string>
     <string name="crypto_save_and_copy">Uložit kopii</string>
-
     <!-- DECRYPT Layout -->
     <string name="action_search">Hledat</string>
     <string name="password">Heslo:</string>
@@ -77,7 +66,6 @@
     <string name="share_as_plaintext">Sdílet v nešifrované podobě</string>
     <string name="last_changed">Naposled změněno %s</string>
     <!-- Preferences -->
-    <string name="pref_edit_server_info">Upravit nastavení git serveru</string>
     <string name="pref_ssh_title">Importovat SSH klíč</string>
     <string name="pref_ssh_keygen_title">Generovat SSH klíč</string>
     <string name="pref_ssh_see_key_title">Zobrazit vygenerovaný veřejný SSH klíč</string>
@@ -108,7 +96,6 @@
     <string name="prefs_export_passwords_title">Exportovat hesla</string>
     <string name="prefs_export_passwords_summary">Exportuje encryptovaná hesla do externího adresáře</string>
     <string name="prefs_version">Verze</string>
-
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Vygenerovat heslo</string>
     <string name="pwgen_generate">Generovat</string>
@@ -118,12 +105,13 @@
     <string name="pwgen_symbols">Symboly</string>
     <string name="pwgen_uppercase">Velká písmena</string>
     <string name="pwgen_ambiguous">Dvouznačné</string>
+    <!-- XKPWD password generator -->
+    <!-- XKPWD prefs -->
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Bezpečnostní fráze</string>
     <string name="ssh_keygen_generate">Generovat</string>
-
+    <!-- SSH Android Keystore auth -->
     <!-- Misc -->
-    <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Ano</string>
     <string name="dialog_no">Ne</string>
     <string name="dialog_cancel">Zrušit</string>
@@ -136,6 +124,7 @@
     <string name="refresh_list">Obnovit seznam</string>
     <string name="no_repo_selected">Nebyl vybrát externí repozitář</string>
     <string name="send_plaintext_password_to">Odeslat heslo jako plaintext za použití…</string>
+    <!-- Oreo Autofill -->
     <!-- Autofill -->
     <string name="autofill_description">Automaticky vyplňuje pole hesel v aplikacích. Funguje pouze pro verzi Androidu 4.3 a vyšší. Není závislé na schránce pro Android verze 5.0 a vyšší.</string>
     <string name="autofill_apps_default">Použít výchozí nastavení</string>
@@ -144,4 +133,11 @@
     <string name="autofill_apps_match">Spárovat s</string>
     <string name="autofill_apps_never">Nikdy nepárovat</string>
     <string name="autofill_apps_delete">Smazat</string>
+    <!-- OpenKeychain errors -->
+    <!-- Password creation failure -->
+    <!-- GitException messages -->
+    <!-- OpenKeychain not installed -->
+    <!-- GPG key selection in folder creation -->
+    <!-- Onboarding flow -->
+    <!-- SSH port validation -->
 </resources>

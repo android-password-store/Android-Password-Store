@@ -2,21 +2,21 @@
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
-
 <resources>
-
+    <!-- Activity names -->
     <string name="action_settings">الإعدادات</string>
     <string name="dialog_delete_title">إنّ المجلد موجود</string>
     <string name="dialog_delete">حذف المجلد</string>
     <string name="dialog_do_not_delete">إلغاء</string>
     <string name="title_activity_git_clone">معلومات حول المستودع</string>
+    <!-- Password Store -->
     <string name="move">نقل</string>
     <string name="edit">تعديل</string>
     <string name="delete">حذف</string>
+    <!-- git commits -->
     <!-- PGPHandler -->
     <string name="file_toast_text">الرجاء إدخال إسم ملف</string>
     <!-- Git Async Task -->
-
     <!-- Git Handler -->
     <string name="ssh_preferences_dialog_title">خال من مفاتيح الـ SSH</string>
     <string name="ssh_preferences_dialog_import">إستيراد</string>
@@ -24,13 +24,11 @@
     <string name="passphrase_dialog_title">المصادقة</string>
     <!-- Clone fragment -->
     <string name="server_name">الخادوم</string>
-
     <string name="connection_mode">نوع المصادقة</string>
-
+    <!-- Git Config fragment -->
     <string name="git_user_name_hint">إسم المستخدم</string>
     <string name="invalid_email_dialog_text">يرجى إدخال عنوان بريد إلكتروني صالح</string>
     <string name="clone_button">أنسخ !</string>
-
     <!-- PGP Handler -->
     <string name="crypto_name_hint">التسمية</string>
     <string name="crypto_pass_label">كلمة السر</string>
@@ -46,7 +44,6 @@
     <string name="share_as_plaintext">شارك كنص مجرد</string>
     <string name="last_changed">آخِر تعديل %s</string>
     <!-- Preferences -->
-    <string name="pref_edit_server_info">تعديل إعدادات خادوم جيت</string>
     <string name="pref_ssh_title">إستيراد مفتاح الـ SSH</string>
     <string name="pref_ssh_keygen_title">توليد مفتاحَي الـ SSH</string>
     <string name="pref_ssh_see_key_title">إظهار مفتاح الـ SSH العمومي الذي تم توليده</string>
@@ -68,7 +65,7 @@
     <string name="pref_select_external_repository">إختيار مستودع التخزين الخارجي</string>
     <string name="prefs_export_passwords_title">تصدير كلمات السر</string>
     <string name="prefs_version">النسخة</string>
-
+    <!-- PasswordGenerator fragment -->
     <string name="pwgen_generate">توليد</string>
     <string name="pwgen_include">تحتوي على</string>
     <string name="pwgen_length">الطول</string>
@@ -77,10 +74,12 @@
     <string name="pwgen_uppercase">حروف كبيرة</string>
     <string name="pwgen_ambiguous">مبهمة</string>
     <string name="pwgen_pronounceable">منطوقة</string>
+    <!-- XKPWD password generator -->
+    <!-- XKPWD prefs -->
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">العبارة السرية</string>
     <string name="ssh_keygen_generate">توليد</string>
-
+    <!-- SSH Android Keystore auth -->
     <!-- Misc -->
     <string name="dialog_ok">حسناً</string>
     <string name="dialog_yes">نعم</string>
@@ -92,7 +91,8 @@
     <string name="pwd_generate_button">توليد</string>
     <string name="refresh_list">تحديث القائمة</string>
     <string name="app_icon_hint">أيقونة التطبيق</string>
-
+    <!-- Oreo Autofill -->
+    <!-- Autofill -->
     <string name="autofill_apps_default">إستخدم الإعداد الإفتراضي</string>
     <string name="autofill_apps_match_ellipsis">طابق مع ...</string>
     <string name="autofill_apps_match">طابق مع</string>
@@ -102,4 +102,11 @@
     <string name="autofill_pick_and_match">إختر و طابق مع ...</string>
     <string name="autofill_paste">إلصاق</string>
     <string name="new_password_title">كلمة السر الجديدة</string>
+    <!-- OpenKeychain errors -->
+    <!-- Password creation failure -->
+    <!-- GitException messages -->
+    <!-- OpenKeychain not installed -->
+    <!-- GPG key selection in folder creation -->
+    <!-- Onboarding flow -->
+    <!-- SSH port validation -->
 </resources>
