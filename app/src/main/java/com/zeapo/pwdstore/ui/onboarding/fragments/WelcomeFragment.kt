@@ -5,11 +5,13 @@
 
 package com.zeapo.pwdstore.ui.onboarding.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.databinding.FragmentWelcomeBinding
 import com.zeapo.pwdstore.utils.performTransactionWithBackStack
 import com.zeapo.pwdstore.utils.viewBinding
@@ -23,5 +25,6 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.letsGo.setOnClickListener { parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance()) }
+        binding.settingsButton.setOnClickListener { startActivity(Intent(requireContext(), UserPreference::class.java)) }
     }
 }
