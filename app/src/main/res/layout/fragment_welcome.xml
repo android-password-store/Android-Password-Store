@@ -5,6 +5,19 @@
     android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settings_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="@string/action_settings"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/app_icon"
         android:layout_width="100dp"
