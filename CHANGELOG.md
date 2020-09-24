@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.12.0] - 2020-09-24
+
 ### Added
 
 -   Allow sorting by recently used
@@ -345,7 +347,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.3...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.0...HEAD
+
+[1.12.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.3...v1.12.0
 
 [1.11.3]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.2...v1.11.3
 
