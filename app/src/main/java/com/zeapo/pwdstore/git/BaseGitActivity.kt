@@ -128,11 +128,12 @@ abstract class BaseGitActivity : AppCompatActivity() {
      */
     private fun rootCauseException(throwable: Throwable): Throwable {
         var rootCause = throwable
-        // JGit's TransportException hides the more helpful SSHJ exceptions.
+        // JGit's InvalidRemoteException and TransportException hide the more helpful SSHJ exceptions.
         // Also, SSHJ's UserAuthException about exhausting available authentication methods hides
         // more useful exceptions.
         while ((rootCause is org.eclipse.jgit.errors.TransportException ||
                 rootCause is org.eclipse.jgit.api.errors.TransportException ||
+                rootCause is org.eclipse.jgit.api.errors.InvalidRemoteException ||
                 (rootCause is UserAuthException &&
                     rootCause.message == "Exhausted available authentication methods"))) {
             rootCause = rootCause.cause ?: break

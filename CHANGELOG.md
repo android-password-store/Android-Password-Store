@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-  Some classes of errors would be swallowed by an unhelpful 'Invalid remote: origin' message
+
 ## [1.12.0] - 2020-09-24
 
 ### Added
