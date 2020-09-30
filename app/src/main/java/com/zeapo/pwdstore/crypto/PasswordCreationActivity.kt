@@ -255,6 +255,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     @OptIn(ExperimentalUnsignedTypes::class)
     private fun parseGpgIdentifier(identifier: String): GpgIdentifier? {
+        if (identifier.isEmpty()) return null
         // Match long key IDs:
         // FF22334455667788 or 0xFF22334455667788
         val maybeLongKeyId = identifier.removePrefix("0x").takeIf {
@@ -320,6 +321,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 .filter { it.isNotBlank() }
                 .map { line ->
                     parseGpgIdentifier(line) ?: run {
+                        // The line being empty means this is most likely an empty `.gpg-id` file
+                        // we created. Skip the validation so we can make the user add a real ID.
+                        if (line.isEmpty()) return@run
                         if (line.removePrefix("0x").matches("[a-fA-F0-9]{8}".toRegex())) {
                             snackbar(message = resources.getString(R.string.short_key_ids_unsupported))
                         } else {
