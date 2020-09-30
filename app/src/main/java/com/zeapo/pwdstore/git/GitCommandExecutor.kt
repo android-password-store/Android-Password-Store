@@ -51,8 +51,10 @@ class GitCommandExecutor(
                         // the previous status will eventually be used to avoid a commit
                         if (nbChanges > 0) {
                             withContext(Dispatchers.IO) {
+                                val name = GitSettings.authorName.ifEmpty { "root" }
+                                val email = GitSettings.authorEmail.ifEmpty { "localhost" }
                                 command
-                                    .setAuthor(PersonIdent(GitSettings.authorName, GitSettings.authorEmail))
+                                    .setAuthor(PersonIdent(name, email))
                                     .call()
                             }
                         }
