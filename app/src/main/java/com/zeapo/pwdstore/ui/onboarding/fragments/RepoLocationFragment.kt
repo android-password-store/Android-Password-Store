@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.github.ajalt.timberkt.d
+import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,14 +27,14 @@ import com.zeapo.pwdstore.utils.finish
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.isPermissionGranted
 import com.zeapo.pwdstore.utils.listFilesRecursively
+import com.zeapo.pwdstore.utils.performTransactionWithBackStack
 import com.zeapo.pwdstore.utils.sharedPrefs
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
-    private val firstRunActivity by lazy { requireActivity() }
-    private val settings by lazy { firstRunActivity.applicationContext.sharedPrefs }
+    private val settings by lazy { requireActivity().applicationContext.sharedPrefs }
     private val binding by viewBinding(FragmentRepoLocationBinding::bind)
     private val sortOrder: PasswordRepository.PasswordSortOrder
         get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
@@ -151,18 +152,14 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
             if (!PasswordRepository.isInitialized) {
                 PasswordRepository.initialize()
             }
-            if (File(localDir.absolutePath + "/.gpg-id").createNewFile()) {
-                settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-            } else {
-                throw IllegalStateException("Failed to initialize repository state.")
-            }
+            parentFragmentManager.performTransactionWithBackStack(KeySelectionFragment.newInstance())
         }.onFailure { e ->
-            e.printStackTrace()
+            e(e)
             if (!localDir.delete()) {
                 d { "Failed to delete local repository: $localDir" }
             }
+            finish()
         }
-        finish()
     }
 
     private fun initializeRepositoryInfo() {

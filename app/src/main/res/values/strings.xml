@@ -400,6 +400,9 @@
     <string name="select_repo_type_text">Select if you want to create a local repo or clone a remote repo.</string>
     <string name="clone_remote_repo">Clone Remote Repo</string>
     <string name="create_local_repo">Create Local Repo</string>
+    <string name="select_gpg_key_title">Select\nGPG\nKey</string>
+    <string name="select_gpg_key_message">Select a GPG key to initialize your store with</string>
+    <string name="gpg_key_select">Select key</string>
 
     <!-- SSH port validation -->
     <string name="ssh_scheme_needed_title">Potentially incorrect URL</string>
