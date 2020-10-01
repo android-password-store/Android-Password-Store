@@ -20,40 +20,12 @@ jobs:
     - name: Copy CI gradle.properties
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-    - name: Generate cache key
-      run: ./.github/checksum.sh checksum.txt
-
-    - name: Cache gradle modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches/modules-2
-        key: ${{ runner.os }}-gradlemodules-${{ hashFiles('checksum.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradlemodules-
-
-    - name: Cache gradle jars
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches/jars-3
-        key: ${{ runner.os }}-gradlejars-${{ hashFiles('checksum.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradlejars-
-
-    - name: Cache gradle build
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches/build-cache-1
-        key: ${{ runner.os }}-gradlebuildcache-${{ hashFiles('checksum.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradlebuildcache-
-
-    - name: Download gradle dependencies
-      run: ./gradlew dependencies
-
     - name: Build release app
-      run: ./gradlew :app:assembleFreeRelease :app:assembleNonFreeRelease
+      uses: burrunan/gradle-cache-action@v1
       env:
         SNAPSHOT: "true"
+      with:
+        arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease
 
     - name: Clean secrets
       run: release/signing-cleanup.sh
@@ -66,18 +38,3 @@ jobs:
         SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
         SERVER_DESTINATION: ${{ secrets.SERVER_DESTINATION }}
         SSH_PORT: ${{ secrets.SSH_PORT }}
-
-    - name: Install NodeJS
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: '12'
-
-    - name: Install cfcli
-      run: npm install -g cloudflare-cli
-
-    - name: Purge Cloudflare cache
-      run: |
-        cfcli --token ${CF_TOKEN} purge "https://dl.msfjarvis.dev/APS/$(cd ./app/build/outputs/apk/nonFree/release/; ls *.apk)"
-        cfcli --token ${CF_TOKEN} purge "https://dl.msfjarvis.dev/APS/$(cd ./app/build/outputs/apk/free/release/; ls *.apk)"
-      env:
-        CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

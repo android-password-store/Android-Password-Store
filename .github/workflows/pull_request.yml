@@ -33,40 +33,11 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-    - name: Generate cache key
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      run: ./.github/checksum.sh checksum.txt
-
-    - name: Cache gradle modules
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches/modules-2
-        key: ${{ runner.os }}-gradlemodules-${{ hashFiles('checksum.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradlemodules-
-
-    - name: Cache gradle jars
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches/jars-3
-        key: ${{ runner.os }}-gradlejars-${{ hashFiles('checksum.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradlejars-
-
-    - name: Cache gradle build
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches/build-cache-1
-        key: ${{ runner.os }}-gradlebuildcache-${{ hashFiles('checksum.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-gradlebuildcache-
-
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      run: ./gradlew testFreeDebug lintFreeDebug
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: testFreeDebug lintFreeDebug
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
