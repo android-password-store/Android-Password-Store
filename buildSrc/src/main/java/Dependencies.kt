@@ -8,6 +8,7 @@ private const val KOTLIN_VERSION = "1.4.10"
 object Plugins {
 
     const val agp = "com.android.tools.build:gradle:4.0.1"
+    const val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
 }
 

@@ -4,20 +4,32 @@
  */
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.BaseExtension
+import kotlinx.validation.ApiValidationExtension
 
 buildscript {
     repositories {
         google()
         jcenter()
+        // For binary compatibility validator.
+        maven { url = uri("https://kotlin.bintray.com/kotlinx") }
     }
     dependencies {
         classpath(Plugins.agp)
+        classpath(Plugins.binaryCompatibilityValidator)
         classpath(Plugins.kotlin)
     }
 }
 
 plugins {
     id("com.github.ben-manes.versions") version "0.31.0"
+}
+
+apply(plugin = "binary-compatibility-validator")
+
+extensions.configure<ApiValidationExtension> {
+  ignoredProjects = mutableSetOf(
+      "app"
+  )
 }
 
 subprojects {
