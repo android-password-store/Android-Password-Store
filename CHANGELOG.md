@@ -7,6 +7,11 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 -  Some classes of errors would be swallowed by an unhelpful 'Invalid remote: origin' message
+-  Repositories created within APS would contain invalid `.gpg-id` files with no ability to fix them from the app
+
+### Added
+
+-  Add GPG key selection step to onboarding flow
 
 ## [1.12.0] - 2020-09-24
 
