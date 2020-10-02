@@ -21,9 +21,9 @@ jobs:
             pull_number: context.payload.number,
             per_page: 100
           })
-          const serviceChanged = result.data.filter(f => f.filename.startsWith("app/") || f.filename.startsWith("buildSrc/") || f.filename.endsWith("gradle") || f.filename.startsWith(".github/workflows/pull_request.yml") || f.filename.startsWith("gradle") || f.filename.endsWith("properties")).length > 0
-          console.log(serviceChanged)
-          return serviceChanged
+          const shouldRun = result.data.filter(f => !f.filename.endsWith(".md") || !f.filename.endsWith(".txt") || !f.filename.startsWith("contrib/") || !f.filename.endsWith(".yml")).length > 0
+          console.log(shouldRun)
+          return shouldRun
 
     - name: Checkout repository
       if: ${{ steps.service-changed.outputs.result == 'true' }}
