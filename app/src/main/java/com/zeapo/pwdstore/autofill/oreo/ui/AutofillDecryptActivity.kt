@@ -81,6 +81,18 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    private val decryptInteractionRequiredAction = registerForActivityResult(StartIntentSenderForResult()) { result ->
+        if (continueAfterUserInteraction != null) {
+            val data = result.data
+            if (result.resultCode == RESULT_OK && data != null) {
+                continueAfterUserInteraction?.resume(data)
+            } else {
+                continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))
+            }
+            continueAfterUserInteraction = null
+        }
+    }
+
     private var continueAfterUserInteraction: Continuation<Intent>? = null
     private lateinit var directoryStructure: DirectoryStructure
 
@@ -198,17 +210,7 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                             val intentToResume = withContext(Dispatchers.Main) {
                                 suspendCoroutine<Intent> { cont ->
                                     continueAfterUserInteraction = cont
-                                    registerForActivityResult(StartIntentSenderForResult()) { result ->
-                                        if (continueAfterUserInteraction != null) {
-                                            val data = result.data
-                                            if (result.resultCode == RESULT_OK && data != null) {
-                                                continueAfterUserInteraction?.resume(data)
-                                            } else {
-                                                continueAfterUserInteraction?.resumeWithException(Exception("OpenPgpApi ACTION_DECRYPT_VERIFY failed to continue after user interaction"))
-                                            }
-                                            continueAfterUserInteraction = null
-                                        }
-                                    }.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
+                                    decryptInteractionRequiredAction.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
                                 }
                             }
                             decryptCredential(file, intentToResume)

@@ -47,6 +47,7 @@ import java.io.File
 import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
@@ -63,6 +64,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
     private var oldCategory: String? = null
     private var copy: Boolean = false
+    private var encryptionIntent: Intent = Intent()
 
     private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
         if (result.data == null) {
@@ -76,6 +78,41 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             RESULT_CANCELED -> {
                 setResult(RESULT_CANCELED, result.data)
                 finish()
+            }
+        }
+    }
+
+    private val otpImportAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            binding.otpImportButton.isVisible = false
+            val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
+            val contents = "${intentResult.contents}\n"
+            val currentExtras = binding.extraContent.text.toString()
+            if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+                binding.extraContent.append("\n$contents")
+            else
+                binding.extraContent.append(contents)
+            snackbar(message = getString(R.string.otp_import_success))
+        } else {
+            snackbar(message = getString(R.string.otp_import_failure))
+        }
+    }
+
+    private val gpgKeySelectAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
+                lifecycleScope.launch {
+                    val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+                    withContext(Dispatchers.IO) {
+                        gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
+                    }
+                    commitChange(getString(
+                        R.string.git_commit_gpg_id,
+                        getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                    )).onSuccess {
+                        encrypt(encryptionIntent)
+                    }
+                }
             }
         }
     }
@@ -107,26 +144,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
             otpImportButton.setOnClickListener {
-                registerForActivityResult(StartActivityForResult()) { result ->
-                    if (result.resultCode == RESULT_OK) {
-                        otpImportButton.isVisible = false
-                        val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
-                        val contents = "${intentResult.contents}\n"
-                        val currentExtras = extraContent.text.toString()
-                        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
-                            extraContent.append("\n$contents")
-                        else
-                            extraContent.append(contents)
-                        snackbar(message = getString(R.string.otp_import_success))
-                    } else {
-                        snackbar(message = getString(R.string.otp_import_failure))
-                    }
-                }.launch(
-                    IntentIntegrator(this@PasswordCreationActivity)
-                        .setOrientationLocked(false)
-                        .setBeepEnabled(false)
-                        .setDesiredBarcodeFormats(QR_CODE)
-                        .createScanIntent()
+                otpImportAction.launch(IntentIntegrator(this@PasswordCreationActivity)
+                    .setOrientationLocked(false)
+                    .setBeepEnabled(false)
+                    .setDesiredBarcodeFormats(QR_CODE)
+                    .createScanIntent()
                 )
             }
 
@@ -306,8 +328,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 copyPasswordToClipboard(editPass)
             }
 
-            val data = receivedIntent ?: Intent()
-            data.action = OpenPgpApi.ACTION_ENCRYPT
+            encryptionIntent = receivedIntent ?: Intent()
+            encryptionIntent.action = OpenPgpApi.ACTION_ENCRYPT
 
             // pass enters the key ID into `.gpg-id`.
             val repoRoot = PasswordRepository.getRepositoryDirectory()
@@ -329,33 +351,19 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     }
                 }
             if (gpgIdentifiers.isEmpty()) {
-                registerForActivityResult(StartActivityForResult()) { result ->
-                    if (result.resultCode == RESULT_OK) {
-                        result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
-                            gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
-                            lifecycleScope.launch {
-                                commitChange(getString(
-                                    R.string.git_commit_gpg_id,
-                                    getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                )).onSuccess {
-                                    encrypt(data)
-                                }
-                            }
-                        }
-                    }
-                }.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
+                gpgKeySelectAction.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
                 return@with
             }
             val keyIds = gpgIdentifiers.filterIsInstance<GpgIdentifier.KeyId>().map { it.id }.toLongArray()
             if (keyIds.isNotEmpty()) {
-                data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, keyIds)
+                encryptionIntent.putExtra(OpenPgpApi.EXTRA_KEY_IDS, keyIds)
             }
             val userIds = gpgIdentifiers.filterIsInstance<GpgIdentifier.UserId>().map { it.email }.toTypedArray()
             if (userIds.isNotEmpty()) {
-                data.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds)
+                encryptionIntent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds)
             }
 
-            data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
+            encryptionIntent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
 
             val content = "$editPass\n$editExtra"
             val inputStream = ByteArrayInputStream(content.toByteArray())
@@ -382,7 +390,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             }
 
             lifecycleScope.launch(Dispatchers.IO) {
-                api?.executeApiAsync(data, inputStream, outputStream) { result ->
+                api?.executeApiAsync(encryptionIntent, inputStream, outputStream) { result ->
                     when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                         OpenPgpApi.RESULT_CODE_SUCCESS -> {
                             runCatching {

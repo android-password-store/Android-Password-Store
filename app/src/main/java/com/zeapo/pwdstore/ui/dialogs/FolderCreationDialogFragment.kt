@@ -31,6 +31,30 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi
 
 class FolderCreationDialogFragment : DialogFragment() {
 
+    private lateinit var newFolder: File
+
+    private val keySelectAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
+                val gpgIdentifierFile = File(newFolder, ".gpg-id")
+                gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
+                val repo = PasswordRepository.getRepository(null)
+                if (repo != null) {
+                    lifecycleScope.launch {
+                        val repoPath = getRepositoryDirectory().absolutePath
+                        requireActivity().commitChange(
+                            getString(
+                                R.string.git_commit_gpg_id,
+                                BasePgpActivity.getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                            ),
+                        )
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
         alertDialogBuilder.setTitle(R.string.title_create_folder)
@@ -53,7 +77,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         val dialog = requireDialog()
         val folderNameView = dialog.findViewById<TextInputEditText>(R.id.folder_name_text)
         val folderNameViewContainer = dialog.findViewById<TextInputLayout>(R.id.folder_name_container)
-        val newFolder = File("$currentDir/${folderNameView.text}")
+        newFolder = File("$currentDir/${folderNameView.text}")
         folderNameViewContainer.error = when {
             newFolder.isFile -> getString(R.string.folder_creation_err_file_exists)
             newFolder.isDirectory -> getString(R.string.folder_creation_err_folder_exists)
@@ -63,27 +87,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         newFolder.mkdirs()
         (requireActivity() as PasswordStore).refreshPasswordList(newFolder)
         if (dialog.findViewById<MaterialCheckBox>(R.id.set_gpg_key).isChecked) {
-            val gpgIdentifierFile = File(newFolder, ".gpg-id")
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                    result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
-                        gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
-                        val repo = PasswordRepository.getRepository(null)
-                        if (repo != null) {
-                            lifecycleScope.launch {
-                                val repoPath = getRepositoryDirectory().absolutePath
-                                requireActivity().commitChange(
-                                    getString(
-                                        R.string.git_commit_gpg_id,
-                                        BasePgpActivity.getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
-                                    ),
-                                )
-                                dismiss()
-                            }
-                        }
-                    }
-                }
-            }.launch(Intent(requireContext(), GetKeyIdsActivity::class.java))
+            keySelectAction.launch(Intent(requireContext(), GetKeyIdsActivity::class.java))
             return
         } else {
             dismiss()

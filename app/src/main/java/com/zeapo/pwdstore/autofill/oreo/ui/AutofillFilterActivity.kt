@@ -79,6 +79,13 @@ class AutofillFilterView : AppCompatActivity() {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
+    private val decryptAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            setResult(RESULT_OK, result.data)
+        }
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -197,12 +204,7 @@ class AutofillFilterView : AppCompatActivity() {
             item.file
         )
         // intent?.extras? is checked to be non-null in onCreate
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                setResult(RESULT_OK, result.data)
-            }
-            finish()
-        }.launch(AutofillDecryptActivity.makeDecryptFileIntent(
+        decryptAction.launch(AutofillDecryptActivity.makeDecryptFileIntent(
             item.file,
             intent!!.extras!!,
             this
