@@ -65,6 +65,106 @@ typealias ChangeListener = Preference.OnPreferenceChangeListener
 class UserPreference : AppCompatActivity() {
 
     private lateinit var prefsFragment: PrefsFragment
+    private var fromIntent = false
+
+    @Suppress("DEPRECATION")
+    private val directorySelectAction = registerForActivityResult(OpenDocumentTree()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+
+        tag(TAG).d { "Selected repository URI is $uri" }
+        // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
+        val docId = DocumentsContract.getTreeDocumentId(uri)
+        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val path = if (split.size > 1) split[1] else split[0]
+        val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
+        val prefs = sharedPrefs
+
+        tag(TAG).d { "Selected repository path is $repoPath" }
+
+        if (Environment.getExternalStorageDirectory().path == repoPath) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.sdcard_root_warning_title))
+                .setMessage(getString(R.string.sdcard_root_warning_message))
+                .setPositiveButton("Remove everything") { _, _ ->
+                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
+                }
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show()
+        }
+        prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
+        if (fromIntent) {
+            setResult(RESULT_OK)
+            finish()
+        }
+
+    }
+
+    private val sshKeyImportAction = registerForActivityResult(OpenDocument()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        runCatching {
+            SshKey.import(uri)
+
+            Toast.makeText(this, resources.getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show()
+            setResult(RESULT_OK)
+            finish()
+        }.onFailure { e ->
+            MaterialAlertDialogBuilder(this)
+                .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
+                .setMessage(e.message)
+                .setPositiveButton(resources.getString(R.string.dialog_ok), null)
+                .show()
+        }
+    }
+
+    private val storeExportAction = registerForActivityResult(object : OpenDocumentTree() {
+        override fun createIntent(context: Context, input: Uri?): Intent {
+            return super.createIntent(context, input).apply {
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                    Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+            }
+        }
+    }) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
+
+        if (targetDirectory != null) {
+            val service = Intent(applicationContext, PasswordExportService::class.java).apply {
+                action = PasswordExportService.ACTION_EXPORT_PASSWORD
+                putExtra("uri", uri)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(service)
+            } else {
+                startService(service)
+            }
+        }
+    }
+
+    private val storeCustomXkpwdDictionaryAction = registerForActivityResult(OpenDocument()) { uri ->
+        if (uri == null) return@registerForActivityResult
+
+        Toast.makeText(
+            this,
+            this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        sharedPrefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
+
+        val customDictPref = prefsFragment.findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
+        setCustomDictSummary(customDictPref, uri)
+        // copy user selected file to internal storage
+        val inputStream = contentResolver.openInputStream(uri)
+        val customDictFile = File(filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
+        inputStream?.copyTo(customDictFile, 1024)
+        inputStream?.close()
+        customDictFile.close()
+
+        setResult(RESULT_OK)
+    }
 
     class PrefsFragment : PreferenceFragmentCompat() {
 
@@ -471,7 +571,10 @@ class UserPreference : AppCompatActivity() {
         when (intent?.getStringExtra("operation")) {
             "get_ssh_key" -> getSshKey()
             "make_ssh_key" -> makeSshKey(false)
-            "git_external" -> selectExternalGitRepository(fromIntent = true)
+            "git_external" -> {
+                fromIntent = true
+                selectExternalGitRepository()
+            }
         }
         prefsFragment = PrefsFragment()
 
@@ -484,41 +587,12 @@ class UserPreference : AppCompatActivity() {
     }
 
     @Suppress("Deprecation") // for Environment.getExternalStorageDirectory()
-    fun selectExternalGitRepository(fromIntent: Boolean = false) {
+    fun selectExternalGitRepository() {
         MaterialAlertDialogBuilder(this)
             .setTitle(this.resources.getString(R.string.external_repository_dialog_title))
             .setMessage(this.resources.getString(R.string.external_repository_dialog_text))
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                registerForActivityResult(OpenDocumentTree()) { uri: Uri? ->
-                    if (uri == null) return@registerForActivityResult
-
-                    tag(TAG).d { "Selected repository URI is $uri" }
-                    // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
-                    val docId = DocumentsContract.getTreeDocumentId(uri)
-                    val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val path = if (split.size > 1) split[1] else split[0]
-                    val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
-                    val prefs = sharedPrefs
-
-                    tag(TAG).d { "Selected repository path is $repoPath" }
-
-                    if (Environment.getExternalStorageDirectory().path == repoPath) {
-                        MaterialAlertDialogBuilder(this)
-                            .setTitle(getString(R.string.sdcard_root_warning_title))
-                            .setMessage(getString(R.string.sdcard_root_warning_message))
-                            .setPositiveButton("Remove everything") { _, _ ->
-                                prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
-                            }
-                            .setNegativeButton(R.string.dialog_cancel, null)
-                            .show()
-                    }
-                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
-                    if (fromIntent) {
-                        setResult(RESULT_OK)
-                        finish()
-                    }
-
-                }.launch(null)
+                directorySelectAction.launch(null)
             }
             .setNegativeButton(R.string.dialog_cancel, null)
             .show()
@@ -539,26 +613,7 @@ class UserPreference : AppCompatActivity() {
     }
 
     private fun importSshKey() {
-        registerForActivityResult(OpenDocument()) { uri: Uri? ->
-            if (uri == null) return@registerForActivityResult
-            runCatching {
-                SshKey.import(uri)
-
-                Toast.makeText(
-                    this,
-                    this.resources.getString(R.string.ssh_key_success_dialog_title),
-                    Toast.LENGTH_LONG
-                ).show()
-                setResult(RESULT_OK)
-                finish()
-            }.onFailure { e ->
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                    .setMessage(e.message)
-                    .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                    .show()
-            }
-        }.launch(arrayOf("*/*"))
+        sshKeyImportAction.launch(arrayOf("*/*"))
     }
 
     /**
@@ -584,32 +639,7 @@ class UserPreference : AppCompatActivity() {
      * Exports the passwords
      */
     private fun exportPasswords() {
-        registerForActivityResult(object : OpenDocumentTree() {
-            override fun createIntent(context: Context, input: Uri?): Intent {
-                return super.createIntent(context, input).apply {
-                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
-                        Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-                }
-            }
-        }) { uri: Uri? ->
-            if (uri == null) return@registerForActivityResult
-            val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
-
-            if (targetDirectory != null) {
-                val service = Intent(applicationContext, PasswordExportService::class.java).apply {
-                    action = PasswordExportService.ACTION_EXPORT_PASSWORD
-                    putExtra("uri", uri)
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(service)
-                } else {
-                    startService(service)
-                }
-            }
-        }.launch(null)
+        storeExportAction.launch(null)
     }
 
     /**
@@ -628,28 +658,7 @@ class UserPreference : AppCompatActivity() {
      * Pick custom xkpwd dictionary from sdcard
      */
     private fun storeCustomDictionaryPath() {
-        registerForActivityResult(OpenDocument()) { uri ->
-            if (uri == null) return@registerForActivityResult
-
-            Toast.makeText(
-                this,
-                this.resources.getString(R.string.xkpwgen_custom_dict_imported, uri.path),
-                Toast.LENGTH_SHORT
-            ).show()
-
-            sharedPrefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
-
-            val customDictPref = prefsFragment.findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
-            setCustomDictSummary(customDictPref, uri)
-            // copy user selected file to internal storage
-            val inputStream = contentResolver.openInputStream(uri)
-            val customDictFile = File(filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
-            inputStream?.copyTo(customDictFile, 1024)
-            inputStream?.close()
-            customDictFile.close()
-
-            setResult(RESULT_OK)
-        }.launch(arrayOf("*/*"))
+        storeCustomXkpwdDictionaryAction.launch(arrayOf("*/*"))
     }
 
     private val isAccessibilityServiceEnabled: Boolean

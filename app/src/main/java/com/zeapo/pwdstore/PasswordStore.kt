@@ -85,6 +85,97 @@ class PasswordStore : BaseGitActivity() {
         ViewModelProvider.AndroidViewModelFactory(application)
     }
 
+    private val storagePermissionRequest = registerForActivityResult(RequestPermission()) { granted ->
+        if (granted) checkLocalRepository()
+    }
+
+    private val directorySelectAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            checkLocalRepository()
+        }
+    }
+
+    private val listRefreshAction = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            refreshPasswordList()
+        }
+    }
+
+    private val passwordMoveAction = registerForActivityResult(StartActivityForResult()) { result ->
+        val intentData = result.data ?: return@registerForActivityResult
+        val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
+        val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
+        val repositoryPath = getRepositoryDirectory().absolutePath
+        if (!target.isDirectory) {
+            e { "Tried moving passwords to a non-existing folder." }
+            return@registerForActivityResult
+        }
+
+        d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
+        d { filesToMove.joinToString(", ") }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            for (file in filesToMove) {
+                val source = File(file)
+                if (!source.exists()) {
+                    e { "Tried moving something that appears non-existent." }
+                    continue
+                }
+                val destinationFile = File(target.absolutePath + "/" + source.name)
+                val basename = source.nameWithoutExtension
+                val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+                val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+                if (destinationFile.exists()) {
+                    e { "Trying to move a file that already exists." }
+                    withContext(Dispatchers.Main) {
+                        MaterialAlertDialogBuilder(this@PasswordStore)
+                            .setTitle(resources.getString(R.string.password_exists_title))
+                            .setMessage(resources.getString(
+                                R.string.password_exists_message,
+                                destinationLongName,
+                                sourceLongName)
+                            )
+                            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                                launch(Dispatchers.IO) {
+                                    moveFile(source, destinationFile)
+                                }
+                            }
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .show()
+                    }
+                } else {
+                    launch(Dispatchers.IO) {
+                        moveFile(source, destinationFile)
+                    }
+                }
+            }
+            when (filesToMove.size) {
+                1 -> {
+                    val source = File(filesToMove[0])
+                    val basename = source.nameWithoutExtension
+                    val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+                    val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
+                    withContext(Dispatchers.Main) {
+                        commitChange(
+                            resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName),
+                        )
+                    }
+                }
+                else -> {
+                    val repoDir = getRepositoryDirectory().absolutePath
+                    val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
+                    withContext(Dispatchers.Main) {
+                        commitChange(
+                            resources.getString(R.string.git_commit_move_multiple_text, relativePath),
+                        )
+                    }
+                }
+            }
+        }
+        refreshPasswordList()
+        plist?.dismissActionMode()
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         // open search view on search key, or Ctr+F
         if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) &&
@@ -288,9 +379,7 @@ class PasswordStore : BaseGitActivity() {
                 Snackbar.LENGTH_INDEFINITE
             ).run {
                 setAction(getString(R.string.snackbar_action_grant)) {
-                    registerForActivityResult(RequestPermission()) { granted ->
-                        if (granted) checkLocalRepository()
-                    }.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    storagePermissionRequest.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     dismiss()
                 }
                 show()
@@ -305,11 +394,7 @@ class PasswordStore : BaseGitActivity() {
     private fun checkLocalRepository() {
         val repo = initialize()
         if (repo == null) {
-            registerForActivityResult(StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
-                    checkLocalRepository()
-                }
-            }.launch(UserPreference.createDirectorySelectionIntent(this))
+            directorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
         } else {
             checkLocalRepository(getRepositoryDirectory())
         }
@@ -422,11 +507,7 @@ class PasswordStore : BaseGitActivity() {
         val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
         intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                refreshPasswordList()
-            }
-        }.launch(intent)
+        listRefreshAction.launch(intent)
     }
 
     fun createFolder() {
@@ -477,80 +558,7 @@ class PasswordStore : BaseGitActivity() {
         val intent = Intent(this, SelectFolderActivity::class.java)
         val fileLocations = values.map { it.file.absolutePath }.toTypedArray()
         intent.putExtra("Files", fileLocations)
-        registerForActivityResult(StartActivityForResult()) { result ->
-            val intentData = result.data ?: return@registerForActivityResult
-            val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
-            val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
-            val repositoryPath = getRepositoryDirectory().absolutePath
-            if (!target.isDirectory) {
-                e { "Tried moving passwords to a non-existing folder." }
-                return@registerForActivityResult
-            }
-
-            d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
-            d { filesToMove.joinToString(", ") }
-
-            lifecycleScope.launch(Dispatchers.IO) {
-                for (file in filesToMove) {
-                    val source = File(file)
-                    if (!source.exists()) {
-                        e { "Tried moving something that appears non-existent." }
-                        continue
-                    }
-                    val destinationFile = File(target.absolutePath + "/" + source.name)
-                    val basename = source.nameWithoutExtension
-                    val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
-                    val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
-                    if (destinationFile.exists()) {
-                        e { "Trying to move a file that already exists." }
-                        withContext(Dispatchers.Main) {
-                            MaterialAlertDialogBuilder(this@PasswordStore)
-                                .setTitle(resources.getString(R.string.password_exists_title))
-                                .setMessage(resources.getString(
-                                    R.string.password_exists_message,
-                                    destinationLongName,
-                                    sourceLongName)
-                                )
-                                .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                                    launch(Dispatchers.IO) {
-                                        moveFile(source, destinationFile)
-                                    }
-                                }
-                                .setNegativeButton(R.string.dialog_cancel, null)
-                                .show()
-                        }
-                    } else {
-                        launch(Dispatchers.IO) {
-                            moveFile(source, destinationFile)
-                        }
-                    }
-                }
-                when (filesToMove.size) {
-                    1 -> {
-                        val source = File(filesToMove[0])
-                        val basename = source.nameWithoutExtension
-                        val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
-                        val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
-                        withContext(Dispatchers.Main) {
-                            commitChange(
-                                resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName),
-                            )
-                        }
-                    }
-                    else -> {
-                        val repoDir = getRepositoryDirectory().absolutePath
-                        val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
-                        withContext(Dispatchers.Main) {
-                            commitChange(
-                                resources.getString(R.string.git_commit_move_multiple_text, relativePath),
-                            )
-                        }
-                    }
-                }
-            }
-            refreshPasswordList()
-            plist?.dismissActionMode()
-        }.launch(intent)
+        passwordMoveAction.launch(intent)
     }
 
     enum class CategoryRenameError(val resource: Int) {
