@@ -6,7 +6,6 @@ package com.zeapo.pwdstore.utils
 
 import android.app.KeyguardManager
 import androidx.annotation.StringRes
-import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
@@ -43,12 +42,12 @@ object BiometricAuthenticator {
                 super.onAuthenticationError(errorCode, errString)
                 tag(TAG).d { "BiometricAuthentication error: errorCode=$errorCode, msg=$errString" }
                 callback(when (errorCode) {
-                    BiometricConstants.ERROR_CANCELED, BiometricConstants.ERROR_USER_CANCELED,
-                    BiometricConstants.ERROR_NEGATIVE_BUTTON -> {
+                    BiometricPrompt.ERROR_CANCELED, BiometricPrompt.ERROR_USER_CANCELED,
+                    BiometricPrompt.ERROR_NEGATIVE_BUTTON -> {
                         Result.Cancelled
                     }
-                    BiometricConstants.ERROR_HW_NOT_PRESENT, BiometricConstants.ERROR_HW_UNAVAILABLE,
-                    BiometricConstants.ERROR_NO_BIOMETRICS, BiometricConstants.ERROR_NO_DEVICE_CREDENTIAL -> {
+                    BiometricPrompt.ERROR_HW_NOT_PRESENT, BiometricPrompt.ERROR_HW_UNAVAILABLE,
+                    BiometricPrompt.ERROR_NO_BIOMETRICS, BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
                         Result.HardwareUnavailableOrDisabled
                     }
                     else -> Result.Failure(errorCode, activity.getString(R.string.biometric_auth_error_reason, errString))
