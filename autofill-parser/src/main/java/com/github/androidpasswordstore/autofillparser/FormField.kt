@@ -243,7 +243,7 @@ class FormField(
 
     // Password field heuristics (based only on the current field)
     private val isPossiblePasswordField =
-        notExcluded && (isAndroidPasswordField || isHtmlPasswordField)
+        notExcluded && (isAndroidPasswordField || isHtmlPasswordField || hasHintPassword)
     private val isCertainPasswordField = isPossiblePasswordField && hasHintPassword
     private val isLikelyPasswordField = isPossiblePasswordField &&
         (isCertainPasswordField || PASSWORD_HEURISTIC_TERMS.anyMatchesFieldInfo)
