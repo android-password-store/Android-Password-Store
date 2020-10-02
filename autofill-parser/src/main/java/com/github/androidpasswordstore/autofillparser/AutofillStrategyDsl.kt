@@ -94,6 +94,10 @@ class SingleFieldMatcher(
 
     override fun match(fields: List<FormField>, alreadyMatched: List<FormField>): List<FormField>? {
         return fields.minus(alreadyMatched).filter { take(it, alreadyMatched) }.let { contestants ->
+            when (contestants.size) {
+                1 -> return@let listOf(contestants.single())
+                0 -> return@let null
+            }
             var current = contestants
             for ((i, tieBreaker) in tieBreakers.withIndex()) {
                 // Successively filter matched fields via tie breakers...
@@ -127,11 +131,15 @@ private class PairOfFieldsMatcher(
         return fields.minus(alreadyMatched).zipWithNext()
             .filter { it.first directlyPrecedes it.second }.filter { take(it, alreadyMatched) }
             .let { contestants ->
+                when (contestants.size) {
+                    1 -> return@let contestants.single().toList()
+                    0 -> return@let null
+                }
                 var current = contestants
                 for ((i, tieBreaker) in tieBreakers.withIndex()) {
                     val new = current.filter { tieBreaker(it, alreadyMatched) }
                     if (new.isEmpty()) {
-                        d { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
+                        d { "Tie breaker #${i + 1}: Didn't match any pair of fields; skipping" }
                         continue
                     }
                     // and return if the available options have been narrowed to a single field.
@@ -140,7 +148,7 @@ private class PairOfFieldsMatcher(
                         current = new
                         break
                     }
-                    d { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
+                    d { "Tie breaker #${i + 1}: Matched ${new.size} pairs of fields; continuing" }
                     current = new
                 }
                 current.singleOrNull()?.toList()
