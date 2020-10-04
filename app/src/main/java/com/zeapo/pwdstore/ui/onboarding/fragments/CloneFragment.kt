@@ -25,7 +25,7 @@ class CloneFragment : Fragment(R.layout.fragment_clone) {
 
     private val binding by viewBinding(FragmentCloneBinding::bind)
 
-    private val settings by lazy { requireActivity().applicationContext.sharedPrefs }
+    private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
 
     private val cloneAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {

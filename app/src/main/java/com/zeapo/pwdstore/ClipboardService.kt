@@ -10,7 +10,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.ClipData
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -32,7 +31,6 @@ import kotlinx.coroutines.withContext
 class ClipboardService : Service() {
 
     private val scope = CoroutineScope(Job() + Dispatchers.Main)
-    private val settings: SharedPreferences by lazy { sharedPrefs }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
@@ -45,7 +43,7 @@ class ClipboardService : Service() {
                 }
 
                 ACTION_START -> {
-                    val time = settings.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
+                    val time = sharedPrefs.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
 
                     if (time == 0) {
                         stopSelf()
@@ -80,7 +78,7 @@ class ClipboardService : Service() {
     }
 
     private fun clearClipboard() {
-        val deepClear = settings.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
+        val deepClear = sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
         val clipboard = clipboard
 
         if (clipboard != null) {

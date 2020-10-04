@@ -30,7 +30,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi
 
 class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
 
-    private val settings by lazy { requireActivity().applicationContext.sharedPrefs }
+    private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
     private val binding by viewBinding(FragmentKeySelectionBinding::bind)
 
     private val gpgKeySelectAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

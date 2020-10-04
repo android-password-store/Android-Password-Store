@@ -50,7 +50,7 @@ private const val PROVIDER_ANDROID_KEY_STORE = "AndroidKeyStore"
 private const val KEYSTORE_ALIAS = "sshkey"
 private const val ANDROIDX_SECURITY_KEYSET_PREF_NAME = "androidx_sshkey_keyset_prefs"
 
-private val androidKeystore: KeyStore by lazy {
+private val androidKeystore: KeyStore by lazy(LazyThreadSafetyMode.NONE) {
     KeyStore.getInstance(PROVIDER_ANDROID_KEY_STORE).apply { load(null) }
 }
 
@@ -119,7 +119,7 @@ object SshKey {
             putString(PreferenceKeys.GIT_REMOTE_KEY_TYPE, value?.value)
         }
 
-    private val isStrongBoxSupported by lazy {
+    private val isStrongBoxSupported by lazy(LazyThreadSafetyMode.NONE) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             context.packageManager.hasSystemFeature(PackageManager.FEATURE_STRONGBOX_KEYSTORE)
         else

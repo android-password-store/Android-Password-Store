@@ -45,24 +45,24 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     /**
      * Full path to the repository
      */
-    val repoPath: String by lazy { intent.getStringExtra("REPO_PATH") }
+    val repoPath: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("REPO_PATH") }
 
     /**
      * Full path to the password file being worked on
      */
-    val fullPath: String by lazy { intent.getStringExtra("FILE_PATH") }
+    val fullPath: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("FILE_PATH") }
 
     /**
      * Name of the password file
      *
      * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org
      */
-    val name: String by lazy { File(fullPath).nameWithoutExtension }
+    val name: String by lazy(LazyThreadSafetyMode.NONE) { File(fullPath).nameWithoutExtension }
 
     /**
      * Get the timestamp for when this file was last modified.
      */
-    val lastChangedString: CharSequence by lazy {
+    val lastChangedString: CharSequence by lazy(LazyThreadSafetyMode.NONE) {
         getLastChangedString(
             intent.getLongExtra(
                 "LAST_CHANGED_TIMESTAMP",
@@ -74,7 +74,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     /**
      * [SharedPreferences] instance used by subclasses to persist settings
      */
-    val settings: SharedPreferences by lazy { sharedPrefs }
+    val settings: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) { sharedPrefs }
 
     /**
      * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.

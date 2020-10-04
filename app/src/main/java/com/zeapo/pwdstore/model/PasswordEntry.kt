@@ -59,7 +59,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return Otp.calculateCode(totpSecret, Date().time / (1000 * totpPeriod), totpAlgorithm, digits).get()
     }
 
-    val extraContentWithoutAuthData by lazy {
+    val extraContentWithoutAuthData by lazy(LazyThreadSafetyMode.NONE) {
         extraContent.splitToSequence("\n").filter { line ->
             return@filter when {
                 USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } -> {

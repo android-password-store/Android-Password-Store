@@ -52,8 +52,8 @@ object GitSettings {
 
     private const val DEFAULT_BRANCH = "master"
 
-    private val settings by lazy { Application.instance.sharedPrefs }
-    private val encryptedSettings by lazy { Application.instance.getEncryptedGitPrefs() }
+    private val settings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.sharedPrefs }
+    private val encryptedSettings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.getEncryptedGitPrefs() }
 
     var authMode
         get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))

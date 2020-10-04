@@ -34,7 +34,7 @@ import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
-    private val settings by lazy { requireActivity().applicationContext.sharedPrefs }
+    private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
     private val binding by viewBinding(FragmentRepoLocationBinding::bind)
     private val sortOrder: PasswordRepository.PasswordSortOrder
         get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
