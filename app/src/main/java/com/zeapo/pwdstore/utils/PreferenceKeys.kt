@@ -80,4 +80,9 @@ object PreferenceKeys {
 
     @Deprecated("To be used only in Migrations.kt")
     const val USE_GENERATED_KEY = "use_generated_key"
+
+    const val PROXY_HOST = "proxy_host"
+    const val PROXY_PORT = "proxy_port"
+    const val PROXY_USERNAME = "proxy_username"
+    const val PROXY_PASSWORD = "proxy_password"
 }

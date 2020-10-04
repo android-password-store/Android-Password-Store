@@ -14,6 +14,7 @@ import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import com.zeapo.pwdstore.git.sshj.setUpBouncyCastleForSshj
 import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.utils.ProxyUtils
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 
@@ -33,6 +34,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         setNightMode()
         setUpBouncyCastleForSshj()
         runMigrations(applicationContext)
+        ProxyUtils.setDefaultProxy()
     }
 
     override fun onTerminate() {
