@@ -95,9 +95,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/warningAppInstallDate" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/okButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/AppTheme.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -110,9 +110,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/warningAppFooter" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/advancedButton"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/AppTheme.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -144,7 +144,7 @@
         tools:text="Package: com.example.banking\n\nHash:\n8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M="
         tools:visibility="visible" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/resetButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
@@ -152,6 +152,7 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:text="@string/oreo_autofill_warning_publisher_reenable_button"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="10sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

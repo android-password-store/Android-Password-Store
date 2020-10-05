@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 -  Some classes of errors would be swallowed by an unhelpful 'Invalid remote: origin' message
 -  Repositories created within APS would contain invalid `.gpg-id` files with no ability to fix them from the app
+-  Button labels were invisible in Autofill phishing warning screen
 
 ### Added
 
