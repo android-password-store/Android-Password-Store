@@ -66,7 +66,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
         with(binding) {
             okButton.setOnClickListener { finish() }
             advancedButton.setOnClickListener {
-                advancedButton.visibility = View.INVISIBLE
+                advancedButton.visibility = View.GONE
                 warningAppAdvancedInfo.visibility = View.VISIBLE
                 resetButton.visibility = View.VISIBLE
             }

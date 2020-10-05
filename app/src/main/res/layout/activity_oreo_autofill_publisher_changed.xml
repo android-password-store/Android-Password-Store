@@ -6,57 +6,69 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="280dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     android:elevation="2dp"
+    android:paddingBottom="16dp"
     android:scrollbars="vertical"
     tools:context="com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity">
 
     <ImageView
         android:id="@+id/cover"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@color/primary_color"
         android:contentDescription="@string/app_name"
         android:src="@mipmap/ic_launcher_foreground"
         app:layout_constraintBottom_toTopOf="@id/warningSign"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/app_name"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/cover"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cover"
+        app:layout_constraintTop_toTopOf="@id/cover" />
 
     <ImageView
         android:id="@+id/warningSign"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:contentDescription="@string/oreo_autofill_warning_publisher_warning_sign_description"
         android:src="@drawable/ic_warning_red_24dp"
-        app:layout_constraintBottom_toTopOf="@id/warningHeader"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/warningHeader"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cover" />
+        app:layout_constraintBottom_toBottomOf="@id/warningHeader" />
 
     <TextView
         android:id="@+id/warningHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="@string/oreo_autofill_warning_publisher_header"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/warningAppName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/warningSign" />
+        app:layout_constraintStart_toEndOf="@id/warningSign"
+        app:layout_constraintTop_toBottomOf="@id/cover" />
 
     <TextView
         android:id="@+id/warningAppName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:gravity="center_horizontal"
         android:textSize="12sp"
@@ -87,10 +99,8 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="@string/oreo_autofill_warning_publisher_footer"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/okButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/warningAppInstallDate" />
@@ -101,12 +111,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:minWidth="240dp"
         android:text="@string/oreo_autofill_warning_publisher_changed_disable_autofill_button"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/advancedButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/warningAppFooter" />
 
@@ -117,50 +127,49 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:minWidth="240dp"
         android:text="@string/oreo_autofill_warning_publisher_advanced_info_button"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/warningAppAdvancedInfo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/okButton" />
+        app:layout_constraintTop_toBottomOf="@id/okButton"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/resetButton"
+        style="@style/AppTheme.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:minWidth="240dp"
+        android:text="@string/oreo_autofill_warning_publisher_reenable_button"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/advancedButton"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/warningAppAdvancedInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:fontFamily="monospace"
         android:gravity="center_horizontal"
         android:textIsSelectable="true"
         android:textSize="10sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/resetButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/advancedButton"
-        tools:ignore="SmallSp"
-        tools:text="Package: com.example.banking\n\nHash:\n8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M="
-        tools:visibility="visible" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/resetButton"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@string/oreo_autofill_warning_publisher_reenable_button"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="10sp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/warningAppAdvancedInfo"
+        app:layout_constraintTop_toBottomOf="@id/resetButton"
         tools:ignore="SmallSp"
+        tools:text="Package: com.example.banking\n\nHash:\n8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M="
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
