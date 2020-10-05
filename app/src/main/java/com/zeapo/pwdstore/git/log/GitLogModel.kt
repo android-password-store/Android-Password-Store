@@ -41,7 +41,7 @@ class GitLogModel {
     // This is because the commit graph is walked from HEAD to the last commit to obtain.
     // Additionally, tests with 1000 commits in the log have not produced a significant delay in the
     // user experience.
-    private val cache: MutableList<GitCommit> by lazy {
+    private val cache: MutableList<GitCommit> by lazy(LazyThreadSafetyMode.NONE) {
         commits().map {
             GitCommit(it.hash, it.shortMessage, it.authorIdent.name, it.time)
         }.toMutableList()

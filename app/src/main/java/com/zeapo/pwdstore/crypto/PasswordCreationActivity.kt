@@ -56,12 +56,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
 
-    private val suggestedName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
-    private val suggestedPass by lazy { intent.getStringExtra(EXTRA_PASSWORD) }
-    private val suggestedExtra by lazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
-    private val shouldGeneratePassword by lazy { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
-    private val editing by lazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
-    private val oldFileName by lazy { intent.getStringExtra(EXTRA_FILE_NAME) }
+    private val suggestedName by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_FILE_NAME) }
+    private val suggestedPass by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_PASSWORD) }
+    private val suggestedExtra by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
+    private val shouldGeneratePassword by lazy(LazyThreadSafetyMode.NONE) { intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false) }
+    private val editing by lazy(LazyThreadSafetyMode.NONE) { intent.getBooleanExtra(EXTRA_EDITING, false) }
+    private val oldFileName by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_FILE_NAME) }
     private var oldCategory: String? = null
     private var copy: Boolean = false
     private var encryptionIntent: Intent = Intent()

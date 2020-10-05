@@ -39,7 +39,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     private val binding by viewBinding(DecryptLayoutBinding::inflate)
 
-    private val relativeParentPath by lazy { getParentPath(fullPath, repoPath) }
+    private val relativeParentPath by lazy(LazyThreadSafetyMode.NONE) { getParentPath(fullPath, repoPath) }
     private var passwordEntry: PasswordEntry? = null
 
     private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->

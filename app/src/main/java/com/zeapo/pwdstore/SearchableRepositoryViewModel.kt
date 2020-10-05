@@ -139,7 +139,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
     private val root
         get() = PasswordRepository.getRepositoryDirectory()
-    private val settings by lazy { application.sharedPrefs }
+    private val settings by lazy(LazyThreadSafetyMode.NONE) { application.sharedPrefs }
     private val showHiddenContents
         get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
     private val defaultSearchMode

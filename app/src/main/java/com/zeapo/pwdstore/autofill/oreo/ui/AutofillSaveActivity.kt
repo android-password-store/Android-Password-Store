@@ -82,7 +82,7 @@ class AutofillSaveActivity : AppCompatActivity() {
         }
     }
 
-    private val formOrigin: FormOrigin? by lazy {
+    private val formOrigin by lazy(LazyThreadSafetyMode.NONE) {
         val shouldMatchApp: String? = intent.getStringExtra(EXTRA_SHOULD_MATCH_APP)
         val shouldMatchWeb: String? = intent.getStringExtra(EXTRA_SHOULD_MATCH_WEB)
         if (shouldMatchApp != null && shouldMatchWeb == null) {

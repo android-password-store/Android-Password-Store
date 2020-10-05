@@ -93,7 +93,7 @@ open class PasswordRepository protected constructor() {
     companion object {
 
         private var repository: Repository? = null
-        private val settings by lazy { Application.instance.sharedPrefs }
+        private val settings by lazy(LazyThreadSafetyMode.NONE) { Application.instance.sharedPrefs }
         private val filesDir
             get() = Application.instance.filesDir
 
