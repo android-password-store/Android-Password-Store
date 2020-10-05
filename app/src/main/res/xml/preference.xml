@@ -138,6 +138,12 @@
             app:key="biometric_auth"
             app:summary="@string/biometric_auth_summary"
             app:title="@string/biometric_auth_title" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="sync_on_launch"
+            app:persistent="true"
+            app:summary="@string/sync_on_launch_summary"
+            app:title="@string/sync_on_launch_title" />
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/pref_category_title_passwords">
         <EditTextPreference
