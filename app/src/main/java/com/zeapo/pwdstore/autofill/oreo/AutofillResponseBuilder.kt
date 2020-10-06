@@ -15,12 +15,12 @@ import android.service.autofill.SaveInfo
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.e
-import com.github.michaelbull.result.fold
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.AutofillScenario
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
+import com.github.michaelbull.result.fold
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillDecryptActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillFilterView
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity
@@ -88,8 +88,13 @@ class AutofillResponseBuilder(form: FillableForm) {
         publisherChangedException: AutofillPublisherChangedException
     ): Dataset {
         val remoteView = makeWarningRemoteView(context)
+        // If the user decides to trust the new publisher, they can choose reset the list of
+        // matches. In this case we need to immediately show a new `FillResponse` as if the app were
+        // autofilled for the first time. This `FillResponse` needs to be returned as a result from
+        // `AutofillPublisherChangedActivity`, which is why we create and pass it on here.
+        val fillResponseAfterReset = makeFillResponse(context, emptyList())
         val intentSender = AutofillPublisherChangedActivity.makePublisherChangedIntentSender(
-            context, publisherChangedException
+            context, publisherChangedException, fillResponseAfterReset
         )
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.Match)
     }

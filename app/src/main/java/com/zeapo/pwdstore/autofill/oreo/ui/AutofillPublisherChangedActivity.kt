@@ -12,8 +12,10 @@ import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.service.autofill.FillResponse
 import android.text.format.DateUtils
 import android.view.View
+import android.view.autofill.AutofillManager
 import androidx.appcompat.app.AppCompatActivity
 import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.FormOrigin
@@ -33,14 +35,18 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
 
         private const val EXTRA_APP_PACKAGE =
             "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_APP_PACKAGE"
+        private const val EXTRA_FILL_RESPONSE_AFTER_RESET =
+            "com.zeapo.pwdstore.autofill.oreo.ui.EXTRA_FILL_RESPONSE_AFTER_RESET"
         private var publisherChangedRequestCode = 1
 
         fun makePublisherChangedIntentSender(
             context: Context,
-            publisherChangedException: AutofillPublisherChangedException
+            publisherChangedException: AutofillPublisherChangedException,
+            fillResponseAfterReset: FillResponse?,
         ): IntentSender {
             val intent = Intent(context, AutofillPublisherChangedActivity::class.java).apply {
                 putExtra(EXTRA_APP_PACKAGE, publisherChangedException.formOrigin.identifier)
+                putExtra(EXTRA_FILL_RESPONSE_AFTER_RESET, fillResponseAfterReset)
             }
             return PendingIntent.getActivity(
                 context, publisherChangedRequestCode++, intent, PendingIntent.FLAG_CANCEL_CURRENT
@@ -72,6 +78,10 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
             }
             resetButton.setOnClickListener {
                 AutofillMatcher.clearMatchesFor(this@AutofillPublisherChangedActivity, FormOrigin.App(appPackage))
+                val fillResponse = intent.getParcelableExtra<FillResponse>(EXTRA_FILL_RESPONSE_AFTER_RESET)
+                setResult(RESULT_OK, Intent().apply {
+                    putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse)
+                })
                 finish()
             }
         }
