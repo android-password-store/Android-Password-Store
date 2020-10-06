@@ -7,16 +7,14 @@ package com.zeapo.pwdstore
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.github.michaelbull.result.fold
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.crypto.DecryptActivity
 import com.zeapo.pwdstore.git.BaseGitActivity
+import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
@@ -52,8 +50,6 @@ class LaunchActivity : BaseGitActivity() {
     }
 
     private fun startTargetActivity(noAuth: Boolean) {
-        lifecycleScope.launch {
-        }
         if (intent.action == ACTION_DECRYPT_PASS) {
             val intent = Intent(this, DecryptActivity::class.java).apply {
                 putExtra("NAME", intent.getStringExtra("NAME"))
@@ -67,7 +63,7 @@ class LaunchActivity : BaseGitActivity() {
             if (isInitialized && !GitSettings.url.isNullOrEmpty() && sharedPrefs.getBoolean(PreferenceKeys.SYNC_ON_LAUNCH, false)) {
                 findViewById<ProgressBar>(R.id.progress_bar).isVisible = true
                 findViewById<ProgressBar>(R.id.sync).isVisible = true
-                runGitOperation(GitOp.SYNC, intent)
+                runGitOperation(intent)
             } else {
                 startPasswordStoreActivity(intent, noAuth)
             }
@@ -81,8 +77,9 @@ class LaunchActivity : BaseGitActivity() {
         }, 1000L)
     }
 
-    private fun runGitOperation(operation: GitOp, intent: Intent) = lifecycleScope.launch {
-        launchGitOperation(operation).fold(
+    private fun runGitOperation(intent: Intent) = lifecycleScope.launch {
+        val gitOp = if (GitSettings.authMode == AuthMode.None) GitOp.PULL else GitOp.SYNC
+        launchGitOperation(gitOp).fold(
             success = { startPasswordStoreActivity(intent, false) },
             failure = { promptOnErrorHandler(it) { startPasswordStoreActivity(intent, false) } },
         )
