@@ -21,7 +21,7 @@ buildscript {
 }
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.31.0"
+    id("com.github.ben-manes.versions") version "0.33.0"
 }
 
 apply(plugin = "binary-compatibility-validator")
