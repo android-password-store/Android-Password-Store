@@ -39,10 +39,37 @@ afterEvaluate {
         }
         publications {
             create<MavenPublication>("apsMaven") {
+                fun getKey(propertyName: String): String {
+                    return findProperty(propertyName)?.toString() ?: error("Failed to find property for $propertyName")
+                }
+
                 from(components.getByName("release"))
-                groupId = findProperty("GROUP").toString()
-                artifactId = findProperty("POM_ARTIFACT_ID").toString()
-                version = findProperty("VERSION_NAME").toString()
+                groupId = getKey("GROUP")
+                artifactId = getKey("POM_ARTIFACT_ID")
+                version = getKey("VERSION_NAME")
+                pom {
+                    name.set(getKey("POM_ARTIFACT_ID"))
+                    description.set(getKey("POM_ARTIFACT_DESCRIPTION"))
+                    url.set(getKey("POM_URL"))
+                    licenses {
+                        license {
+                            name.set(getKey("POM_LICENSE_NAME"))
+                            url.set(getKey("POM_LICENSE_URL"))
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set(getKey("POM_DEVELOPER_ID"))
+                            name.set(getKey("POM_DEVELOPER_NAME"))
+                            email.set(getKey("POM_DEVELOPER_EMAIL"))
+                        }
+                    }
+                    scm {
+                        connection.set(getKey("POM_SCM_CONNECTION"))
+                        developerConnection.set(getKey("POM_SCM_DEV_CONNECTION"))
+                        url.set(getKey("POM_SCM_URL"))
+                    }
+                }
             }
         }
     }
