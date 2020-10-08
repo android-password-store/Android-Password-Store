@@ -50,6 +50,7 @@ import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
 import com.zeapo.pwdstore.sshkeygen.SshKeyGenActivity
+import com.zeapo.pwdstore.ui.proxy.ProxySelectorActivity
 import com.zeapo.pwdstore.utils.BiometricAuthenticator
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
@@ -416,6 +417,11 @@ class UserPreference : AppCompatActivity() {
                         true
                     }
                 }
+            }
+
+            findPreference<Preference>(PreferenceKeys.PROXY_SETTINGS)?.onPreferenceClickListener = ClickListener {
+                startActivity(Intent(requireContext(), ProxySelectorActivity::class.java))
+                true
             }
 
             val prefCustomXkpwdDictionary = findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)

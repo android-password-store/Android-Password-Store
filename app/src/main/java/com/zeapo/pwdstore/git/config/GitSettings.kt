@@ -11,6 +11,7 @@ import com.zeapo.pwdstore.Application
 import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
+import com.zeapo.pwdstore.utils.getEncryptedProxyPrefs
 import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
@@ -54,6 +55,7 @@ object GitSettings {
 
     private val settings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.sharedPrefs }
     private val encryptedSettings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.getEncryptedGitPrefs() }
+    private val proxySettings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.getEncryptedProxyPrefs() }
 
     var authMode
         get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
@@ -105,6 +107,38 @@ object GitSettings {
         set(value) {
             settings.edit {
                 putBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, value)
+            }
+        }
+
+    var proxyHost
+        get() = proxySettings.getString(PreferenceKeys.PROXY_HOST)
+        set(value) {
+            proxySettings.edit {
+                putString(PreferenceKeys.PROXY_HOST, value)
+            }
+        }
+
+    var proxyPort
+        get() = proxySettings.getInt(PreferenceKeys.PROXY_PORT, -1)
+        set(value) {
+            proxySettings.edit {
+                putInt(PreferenceKeys.PROXY_PORT, value)
+            }
+        }
+
+    var proxyUsername
+        get() = settings.getString(PreferenceKeys.PROXY_USERNAME)
+        set(value) {
+            proxySettings.edit {
+                putString(PreferenceKeys.PROXY_USERNAME, value)
+            }
+        }
+
+    var proxyPassword
+        get() = proxySettings.getString(PreferenceKeys.PROXY_PASSWORD)
+        set(value) {
+            proxySettings.edit {
+                putString(PreferenceKeys.PROXY_PASSWORD, value)
             }
         }
 

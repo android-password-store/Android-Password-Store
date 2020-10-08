@@ -49,6 +49,9 @@
             app:key="git_server_info"
             app:title="@string/pref_edit_server_info" />
         <Preference
+            app:key="proxy_settings"
+            app:title="@string/pref_proxy_settings" />
+        <Preference
             app:key="git_config"
             app:title="@string/pref_edit_git_config" />
         <Preference
