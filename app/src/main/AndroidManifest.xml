@@ -36,6 +36,9 @@
             android:name=".ui.onboarding.activity.OnboardingActivity"
             android:configChanges="orientation|screenSize" />
 
+        <activity android:name=".ui.proxy.ProxySelectorActivity"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".LaunchActivity"
             android:configChanges="orientation|screenSize"
