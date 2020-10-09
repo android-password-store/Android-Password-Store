@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -  Add GPG key selection step to onboarding flow
+-  Allow configuring an app-wide HTTP(S) proxy
 
 ## [1.12.0] - 2020-09-24
 
