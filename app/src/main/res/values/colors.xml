@@ -15,7 +15,7 @@
     <!-- Theme variables -->
     <color name="color_control_normal">@color/primary_text_color</color>
     <color name="list_multiselect_background">#668eacbb</color>
-    <color name="navigation_bar_color">@color/primary_color</color>
+    <color name="navigation_bar_color">#000000</color>
     <color name="status_bar_color">@color/primary_color</color>
     <color name="ripple_color">#aa003e5b</color>
     <color name="button_color">#44003e5b</color>
