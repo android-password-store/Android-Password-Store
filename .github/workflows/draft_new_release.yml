@@ -15,7 +15,7 @@ jobs:
       - name: Extract version from milestone
         run: |
           VERSION="${{ github.event.milestone.title }}"
-          echo "::set-env name=RELEASE_VERSION::$VERSION"
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Create release branch
         run: git checkout -b release-${{ env.RELEASE_VERSION }}
@@ -25,15 +25,16 @@ jobs:
         with:
           version: v${{ env.RELEASE_VERSION }}
 
-      - name: Initialize git config
+      - name: Initialize git config and commit changes
         run: |
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
+          git commit "Prepare release $RELEASE_VERSION"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: repo-sync/pull-request@v2
         with:
-          commit-message: "Prepare release ${{ env.RELEASE_VERSION }}"
-          branch: release-${{ env.RELEASE_VERSION }}
-          base: release
-          title: Release ${{ env.RELEASE_VERSION }}
+          source_branch: release-${{ env.RELEASE_VERSION }}
+          destination_branch: release
+          pr_title: Release ${{ env.RELEASE_VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
