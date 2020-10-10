@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore
 
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -54,12 +55,7 @@ class LaunchActivity : BaseGitActivity() {
 
     private fun startTargetActivity(noAuth: Boolean) {
         if (intent.action == ACTION_DECRYPT_PASS) {
-            val intent = Intent(this, DecryptActivity::class.java).apply {
-                putExtra("NAME", intent.getStringExtra("NAME"))
-                putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
-                putExtra("REPO_PATH", intent.getStringExtra("REPO_PATH"))
-                putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
-            }
+            intent.component = ComponentName(this, DecryptActivity::class.java)
             startPasswordStoreActivity(intent, noAuth)
         } else {
             val intent = Intent(this, PasswordStore::class.java)
