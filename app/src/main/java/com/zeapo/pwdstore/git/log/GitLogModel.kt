@@ -15,7 +15,7 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.revwalk.RevCommit
 
 private fun commits(): Iterable<RevCommit> {
-    val repo = PasswordRepository.getRepository(null)
+    val repo = PasswordRepository.getRepository()
     if (repo == null) {
         e { "Could not access git repository" }
         return listOf()

@@ -424,7 +424,7 @@ class PasswordStore : BaseGitActivity() {
 
     private fun getLastChangedTimestamp(fullPath: String): Long {
         val repoPath = PasswordRepository.getDirectory()
-        val repository = PasswordRepository.getRepository(repoPath)
+        val repository = PasswordRepository.getRepository()
         if (repository == null) {
             d { "getLastChangedTimestamp: No git repository" }
             return File(fullPath).lastModified()

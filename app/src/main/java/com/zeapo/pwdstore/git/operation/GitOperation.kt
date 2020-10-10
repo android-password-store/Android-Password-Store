@@ -53,7 +53,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
     private var sshSessionFactory: SshjSessionFactory? = null
 
-    protected val repository = PasswordRepository.getRepository(null)!!
+    protected val repository = PasswordRepository.getRepository()!!
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
     private val authActivity get() = callingActivity as ContinuationContainerActivity

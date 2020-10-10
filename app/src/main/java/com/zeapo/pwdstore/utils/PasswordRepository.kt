@@ -56,57 +56,63 @@ object PasswordRepository {
     private val filesDir
         get() = Application.instance.filesDir
 
-    /**
-     * Returns the git repository
-     *
-     * @param localDir needed only on the creation
-     * @return the git repository
-     */
-    @JvmStatic
-    fun getRepository(localDir: File?): Repository? {
-        if (repository == null && localDir != null) {
-            val builder = FileRepositoryBuilder()
-            repository = runCatching {
-                builder.run {
-                    gitDir = localDir
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        fs = Java7FSFactory().detect(null)
-                    }
-                    readEnvironment()
-                }.build()
-            }.getOrElse { e ->
-                e.printStackTrace()
-                null
-            }
-        }
+    fun getRepository(): Repository? {
         return repository
     }
 
+    /**
+     * Sets up the [repository] field.
+     *
+     * @param localDir The directory which contains our Git repository
+     */
+    private fun setup(localDir: File) {
+        val builder = FileRepositoryBuilder()
+        repository = runCatching {
+            builder.run {
+                gitDir = localDir
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    fs = Java7FSFactory().detect(null)
+                }
+                readEnvironment()
+            }.build()
+        }.getOrElse { e ->
+            e.printStackTrace()
+            null
+        }
+    }
+
+    /**
+     * Simple check to see if [repository] has been initialized
+     */
     @JvmStatic
     val isInitialized: Boolean
         get() = repository != null
 
+    /**
+     * Loose checks to confirm that a repository contains objects.
+     */
     @JvmStatic
     fun isGitRepo(): Boolean {
-        if (repository != null) {
-            return repository!!.objectDatabase.exists()
-        }
-        return false
+        val repo = repository ?: return false
+        return repo.objectDatabase.exists()
     }
 
+    /**
+     * Create a new, empty repository in the given [localDir].
+     */
     @JvmStatic
-    @Throws(Exception::class)
     fun createRepository(localDir: File) {
         localDir.delete()
-
         Git.init().setDirectory(localDir).call()
-        getRepository(localDir)
+        setup(localDir)
     }
 
-    // TODO add multiple remotes support for pull/push
+    /**
+     * Adds a new Git remote to the [repository] with the given [name] and [url].
+     */
     @JvmStatic
     fun addRemote(name: String, url: String, replace: Boolean = false) {
-        val storedConfig = repository!!.config
+        val storedConfig = repository?.config ?: return
         val remotes = storedConfig.getSubsections("remote")
 
         if (!remotes.contains(name)) {
@@ -151,12 +157,18 @@ object PasswordRepository {
         }
     }
 
+    /**
+     * Close the [repository] to prevent any errors or leaks.
+     */
     @JvmStatic
     fun closeRepository() {
-        if (repository != null) repository!!.close()
+        repository?.close()
         repository = null
     }
 
+    /**
+     * Get the store path based on user preferences.
+     */
     @JvmStatic
     fun getDirectory(): File {
         return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
@@ -170,6 +182,9 @@ object PasswordRepository {
         }
     }
 
+    /**
+     * Initialize the store to get everything going
+     */
     @JvmStatic
     fun initialize(): Repository? {
         val dir = getDirectory()
@@ -183,7 +198,8 @@ object PasswordRepository {
         }
 
         // create the repository static variable in PasswordRepository
-        return getRepository(File(dir.absolutePath + "/.git"))
+        setup(dir)
+        return repository
     }
 
     /**
