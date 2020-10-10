@@ -158,7 +158,7 @@ object PasswordRepository {
     }
 
     @JvmStatic
-    fun getRepositoryDirectory(): File {
+    fun getDirectory(): File {
         return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
             val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
             if (externalRepo != null)
@@ -172,7 +172,7 @@ object PasswordRepository {
 
     @JvmStatic
     fun initialize(): Repository? {
-        val dir = getRepositoryDirectory()
+        val dir = getDirectory()
         // uninitialize the repo if the dir does not exist or is absolutely empty
         settings.edit {
             if (!dir.exists() || !dir.isDirectory || requireNotNull(dir.listFiles()).isEmpty()) {

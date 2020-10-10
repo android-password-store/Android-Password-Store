@@ -40,7 +40,7 @@ class FolderCreationDialogFragment : DialogFragment() {
                 val repo = PasswordRepository.getRepository(null)
                 if (repo != null) {
                     lifecycleScope.launch {
-                        val repoPath = PasswordRepository.getRepositoryDirectory().absolutePath
+                        val repoPath = PasswordRepository.getDirectory().absolutePath
                         requireActivity().commitChange(
                             getString(
                                 R.string.git_commit_gpg_id,

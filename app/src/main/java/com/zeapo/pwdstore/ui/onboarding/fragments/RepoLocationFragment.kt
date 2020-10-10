@@ -136,7 +136,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
                 dir.isDirectory && // The directory, is really a directory
                 dir.listFilesRecursively().isNotEmpty() && // The directory contains files
                 // The directory contains a non-zero number of password files
-                PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(), sortOrder).isNotEmpty()
+                PasswordRepository.getPasswords(dir, PasswordRepository.getDirectory(), sortOrder).isNotEmpty()
             ) {
                 PasswordRepository.closeRepository()
                 return true
@@ -146,7 +146,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
     }
 
     private fun createRepository() {
-        val localDir = PasswordRepository.getRepositoryDirectory()
+        val localDir = PasswordRepository.getDirectory()
         runCatching {
             check(localDir.exists() || localDir.mkdir()) { "Failed to create directory!" }
             PasswordRepository.createRepository(localDir)

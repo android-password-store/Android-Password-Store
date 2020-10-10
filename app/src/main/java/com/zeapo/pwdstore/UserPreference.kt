@@ -287,14 +287,14 @@ class UserPreference : AppCompatActivity() {
             }
 
             deleteRepoPreference?.onPreferenceClickListener = ClickListener {
-                val repoDir = PasswordRepository.getRepositoryDirectory()
+                val repoDir = PasswordRepository.getDirectory()
                 MaterialAlertDialogBuilder(prefsActivity)
                     .setTitle(R.string.pref_dialog_delete_title)
                     .setMessage(resources.getString(R.string.dialog_delete_msg, repoDir))
                     .setCancelable(false)
                     .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
                         runCatching {
-                            PasswordRepository.getRepositoryDirectory().deleteRecursively()
+                            PasswordRepository.getDirectory().deleteRecursively()
                             PasswordRepository.closeRepository()
                         }.onFailure {
                             // TODO Handle the different cases of exceptions

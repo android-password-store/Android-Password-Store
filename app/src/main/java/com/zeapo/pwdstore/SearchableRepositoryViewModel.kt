@@ -51,9 +51,9 @@ import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
 private fun File.toPasswordItem() = if (isFile)
-    PasswordItem.newPassword(name, this, PasswordRepository.getRepositoryDirectory())
+    PasswordItem.newPassword(name, this, PasswordRepository.getDirectory())
 else
-    PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
+    PasswordItem.newCategory(name, this, PasswordRepository.getDirectory())
 
 private fun PasswordItem.fuzzyMatch(filter: String): Int {
     var i = 0
@@ -139,7 +139,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     }
 
     private val root
-        get() = PasswordRepository.getRepositoryDirectory()
+        get() = PasswordRepository.getDirectory()
     private val settings by lazy(LazyThreadSafetyMode.NONE) { application.sharedPrefs }
     private val showHiddenContents
         get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)

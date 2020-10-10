@@ -81,7 +81,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
     private fun initializePasswordList() {
-        val gitDir = File(PasswordRepository.getRepositoryDirectory(), ".git")
+        val gitDir = File(PasswordRepository.getDirectory(), ".git")
         val hasGitDir = gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
         binding.swipeRefresher.setOnRefreshListener {
             if (!hasGitDir) {

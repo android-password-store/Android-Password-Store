@@ -38,7 +38,7 @@ class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
             result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                 lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
-                        val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+                        val gpgIdentifierFile = File(PasswordRepository.getDirectory(), ".gpg-id")
                         gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                     }
                     settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }

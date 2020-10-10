@@ -102,7 +102,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         if (result.resultCode == RESULT_OK) {
             result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
                 lifecycleScope.launch {
-                    val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+                    val gpgIdentifierFile = File(PasswordRepository.getDirectory(), ".gpg-id")
                     withContext(Dispatchers.IO) {
                         gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
                     }
@@ -333,7 +333,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             encryptionIntent.action = OpenPgpApi.ACTION_ENCRYPT
 
             // pass enters the key ID into `.gpg-id`.
-            val repoRoot = PasswordRepository.getRepositoryDirectory()
+            val repoRoot = PasswordRepository.getDirectory()
             val gpgIdentifierFile = File(repoRoot, directory.text.toString()).findTillRoot(".gpg-id", repoRoot)
             if (gpgIdentifierFile == null) {
                 snackbar(message = resources.getString(R.string.failed_to_find_key_id))

@@ -49,10 +49,10 @@ fun File.contains(other: File): Boolean {
 
 /**
  * Checks if this [File] is in the password repository directory as given
- * by [PasswordRepository.getRepositoryDirectory]
+ * by [PasswordRepository.getDirectory]
  */
 fun File.isInsideRepository(): Boolean {
-    return canonicalPath.contains(PasswordRepository.getRepositoryDirectory().canonicalPath)
+    return canonicalPath.contains(PasswordRepository.getDirectory().canonicalPath)
 }
 
 /**
