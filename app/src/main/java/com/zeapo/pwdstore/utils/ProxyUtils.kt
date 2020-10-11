@@ -32,7 +32,7 @@ object ProxyUtils {
                 val host = GitSettings.proxyHost
                 val port = GitSettings.proxyPort
                 return if (host == null || port == -1) {
-                    mutableListOf()
+                    mutableListOf(Proxy.NO_PROXY)
                 } else {
                     mutableListOf(Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved(host, port)))
                 }
