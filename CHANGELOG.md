@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ## [1.12.0] - 2020-09-24
 
+### Fixed
+
+-   Certain operations like folder creation with GPG keys would fail with `java.lang.IllegalStateException`.
+-   ECDSA key exchanges failed resulting in users being unable to clone repositories.
+
 ### Added
 
 -   Allow sorting by recently used
