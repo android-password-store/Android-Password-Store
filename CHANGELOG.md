@@ -15,6 +15,13 @@ All notable changes to this project will be documented in this file.
 -  Add GPG key selection step to onboarding flow
 -  Allow configuring an app-wide HTTP(S) proxy
 
+## [1.12.1] - 2020-10-13
+
+### Fixed
+
+-   Certain operations like folder creation with GPG keys would fail with `java.lang.IllegalStateException`.
+-   ECDSA key exchanges failed resulting in users being unable to clone repositories.
+
 ## [1.12.0] - 2020-09-24
 
 ### Added
@@ -358,7 +365,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.1...HEAD
+
+[1.12.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.0...v1.12.1
 
 [1.12.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.11.3...v1.12.0
 
