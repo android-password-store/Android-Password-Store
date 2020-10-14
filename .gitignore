@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/androidstudio,gradle
 # Edit at https://www.gitignore.io/?templates=androidstudio,gradle
 
@@ -44,7 +43,7 @@ out/
 
 # Signing files
 .signing/
-keystore.*
+/keystore.*
 
 # Local configuration file (sdk path, etc)
 local.properties
