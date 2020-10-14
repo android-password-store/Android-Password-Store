@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Decrypt secrets
-      run: release/signing-setup.sh "$ENCRYPT_KEY"
+      run: scripts/signing-setup.sh "$ENCRYPT_KEY"
       env:
         ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
 
@@ -28,10 +28,10 @@ jobs:
         arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease
 
     - name: Clean secrets
-      run: release/signing-cleanup.sh
+      run: scripts/signing-cleanup.sh
 
     - name: Deploy snapshot
-      run: release/deploy-snapshot.sh
+      run: scripts/deploy-snapshot.sh
       env:
         ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
