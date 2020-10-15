@@ -7,6 +7,8 @@ import com.android.build.gradle.BaseExtension
 import kotlinx.validation.ApiValidationExtension
 
 buildscript {
+    apply(from = "buildSrc/buildDependencies.gradle")
+    val build: Map<Any, Any> by extra
     repositories {
         google()
         jcenter()
@@ -14,9 +16,9 @@ buildscript {
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
     }
     dependencies {
-        classpath(Plugins.agp)
-        classpath(Plugins.binaryCompatibilityValidator)
-        classpath(Plugins.kotlin)
+        classpath(build.getValue("androidGradlePlugin"))
+        classpath(build.getValue("binaryCompatibilityValidator"))
+        classpath(build.getValue("kotlinGradlePlugin"))
     }
 }
 
