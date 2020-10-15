@@ -407,6 +407,9 @@
     <!-- SSH port validation -->
     <string name="ssh_scheme_needed_title">Potentially incorrect URL</string>
     <string name="ssh_scheme_needed_message">It appears that your URL contains a custom port, but does not specify the ssh:// scheme.\nThis can cause the port to be considered a part of your path. Press OK here to fix the URL.</string>
+    <string name="sync_on_launch_title">Sync on launch</string>
+    <string name="sync_on_launch_summary">Sync passwords when application is launched</string>
+    <string name="syncing">Syncing…</string>
 
     <!-- Proxy configuration activity -->
     <string name="proxy_hostname">Proxy hostname</string>

@@ -42,8 +42,7 @@
         <activity
             android:name=".LaunchActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/NoBackgroundTheme">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
