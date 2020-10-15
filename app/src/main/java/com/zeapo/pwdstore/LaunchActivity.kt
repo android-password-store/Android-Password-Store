@@ -59,7 +59,9 @@ class LaunchActivity : BaseGitActivity() {
             startPasswordStoreActivity(intent, noAuth)
         } else {
             val intent = Intent(this, PasswordStore::class.java)
-            if (PasswordRepository.getRepository(null) != null &&
+            val repo = PasswordRepository.initialize()
+            // if repo is null, let PasswordStore handle it.
+            if (repo != null &&
                 !GitSettings.url.isNullOrEmpty() &&
                 sharedPrefs.getBoolean(PreferenceKeys.SYNC_ON_LAUNCH, false)) {
                 binding.progressBar.isVisible = true
