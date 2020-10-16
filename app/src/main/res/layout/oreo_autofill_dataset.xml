@@ -4,6 +4,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="20dp"
         android:maxHeight="20dp"
-        android:tint="@color/secondary_color"
+        app:tint="@color/secondary_color"
         tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout
