@@ -14,6 +14,15 @@ kotlinDslPluginOptions {
     experimentalWarning.set(false)
 }
 
+gradlePlugin {
+    plugins {
+        register("aps") {
+            id = "aps-plugin"
+            implementationClass = "PasswordStorePlugin"
+        }
+    }
+}
+
 dependencies {
     implementation(build.getValue("kotlinGradlePlugin"))
     implementation(build.getValue("androidGradlePlugin"))
