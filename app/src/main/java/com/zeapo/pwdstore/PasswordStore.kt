@@ -375,7 +375,6 @@ class PasswordStore : BaseGitActivity() {
     private fun hasRequiredStoragePermissions(): Boolean {
         return if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             BasicBottomSheet.Builder(this)
-                .setTitle("")
                 .setMessageRes(R.string.access_sdcard_text)
                 .setPositiveButtonClickListener(getString(R.string.snackbar_action_grant)) {
                     storagePermissionRequest.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
