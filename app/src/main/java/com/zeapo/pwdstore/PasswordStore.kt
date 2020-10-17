@@ -46,6 +46,7 @@ import com.zeapo.pwdstore.crypto.PasswordCreationActivity
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
+import com.zeapo.pwdstore.ui.dialogs.BasicBottomSheet
 import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.ui.onboarding.activity.OnboardingActivity
 import com.zeapo.pwdstore.utils.PasswordItem
@@ -373,17 +374,13 @@ class PasswordStore : BaseGitActivity() {
      */
     private fun hasRequiredStoragePermissions(): Boolean {
         return if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Snackbar.make(
-                findViewById(R.id.main_layout),
-                getString(R.string.access_sdcard_text),
-                Snackbar.LENGTH_INDEFINITE
-            ).run {
-                setAction(getString(R.string.snackbar_action_grant)) {
+            BasicBottomSheet.Builder(this)
+                .setMessageRes(R.string.access_sdcard_text)
+                .setPositiveButtonClickListener(getString(R.string.snackbar_action_grant)) {
                     storagePermissionRequest.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    dismiss()
                 }
-                show()
-            }
+                .build()
+                .show(supportFragmentManager, "STORAGE_PERMISSION_MISSING")
             false
         } else {
             checkLocalRepository()

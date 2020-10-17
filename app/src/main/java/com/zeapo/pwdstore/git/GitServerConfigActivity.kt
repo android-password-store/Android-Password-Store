@@ -115,10 +115,25 @@ class GitServerConfigActivity : BaseGitActivity() {
                 GitSettings.UpdateConnectionSettingsResult.FailedToParseUrl -> {
                     Snackbar.make(binding.root, getString(R.string.git_server_config_save_error), Snackbar.LENGTH_LONG).show()
                 }
+
                 is GitSettings.UpdateConnectionSettingsResult.MissingUsername -> {
                     when (updateResult.newProtocol) {
-                        Protocol.Https -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_https), Snackbar.LENGTH_LONG).show()
-                        Protocol.Ssh -> Snackbar.make(binding.root, getString(R.string.git_server_config_save_missing_username_ssh), Snackbar.LENGTH_LONG).show()
+                        Protocol.Https ->
+                            BasicBottomSheet.Builder(this)
+                                .setTitleRes(R.string.ssh_scheme_needed_title)
+                                .setMessageRes(R.string.git_server_config_save_missing_username_https)
+                                .setPositiveButtonClickListener {
+                                }
+                                .build()
+                                .show(supportFragmentManager, "HTTPS_MISSING_USERNAME")
+                        Protocol.Ssh ->
+                            BasicBottomSheet.Builder(this)
+                                .setTitleRes(R.string.ssh_scheme_needed_title)
+                                .setMessageRes(R.string.git_server_config_save_missing_username_ssh)
+                                .setPositiveButtonClickListener {
+                                }
+                                .build()
+                                .show(supportFragmentManager, "SSH_MISSING_USERNAME")
                     }
                 }
                 GitSettings.UpdateConnectionSettingsResult.Valid -> {
@@ -201,7 +216,6 @@ class GitServerConfigActivity : BaseGitActivity() {
                 // Silently delete & replace the lone .git folder if it exists
                 if (localDir.exists() && localDirFiles.size == 1 && localDirFiles[0].name == ".git") {
                     localDir.deleteRecursively()
-
                 }
             }.onFailure { e ->
                 e(e)

@@ -28,8 +28,10 @@ import com.zeapo.pwdstore.utils.viewBinding
  * API through [Builder] to create a similar UI, just at the bottom of the screen.
  */
 class BasicBottomSheet private constructor(
-    val title: String,
+    val title: String?,
     val message: String,
+    val positiveButtonLabel: String?,
+    val negativeButtonLabel: String?,
     val positiveButtonClickListener: View.OnClickListener?,
     val negativeButtonClickListener: View.OnClickListener?,
 ) : BottomSheetDialogFragment() {
@@ -65,9 +67,15 @@ class BasicBottomSheet private constructor(
                     peekHeight = 0
                     addBottomSheetCallback(bottomSheetCallback)
                 }
-                binding.bottomSheetTitle.text = title
+                if (!title.isNullOrEmpty()) {
+                    binding.bottomSheetTitle.isVisible = true
+                    binding.bottomSheetTitle.text = title
+                }
                 binding.bottomSheetMessage.text = message
                 if (positiveButtonClickListener != null) {
+                    positiveButtonLabel?.let { buttonLbl ->
+                        binding.bottomSheetOkButton.text = buttonLbl
+                    }
                     binding.bottomSheetOkButton.isVisible = true
                     binding.bottomSheetOkButton.setOnClickListener {
                         positiveButtonClickListener.onClick(it)
@@ -76,6 +84,9 @@ class BasicBottomSheet private constructor(
                 }
                 if (negativeButtonClickListener != null) {
                     binding.bottomSheetCancelButton.isVisible = true
+                    negativeButtonLabel?.let { buttonLbl ->
+                        binding.bottomSheetCancelButton.text = buttonLbl
+                    }
                     binding.bottomSheetCancelButton.setOnClickListener {
                         negativeButtonClickListener.onClick(it)
                         dismiss()
@@ -98,6 +109,8 @@ class BasicBottomSheet private constructor(
 
         private var title: String? = null
         private var message: String? = null
+        private var positiveButtonLabel: String? = null
+        private var negativeButtonLabel: String? = null
         private var positiveButtonClickListener: View.OnClickListener? = null
         private var negativeButtonClickListener: View.OnClickListener? = null
 
@@ -121,22 +134,25 @@ class BasicBottomSheet private constructor(
             return this
         }
 
-        fun setPositiveButtonClickListener(listener: View.OnClickListener): Builder {
+        fun setPositiveButtonClickListener(buttonLabel: String? = null, listener: View.OnClickListener): Builder {
             this.positiveButtonClickListener = listener
+            this.positiveButtonLabel = buttonLabel
             return this
         }
 
-        fun setNegativeButtonClickListener(listener: View.OnClickListener): Builder {
+        fun setNegativeButtonClickListener(buttonLabel: String? = null, listener: View.OnClickListener): Builder {
             this.negativeButtonClickListener = listener
+            this.negativeButtonLabel = buttonLabel
             return this
         }
 
         fun build(): BasicBottomSheet {
-            require(title != null) { "Title needs to be set" }
             require(message != null) { "Message needs to be set" }
             return BasicBottomSheet(
-                title!!,
+                title,
                 message!!,
+                positiveButtonLabel,
+                negativeButtonLabel,
                 positiveButtonClickListener,
                 negativeButtonClickListener
             )
