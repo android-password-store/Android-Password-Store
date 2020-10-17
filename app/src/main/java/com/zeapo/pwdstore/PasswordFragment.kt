@@ -87,8 +87,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 requireStore().refreshPasswordList()
                 binding.swipeRefresher.isRefreshing = false
             } else if (!PasswordRepository.isGitRepo()) {
-                BasicBottomSheet.Builder(binding.root.context)
-                    .setTitle("")
+                BasicBottomSheet.Builder(requireContext())
                     .setMessageRes(R.string.clone_git_repo)
                     .setPositiveButtonClickListener(getString(R.string.clone_button)) {
                         swipeResult.launch(GitServerConfigActivity.createCloneIntent(requireContext()))
