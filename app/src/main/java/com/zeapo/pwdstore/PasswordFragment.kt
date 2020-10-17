@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.onFailure
-import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.databinding.PasswordRecyclerViewBinding
 import com.zeapo.pwdstore.git.BaseGitActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
@@ -32,6 +31,7 @@ import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.ui.OnOffItemAnimator
 import com.zeapo.pwdstore.ui.adapters.PasswordItemRecyclerAdapter
+import com.zeapo.pwdstore.ui.dialogs.BasicBottomSheet
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
@@ -87,11 +87,14 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                 requireStore().refreshPasswordList()
                 binding.swipeRefresher.isRefreshing = false
             } else if (!PasswordRepository.isGitRepo()) {
-                Snackbar.make(binding.root, getString(R.string.clone_git_repo), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.clone_button) {
+                BasicBottomSheet.Builder(binding.root.context)
+                    .setTitle("")
+                    .setMessageRes(R.string.clone_git_repo)
+                    .setPositiveButtonClickListener(getString(R.string.clone_button)) {
                         swipeResult.launch(GitServerConfigActivity.createCloneIntent(requireContext()))
                     }
-                    .show()
+                    .build()
+                    .show(requireActivity().supportFragmentManager, "NOT_A_GIT_REPO")
                 binding.swipeRefresher.isRefreshing = false
             } else {
                 // When authentication is set to AuthMode.None then the only git operation we can
