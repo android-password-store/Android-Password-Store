@@ -28,7 +28,7 @@ import com.zeapo.pwdstore.utils.viewBinding
  * API through [Builder] to create a similar UI, just at the bottom of the screen.
  */
 class BasicBottomSheet private constructor(
-    val title: String,
+    val title: String?,
     val message: String,
     val positiveButtonLabel: String?,
     val negativeButtonLabel: String?,
@@ -67,7 +67,10 @@ class BasicBottomSheet private constructor(
                     peekHeight = 0
                     addBottomSheetCallback(bottomSheetCallback)
                 }
-                binding.bottomSheetTitle.text = title
+                if (!title.isNullOrEmpty()) {
+                    binding.bottomSheetTitle.isVisible = true
+                    binding.bottomSheetTitle.text = title
+                }
                 binding.bottomSheetMessage.text = message
                 if (positiveButtonClickListener != null) {
                     positiveButtonLabel?.let { buttonLbl ->
@@ -144,10 +147,9 @@ class BasicBottomSheet private constructor(
         }
 
         fun build(): BasicBottomSheet {
-            require(title != null) { "Title needs to be set" }
             require(message != null) { "Message needs to be set" }
             return BasicBottomSheet(
-                title!!,
+                title,
                 message!!,
                 positiveButtonLabel,
                 negativeButtonLabel,
