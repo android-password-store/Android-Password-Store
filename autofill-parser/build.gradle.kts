@@ -1,6 +1,8 @@
 plugins {
-  kotlin("android")
-  id("maven-publish")
+    id("com.android.library")
+    id("maven-publish")
+    kotlin("android")
+    `aps-plugin`
 }
 
 // Type safety can sometimes suck

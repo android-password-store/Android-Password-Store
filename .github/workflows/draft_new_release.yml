@@ -29,7 +29,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
-          git commit "Prepare release $RELEASE_VERSION"
+          git commit -am "Prepare release $RELEASE_VERSION"
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2

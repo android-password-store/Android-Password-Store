@@ -5,13 +5,6 @@
 
 private const val KOTLIN_VERSION = "1.4.10"
 
-object Plugins {
-
-    const val agp = "com.android.tools.build:gradle:4.0.2"
-    const val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
-}
-
 object Dependencies {
     object Kotlin {
         object Coroutines {
@@ -28,7 +21,7 @@ object Dependencies {
 
         const val activity_ktx = "androidx.activity:activity-ktx:1.2.0-beta01"
         const val annotation = "androidx.annotation:annotation:1.1.0"
-        const val autofill = "androidx.autofill:autofill:1.1.0-alpha02"
+        const val autofill = "androidx.autofill:autofill:1.1.0-beta01"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val biometric = "androidx.biometric:biometric:1.1.0-beta01"
         const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.2"
@@ -38,7 +31,7 @@ object Dependencies {
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-        const val material = "com.google.android.material:material:1.3.0-alpha02"
+        const val material = "com.google.android.material:material:1.3.0-alpha03"
         const val preference = "androidx.preference:preference:1.1.1"
         const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-alpha06"
         const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
@@ -72,12 +65,12 @@ object Dependencies {
 
     object NonFree {
 
-        const val google_play_auth_api_phone = "com.google.android.gms:play-services-auth-api-phone:17.4.0"
+        const val google_play_auth_api_phone = "com.google.android.gms:play-services-auth-api-phone:17.5.0"
     }
 
     object Testing {
 
-        const val junit = "junit:junit:4.13"
+        const val junit = "junit:junit:4.13.1"
         const val kotlin_test_junit = "org.jetbrains.kotlin:kotlin-test-junit:$KOTLIN_VERSION"
 
         object AndroidX {

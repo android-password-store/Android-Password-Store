@@ -6,7 +6,9 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.util.Properties
 
 plugins {
+    id("com.android.application")
     kotlin("android")
+    `aps-plugin`
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -26,26 +28,22 @@ android {
 
     adbOptions.installOptions("--user 0")
 
-    buildFeatures.viewBinding = true
-    buildFeatures.buildConfig = true
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 11201
+        versionCode = 11211
         versionName = "1.13.0-SNAPSHOT"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     lintOptions {
         isAbortOnError = true
         isCheckReleaseBuilds = false
         disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
-    }
-
-    packagingOptions {
-        exclude("**/*.version")
-        exclude("**/*.txt")
-        exclude("**/*.kotlin_module")
-        exclude("**/plugin.properties")
     }
 
     buildTypes {

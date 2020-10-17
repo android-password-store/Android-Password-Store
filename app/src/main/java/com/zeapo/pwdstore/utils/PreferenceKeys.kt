@@ -77,6 +77,7 @@ object PreferenceKeys {
     const val SSH_OPENKEYSTORE_CLEAR_KEY_ID = "ssh_openkeystore_clear_keyid"
     const val SSH_OPENKEYSTORE_KEYID = "ssh_openkeystore_keyid"
     const val SSH_SEE_KEY = "ssh_see_key"
+    const val SYNC_ON_LAUNCH = "sync_on_launch"
 
     @Deprecated("To be used only in Migrations.kt")
     const val USE_GENERATED_KEY = "use_generated_key"
