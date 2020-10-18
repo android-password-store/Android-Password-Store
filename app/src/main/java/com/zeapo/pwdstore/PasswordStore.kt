@@ -37,7 +37,6 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.zeapo.pwdstore.autofill.oreo.AutofillMatcher
 import com.zeapo.pwdstore.crypto.BasePgpActivity.Companion.getLongName
@@ -54,7 +53,6 @@ import com.zeapo.pwdstore.utils.PasswordRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepository
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.isInitialized
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.commitChange
@@ -72,14 +70,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.Git
 
+const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
+
 class PasswordStore : BaseGitActivity() {
 
-    private lateinit var activity: PasswordStore
     private lateinit var searchItem: MenuItem
-    private lateinit var searchView: SearchView
-    private var plist: PasswordFragment? = null
-    private var shortcutManager: ShortcutManager? = null
-
     private val settings by lazy { sharedPrefs }
 
     private val model: SearchableRepositoryViewModel by viewModels {
@@ -174,7 +169,7 @@ class PasswordStore : BaseGitActivity() {
             }
         }
         refreshPasswordList()
-        plist?.dismissActionMode()
+        getPasswordFragment()?.dismissActionMode()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -190,7 +185,7 @@ class PasswordStore : BaseGitActivity() {
         val printable = isPrintable(c)
         if (printable && !searchItem.isActionViewExpanded) {
             searchItem.expandActionView()
-            searchView.setQuery(c.toString(), true)
+            (searchItem.actionView as SearchView).setQuery(c.toString(), true)
             return true
         }
         return super.onKeyDown(keyCode, event)
@@ -198,7 +193,6 @@ class PasswordStore : BaseGitActivity() {
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activity = this
         // If user opens app with permission granted then revokes and returns,
         // prevent attempt to create password list fragment
         var savedInstance = savedInstanceState
@@ -208,9 +202,6 @@ class PasswordStore : BaseGitActivity() {
         }
         super.onCreate(savedInstance)
         setContentView(R.layout.activity_pwdstore)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager = getSystemService()
-        }
 
         model.currentDir.observe(this) { dir ->
             val basePath = getRepositoryDirectory().absoluteFile
@@ -257,7 +248,7 @@ class PasswordStore : BaseGitActivity() {
         // we can get by without any noticeable difference in performance.
         invalidateOptionsMenu()
         searchItem = menu.findItem(R.id.action_search)
-        searchView = searchItem.actionView as SearchView
+        val searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(
             object : OnQueryTextListener {
                 override fun onQueryTextSubmit(s: String): Boolean {
@@ -317,7 +308,7 @@ class PasswordStore : BaseGitActivity() {
                 return true
             }
             R.id.git_push -> {
-                if (!isInitialized) {
+                if (!PasswordRepository.isInitialized) {
                     initBefore.show()
                     return false
                 }
@@ -325,7 +316,7 @@ class PasswordStore : BaseGitActivity() {
                 return true
             }
             R.id.git_pull -> {
-                if (!isInitialized) {
+                if (!PasswordRepository.isInitialized) {
                     initBefore.show()
                     return false
                 }
@@ -333,7 +324,7 @@ class PasswordStore : BaseGitActivity() {
                 return true
             }
             R.id.git_sync -> {
-                if (!isInitialized) {
+                if (!PasswordRepository.isInitialized) {
                     initBefore.show()
                     return false
                 }
@@ -351,9 +342,13 @@ class PasswordStore : BaseGitActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDestroy() {
-        plist = null
-        super.onDestroy()
+    override fun onBackPressed() {
+        if (getPasswordFragment()?.onBackPressedInActivity() != true)
+            super.onBackPressed()
+    }
+
+    private fun getPasswordFragment(): PasswordFragment? {
+        return supportFragmentManager.findFragmentByTag(PASSWORD_FRAGMENT_TAG) as? PasswordFragment
     }
 
     fun clearSearch() {
@@ -401,10 +396,9 @@ class PasswordStore : BaseGitActivity() {
         if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
             d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
-            if (supportFragmentManager.findFragmentByTag("PasswordsList") == null ||
+            if (getPasswordFragment() == null ||
                 settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)) {
                 settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
-                plist = PasswordFragment()
                 val args = Bundle()
                 args.putString(REQUEST_ARG_PATH, getRepositoryDirectory().absolutePath)
 
@@ -413,22 +407,18 @@ class PasswordStore : BaseGitActivity() {
                 if (intent.getBooleanExtra("matchWith", false)) {
                     args.putBoolean("matchWith", true)
                 }
-                plist!!.arguments = args
-                supportActionBar!!.show()
-                supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                supportActionBar?.apply {
+                    show()
+                    setDisplayHomeAsUpEnabled(false)
+                }
                 supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 supportFragmentManager.commit {
-                    replace(R.id.main_layout, plist!!, "PasswordsList")
+                    replace(R.id.main_layout, PasswordFragment.newInstance(args), PASSWORD_FRAGMENT_TAG)
                 }
             }
         } else {
             startActivity(Intent(this, OnboardingActivity::class.java))
         }
-    }
-
-    override fun onBackPressed() {
-        if (plist?.onBackPressedInActivity() != true)
-            super.onBackPressed()
     }
 
     private fun getRelativePath(fullPath: String, repositoryPath: String): String {
@@ -468,26 +458,27 @@ class PasswordStore : BaseGitActivity() {
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager: ShortcutManager = getSystemService() ?: return
             val shortcut = Builder(this, item.fullPathToParent)
                 .setShortLabel(item.toString())
                 .setLongLabel(item.fullPathToParent + item.toString())
                 .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
                 .setIntent(authDecryptIntent)
                 .build()
-            val shortcuts = shortcutManager!!.dynamicShortcuts
-            if (shortcuts.size >= shortcutManager!!.maxShortcutCountPerActivity && shortcuts.size > 0) {
+            val shortcuts = shortcutManager.dynamicShortcuts
+            if (shortcuts.size >= shortcutManager.maxShortcutCountPerActivity && shortcuts.size > 0) {
                 shortcuts.removeAt(shortcuts.size - 1)
                 shortcuts.add(0, shortcut)
-                shortcutManager!!.dynamicShortcuts = shortcuts
+                shortcutManager.dynamicShortcuts = shortcuts
             } else {
-                shortcutManager!!.addDynamicShortcuts(listOf(shortcut))
+                shortcutManager.addDynamicShortcuts(listOf(shortcut))
             }
         }
         startActivity(decryptIntent)
     }
 
     private fun validateState(): Boolean {
-        if (!isInitialized) {
+        if (!PasswordRepository.isInitialized) {
             MaterialAlertDialogBuilder(this)
                 .setMessage(resources.getString(R.string.creation_dialog_text))
                 .setPositiveButton(resources.getString(R.string.dialog_ok), null)
@@ -638,6 +629,7 @@ class PasswordStore : BaseGitActivity() {
      * the current directory).
      */
     fun refreshPasswordList(target: File? = null) {
+        val plist = getPasswordFragment()
         if (target?.isDirectory == true && model.currentDir.value?.contains(target) == true) {
             plist?.navigateTo(target)
         } else if (target?.isFile == true && model.currentDir.value?.contains(target) == true) {
@@ -652,7 +644,7 @@ class PasswordStore : BaseGitActivity() {
     }
 
     private val currentDir: File
-        get() = plist?.currentDir ?: getRepositoryDirectory()
+        get() = getPasswordFragment()?.currentDir ?: getRepositoryDirectory()
 
     private suspend fun moveFile(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {

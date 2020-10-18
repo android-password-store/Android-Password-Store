@@ -31,7 +31,7 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         supportFragmentManager.commit {
-            replace(R.id.pgp_handler_linearlayout, passwordList, "PasswordsList")
+            replace(R.id.pgp_handler_linearlayout, passwordList, PASSWORD_FRAGMENT_TAG)
         }
     }
 

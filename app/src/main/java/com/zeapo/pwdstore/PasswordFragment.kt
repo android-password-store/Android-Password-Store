@@ -312,6 +312,12 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         const val ACTION_KEY = "action"
         const val ACTION_FOLDER = "folder"
         const val ACTION_PASSWORD = "password"
+
+        fun newInstance(args: Bundle): PasswordFragment {
+            val fragment = PasswordFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
 
