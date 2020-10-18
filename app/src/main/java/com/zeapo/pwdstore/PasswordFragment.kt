@@ -35,6 +35,7 @@ import com.zeapo.pwdstore.ui.dialogs.BasicBottomSheet
 import com.zeapo.pwdstore.ui.dialogs.ItemCreationBottomSheet
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PasswordSortOrder
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.getString
@@ -262,7 +263,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         runCatching {
             listener = object : OnFragmentInteractionListener {
                 override fun onFragmentInteraction(item: PasswordItem) {
-                    if (settings.getString(PreferenceKeys.SORT_ORDER) == PasswordRepository.PasswordSortOrder.RECENTLY_USED.name) {
+                    if (settings.getString(PreferenceKeys.SORT_ORDER) == PasswordSortOrder.RECENTLY_USED.name) {
                         //save the time when password was used
                         val preferences = context.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                         preferences.edit {

@@ -28,6 +28,7 @@ import com.zeapo.pwdstore.autofill.oreo.AutofillPreferences
 import com.zeapo.pwdstore.autofill.oreo.DirectoryStructure
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
+import com.zeapo.pwdstore.utils.PasswordSortOrder
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.File
@@ -87,16 +88,16 @@ private val CaseInsensitiveComparator = Collator.getInstance().apply {
 }
 
 private fun PasswordItem.Companion.makeComparator(
-    typeSortOrder: PasswordRepository.PasswordSortOrder,
+    typeSortOrder: PasswordSortOrder,
     directoryStructure: DirectoryStructure
 ): Comparator<PasswordItem> {
     return when (typeSortOrder) {
-        PasswordRepository.PasswordSortOrder.FOLDER_FIRST -> compareBy { it.type }
+        PasswordSortOrder.FOLDER_FIRST -> compareBy { it.type }
         // In order to let INDEPENDENT not distinguish between items based on their type, we simply
         // declare them all equal at this stage.
-        PasswordRepository.PasswordSortOrder.INDEPENDENT -> Comparator { _, _ -> 0 }
-        PasswordRepository.PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
-        PasswordRepository.PasswordSortOrder.RECENTLY_USED -> PasswordRepository.PasswordSortOrder.RECENTLY_USED.comparator
+        PasswordSortOrder.INDEPENDENT -> Comparator { _, _ -> 0 }
+        PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
+        PasswordSortOrder.RECENTLY_USED -> PasswordSortOrder.RECENTLY_USED.comparator
     }
         .then(compareBy(nullsLast(CaseInsensitiveComparator)) {
             directoryStructure.getIdentifierFor(it.file)
@@ -150,7 +151,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         }
 
     private val typeSortOrder
-        get() = PasswordRepository.PasswordSortOrder.getSortOrder(settings)
+        get() = PasswordSortOrder.getSortOrder(settings)
     private val directoryStructure
         get() = AutofillPreferences.directoryStructure(getApplication())
     private val itemComparator
