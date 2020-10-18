@@ -50,9 +50,6 @@ import com.zeapo.pwdstore.ui.dialogs.FolderCreationDialogFragment
 import com.zeapo.pwdstore.ui.onboarding.activity.OnboardingActivity
 import com.zeapo.pwdstore.utils.PasswordItem
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.initialize
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.base64
 import com.zeapo.pwdstore.utils.commitChange
@@ -101,7 +98,7 @@ class PasswordStore : BaseGitActivity() {
         val intentData = result.data ?: return@registerForActivityResult
         val filesToMove = requireNotNull(intentData.getStringArrayExtra("Files"))
         val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
-        val repositoryPath = getRepositoryDirectory().absolutePath
+        val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePath
         if (!target.isDirectory) {
             e { "Tried moving passwords to a non-existing folder." }
             return@registerForActivityResult
@@ -158,7 +155,7 @@ class PasswordStore : BaseGitActivity() {
                     }
                 }
                 else -> {
-                    val repoDir = getRepositoryDirectory().absolutePath
+                    val repoDir = PasswordRepository.getRepositoryDirectory().absolutePath
                     val relativePath = getRelativePath("${target.absolutePath}/", repoDir)
                     withContext(Dispatchers.Main) {
                         commitChange(
@@ -204,7 +201,7 @@ class PasswordStore : BaseGitActivity() {
         setContentView(R.layout.activity_pwdstore)
 
         model.currentDir.observe(this) { dir ->
-            val basePath = getRepositoryDirectory().absoluteFile
+            val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
             supportActionBar!!.apply {
                 if (dir != basePath)
                     title = dir.name
@@ -384,11 +381,11 @@ class PasswordStore : BaseGitActivity() {
     }
 
     private fun checkLocalRepository() {
-        val repo = initialize()
+        val repo = PasswordRepository.initialize()
         if (repo == null) {
             directorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
         } else {
-            checkLocalRepository(getRepositoryDirectory())
+            checkLocalRepository(PasswordRepository.getRepositoryDirectory())
         }
     }
 
@@ -400,7 +397,7 @@ class PasswordStore : BaseGitActivity() {
                 settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)) {
                 settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
                 val args = Bundle()
-                args.putString(REQUEST_ARG_PATH, getRepositoryDirectory().absolutePath)
+                args.putString(REQUEST_ARG_PATH, PasswordRepository.getRepositoryDirectory().absolutePath)
 
                 // if the activity was started from the autofill settings, the
                 // intent is to match a clicked pwd with app. pass this to fragment
@@ -426,8 +423,8 @@ class PasswordStore : BaseGitActivity() {
     }
 
     private fun getLastChangedTimestamp(fullPath: String): Long {
-        val repoPath = getRepositoryDirectory()
-        val repository = getRepository(repoPath)
+        val repoPath = PasswordRepository.getRepositoryDirectory()
+        val repository = PasswordRepository.getRepository(repoPath)
         if (repository == null) {
             d { "getLastChangedTimestamp: No git repository" }
             return File(fullPath).lastModified()
@@ -450,7 +447,7 @@ class PasswordStore : BaseGitActivity() {
         for (intent in arrayOf(decryptIntent, authDecryptIntent)) {
             intent.putExtra("NAME", item.toString())
             intent.putExtra("FILE_PATH", item.file.absolutePath)
-            intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
+            intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
             intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.file.absolutePath))
         }
         // Needs an action to be a shortcut intent
@@ -494,7 +491,7 @@ class PasswordStore : BaseGitActivity() {
         i { "Adding file to : ${currentDir.absolutePath}" }
         val intent = Intent(this, PasswordCreationActivity::class.java)
         intent.putExtra("FILE_PATH", currentDir.absolutePath)
-        intent.putExtra("REPO_PATH", getRepositoryDirectory().absolutePath)
+        intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
         listRefreshAction.launch(intent)
     }
 
@@ -530,7 +527,7 @@ class PasswordStore : BaseGitActivity() {
                 refreshPasswordList()
                 AutofillMatcher.updateMatches(applicationContext, delete = filesToDelete)
                 val fmt = selectedItems.joinToString(separator = ", ") { item ->
-                    item.file.toRelativeString(getRepositoryDirectory())
+                    item.file.toRelativeString(PasswordRepository.getRepositoryDirectory())
                 }
                 lifecycleScope.launch {
                     commitChange(
@@ -644,7 +641,7 @@ class PasswordStore : BaseGitActivity() {
     }
 
     private val currentDir: File
-        get() = getPasswordFragment()?.currentDir ?: getRepositoryDirectory()
+        get() = getPasswordFragment()?.currentDir ?: PasswordRepository.getRepositoryDirectory()
 
     private suspend fun moveFile(source: File, destinationFile: File) {
         val sourceDestinationMap = if (source.isDirectory) {
@@ -674,7 +671,7 @@ class PasswordStore : BaseGitActivity() {
     fun matchPasswordWithApp(item: PasswordItem) {
         val path = item.file
             .absolutePath
-            .replace(getRepositoryDirectory().toString() + "/", "")
+            .replace(PasswordRepository.getRepositoryDirectory().toString() + "/", "")
             .replace(".gpg", "")
         val data = Intent()
         data.putExtra("path", path)

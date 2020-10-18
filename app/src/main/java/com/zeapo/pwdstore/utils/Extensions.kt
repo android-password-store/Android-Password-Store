@@ -6,7 +6,6 @@ package com.zeapo.pwdstore.utils
 
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import java.io.File
 import java.util.Date
 import org.eclipse.jgit.lib.ObjectId
@@ -50,10 +49,10 @@ fun File.contains(other: File): Boolean {
 
 /**
  * Checks if this [File] is in the password repository directory as given
- * by [getRepositoryDirectory]
+ * by [PasswordRepository.getRepositoryDirectory]
  */
 fun File.isInsideRepository(): Boolean {
-    return canonicalPath.contains(getRepositoryDirectory().canonicalPath)
+    return canonicalPath.contains(PasswordRepository.getRepositoryDirectory().canonicalPath)
 }
 
 /**

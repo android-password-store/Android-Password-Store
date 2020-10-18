@@ -22,7 +22,6 @@ import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.crypto.BasePgpActivity
 import com.zeapo.pwdstore.crypto.GetKeyIdsActivity
 import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PasswordRepository.Companion.getRepositoryDirectory
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.requestInputFocusOnView
 import java.io.File
@@ -41,7 +40,7 @@ class FolderCreationDialogFragment : DialogFragment() {
                 val repo = PasswordRepository.getRepository(null)
                 if (repo != null) {
                     lifecycleScope.launch {
-                        val repoPath = getRepositoryDirectory().absolutePath
+                        val repoPath = PasswordRepository.getRepositoryDirectory().absolutePath
                         requireActivity().commitChange(
                             getString(
                                 R.string.git_commit_gpg_id,
