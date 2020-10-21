@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 -  Add GPG key selection step to onboarding flow
 -  Allow configuring an app-wide HTTP(S) proxy
 -  Add option to automatically sync repository on app launch
+-  Add a quickfix for invalid HTTPS URLs that contain a custom port
 
 ## [1.12.1] - 2020-10-13
 
