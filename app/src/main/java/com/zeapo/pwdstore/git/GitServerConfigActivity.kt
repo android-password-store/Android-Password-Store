@@ -71,24 +71,15 @@ class GitServerConfigActivity : BaseGitActivity() {
             }
         }
 
-        binding.serverUrl.setText(GitSettings.url)
+        binding.serverUrl.setText(GitSettings.url.also {
+            if (it.isNullOrEmpty()) return@also
+            setAuthModes(it.startsWith("http://") || it.startsWith("https://"))
+        })
         binding.serverBranch.setText(GitSettings.branch)
 
         binding.serverUrl.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) return@doOnTextChanged
-            if (text.startsWith("http://") || text.startsWith("https://")) {
-                binding.authModeSshKey.isVisible = false
-                binding.authModeOpenKeychain.isVisible = false
-                binding.authModePassword.isVisible = true
-                if (binding.authModeGroup.checkedButtonId != binding.authModePassword.id)
-                    binding.authModeGroup.check(View.NO_ID)
-            } else {
-                binding.authModeSshKey.isVisible = true
-                binding.authModeOpenKeychain.isVisible = true
-                binding.authModePassword.isVisible = true
-                if (binding.authModeGroup.checkedButtonId == View.NO_ID)
-                    binding.authModeGroup.check(binding.authModeSshKey.id)
-            }
+            setAuthModes(text.startsWith("http://") || text.startsWith("https://"))
         }
 
         binding.saveButton.setOnClickListener {
@@ -168,6 +159,22 @@ class GitServerConfigActivity : BaseGitActivity() {
         }
     }
 
+    private fun setAuthModes(isHttps: Boolean) = with(binding) {
+        if (isHttps) {
+            authModeSshKey.isVisible = false
+            authModeOpenKeychain.isVisible = false
+            authModePassword.isVisible = true
+            if (authModeGroup.checkedButtonId != authModePassword.id)
+                authModeGroup.check(View.NO_ID)
+        } else {
+            authModeSshKey.isVisible = true
+            authModeOpenKeychain.isVisible = true
+            authModePassword.isVisible = true
+            if (authModeGroup.checkedButtonId == View.NO_ID)
+                authModeGroup.check(authModeSshKey.id)
+        }
+    }
+
     /**
      * Clones the repository, the directory exists, deletes it
      */
@@ -234,6 +241,7 @@ class GitServerConfigActivity : BaseGitActivity() {
     }
 
     companion object {
+
         fun createCloneIntent(context: Context): Intent {
             return Intent(context, GitServerConfigActivity::class.java).apply {
                 putExtra("cloning", true)
