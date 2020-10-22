@@ -119,9 +119,6 @@
     <string name="pref_recently_used_sort_order">Недавно использованные</string>
     <string name="pref_autofill_title">Автозаполнение</string>
     <string name="pref_autofill_enable_title">Включить автозаполнение</string>
-    <string name="pref_autofill_enable_msg">Нажмите ОК чтобы перейти в Специальные Возможности. Выберите Password Store в службах, а потом нажмите на переключатель.</string>
-    <string name="pref_autofill_enable_msg2">После активации сервиса, при клике на поле ввода пароля в приложении появится диалоговое окно, если подходящий пароль существует</string>
-    <string name="pref_autofill_enable_msg3">Password Store пытается сопоставлять пароли с приложениями автоматически. Вы можете изменить это поведение.</string>
     <string name="pref_autofill_apps_title">Настройки приложений и веб сайтов</string>
     <string name="pref_autofill_default_title">Автоматически сопоставлять по умолчанию</string>
     <string name="pref_autofill_default_hint">По умолчанию \'Автоматически сопоставлять\' для приложений без пользовательских настроек. В другом случае, \'Никогда не сопоставлять\'</string>
@@ -220,23 +217,8 @@
     <string name="oreo_autofill_enable_dialog_instructions">Чтобы включить эту функцию, нажмите ОК, чтобы перейти к настройкам автозаполнения. Там выберите Password Store из списка и подтвердите запрос подтверждения, нажав ОК.</string>
     <string name="oreo_autofill_enable_dialog_installed_browsers">Поддержка автозаполнения установленными браузерами:</string>
     <!-- Autofill -->
-    <string name="autofill_description">Автозаполнение паролей в приложениях. Работает только в Android 4.3 и выше. Не использует буфер обмена в Android 5.0 и выше.</string>
-    <string name="autofill_apps_default">Использовать настройки по умолчанию</string>
-    <string name="autofill_apps_first">Автоматически сопоставлять</string>
-    <string name="autofill_apps_match_ellipsis">Сопоставить с … </string>
-    <string name="autofill_apps_match">Сопоставить с</string>
-    <string name="autofill_apps_never">Никогда не сопоставлять</string>
-    <string name="autofill_apps_delete">Удалить</string>
-    <string name="autofill_pick">Выбрать…</string>
-    <string name="autofill_pick_and_match">Выбрать и сопоставить…</string>
-    <string name="autofill_paste">Вставить</string>
-    <string name="autofill_paste_username">Вставить имя пользователя?\n\n%s</string>
-    <string name="autofill_toast_username">Выберите поле ввода для вставки имени пользователя.\nИмя пользователя можно вставить в течение %d секунд.</string>
     <string name="ssh_key_does_not_exist">Невозможно открыть приватный ключ ssh, пожалуйста проверьте, что файл существует</string>
     <string name="new_password_title">Новый пароль</string>
-    <string name="autofill_ins_1_hint">Снимок экрана сервисов доступности</string>
-    <string name="autofill_ins_2_hint">Снимок экрана переключателя в сервисах доступности</string>
-    <string name="autofill_ins_3_hint">Снимок экрана сервиса автозаполнения в действии</string>
     <string name="clear_saved_passphrase_ssh">Очистить сохраненную кодовую фразу для локального SSH ключа</string>
     <string name="clear_saved_passphrase_https">Очистить сохраненный пароль HTTPS</string>
     <string name="git_operation_remember_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>

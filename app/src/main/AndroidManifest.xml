@@ -11,9 +11,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
-        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
@@ -93,17 +90,6 @@
             android:theme="@style/NoBackgroundTheme" />
 
         <service
-            android:name=".autofill.AutofillService"
-            android:enabled="@bool/enable_accessibility_autofill"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/autofill_config" />
-        </service>
-        <service
             android:name=".ClipboardService"
             android:process=":clipboard_service_process" />
         <service
@@ -119,15 +105,6 @@
                 android:name="android.autofill"
                 android:resource="@xml/oreo_autofill_service" />
         </service>
-
-        <activity
-            android:name=".autofill.AutofillActivity"
-            android:documentLaunchMode="intoExisting"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppTheme"
-            tools:ignore="UnusedAttribute" />
-
-        <activity android:name=".autofill.AutofillPreferenceActivity" />
 
         <activity android:name=".SelectFolderActivity" />
         <activity

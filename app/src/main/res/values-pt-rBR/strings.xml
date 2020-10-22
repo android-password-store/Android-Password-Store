@@ -115,9 +115,6 @@
     <string name="pref_recently_used_sort_order">Usado recentemente</string>
     <string name="pref_autofill_title">Preenchimento Automático</string>
     <string name="pref_autofill_enable_title">Ativar preenchimento automático</string>
-    <string name="pref_autofill_enable_msg">Toque em OK para ir para as Configurações de Acessibilidade. Lá, toque em Password Store nos Serviços e toque na chave no canto superior direito para ligar ou desligar.</string>
-    <string name="pref_autofill_enable_msg2">Quando o serviço estiver ativado, uma caixa de diálogo irá aparecer quando você clicar no campo de senha em um aplicativo se existir uma senha correspondente para o aplicativo.</string>
-    <string name="pref_autofill_enable_msg3">O Password Store tenta combinar aplicativos com senhas automaticamente. Você pode alterar essa configuração padrão e também as configurações correspondentes por aplicativo.</string>
     <string name="pref_autofill_apps_title">Configurações de apps e sites</string>
     <string name="pref_autofill_default_title">Corresponder automaticamente por padrão</string>
     <string name="pref_autofill_default_hint">Padrão para \'correspondência automática\' para aplicativos sem configurações personalizadas. Caso contrário, \'Nunca corresponder.\'</string>
@@ -216,23 +213,8 @@
     <string name="oreo_autofill_enable_dialog_instructions">Para ativar esse recurso, toque em OK para ir para as configurações de preenchimento automático. Lá, selecione Password Store na lista e confirme na tela confirmação com OK.</string>
     <string name="oreo_autofill_enable_dialog_installed_browsers">Suporte ao preenchimento automático com navegadores instalados:</string>
     <!-- Autofill -->
-    <string name="autofill_description">Preenche automaticamente campos de senha em aplicativos. Funciona apenas para versões Android 4.3 e superior. Não depende da área de transferência para Android versões 5.0 ou superior.</string>
-    <string name="autofill_apps_default">Usar configurações padrão</string>
-    <string name="autofill_apps_first">Corresponder automaticamente</string>
-    <string name="autofill_apps_match_ellipsis">Combinar com…</string>
-    <string name="autofill_apps_match">Combinar com</string>
-    <string name="autofill_apps_never">Nunca coincidir</string>
-    <string name="autofill_apps_delete">Excluir</string>
-    <string name="autofill_pick">Escolher…</string>
-    <string name="autofill_pick_and_match">Escolher e combinar…</string>
-    <string name="autofill_paste">Colar</string>
-    <string name="autofill_paste_username">Colar usuário?\n\n%s</string>
-    <string name="autofill_toast_username">Selecione um campo editável para colar o nome de usuário.\nNome de usuário está disponível por %d segundos.</string>
     <string name="ssh_key_does_not_exist">Não foi possível abrir a chave privada ssh, por favor verifique se o arquivo existe</string>
     <string name="new_password_title">Nova senha</string>
-    <string name="autofill_ins_1_hint">Captura de tela de serviços de acessibilidade</string>
-    <string name="autofill_ins_2_hint">Captura de tela de alternância nos serviços de acessibilidade</string>
-    <string name="autofill_ins_3_hint">Captura de tela do serviço de preenchimento automático em ação</string>
     <string name="clear_saved_passphrase_ssh">Limpar a frase secreta salva para chave SSH local</string>
     <string name="clear_saved_passphrase_https">Limpar senha HTTPS salva</string>
     <string name="git_operation_remember_passphrase">Lembrar senha da chave</string>

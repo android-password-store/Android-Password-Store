@@ -9,11 +9,7 @@ object PreferenceKeys {
 
     const val APP_THEME = "app_theme"
     const val APP_VERSION = "app_version"
-    const val AUTOFILL_APPS = "autofill_apps"
-    const val AUTOFILL_ALWAYS = "autofill_always"
-    const val AUTOFILL_DEFAULT = "autofill_default"
     const val AUTOFILL_ENABLE = "autofill_enable"
-    const val AUTOFILL_FULL_PATH = "autofill_full_path"
     const val BIOMETRIC_AUTH = "biometric_auth"
     const val CLEAR_CLIPBOARD_20X = "clear_clipboard_20x"
     const val CLEAR_SAVED_PASS = "clear_saved_pass"

@@ -137,9 +137,6 @@
     <string name="pref_recently_used_sort_order">Recently used</string>
     <string name="pref_autofill_title">Autofill</string>
     <string name="pref_autofill_enable_title">Enable Autofill</string>
-    <string name="pref_autofill_enable_msg">Tap OK to go to Accessibility settings. There, tap Password Store under Services then tap the switch in the top right to turn it on or off.</string>
-    <string name="pref_autofill_enable_msg2">Once the service is on, a dialog will appear when you click on a password field in an app if a matching password for the app exists.</string>
-    <string name="pref_autofill_enable_msg3">Password Store attempts to match apps with passwords automatically. You can change this default setting and also matching settings per-app.</string>
     <string name="pref_autofill_apps_title">App and website settings</string>
     <string name="pref_autofill_default_title">Automatically match by default</string>
     <string name="pref_autofill_default_hint">Default to \'Automatically match\' for apps without custom settings. Otherwise, \'Never match.\'</string>
@@ -266,23 +263,8 @@
     <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill support with installed browsers:</string>
 
     <!-- Autofill -->
-    <string name="autofill_description">Autofills password fields in apps. Only works for Android versions 4.3 and up. Does not rely on the clipboard for Android versions 5.0 and up.</string>
-    <string name="autofill_apps_default">Use default setting</string>
-    <string name="autofill_apps_first">Automatically match</string>
-    <string name="autofill_apps_match_ellipsis">Match with…</string>
-    <string name="autofill_apps_match">Match with</string>
-    <string name="autofill_apps_never">Never match</string>
-    <string name="autofill_apps_delete">Delete</string>
-    <string name="autofill_pick">Pick…</string>
-    <string name="autofill_pick_and_match">Pick and match…</string>
-    <string name="autofill_paste">Paste</string>
-    <string name="autofill_paste_username">Paste username?\n\n%s</string>
-    <string name="autofill_toast_username">Select an editable field to paste the username.\nUsername is available for %d seconds.</string>
     <string name="ssh_key_does_not_exist">Unable to open the ssh private key, please check that the file exists</string>
     <string name="new_password_title">New password</string>
-    <string name="autofill_ins_1_hint">Screenshot of accessibility services</string>
-    <string name="autofill_ins_2_hint">Screenshot of toggle in accessibility services</string>
-    <string name="autofill_ins_3_hint">Screenshot of autofill service in action</string>
     <string name="clear_saved_passphrase_ssh">Clear saved passphrase for local SSH key</string>
     <string name="clear_saved_passphrase_https">Clear saved HTTPS password</string>
     <string name="git_operation_remember_passphrase">Remember key passphrase</string>
