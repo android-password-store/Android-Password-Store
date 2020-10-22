@@ -56,9 +56,6 @@
     <string name="pref_recursive_filter_hint">現在のディレクトリーのパスワードを再帰的に検索します。</string>
     <string name="pref_autofill_title">自動入力</string>
     <string name="pref_autofill_enable_title">自動入力を有効にする</string>
-    <string name="pref_autofill_enable_msg">OK をタップするとアクセシビリティ設定に移動します。 ここで、サービスの下の Password Store をタップし、右上のスイッチをタップしてオンまたはオフにします。</string>
-    <string name="pref_autofill_enable_msg2">サービスがオンになると、アプリのパスワードフィールドをクリックすとダイアログが表示され、一致するアプリのパスワードが存在すると表示されます。</string>
-    <string name="pref_autofill_enable_msg3">Password Store は、自動的にアプリをパスワードと照合します。 このデフォルト設定を変更することも、アプリごとに設定を変更することもできます。</string>
     <string name="pref_autofill_apps_title">アプリとウェブサイトの設定</string>
     <string name="pref_autofill_default_title">デフォルトで自動的に一致</string>
     <string name="pref_autofill_default_hint">カスタム設定のないアプリは、デフォルトは \'自動的に一致\' になります。 それ以外の場合は、\'一致しない\'。</string>
@@ -100,13 +97,6 @@
     <string name="send_plaintext_password_to">パスワードをプレーンテキストとして送信…</string>
     <!-- Oreo Autofill -->
     <!-- Autofill -->
-    <string name="autofill_description">アプリのパスワードフィールドを自動入力します。 Android バージョン 4.3 以降でのみ動作します。 Android 5.0 以降のクリップボードには依存しません。</string>
-    <string name="autofill_apps_default">デフォルト設定を使用する</string>
-    <string name="autofill_apps_first">自動的に一致</string>
-    <string name="autofill_apps_match_ellipsis">一致…</string>
-    <string name="autofill_apps_match">一致</string>
-    <string name="autofill_apps_never">一致しない</string>
-    <string name="autofill_apps_delete">削除</string>
     <!-- OpenKeychain errors -->
     <!-- Password creation failure -->
     <!-- GitException messages -->

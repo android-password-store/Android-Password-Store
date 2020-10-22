@@ -55,9 +55,6 @@
     <string name="pref_recursive_filter">搜索子文件夹</string>
     <string name="pref_recursive_filter_hint">在当前目录的子目录中查找密码</string>
     <string name="pref_autofill_enable_title">启动自动填充</string>
-    <string name="pref_autofill_enable_msg">点击 OK 进入无障碍设置. 在那里的服务选项中选中点选 Password Store 并单击右上方的开关将其开启或关闭</string>
-    <string name="pref_autofill_enable_msg2">服务启动之后, 在你点击一个应用的密码栏时如果该应用有匹配的密码则会弹出对话框.</string>
-    <string name="pref_autofill_enable_msg3">Password Store 会自动尝试将应用与密码匹配. 你可以更改这个默认设置以及每个应用的匹配设置.</string>
     <string name="pref_autofill_apps_title">应用及网站设置</string>
     <string name="pref_autofill_default_title">默认为自动匹配</string>
     <string name="pref_autofill_default_hint">无自定义设置的应用将默认采用 \'自动匹配\' . 否则将采用\'从不匹配\'</string>
@@ -98,13 +95,6 @@
     <string name="send_plaintext_password_to">将密码以纯文本发送…</string>
     <!-- Oreo Autofill -->
     <!-- Autofill -->
-    <string name="autofill_description">在app中自动输入密码. 此功能只在 Andorid 4.3 及以上版本中可用. 在 Andorid 5.0 及以上版本中不依赖剪贴板</string>
-    <string name="autofill_apps_default">使用默认设置</string>
-    <string name="autofill_apps_first">自动匹配</string>
-    <string name="autofill_apps_match_ellipsis">匹配…</string>
-    <string name="autofill_apps_match">匹配</string>
-    <string name="autofill_apps_never">从不匹配</string>
-    <string name="autofill_apps_delete">删除</string>
     <!-- OpenKeychain errors -->
     <!-- Password creation failure -->
     <!-- GitException messages -->

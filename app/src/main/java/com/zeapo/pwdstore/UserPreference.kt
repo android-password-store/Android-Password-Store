@@ -4,7 +4,6 @@
  */
 package com.zeapo.pwdstore
 
-import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -18,10 +17,10 @@ import android.provider.DocumentsContract
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
-import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.edit
@@ -42,7 +41,6 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.zeapo.pwdstore.autofill.AutofillPreferenceActivity
 import com.zeapo.pwdstore.crypto.BasePgpActivity
 import com.zeapo.pwdstore.git.GitConfigActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
@@ -173,7 +171,6 @@ class UserPreference : AppCompatActivity() {
         private var autoFillEnablePreference: SwitchPreferenceCompat? = null
         private var clearSavedPassPreference: Preference? = null
         private var viewSshKeyPreference: Preference? = null
-        private lateinit var autofillDependencies: List<Preference>
         private lateinit var oreoAutofillDependencies: List<Preference>
         private lateinit var prefsActivity: UserPreference
         private lateinit var sharedPreferences: SharedPreferences
@@ -220,16 +217,6 @@ class UserPreference : AppCompatActivity() {
             val oreoAutofillDirectoryStructurePreference = findPreference<ListPreference>(PreferenceKeys.OREO_AUTOFILL_DIRECTORY_STRUCTURE)
             val oreoAutofillDefaultUsername = findPreference<EditTextPreference>(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
             val oreoAutofillCustomPublixSuffixes = findPreference<EditTextPreference>(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
-            val autoFillAppsPreference = findPreference<Preference>(PreferenceKeys.AUTOFILL_APPS)
-            val autoFillDefaultPreference = findPreference<CheckBoxPreference>(PreferenceKeys.AUTOFILL_DEFAULT)
-            val autoFillAlwaysShowDialogPreference = findPreference<CheckBoxPreference>(PreferenceKeys.AUTOFILL_ALWAYS)
-            val autoFillShowFullNamePreference = findPreference<CheckBoxPreference>(PreferenceKeys.AUTOFILL_FULL_PATH)
-            autofillDependencies = listOfNotNull(
-                autoFillAppsPreference,
-                autoFillDefaultPreference,
-                autoFillAlwaysShowDialogPreference,
-                autoFillShowFullNamePreference,
-            )
             oreoAutofillDependencies = listOfNotNull(
                 oreoAutofillDirectoryStructurePreference,
                 oreoAutofillDefaultUsername,
@@ -347,15 +334,11 @@ class UserPreference : AppCompatActivity() {
             selectExternalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
             externalGitRepositoryPreference?.onPreferenceChangeListener = resetRepo
 
-            autoFillAppsPreference?.onPreferenceClickListener = ClickListener {
-                val intent = Intent(prefsActivity, AutofillPreferenceActivity::class.java)
-                startActivity(intent)
-                true
-            }
-
-            autoFillEnablePreference?.onPreferenceClickListener = ClickListener {
-                onEnableAutofillClick()
-                true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                autoFillEnablePreference?.onPreferenceClickListener = ClickListener {
+                    onEnableAutofillClick()
+                    true
+                }
             }
 
             findPreference<Preference>(PreferenceKeys.EXPORT_PASSWORDS)?.apply {
@@ -474,12 +457,12 @@ class UserPreference : AppCompatActivity() {
         }
 
         private fun updateAutofillSettings() {
-            val isAccessibilityServiceEnabled = prefsActivity.isAccessibilityServiceEnabled
             val isAutofillServiceEnabled = prefsActivity.isAutofillServiceEnabled
-            autoFillEnablePreference?.isChecked =
-                isAccessibilityServiceEnabled || isAutofillServiceEnabled
-            autofillDependencies.forEach {
-                it.isVisible = isAccessibilityServiceEnabled
+            val isAutofillSupported = prefsActivity.isAutofillServiceSupported
+            if (!isAutofillSupported) {
+                autoFillEnablePreference?.isVisible = false
+            } else {
+                autoFillEnablePreference?.isChecked = isAutofillServiceEnabled
             }
             oreoAutofillDependencies.forEach {
                 it.isVisible = isAutofillServiceEnabled
@@ -507,51 +490,40 @@ class UserPreference : AppCompatActivity() {
             viewSshKeyPreference?.isVisible = SshKey.canShowSshPublicKey
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         private fun onEnableAutofillClick() {
-            if (prefsActivity.isAccessibilityServiceEnabled) {
-                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            } else if (prefsActivity.isAutofillServiceEnabled) {
+            if (prefsActivity.isAutofillServiceEnabled) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     prefsActivity.autofillManager!!.disableAutofillServices()
                 else
                     throw IllegalStateException("isAutofillServiceEnabled == true, but Build.VERSION.SDK_INT < Build.VERSION_CODES.O")
             } else {
-                val enableOreoAutofill = prefsActivity.isAutofillServiceSupported
                 MaterialAlertDialogBuilder(prefsActivity).run {
                     setTitle(R.string.pref_autofill_enable_title)
-                    if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        @SuppressLint("InflateParams")
-                        val layout =
-                            layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
-                        val supportedBrowsersTextView =
-                            layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
-                        supportedBrowsersTextView.text =
-                            getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
-                                separator = "\n"
-                            ) {
-                                val appLabel = it.first
-                                val supportDescription = when (it.second) {
-                                    BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
-                                    BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
-                                    BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
-                                    BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
-                                    BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
-                                }
-                                "$appLabel: $supportDescription"
+                    @SuppressLint("InflateParams")
+                    val layout =
+                        layoutInflater.inflate(R.layout.oreo_autofill_instructions, null)
+                    val supportedBrowsersTextView =
+                        layout.findViewById<AppCompatTextView>(R.id.supportedBrowsers)
+                    supportedBrowsersTextView.text =
+                        getInstalledBrowsersWithAutofillSupportLevel(context).joinToString(
+                            separator = "\n"
+                        ) {
+                            val appLabel = it.first
+                            val supportDescription = when (it.second) {
+                                BrowserAutofillSupportLevel.None -> getString(R.string.oreo_autofill_no_support)
+                                BrowserAutofillSupportLevel.FlakyFill -> getString(R.string.oreo_autofill_flaky_fill_support)
+                                BrowserAutofillSupportLevel.PasswordFill -> getString(R.string.oreo_autofill_password_fill_support)
+                                BrowserAutofillSupportLevel.GeneralFill -> getString(R.string.oreo_autofill_general_fill_support)
+                                BrowserAutofillSupportLevel.GeneralFillAndSave -> getString(R.string.oreo_autofill_general_fill_and_save_support)
                             }
-                        setView(layout)
-                    } else {
-                        setView(R.layout.autofill_instructions)
-                    }
+                            "$appLabel: $supportDescription"
+                        }
+                    setView(layout)
                     setPositiveButton(R.string.dialog_ok) { _, _ ->
-                        val intent =
-                            if (enableOreoAutofill && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
-                                    data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-                                }
-                            } else {
-                                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                            }
+                        val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
+                            data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                        }
                         startActivity(intent)
                     }
                     setNegativeButton(R.string.dialog_cancel, null)
@@ -669,16 +641,6 @@ class UserPreference : AppCompatActivity() {
     private fun storeCustomDictionaryPath() {
         storeCustomXkpwdDictionaryAction.launch(arrayOf("*/*"))
     }
-
-    private val isAccessibilityServiceEnabled: Boolean
-        get() {
-            val am = getSystemService<AccessibilityManager>() ?: return false
-            val runningServices = am
-                .getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
-            return runningServices
-                .map { it.id.substringBefore("/") }
-                .any { it == BuildConfig.APPLICATION_ID }
-        }
 
     private val isAutofillServiceSupported: Boolean
         get() {

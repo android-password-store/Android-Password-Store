@@ -79,9 +79,6 @@
     <string name="pref_type_independent_sort_order">Independiente del tipo</string>
     <string name="pref_autofill_title">Autollenado</string>
     <string name="pref_autofill_enable_title">Habilitar autollenado</string>
-    <string name="pref_autofill_enable_msg">Pulsa OK para ir a los ajustes de Accesibilidad. Ahí, pulsa Password Store debajo de Servicios, luego pulsa el switch en la esquina superior derecha para (des)activarlo.</string>
-    <string name="pref_autofill_enable_msg2">Una vez que el servicio está activo, un diálogo aparecerá cuando pulses sobre un campo de contraseña en una app si existe un registro ligado.</string>
-    <string name="pref_autofill_enable_msg3">Password Store intenta ligar las contraseñas automáticamente. Puedes cambiar este ajuste predeterminado y cada ajuste por aplicación.</string>
     <string name="pref_autofill_apps_title">Ajustes de aplicaciones y sitios web</string>
     <string name="pref_autofill_default_title">Ligar automáticamente por defecto</string>
     <string name="pref_autofill_default_hint">Por defecto usar \'Ligar automáticamente\' para aplicaciones sin ajustes personalizados. De otra forma, usar \'Nunca ligar.\'</string>
@@ -149,23 +146,8 @@
     <string name="oreo_autofill_general_fill_support">Rellena las credenciales</string>
     <string name="oreo_autofill_password_fill_support">Rellenar las contraseñas</string>
     <!-- Autofill -->
-    <string name="autofill_description">Autollena campos de contraseña en aplicaciones. Solo funciona en Android 4.3 y superiores. No depende del portapapales en Android 5.0 y superiores.</string>
-    <string name="autofill_apps_default">Usar la opción predeterminada</string>
-    <string name="autofill_apps_first">Ligar automáticamente</string>
-    <string name="autofill_apps_match_ellipsis">Ligar a…</string>
-    <string name="autofill_apps_match">Ligar a</string>
-    <string name="autofill_apps_never">Nunca ligar</string>
-    <string name="autofill_apps_delete">Eliminar</string>
-    <string name="autofill_pick">Seleccionar…</string>
-    <string name="autofill_pick_and_match">Seleccionar y ligar…</string>
-    <string name="autofill_paste">Pegar</string>
-    <string name="autofill_paste_username">Pegar nombre de usuario?\n\n%s</string>
-    <string name="autofill_toast_username">Selecciona un campo editable para pegar el nombre de usuario.\nNombre de usuario disponible por %d segundos.</string>
     <string name="ssh_key_does_not_exist">Imposible abrir la llave privada SSH. Por favor verifica que el archivo exista</string>
     <string name="new_password_title">Nueva contraseña</string>
-    <string name="autofill_ins_1_hint">Pantalla de Servicios de Accesibilidad</string>
-    <string name="autofill_ins_2_hint">Pantalla de activación en Servicios de Accesibilidad</string>
-    <string name="autofill_ins_3_hint">Pantalla de servicio de autollenado en acción</string>
     <string name="git_operation_remember_passphrase">Recordar contraseñagit  (inseguro)</string>
     <string name="abort_rebase">Abortar rebase</string>
     <!-- OpenKeychain errors -->

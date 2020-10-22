@@ -93,14 +93,6 @@
     <string name="app_icon_hint">أيقونة التطبيق</string>
     <!-- Oreo Autofill -->
     <!-- Autofill -->
-    <string name="autofill_apps_default">إستخدم الإعداد الإفتراضي</string>
-    <string name="autofill_apps_match_ellipsis">طابق مع ...</string>
-    <string name="autofill_apps_match">طابق مع</string>
-    <string name="autofill_apps_never">لا تطابق أبدا</string>
-    <string name="autofill_apps_delete">حذف</string>
-    <string name="autofill_pick">إختر</string>
-    <string name="autofill_pick_and_match">إختر و طابق مع ...</string>
-    <string name="autofill_paste">إلصاق</string>
     <string name="new_password_title">كلمة السر الجديدة</string>
     <!-- OpenKeychain errors -->
     <!-- Password creation failure -->

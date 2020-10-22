@@ -113,9 +113,6 @@
     <string name="pref_recently_used_sort_order">Récemment utilisé</string>
     <string name="pref_autofill_title">Saisie automatique</string>
     <string name="pref_autofill_enable_title">Saisie automatique</string>
-    <string name="pref_autofill_enable_msg">Tapez OK pour aller dans les paramètres d\'Accessibilité. Puis, choisissez \"Password Store\" dans \"Services\", ensuite utilisez le boutton dans le coin supérieur droit pour activer/désactiver la saisie automatique.</string>
-    <string name="pref_autofill_enable_msg2">Lorsque le service est activé une fenêtre de dialogue apparaitra lorsque vous cliquez sur un champ de type mot de passe.</string>
-    <string name="pref_autofill_enable_msg3">Password Store proposera alors le mot de passe. Vous pouvez changer ce réglage ou effectuer une correspondance spéfique par application.</string>
     <string name="pref_autofill_apps_title">Paramètres Application et site web</string>
     <string name="pref_autofill_default_title">Correspondance automatique par défaut</string>
     <string name="pref_autofill_default_hint">Default to \"Automatically match\" for apps without custom settings. Otherwise, \"Never match.\"</string>
@@ -208,22 +205,8 @@
     <string name="oreo_autofill_enable_dialog_instructions">Pour activer cette fonctionnalité, appuyez sur OK pour aller dans les paramètres de saisie automatique, sélectionnez Password Store dans la liste puis confirmez avec OK.</string>
     <string name="oreo_autofill_enable_dialog_installed_browsers">Prise en charge du remplissage automatique avec les navigateurs installés:</string>
     <!-- Autofill -->
-    <string name="autofill_description">Remplissage automatique des champs de type mot de passe dans les applications. Ne fonctionne que sur les version d\'Android 4.3 et supérieure. Ne dépend pas du presse-papier pour les version d\'Android 5.0 et supérieure.</string>
-    <string name="autofill_apps_default">Utiliser les paramètres par défaut</string>
-    <string name="autofill_apps_first">Correspondance automatique</string>
-    <string name="autofill_apps_match_ellipsis">Correspondance avec…</string>
-    <string name="autofill_apps_match">Correspondance avec</string>
-    <string name="autofill_apps_never">Aucun correspondance</string>
-    <string name="autofill_apps_delete">Supprimer</string>
-    <string name="autofill_pick">Choisir…</string>
-    <string name="autofill_pick_and_match">Choisir et correspondre…</string>
-    <string name="autofill_paste">Coller</string>
-    <string name="autofill_paste_username">Coller le nom d\'utilisateur?\n\n%s</string>
     <string name="ssh_key_does_not_exist">Impossible d\'ouvrir la clef ssh, merci de vérifier que le ficher existe</string>
     <string name="new_password_title">Nouveau mot de passe</string>
-    <string name="autofill_ins_1_hint">Capture des services d\'accessibilité</string>
-    <string name="autofill_ins_2_hint">Capture de bascule dans les services d\'accessibilité</string>
-    <string name="autofill_ins_3_hint">Capture du service de remplissage automatique en action</string>
     <string name="git_operation_remember_passphrase">Se rappeler de la phrase secrète dans la configuration de l\'application (peu sûr)</string>
     <string name="reset_to_remote">Réinitialisation dure de la branche distante</string>
     <string name="biometric_prompt_title">Identification biométrique</string>

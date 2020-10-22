@@ -79,9 +79,6 @@
     <string name="pref_recursive_filter">Rekurzivní filtrování</string>
     <string name="pref_recursive_filter_hint">Rekurzivní hledání hesel v aktuálním adresáři.</string>
     <string name="pref_autofill_enable_title">Povolit automatické vyplňování</string>
-    <string name="pref_autofill_enable_msg">Ťukni na OK pro zobrazení nastavení přístupnosti. Tam poté ťuknout mezi službami na Password Store a přepínačem lze zapnout nebo vypnout.</string>
-    <string name="pref_autofill_enable_msg2">Jakmile bude služba zapnuta, po kliknutí na pole hesla bude zobrazeno dialogové okno pokud je pro používanou aplikaci heslo dostupné.</string>
-    <string name="pref_autofill_enable_msg3">Password Store se automaticky pokouší najít odpovídající heslo k aplikacím. Toto výchozí nastavení spolu s nastavením pro jednotlivé aplikace lze změnit.</string>
     <string name="pref_autofill_apps_title">Nastavení aplikace a webové stránky</string>
     <string name="pref_autofill_default_title">Automaticky párovat ve výchozím nastavení</string>
     <string name="pref_autofill_default_hint">Ve výchozím nastavení \'Automaticky párovat\' u aplikací bez vybraného nastavení. Jinak, \'Nikdy nepárovat.\'</string>
@@ -126,13 +123,6 @@
     <string name="send_plaintext_password_to">Odeslat heslo jako plaintext za použití…</string>
     <!-- Oreo Autofill -->
     <!-- Autofill -->
-    <string name="autofill_description">Automaticky vyplňuje pole hesel v aplikacích. Funguje pouze pro verzi Androidu 4.3 a vyšší. Není závislé na schránce pro Android verze 5.0 a vyšší.</string>
-    <string name="autofill_apps_default">Použít výchozí nastavení</string>
-    <string name="autofill_apps_first">Automaticky spárovat</string>
-    <string name="autofill_apps_match_ellipsis">Spárovat s…</string>
-    <string name="autofill_apps_match">Spárovat s</string>
-    <string name="autofill_apps_never">Nikdy nepárovat</string>
-    <string name="autofill_apps_delete">Smazat</string>
     <!-- OpenKeychain errors -->
     <!-- Password creation failure -->
     <!-- GitException messages -->
