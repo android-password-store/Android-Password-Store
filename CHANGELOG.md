@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.13.0] - 2020-10-22
+
 ### Fixed
 
 -  Some classes of errors would be swallowed by an unhelpful 'Invalid remote: origin' message
@@ -368,7 +370,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.1...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.0...HEAD
+
+[1.13.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.1...v1.13.0
 
 [1.12.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.0...v1.12.1
 
