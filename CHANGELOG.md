@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-  Add support for domain-level autofill in DuckDuckGo's F-Droid builds.
+
 ### Changed
 
 -  The newly added automatic synchronisation feature has been rolled back due to multiple issues with its implementation.
