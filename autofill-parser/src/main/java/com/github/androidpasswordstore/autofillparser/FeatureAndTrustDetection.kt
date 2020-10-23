@@ -55,36 +55,36 @@ import androidx.annotation.RequiresApi
  * fields on the page, e.g. of those in iframes.
  */
 private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
-    "com.android.chrome" to "8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M=",
-    "com.brave.browser" to "nC23BRNRX9v7vFhbPt89cSPU3GfJT/0wY2HB15u/GKw=",
-    "com.chrome.beta" to "2mM9NLaeY64hA7SdU84FL8X388U6q5T9wqIIvf0UJJw=",
-    "com.chrome.canary" to "IBnfofsj779wxbzRRDxb6rBPPy/0Nm6aweNFdjmiTPw=",
-    "com.chrome.dev" to "kETuX+5LvF4h3URmVDHE6x8fcaMnFqC8knvLs5Izyr8=",
-    "com.duckduckgo.mobile.android" to "u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=",
-    "com.microsoft.emmx" to "AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk=",
-    "com.opera.mini.native" to "V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I=",
-    "com.opera.mini.native.beta" to "V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I=",
-    "com.opera.touch" to "qtjiBNJNF3k0yc0MY8xqo4779CxKaVcJfiIQ9X+qZ6o=",
-    "org.bromite.bromite" to "4e5c0HbXsNyEyytF+3i4bfLrOaO2xWuj3CkqXgw7lQQ=",
-    "org.gnu.icecat" to "wi2iuVvK/WYZUzd2g0Qzn9ef3kAisQURZ8U1WSMTkcM=",
-    "org.mozilla.fenix" to "UAR3kIjn+YjVvFzF+HmP6/T4zQhKGypG79TI7krq8hE=",
-    "org.mozilla.fenix.nightly" to "d+rEzu02r++6dheZMd1MwZWrDNVLrzVdIV57vdKOQCo=",
-    "org.mozilla.fennec_aurora" to "vASIg40G9Mpr8yOG2qsN2OvPPncweHRZ9i+zzRShuqo=",
-    "org.mozilla.fennec_fdroid" to "BmZTWO/YugW+I2pHoSywlY19dd2TnXfCsx9TmFN+vcU=",
-    "org.mozilla.firefox" to "p4tipRZbRJSy/q2edqKA0i2Tf+5iUa7OWZRGsuoxmwQ=",
-    "org.mozilla.firefox_beta" to "p4tipRZbRJSy/q2edqKA0i2Tf+5iUa7OWZRGsuoxmwQ=",
-    "org.mozilla.focus" to "YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w=",
-    "org.mozilla.klar" to "YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w=",
-    "org.torproject.torbrowser" to "IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg=",
-    "org.ungoogled.chromium.stable" to "29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk=",
-    "org.ungoogled.chromium.extensions.stable" to "29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk=",
-    "com.kiwibrowser.browser" to "wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig=",
+    "com.android.chrome" to arrayOf("8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M="),
+    "com.brave.browser" to arrayOf("nC23BRNRX9v7vFhbPt89cSPU3GfJT/0wY2HB15u/GKw="),
+    "com.chrome.beta" to arrayOf("2mM9NLaeY64hA7SdU84FL8X388U6q5T9wqIIvf0UJJw="),
+    "com.chrome.canary" to arrayOf("IBnfofsj779wxbzRRDxb6rBPPy/0Nm6aweNFdjmiTPw="),
+    "com.chrome.dev" to arrayOf("kETuX+5LvF4h3URmVDHE6x8fcaMnFqC8knvLs5Izyr8="),
+    "com.duckduckgo.mobile.android" to arrayOf("u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ="),
+    "com.microsoft.emmx" to arrayOf("AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk="),
+    "com.opera.mini.native" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
+    "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
+    "com.opera.touch" to arrayOf("qtjiBNJNF3k0yc0MY8xqo4779CxKaVcJfiIQ9X+qZ6o="),
+    "org.bromite.bromite" to arrayOf("4e5c0HbXsNyEyytF+3i4bfLrOaO2xWuj3CkqXgw7lQQ="),
+    "org.gnu.icecat" to arrayOf("wi2iuVvK/WYZUzd2g0Qzn9ef3kAisQURZ8U1WSMTkcM="),
+    "org.mozilla.fenix" to arrayOf("UAR3kIjn+YjVvFzF+HmP6/T4zQhKGypG79TI7krq8hE="),
+    "org.mozilla.fenix.nightly" to arrayOf("d+rEzu02r++6dheZMd1MwZWrDNVLrzVdIV57vdKOQCo="),
+    "org.mozilla.fennec_aurora" to arrayOf("vASIg40G9Mpr8yOG2qsN2OvPPncweHRZ9i+zzRShuqo="),
+    "org.mozilla.fennec_fdroid" to arrayOf("BmZTWO/YugW+I2pHoSywlY19dd2TnXfCsx9TmFN+vcU="),
+    "org.mozilla.firefox" to arrayOf("p4tipRZbRJSy/q2edqKA0i2Tf+5iUa7OWZRGsuoxmwQ="),
+    "org.mozilla.firefox_beta" to arrayOf("p4tipRZbRJSy/q2edqKA0i2Tf+5iUa7OWZRGsuoxmwQ="),
+    "org.mozilla.focus" to arrayOf("YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w="),
+    "org.mozilla.klar" to arrayOf("YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w="),
+    "org.torproject.torbrowser" to arrayOf("IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg="),
+    "org.ungoogled.chromium.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
+    "org.ungoogled.chromium.extensions.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
+    "com.kiwibrowser.browser" to arrayOf("wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig="),
 )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
-    val expectedCertificateHash = TRUSTED_BROWSER_CERTIFICATE_HASH[appPackage] ?: return false
+    val expectedCertificateHashes = TRUSTED_BROWSER_CERTIFICATE_HASH[appPackage] ?: return false
     val certificateHash = computeCertificatesHash(context, appPackage)
-    return certificateHash == expectedCertificateHash
+    return certificateHash in expectedCertificateHashes
 }
 
 enum class BrowserMultiOriginMethod {
