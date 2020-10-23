@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
 
     - name: Decrypt secrets
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
@@ -21,24 +21,24 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Build release binaries
-      uses: burrunan/gradle-cache-action@v1
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
 
     - name: Upload non-free release APK
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
       with:
         name: APS Non-Free Release APK
         path: app/build/outputs/apk/nonFree/release/app-nonFree-release.apk
 
     - name: Upload non-free release Bundle
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
       with:
         name: APS Non-Free Release Bundle
         path: app/build/outputs/bundle/nonFreeRelease/app-nonFree-release.aab
 
     - name: Upload free release APK
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
       with:
         name: APS Free Release APK
         path: app/build/outputs/apk/free/release/app-free-release.apk
@@ -53,36 +53,36 @@ jobs:
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
 
       - name: Get Non-Free Release APK
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@f60857ee283b759efd0a9bf31b1b24a2d9c7e5cd
         with:
           name: APS Non-Free Release APK
           path: artifacts/nonFree
 
       - name: Get Non-Free Bundle
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@f60857ee283b759efd0a9bf31b1b24a2d9c7e5cd
         with:
           name: APS Non-Free Release Bundle
           path: artifacts/nonFree
 
       - name: Get Free Release APK
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@f60857ee283b759efd0a9bf31b1b24a2d9c7e5cd
         with:
           name: APS Free Release APK
           path: artifacts/free
 
       - name: Get Changelog Entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@v1.1.0
+        uses: mindsers/changelog-reader-action@30552f0e948002519ff6b36ffbf889ef4da47246
         with:
           version: ${{ github.ref }}
           path: ./CHANGELOG.md
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@c38d3a140cc22e67e265c5d5b6b4888d1f02533f
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -97,7 +97,7 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Upload Non-Free Release Apk
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e9f0662bdf9868f4aac644f0eedc2b56567fdba8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -107,7 +107,7 @@ jobs:
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload Non-Free Release Bundle
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e9f0662bdf9868f4aac644f0eedc2b56567fdba8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -117,7 +117,7 @@ jobs:
           asset_content_type: application/octet-stream
 
       - name: Upload Free Release Apk
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e9f0662bdf9868f4aac644f0eedc2b56567fdba8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
