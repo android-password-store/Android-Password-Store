@@ -31,9 +31,9 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
 
     init {
-        val pair = findAndStripPassword(content.split("\n".toRegex()))
-        password = pair.first
-        extraContent = pair.second.joinToString("\n")
+        val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
+        password = foundPassword
+        extraContent = passContent.joinToString("\n")
         username = findUsername()
         digits = findOtpDigits(content)
         totpSecret = findTotpSecret(content)
