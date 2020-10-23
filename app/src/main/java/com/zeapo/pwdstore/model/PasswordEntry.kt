@@ -31,9 +31,9 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
 
     init {
-        val passContent = content.split("\n".toRegex()).toMutableList()
-        password = findPassword(passContent)
-        extraContent = passContent.joinToString("\n")
+        val pair = findAndStripPassword(content.split("\n".toRegex()))
+        password = pair.first
+        extraContent = pair.second.joinToString("\n")
         username = findUsername()
         digits = findOtpDigits(content)
         totpSecret = findTotpSecret(content)
@@ -86,17 +86,16 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return null
     }
 
-    private fun findPassword(passContent: MutableList<String>): String {
-        if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) return ""
+    private fun findAndStripPassword(passContent: List<String>): Pair<String, List<String>> {
+        if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) return Pair("", passContent)
         for ((index, line) in passContent.withIndex()) {
             for (prefix in PASSWORD_FIELDS) {
                 if (line.startsWith(prefix, ignoreCase = true)) {
-                    passContent.removeAt(index)
-                    return line.substring(prefix.length).trimStart()
+                    return Pair(line.substring(prefix.length).trimStart(), passContent.minus(line))
                 }
             }
         }
-        return passContent.removeAt(0)
+        return Pair(passContent[0], passContent.minus(passContent[0]))
     }
 
     private fun findTotpSecret(decryptedContent: String): String? {
