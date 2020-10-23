@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+-  The newly added automatic synchronisation feature has been rolled back due to multiple issues with its implementation.
+
 ## [1.13.0] - 2020-10-22
 
 ### Fixed
