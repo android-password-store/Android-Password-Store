@@ -4,12 +4,12 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.RebaseCommand
 
-class BreakOutOfDetached(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
+class BreakOutOfDetached(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
 
     override val commands = arrayOf(
         // abort the rebase

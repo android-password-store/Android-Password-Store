@@ -4,9 +4,9 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import androidx.appcompat.app.AppCompatActivity
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 
-class SyncOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
+class SyncOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
 
     override val commands = arrayOf(
         // Stage all files

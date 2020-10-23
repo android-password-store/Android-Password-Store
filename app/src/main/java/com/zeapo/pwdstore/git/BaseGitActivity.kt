@@ -20,6 +20,7 @@ import com.zeapo.pwdstore.git.operation.PullOperation
 import com.zeapo.pwdstore.git.operation.PushOperation
 import com.zeapo.pwdstore.git.operation.ResetToRemoteOperation
 import com.zeapo.pwdstore.git.operation.SyncOperation
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.getEncryptedGitPrefs
 import com.zeapo.pwdstore.utils.sharedPrefs
@@ -33,7 +34,7 @@ import net.schmizz.sshj.userauth.UserAuthException
  * Abstract [AppCompatActivity] that holds some information that is commonly shared across git-related
  * tasks and makes sense to be held here.
  */
-abstract class BaseGitActivity : AppCompatActivity() {
+abstract class BaseGitActivity : ContinuationContainerActivity() {
 
     /**
      * Enum of possible Git operations than can be run through [launchGitOperation].

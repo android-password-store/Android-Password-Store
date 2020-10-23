@@ -4,10 +4,10 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import androidx.appcompat.app.AppCompatActivity
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.GitCommand
 
-class PushOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
+class PushOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
 
     override val commands: Array<GitCommand<out Any>> = arrayOf(
         git.push().setPushAll().setRemote("origin"),

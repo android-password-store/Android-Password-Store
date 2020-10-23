@@ -5,7 +5,6 @@
 package com.zeapo.pwdstore.git.sshj
 
 import android.util.Base64
-import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.getOrElse
@@ -40,10 +39,10 @@ import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
 
-sealed class SshAuthMethod(val activity: FragmentActivity) {
-    class Password(activity: FragmentActivity) : SshAuthMethod(activity)
-    class SshKey(activity: FragmentActivity) : SshAuthMethod(activity)
-    class OpenKeychain(activity: FragmentActivity) : SshAuthMethod(activity)
+sealed class SshAuthMethod(val activity: ContinuationContainerActivity) {
+    class Password(activity: ContinuationContainerActivity) : SshAuthMethod(activity)
+    class SshKey(activity: ContinuationContainerActivity) : SshAuthMethod(activity)
+    class OpenKeychain(activity: ContinuationContainerActivity) : SshAuthMethod(activity)
 }
 
 abstract class InteractivePasswordFinder : PasswordFinder {
