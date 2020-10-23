@@ -60,7 +60,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "com.chrome.beta" to arrayOf("2mM9NLaeY64hA7SdU84FL8X388U6q5T9wqIIvf0UJJw="),
     "com.chrome.canary" to arrayOf("IBnfofsj779wxbzRRDxb6rBPPy/0Nm6aweNFdjmiTPw="),
     "com.chrome.dev" to arrayOf("kETuX+5LvF4h3URmVDHE6x8fcaMnFqC8knvLs5Izyr8="),
-    "com.duckduckgo.mobile.android" to arrayOf("u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ="),
+    "com.duckduckgo.mobile.android" to arrayOf("u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=", "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="),
     "com.microsoft.emmx" to arrayOf("AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk="),
     "com.opera.mini.native" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
