@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- OpenKeychain authentication would fail with `LifecycleOwner com.zeapo.pwdstore.git.GitServerConfigActivity@f578da1 is attempting to register while current state is RESUMED. LifecycleOwners must call register before they are STARTED.`
+
 ### Added
 
 -  Add support for domain-level autofill in DuckDuckGo's F-Droid builds.

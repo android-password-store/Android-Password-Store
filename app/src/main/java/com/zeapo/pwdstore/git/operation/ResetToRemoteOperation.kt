@@ -4,10 +4,10 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import androidx.appcompat.app.AppCompatActivity
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.ResetCommand
 
-class ResetToRemoteOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
+class ResetToRemoteOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
 
     override val commands = arrayOf(
         // Stage all files

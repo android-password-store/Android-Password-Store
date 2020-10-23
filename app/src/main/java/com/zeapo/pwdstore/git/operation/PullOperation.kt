@@ -4,10 +4,10 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import androidx.appcompat.app.AppCompatActivity
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.GitCommand
 
-class PullOperation(callingActivity: AppCompatActivity) : GitOperation(callingActivity) {
+class PullOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
 
     /**
      * The story of why the pull operation is committing files goes like this: Once upon a time when

@@ -7,18 +7,14 @@ package com.zeapo.pwdstore.git.sshj
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
-import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.utils.OPENPGP_PROVIDER
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.sharedPrefs
 import java.io.Closeable
 import java.security.PublicKey
-import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,11 +35,11 @@ import org.openintents.ssh.authentication.response.Response
 import org.openintents.ssh.authentication.response.SigningResponse
 import org.openintents.ssh.authentication.response.SshPublicKeyResponse
 
-class OpenKeychainKeyProvider private constructor(activity: FragmentActivity) : KeyProvider, Closeable {
+class OpenKeychainKeyProvider private constructor(val activity: ContinuationContainerActivity) : KeyProvider, Closeable {
 
     companion object {
 
-        suspend fun prepareAndUse(activity: FragmentActivity, block: (provider: OpenKeychainKeyProvider) -> Unit) {
+        suspend fun prepareAndUse(activity: ContinuationContainerActivity, block: (provider: OpenKeychainKeyProvider) -> Unit) {
             withContext(Dispatchers.Main) {
                 OpenKeychainKeyProvider(activity)
             }.prepareAndUse(block)
@@ -59,21 +55,8 @@ class OpenKeychainKeyProvider private constructor(activity: FragmentActivity) : 
     private val context = activity.applicationContext
     private val sshServiceConnection = SshAuthenticationConnection(context, OPENPGP_PROVIDER)
     private val preferences = context.sharedPrefs
-    private val continueAfterUserInteraction =
-        activity.registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            currentCont?.let { cont ->
-                currentCont = null
-                val data = result.data
-                if (data != null)
-                    cont.resume(data)
-                else
-                    cont.resumeWithException(UserAuthException(DisconnectReason.AUTH_CANCELLED_BY_USER))
-            }
-        }
-
     private lateinit var sshServiceApi: SshAuthenticationApi
 
-    private var currentCont: Continuation<Intent>? = null
     private var keyId
         get() = preferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null)
         set(value) {
@@ -164,8 +147,8 @@ class OpenKeychainKeyProvider private constructor(activity: FragmentActivity) : 
                 val pendingIntent: PendingIntent = result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT)!!
                 val resultOfUserInteraction: Intent = withContext(Dispatchers.Main) {
                     suspendCoroutine { cont ->
-                        currentCont = cont
-                        continueAfterUserInteraction.launch(IntentSenderRequest.Builder(pendingIntent).build())
+                        activity.stashedCont = cont
+                        activity.continueAfterUserInteraction.launch(IntentSenderRequest.Builder(pendingIntent).build())
                     }
                 }
                 executeApiRequest(request, resultOfUserInteraction)
@@ -196,7 +179,7 @@ class OpenKeychainKeyProvider private constructor(activity: FragmentActivity) : 
     }
 
     override fun close() {
-        continueAfterUserInteraction.unregister()
+        activity.continueAfterUserInteraction.unregister()
         sshServiceConnection.disconnect()
     }
 

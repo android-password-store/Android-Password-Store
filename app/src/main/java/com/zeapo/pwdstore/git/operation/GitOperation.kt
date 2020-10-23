@@ -19,6 +19,7 @@ import com.zeapo.pwdstore.UserPreference
 import com.zeapo.pwdstore.git.GitCommandExecutor
 import com.zeapo.pwdstore.git.config.AuthMode
 import com.zeapo.pwdstore.git.config.GitSettings
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import com.zeapo.pwdstore.git.sshj.SshAuthMethod
 import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.git.sshj.SshjSessionFactory
@@ -55,6 +56,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     protected val repository = PasswordRepository.getRepository(null)!!
     protected val git = Git(repository)
     protected val remoteBranch = GitSettings.branch
+    private val authActivity get() = callingActivity as ContinuationContainerActivity
 
     private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
 
@@ -154,7 +156,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                     }
                     when (result) {
                         is BiometricAuthenticator.Result.Success -> {
-                            registerAuthProviders(SshAuthMethod.SshKey(callingActivity))
+                            registerAuthProviders(SshAuthMethod.SshKey(authActivity))
                         }
                         is BiometricAuthenticator.Result.Cancelled -> {
                             return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
@@ -172,7 +174,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                         }
                     }
                 } else {
-                    registerAuthProviders(SshAuthMethod.SshKey(callingActivity))
+                    registerAuthProviders(SshAuthMethod.SshKey(authActivity))
                 }
             } else {
                 onMissingSshKeyFile()
@@ -180,10 +182,10 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 // error, allowing users to make the SSH key selection.
                 return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
             }
-            AuthMode.OpenKeychain -> registerAuthProviders(SshAuthMethod.OpenKeychain(callingActivity))
+            AuthMode.OpenKeychain -> registerAuthProviders(SshAuthMethod.OpenKeychain(authActivity))
             AuthMode.Password -> {
                 val httpsCredentialProvider = HttpsCredentialsProvider(CredentialFinder(callingActivity, AuthMode.Password))
-                registerAuthProviders(SshAuthMethod.Password(callingActivity), httpsCredentialProvider)
+                registerAuthProviders(SshAuthMethod.Password(authActivity), httpsCredentialProvider)
             }
             AuthMode.None -> {
             }
