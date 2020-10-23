@@ -96,9 +96,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
                 }
             }
         }
-        var save = passContent[0]
-        passContent.removeAt(0)
-        return save
+        return passContent.removeAt(0)
     }
 
     private fun findTotpSecret(decryptedContent: String): String? {
