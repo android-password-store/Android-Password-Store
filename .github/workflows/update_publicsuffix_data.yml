@@ -10,12 +10,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
 
-      - name: Initialize git config
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email noreply@github.com
-          git checkout -b bot/update-psl
-
       - name: Download new publicsuffix data
         run: curl -L https://github.com/mozilla-mobile/android-components/raw/master/components/lib/publicsuffixlist/src/main/assets/publicsuffixes -o autofill-parser/src/main/assets/publicsuffixes
 
@@ -23,13 +17,15 @@ jobs:
         run: if [[ $(git diff --binary --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Create Pull Request
-        uses: repo-sync/pull-request@24ed95dd0d9ada9dfec0d555129c3db5a9e93e2a
+        uses: peter-evans/create-pull-request@c7f493a8000b8aeb17a1332e326ba76b57cb83eb
         if: env.UPDATED == 'true'
         with:
-          source_branch: bot/update-psl
-          destination_branch: develop
-          pr_title: "Update Public Suffix List data"
-          pr_body: "This is an automated pull request to update the publicsuffixes file to the latest copy from Mozilla"
           assignees: msfjarvis
-          pr_label: PSL
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author: GitHub Actions <noreply@github.com>
+          base: develop
+          body: This is an automated pull request to update the publicsuffixes file to the latest copy from Mozilla
+          branch: bot/update-psl
+          commit-message: "autofill-parser: update publicsuffixes file"
+          labels: PSL
+          title: Update Public Suffix List data
+          token: ${{ secrets.GITHUB_TOKEN }}
