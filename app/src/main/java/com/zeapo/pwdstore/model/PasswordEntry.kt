@@ -88,7 +88,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     private fun findAndStripPassword(passContent: List<String>): Pair<String, List<String>> {
         if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) return Pair("", passContent)
-        for ((index, line) in passContent.withIndex()) {
+        for (line in passContent) {
             for (prefix in PASSWORD_FIELDS) {
                 if (line.startsWith(prefix, ignoreCase = true)) {
                     return Pair(line.substring(prefix.length).trimStart(), passContent.minus(line))
