@@ -4,7 +4,7 @@
  */
 package com.zeapo.pwdstore.git.operation
 
-import androidx.appcompat.app.AppCompatActivity
+import com.zeapo.pwdstore.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.GitCommand
 
@@ -14,7 +14,7 @@ import org.eclipse.jgit.api.GitCommand
  * @param uri URL to clone the repository from
  * @param callingActivity the calling activity
  */
-class CloneOperation(callingActivity: AppCompatActivity, uri: String) : GitOperation(callingActivity) {
+class CloneOperation(callingActivity: ContinuationContainerActivity, uri: String) : GitOperation(callingActivity) {
 
     override val commands: Array<GitCommand<out Any>> = arrayOf(
         Git.cloneRepository().setBranch(remoteBranch).setDirectory(repository.workTree).setURI(uri),
