@@ -44,7 +44,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.crypto.BasePgpActivity
 import com.zeapo.pwdstore.git.GitConfigActivity
 import com.zeapo.pwdstore.git.GitServerConfigActivity
-import com.zeapo.pwdstore.git.config.GitSettings
 import com.zeapo.pwdstore.git.sshj.SshKey
 import com.zeapo.pwdstore.pwgenxkpwd.XkpwdDictionary
 import com.zeapo.pwdstore.sshkeygen.ShowSshKeyFragment
@@ -407,8 +406,6 @@ class UserPreference : AppCompatActivity() {
                 startActivity(Intent(requireContext(), ProxySelectorActivity::class.java))
                 true
             }
-
-            findPreference<CheckBoxPreference>(PreferenceKeys.SYNC_ON_LAUNCH)?.isVisible = !GitSettings.url.isNullOrEmpty()
 
             val prefCustomXkpwdDictionary = findPreference<Preference>(PreferenceKeys.PREF_KEY_CUSTOM_DICT)
             prefCustomXkpwdDictionary?.onPreferenceClickListener = ClickListener {
