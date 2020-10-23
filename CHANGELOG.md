@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-  Add support for domain-level autofill in DuckDuckGo's F-Droid builds.
+
 ### Changed
 
 -  Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
