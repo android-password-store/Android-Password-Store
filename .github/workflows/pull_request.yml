@@ -10,7 +10,7 @@ jobs:
     steps:
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@0.9.0
+      uses: actions/github-script@626af12fe9a53dc2972b48385e7fe7dec79145c9
       id: service-changed
       with:
         result-encoding: string
@@ -27,7 +27,7 @@ jobs:
 
     - name: Checkout repository
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
@@ -35,13 +35,13 @@ jobs:
 
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: burrunan/gradle-cache-action@v1
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: apiCheck testFreeDebug lintFreeDebug
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@v2.11.0
+      uses: reactivecircus/android-emulator-runner@07b0366e7b93d87f3d00b3e78d9033f04009b347
       with:
         api-level: ${{ matrix.api-level }}
         target: default
@@ -53,7 +53,7 @@ jobs:
 
     - name: (Fail-only) upload test report
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
       with:
           name: Test report
           path: app/build/reports

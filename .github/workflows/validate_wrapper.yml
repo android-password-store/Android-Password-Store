@@ -12,5 +12,5 @@ jobs:
     name: "Wrapper validation"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: gradle/wrapper-validation-action@v1.0.3
+      - uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+      - uses: gradle/wrapper-validation-action@2a9956c214b2b4b63544570479c926e7a121218e

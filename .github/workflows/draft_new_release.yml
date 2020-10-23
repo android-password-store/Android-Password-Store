@@ -9,7 +9,7 @@ jobs:
     name: "Draft a new release"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
         with:
           ref: 'release'
       - name: Extract version from milestone
@@ -32,7 +32,7 @@ jobs:
           git commit -am "Prepare release $RELEASE_VERSION"
 
       - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
+        uses: repo-sync/pull-request@24ed95dd0d9ada9dfec0d555129c3db5a9e93e2a
         with:
           source_branch: release-${{ env.RELEASE_VERSION }}
           destination_branch: release

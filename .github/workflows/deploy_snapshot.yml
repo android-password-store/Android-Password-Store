@@ -10,7 +10,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
 
     - name: Decrypt secrets
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
@@ -21,7 +21,7 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Build release app
-      uses: burrunan/gradle-cache-action@v1
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       env:
         SNAPSHOT: "true"
       with:
