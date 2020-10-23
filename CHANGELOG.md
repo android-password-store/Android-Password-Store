@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -  Add support for domain-level autofill in DuckDuckGo's F-Droid builds.
+-  Support gopass MIME secret encoding
 
 ### Changed
 
