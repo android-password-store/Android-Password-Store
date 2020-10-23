@@ -9,32 +9,32 @@ jobs:
     name: "Draft a new release"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
         with:
           ref: 'release'
       - name: Extract version from milestone
         run: |
           VERSION="${{ github.event.milestone.title }}"
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Create release branch
-        run: git checkout -b release-${{ env.RELEASE_VERSION }}
+          echo "RELEASE_VERSION=${VERSION/v/}" >> $GITHUB_ENV
 
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.1.0
         with:
-          version: v${{ env.RELEASE_VERSION }}
+          version: ${{ env.RELEASE_VERSION }}
 
       - name: Initialize git config and commit changes
         run: |
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
-          git commit -am "Prepare release $RELEASE_VERSION"
 
       - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
+        uses: peter-evans/create-pull-request@c7f493a8000b8aeb17a1332e326ba76b57cb83eb
         with:
-          source_branch: release-${{ env.RELEASE_VERSION }}
-          destination_branch: release
-          pr_title: Release ${{ env.RELEASE_VERSION }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author: GitHub Actions <noreply@github.com>
+          base: release
+          body: This is an automated pull request to bump the changelog for the v${{ env.RELEASE_VERSION }} release.
+          branch: release-${{ env.RELEASE_VERSION }}
+          commit-message: "CHANGELOG: bump for ${{ env.RELEASE_VERSION }}"
+          draft: true
+          title: Release v${{ env.RELEASE_VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
