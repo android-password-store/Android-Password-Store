@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 -  Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
+-  The newly added automatic synchronisation feature has been rolled back due to multiple issues with its implementation.
 
 ## [1.13.0] - 2020-10-22
 
