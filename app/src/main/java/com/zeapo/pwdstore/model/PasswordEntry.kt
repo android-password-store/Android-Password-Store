@@ -87,7 +87,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     private fun findPassword(passContent: MutableList<String>): String {
-        if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it)}) return ""
+        if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) return ""
         for ((index, line) in passContent.withIndex()) {
             for (prefix in PASSWORD_FIELDS) {
                 if (line.startsWith(prefix, ignoreCase = true)) {
@@ -96,8 +96,9 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
                 }
             }
         }
+        var save = passContent[0]
         passContent.removeAt(0)
-        return passContent[0]
+        return save
     }
 
     private fun findTotpSecret(decryptedContent: String): String? {
