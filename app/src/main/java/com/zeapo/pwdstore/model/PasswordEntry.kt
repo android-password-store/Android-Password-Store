@@ -31,9 +31,9 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
 
     init {
-        val passContent = content.split("\n".toRegex(), 2).toTypedArray()
-        password = if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) "" else passContent[0]
-        extraContent = findExtraContent(passContent)
+        val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
+        password = foundPassword
+        extraContent = passContent.joinToString("\n")
         username = findUsername()
         digits = findOtpDigits(content)
         totpSecret = findTotpSecret(content)
@@ -86,10 +86,16 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return null
     }
 
-    private fun findExtraContent(passContent: Array<String>) = when {
-        password.isEmpty() && passContent[0].isNotEmpty() -> passContent[0]
-        passContent.size > 1 -> passContent[1]
-        else -> ""
+    private fun findAndStripPassword(passContent: List<String>): Pair<String, List<String>> {
+        if (UriTotpFinder.TOTP_FIELDS.any { passContent[0].startsWith(it) }) return Pair("", passContent)
+        for (line in passContent) {
+            for (prefix in PASSWORD_FIELDS) {
+                if (line.startsWith(prefix, ignoreCase = true)) {
+                    return Pair(line.substring(prefix.length).trimStart(), passContent.minus(line))
+                }
+            }
+        }
+        return Pair(passContent[0], passContent.minus(passContent[0]))
     }
 
     private fun findTotpSecret(decryptedContent: String): String? {
@@ -120,6 +126,12 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             "handle:",
             "id:",
             "identity:"
+        )
+
+        val PASSWORD_FIELDS = arrayOf(
+            "password:",
+            "secret:",
+            "pass:",
         )
     }
 }

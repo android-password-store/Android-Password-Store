@@ -28,6 +28,12 @@ class PasswordEntryTest {
         assertEquals("", makeEntry("\nblubb").password)
         assertEquals("", makeEntry("\n").password)
         assertEquals("", makeEntry("").password)
+        for (field in PasswordEntry.PASSWORD_FIELDS) {
+            assertEquals("fooooo", makeEntry("\n$field fooooo").password)
+            assertEquals("fooooo", makeEntry("\n${field.toUpperCase()} fooooo").password)
+            assertEquals("fooooo", makeEntry("GOPASS-SECRET-1.0\n$field fooooo").password)
+            assertEquals("fooooo", makeEntry("someFirstLine\nUsername: bar\n$field fooooo").password)
+        }
     }
 
     @Test fun testGetExtraContent() {
@@ -37,6 +43,9 @@ class PasswordEntryTest {
         assertEquals("", makeEntry("fooooo").extraContent)
         assertEquals("blubb\n", makeEntry("\nblubb\n").extraContent)
         assertEquals("blubb", makeEntry("\nblubb").extraContent)
+        assertEquals("blubb", makeEntry("blubb\npassword: foo").extraContent)
+        assertEquals("blubb", makeEntry("password: foo\nblubb").extraContent)
+        assertEquals("blubb\nusername: bar", makeEntry("blubb\npassword: foo\nusername: bar").extraContent)
         assertEquals("", makeEntry("\n").extraContent)
         assertEquals("", makeEntry("").extraContent)
     }
