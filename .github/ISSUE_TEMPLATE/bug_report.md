@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us address issues you are facing with the app
 title: "[BUG]"
-labels: bug, 'triage: needed'
+labels: 'bug, triage: needed'
 assignees: ''
 
 ---
