@@ -1,0 +1,57 @@
+name: Check dependency tree changes
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+    paths:
+      - 'buildSrc/src/main/java/Dependencies.kt'
+      - 'buildSrc/buildDependencies.gradle'
+      - '**/build.gradle.kts'
+
+jobs:
+  compare-dependency-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pull request tree
+        uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+        with:
+          path: pr-source
+
+      - name: Checkout development tree
+        uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+        with:
+          ref: develop
+          path: dev-source
+
+      - name: Generate and compare dependency trees
+        id: tree-changed
+        run: |
+          set -euxo pipefail
+          curl -sL https://github.com/JakeWharton/dependency-tree-diff/releases/download/1.2.0/dependency-tree-diff.jar -o dependency-tree-diff.jar
+          cd pr-source || exit 1
+          ./gradlew -q :app:dependencies --configuration nonFreeReleaseRuntimeClasspath | tee ../pr-tree.txt
+          cd ../dev-source || exit 1
+          ./gradlew -q :app:dependencies --configuration nonFreeReleaseRuntimeClasspath | tee ../dev-tree.txt
+          cd ../
+          chmod +x dependency-tree-diff.jar
+          ./dependency-tree-diff.jar dev-tree.txt pr-tree.txt > diff.txt
+          if [[ $(($(cat diff.txt | wc -l))) -gt 0 ]]; then
+            echo "::set-output name=diff::$(cat diff.txt)"
+          else
+            echo "::set-output name=diff::null"
+          fi
+
+      - name: Post dependency tree diff to pull request if changed
+        if: ${{ steps.tree-changed.outputs.diff != 'null' }}
+        uses: actions/github-script@626af12fe9a53dc2972b48385e7fe7dec79145c9
+        with:
+          result-encoding: string
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: ':warning: **This PR results in dependency tree changes** :warning: \n\n```diff\n${{ steps.tree-changed.outputs.diff }}\n```'
+            })
