@@ -75,9 +75,8 @@ object Dependencies {
 
         object AndroidX {
 
-            private const val version = "1.3.1-alpha02"
-            const val runner = "androidx.test:runner:$version"
-            const val rules = "androidx.test:rules:$version"
+            const val runner = "androidx.test:runner:1.3.0"
+            const val rules = "androidx.test:rules:1.3.0"
         }
     }
 }
