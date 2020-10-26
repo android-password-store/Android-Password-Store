@@ -9,7 +9,7 @@ object Dependencies {
     object Kotlin {
         object Coroutines {
 
-            private const val version = "1.3.9"
+            private const val version = "1.4.0"
             const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         }
@@ -60,7 +60,7 @@ object Dependencies {
         const val ssh_auth = "org.sufficientlysecure:sshauthentication-api:1.0"
         const val timber = "com.jakewharton.timber:timber:4.7.1"
         const val timberkt = "com.github.ajalt:timberkt:1.5.1"
-        const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.0.5"
+        const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.1.0"
     }
 
     object NonFree {
@@ -75,8 +75,9 @@ object Dependencies {
 
         object AndroidX {
 
-            const val runner = "androidx.test:runner:1.3.0"
-            const val rules = "androidx.test:rules:1.3.0"
+            private const val version = "1.3.1-alpha02"
+            const val runner = "androidx.test:runner:$version"
+            const val rules = "androidx.test:rules:$version"
         }
     }
 }
