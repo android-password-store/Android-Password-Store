@@ -162,6 +162,12 @@ class AutofillFilterView : AppCompatActivity() {
                 setText(initialSearch, TextView.BufferType.EDITABLE)
                 addTextChangedListener { updateSearch() }
             }
+            origin.text = buildSpannedString {
+                append("Search and fill into\n")
+                bold {
+                    append(formOrigin.getPrettyIdentifier(applicationContext, untrusted = true))
+                }
+            }
             strictDomainSearch.apply {
                 visibility = if (formOrigin is FormOrigin.Web) View.VISIBLE else View.GONE
                 isChecked = formOrigin is FormOrigin.Web

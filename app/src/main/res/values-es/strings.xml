@@ -130,11 +130,9 @@
     <!-- Oreo Autofill -->
     <string name="oreo_autofill_match_with">Coincide con %1$s</string>
     <string name="oreo_autofill_filter_no_results">Sin resultados.</string>
-    <string name="oreo_autofill_search_in_store">Buscar en la tienda…</string>
     <string name="oreo_autofill_save_internal_error">Error al guardar debido a un error interno</string>
     <string name="oreo_autofill_save_app_not_supported">Esta aplicación no es compatible actualmente</string>
     <string name="oreo_autofill_save_passwords_dont_match">Las contraseñas no coinciden</string>
-    <string name="oreo_autofill_generate_password">Generar contraseña…</string>
     <string name="oreo_autofill_warning_publisher_install_time">Instalada: %1$s</string>
     <string name="oreo_autofill_warning_publisher_advanced_info_button">Información avanzada</string>
     <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Mantener el Autocompletado desactivado</string>

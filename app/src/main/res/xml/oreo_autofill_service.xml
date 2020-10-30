@@ -5,6 +5,7 @@
 
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:supportsInlineSuggestions="true"
     tools:ignore="UnusedAttribute">
     <compatibility-package android:name="com.android.chrome" />
     <compatibility-package android:name="com.brave.browser" />

@@ -162,7 +162,9 @@
     <string name="oreo_autofill_save_internal_error">Speichern aufgrund eines internen Fehlers fehlgeschlagen</string>
     <string name="oreo_autofill_save_app_not_supported">Diese App wird derzeit nicht unterstützt</string>
     <string name="oreo_autofill_save_passwords_dont_match">Die Passwörter stimmen nicht überein</string>
-    <string name="oreo_autofill_generate_password">Passwort generieren…</string>
+    <string name="oreo_autofill_generate_password">Eintrag erstellen</string>
+    <string name="oreo_autofill_search_in_store">Eintrag suchen</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Code aus SMS einfügen</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>Die derzeit installierte App versucht, Ihre Anmeldeinformationen zu stehlen, indem sie vorgibt, eine vertrauenswürdige App zu sein.</b>\n\nVersuchen Sie die App zu deinstallieren und installieren Sie sie erneut aus einer vertrauenswürdigen Quelle wie dem Play Store, Amazon Appstore, F-Droid oder dem Shop Ihres Telefonherstellers.</string>
     <string name="oreo_autofill_warning_publisher_install_time">Installiert: %1$s</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Warnung</string>
