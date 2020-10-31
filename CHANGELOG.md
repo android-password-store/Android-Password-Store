@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Cancelling the Autofill "Generate password" action now correctly returns you to the original app.
+
 ### Changed
 
 -   Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
