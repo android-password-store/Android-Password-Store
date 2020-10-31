@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Cancelling the Autofill "Generate password" action now correctly returns you to the original app.
+
 ## [1.13.1] - 2020-10-23
 
 ### Fixed
