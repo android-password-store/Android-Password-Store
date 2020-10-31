@@ -140,8 +140,10 @@ class AutofillSaveActivity : AppCompatActivity() {
                     Intent()
                 }
                 setResult(RESULT_OK, resultIntent)
-                finish()
+            } else {
+                setResult(RESULT_CANCELED)
             }
+            finish()
         }.launch(saveIntent)
     }
 }
