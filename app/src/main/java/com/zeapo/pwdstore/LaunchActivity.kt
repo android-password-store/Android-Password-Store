@@ -7,6 +7,7 @@ package com.zeapo.pwdstore
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.zeapo.pwdstore.crypto.DecryptActivity
@@ -51,7 +52,7 @@ class LaunchActivity : AppCompatActivity() {
             Intent(this, PasswordStore::class.java)
         startActivity(intentToStart)
 
-        Handler().postDelayed({ finish() }, if (noAuth) 0L else 500L)
+        Handler(Looper.getMainLooper()).postDelayed({ finish() }, if (noAuth) 0L else 500L)
     }
 
     companion object {

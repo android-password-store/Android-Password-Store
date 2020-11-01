@@ -60,7 +60,7 @@ internal fun Project.configureForAllProjects() {
  */
 @Suppress("UnstableApiUsage")
 internal fun TestedExtension.configureCommonAndroidOptions() {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
 
     defaultConfig {
         minSdkVersion(23)

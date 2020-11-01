@@ -45,12 +45,12 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     /**
      * Full path to the repository
      */
-    val repoPath: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("REPO_PATH") }
+    val repoPath by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("REPO_PATH")!! }
 
     /**
      * Full path to the password file being worked on
      */
-    val fullPath: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("FILE_PATH") }
+    val fullPath by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("FILE_PATH")!! }
 
     /**
      * Name of the password file
@@ -186,7 +186,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
      */
     fun getUserInteractionRequestIntent(result: Intent): IntentSender {
         i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
-        return (result.getParcelableExtra(OpenPgpApi.RESULT_INTENT) as PendingIntent).intentSender
+        return result.getParcelableExtra<PendingIntent>(OpenPgpApi.RESULT_INTENT)!!.intentSender
     }
 
     /**

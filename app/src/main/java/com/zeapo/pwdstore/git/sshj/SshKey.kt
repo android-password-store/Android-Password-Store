@@ -262,7 +262,12 @@ object SshKey {
             apply(algorithm.applyToSpec)
             if (requireAuthentication) {
                 setUserAuthenticationRequired(true)
-                setUserAuthenticationValidityDurationSeconds(30)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    setUserAuthenticationParameters(30, KeyProperties.AUTH_DEVICE_CREDENTIAL)
+                } else {
+                    @Suppress("DEPRECATION")
+                    setUserAuthenticationValidityDurationSeconds(30)
+                }
             }
             build()
         }

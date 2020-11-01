@@ -7,6 +7,7 @@ package com.zeapo.pwdstore.git
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Patterns
 import android.view.MenuItem
 import androidx.core.os.postDelayed
@@ -55,7 +56,7 @@ class GitConfigActivity : BaseGitActivity() {
                 GitSettings.authorEmail = email
                 GitSettings.authorName = name
                 Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
-                Handler().postDelayed(500) { finish() }
+                Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
             }
         }
     }

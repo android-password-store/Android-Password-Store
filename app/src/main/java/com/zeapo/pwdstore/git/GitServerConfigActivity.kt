@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.postDelayed
@@ -144,7 +145,7 @@ class GitServerConfigActivity : BaseGitActivity() {
                         PasswordRepository.initialize()
                     if (!isClone) {
                         Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
-                        Handler().postDelayed(500) { finish() }
+                        Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
                     } else {
                         cloneRepository()
                     }
