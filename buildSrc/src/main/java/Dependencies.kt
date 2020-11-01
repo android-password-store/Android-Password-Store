@@ -24,7 +24,7 @@ object Dependencies {
         const val autofill = "androidx.autofill:autofill:1.1.0-beta01"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val biometric = "androidx.biometric:biometric:1.1.0-beta01"
-        const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.2"
+        const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.4"
         const val core_ktx = "androidx.core:core-ktx:1.5.0-alpha04"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
         const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0-beta01"
@@ -48,7 +48,7 @@ object Dependencies {
 
     object ThirdParty {
 
-        const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.66"
+        const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.67"
         const val commons_codec = "commons-codec:commons-codec:1.14"
         const val eddsa = "net.i2p.crypto:eddsa:0.3.0"
         const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.4"
@@ -60,7 +60,7 @@ object Dependencies {
         const val ssh_auth = "org.sufficientlysecure:sshauthentication-api:1.0"
         const val timber = "com.jakewharton.timber:timber:4.7.1"
         const val timberkt = "com.github.ajalt:timberkt:1.5.1"
-        const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.1.0"
+        const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.2.0"
     }
 
     object NonFree {
@@ -75,8 +75,9 @@ object Dependencies {
 
         object AndroidX {
 
-            const val runner = "androidx.test:runner:1.3.0"
-            const val rules = "androidx.test:rules:1.3.0"
+            private const val version = "1.3.1-alpha02"
+            const val runner = "androidx.test:runner:$version"
+            const val rules = "androidx.test:rules:$version"
         }
     }
 }
