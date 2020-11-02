@@ -17,17 +17,17 @@ import com.github.ajalt.timberkt.d
 /**
  * A unique identifier for either an Android app (package name) or a website (origin minus port).
  */
-sealed class FormOrigin(open val identifier: String) {
+public sealed class FormOrigin(public open val identifier: String) {
 
-    data class Web(override val identifier: String) : FormOrigin(identifier)
-    data class App(override val identifier: String) : FormOrigin(identifier)
+    public data class Web(override val identifier: String) : FormOrigin(identifier)
+    public data class App(override val identifier: String) : FormOrigin(identifier)
 
-    companion object {
+    public companion object {
 
         private const val BUNDLE_KEY_WEB_IDENTIFIER = "webIdentifier"
         private const val BUNDLE_KEY_APP_IDENTIFIER = "appIdentifier"
 
-        fun fromBundle(bundle: Bundle): FormOrigin? {
+        public fun fromBundle(bundle: Bundle): FormOrigin? {
             val webIdentifier = bundle.getString(BUNDLE_KEY_WEB_IDENTIFIER)
             if (webIdentifier != null) {
                 return Web(webIdentifier)
@@ -37,18 +37,19 @@ sealed class FormOrigin(open val identifier: String) {
         }
     }
 
-    fun getPrettyIdentifier(context: Context, untrusted: Boolean = true) = when (this) {
-        is Web -> identifier
-        is App -> {
-            val info = context.packageManager.getApplicationInfo(
-                identifier, PackageManager.GET_META_DATA
-            )
-            val label = context.packageManager.getApplicationLabel(info)
-            if (untrusted) "“$label”" else "$label"
+    public fun getPrettyIdentifier(context: Context, untrusted: Boolean = true): String =
+        when (this) {
+            is Web -> identifier
+            is App -> {
+                val info = context.packageManager.getApplicationInfo(
+                    identifier, PackageManager.GET_META_DATA
+                )
+                val label = context.packageManager.getApplicationLabel(info)
+                if (untrusted) "“$label”" else "$label"
+            }
         }
-    }
 
-    fun toBundle() = Bundle().apply {
+    public fun toBundle(): Bundle = Bundle().apply {
         when (this@FormOrigin) {
             is Web -> putString(BUNDLE_KEY_WEB_IDENTIFIER, identifier)
             is App -> putString(BUNDLE_KEY_APP_IDENTIFIER, identifier)
@@ -183,24 +184,24 @@ private class AutofillFormParser(
     }
 }
 
-data class Credentials(val username: String?, val password: String?, val otp: String?)
+public data class Credentials(val username: String?, val password: String?, val otp: String?)
 
 /**
  * Represents a collection of fields in a specific app that can be filled or saved. This is the
  * entry point to all fill and save features.
  */
 @RequiresApi(Build.VERSION_CODES.O)
-class FillableForm private constructor(
-    val formOrigin: FormOrigin,
-    val scenario: AutofillScenario<FormField>,
-    val ignoredIds: List<AutofillId>,
-    val saveFlags: Int?
+public class FillableForm private constructor(
+    public val formOrigin: FormOrigin,
+    public val scenario: AutofillScenario<AutofillId>,
+    public val ignoredIds: List<AutofillId>,
+    public val saveFlags: Int?
 ) {
-    companion object {
+    public companion object {
         /**
          * Returns a [FillableForm] if a login form could be detected in [structure].
          */
-        fun parseAssistStructure(
+        public fun parseAssistStructure(
             context: Context,
             structure: AssistStructure,
             isManualRequest: Boolean,
@@ -208,11 +209,11 @@ class FillableForm private constructor(
         ): FillableForm? {
             val form = AutofillFormParser(context, structure, isManualRequest, customSuffixes)
             if (form.formOrigin == null || form.scenario == null) return null
-            return FillableForm(form.formOrigin, form.scenario, form.ignoredIds, form.saveFlags)
+            return FillableForm(form.formOrigin, form.scenario.map { it.autofillId }, form.ignoredIds, form.saveFlags)
         }
     }
 
-    fun toClientState() = scenario.toBundle().apply {
+    public fun toClientState(): Bundle = scenario.toBundle().apply {
         putAll(formOrigin.toBundle())
     }
 }

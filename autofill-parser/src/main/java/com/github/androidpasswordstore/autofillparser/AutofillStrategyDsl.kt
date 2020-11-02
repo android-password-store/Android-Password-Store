@@ -10,10 +10,10 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 
 @DslMarker
-annotation class AutofillDsl
+internal annotation class AutofillDsl
 
 @RequiresApi(Build.VERSION_CODES.O)
-interface FieldMatcher {
+internal interface FieldMatcher {
 
     fun match(fields: List<FormField>, alreadyMatched: List<FormField>): List<FormField>?
 
@@ -63,7 +63,7 @@ interface FieldMatcher {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class SingleFieldMatcher(
+internal class SingleFieldMatcher(
     private val take: (FormField, List<FormField>) -> Boolean,
     private val tieBreakers: List<(FormField, List<FormField>) -> Boolean>
 ) : FieldMatcher {
@@ -157,7 +157,7 @@ private class PairOfFieldsMatcher(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillRule private constructor(
+internal class AutofillRule private constructor(
     private val matchers: List<AutofillRuleMatcher>,
     private val applyInSingleOriginMode: Boolean,
     private val applyOnManualRequestOnly: Boolean,
@@ -332,7 +332,7 @@ class AutofillRule private constructor(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillStrategy private constructor(private val rules: List<AutofillRule>) {
+internal class AutofillStrategy private constructor(private val rules: List<AutofillRule>) {
 
     @AutofillDsl
     class Builder {
@@ -385,5 +385,5 @@ class AutofillStrategy private constructor(private val rules: List<AutofillRule>
     }
 }
 
-fun strategy(block: AutofillStrategy.Builder.() -> Unit) =
+internal fun strategy(block: AutofillStrategy.Builder.() -> Unit) =
     AutofillStrategy.Builder().apply(block).build()

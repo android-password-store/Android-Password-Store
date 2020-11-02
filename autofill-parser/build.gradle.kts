@@ -25,6 +25,16 @@ android {
         versionName = "1.0"
         consumerProguardFiles("consumer-rules.pro")
     }
+
+    kotlin {
+        explicitApi()
+    }
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-Xexplicit-api=strict"
+        )
+    }
 }
 
 afterEvaluate {

@@ -102,7 +102,7 @@ class OreoAutofillService : AutofillService() {
             callback.onFailure(getString(R.string.oreo_autofill_save_internal_error))
             return
         }
-        val scenario = AutofillScenario.fromBundle(clientState)?.recoverNodes(structure) ?: run {
+        val scenario = AutofillScenario.fromClientState(clientState)?.recoverNodes(structure) ?: run {
             e { "Failed to recover client state or nodes from client state" }
             callback.onFailure(getString(R.string.oreo_autofill_save_internal_error))
             return
