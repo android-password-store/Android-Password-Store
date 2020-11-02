@@ -94,7 +94,7 @@ fun makeFillOtpFromSmsMetadata(context: Context) = DatasetMetadata(
     R.drawable.ic_autofill_sms
 )
 
-fun makeEmptyMetadata(context: Context) = DatasetMetadata(
+fun makeEmptyMetadata() = DatasetMetadata(
     "PLACEHOLDER",
     "PLACEHOLDER",
     R.mipmap.ic_launcher

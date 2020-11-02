@@ -212,7 +212,7 @@ class AutofillResponseBuilder(form: FillableForm) {
             val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 Dataset.Builder()
             } else {
-                Dataset.Builder(makeRemoteView(context, makeEmptyMetadata(context)))
+                Dataset.Builder(makeRemoteView(context, makeEmptyMetadata()))
             }
             return builder.run {
                 if (scenario != null) fillWith(scenario, action, credentials)
