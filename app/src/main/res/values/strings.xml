@@ -231,16 +231,17 @@
     <string name="app_icon_hint">App icon</string>
 
     <!-- Oreo Autofill -->
+    <string name="oreo_autofill_select_and_fill_into">Select entry to fill into</string>
     <string name="oreo_autofill_strict_domain_search">Phishing-resistant search</string>
     <string name="oreo_autofill_match_with">Match with %1$s</string>
     <string name="oreo_autofill_matches_clear_existing">Clear existing matches</string>
     <string name="oreo_autofill_filter_no_results">No results.</string>
-    <string name="oreo_autofill_search_in_store">Search in store…</string>
+    <string name="oreo_autofill_search_in_store">Search entry</string>
     <string name="oreo_autofill_save_internal_error">Save failed due to an internal error</string>
     <string name="oreo_autofill_save_app_not_supported">This app is currently not supported</string>
     <string name="oreo_autofill_save_passwords_dont_match">Passwords don\'t match</string>
-    <string name="oreo_autofill_generate_password">Generate password…</string>
-    <string name="oreo_autofill_fill_otp_from_sms">Extract code from SMS…</string>
+    <string name="oreo_autofill_generate_password">Create entry</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Extract code from SMS</string>
     <string name="oreo_autofill_max_matches_reached">Maximum number of matches (%1$d) reached; clear matches before adding new ones.</string>
     <string name="oreo_autofill_warning_publisher_header">This app\'s publisher has changed since you first associated a Password Store entry with it:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>The currently installed app may be trying to steal your credentials by pretending to be a trusted app.</b>\n\nTry to uninstall and reinstall the app from a trusted source, such as the Play Store, Amazon Appstore, F-Droid, or your phone manufacturer\'s store.</string>
@@ -250,7 +251,7 @@
     <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Keep Autofill disabled</string>
     <string name="oreo_autofill_warning_publisher_reenable_button">Re-enable Autofill</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Warning</string>
-    <string name="oreo_autofill_warning_publisher_dataset_summary">Tap for details…</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Tap for details</string>
     <string name="oreo_autofill_warning_publisher_dataset_title">Possible phishing attempt</string>
     <string name="oreo_autofill_general_fill_and_save_support">Fill and save credentials</string>
     <string name="oreo_autofill_general_fill_support">Fill credentials</string>

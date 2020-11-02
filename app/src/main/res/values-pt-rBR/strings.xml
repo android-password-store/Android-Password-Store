@@ -187,12 +187,10 @@
     <string name="oreo_autofill_match_with">Combinar com %1$s</string>
     <string name="oreo_autofill_matches_clear_existing">Limpar correspondências existentes</string>
     <string name="oreo_autofill_filter_no_results">Sem resultados.</string>
-    <string name="oreo_autofill_search_in_store">Pesquisar no armazenamento…</string>
     <string name="oreo_autofill_save_internal_error">Falha ao salvar devido a um erro interno</string>
     <string name="oreo_autofill_save_app_not_supported">Este app não é suportado no momento</string>
     <string name="oreo_autofill_save_passwords_dont_match">As senhas não coincidem</string>
-    <string name="oreo_autofill_generate_password">Gerar senha…</string>
-    <string name="oreo_autofill_fill_otp_from_sms">Extrair código do SMS…</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Extrair código do SMS</string>
     <string name="oreo_autofill_max_matches_reached">Número máximo de correspondências (%1$d) atingidas; limpar correspondências antes de adicionar novas.</string>
     <string name="oreo_autofill_warning_publisher_header">O editor deste aplicativo mudou desde a primeira vez que você associou uma entrada no Password Store:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>O aplicativo atualmente instalado pode estar tentando roubar suas credenciais fingindo ser um aplicativo confiável.</b>\n\nTente desinstalar e reinstalar o aplicativo de uma fonte confiável, como a Play Store, Amazon Appstore, F-Droid ou a loja do fabricante do seu telefone.</string>
@@ -201,7 +199,7 @@
     <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Manter o preenchimento automático desativado</string>
     <string name="oreo_autofill_warning_publisher_reenable_button">Reativar preenchimento automático</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Alerta</string>
-    <string name="oreo_autofill_warning_publisher_dataset_summary">Toque para detalhes…</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Toque para detalhes</string>
     <string name="oreo_autofill_warning_publisher_dataset_title">Possível tentativa de phishing</string>
     <string name="oreo_autofill_general_fill_and_save_support">Preencher e salvar credenciais</string>
     <string name="oreo_autofill_general_fill_support">Preencher as credenciais</string>

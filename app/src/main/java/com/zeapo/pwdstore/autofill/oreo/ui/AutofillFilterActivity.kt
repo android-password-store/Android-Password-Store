@@ -162,6 +162,13 @@ class AutofillFilterView : AppCompatActivity() {
                 setText(initialSearch, TextView.BufferType.EDITABLE)
                 addTextChangedListener { updateSearch() }
             }
+            origin.text = buildSpannedString {
+                append(getString(R.string.oreo_autofill_select_and_fill_into))
+                append("\n")
+                bold {
+                    append(formOrigin.getPrettyIdentifier(applicationContext, untrusted = true))
+                }
+            }
             strictDomainSearch.apply {
                 visibility = if (formOrigin is FormOrigin.Web) View.VISIBLE else View.GONE
                 isChecked = formOrigin is FormOrigin.Web

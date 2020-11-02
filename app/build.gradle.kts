@@ -89,6 +89,7 @@ dependencies {
     compileOnly(Dependencies.AndroidX.annotation)
     implementation(Dependencies.AndroidX.activity_ktx)
     implementation(Dependencies.AndroidX.appcompat)
+    implementation(Dependencies.AndroidX.autofill)
     implementation(Dependencies.AndroidX.biometric)
     implementation(Dependencies.AndroidX.constraint_layout)
     implementation(Dependencies.AndroidX.core_ktx)
