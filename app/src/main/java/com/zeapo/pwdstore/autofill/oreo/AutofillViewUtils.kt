@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore.autofill.oreo
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -40,6 +41,7 @@ fun makeRemoteView(context: Context, metadata: DatasetMetadata): RemoteViews {
     }
 }
 
+@SuppressLint("RestrictedApi")
 fun makeInlinePresentation(context: Context, imeSpec: InlinePresentationSpec, metadata: DatasetMetadata): InlinePresentation? {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
         return null
