@@ -204,7 +204,11 @@ class AutofillResponseBuilder(form: FillableForm) {
         ): Dataset {
             val scenario = AutofillScenario.fromBundle(clientState)
             // Before Android P, Datasets used for fill-in had to come with a RemoteViews, even
-            // though they are never shown.
+            // though they are rarely shown.
+            // FIXME: We should clone the original dataset here and add the credentials to be filled
+            // in. Otherwise, the entry in the cached list of datasets will be overwritten by the
+            // fill-in dataset without any visual representation. This causes it to be missing from
+            // the Autofill suggestions shown after the user clears the filled out form fields.
             val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 Dataset.Builder()
             } else {
