@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   On Android 11, Autofill will use the new [inline autofill](https://developer.android.com/guide/topics/text/ime-autofill#configure-provider) UI that integrates Autofill results into your keyboard app.
+
 ### Fixed
 
 -   Cancelling the Autofill "Generate password" action now correctly returns you to the original app.

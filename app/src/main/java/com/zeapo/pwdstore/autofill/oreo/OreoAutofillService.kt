@@ -86,7 +86,13 @@ class OreoAutofillService : AutofillService() {
             callback.onSuccess(null)
             return
         }
-        AutofillResponseBuilder(formToFill).fillCredentials(this, callback)
+        val inlineSuggestionsRequest =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                request.inlineSuggestionsRequest
+            } else {
+                null
+            }
+        AutofillResponseBuilder(formToFill).fillCredentials(this, inlineSuggestionsRequest, callback)
     }
 
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
