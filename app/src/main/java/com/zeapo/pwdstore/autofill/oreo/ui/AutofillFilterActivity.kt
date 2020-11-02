@@ -163,7 +163,8 @@ class AutofillFilterView : AppCompatActivity() {
                 addTextChangedListener { updateSearch() }
             }
             origin.text = buildSpannedString {
-                append("Search and fill into\n")
+                append(getString(R.string.oreo_autofill_select_and_fill_into))
+                append("\n")
                 bold {
                     append(formOrigin.getPrettyIdentifier(applicationContext, untrusted = true))
                 }

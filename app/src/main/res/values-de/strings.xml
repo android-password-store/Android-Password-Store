@@ -157,6 +157,7 @@
     <string name="send_plaintext_password_to">Passwort unverschlüsselt senden an…</string>
     <string name="app_icon_hint">App Icon</string>
     <!-- Oreo Autofill -->
+    <string name="oreo_autofill_select_and_fill_into">Eintrag auswählen für Autofill in</string>
     <string name="oreo_autofill_strict_domain_search">Phishing-resistente Suche</string>
     <string name="oreo_autofill_filter_no_results">Keine Ergebnisse.</string>
     <string name="oreo_autofill_save_internal_error">Speichern aufgrund eines internen Fehlers fehlgeschlagen</string>
