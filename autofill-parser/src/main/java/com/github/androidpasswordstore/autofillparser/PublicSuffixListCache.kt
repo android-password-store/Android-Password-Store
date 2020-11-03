@@ -24,7 +24,7 @@ private object PublicSuffixListCache {
     }
 }
 
-fun cachePublicSuffixList(context: Context) {
+public fun cachePublicSuffixList(context: Context) {
     PublicSuffixListCache.getOrCachePublicSuffixList(context)
 }
 
@@ -35,7 +35,7 @@ fun cachePublicSuffixList(context: Context) {
  * Note: Invalid domains, such as IP addresses, are returned unchanged and thus never collide with
  * the return value for valid domains.
  */
-fun getPublicSuffixPlusOne(context: Context, domain: String, customSuffixes: Sequence<String>) = runBlocking {
+internal fun getPublicSuffixPlusOne(context: Context, domain: String, customSuffixes: Sequence<String>) = runBlocking {
     // We only feed valid domain names which are not IP addresses into getPublicSuffixPlusOne.
     // We do not check whether the domain actually exists (actually, not even whether its TLD
     // exists). As long as we restrict ourselves to syntactically valid domain names,
@@ -55,7 +55,7 @@ fun getPublicSuffixPlusOne(context: Context, domain: String, customSuffixes: Seq
  * - null, if [domain] does not have [suffix] as a domain suffix or only with an empty prefix;
  * - the direct subdomain of [suffix] of which [domain] is a subdomain.
  */
-fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
+private fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
     if (domain == suffix)
         return domain
     val prefix = domain.removeSuffix(".$suffix")
@@ -65,7 +65,8 @@ fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
     return "$lastPrefixPart.$suffix"
 }
 
-suspend fun getCanonicalSuffix(context: Context, domain: String, customSuffixes: Sequence<String>): String {
+private suspend fun getCanonicalSuffix(
+    context: Context, domain: String, customSuffixes: Sequence<String>): String {
     val publicSuffixList = PublicSuffixListCache.getOrCachePublicSuffixList(context)
     val publicSuffixPlusOne = publicSuffixList.getPublicSuffixPlusOne(domain).await()
         ?: return domain

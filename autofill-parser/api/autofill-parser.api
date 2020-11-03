@@ -7,149 +7,31 @@ public final class com/github/androidpasswordstore/autofillparser/AutofillAction
 	public static fun values ()[Lcom/github/androidpasswordstore/autofillparser/AutofillAction;
 }
 
-public abstract interface annotation class com/github/androidpasswordstore/autofillparser/AutofillDsl : java/lang/annotation/Annotation {
-}
-
 public final class com/github/androidpasswordstore/autofillparser/AutofillHelperKt {
 	public static final fun computeCertificatesHash (Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;
-	public static final fun findNodeByAutofillId (Landroid/app/assist/AssistStructure;Landroid/view/autofill/AutofillId;)Landroid/app/assist/AssistStructure$ViewNode;
-	public static final fun getWebOrigin (Landroid/app/assist/AssistStructure$ViewNode;)Ljava/lang/String;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillRule {
-	public synthetic fun <init> (Ljava/util/List;ZZLjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun match (Ljava/util/List;Ljava/util/List;Ljava/util/List;ZZ)Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillRule$AutofillRuleMatcher {
-	public fun <init> (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;Lcom/github/androidpasswordstore/autofillparser/FieldMatcher;ZZ)V
-	public final fun component1 ()Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public final fun component2 ()Lcom/github/androidpasswordstore/autofillparser/FieldMatcher;
-	public final fun component3 ()Z
-	public final fun component4 ()Z
-	public final fun copy (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;Lcom/github/androidpasswordstore/autofillparser/FieldMatcher;ZZ)Lcom/github/androidpasswordstore/autofillparser/AutofillRule$AutofillRuleMatcher;
-	public static synthetic fun copy$default (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$AutofillRuleMatcher;Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;Lcom/github/androidpasswordstore/autofillparser/FieldMatcher;ZZILjava/lang/Object;)Lcom/github/androidpasswordstore/autofillparser/AutofillRule$AutofillRuleMatcher;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMatchHidden ()Z
-	public final fun getMatcher ()Lcom/github/androidpasswordstore/autofillparser/FieldMatcher;
-	public final fun getOptional ()Z
-	public final fun getType ()Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillRule$Builder {
-	public static final field Companion Lcom/github/androidpasswordstore/autofillparser/AutofillRule$Builder$Companion;
-	public fun <init> (ZZ)V
-	public final fun build ()Lcom/github/androidpasswordstore/autofillparser/AutofillRule;
-	public final fun currentPassword (ZZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun currentPassword$default (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$Builder;ZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun genericPassword (ZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun genericPassword$default (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$Builder;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun getName ()Ljava/lang/String;
-	public final fun newPassword (ZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun newPassword$default (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$Builder;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun otp (ZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun otp$default (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$Builder;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun setName (Ljava/lang/String;)V
-	public final fun username (ZZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun username$default (Lcom/github/androidpasswordstore/autofillparser/AutofillRule$Builder;ZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillRule$Builder$Companion {
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType : java/lang/Enum {
-	public static final field CurrentPassword Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public static final field GenericPassword Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public static final field NewPassword Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public static final field Otp Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public static final field Username Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public static fun valueOf (Ljava/lang/String;)Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
-	public static fun values ()[Lcom/github/androidpasswordstore/autofillparser/AutofillRule$FillableFieldType;
 }
 
 public abstract class com/github/androidpasswordstore/autofillparser/AutofillScenario {
-	public static final field BUNDLE_KEY_CURRENT_PASSWORD_IDS Ljava/lang/String;
-	public static final field BUNDLE_KEY_FILL_USERNAME Ljava/lang/String;
-	public static final field BUNDLE_KEY_GENERIC_PASSWORD_IDS Ljava/lang/String;
-	public static final field BUNDLE_KEY_NEW_PASSWORD_IDS Ljava/lang/String;
-	public static final field BUNDLE_KEY_OTP_ID Ljava/lang/String;
-	public static final field BUNDLE_KEY_USERNAME_ID Ljava/lang/String;
 	public static final field Companion Lcom/github/androidpasswordstore/autofillparser/AutofillScenario$Companion;
-	public final fun fieldsToFillOn (Lcom/github/androidpasswordstore/autofillparser/AutofillAction;)Ljava/util/List;
-	public final fun getAllFields ()Ljava/util/List;
-	public abstract fun getAllPasswordFields ()Ljava/util/List;
 	public final fun getFieldsToSave ()Ljava/util/List;
-	public abstract fun getFillUsername ()Z
-	public abstract fun getOtp ()Ljava/lang/Object;
-	public abstract fun getPasswordFieldsToFillOnGenerate ()Ljava/util/List;
-	public abstract fun getPasswordFieldsToFillOnMatch ()Ljava/util/List;
-	public abstract fun getPasswordFieldsToFillOnSearch ()Ljava/util/List;
+	public final fun getHasFieldsToSave ()Z
+	public final fun getHasPasswordFieldsToSave ()Z
+	public final fun getHasUsername ()Z
 	public abstract fun getPasswordFieldsToSave ()Ljava/util/List;
 	public abstract fun getUsername ()Ljava/lang/Object;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillScenario$Builder {
-	public fun <init> ()V
-	public final fun build ()Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
-	public final fun getCurrentPassword ()Ljava/util/List;
-	public final fun getFillUsername ()Z
-	public final fun getGenericPassword ()Ljava/util/List;
-	public final fun getNewPassword ()Ljava/util/List;
-	public final fun getOtp ()Ljava/lang/Object;
-	public final fun getUsername ()Ljava/lang/Object;
-	public final fun setFillUsername (Z)V
-	public final fun setOtp (Ljava/lang/Object;)V
-	public final fun setUsername (Ljava/lang/Object;)V
+	public final fun hasFieldsToFillOn (Lcom/github/androidpasswordstore/autofillparser/AutofillAction;)Z
 }
 
 public final class com/github/androidpasswordstore/autofillparser/AutofillScenario$Companion {
 	public final fun fromBundle (Landroid/os/Bundle;)Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
+	public final fun fromClientState (Landroid/os/Bundle;)Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
 }
 
 public final class com/github/androidpasswordstore/autofillparser/AutofillScenarioKt {
 	public static final fun fillWithAutofillId (Landroid/service/autofill/Dataset$Builder;Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;Lcom/github/androidpasswordstore/autofillparser/AutofillAction;Lcom/github/androidpasswordstore/autofillparser/Credentials;)V
-	public static final fun fillWithFormField (Landroid/service/autofill/Dataset$Builder;Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;Lcom/github/androidpasswordstore/autofillparser/AutofillAction;Lcom/github/androidpasswordstore/autofillparser/Credentials;)V
 	public static final fun getPasswordValue (Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;)Ljava/lang/String;
 	public static final fun getUsernameValue (Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;)Ljava/lang/String;
-	public static final fun map (Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;Lkotlin/jvm/functions/Function1;)Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
-	public static final fun passesOriginCheck (Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;Z)Z
 	public static final fun recoverNodes (Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;Landroid/app/assist/AssistStructure;)Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
-	public static final fun toBundleFormField (Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;)Landroid/os/Bundle;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillStrategy {
-	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun match (Ljava/util/List;ZZ)Lcom/github/androidpasswordstore/autofillparser/AutofillScenario;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillStrategy$Builder {
-	public fun <init> ()V
-	public final fun build ()Lcom/github/androidpasswordstore/autofillparser/AutofillStrategy;
-	public final fun rule (ZZLkotlin/jvm/functions/Function1;)V
-	public static synthetic fun rule$default (Lcom/github/androidpasswordstore/autofillparser/AutofillStrategy$Builder;ZZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillStrategyDslKt {
-	public static final fun strategy (Lkotlin/jvm/functions/Function1;)Lcom/github/androidpasswordstore/autofillparser/AutofillStrategy;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/AutofillStrategyKt {
-	public static final fun getAutofillStrategy ()Lcom/github/androidpasswordstore/autofillparser/AutofillStrategy;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/BrowserAutofillSupportInfo {
-	public fun <init> (Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;Ljava/lang/Integer;)V
-	public final fun component1 ()Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-	public final fun component2 ()Ljava/lang/Integer;
-	public final fun copy (Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;Ljava/lang/Integer;)Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportInfo;
-	public static synthetic fun copy$default (Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportInfo;Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;Ljava/lang/Integer;ILjava/lang/Object;)Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportInfo;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMultiOriginMethod ()Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-	public final fun getSaveFlags ()Ljava/lang/Integer;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/github/androidpasswordstore/autofillparser/BrowserAutofillSupportLevel : java/lang/Enum {
@@ -161,47 +43,6 @@ public final class com/github/androidpasswordstore/autofillparser/BrowserAutofil
 	public static final field PasswordFillAndSaveIfNoAccessibility Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportLevel;
 	public static fun valueOf (Ljava/lang/String;)Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportLevel;
 	public static fun values ()[Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportLevel;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod : java/lang/Enum {
-	public static final field Field Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-	public static final field None Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-	public static final field WebView Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-	public static fun valueOf (Ljava/lang/String;)Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-	public static fun values ()[Lcom/github/androidpasswordstore/autofillparser/BrowserMultiOriginMethod;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/CertaintyLevel : java/lang/Enum {
-	public static final field Certain Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public static final field Impossible Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public static final field Likely Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public static final field Possible Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public static fun valueOf (Ljava/lang/String;)Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public static fun values ()[Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/ClassifiedAutofillScenario : com/github/androidpasswordstore/autofillparser/AutofillScenario {
-	public fun <init> (Ljava/lang/Object;ZLjava/lang/Object;Ljava/util/List;Ljava/util/List;)V
-	public final fun component1 ()Ljava/lang/Object;
-	public final fun component2 ()Z
-	public final fun component3 ()Ljava/lang/Object;
-	public final fun component4 ()Ljava/util/List;
-	public final fun component5 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/Object;ZLjava/lang/Object;Ljava/util/List;Ljava/util/List;)Lcom/github/androidpasswordstore/autofillparser/ClassifiedAutofillScenario;
-	public static synthetic fun copy$default (Lcom/github/androidpasswordstore/autofillparser/ClassifiedAutofillScenario;Ljava/lang/Object;ZLjava/lang/Object;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcom/github/androidpasswordstore/autofillparser/ClassifiedAutofillScenario;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getAllPasswordFields ()Ljava/util/List;
-	public final fun getCurrentPassword ()Ljava/util/List;
-	public fun getFillUsername ()Z
-	public final fun getNewPassword ()Ljava/util/List;
-	public fun getOtp ()Ljava/lang/Object;
-	public fun getPasswordFieldsToFillOnGenerate ()Ljava/util/List;
-	public fun getPasswordFieldsToFillOnMatch ()Ljava/util/List;
-	public fun getPasswordFieldsToFillOnSearch ()Ljava/util/List;
-	public fun getPasswordFieldsToSave ()Ljava/util/List;
-	public fun getUsername ()Ljava/lang/Object;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/github/androidpasswordstore/autofillparser/Credentials {
@@ -220,23 +61,7 @@ public final class com/github/androidpasswordstore/autofillparser/Credentials {
 }
 
 public final class com/github/androidpasswordstore/autofillparser/FeatureAndTrustDetectionKt {
-	public static final fun getBrowserAutofillSupportInfoIfTrusted (Landroid/content/Context;Ljava/lang/String;)Lcom/github/androidpasswordstore/autofillparser/BrowserAutofillSupportInfo;
 	public static final fun getInstalledBrowsersWithAutofillSupportLevel (Landroid/content/Context;)Ljava/util/List;
-}
-
-public abstract interface class com/github/androidpasswordstore/autofillparser/FieldMatcher {
-	public abstract fun match (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/FieldMatcher$Builder {
-	public fun <init> ()V
-	public final fun breakTieOnPair (Lkotlin/jvm/functions/Function2;)V
-	public final fun breakTieOnSingle (Lkotlin/jvm/functions/Function2;)V
-	public final fun build ()Lcom/github/androidpasswordstore/autofillparser/FieldMatcher;
-	public final fun takePair (Lkotlin/jvm/functions/Function2;)V
-	public static synthetic fun takePair$default (Lcom/github/androidpasswordstore/autofillparser/FieldMatcher$Builder;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
-	public final fun takeSingle (Lkotlin/jvm/functions/Function2;)V
-	public static synthetic fun takeSingle$default (Lcom/github/androidpasswordstore/autofillparser/FieldMatcher$Builder;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 }
 
 public final class com/github/androidpasswordstore/autofillparser/FillableForm {
@@ -258,39 +83,6 @@ public final class com/github/androidpasswordstore/autofillparser/FixedSaveCallb
 	public fun <init> (Landroid/content/Context;Landroid/service/autofill/SaveCallback;)V
 	public final fun onFailure (Ljava/lang/CharSequence;)V
 	public final fun onSuccess (Landroid/content/IntentSender;)V
-}
-
-public final class com/github/androidpasswordstore/autofillparser/FormField {
-	public static final field Companion Lcom/github/androidpasswordstore/autofillparser/FormField$Companion;
-	public fun <init> (Landroid/app/assist/AssistStructure$ViewNode;IZLjava/lang/String;)V
-	public synthetic fun <init> (Landroid/app/assist/AssistStructure$ViewNode;IZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun directlyFollows (Lcom/github/androidpasswordstore/autofillparser/FormField;)Z
-	public final fun directlyFollows (Ljava/lang/Iterable;)Z
-	public final fun directlyPrecedes (Lcom/github/androidpasswordstore/autofillparser/FormField;)Z
-	public final fun directlyPrecedes (Ljava/lang/Iterable;)Z
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAutofillId ()Landroid/view/autofill/AutofillId;
-	public final fun getCouldBeTwoStepHiddenPassword ()Z
-	public final fun getCouldBeTwoStepHiddenUsername ()Z
-	public final fun getHasAutocompleteHintCurrentPassword ()Z
-	public final fun getHasAutofillHintPassword ()Z
-	public final fun getHasHintNewPassword ()Z
-	public final fun getHasHintOtp ()Z
-	public final fun getHasHintPassword ()Z
-	public final fun getHasHintUsername ()Z
-	public final fun getOtpCertainty ()Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public final fun getPasswordCertainty ()Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public final fun getRelevantField ()Z
-	public final fun getUsernameCertainty ()Lcom/github/androidpasswordstore/autofillparser/CertaintyLevel;
-	public final fun getWebOrigin ()Ljava/lang/String;
-	public final fun getWebOriginToPassDown ()Ljava/lang/String;
-	public fun hashCode ()I
-	public final fun isFocused ()Z
-	public final fun isVisible ()Z
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/FormField$Companion {
 }
 
 public abstract class com/github/androidpasswordstore/autofillparser/FormOrigin {
@@ -328,55 +120,7 @@ public final class com/github/androidpasswordstore/autofillparser/FormOrigin$Web
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/github/androidpasswordstore/autofillparser/GenericAutofillScenario : com/github/androidpasswordstore/autofillparser/AutofillScenario {
-	public fun <init> (Ljava/lang/Object;ZLjava/lang/Object;Ljava/util/List;)V
-	public final fun component1 ()Ljava/lang/Object;
-	public final fun component2 ()Z
-	public final fun component3 ()Ljava/lang/Object;
-	public final fun component4 ()Ljava/util/List;
-	public final fun copy (Ljava/lang/Object;ZLjava/lang/Object;Ljava/util/List;)Lcom/github/androidpasswordstore/autofillparser/GenericAutofillScenario;
-	public static synthetic fun copy$default (Lcom/github/androidpasswordstore/autofillparser/GenericAutofillScenario;Ljava/lang/Object;ZLjava/lang/Object;Ljava/util/List;ILjava/lang/Object;)Lcom/github/androidpasswordstore/autofillparser/GenericAutofillScenario;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getAllPasswordFields ()Ljava/util/List;
-	public fun getFillUsername ()Z
-	public final fun getGenericPassword ()Ljava/util/List;
-	public fun getOtp ()Ljava/lang/Object;
-	public fun getPasswordFieldsToFillOnGenerate ()Ljava/util/List;
-	public fun getPasswordFieldsToFillOnMatch ()Ljava/util/List;
-	public fun getPasswordFieldsToFillOnSearch ()Ljava/util/List;
-	public fun getPasswordFieldsToSave ()Ljava/util/List;
-	public fun getUsername ()Ljava/lang/Object;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class com/github/androidpasswordstore/autofillparser/PublicSuffixListCacheKt {
 	public static final fun cachePublicSuffixList (Landroid/content/Context;)V
-	public static final fun getCanonicalSuffix (Landroid/content/Context;Ljava/lang/String;Lkotlin/sequences/Sequence;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun getPublicSuffixPlusOne (Landroid/content/Context;Ljava/lang/String;Lkotlin/sequences/Sequence;)Ljava/lang/String;
-	public static final fun getSuffixPlusUpToOne (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/SingleFieldMatcher : com/github/androidpasswordstore/autofillparser/FieldMatcher {
-	public fun <init> (Lkotlin/jvm/functions/Function2;Ljava/util/List;)V
-	public fun match (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
-}
-
-public final class com/github/androidpasswordstore/autofillparser/SingleFieldMatcher$Builder {
-	public fun <init> ()V
-	public final fun breakTieOnSingle (Lkotlin/jvm/functions/Function2;)V
-	public final fun build ()Lcom/github/androidpasswordstore/autofillparser/SingleFieldMatcher;
-	public final fun takeSingle (Lkotlin/jvm/functions/Function2;)V
-	public static synthetic fun takeSingle$default (Lcom/github/androidpasswordstore/autofillparser/SingleFieldMatcher$Builder;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
-}
-
-public final class mozilla/components/lib/publicsuffixlist/PublicSuffixList {
-	public fun <init> (Landroid/content/Context;Lkotlinx/coroutines/CoroutineDispatcher;Lkotlinx/coroutines/CoroutineScope;)V
-	public synthetic fun <init> (Landroid/content/Context;Lkotlinx/coroutines/CoroutineDispatcher;Lkotlinx/coroutines/CoroutineScope;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getPublicSuffix (Ljava/lang/String;)Lkotlinx/coroutines/Deferred;
-	public final fun getPublicSuffixPlusOne (Ljava/lang/String;)Lkotlinx/coroutines/Deferred;
-	public final fun isPublicSuffix (Ljava/lang/String;)Lkotlinx/coroutines/Deferred;
-	public final fun prefetch ()Lkotlinx/coroutines/Deferred;
-	public final fun stripPublicSuffix (Ljava/lang/String;)Lkotlinx/coroutines/Deferred;
 }
 

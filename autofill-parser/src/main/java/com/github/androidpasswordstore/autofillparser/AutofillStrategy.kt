@@ -23,7 +23,7 @@ private inline fun <T> Pair<T, T>.none(predicate: T.() -> Boolean) =
  * [AutofillDsl].
  */
 @RequiresApi(Build.VERSION_CODES.O)
-val autofillStrategy = strategy {
+internal val autofillStrategy = strategy {
 
     // Match two new password fields, an optional current password field right below or above, and
     // an optional username field with autocomplete hint.
@@ -65,7 +65,7 @@ val autofillStrategy = strategy {
             }
         }
         currentPassword {
-            takeSingle { _ ->
+            takeSingle {
                 hasAutocompleteHintCurrentPassword && isFocused
             }
         }

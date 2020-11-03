@@ -26,7 +26,7 @@ import kotlinx.coroutines.async
  * https://publicsuffix.org/
  * https://github.com/publicsuffix/list
  */
-class PublicSuffixList(
+internal class PublicSuffixList(
     context: Context,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val scope: CoroutineScope = CoroutineScope(dispatcher)
@@ -39,30 +39,6 @@ class PublicSuffixList(
      */
     fun prefetch(): Deferred<Unit> = scope.async {
         data.run { Unit }
-    }
-
-    /**
-     * Returns true if the given [domain] is a public suffix; false otherwise.
-     *
-     * E.g.:
-     * ```
-     *   co.uk       -> true
-     *   com         -> true
-     *   mozilla.org -> false
-     *   org         -> true
-     * ```
-     *
-     * Note that this method ignores the default "prevailing rule" described in the formal public suffix list algorithm:
-     * If no rule matches then the passed [domain] is assumed to *not* be a public suffix.
-     *
-     * @param [domain] _must_ be a valid domain. [PublicSuffixList] performs no validation, and if any unexpected values
-     * are passed (e.g., a full URL, a domain with a trailing '/', etc) this may return an incorrect result.
-     */
-    fun isPublicSuffix(domain: String): Deferred<Boolean> = scope.async {
-        when (data.getPublicSuffixOffset(domain)) {
-            is PublicSuffixOffset.PublicSuffix -> true
-            else -> false
-        }
     }
 
     /**
@@ -89,51 +65,4 @@ class PublicSuffixList(
         }
     }
 
-    /**
-     * Returns the public suffix of the given [domain]; known as the effective top-level domain (eTLD). Returns `null`
-     * if the [domain] is a public suffix itself.
-     *
-     * E.g.:
-     * ```
-     * wwww.mozilla.org -> org
-     * www.bcc.co.uk    -> co.uk
-     * a.b.ide.kyoto.jp -> ide.kyoto.jp
-     * ```
-     *
-     * @param [domain] _must_ be a valid domain. [PublicSuffixList] performs no validation, and if any unexpected values
-     * are passed (e.g., a full URL, a domain with a trailing '/', etc) this may return an incorrect result.
-     */
-    fun getPublicSuffix(domain: String) = scope.async {
-        when (val offset = data.getPublicSuffixOffset(domain)) {
-            is PublicSuffixOffset.Offset -> domain
-                .split('.')
-                .drop(offset.value + 1)
-                .joinToString(separator = ".")
-            else -> null
-        }
-    }
-
-    /**
-     * Strips the public suffix from the given [domain]. Returns the original domain if no public suffix could be
-     * stripped.
-     *
-     * E.g.:
-     * ```
-     * wwww.mozilla.org -> www.mozilla
-     * www.bcc.co.uk    -> www.bbc
-     * a.b.ide.kyoto.jp -> a.b
-     * ```
-     *
-     * @param [domain] _must_ be a valid domain. [PublicSuffixList] performs no validation, and if any unexpected values
-     * are passed (e.g., a full URL, a domain with a trailing '/', etc) this may return an incorrect result.
-     */
-    fun stripPublicSuffix(domain: String) = scope.async {
-        when (val offset = data.getPublicSuffixOffset(domain)) {
-            is PublicSuffixOffset.Offset -> domain
-                .split('.')
-                .joinToString(separator = ".", limit = offset.value + 1, truncated = "")
-                .dropLast(1)
-            else -> domain
-        }
-    }
 }

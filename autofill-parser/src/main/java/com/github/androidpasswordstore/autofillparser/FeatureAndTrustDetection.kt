@@ -89,7 +89,7 @@ private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
     return certificateHash in expectedCertificateHashes
 }
 
-enum class BrowserMultiOriginMethod {
+internal enum class BrowserMultiOriginMethod {
     None, WebView, Field
 }
 
@@ -164,13 +164,13 @@ private fun getBrowserSaveFlag(context: Context, appPackage: String): Int? =
             isNoAccessibilityServiceEnabled(context)
         }
 
-data class BrowserAutofillSupportInfo(
+internal data class BrowserAutofillSupportInfo(
     val multiOriginMethod: BrowserMultiOriginMethod,
     val saveFlags: Int?
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getBrowserAutofillSupportInfoIfTrusted(
+internal fun getBrowserAutofillSupportInfoIfTrusted(
     context: Context,
     appPackage: String
 ): BrowserAutofillSupportInfo? {
@@ -187,7 +187,7 @@ private val FLAKY_BROWSERS = listOf(
     "com.kiwibrowser.browser",
 )
 
-enum class BrowserAutofillSupportLevel {
+public enum class BrowserAutofillSupportLevel {
     None,
     FlakyFill,
     PasswordFill,
@@ -213,7 +213,7 @@ private fun getBrowserAutofillSupportLevel(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getInstalledBrowsersWithAutofillSupportLevel(context: Context): List<Pair<String, BrowserAutofillSupportLevel>> {
+public fun getInstalledBrowsersWithAutofillSupportLevel(context: Context): List<Pair<String, BrowserAutofillSupportLevel>> {
     val testWebIntent = Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse("http://example.org")
     }

@@ -42,7 +42,7 @@ private fun stableHash(array: Collection<ByteArray>): String {
  * In most cases apps will only have a single certificate. If there are multiple, this functions
  * returns all of them in sorted order and separated with `;`.
  */
-fun computeCertificatesHash(context: Context, appPackage: String): String {
+public fun computeCertificatesHash(context: Context, appPackage: String): String {
     // The warning does not apply since 1) we are specifically hashing **all** signatures and 2) it
     // no longer applies to Android 4.4+.
     // Even though there is a new way to get the certificates as of Android Pie, we need to keep
@@ -68,18 +68,18 @@ fun computeCertificatesHash(context: Context, appPackage: String): String {
  * Returns the "origin" (without port information) of the [AssistStructure.ViewNode] derived from
  * its `webDomain` and `webScheme`, if available.
  */
-val AssistStructure.ViewNode.webOrigin: String?
+internal val AssistStructure.ViewNode.webOrigin: String?
     @RequiresApi(Build.VERSION_CODES.O) get() = webDomain?.let { domain ->
         val scheme = (if (Build.VERSION.SDK_INT >= 28) webScheme else null) ?: "https"
         "$scheme://$domain"
     }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class FixedSaveCallback(context: Context, private val callback: SaveCallback) {
+public class FixedSaveCallback(context: Context, private val callback: SaveCallback) {
 
     private val applicationContext = context.applicationContext
 
-    fun onFailure(message: CharSequence) {
+    public fun onFailure(message: CharSequence) {
         callback.onFailure(message)
         // When targeting SDK 29, the message is no longer shown as a toast.
         // See https://developer.android.com/reference/android/service/autofill/SaveCallback#onFailure(java.lang.CharSequence)
@@ -88,7 +88,7 @@ class FixedSaveCallback(context: Context, private val callback: SaveCallback) {
         }
     }
 
-    fun onSuccess(intentSender: IntentSender) {
+    public fun onSuccess(intentSender: IntentSender) {
         if (Build.VERSION.SDK_INT >= 28) {
             callback.onSuccess(intentSender)
         } else {
@@ -117,7 +117,7 @@ private fun visitViewNode(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun AssistStructure.findNodeByAutofillId(autofillId: AutofillId): AssistStructure.ViewNode? {
+internal fun AssistStructure.findNodeByAutofillId(autofillId: AutofillId): AssistStructure.ViewNode? {
     var node: AssistStructure.ViewNode? = null
     visitViewNodes(this) {
         if (it.autofillId == autofillId)

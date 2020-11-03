@@ -21,9 +21,19 @@ fun getCredential(type: String): String {
 
 android {
     defaultConfig {
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    kotlin {
+        explicitApi()
+    }
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-Xexplicit-api=strict"
+        )
     }
 }
 
