@@ -62,14 +62,14 @@ class AutofillResponseBuilder(form: FillableForm) {
     }
 
     private fun makeMatchDataset(context: Context, file: File, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
         val metadata = makeFillMatchMetadata(context, file)
         val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
         return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
     }
 
     private fun makeSearchDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.Search)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.Search)) return null
         val metadata = makeSearchAndFillMetadata(context)
         val intentSender =
             AutofillFilterView.makeMatchAndDecryptFileIntentSender(context, formOrigin)
@@ -77,14 +77,14 @@ class AutofillResponseBuilder(form: FillableForm) {
     }
 
     private fun makeGenerateDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.Generate)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.Generate)) return null
         val metadata = makeGenerateAndFillMetadata(context)
         val intentSender = AutofillSaveActivity.makeSaveIntentSender(context, null, formOrigin)
         return makeIntentDataset(context, AutofillAction.Generate, intentSender, metadata, imeSpec)
     }
 
     private fun makeFillOtpFromSmsDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
         if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
         val metadata = makeFillOtpFromSmsMetadata(context)
         val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
