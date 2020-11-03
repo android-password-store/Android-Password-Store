@@ -38,8 +38,7 @@ class AutofillResponseBuilder(form: FillableForm) {
     private val clientState = form.toClientState()
 
     // We do not offer save when the only relevant field is a username field or there is no field.
-    private val scenarioSupportsSave =
-        scenario.fieldsToSave.minus(listOfNotNull(scenario.username)).isNotEmpty()
+    private val scenarioSupportsSave = scenario.hasPasswordFieldsToSave
     private val canBeSaved = saveFlags != null && scenarioSupportsSave
 
     private fun makeIntentDataset(
@@ -63,14 +62,14 @@ class AutofillResponseBuilder(form: FillableForm) {
     }
 
     private fun makeMatchDataset(context: Context, file: File, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.fieldsToFillOn(AutofillAction.Match).isEmpty()) return null
+        if (scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
         val metadata = makeFillMatchMetadata(context, file)
         val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
         return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
     }
 
     private fun makeSearchDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.fieldsToFillOn(AutofillAction.Search).isEmpty()) return null
+        if (scenario.hasFieldsToFillOn(AutofillAction.Search)) return null
         val metadata = makeSearchAndFillMetadata(context)
         val intentSender =
             AutofillFilterView.makeMatchAndDecryptFileIntentSender(context, formOrigin)
@@ -78,14 +77,14 @@ class AutofillResponseBuilder(form: FillableForm) {
     }
 
     private fun makeGenerateDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.fieldsToFillOn(AutofillAction.Generate).isEmpty()) return null
+        if (scenario.hasFieldsToFillOn(AutofillAction.Generate)) return null
         val metadata = makeGenerateAndFillMetadata(context)
         val intentSender = AutofillSaveActivity.makeSaveIntentSender(context, null, formOrigin)
         return makeIntentDataset(context, AutofillAction.Generate, intentSender, metadata, imeSpec)
     }
 
     private fun makeFillOtpFromSmsDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
-        if (scenario.fieldsToFillOn(AutofillAction.FillOtpFromSms).isEmpty()) return null
+        if (scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
         if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
         val metadata = makeFillOtpFromSmsMetadata(context)
         val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
@@ -131,10 +130,10 @@ class AutofillResponseBuilder(form: FillableForm) {
     private fun makeSaveInfo(): SaveInfo? {
         if (!canBeSaved) return null
         check(saveFlags != null)
-        val idsToSave = scenario.fieldsToSave.map { it.autofillId }.toTypedArray()
+        val idsToSave = scenario.fieldsToSave.toTypedArray()
         if (idsToSave.isEmpty()) return null
         var saveDataTypes = SaveInfo.SAVE_DATA_TYPE_PASSWORD
-        if (scenario.username != null) {
+        if (scenario.hasUsername) {
             saveDataTypes = saveDataTypes or SaveInfo.SAVE_DATA_TYPE_USERNAME
         }
         return SaveInfo.Builder(saveDataTypes, idsToSave).run {
@@ -202,7 +201,7 @@ class AutofillResponseBuilder(form: FillableForm) {
             clientState: Bundle,
             action: AutofillAction
         ): Dataset {
-            val scenario = AutofillScenario.fromBundle(clientState)
+            val scenario = AutofillScenario.fromClientState(clientState)
             // Before Android P, Datasets used for fill-in had to come with a RemoteViews, even
             // though they are rarely shown.
             // FIXME: We should clone the original dataset here and add the credentials to be filled

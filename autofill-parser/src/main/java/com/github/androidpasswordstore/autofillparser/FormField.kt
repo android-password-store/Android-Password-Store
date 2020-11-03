@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.autofill.HintConstants
 import java.util.Locale
 
-enum class CertaintyLevel {
+internal enum class CertaintyLevel {
     Impossible, Possible, Likely, Certain
 }
 
@@ -22,7 +22,7 @@ enum class CertaintyLevel {
  * extracted from its [AssistStructure.ViewNode].
  */
 @RequiresApi(Build.VERSION_CODES.O)
-class FormField(
+internal class FormField(
     node: AssistStructure.ViewNode,
     private val index: Int,
     passDownWebViewOrigins: Boolean,

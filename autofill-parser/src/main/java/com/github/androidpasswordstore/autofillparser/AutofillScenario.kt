@@ -13,7 +13,7 @@ import android.view.autofill.AutofillValue
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.e
 
-enum class AutofillAction {
+public enum class AutofillAction {
     Match, Search, Generate, FillOtpFromSms
 }
 
@@ -24,18 +24,23 @@ enum class AutofillAction {
  * field is needed and available in the particular situation.
  */
 @RequiresApi(Build.VERSION_CODES.O)
-sealed class AutofillScenario<out T : Any> {
+public sealed class AutofillScenario<out T : Any> {
 
-    companion object {
+    public companion object {
 
-        const val BUNDLE_KEY_USERNAME_ID = "usernameId"
-        const val BUNDLE_KEY_FILL_USERNAME = "fillUsername"
-        const val BUNDLE_KEY_OTP_ID = "otpId"
-        const val BUNDLE_KEY_CURRENT_PASSWORD_IDS = "currentPasswordIds"
-        const val BUNDLE_KEY_NEW_PASSWORD_IDS = "newPasswordIds"
-        const val BUNDLE_KEY_GENERIC_PASSWORD_IDS = "genericPasswordIds"
+        internal const val BUNDLE_KEY_USERNAME_ID = "usernameId"
+        internal const val BUNDLE_KEY_FILL_USERNAME = "fillUsername"
+        internal const val BUNDLE_KEY_OTP_ID = "otpId"
+        internal const val BUNDLE_KEY_CURRENT_PASSWORD_IDS = "currentPasswordIds"
+        internal const val BUNDLE_KEY_NEW_PASSWORD_IDS = "newPasswordIds"
+        internal const val BUNDLE_KEY_GENERIC_PASSWORD_IDS = "genericPasswordIds"
 
-        fun fromBundle(clientState: Bundle): AutofillScenario<AutofillId>? {
+        @Deprecated("Use `fromClientState` instead.", ReplaceWith("fromClientState(clientState)", "com.github.androidpasswordstore.autofillparser.AutofillScenario.Companion.fromClientState"))
+        public fun fromBundle(clientState: Bundle): AutofillScenario<AutofillId>? {
+            return fromClientState(clientState)
+        }
+
+        public fun fromClientState(clientState: Bundle): AutofillScenario<AutofillId>? {
             return try {
                 Builder<AutofillId>().apply {
                     username = clientState.getParcelable(BUNDLE_KEY_USERNAME_ID)
@@ -64,7 +69,7 @@ sealed class AutofillScenario<out T : Any> {
         }
     }
 
-    class Builder<T : Any> {
+    internal class Builder<T : Any> {
 
         var username: T? = null
         var fillUsername = false
@@ -94,22 +99,23 @@ sealed class AutofillScenario<out T : Any> {
         }
     }
 
-    abstract val username: T?
-    abstract val fillUsername: Boolean
-    abstract val otp: T?
-    abstract val allPasswordFields: List<T>
-    abstract val passwordFieldsToFillOnMatch: List<T>
-    abstract val passwordFieldsToFillOnSearch: List<T>
-    abstract val passwordFieldsToFillOnGenerate: List<T>
-    abstract val passwordFieldsToSave: List<T>
+    public abstract val username: T?
+    public abstract val passwordFieldsToSave: List<T>
 
-    val fieldsToSave
+    internal abstract val otp: T?
+    internal abstract val allPasswordFields: List<T>
+    internal abstract val fillUsername: Boolean
+    internal abstract val passwordFieldsToFillOnMatch: List<T>
+    internal abstract val passwordFieldsToFillOnSearch: List<T>
+    internal abstract val passwordFieldsToFillOnGenerate: List<T>
+
+    public val fieldsToSave: List<T>
         get() = listOfNotNull(username) + passwordFieldsToSave
 
-    val allFields
+    internal val allFields: List<T>
         get() = listOfNotNull(username, otp) + allPasswordFields
 
-    fun fieldsToFillOn(action: AutofillAction): List<T> {
+    internal fun fieldsToFillOn(action: AutofillAction): List<T> {
         val credentialFieldsToFill = when (action) {
             AutofillAction.Match -> passwordFieldsToFillOnMatch + listOfNotNull(otp)
             AutofillAction.Search -> passwordFieldsToFillOnSearch + listOfNotNull(otp)
@@ -134,10 +140,23 @@ sealed class AutofillScenario<out T : Any> {
             else -> emptyList()
         }
     }
+
+    public fun hasFieldsToFillOn(action: AutofillAction): Boolean {
+        return fieldsToFillOn(action).isNotEmpty()
+    }
+
+    public val hasFieldsToSave: Boolean
+        get() = fieldsToSave.isNotEmpty()
+
+    public val hasPasswordFieldsToSave: Boolean
+        get() = fieldsToSave.minus(listOfNotNull(username)).isNotEmpty()
+
+    public val hasUsername: Boolean
+        get() = username != null
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-data class ClassifiedAutofillScenario<T : Any>(
+internal data class ClassifiedAutofillScenario<T : Any>(
     override val username: T?,
     override val fillUsername: Boolean,
     override val otp: T?,
@@ -158,7 +177,7 @@ data class ClassifiedAutofillScenario<T : Any>(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-data class GenericAutofillScenario<T : Any>(
+internal data class GenericAutofillScenario<T : Any>(
     override val username: T?,
     override val fillUsername: Boolean,
     override val otp: T?,
@@ -177,7 +196,7 @@ data class GenericAutofillScenario<T : Any>(
         get() = genericPassword
 }
 
-fun AutofillScenario<FormField>.passesOriginCheck(singleOriginMode: Boolean): Boolean {
+internal fun AutofillScenario<FormField>.passesOriginCheck(singleOriginMode: Boolean): Boolean {
     return if (singleOriginMode) {
         // In single origin mode, only the browsers URL bar (which is never filled) should have
         // a webOrigin.
@@ -191,7 +210,7 @@ fun AutofillScenario<FormField>.passesOriginCheck(singleOriginMode: Boolean): Bo
 
 @RequiresApi(Build.VERSION_CODES.O)
 @JvmName("fillWithAutofillId")
-fun Dataset.Builder.fillWith(
+public fun Dataset.Builder.fillWith(
     scenario: AutofillScenario<AutofillId>,
     action: AutofillAction,
     credentials: Credentials?
@@ -211,17 +230,7 @@ fun Dataset.Builder.fillWith(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@JvmName("fillWithFormField")
-fun Dataset.Builder.fillWith(
-    scenario: AutofillScenario<FormField>,
-    action: AutofillAction,
-    credentials: Credentials?
-) {
-    fillWith(scenario.map { it.autofillId }, action, credentials)
-}
-
-inline fun <T : Any, S : Any> AutofillScenario<T>.map(transform: (T) -> S): AutofillScenario<S> {
+internal inline fun <T : Any, S : Any> AutofillScenario<T>.map(transform: (T) -> S): AutofillScenario<S> {
     val builder = AutofillScenario.Builder<S>()
     builder.username = username?.let(transform)
     builder.fillUsername = fillUsername
@@ -240,7 +249,7 @@ inline fun <T : Any, S : Any> AutofillScenario<T>.map(transform: (T) -> S): Auto
 
 @RequiresApi(Build.VERSION_CODES.O)
 @JvmName("toBundleAutofillId")
-private fun AutofillScenario<AutofillId>.toBundle(): Bundle = when (this) {
+internal fun AutofillScenario<AutofillId>.toBundle(): Bundle = when (this) {
     is ClassifiedAutofillScenario<AutofillId> -> {
         Bundle(5).apply {
             putParcelable(AutofillScenario.BUNDLE_KEY_USERNAME_ID, username)
@@ -267,22 +276,18 @@ private fun AutofillScenario<AutofillId>.toBundle(): Bundle = when (this) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@JvmName("toBundleFormField")
-fun AutofillScenario<FormField>.toBundle(): Bundle = map { it.autofillId }.toBundle()
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun AutofillScenario<AutofillId>.recoverNodes(structure: AssistStructure): AutofillScenario<AssistStructure.ViewNode>? {
+public fun AutofillScenario<AutofillId>.recoverNodes(structure: AssistStructure): AutofillScenario<AssistStructure.ViewNode>? {
     return map { autofillId ->
         structure.findNodeByAutofillId(autofillId) ?: return null
     }
 }
 
-val AutofillScenario<AssistStructure.ViewNode>.usernameValue: String?
+public val AutofillScenario<AssistStructure.ViewNode>.usernameValue: String?
     @RequiresApi(Build.VERSION_CODES.O) get() {
         val value = username?.autofillValue ?: return null
         return if (value.isText) value.textValue.toString() else null
     }
-val AutofillScenario<AssistStructure.ViewNode>.passwordValue: String?
+public val AutofillScenario<AssistStructure.ViewNode>.passwordValue: String?
     @RequiresApi(Build.VERSION_CODES.O) get() {
         val distinctValues = passwordFieldsToSave.map {
             if (it.autofillValue?.isText == true) {
