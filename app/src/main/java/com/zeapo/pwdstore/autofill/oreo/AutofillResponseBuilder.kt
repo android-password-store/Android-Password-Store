@@ -53,14 +53,14 @@ class AutofillResponseBuilder(form: FillableForm) {
     }
 
     private fun makeMatchDataset(context: Context, file: File): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
         val remoteView = makeFillMatchRemoteView(context, file, formOrigin)
         val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.Match)
     }
 
     private fun makeSearchDataset(context: Context): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.Search)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.Search)) return null
         val remoteView = makeSearchAndFillRemoteView(context, formOrigin)
         val intentSender =
             AutofillFilterView.makeMatchAndDecryptFileIntentSender(context, formOrigin)
@@ -68,14 +68,14 @@ class AutofillResponseBuilder(form: FillableForm) {
     }
 
     private fun makeGenerateDataset(context: Context): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.Generate)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.Generate)) return null
         val remoteView = makeGenerateAndFillRemoteView(context, formOrigin)
         val intentSender = AutofillSaveActivity.makeSaveIntentSender(context, null, formOrigin)
         return makePlaceholderDataset(remoteView, intentSender, AutofillAction.Generate)
     }
 
     private fun makeFillOtpFromSmsDataset(context: Context): Dataset? {
-        if (scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
+        if (!scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
         if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
         val remoteView = makeFillOtpFromSmsRemoteView(context, formOrigin)
         val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
