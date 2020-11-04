@@ -116,11 +116,7 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
         inlineSuggestionsRequest: InlineSuggestionsRequest?,
         publisherChangedException: AutofillPublisherChangedException
     ): FillResponse {
-        val imeSpec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            inlineSuggestionsRequest?.inlinePresentationSpecs?.firstOrNull()
-        } else {
-            null
-        }
+        val imeSpec = inlineSuggestionsRequest?.inlinePresentationSpecs?.firstOrNull()
         return FillResponse.Builder().run {
             addDataset(makePublisherChangedDataset(context, publisherChangedException, imeSpec))
             setIgnoredIds(*ignoredIds.toTypedArray())
@@ -130,11 +126,7 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
 
     private fun makeFillResponse(context: Context, inlineSuggestionsRequest: InlineSuggestionsRequest?, matchedFiles: List<File>): FillResponse? {
         var datasetCount = 0
-        val imeSpecs: List<InlinePresentationSpec> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            inlineSuggestionsRequest?.inlinePresentationSpecs
-        } else {
-            null
-        } ?: emptyList()
+        val imeSpecs = inlineSuggestionsRequest?.inlinePresentationSpecs ?: emptyList()
         return FillResponse.Builder().run {
             for (file in matchedFiles) {
                 makeMatchDataset(context, file, imeSpecs.getOrNull(datasetCount))?.let {
@@ -155,9 +147,7 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
                 addDataset(it)
             }
             if (datasetCount == 0) return null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                setHeader(makeRemoteView(context, makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))))
-            }
+            setHeader(makeRemoteView(context, makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))))
             makeSaveInfo()?.let { setSaveInfo(it) }
             setClientState(clientState)
             setIgnoredIds(*ignoredIds.toTypedArray())
