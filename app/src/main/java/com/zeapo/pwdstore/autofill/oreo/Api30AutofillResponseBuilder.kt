@@ -2,21 +2,21 @@
  * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+
 package com.zeapo.pwdstore.autofill.oreo
 
 import android.content.Context
 import android.content.IntentSender
 import android.os.Build
-import android.os.Bundle
 import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
+import android.view.inputmethod.InlineSuggestionsRequest
+import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
 import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
-import com.github.androidpasswordstore.autofillparser.AutofillScenario
-import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
@@ -27,8 +27,12 @@ import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSaveActivity
 import com.zeapo.pwdstore.autofill.oreo.ui.AutofillSmsActivity
 import java.io.File
 
-@RequiresApi(Build.VERSION_CODES.O)
-class AutofillResponseBuilder(form: FillableForm) {
+/**
+ * Implements [AutofillResponseBuilder]'s methods for API 30 and above
+ */
+@RequiresApi(Build.VERSION_CODES.R)
+class Api30AutofillResponseBuilder(form: FillableForm) {
+
     private val formOrigin = form.formOrigin
     private val scenario = form.scenario
     private val ignoredIds = form.ignoredIds
@@ -44,67 +48,108 @@ class AutofillResponseBuilder(form: FillableForm) {
         action: AutofillAction,
         intentSender: IntentSender,
         metadata: DatasetMetadata,
+        imeSpec: InlinePresentationSpec?,
     ): Dataset {
         return Dataset.Builder(makeRemoteView(context, metadata)).run {
             fillWith(scenario, action, credentials = null)
             setAuthentication(intentSender)
+            if (imeSpec != null) {
+                val inlinePresentation = makeInlinePresentation(context, imeSpec, metadata)
+                if (inlinePresentation != null) {
+                    setInlinePresentation(inlinePresentation)
+                }
+            }
             build()
         }
     }
 
-    private fun makeMatchDataset(context: Context, file: File): Dataset? {
+    private fun makeMatchDataset(context: Context, file: File, imeSpec: InlinePresentationSpec?): Dataset? {
         if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
         val metadata = makeFillMatchMetadata(context, file)
         val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
-        return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata)
+        return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
     }
 
-
-    private fun makeSearchDataset(context: Context): Dataset? {
+    private fun makeSearchDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
         if (!scenario.hasFieldsToFillOn(AutofillAction.Search)) return null
         val metadata = makeSearchAndFillMetadata(context)
         val intentSender =
             AutofillFilterView.makeMatchAndDecryptFileIntentSender(context, formOrigin)
-        return makeIntentDataset(context, AutofillAction.Search, intentSender, metadata)
+        return makeIntentDataset(context, AutofillAction.Search, intentSender, metadata, imeSpec)
     }
 
-    private fun makeGenerateDataset(context: Context): Dataset? {
+    private fun makeGenerateDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
         if (!scenario.hasFieldsToFillOn(AutofillAction.Generate)) return null
         val metadata = makeGenerateAndFillMetadata(context)
         val intentSender = AutofillSaveActivity.makeSaveIntentSender(context, null, formOrigin)
-        return makeIntentDataset(context, AutofillAction.Generate, intentSender, metadata)
+        return makeIntentDataset(context, AutofillAction.Generate, intentSender, metadata, imeSpec)
     }
 
-    private fun makeFillOtpFromSmsDataset(context: Context): Dataset? {
+
+    private fun makeFillOtpFromSmsDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
         if (!scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
         if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
         val metadata = makeFillOtpFromSmsMetadata(context)
         val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
-        return makeIntentDataset(context, AutofillAction.FillOtpFromSms, intentSender, metadata)
+        return makeIntentDataset(context, AutofillAction.FillOtpFromSms, intentSender, metadata, imeSpec)
     }
 
     private fun makePublisherChangedDataset(
         context: Context,
         publisherChangedException: AutofillPublisherChangedException,
+        imeSpec: InlinePresentationSpec?
     ): Dataset {
         val metadata = makeWarningMetadata(context)
         // If the user decides to trust the new publisher, they can choose reset the list of
         // matches. In this case we need to immediately show a new `FillResponse` as if the app were
         // autofilled for the first time. This `FillResponse` needs to be returned as a result from
         // `AutofillPublisherChangedActivity`, which is why we create and pass it on here.
-        val fillResponseAfterReset = makeFillResponse(context, emptyList())
+        val fillResponseAfterReset = makeFillResponse(context, null, emptyList())
         val intentSender = AutofillPublisherChangedActivity.makePublisherChangedIntentSender(
             context, publisherChangedException, fillResponseAfterReset
         )
-        return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata)
+        return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
     }
 
     private fun makePublisherChangedResponse(
         context: Context,
+        inlineSuggestionsRequest: InlineSuggestionsRequest?,
         publisherChangedException: AutofillPublisherChangedException
     ): FillResponse {
+        val imeSpec = inlineSuggestionsRequest?.inlinePresentationSpecs?.firstOrNull()
         return FillResponse.Builder().run {
-            addDataset(makePublisherChangedDataset(context, publisherChangedException))
+            addDataset(makePublisherChangedDataset(context, publisherChangedException, imeSpec))
+            setIgnoredIds(*ignoredIds.toTypedArray())
+            build()
+        }
+    }
+
+    private fun makeFillResponse(context: Context, inlineSuggestionsRequest: InlineSuggestionsRequest?, matchedFiles: List<File>): FillResponse? {
+        var datasetCount = 0
+        val imeSpecs = inlineSuggestionsRequest?.inlinePresentationSpecs ?: emptyList()
+        return FillResponse.Builder().run {
+            for (file in matchedFiles) {
+                makeMatchDataset(context, file, imeSpecs.getOrNull(datasetCount))?.let {
+                    datasetCount++
+                    addDataset(it)
+                }
+            }
+            makeSearchDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
+                datasetCount++
+                addDataset(it)
+            }
+            makeGenerateDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
+                datasetCount++
+                addDataset(it)
+            }
+            makeFillOtpFromSmsDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
+                datasetCount++
+                addDataset(it)
+            }
+            if (datasetCount == 0) return null
+            setHeader(makeRemoteView(context, makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))))
+            makeSaveInfo()?.let { setSaveInfo(it) }
+            setClientState(clientState)
             setIgnoredIds(*ignoredIds.toTypedArray())
             build()
         }
@@ -127,77 +172,18 @@ class AutofillResponseBuilder(form: FillableForm) {
         }
     }
 
-    private fun makeFillResponse(context: Context, matchedFiles: List<File>): FillResponse? {
-        var datasetCount = 0
-        return FillResponse.Builder().run {
-            for (file in matchedFiles) {
-                makeMatchDataset(context, file)?.let {
-                    datasetCount++
-                    addDataset(it)
-                }
-            }
-            makeSearchDataset(context)?.let {
-                datasetCount++
-                addDataset(it)
-            }
-            makeGenerateDataset(context)?.let {
-                datasetCount++
-                addDataset(it)
-            }
-            makeFillOtpFromSmsDataset(context)?.let {
-                datasetCount++
-                addDataset(it)
-            }
-            if (datasetCount == 0) return null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                setHeader(makeRemoteView(context, makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))))
-            }
-            makeSaveInfo()?.let { setSaveInfo(it) }
-            setClientState(clientState)
-            setIgnoredIds(*ignoredIds.toTypedArray())
-            build()
-        }
-    }
-
     /**
      * Creates and returns a suitable [FillResponse] to the Autofill framework.
      */
-    fun fillCredentials(context: Context, callback: FillCallback) {
+    fun fillCredentials(context: Context, inlineSuggestionsRequest: InlineSuggestionsRequest?, callback: FillCallback) {
         AutofillMatcher.getMatchesFor(context, formOrigin).fold(
             success = { matchedFiles ->
-                callback.onSuccess(makeFillResponse(context, matchedFiles))
+                callback.onSuccess(makeFillResponse(context, inlineSuggestionsRequest, matchedFiles))
             },
             failure = { e ->
                 e(e)
-                callback.onSuccess(makePublisherChangedResponse(context, e))
+                callback.onSuccess(makePublisherChangedResponse(context, inlineSuggestionsRequest, e))
             }
         )
-    }
-
-    companion object {
-        fun makeFillInDataset(
-            context: Context,
-            credentials: Credentials,
-            clientState: Bundle,
-            action: AutofillAction
-        ): Dataset {
-            val scenario = AutofillScenario.fromClientState(clientState)
-            // Before Android P, Datasets used for fill-in had to come with a RemoteViews, even
-            // though they are rarely shown.
-            // FIXME: We should clone the original dataset here and add the credentials to be filled
-            // in. Otherwise, the entry in the cached list of datasets will be overwritten by the
-            // fill-in dataset without any visual representation. This causes it to be missing from
-            // the Autofill suggestions shown after the user clears the filled out form fields.
-            val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                Dataset.Builder()
-            } else {
-                Dataset.Builder(makeRemoteView(context, makeEmptyMetadata()))
-            }
-            return builder.run {
-                if (scenario != null) fillWith(scenario, action, credentials)
-                else e { "Failed to recover scenario from client state" }
-                build()
-            }
-        }
     }
 }
