@@ -53,7 +53,7 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
         return Dataset.Builder(makeRemoteView(context, metadata)).run {
             fillWith(scenario, action, credentials = null)
             setAuthentication(intentSender)
-            if (imeSpec != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (imeSpec != null) {
                 val inlinePresentation = makeInlinePresentation(context, imeSpec, metadata)
                 if (inlinePresentation != null) {
                     setInlinePresentation(inlinePresentation)
