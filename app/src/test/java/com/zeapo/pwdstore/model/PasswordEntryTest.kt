@@ -116,6 +116,17 @@ class PasswordEntryTest {
         assertFalse(entry.hasUsername())
     }
 
+    // https://msfjarvis.dev/aps/issue/1190
+    @Test fun extraContentWithUnknownFieldsInBetween() {
+        val entry = makeEntry("pass\nuser: user\nid: id\n$TOTP_URI")
+        assertTrue(entry.hasExtraContent())
+        assertTrue(entry.hasTotp())
+        assertTrue(entry.hasUsername())
+        assertEquals("pass", entry.password)
+        assertEquals("user", entry.username)
+        assertEquals("id: id", entry.extraContentWithoutAuthData)
+    }
+
     companion object {
 
         const val TOTP_URI = "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
