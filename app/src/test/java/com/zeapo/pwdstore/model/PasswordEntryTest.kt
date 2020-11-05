@@ -116,8 +116,8 @@ class PasswordEntryTest {
         assertFalse(entry.hasUsername())
     }
 
-    // https://msfjarvis.dev/aps/issue/1190
-    @Test fun extraContentWithUnknownFieldsInBetween() {
+    // https://github.com/android-password-store/Android-Password-Store/issues/1190
+    @Test fun extraContentWithMultipleUsernameFields() {
         val entry = makeEntry("pass\nuser: user\nid: id\n$TOTP_URI")
         assertTrue(entry.hasExtraContent())
         assertTrue(entry.hasTotp())
