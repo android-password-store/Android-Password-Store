@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 -   Cancelling the Autofill "Generate password" action now correctly returns you to the original app.
+-   If multiple username fields exist in the password, we now ensure the later ones are not dropped from extra content.
 
 ## [1.13.1] - 2020-10-23
 
