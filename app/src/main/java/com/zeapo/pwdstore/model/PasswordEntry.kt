@@ -60,9 +60,11 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     val extraContentWithoutAuthData by lazy(LazyThreadSafetyMode.NONE) {
+        var foundUsername = false
         extraContent.splitToSequence("\n").filter { line ->
             return@filter when {
-                USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } -> {
+                USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } && !foundUsername -> {
+                    foundUsername = true
                     false
                 }
                 line.startsWith("otpauth://", ignoreCase = true) ||
