@@ -71,6 +71,7 @@ dependencies {
     implementation(Dependencies.ThirdParty.commons_codec)
     implementation(Dependencies.ThirdParty.eddsa)
     implementation(Dependencies.ThirdParty.fastscroll)
+    implementation(Dependencies.ThirdParty.fuzzywuzzy)
     implementation(Dependencies.ThirdParty.jgit) {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }

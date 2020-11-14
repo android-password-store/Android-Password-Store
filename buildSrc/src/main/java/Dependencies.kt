@@ -52,6 +52,7 @@ object Dependencies {
         const val commons_codec = "commons-codec:commons-codec:1.14"
         const val eddsa = "net.i2p.crypto:eddsa:0.3.0"
         const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
+        const val fuzzywuzzy = "me.xdrop:fuzzywuzzy:1.3.1"
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
         const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
         const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.5"

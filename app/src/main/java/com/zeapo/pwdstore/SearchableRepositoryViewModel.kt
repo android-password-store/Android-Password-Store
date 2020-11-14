@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.yield
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
 private fun File.toPasswordItem() = if (isFile)
@@ -56,31 +57,8 @@ else
     PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
 
 private fun PasswordItem.fuzzyMatch(filter: String): Int {
-    var i = 0
-    var j = 0
-    var score = 0
-    var bonus = 0
-    var bonusIncrement = 0
-
-    val toMatch = longName
-
-    while (i < filter.length && j < toMatch.length) {
-        when {
-            filter[i].isWhitespace() -> i++
-            filter[i].toLowerCase() == toMatch[j].toLowerCase() -> {
-                i++
-                bonusIncrement += 1
-                bonus += bonusIncrement
-                score += bonus
-            }
-            else -> {
-                bonus = 0
-                bonusIncrement = 0
-            }
-        }
-        j++
-    }
-    return if (i == filter.length) score else 0
+    val result = FuzzySearch.partialRatio(filter, longName)
+    return if (result < 30) 0 else result
 }
 
 private val CaseInsensitiveComparator = Collator.getInstance().apply {
