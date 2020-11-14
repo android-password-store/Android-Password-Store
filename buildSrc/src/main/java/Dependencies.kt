@@ -9,7 +9,7 @@ object Dependencies {
     object Kotlin {
         object Coroutines {
 
-            private const val version = "1.4.0"
+            private const val version = "1.4.1"
             const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         }
@@ -21,11 +21,11 @@ object Dependencies {
 
         const val activity_ktx = "androidx.activity:activity-ktx:1.2.0-beta01"
         const val annotation = "androidx.annotation:annotation:1.1.0"
-        const val autofill = "androidx.autofill:autofill:1.1.0-beta01"
+        const val autofill = "androidx.autofill:autofill:1.1.0-rc01"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
-        const val biometric = "androidx.biometric:biometric:1.1.0-beta01"
+        const val biometric = "androidx.biometric:biometric:1.1.0-rc01"
         const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.4"
-        const val core_ktx = "androidx.core:core-ktx:1.5.0-alpha04"
+        const val core_ktx = "androidx.core:core-ktx:1.5.0-alpha05"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
         const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0-beta01"
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
@@ -51,7 +51,7 @@ object Dependencies {
         const val bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.67"
         const val commons_codec = "commons-codec:commons-codec:1.14"
         const val eddsa = "net.i2p.crypto:eddsa:0.3.0"
-        const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.4"
+        const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
         const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
         const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.5"
