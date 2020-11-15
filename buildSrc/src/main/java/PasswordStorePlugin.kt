@@ -4,6 +4,7 @@
  */
 
 import com.android.build.gradle.TestedExtension
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
 import org.gradle.api.Plugin
@@ -32,8 +33,12 @@ class PasswordStorePlugin : Plugin<Project> {
                         options.isDeprecation = true
                     }
                 }
-                is LibraryPlugin,
+                is LibraryPlugin -> {
+                    project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
+                }
                 is AppPlugin -> {
+                    project.extensions.getByType<BaseAppModuleExtension>().configureAndroidApplicationOptions(project)
+                    project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
                     project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
                 }
             }

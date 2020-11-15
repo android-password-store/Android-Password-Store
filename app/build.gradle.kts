@@ -3,18 +3,11 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.util.Properties
 
 plugins {
     id("com.android.application")
     kotlin("android")
     `aps-plugin`
-}
-
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-
-fun isSnapshot(): Boolean {
-    return System.getenv("GITHUB_WORKFLOW") != null && System.getenv("SNAPSHOT") != null
 }
 
 android {
@@ -24,13 +17,6 @@ android {
                 (this as BaseVariantOutputImpl).outputFileName = "aps-${flavorName}_$versionName.apk"
             }
         }
-    }
-
-    adbOptions.installOptions("--user 0")
-
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
     }
 
     defaultConfig {
@@ -44,36 +30,6 @@ android {
         isAbortOnError = true
         isCheckReleaseBuilds = false
         disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
-    }
-
-    buildTypes {
-        named("release") {
-            isMinifyEnabled = true
-            setProguardFiles(listOf("proguard-android-optimize.txt", "proguard-rules.pro"))
-            buildConfigField("boolean", "ENABLE_DEBUG_FEATURES", if (isSnapshot()) "true" else "false")
-        }
-        named("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
-            isMinifyEnabled = false
-            buildConfigField("boolean", "ENABLE_DEBUG_FEATURES", "true")
-        }
-    }
-
-    if (keystorePropertiesFile.exists()) {
-        val keystoreProperties = Properties()
-        keystoreProperties.load(keystorePropertiesFile.inputStream())
-        signingConfigs {
-            register("release") {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-            }
-        }
-        listOf("release", "debug").map {
-            buildTypes.getByName(it).signingConfig = signingConfigs.getByName(it)
-        }
     }
 
     flavorDimensions("free")
