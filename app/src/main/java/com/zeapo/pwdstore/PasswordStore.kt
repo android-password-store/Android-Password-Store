@@ -453,6 +453,8 @@ class PasswordStore : BaseGitActivity() {
         // Needs an action to be a shortcut intent
         authDecryptIntent.action = LaunchActivity.ACTION_DECRYPT_PASS
 
+        startActivity(decryptIntent)
+
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager: ShortcutManager = getSystemService() ?: return
@@ -471,7 +473,6 @@ class PasswordStore : BaseGitActivity() {
                 shortcutManager.addDynamicShortcuts(listOf(shortcut))
             }
         }
-        startActivity(decryptIntent)
     }
 
     private fun validateState(): Boolean {
