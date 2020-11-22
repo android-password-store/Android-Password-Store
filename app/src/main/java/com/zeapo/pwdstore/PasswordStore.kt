@@ -453,13 +453,15 @@ class PasswordStore : BaseGitActivity() {
         // Needs an action to be a shortcut intent
         authDecryptIntent.action = LaunchActivity.ACTION_DECRYPT_PASS
 
+        startActivity(decryptIntent)
+
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val shortcutManager: ShortcutManager = getSystemService() ?: return
             val shortcut = Builder(this, item.fullPathToParent)
                 .setShortLabel(item.toString())
                 .setLongLabel(item.fullPathToParent + item.toString())
-                .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_lock_open_24px))
                 .setIntent(authDecryptIntent)
                 .build()
             val shortcuts = shortcutManager.dynamicShortcuts
@@ -471,7 +473,6 @@ class PasswordStore : BaseGitActivity() {
                 shortcutManager.addDynamicShortcuts(listOf(shortcut))
             }
         }
-        startActivity(decryptIntent)
     }
 
     private fun validateState(): Boolean {

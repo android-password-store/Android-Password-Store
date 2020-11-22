@@ -8,6 +8,7 @@ plugins {
 repositories {
     google()
     gradlePluginPortal()
+    jcenter()
 }
 
 kotlinDslPluginOptions {

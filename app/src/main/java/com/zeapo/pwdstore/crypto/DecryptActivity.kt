@@ -114,6 +114,18 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     }
 
     /**
+     * Automatically finishes the activity 60 seconds after decryption succeeded to prevent
+     * information leaks from stale activities.
+     */
+    @OptIn(ExperimentalTime::class)
+    private fun startAutoDismissTimer() {
+        lifecycleScope.launch {
+            delay(60.seconds)
+            finish()
+        }
+    }
+
+    /**
      * Edit the current password and hide all the fields populated by encrypted data so that when
      * the result triggers they can be repopulated with new data.
      */
@@ -155,6 +167,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             api?.executeApiAsync(data, inputStream, outputStream) { result ->
                 when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                     OpenPgpApi.RESULT_CODE_SUCCESS -> {
+                        startAutoDismissTimer()
                         runCatching {
                             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
                             val showExtraContent = settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
