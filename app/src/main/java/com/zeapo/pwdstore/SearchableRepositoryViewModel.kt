@@ -55,7 +55,8 @@ private fun File.toPasswordItem() = if (isFile)
 else
     PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
 
-private fun PasswordItem.fuzzyMatch(filter: String): Int {
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+public fun PasswordItem.fuzzyMatch(filter: String): Int {
     var i = 0
     var j = 0
     var score = 0
