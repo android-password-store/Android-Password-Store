@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 -   Cancelling the Autofill "Generate password" action now correctly returns you to the original app.
 -   If multiple username fields exist in the password, we now ensure the later ones are not dropped from extra content.
 -   Icons in Autofill suggestions are no longer black on almost black in dark mode.
+-   Decrypt screen would stay in memory infinitely, allowing passwords to be seen without re-auth
 
 ## [1.13.1] - 2020-10-23
 
