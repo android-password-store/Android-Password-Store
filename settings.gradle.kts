@@ -4,6 +4,7 @@
  */
 include(":autofill-parser")
 include(":app")
+include(":openpgp-ktx")
 
 pluginManagement {
     repositories {
