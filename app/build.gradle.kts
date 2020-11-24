@@ -43,6 +43,8 @@ android {
 
 dependencies {
     compileOnly(Dependencies.AndroidX.annotation)
+    implementation(project(":autofill-parser"))
+    implementation(project(":openpgp-ktx"))
     implementation(Dependencies.AndroidX.activity_ktx)
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.autofill)
@@ -64,8 +66,6 @@ dependencies {
     implementation(Dependencies.Kotlin.Coroutines.android)
     implementation(Dependencies.Kotlin.Coroutines.core)
 
-    implementation(project(Dependencies.FirstParty.autofill_parser))
-    implementation(Dependencies.FirstParty.openpgp_ktx)
     implementation(Dependencies.FirstParty.zxing_android_embedded)
 
     implementation(Dependencies.ThirdParty.commons_codec)

@@ -39,7 +39,6 @@ internal fun Project.configureForAllProjects() {
     repositories {
         google()
         jcenter()
-        maven { setUrl("https://jitpack.io") }
     }
     tasks.withType<KotlinCompile> {
         kotlinOptions {
