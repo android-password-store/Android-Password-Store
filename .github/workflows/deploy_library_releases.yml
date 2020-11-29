@@ -1,0 +1,32 @@
+name: "Release library subprojects"
+on:
+  push:
+    tags:
+      - openpgp-ktx-v*
+      - autofill-parser-v*
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+
+    - name: Determine publishing task
+      id: task-select
+      run: |
+        set -x
+        TAG=${GITHUB_REF/refs\/tags\//}
+        if [[ "${TAG}" =~ "openpgp-ktx" ]]; then
+          echo '::set-output name=PROJECT::openpgp-ktx'
+        elif [[ "${TAG}" =~ "autofill-parser" ]]; then
+          echo '::set-output name=PROJECT::autofill-parser'
+        fi
+
+    - name: Publish snapshot
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+      with:
+        arguments: :${{ steps.task-select.outputs.PROJECT }}:publishApsPublicationToBintrayRepository
+      env:
+        MAVEN_USER: msfjarvis
+        MAVEN_PASSWORD: ${{ secrets.BINTRAY_TOKEN }}
