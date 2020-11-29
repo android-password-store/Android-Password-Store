@@ -28,14 +28,6 @@ internal fun TestedExtension.registerSourcesJarTask(project: Project) {
 internal fun PublishingExtension.configureMavenPublication(project: Project) {
     repositories {
         maven {
-            name = "apsMaven"
-            url = project.uri("https://maven.msfjarvis.dev/android-password-store/${project.getKey("POM_ARTIFACT_ID")}")
-            credentials {
-                username = project.getCredential("user")
-                password = project.getCredential("password")
-            }
-        }
-        maven {
             val artifactId = project.getKey("POM_ARTIFACT_ID")
             name = "bintray"
             url = project.uri("https://api.bintray.com/maven/android-password-store/$artifactId/$artifactId/;publish=1;override=0")
