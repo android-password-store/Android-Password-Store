@@ -7,7 +7,7 @@ plugins {
 
 android {
     defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
+        consumerProguardFiles("consumer-proguard-rules.pro")
     }
 
     buildFeatures.aidl = true
