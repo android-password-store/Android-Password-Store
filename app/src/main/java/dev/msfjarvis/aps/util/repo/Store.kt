@@ -15,12 +15,12 @@ interface Store {
     /**
      * List the passwords in the root directory of the store
      */
-    fun listRootPasswords(): Array<File>
+    fun listRootPasswords(): List<File>
 
     /**
-     * List the passwords in [subDir]
+     * List the files in [subDir]
      */
-    fun listPasswordsBySubDir(subDir: File): Array<File>
+    fun listFiles(subDir: File): List<File>
 
     /**
      * Delete [password] from the store
@@ -41,4 +41,9 @@ interface Store {
      * Write the given [data] to [password]
      */
     fun writeToFile(password: File, data: ByteArray)
+
+    /**
+     * List all the files in [subDir] recursively
+     */
+    fun listFilesRecursively(subDir: File): FileTreeWalk
 }

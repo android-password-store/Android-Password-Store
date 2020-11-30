@@ -12,6 +12,7 @@ import xyz.quaver.io.util.readBytes
 import xyz.quaver.io.util.writeBytes
 import androidx.core.net.toUri
 import dev.msfjarvis.aps.Application
+import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import java.io.File
 
 /**
@@ -21,15 +22,15 @@ import java.io.File
 class FileXStoreImpl(val baseDir: File) : Store {
 
     @Suppress("UNCHECKED_CAST")
-    override fun listRootPasswords(): Array<File> {
+    override fun listRootPasswords(): List<File> {
         val rootDir = TreeFileX(Application.instance, baseDir.toUri(), cached = true)
-        return rootDir.listFiles() as Array<File>
+        return rootDir.listFiles().toList<File>()
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun listPasswordsBySubDir(subDir: File): Array<File> {
+    override fun listFiles(subDir: File): List<File> {
         val rootDir = TreeFileX(Application.instance, subDir.toUri(), cached = true)
-        return rootDir.listFiles() as Array<File>
+        return rootDir.listFiles().toList<File>()
     }
 
     override fun deletePassword(password: File): Boolean {
@@ -48,5 +49,9 @@ class FileXStoreImpl(val baseDir: File) : Store {
     override fun writeToFile(password: File, data: ByteArray) {
         val fileX = FileX(Application.instance, password.toUri())
         fileX.writeBytes(data)
+    }
+
+    override fun listFilesRecursively(subDir: File): FileTreeWalk {
+        return TreeFileX(Application.instance, subDir.toUri(), cached = true).walkTopDown()
     }
 }

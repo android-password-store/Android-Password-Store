@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityGitCloneBinding
+import dev.msfjarvis.aps.injection.Graph
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.Protocol
@@ -194,7 +195,7 @@ class GitServerConfigActivity : BaseGitActivity() {
      */
     private fun cloneRepository() {
         val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
-        val localDirFiles = localDir.listFiles() ?: emptyArray()
+        val localDirFiles = Graph.store.listRootPasswords()
         // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
         if (localDir.exists() && localDirFiles.isNotEmpty() &&
             !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")) {

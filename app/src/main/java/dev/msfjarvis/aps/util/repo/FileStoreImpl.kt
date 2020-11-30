@@ -5,6 +5,7 @@
 
 package dev.msfjarvis.aps.util.repo
 
+import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import java.io.File
 
 /**
@@ -12,12 +13,12 @@ import java.io.File
  */
 class FileStoreImpl(val baseDir: File) : Store {
 
-    override fun listRootPasswords(): Array<File> {
-        return (baseDir.listFiles() ?: emptyArray()).filterNotNull().toTypedArray()
+    override fun listRootPasswords(): List<File> {
+        return (baseDir.listFiles() ?: emptyArray()).filterNotNull().toList()
     }
 
-    override fun listPasswordsBySubDir(subDir: File): Array<File> {
-        return (subDir.listFiles() ?: emptyArray()).filterNotNull().toTypedArray()
+    override fun listFiles(subDir: File): List<File> {
+        return (subDir.listFiles() ?: emptyArray()).filterNotNull().toList()
     }
 
     override fun deletePassword(password: File): Boolean {
@@ -34,5 +35,9 @@ class FileStoreImpl(val baseDir: File) : Store {
 
     override fun writeToFile(password: File, data: ByteArray) {
         password.writeBytes(data)
+    }
+
+    override fun listFilesRecursively(subDir: File): FileTreeWalk {
+        return subDir.walkTopDown()
     }
 }

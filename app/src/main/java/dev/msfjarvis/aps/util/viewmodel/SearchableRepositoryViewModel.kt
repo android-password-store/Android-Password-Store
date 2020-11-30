@@ -24,6 +24,7 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import dev.msfjarvis.aps.injection.Graph
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.data.password.PasswordItem
@@ -42,7 +43,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -67,7 +67,7 @@ private fun PasswordItem.fuzzyMatch(filter: String): Int {
     while (i < filter.length && j < toMatch.length) {
         when {
             filter[i].isWhitespace() -> i++
-            filter[i].toLowerCase() == toMatch[j].toLowerCase() -> {
+            filter[i].equals(toMatch[j], ignoreCase = true) -> {
                 i++
                 bonusIncrement += 1
                 bonus += bonusIncrement
@@ -138,6 +138,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         _updateCounter++
     }
 
+    private val store = Graph.store
     private val root
         get() = PasswordRepository.getRepositoryDirectory()
     private val settings by lazy(LazyThreadSafetyMode.NONE) { application.sharedPrefs }
@@ -212,9 +213,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 ListMode.DirectoriesOnly -> listResultFlow.filter { it.isDirectory }
                 ListMode.AllEntries -> listResultFlow
             }
-            val filterModeToUse =
-                if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode
-            val passwordList = when (filterModeToUse) {
+            val passwordList = when (if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode) {
                 FilterMode.NoFilter -> {
                     prefilteredResultFlow
                         .map { it.toPasswordItem() }
@@ -264,13 +263,13 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     }
 
     private fun listFiles(dir: File): Flow<File> {
-        return dir.listFiles { file -> shouldTake(file) }?.asFlow() ?: emptyFlow()
+        return store.listFiles(dir).filter { file -> shouldTake(file) }.asFlow()
     }
 
     private fun listFilesRecursively(dir: File): Flow<File> {
-        return dir
+        return store.listFilesRecursively(dir)
             // Take top directory even if it is hidden.
-            .walkTopDown().onEnter { file -> file == dir || shouldTake(file) }
+            .onEnter { file -> file == dir || shouldTake(file) }
             .asFlow()
             // Skip the root directory
             .drop(1)

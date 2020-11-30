@@ -24,11 +24,9 @@ import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.getString
-import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.viewBinding
-import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
