@@ -9,7 +9,7 @@ object Dependencies {
     object Kotlin {
         object Coroutines {
 
-            private const val version = "1.4.1"
+            private const val version = "1.4.2"
             const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         }
@@ -24,14 +24,14 @@ object Dependencies {
         const val autofill = "androidx.autofill:autofill:1.1.0-rc01"
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val biometric = "androidx.biometric:biometric:1.1.0-rc01"
-        const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.4"
+        const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.1.0-alpha1"
         const val core_ktx = "androidx.core:core-ktx:1.5.0-alpha05"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
         const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0-beta01"
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-        const val material = "com.google.android.material:material:1.3.0-alpha03"
+        const val material = "com.google.android.material:material:1.3.0-alpha04"
         const val preference = "androidx.preference:preference:1.1.1"
         const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-alpha06"
         const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
