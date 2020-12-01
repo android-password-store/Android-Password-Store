@@ -53,9 +53,8 @@ class GitCommandExecutor(
                             withContext(Dispatchers.IO) {
                                 val name = GitSettings.authorName.ifEmpty { "root" }
                                 val email = GitSettings.authorEmail.ifEmpty { "localhost" }
-                                command
-                                    .setAuthor(PersonIdent(name, email))
-                                    .call()
+                                val identity = PersonIdent(name, email)
+                                command.setAuthor(identity).setCommitter(identity).call()
                             }
                         }
                     }
@@ -64,7 +63,7 @@ class GitCommandExecutor(
                             command.call()
                         }
                         val rr = result.rebaseResult
-                        if (rr.status === RebaseResult.Status.STOPPED) {
+                        if (rr.status == RebaseResult.Status.STOPPED) {
                             throw PullException.PullRebaseFailed
                         }
                     }
