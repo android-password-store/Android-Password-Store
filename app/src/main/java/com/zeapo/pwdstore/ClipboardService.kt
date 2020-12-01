@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,6 +13,7 @@ import android.content.ClipData
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.github.ajalt.timberkt.d
@@ -119,7 +121,17 @@ class ClipboardService : Service() {
             PendingIntent.getService(this, 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notification = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            createNotificationApi23(pendingIntent)
+        } else {
+            createNotificationApi24(pendingIntent)
+        }
+
+        startForeground(1, notification)
+    }
+
+    private fun createNotificationApi23(pendingIntent: PendingIntent): Notification {
+        return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.tap_clear_clipboard))
             .setSmallIcon(R.drawable.ic_action_secure_24dp)
@@ -127,8 +139,24 @@ class ClipboardService : Service() {
             .setUsesChronometer(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
+    }
 
-        startForeground(1, notification)
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createNotificationApi24(pendingIntent: PendingIntent): Notification {
+        val time =
+            (sharedPrefs.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45) * 1000L
+
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.tap_clear_clipboard))
+            .setSmallIcon(R.drawable.ic_action_secure_24dp)
+            .setContentIntent(pendingIntent)
+            .setUsesChronometer(true)
+            .setChronometerCountDown(true)
+            .setShowWhen(true)
+            .setWhen(System.currentTimeMillis() + time)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
     }
 
     private fun createNotificationChannel() {
