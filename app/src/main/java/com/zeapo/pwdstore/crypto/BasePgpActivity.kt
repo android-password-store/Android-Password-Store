@@ -254,6 +254,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         if (clearAfter != 0) {
             val service = Intent(this, ClipboardService::class.java).apply {
                 action = ClipboardService.ACTION_START
+                putExtra(ClipboardService.EXTRA_NOTIFICATION_TIME, clearAfter)
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(service)
