@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 -   If multiple username fields exist in the password, we now ensure the later ones are not dropped from extra content.
 -   Icons in Autofill suggestions are no longer black on almost black in dark mode.
 -   Decrypt screen would stay in memory infinitely, allowing passwords to be seen without re-auth
+-   Git commits in the store would wrongly use the 'default' committer as opposed to the user's configured one
 
 ### Changed
 
