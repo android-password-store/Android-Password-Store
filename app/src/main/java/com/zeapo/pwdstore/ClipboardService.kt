@@ -4,6 +4,7 @@
  */
 package com.zeapo.pwdstore
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,12 +13,12 @@ import android.content.ClipData
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.github.ajalt.timberkt.d
 import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.clipboard
-import com.zeapo.pwdstore.utils.getString
 import com.zeapo.pwdstore.utils.sharedPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,13 +44,13 @@ class ClipboardService : Service() {
                 }
 
                 ACTION_START -> {
-                    val time = sharedPrefs.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toIntOrNull() ?: 45
+                    val time = intent.getIntExtra(EXTRA_NOTIFICATION_TIME, 45)
 
                     if (time == 0) {
                         stopSelf()
                     }
 
-                    createNotification()
+                    createNotification(time)
                     scope.launch {
                         withContext(Dispatchers.IO) {
                             startTimer(time)
@@ -109,17 +110,28 @@ class ClipboardService : Service() {
         }
     }
 
-    private fun createNotification() {
-        createNotificationChannel()
-        val clearIntent = Intent(this, ClipboardService::class.java)
-        clearIntent.action = ACTION_CLEAR
+    private fun createNotification(clearTime: Int) {
+        val clearTimeMs = clearTime * 1000L
+        val clearIntent = Intent(this, ClipboardService::class.java).apply {
+            action = ACTION_CLEAR
+        }
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             PendingIntent.getForegroundService(this, 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
             PendingIntent.getService(this, 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
+        val notification = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            createNotificationApi23(pendingIntent)
+        } else {
+            createNotificationApi24(pendingIntent, clearTimeMs)
+        }
 
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        createNotificationChannel()
+        startForeground(1, notification)
+    }
+
+    private fun createNotificationApi23(pendingIntent: PendingIntent): Notification {
+        return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.tap_clear_clipboard))
             .setSmallIcon(R.drawable.ic_action_secure_24dp)
@@ -127,8 +139,21 @@ class ClipboardService : Service() {
             .setUsesChronometer(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
+    }
 
-        startForeground(1, notification)
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createNotificationApi24(pendingIntent: PendingIntent, clearTimeMs: Long): Notification {
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.tap_clear_clipboard))
+            .setSmallIcon(R.drawable.ic_action_secure_24dp)
+            .setContentIntent(pendingIntent)
+            .setUsesChronometer(true)
+            .setChronometerCountDown(true)
+            .setShowWhen(true)
+            .setWhen(System.currentTimeMillis() + clearTimeMs)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
     }
 
     private fun createNotificationChannel() {
@@ -149,8 +174,9 @@ class ClipboardService : Service() {
 
     companion object {
 
-        private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
         const val ACTION_START = "ACTION_START_CLIPBOARD_TIMER"
+        const val EXTRA_NOTIFICATION_TIME = "EXTRA_NOTIFICATION_TIME"
+        private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
         private const val CHANNEL_ID = "NotificationService"
     }
 }
