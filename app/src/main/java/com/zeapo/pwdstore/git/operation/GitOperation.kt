@@ -108,6 +108,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                 (transport as? SshTransport)?.sshSessionFactory = sshSessionFactory
                 credentialsProvider?.let { transport.credentialsProvider = it }
             }
+            command.setTimeout(CONNECT_TIMEOUT)
         }
     }
 
@@ -203,5 +204,13 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         withContext(Dispatchers.IO) {
             sshSessionFactory?.close()
         }
+    }
+
+    companion object {
+
+        /**
+         * Timeout in seconds before [TransportCommand] will abort a stalled IO operation.
+         */
+        private const val CONNECT_TIMEOUT = 10
     }
 }
