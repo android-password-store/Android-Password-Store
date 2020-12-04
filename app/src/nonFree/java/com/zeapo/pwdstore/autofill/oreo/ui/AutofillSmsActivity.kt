@@ -29,9 +29,9 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
-import com.zeapo.pwdstore.autofill.oreo.AutofillResponseBuilder
+import com.zeapo.pwdstore.util.autofill.AutofillResponseBuilder
 import com.zeapo.pwdstore.databinding.ActivityOreoAutofillSmsBinding
-import com.zeapo.pwdstore.utils.viewBinding
+import com.zeapo.pwdstore.util.extensions.viewBinding
 import java.util.concurrent.ExecutionException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

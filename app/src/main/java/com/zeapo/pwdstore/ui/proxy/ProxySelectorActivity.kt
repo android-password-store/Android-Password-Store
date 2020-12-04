@@ -15,12 +15,12 @@ import androidx.core.os.postDelayed
 import androidx.core.widget.doOnTextChanged
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.ActivityProxySelectorBinding
-import com.zeapo.pwdstore.git.config.GitSettings
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.ProxyUtils
-import com.zeapo.pwdstore.utils.getEncryptedProxyPrefs
-import com.zeapo.pwdstore.utils.getString
-import com.zeapo.pwdstore.utils.viewBinding
+import com.zeapo.pwdstore.util.settings.GitSettings
+import com.zeapo.pwdstore.util.settings.PreferenceKeys
+import com.zeapo.pwdstore.util.proxy.ProxyUtils
+import com.zeapo.pwdstore.util.extensions.getEncryptedProxyPrefs
+import com.zeapo.pwdstore.util.extensions.getString
+import com.zeapo.pwdstore.util.extensions.viewBinding
 
 private val IP_ADDRESS_REGEX = Patterns.IP_ADDRESS.toRegex()
 private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()

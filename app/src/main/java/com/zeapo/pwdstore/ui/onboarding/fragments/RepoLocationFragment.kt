@@ -19,18 +19,18 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.ui.settings.UserPreference
 import com.zeapo.pwdstore.databinding.FragmentRepoLocationBinding
-import com.zeapo.pwdstore.utils.PasswordRepository
-import com.zeapo.pwdstore.utils.PasswordSortOrder
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.finish
-import com.zeapo.pwdstore.utils.getString
-import com.zeapo.pwdstore.utils.isPermissionGranted
-import com.zeapo.pwdstore.utils.listFilesRecursively
-import com.zeapo.pwdstore.utils.performTransactionWithBackStack
-import com.zeapo.pwdstore.utils.sharedPrefs
-import com.zeapo.pwdstore.utils.viewBinding
+import com.zeapo.pwdstore.data.repo.PasswordRepository
+import com.zeapo.pwdstore.util.settings.PasswordSortOrder
+import com.zeapo.pwdstore.util.settings.PreferenceKeys
+import com.zeapo.pwdstore.util.extensions.finish
+import com.zeapo.pwdstore.util.extensions.getString
+import com.zeapo.pwdstore.util.extensions.isPermissionGranted
+import com.zeapo.pwdstore.util.extensions.listFilesRecursively
+import com.zeapo.pwdstore.util.extensions.performTransactionWithBackStack
+import com.zeapo.pwdstore.util.extensions.sharedPrefs
+import com.zeapo.pwdstore.util.extensions.viewBinding
 import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {

@@ -20,8 +20,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.BasicBottomSheetBinding
-import com.zeapo.pwdstore.utils.resolveAttribute
-import com.zeapo.pwdstore.utils.viewBinding
+import com.zeapo.pwdstore.util.extensions.resolveAttribute
+import com.zeapo.pwdstore.util.extensions.viewBinding
 
 /**
  * [BottomSheetDialogFragment] that exposes a simple [androidx.appcompat.app.AlertDialog] like

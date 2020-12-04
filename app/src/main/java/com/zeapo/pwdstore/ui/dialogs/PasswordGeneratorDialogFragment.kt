@@ -21,11 +21,11 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.pwgen.PasswordGenerator
-import com.zeapo.pwdstore.pwgen.PasswordGenerator.generate
-import com.zeapo.pwdstore.pwgen.PasswordGenerator.setPrefs
-import com.zeapo.pwdstore.pwgen.PasswordOption
-import com.zeapo.pwdstore.utils.PreferenceKeys
+import com.zeapo.pwdstore.util.pwgen.PasswordGenerator
+import com.zeapo.pwdstore.util.pwgen.PasswordGenerator.generate
+import com.zeapo.pwdstore.util.pwgen.PasswordGenerator.setPrefs
+import com.zeapo.pwdstore.util.pwgen.PasswordOption
+import com.zeapo.pwdstore.util.settings.PreferenceKeys
 
 class PasswordGeneratorDialogFragment : DialogFragment() {
 

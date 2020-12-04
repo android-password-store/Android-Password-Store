@@ -14,9 +14,9 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.Selection
 import androidx.recyclerview.widget.RecyclerView
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.SearchableRepositoryAdapter
-import com.zeapo.pwdstore.stableId
-import com.zeapo.pwdstore.utils.PasswordItem
+import com.zeapo.pwdstore.data.password.PasswordItem
+import com.zeapo.pwdstore.util.viewmodel.SearchableRepositoryAdapter
+import com.zeapo.pwdstore.util.viewmodel.stableId
 
 open class PasswordItemRecyclerAdapter :
     SearchableRepositoryAdapter<PasswordItemRecyclerAdapter.PasswordItemViewHolder>(
@@ -57,7 +57,8 @@ open class PasswordItemRecyclerAdapter :
             name.text = spannable
             if (item.type == PasswordItem.TYPE_CATEGORY) {
                 folderIndicator.visibility = View.VISIBLE
-                val count = item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
+                val count = item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size
+                    ?: 0
                 childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
                 childCount.text = "$count"
             } else {

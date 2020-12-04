@@ -16,12 +16,12 @@ import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.zeapo.pwdstore.PasswordFragment.Companion.ACTION_FOLDER
-import com.zeapo.pwdstore.PasswordFragment.Companion.ACTION_KEY
-import com.zeapo.pwdstore.PasswordFragment.Companion.ACTION_PASSWORD
-import com.zeapo.pwdstore.PasswordFragment.Companion.ITEM_CREATION_REQUEST_KEY
+import com.zeapo.pwdstore.ui.passwords.PasswordFragment.Companion.ACTION_FOLDER
+import com.zeapo.pwdstore.ui.passwords.PasswordFragment.Companion.ACTION_KEY
+import com.zeapo.pwdstore.ui.passwords.PasswordFragment.Companion.ACTION_PASSWORD
+import com.zeapo.pwdstore.ui.passwords.PasswordFragment.Companion.ITEM_CREATION_REQUEST_KEY
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.utils.resolveAttribute
+import com.zeapo.pwdstore.util.extensions.resolveAttribute
 
 class ItemCreationBottomSheet : BottomSheetDialogFragment() {
 

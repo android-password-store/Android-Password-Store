@@ -11,10 +11,10 @@ import android.view.View
 import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import com.zeapo.pwdstore.R
-import com.zeapo.pwdstore.UserPreference
+import com.zeapo.pwdstore.ui.settings.UserPreference
 import com.zeapo.pwdstore.databinding.FragmentWelcomeBinding
-import com.zeapo.pwdstore.utils.performTransactionWithBackStack
-import com.zeapo.pwdstore.utils.viewBinding
+import com.zeapo.pwdstore.util.extensions.performTransactionWithBackStack
+import com.zeapo.pwdstore.util.extensions.viewBinding
 
 @Keep
 @Suppress("unused")

@@ -12,11 +12,12 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
-import com.zeapo.pwdstore.git.sshj.setUpBouncyCastleForSshj
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.ProxyUtils
-import com.zeapo.pwdstore.utils.getString
-import com.zeapo.pwdstore.utils.sharedPrefs
+import com.zeapo.pwdstore.util.git.sshj.setUpBouncyCastleForSshj
+import com.zeapo.pwdstore.util.settings.PreferenceKeys
+import com.zeapo.pwdstore.util.proxy.ProxyUtils
+import com.zeapo.pwdstore.util.extensions.getString
+import com.zeapo.pwdstore.util.extensions.sharedPrefs
+import com.zeapo.pwdstore.util.settings.runMigrations
 
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {

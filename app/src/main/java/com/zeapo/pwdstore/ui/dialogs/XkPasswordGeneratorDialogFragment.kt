@@ -22,9 +22,9 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentXkpwgenBinding
-import com.zeapo.pwdstore.pwgenxkpwd.CapsType
-import com.zeapo.pwdstore.pwgenxkpwd.PasswordBuilder
-import com.zeapo.pwdstore.utils.getString
+import com.zeapo.pwdstore.util.pwgenxkpwd.CapsType
+import com.zeapo.pwdstore.util.pwgenxkpwd.PasswordBuilder
+import com.zeapo.pwdstore.util.extensions.getString
 
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {

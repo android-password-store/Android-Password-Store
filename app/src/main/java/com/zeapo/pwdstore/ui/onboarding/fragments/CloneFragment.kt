@@ -14,12 +14,12 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.databinding.FragmentCloneBinding
-import com.zeapo.pwdstore.git.GitServerConfigActivity
-import com.zeapo.pwdstore.utils.PreferenceKeys
-import com.zeapo.pwdstore.utils.finish
-import com.zeapo.pwdstore.utils.performTransactionWithBackStack
-import com.zeapo.pwdstore.utils.sharedPrefs
-import com.zeapo.pwdstore.utils.viewBinding
+import com.zeapo.pwdstore.ui.git.config.GitServerConfigActivity
+import com.zeapo.pwdstore.util.settings.PreferenceKeys
+import com.zeapo.pwdstore.util.extensions.finish
+import com.zeapo.pwdstore.util.extensions.performTransactionWithBackStack
+import com.zeapo.pwdstore.util.extensions.sharedPrefs
+import com.zeapo.pwdstore.util.extensions.viewBinding
 
 class CloneFragment : Fragment(R.layout.fragment_clone) {
 
