@@ -11,7 +11,7 @@
     android:background="?android:attr/windowBackground"
     android:padding="@dimen/activity_horizontal_margin"
     tools:background="@color/white"
-    tools:context="com.zeapo.pwdstore.git.GitServerConfigActivity">
+    tools:context="dev.msfjarvis.aps.git.GitServerConfigActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

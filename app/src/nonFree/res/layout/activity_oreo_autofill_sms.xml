@@ -9,7 +9,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
-    tools:context="com.zeapo.pwdstore.ui.autofill.AutofillFilterView">
+    tools:context="dev.msfjarvis.aps.ui.autofill.AutofillFilterView">
 
     <ImageView
         android:id="@+id/cover"

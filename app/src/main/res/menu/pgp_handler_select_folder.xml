@@ -6,7 +6,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:pwstore="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.zeapo.pwdstore.SelectFolderActivity">
+    tools:context="dev.msfjarvis.aps.SelectFolderActivity">
     <item
         android:id="@+id/crypto_select"
         android:icon="@drawable/ic_done_24dp"
