@@ -5,7 +5,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.zeapo.pwdstore"
+    package="dev.msfjarvis.aps"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,7 +25,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".PasswordStore"
+            android:name=".ui.passwords.PasswordStore"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
 
@@ -37,7 +37,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".LaunchActivity"
+            android:name=".ui.main.LaunchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/NoBackgroundTheme">
@@ -56,48 +56,48 @@
             tools:node="replace" />
 
         <activity
-            android:name=".git.GitServerConfigActivity"
+            android:name=".ui.git.config.GitServerConfigActivity"
             android:label="@string/title_activity_git_clone"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".git.GitConfigActivity"
+            android:name=".ui.git.config.GitConfigActivity"
             android:label="@string/title_activity_git_config"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".git.log.GitLogActivity"
+            android:name=".ui.git.log.GitLogActivity"
             android:label="@string/title_activity_git_log" />
 
         <activity
-            android:name=".UserPreference"
+            android:name=".ui.settings.UserPreference"
             android:label="@string/action_settings"
-            android:parentActivityName=".PasswordStore" />
+            android:parentActivityName=".ui.passwords.PasswordStore" />
 
         <activity
-            android:name=".crypto.PasswordCreationActivity"
+            android:name=".ui.crypto.PasswordCreationActivity"
             android:label="@string/new_password_title"
-            android:parentActivityName=".PasswordStore"
+            android:parentActivityName=".ui.passwords.PasswordStore"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".crypto.DecryptActivity"
-            android:parentActivityName=".PasswordStore"
+            android:name=".ui.crypto.DecryptActivity"
+            android:parentActivityName=".ui.passwords.PasswordStore"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".crypto.GetKeyIdsActivity"
-            android:parentActivityName=".PasswordStore"
+            android:name=".ui.crypto.GetKeyIdsActivity"
+            android:parentActivityName=".ui.passwords.PasswordStore"
             android:theme="@style/NoBackgroundTheme" />
 
         <service
-            android:name=".ClipboardService"
+            android:name=".util.services.ClipboardService"
             android:process=":clipboard_service_process" />
         <service
-            android:name=".PasswordExportService"
+            android:name=".util.services.PasswordExportService"
             android:process=":password_export_service_process" />
         <service
-            android:name=".autofill.oreo.OreoAutofillService"
+            android:name=".util.services.OreoAutofillService"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
@@ -107,21 +107,21 @@
                 android:resource="@xml/oreo_autofill_service" />
         </service>
 
-        <activity android:name=".SelectFolderActivity" />
+        <activity android:name=".ui.folderselect.SelectFolderActivity" />
         <activity
-            android:name=".sshkeygen.SshKeyGenActivity"
+            android:name=".ui.sshkeygen.SshKeyGenActivity"
             android:label="@string/pref_ssh_keygen_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".autofill.oreo.ui.AutofillDecryptActivity"
+            android:name=".ui.autofill.AutofillDecryptActivity"
             android:theme="@style/NoBackgroundTheme" />
         <activity
-            android:name=".autofill.oreo.ui.AutofillFilterView"
+            android:name=".ui.autofill.AutofillFilterView"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogLikeTheme"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".autofill.oreo.ui.AutofillSaveActivity"
+            android:name=".ui.autofill.AutofillSaveActivity"
             android:theme="@style/NoBackgroundTheme" />
         <activity
             android:name=".autofill.oreo.ui.AutofillSmsActivity"
@@ -129,7 +129,7 @@
             android:theme="@style/DialogLikeTheme"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".autofill.oreo.ui.AutofillPublisherChangedActivity"
+            android:name=".ui.autofill.AutofillPublisherChangedActivity"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogLikeTheme"
             android:windowSoftInputMode="adjustNothing" />

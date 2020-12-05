@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="2dp"
-    tools:context="com.zeapo.pwdstore.autofill.oreo.ui.AutofillFilterView">
+    tools:context="dev.msfjarvis.aps.ui.autofill.AutofillFilterView">
 
     <ImageView
         android:id="@+id/cover"

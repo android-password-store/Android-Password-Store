@@ -12,7 +12,7 @@
     android:elevation="2dp"
     android:paddingBottom="16dp"
     android:scrollbars="vertical"
-    tools:context="com.zeapo.pwdstore.autofill.oreo.ui.AutofillPublisherChangedActivity">
+    tools:context="dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity">
 
     <ImageView
         android:id="@+id/cover"
