@@ -5,6 +5,7 @@
 
 package dev.msfjarvis.aps.injection
 
+import android.content.Context
 import dev.msfjarvis.aps.util.repo.FileStoreImpl
 import dev.msfjarvis.aps.util.repo.FileXStoreImpl
 import dev.msfjarvis.aps.util.repo.Store
@@ -17,7 +18,8 @@ object Graph {
 
     lateinit var store: Store
 
-    fun buildStoreImpl(baseDir: File, external: Boolean) {
+    fun buildStoreImpl(context: Context, baseDir: File) {
+        val external = !baseDir.absolutePath.startsWith("${context.filesDir}")
         store = if (external)
             FileXStoreImpl(baseDir)
         else

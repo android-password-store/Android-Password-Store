@@ -21,6 +21,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.ui.settings.UserPreference
 import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.injection.Graph
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.getString
@@ -41,6 +42,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
     private val externalDirectorySelectAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            Graph.buildStoreImpl(requireContext(), PasswordRepository.getRepositoryDirectory())
             finish()
         }
     }

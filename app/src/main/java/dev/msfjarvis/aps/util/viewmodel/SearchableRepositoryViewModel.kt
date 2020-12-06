@@ -138,7 +138,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         _updateCounter++
     }
 
-    private val store = Graph.store
+    private val store by lazy(LazyThreadSafetyMode.NONE) { Graph.store }
     private val root
         get() = PasswordRepository.getRepositoryDirectory()
     private val settings by lazy(LazyThreadSafetyMode.NONE) { application.sharedPrefs }
