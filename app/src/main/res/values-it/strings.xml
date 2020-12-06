@@ -93,7 +93,7 @@
     <string name="share_as_plaintext">Condividi come testo semplice</string>
     <string name="last_changed">Ultima modifica %s</string>
     <!-- Preferences -->
-    <string name="pref_repository_title">Repository</string>
+    <string name="pref_category_repository_title">Repository</string>
     <string name="pref_edit_server_info">Modifica impostazioni del server di Git</string>
     <string name="pref_edit_git_config">Configurazione &amp; utilità della configurazione di Git</string>
     <string name="pref_ssh_title">Importa chiave SSH</string>
@@ -102,11 +102,11 @@
     <string name="pref_git_delete_repo">Elimina repository</string>
     <string name="pref_dialog_delete_title">Cancella repository</string>
     <string name="pref_category_general_title">Generale</string>
-    <string name="pref_category_title_passwords">Password</string>
+    <string name="pref_category_passwords_title">Password</string>
     <string name="pref_clipboard_timeout_title">Timeout copia della password</string>
     <string name="pref_clipboard_timeout_summary">Imposta per quanto tempo (in secondi) vuoi che la password rimanga negli appunti. 0 significa per sempre. Valore corrente: %1$s</string>
     <string name="pref_copy_title">Copia automaticamente la password</string>
-    <string name="pref_copy_dialog_title">Copia automaticamente la password negli appunti dopo il successo della decifratura.</string>
+    <string name="pref_copy_summary">Copia automaticamente la password negli appunti dopo il successo della decifratura.</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">Il file selezionato non sembra essere una chiave privata SSH.</string>
     <string name="ssh_key_success_dialog_title">Chiave SSH importata</string>
     <string name="ssh_key_error_dialog_title">Errore di importazione della chiave</string>
@@ -118,11 +118,11 @@
     <string name="pref_file_first_sort_order">Prima i file</string>
     <string name="pref_type_independent_sort_order">Tipo indipendente</string>
     <string name="pref_recently_used_sort_order">Usato di recente</string>
-    <string name="pref_autofill_title">Auto-compilazione</string>
+    <string name="pref_category_autofill_title">Auto-compilazione</string>
     <string name="pref_autofill_enable_title">Abilita Auto-Compilazione</string>
-    <string name="pref_misc_title">Varie</string>
+    <string name="pref_category_misc_title">Varie</string>
     <string name="pref_clear_clipboard_title">Cancella 20 volte gli appunti</string>
-    <string name="pref_clear_clipboard_hint">Archivia i numeri consecutivi negli appunti per 20 volte. Utile sui telefoni Samsung che presentano la cronologia degli appunti.</string>
+    <string name="pref_clear_clipboard_summary">Archivia i numeri consecutivi negli appunti per 20 volte. Utile sui telefoni Samsung che presentano la cronologia degli appunti.</string>
     <string name="pref_git_delete_repo_summary">Elimina repository locale (nascosta)</string>
     <string name="pref_external_repository">Repository Esterna</string>
     <string name="pref_external_repository_summary">Usa una repository di password esterna</string>
@@ -266,7 +266,7 @@
     <string name="button_create">Crea</string>
     <string name="pref_search_on_start">Apri ricerca all\'avvio</string>
     <string name="pref_search_on_start_hint">Apri la barra di ricerca al lancio dell\'app</string>
-    <string name="password_generator_category_title">Generatore di Password</string>
+    <string name="pref_category_pwgen_title">Generatore di Password</string>
     <string name="tap_clear_clipboard">Tocca qui per cancellare gli appunti</string>
     <string name="clone_git_repo">La repository deve essere clonata prima di sincronizzare le modifiche.</string>
     <string name="theme_title">Tema dell\'App</string>

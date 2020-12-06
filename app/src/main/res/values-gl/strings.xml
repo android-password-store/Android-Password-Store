@@ -93,7 +93,7 @@
     <string name="share_as_plaintext">Compartir como texto plano</string>
     <string name="last_changed">Último cambio %s</string>
     <!-- Preferences -->
-    <string name="pref_repository_title">Repositorio</string>
+    <string name="pref_category_repository_title">Repositorio</string>
     <string name="pref_edit_server_info">Editar axustes do servidor git</string>
     <string name="pref_edit_git_config">Utilidades Git</string>
     <string name="pref_ssh_title">Importar chave SSH</string>
@@ -102,11 +102,11 @@
     <string name="pref_git_delete_repo">Eliminar repositorio</string>
     <string name="pref_dialog_delete_title">Baleirar repositorio</string>
     <string name="pref_category_general_title">Xeral</string>
-    <string name="pref_category_title_passwords">Contrasinais</string>
+    <string name="pref_category_passwords_title">Contrasinais</string>
     <string name="pref_clipboard_timeout_title">Caducidade do copiado do contrasinal</string>
     <string name="pref_clipboard_timeout_summary">Establece os segundos que queres que o contrasinal permaneza copiado no portapapeis. 0 significa para sempre. Valor actual: %1$s</string>
     <string name="pref_copy_title">Copiar contrasinal automáticamente</string>
-    <string name="pref_copy_dialog_title">Copia automáticamente o contrasinal ao portapapeis se o descifra correctamente</string>
+    <string name="pref_copy_summary">Copia automáticamente o contrasinal ao portapapeis se o descifra correctamente</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">O ficheiro escollido non semella ser unha chave privada SSH.</string>
     <string name="ssh_key_success_dialog_title">Chave-SSH importada</string>
     <string name="ssh_key_error_dialog_title">Houbo un fallo ao importar a chave ssh</string>
@@ -118,11 +118,11 @@
     <string name="pref_file_first_sort_order">Primeiro ficheiros</string>
     <string name="pref_type_independent_sort_order">Independentemente do tipo</string>
     <string name="pref_recently_used_sort_order">Usadas recentemente</string>
-    <string name="pref_autofill_title">Completado automático</string>
+    <string name="pref_category_autofill_title">Completado automático</string>
     <string name="pref_autofill_enable_title">Activar completado automático</string>
-    <string name="pref_misc_title">Varios</string>
+    <string name="pref_category_misc_title">Varios</string>
     <string name="pref_clear_clipboard_title">Baleirar portapapeis 20 veces</string>
-    <string name="pref_clear_clipboard_hint">Gardar números consecutivos no portapapeis 20 veces. Resulta útil nos móbiles Samsung que gardan historial no portapapeis.</string>
+    <string name="pref_clear_clipboard_summary">Gardar números consecutivos no portapapeis 20 veces. Resulta útil nos móbiles Samsung que gardan historial no portapapeis.</string>
     <string name="pref_git_delete_repo_summary">Elimina repositorio local (oculto).</string>
     <string name="pref_external_repository">Repositorio externo</string>
     <string name="pref_external_repository_summary">Usar un repositorio externo de contrasinais</string>
@@ -267,7 +267,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="button_create">Crear</string>
     <string name="pref_search_on_start">Abrir busca ao inicio</string>
     <string name="pref_search_on_start_hint">Abrir a barra de busca cando se inicia a app</string>
-    <string name="password_generator_category_title">Creador de contrasinais</string>
+    <string name="pref_category_pwgen_title">Creador de contrasinais</string>
     <string name="tap_clear_clipboard">Toca aquí para baleirar o portapapeis</string>
     <string name="clone_git_repo">Clonar un repositorio git para sincronizar os cambios</string>
     <string name="theme_title">Decorado da App</string>

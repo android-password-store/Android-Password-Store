@@ -55,6 +55,7 @@ import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
 import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.settings.MainSettingsScreen
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
@@ -300,7 +301,7 @@ class PasswordStore : BaseGitActivity() {
         when (id) {
             R.id.user_pref -> {
                 runCatching {
-                    startActivity(Intent(this, UserPreference::class.java))
+                    startActivity(Intent(this, MainSettingsScreen::class.java))
                 }.onFailure { e ->
                     e.printStackTrace()
                 }

@@ -89,7 +89,7 @@
     <string name="share_as_plaintext">Als Klartext teilen</string>
     <string name="last_changed">Zuletzt geändert %s</string>
     <!-- Preferences -->
-    <string name="pref_repository_title">Repository</string>
+    <string name="pref_category_repository_title">Repository</string>
     <string name="pref_edit_server_info">Git-Server Einstellungen</string>
     <string name="pref_edit_git_config">Lokale Git Konfiguration &amp; Dienstprogramme</string>
     <string name="pref_ssh_title">Importiere SSH-Key</string>
@@ -98,11 +98,11 @@
     <string name="pref_git_delete_repo">Repository löschen</string>
     <string name="pref_dialog_delete_title">Repository löschen</string>
     <string name="pref_category_general_title">Allgemein</string>
-    <string name="pref_category_title_passwords">Passwörter</string>
+    <string name="pref_category_passwords_title">Passwörter</string>
     <string name="pref_clipboard_timeout_title">Timeout für das Kopieren des Passwortes</string>
     <string name="pref_clipboard_timeout_summary">Legen Sie die Zeit (in Sekunden) fest, die das Passwort in der Zwischenablage liegen soll. 0 bedeutet für immer. Aktueller Wert: %1$s</string>
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
-    <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
+    <string name="pref_copy_summary">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">Die ausgewählte Datei scheint kein privater SSH-Schlüssel zu sein.</string>
     <string name="ssh_key_success_dialog_title">SSH-Key importiert</string>
     <string name="ssh_key_error_dialog_title">Schlüssel-Importfehler</string>
@@ -114,11 +114,11 @@
     <string name="pref_file_first_sort_order">Dateien zuerst</string>
     <string name="pref_type_independent_sort_order">Typ unabhängig</string>
     <string name="pref_recently_used_sort_order">Zuletzt verwendet</string>
-    <string name="pref_autofill_title">Automatisch ausfüllen</string>
+    <string name="pref_category_autofill_title">Automatisch ausfüllen</string>
     <string name="pref_autofill_enable_title">Autofill aktivieren</string>
-    <string name="pref_misc_title">Verschiedenes</string>
+    <string name="pref_category_misc_title">Verschiedenes</string>
     <string name="pref_clear_clipboard_title">Lösche die Zwischenablage 20-mal</string>
-    <string name="pref_clear_clipboard_hint">Speichert Nonsense 20-mal anstatt 1-mal in der Zwischenablage. Nützlich bspw. auf Samsung-Geräten, die den Verlauf der Zwischenablage speichern.</string>
+    <string name="pref_clear_clipboard_summary">Speichert Nonsense 20-mal anstatt 1-mal in der Zwischenablage. Nützlich bspw. auf Samsung-Geräten, die den Verlauf der Zwischenablage speichern.</string>
     <string name="pref_git_delete_repo_summary">Lösche das lokale (versteckte) Repository</string>
     <string name="pref_external_repository">Externes Repository</string>
     <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
@@ -256,7 +256,7 @@
     <string name="button_create">Erstellen</string>
     <string name="pref_search_on_start">Suchfeld beim Start öffnen</string>
     <string name="pref_search_on_start_hint">Suchleiste beim Start der App anzeigen</string>
-    <string name="password_generator_category_title">Passwort Generator</string>
+    <string name="pref_category_pwgen_title">Passwort Generator</string>
     <string name="tap_clear_clipboard">Hier tippen, um die Zwischenablage zu löschen</string>
     <string name="clone_git_repo">Das Repository muss geklont werden, bevor Änderungen synchronisert werden können.</string>
     <string name="theme_title">App Farbthema</string>

@@ -33,7 +33,8 @@
             android:name=".ui.onboarding.activity.OnboardingActivity"
             android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".ui.proxy.ProxySelectorActivity"
+        <activity
+            android:name=".ui.proxy.ProxySelectorActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
@@ -68,6 +69,11 @@
         <activity
             android:name=".ui.git.log.GitLogActivity"
             android:label="@string/title_activity_git_log" />
+
+        <activity
+            android:name=".ui.settings.MainSettingsScreen"
+            android:label="@string/action_settings"
+            android:parentActivityName=".ui.passwords.PasswordStore" />
 
         <activity
             android:name=".ui.settings.UserPreference"

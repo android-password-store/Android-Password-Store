@@ -97,7 +97,7 @@
     <string name="share_as_plaintext">Поделиться в открытом виде</string>
     <string name="last_changed">Последние изменение %s</string>
     <!-- Preferences -->
-    <string name="pref_repository_title">Репозиторий</string>
+    <string name="pref_category_repository_title">Репозиторий</string>
     <string name="pref_edit_server_info">Изменить настройки сервера Git</string>
     <string name="pref_edit_git_config">Конфигурация локального Git</string>
     <string name="pref_ssh_title">Импортировать SSH ключ</string>
@@ -106,11 +106,11 @@
     <string name="pref_git_delete_repo">Удалить репозиторий</string>
     <string name="pref_dialog_delete_title">Очистить репозиторий</string>
     <string name="pref_category_general_title">Общие</string>
-    <string name="pref_category_title_passwords">Пароли</string>
+    <string name="pref_category_passwords_title">Пароли</string>
     <string name="pref_clipboard_timeout_title">Срок хранения пароля в буфере обмена</string>
     <string name="pref_clipboard_timeout_summary">Установите время (в секундах), которое вы хотите, чтобы пароль был в буфере обмена. 0 означает навсегда. Текущее значение: %1$s</string>
     <string name="pref_copy_title">Автоматически копировать пароль</string>
-    <string name="pref_copy_dialog_title">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
+    <string name="pref_copy_summary">Автоматически копировать пароль в буфер обмена после успешного расшифрования</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">Выбранный файл не похож на приватный SSH-ключ.</string>
     <string name="ssh_key_success_dialog_title">SSH ключ импортирован</string>
     <string name="ssh_key_error_dialog_title">Ошибка импорта ключа</string>
@@ -122,11 +122,11 @@
     <string name="pref_file_first_sort_order">Сначала файлы</string>
     <string name="pref_type_independent_sort_order">Типонезависимый</string>
     <string name="pref_recently_used_sort_order">Недавно использованные</string>
-    <string name="pref_autofill_title">Автозаполнение</string>
+    <string name="pref_category_autofill_title">Автозаполнение</string>
     <string name="pref_autofill_enable_title">Включить автозаполнение</string>
-    <string name="pref_misc_title">Другое</string>
+    <string name="pref_category_misc_title">Другое</string>
     <string name="pref_clear_clipboard_title">Очистить буфер 20 раз</string>
-    <string name="pref_clear_clipboard_hint">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
+    <string name="pref_clear_clipboard_summary">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
     <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
     <string name="pref_external_repository">Внешний репозиторий</string>
     <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
@@ -269,7 +269,7 @@
     <string name="button_create">Создать</string>
     <string name="pref_search_on_start">Открыть поиск на старте</string>
     <string name="pref_search_on_start_hint">Открыть панель поиска при запуске приложения</string>
-    <string name="password_generator_category_title">Генератор паролей</string>
+    <string name="pref_category_pwgen_title">Генератор паролей</string>
     <string name="tap_clear_clipboard">Нажмите здесь чтобы очистить буфер обмена</string>
     <string name="clone_git_repo">Для синхронизации изменений клонируйте git репозиторий</string>
     <string name="theme_title">Тема приложения</string>

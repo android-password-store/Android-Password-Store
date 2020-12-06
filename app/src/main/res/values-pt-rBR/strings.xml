@@ -93,7 +93,7 @@
     <string name="share_as_plaintext">Compartilhar como texto</string>
     <string name="last_changed">Última alteração %s</string>
     <!-- Preferences -->
-    <string name="pref_repository_title">Repositório</string>
+    <string name="pref_category_repository_title">Repositório</string>
     <string name="pref_edit_server_info">Editar configurações do servidor Git</string>
     <string name="pref_edit_git_config">Configuração local do Git &amp; utilitários</string>
     <string name="pref_ssh_title">Importar chave SSH</string>
@@ -102,11 +102,11 @@
     <string name="pref_git_delete_repo">Excluir repositório</string>
     <string name="pref_dialog_delete_title">Limpar repositório</string>
     <string name="pref_category_general_title">Geral</string>
-    <string name="pref_category_title_passwords">Senhas</string>
+    <string name="pref_category_passwords_title">Senhas</string>
     <string name="pref_clipboard_timeout_title">Tempo limite de cópia da senha</string>
     <string name="pref_clipboard_timeout_summary">Definir o tempo (em segundos) que a senha está na área de transferência. 0 significa para sempre. Valor atual: %1$s</string>
     <string name="pref_copy_title">Copiar senha automaticamente</string>
-    <string name="pref_copy_dialog_title">Automaticamente copie a senha para a área de transferência após a descriptografia ser bem sucedida.</string>
+    <string name="pref_copy_summary">Automaticamente copie a senha para a área de transferência após a descriptografia ser bem sucedida.</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">O arquivo selecionado não parece ser uma chave SSH privada.</string>
     <string name="ssh_key_success_dialog_title">Chave SSH importada</string>
     <string name="ssh_key_error_dialog_title">Erro ao importar chave</string>
@@ -118,11 +118,11 @@
     <string name="pref_file_first_sort_order">Arquivos primeiro</string>
     <string name="pref_type_independent_sort_order">Tipo independente</string>
     <string name="pref_recently_used_sort_order">Usado recentemente</string>
-    <string name="pref_autofill_title">Preenchimento Automático</string>
+    <string name="pref_category_autofill_title">Preenchimento Automático</string>
     <string name="pref_autofill_enable_title">Ativar preenchimento automático</string>
-    <string name="pref_misc_title">Outros</string>
+    <string name="pref_category_misc_title">Outros</string>
     <string name="pref_clear_clipboard_title">Limpar área de transferência 20 vezes</string>
-    <string name="pref_clear_clipboard_hint">Armazene números consecutivos na área de transferência 20 vezes. Útil em telefones Samsung que apresentam o histórico da área de transferência.</string>
+    <string name="pref_clear_clipboard_summary">Armazene números consecutivos na área de transferência 20 vezes. Útil em telefones Samsung que apresentam o histórico da área de transferência.</string>
     <string name="pref_git_delete_repo_summary">Exclui o repositório local (oculto)</string>
     <string name="pref_external_repository">Repositório externo</string>
     <string name="pref_external_repository_summary">Use um repositório de senha externo</string>
@@ -265,7 +265,7 @@
     <string name="button_create">Criar</string>
     <string name="pref_search_on_start">Abrir pesquisa ao inicializar</string>
     <string name="pref_search_on_start_hint">Abrir barra de pesquisa quando o aplicativo for iniciado</string>
-    <string name="password_generator_category_title">Gerador de Senha</string>
+    <string name="pref_category_pwgen_title">Gerador de Senha</string>
     <string name="tap_clear_clipboard">Toque aqui para limpar a área de transferência</string>
     <string name="clone_git_repo">O repositório deve ser clonado antes de sincronizar as alterações.</string>
     <string name="theme_title">Tema do aplicativo</string>

@@ -91,7 +91,7 @@
     <string name="share_as_plaintext">Partager en clair</string>
     <string name="last_changed">Dernière modification le %s</string>
     <!-- Preferences -->
-    <string name="pref_repository_title">Dépôt</string>
+    <string name="pref_category_repository_title">Dépôt</string>
     <string name="pref_edit_server_info">Modifier les paramètres du serveur Git</string>
     <string name="pref_edit_git_config">Configuration locale de Git &amp; utilitaires</string>
     <string name="pref_ssh_title">Importer une clef SSH</string>
@@ -100,11 +100,11 @@
     <string name="pref_git_delete_repo">Supprimer le dépôt</string>
     <string name="pref_dialog_delete_title">Effacer le dépôt</string>
     <string name="pref_category_general_title">Général</string>
-    <string name="pref_category_title_passwords">Mot de passe</string>
+    <string name="pref_category_passwords_title">Mot de passe</string>
     <string name="pref_clipboard_timeout_title">Délai imparti pour la copie</string>
     <string name="pref_clipboard_timeout_summary">Définissez le temps (en secondes) durant lequel le mot de passe restera dans le presse-papiers. 0 pour une rétention illimitée. Valeur actuelle: %1$s</string>
     <string name="pref_copy_title">Copie automatique du mot de passe</string>
-    <string name="pref_copy_dialog_title">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
+    <string name="pref_copy_summary">Copie automatiquement le mot de passe vers le presse-papier si le déchiffrement a réussi.</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">Le fichier sélectionné ne semble pas être une clé privée SSH.</string>
     <string name="ssh_key_success_dialog_title">Clef SSH importée</string>
     <string name="ssh_key_error_dialog_title">Erreur d\'importation de la clé</string>
@@ -116,11 +116,11 @@
     <string name="pref_file_first_sort_order">Fichiers en premier</string>
     <string name="pref_type_independent_sort_order">Indifférent au type d\'entrée</string>
     <string name="pref_recently_used_sort_order">Récemment utilisé</string>
-    <string name="pref_autofill_title">Saisie automatique</string>
+    <string name="pref_category_autofill_title">Saisie automatique</string>
     <string name="pref_autofill_enable_title">Saisie automatique</string>
-    <string name="pref_misc_title">Divers</string>
+    <string name="pref_category_misc_title">Divers</string>
     <string name="pref_clear_clipboard_title">Effacer le presse-papier 20 fois</string>
-    <string name="pref_clear_clipboard_hint">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
+    <string name="pref_clear_clipboard_summary">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
     <string name="pref_git_delete_repo_summary">Supprime le dépot local (caché)</string>
     <string name="pref_external_repository">Dépôt externe</string>
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
@@ -237,7 +237,7 @@
     <string name="button_create">Créer</string>
     <string name="pref_search_on_start">Ouvrir la recherche au démarrage</string>
     <string name="pref_search_on_start_hint">Ouvrir la barre de recherche au démarrage de l\'application</string>
-    <string name="password_generator_category_title">Générateur de mot de passe</string>
+    <string name="pref_category_pwgen_title">Générateur de mot de passe</string>
     <string name="tap_clear_clipboard">Appuyez ici pour effacer le presse-papiers</string>
     <string name="theme_title">Thème de l\'application</string>
     <string name="theme_light">Clair</string>
