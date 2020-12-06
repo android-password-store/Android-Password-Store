@@ -42,7 +42,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
     private val externalDirectorySelectAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            Graph.buildStoreImpl(requireContext(), PasswordRepository.getRepositoryDirectory())
+            Graph.buildStoreImpl(requireContext())
             finish()
         }
     }

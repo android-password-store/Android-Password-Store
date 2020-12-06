@@ -5,32 +5,30 @@
 
 package dev.msfjarvis.aps.util.repo
 
+import android.net.Uri
 import xyz.quaver.io.FileX
 import xyz.quaver.io.TreeFileX
 import xyz.quaver.io.util.deleteRecursively
 import xyz.quaver.io.util.readBytes
 import xyz.quaver.io.util.writeBytes
-import androidx.core.net.toUri
 import dev.msfjarvis.aps.Application
-import dev.msfjarvis.aps.util.extensions.listFilesRecursively
+import androidx.core.net.toUri
 import java.io.File
 
 /**
  * [FileX] backed implementation of [Store] for use with repositories in the external storage
  * directory that cannot be accessed with [File].
  */
-class FileXStoreImpl(val baseDir: File) : Store {
+class FileXStoreImpl(val baseDir: Uri) : Store {
 
-    @Suppress("UNCHECKED_CAST")
     override fun listRootPasswords(): List<File> {
-        val rootDir = TreeFileX(Application.instance, baseDir.toUri(), cached = true)
+        val rootDir = TreeFileX(Application.instance, baseDir, cached = true)
         return rootDir.listFiles().toList<File>()
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun listFiles(subDir: File): List<File> {
-        val rootDir = TreeFileX(Application.instance, subDir.toUri(), cached = true)
-        return rootDir.listFiles().toList<File>()
+        val rootDir = TreeFileX(Application.instance, baseDir, cached = true)
+        return rootDir.listFiles().filter { it.canonicalPath.contains(subDir.canonicalPath) }.toList<File>()
     }
 
     override fun deletePassword(password: File): Boolean {
@@ -42,16 +40,16 @@ class FileXStoreImpl(val baseDir: File) : Store {
     }
 
     override fun readFromFile(password: File): ByteArray {
-        val fileX = FileX(Application.instance, password.toUri())
+        val fileX = FileX(Application.instance, password)
         return fileX.readBytes()!!
     }
 
     override fun writeToFile(password: File, data: ByteArray) {
-        val fileX = FileX(Application.instance, password.toUri())
+        val fileX = FileX(Application.instance, password)
         fileX.writeBytes(data)
     }
 
     override fun listFilesRecursively(subDir: File): FileTreeWalk {
-        return TreeFileX(Application.instance, subDir.toUri(), cached = true).walkTopDown()
+        return TreeFileX(Application.instance, ("${baseDir}/${subDir}").toUri(), cached = true).walkTopDown()
     }
 }

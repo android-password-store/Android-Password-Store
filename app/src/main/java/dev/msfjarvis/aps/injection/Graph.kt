@@ -6,9 +6,13 @@
 package dev.msfjarvis.aps.injection
 
 import android.content.Context
+import androidx.core.net.toUri
+import dev.msfjarvis.aps.util.extensions.getString
+import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.repo.FileStoreImpl
 import dev.msfjarvis.aps.util.repo.FileXStoreImpl
 import dev.msfjarvis.aps.util.repo.Store
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 
 /**
@@ -18,11 +22,12 @@ object Graph {
 
     lateinit var store: Store
 
-    fun buildStoreImpl(context: Context, baseDir: File) {
-        val external = !baseDir.absolutePath.startsWith("${context.filesDir}")
-        store = if (external)
-            FileXStoreImpl(baseDir)
+    fun buildStoreImpl(context: Context) {
+        val settings = context.sharedPrefs
+        val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
+        store = if (externalRepo != null)
+            FileXStoreImpl(externalRepo.toUri())
         else
-            FileStoreImpl(baseDir)
+            FileStoreImpl(File("${context.filesDir}/store"))
     }
 }

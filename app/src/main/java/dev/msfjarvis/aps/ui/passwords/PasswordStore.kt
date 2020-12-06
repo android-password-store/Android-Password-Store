@@ -357,7 +357,7 @@ class PasswordStore : BaseGitActivity() {
     }
 
     private fun checkLocalRepository(localDir: File?) {
-        if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
+        if (localDir != null /*&& settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)*/) {
             d { "Check, dir: ${localDir.absolutePath}" }
             // do not push the fragment if we already have it
             if (getPasswordFragment() == null ||

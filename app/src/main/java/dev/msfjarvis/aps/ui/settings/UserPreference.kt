@@ -12,8 +12,6 @@ import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.MenuItem
@@ -54,6 +52,7 @@ import dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity
 import dev.msfjarvis.aps.ui.proxy.ProxySelectorActivity
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.util.activity.OpenDocumentTreeWithPermissions
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.autofillManager
 import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
@@ -69,36 +68,15 @@ class UserPreference : AppCompatActivity() {
     private lateinit var prefsFragment: PrefsFragment
     private var fromIntent = false
 
-    @Suppress("DEPRECATION")
-    private val directorySelectAction = registerForActivityResult(OpenDocumentTree()) { uri: Uri? ->
+    private val directorySelectAction = registerForActivityResult(OpenDocumentTreeWithPermissions()) { uri: Uri? ->
         if (uri == null) return@registerForActivityResult
 
         tag(TAG).d { "Selected repository URI is $uri" }
-        // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
-        val docId = DocumentsContract.getTreeDocumentId(uri)
-        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val path = if (split.size > 1) split[1] else split[0]
-        val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
-        val prefs = sharedPrefs
-
-        tag(TAG).d { "Selected repository path is $repoPath" }
-
-        if (Environment.getExternalStorageDirectory().path == repoPath) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.sdcard_root_warning_title))
-                .setMessage(getString(R.string.sdcard_root_warning_message))
-                .setPositiveButton("Remove everything") { _, _ ->
-                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
-                }
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .show()
-        }
-        prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
+        sharedPrefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.toString()) }
         if (fromIntent) {
             setResult(RESULT_OK)
             finish()
         }
-
     }
 
     private val sshKeyImportAction = registerForActivityResult(OpenDocument()) { uri: Uri? ->
@@ -118,16 +96,7 @@ class UserPreference : AppCompatActivity() {
         }
     }
 
-    private val storeExportAction = registerForActivityResult(object : OpenDocumentTree() {
-        override fun createIntent(context: Context, input: Uri?): Intent {
-            return super.createIntent(context, input).apply {
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
-                    Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-            }
-        }
-    }) { uri: Uri? ->
+    private val storeExportAction = registerForActivityResult(OpenDocumentTreeWithPermissions()) { uri: Uri? ->
         if (uri == null) return@registerForActivityResult
         val targetDirectory = DocumentFile.fromTreeUri(applicationContext, uri)
 

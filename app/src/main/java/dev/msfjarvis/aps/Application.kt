@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
-import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.injection.Graph
 import dev.msfjarvis.aps.util.git.sshj.setUpBouncyCastleForSshj
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -34,7 +33,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
             plant(DebugTree())
         }
         prefs.registerOnSharedPreferenceChangeListener(this)
-        Graph.buildStoreImpl(this, PasswordRepository.getRepositoryDirectory())
+        Graph.buildStoreImpl(this)
         setNightMode()
         setUpBouncyCastleForSshj()
         runMigrations(applicationContext)
