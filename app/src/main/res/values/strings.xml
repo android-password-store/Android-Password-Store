@@ -111,12 +111,12 @@
 
     <!-- Preferences -->
     <string name="pref_category_repository_title">Repository</string>
-    <string name="pref_edit_server_info">Edit Git server settings</string>
+    <string name="pref_edit_git_server_settings">Edit Git server settings</string>
     <string name="pref_edit_git_config">Local Git config &amp; utilities</string>
-    <string name="pref_ssh_title">Import SSH key</string>
+    <string name="pref_import_ssh_key_title">Import SSH key</string>
     <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>
-    <string name="pref_git_delete_repo">Delete repository</string>
+    <string name="pref_git_delete_repo_title">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_passwords_title">Passwords</string>
@@ -389,7 +389,7 @@
     <!-- Proxy configuration activity -->
     <string name="proxy_hostname">Proxy hostname</string>
     <string name="port">Port</string>
-    <string name="pref_proxy_settings">HTTP(S) proxy settings</string>
+    <string name="pref_edit_proxy_settings">HTTP(S) proxy settings</string>
     <string name="invalid_proxy_url">Invalid URL</string>
     <string name="oreo_autofill_password_fill_and_conditional_save_support">Fill and save passwords (saving requires that no accessibility services are enabled)</string>
     <string name="clear_saved_host_key">Clear saved host key</string>

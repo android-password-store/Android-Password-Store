@@ -94,12 +94,12 @@
     <string name="last_changed">Último cambio %s</string>
     <!-- Preferences -->
     <string name="pref_category_repository_title">Repositorio</string>
-    <string name="pref_edit_server_info">Editar axustes do servidor git</string>
+    <string name="pref_edit_git_server_settings">Editar axustes do servidor git</string>
     <string name="pref_edit_git_config">Utilidades Git</string>
-    <string name="pref_ssh_title">Importar chave SSH</string>
+    <string name="pref_import_ssh_key_title">Importar chave SSH</string>
     <string name="pref_ssh_keygen_title">Crear par de chaves SSH</string>
     <string name="pref_ssh_see_key_title">Ver a chave pública SSH creada</string>
-    <string name="pref_git_delete_repo">Eliminar repositorio</string>
+    <string name="pref_git_delete_repo_title">Eliminar repositorio</string>
     <string name="pref_dialog_delete_title">Baleirar repositorio</string>
     <string name="pref_category_general_title">Xeral</string>
     <string name="pref_category_passwords_title">Contrasinais</string>
@@ -354,7 +354,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <!-- Proxy configuration activity -->
     <string name="proxy_hostname">Servidor proxy</string>
     <string name="port">Porto</string>
-    <string name="pref_proxy_settings">Axustes do proxy HTTP(S)</string>
+    <string name="pref_edit_proxy_settings">Axustes do proxy HTTP(S)</string>
     <string name="invalid_proxy_url">URL non válido</string>
     <string name="oreo_autofill_password_fill_and_conditional_save_support">Completa e garda contrasinais (gardar require que os servizos de accesibilidade non estén activados)</string>
     <string name="clear_saved_host_key">Eliminar chave do host gardada</string>

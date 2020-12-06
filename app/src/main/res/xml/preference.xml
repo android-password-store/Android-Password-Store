@@ -30,16 +30,16 @@
     <PreferenceCategory app:title="@string/pref_category_repository_title">
         <Preference
             app:key="git_server_info"
-            app:title="@string/pref_edit_server_info" />
+            app:title="@string/pref_edit_git_server_settings" />
         <Preference
             app:key="proxy_settings"
-            app:title="@string/pref_proxy_settings" />
+            app:title="@string/pref_edit_proxy_settings" />
         <Preference
             app:key="git_config"
             app:title="@string/pref_edit_git_config" />
         <Preference
             app:key="ssh_key"
-            app:title="@string/pref_ssh_title" />
+            app:title="@string/pref_import_ssh_key_title" />
         <Preference
             app:key="ssh_keygen"
             app:title="@string/pref_ssh_keygen_title" />
@@ -53,7 +53,7 @@
         <Preference
             app:key="git_delete_repo"
             app:summary="@string/pref_git_delete_repo_summary"
-            app:title="@string/pref_git_delete_repo" />
+            app:title="@string/pref_git_delete_repo_title" />
         <CheckBoxPreference
             app:key="git_external"
             app:summary="@string/pref_external_repository_summary"

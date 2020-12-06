@@ -98,12 +98,12 @@
     <string name="last_changed">Последние изменение %s</string>
     <!-- Preferences -->
     <string name="pref_category_repository_title">Репозиторий</string>
-    <string name="pref_edit_server_info">Изменить настройки сервера Git</string>
+    <string name="pref_edit_git_server_settings">Изменить настройки сервера Git</string>
     <string name="pref_edit_git_config">Конфигурация локального Git</string>
-    <string name="pref_ssh_title">Импортировать SSH ключ</string>
+    <string name="pref_import_ssh_key_title">Импортировать SSH ключ</string>
     <string name="pref_ssh_keygen_title">Сгенерировать пару SSH ключей</string>
     <string name="pref_ssh_see_key_title">Просмотреть публичный SSH ключ</string>
-    <string name="pref_git_delete_repo">Удалить репозиторий</string>
+    <string name="pref_git_delete_repo_title">Удалить репозиторий</string>
     <string name="pref_dialog_delete_title">Очистить репозиторий</string>
     <string name="pref_category_general_title">Общие</string>
     <string name="pref_category_passwords_title">Пароли</string>

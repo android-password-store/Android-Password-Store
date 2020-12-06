@@ -94,12 +94,12 @@
     <string name="last_changed">Última alteração %s</string>
     <!-- Preferences -->
     <string name="pref_category_repository_title">Repositório</string>
-    <string name="pref_edit_server_info">Editar configurações do servidor Git</string>
+    <string name="pref_edit_git_server_settings">Editar configurações do servidor Git</string>
     <string name="pref_edit_git_config">Configuração local do Git &amp; utilitários</string>
-    <string name="pref_ssh_title">Importar chave SSH</string>
+    <string name="pref_import_ssh_key_title">Importar chave SSH</string>
     <string name="pref_ssh_keygen_title">Gerar um par de chave SSH</string>
     <string name="pref_ssh_see_key_title">Ver a chave SSH pública gerada</string>
-    <string name="pref_git_delete_repo">Excluir repositório</string>
+    <string name="pref_git_delete_repo_title">Excluir repositório</string>
     <string name="pref_dialog_delete_title">Limpar repositório</string>
     <string name="pref_category_general_title">Geral</string>
     <string name="pref_category_passwords_title">Senhas</string>

@@ -94,12 +94,12 @@
     <string name="last_changed">Ultima modifica %s</string>
     <!-- Preferences -->
     <string name="pref_category_repository_title">Repository</string>
-    <string name="pref_edit_server_info">Modifica impostazioni del server di Git</string>
+    <string name="pref_edit_git_server_settings">Modifica impostazioni del server di Git</string>
     <string name="pref_edit_git_config">Configurazione &amp; utilità della configurazione di Git</string>
-    <string name="pref_ssh_title">Importa chiave SSH</string>
+    <string name="pref_import_ssh_key_title">Importa chiave SSH</string>
     <string name="pref_ssh_keygen_title">Genera coppia di chiavi SSH</string>
     <string name="pref_ssh_see_key_title">Visualizza la chiave SSH pubblica generata</string>
-    <string name="pref_git_delete_repo">Elimina repository</string>
+    <string name="pref_git_delete_repo_title">Elimina repository</string>
     <string name="pref_dialog_delete_title">Cancella repository</string>
     <string name="pref_category_general_title">Generale</string>
     <string name="pref_category_passwords_title">Password</string>
@@ -353,7 +353,7 @@
     <!-- Proxy configuration activity -->
     <string name="proxy_hostname">Nome host del proxy</string>
     <string name="port">Porta</string>
-    <string name="pref_proxy_settings">Impostazioni proxy HTTP(S)</string>
+    <string name="pref_edit_proxy_settings">Impostazioni proxy HTTP(S)</string>
     <string name="invalid_proxy_url">URL non valido</string>
     <string name="oreo_autofill_password_fill_and_conditional_save_support">Compila e salva le password (il salvataggio necessita che nessun servizio di accessibilità sia abilitato)</string>
     <string name="clear_saved_host_key">Cancella la chiave host salvata</string>

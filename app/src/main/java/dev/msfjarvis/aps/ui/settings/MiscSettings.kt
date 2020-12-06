@@ -65,12 +65,11 @@ class MiscSettings(activity: FragmentActivity) : SettingsProvider {
                 titleRes = R.string.pref_clear_clipboard_title
                 summaryRes = R.string.pref_clear_clipboard_summary
             }
-            if (!BuildConfig.DEBUG) {
-                checkBox(PreferenceKeys.ENABLE_DEBUG_LOGGING) {
-                    defaultValue = false
-                    titleRes = R.string.pref_debug_logging_title
-                    summaryRes = R.string.pref_debug_logging_summary
-                }
+            checkBox(PreferenceKeys.ENABLE_DEBUG_LOGGING) {
+                defaultValue = false
+                titleRes = R.string.pref_debug_logging_title
+                summaryRes = R.string.pref_debug_logging_summary
+                visible = !BuildConfig.DEBUG
             }
         }
     }

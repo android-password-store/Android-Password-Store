@@ -20,9 +20,11 @@ class MainSettingsScreen : AppCompatActivity() {
     private val miscSettings = MiscSettings(this)
     private val autofillSettings = AutofillSettings(this)
     private val passwordSettings = PasswordSettings(this)
+    private val repositorySettings = RepositorySettings(this)
 
     private val binding by viewBinding(ActivityPreferenceRecyclerviewBinding::inflate)
-    private lateinit var preferencesAdapter: PreferencesAdapter
+    private val preferencesAdapter: PreferencesAdapter
+        get() = binding.preferenceRecyclerView.adapter as PreferencesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +37,13 @@ class MainSettingsScreen : AppCompatActivity() {
             }
             subScreen {
                 titleRes = R.string.pref_category_passwords_title
-                iconRes = R.drawable.vpn_key_24px
+                iconRes = R.drawable.ic_lock_open_24px
                 passwordSettings.provideSettings(this)
             }
             subScreen {
-                titleRes = R.string.pref_category_misc_title
-                iconRes = R.drawable.ic_miscellaneous_services_24px
-                miscSettings.provideSettings(this)
+                titleRes = R.string.pref_category_repository_title
+                iconRes = R.drawable.ic_call_merge_24px
+                repositorySettings.provideSettings(this)
             }
             subScreen {
                 titleRes = R.string.pref_category_misc_title
@@ -50,7 +52,6 @@ class MainSettingsScreen : AppCompatActivity() {
             }
         }
         val adapter = PreferencesAdapter(screen)
-        preferencesAdapter = adapter
         adapter.onScreenChangeListener = PreferencesAdapter.OnScreenChangeListener { subScreen, entering ->
             supportActionBar?.title = if (!entering) {
                 getString(R.string.action_settings)
@@ -76,5 +77,4 @@ class MainSettingsScreen : AppCompatActivity() {
         if (!preferencesAdapter.goBack())
             super.onBackPressed()
     }
-
 }

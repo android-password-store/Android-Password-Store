@@ -92,12 +92,12 @@
     <string name="last_changed">Dernière modification le %s</string>
     <!-- Preferences -->
     <string name="pref_category_repository_title">Dépôt</string>
-    <string name="pref_edit_server_info">Modifier les paramètres du serveur Git</string>
+    <string name="pref_edit_git_server_settings">Modifier les paramètres du serveur Git</string>
     <string name="pref_edit_git_config">Configuration locale de Git &amp; utilitaires</string>
-    <string name="pref_ssh_title">Importer une clef SSH</string>
+    <string name="pref_import_ssh_key_title">Importer une clef SSH</string>
     <string name="pref_ssh_keygen_title">Générer une paire de clefs SSH</string>
     <string name="pref_ssh_see_key_title">Voir la clef publique SSH générée</string>
-    <string name="pref_git_delete_repo">Supprimer le dépôt</string>
+    <string name="pref_git_delete_repo_title">Supprimer le dépôt</string>
     <string name="pref_dialog_delete_title">Effacer le dépôt</string>
     <string name="pref_category_general_title">Général</string>
     <string name="pref_category_passwords_title">Mot de passe</string>
