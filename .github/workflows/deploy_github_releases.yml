@@ -26,19 +26,19 @@ jobs:
         arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
 
     - name: Upload non-free release APK
-      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b
       with:
         name: APS Non-Free Release APK
         path: app/build/outputs/apk/nonFree/release/app-nonFree-release.apk
 
     - name: Upload non-free release Bundle
-      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b
       with:
         name: APS Non-Free Release Bundle
         path: app/build/outputs/bundle/nonFreeRelease/app-nonFree-release.aab
 
     - name: Upload free release APK
-      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b
       with:
         name: APS Free Release APK
         path: app/build/outputs/apk/free/release/app-free-release.apk

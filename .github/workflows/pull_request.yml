@@ -56,7 +56,7 @@ jobs:
 
     - name: (Fail-only) upload test report
       if: failure()
-      uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b
       with:
           name: Test report
           path: app/build/reports
