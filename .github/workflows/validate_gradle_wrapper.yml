@@ -2,7 +2,7 @@ name: "Validate Gradle Wrapper"
 on:
   pull_request:
     paths:
-      - '.github/**'
+      - '.github/workflows/validate_gradle_wrapper.yml'
       - 'gradle/**'
       - 'gradlew'
       - 'gradlew.bat'
