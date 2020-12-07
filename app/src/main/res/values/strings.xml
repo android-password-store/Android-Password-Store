@@ -415,5 +415,6 @@
     <string name="port">Port</string>
     <string name="pref_proxy_settings">HTTP(S) proxy settings</string>
     <string name="invalid_proxy_url">Invalid URL</string>
+    <string name="oreo_autofill_password_fill_and_conditional_save_support">Fill and save passwords (saving requires that no accessibility services are enabled)</string>
 
 </resources>
