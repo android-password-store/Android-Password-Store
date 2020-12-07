@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
+import android.service.autofill.SaveInfo
 import androidx.annotation.RequiresApi
 
 /*
@@ -143,7 +145,21 @@ private val BROWSER_SAVE_FLAG = mapOf(
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun getBrowserSaveFlag(appPackage: String): Int? = BROWSER_SAVE_FLAG[appPackage]
+private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY = mapOf(
+    "com.chrome.canary" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+)
+
+private fun isNoAccessibilityServiceEnabled(context: Context): Boolean {
+    // See https://chromium.googlesource.com/chromium/src/+/447a31e977a65e2eb78804e4a09633699b4ede33
+    return Settings.Secure.getString(context.contentResolver,
+        Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES).isNullOrEmpty()
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getBrowserSaveFlag(context: Context, appPackage: String): Int? =
+    BROWSER_SAVE_FLAG[appPackage] ?: BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY[appPackage]?.takeIf {
+            isNoAccessibilityServiceEnabled(context)
+        }
 
 internal data class BrowserAutofillSupportInfo(
     val multiOriginMethod: BrowserMultiOriginMethod,
@@ -158,14 +174,13 @@ internal fun getBrowserAutofillSupportInfoIfTrusted(
     if (!isTrustedBrowser(context, appPackage)) return null
     return BrowserAutofillSupportInfo(
         multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
-        saveFlags = getBrowserSaveFlag(appPackage)
+        saveFlags = getBrowserSaveFlag(context, appPackage)
     )
 }
 
 private val FLAKY_BROWSERS = listOf(
     "com.android.chrome",
     "com.chrome.beta",
-    "com.chrome.canary",
     "com.chrome.dev",
     "org.bromite.bromite",
     "org.ungoogled.chromium.stable",
@@ -176,6 +191,7 @@ public enum class BrowserAutofillSupportLevel {
     None,
     FlakyFill,
     PasswordFill,
+    PasswordFillAndSaveIfNoAccessibility,
     GeneralFill,
     GeneralFillAndSave,
 }
@@ -189,6 +205,7 @@ private fun getBrowserAutofillSupportLevel(
     return when {
         browserInfo == null -> BrowserAutofillSupportLevel.None
         appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
+        appPackage in BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY -> BrowserAutofillSupportLevel.PasswordFillAndSaveIfNoAccessibility
         browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None -> BrowserAutofillSupportLevel.PasswordFill
         browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
         else -> BrowserAutofillSupportLevel.GeneralFillAndSave
