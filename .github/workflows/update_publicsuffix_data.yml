@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Download new publicsuffix data
         run: curl -L https://github.com/mozilla-mobile/android-components/raw/master/components/lib/publicsuffixlist/src/main/assets/publicsuffixes -o autofill-parser/src/main/assets/publicsuffixes

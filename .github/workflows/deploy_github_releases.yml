@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
     - name: Decrypt secrets
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
@@ -53,7 +53,7 @@ jobs:
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@c952173edf28a2bd22e1a4926590c1ac39630461
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Get Non-Free Release APK
         uses: actions/download-artifact@f60857ee283b759efd0a9bf31b1b24a2d9c7e5cd
