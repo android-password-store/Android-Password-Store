@@ -1,4 +1,4 @@
-name: Release
+name: Publish APS binaries to GitHub Releases
 on:
   push:
     tags:
