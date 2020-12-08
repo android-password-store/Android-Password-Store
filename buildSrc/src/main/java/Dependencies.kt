@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-private const val KOTLIN_VERSION = "1.4.20"
+private const val KOTLIN_VERSION = "1.4.21"
 
 object Dependencies {
     object Kotlin {

@@ -1,6 +1,6 @@
 rootProject.ext.versions = [
         agp                            : '4.1.0',
-        kotlin                         : '1.4.20',
+        kotlin                         : '1.4.21',
         binary_compatibility_validator : '0.2.4',
 ]
 
