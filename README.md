@@ -26,7 +26,7 @@ Want to contribute? See if you can [find an issue](https://github.com/android-pa
 
 Interested in helping to translate Password Store? Contribute [here](https://crowdin.com/project/android-password-store)!
 
-Wanna test early access builds to find bugs and offer feedback? Read the [release channels](https://android-password-store.github.io/docs/users/release-channels) documentation to get access!
+Wanna test development builds to find bugs and offer feedback? Read the [release channels](https://android-password-store.github.io/docs/users/release-channels) documentation to get access!
 
 ## Community
 
