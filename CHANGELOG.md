@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   On Android 11, Autofill will use the new [inline autofill](https://developer.android.com/guide/topics/text/ime-autofill#configure-provider) UI that integrates Autofill results into your keyboard app.
+-   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
 
 ### Fixed
 
