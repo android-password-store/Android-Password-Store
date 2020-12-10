@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 -   Decrypt screen would stay in memory infinitely, allowing passwords to be seen without re-auth
 -   Git commits in the store would wrongly use the 'default' committer as opposed to the user's configured one
 -   Connection attempts now use a reasonable 10 second timeout as opposed to the default of 30 seconds
+-   A change to the remote host key for a server would prevent the user from being able to connect to it
 
 ## [1.13.1] - 2020-10-23
 

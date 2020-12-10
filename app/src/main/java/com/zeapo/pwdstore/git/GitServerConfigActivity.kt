@@ -82,6 +82,12 @@ class GitServerConfigActivity : BaseGitActivity() {
             setAuthModes(text.startsWith("http://") || text.startsWith("https://"))
         }
 
+        binding.clearHostKeyButton.isVisible = GitSettings.hasSavedHostKey()
+        binding.clearHostKeyButton.setOnClickListener {
+            GitSettings.clearSavedHostKey()
+            Snackbar.make(binding.root, getString(R.string.clear_saved_host_key_success), Snackbar.LENGTH_LONG).show()
+            it.isVisible = false
+        }
         binding.saveButton.setOnClickListener {
             val newUrl = binding.serverUrl.text.toString().trim()
             // If url is of type john_doe@example.org:12435/path/to/repo, then not adding `ssh://`

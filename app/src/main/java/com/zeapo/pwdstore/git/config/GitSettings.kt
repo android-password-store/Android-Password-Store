@@ -56,6 +56,7 @@ object GitSettings {
     private val settings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.sharedPrefs }
     private val encryptedSettings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.getEncryptedGitPrefs() }
     private val proxySettings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.getEncryptedProxyPrefs() }
+    private val hostKeyPath by lazy(LazyThreadSafetyMode.NONE) { "${Application.instance.filesDir}/.host_key" }
 
     var authMode
         get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
@@ -64,6 +65,7 @@ object GitSettings {
                 putString(PreferenceKeys.GIT_REMOTE_AUTH, value.pref)
             }
         }
+
     var url
         get() = settings.getString(PreferenceKeys.GIT_REMOTE_URL)
         private set(value) {
@@ -79,8 +81,9 @@ object GitSettings {
             // should be deleted/reset.
             useMultiplexing = true
             encryptedSettings.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
-            File("${Application.instance.filesDir}/.host_key").delete()
+            clearSavedHostKey()
         }
+
     var authorName
         get() = settings.getString(PreferenceKeys.GIT_CONFIG_AUTHOR_NAME) ?: ""
         set(value) {
@@ -88,6 +91,7 @@ object GitSettings {
                 putString(PreferenceKeys.GIT_CONFIG_AUTHOR_NAME, value)
             }
         }
+
     var authorEmail
         get() = settings.getString(PreferenceKeys.GIT_CONFIG_AUTHOR_EMAIL) ?: ""
         set(value) {
@@ -95,6 +99,7 @@ object GitSettings {
                 putString(PreferenceKeys.GIT_CONFIG_AUTHOR_EMAIL, value)
             }
         }
+
     var branch
         get() = settings.getString(PreferenceKeys.GIT_BRANCH_NAME) ?: DEFAULT_BRANCH
         private set(value) {
@@ -102,6 +107,7 @@ object GitSettings {
                 putString(PreferenceKeys.GIT_BRANCH_NAME, value)
             }
         }
+
     var useMultiplexing
         get() = settings.getBoolean(PreferenceKeys.GIT_REMOTE_USE_MULTIPLEXING, true)
         set(value) {
@@ -179,4 +185,16 @@ object GitSettings {
         branch = newBranch
         return UpdateConnectionSettingsResult.Valid
     }
+
+    /**
+     * Deletes a previously saved SSH host key
+     */
+    fun clearSavedHostKey() {
+        File(hostKeyPath).delete()
+    }
+
+    /**
+     * Returns true if a host key was previously saved
+     */
+    fun hasSavedHostKey(): Boolean = File(hostKeyPath).exists()
 }
