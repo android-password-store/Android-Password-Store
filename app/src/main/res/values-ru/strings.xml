@@ -303,7 +303,6 @@
     <string name="otp_import_success">Конфигурация TOTP успешно импортирована</string>
     <string name="otp_import_failure">Не удалось импортировать конфигурацию TOTP</string>
     <string name="exporting_passwords">Экспорт паролей…</string>
-    <string name="failed_to_find_key_id">Не удалось найти .gpg-id, ваше хранилище настроено корректно?</string>
     <string name="invalid_gpg_id">Найден .gpg-id, но он содержит неверный ID ключа, fingerprint или ID пользователя</string>
     <string name="short_key_ids_unsupported">Идентификатор ключа в .gpg-id слишком короткий, пожалуйста, используйте длинные идентификаторы (16 символов) или fingerprint (40 символов)</string>
     <string name="invalid_filename_text">Имя файла не должно содержать \'/\', укажите директорию выше</string>

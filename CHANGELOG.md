@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
+
 ### Fixed
 
 -   Cancelling the Autofill "Generate password" action now correctly returns you to the original app.

@@ -299,7 +299,6 @@
     <string name="otp_import_success">Configuração TOTP importada com sucesso</string>
     <string name="otp_import_failure">Falha ao importar a configuração TOTP</string>
     <string name="exporting_passwords">Exportando senhas…</string>
-    <string name="failed_to_find_key_id">Falha ao localizar .gpg-id, seu store está configurado corretamente?</string>
     <string name="invalid_gpg_id">Encontrado .gpg-id, mas contém uma ID de chave inválida, fingerprint ou ID de usuário</string>
     <string name="short_key_ids_unsupported">O ID de chave em .gpg-id é muito curto, por favor utilize os IDs de chaves longos (16 caracteres) ou fingerprints (40 caracteres)</string>
     <string name="invalid_filename_text">Nome do arquivo não deve conter \'/\', defina o diretório acima</string>
