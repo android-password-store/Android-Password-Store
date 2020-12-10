@@ -344,7 +344,6 @@
     <string name="otp_import_success">Successfully imported TOTP configuration</string>
     <string name="otp_import_failure">Failed to import TOTP configuration</string>
     <string name="exporting_passwords">Exporting passwords…</string>
-    <string name="failed_to_find_key_id">Failed to locate .gpg-id, is your store set up correctly?</string>
     <string name="invalid_gpg_id">Found .gpg-id, but it contains an invalid key ID, fingerprint or user ID</string>
     <string name="short_key_ids_unsupported">A key ID in .gpg-id is too short, please use either long key IDs (16 characters) or fingerprints (40 characters)</string>
     <string name="invalid_filename_text">File name must not contain \'/\', set directory above</string>
