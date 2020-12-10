@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.SSHException
+import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
 
 /**
@@ -76,6 +77,10 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
             if (err.message?.contains("cannot open additional channels") == true) {
                 GitSettings.useMultiplexing = false
                 SSHException(DisconnectReason.TOO_MANY_CONNECTIONS, "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used.")
+            } else if (err is TransportException && err.disconnectReason == DisconnectReason.HOST_KEY_NOT_VERIFIABLE) {
+                SSHException(DisconnectReason.HOST_KEY_NOT_VERIFIABLE,
+                    "WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."
+                )
             } else {
                 err
             }
