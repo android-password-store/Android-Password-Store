@@ -245,7 +245,6 @@
     <!-- Password creation failure -->
     <string name="password_creation_file_fail_title">Erreur</string>
     <string name="exporting_passwords">Exportation des mots de passe…</string>
-    <string name="failed_to_find_key_id">Impossible de localiser .gpg-id, votre dépôt est-il correctement configuré ?</string>
     <string name="short_key_ids_unsupported">Un ID de clé dans .gpg-id est trop court, veuillez utiliser soit des identifiants de clés longs (16 caractères) soit des empreintes digitales (40 caractères)</string>
     <string name="directory_hint">Dossier</string>
     <string name="new_folder_set_gpg_key">Définir la clé GPG pour le dossier</string>
