@@ -9,15 +9,21 @@ import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.categoryHeader
 import de.Maxr1998.modernpreferences.helpers.checkBox
+import de.Maxr1998.modernpreferences.helpers.editText
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import android.text.InputType
 import androidx.fragment.app.FragmentActivity
 
-class PasswordSettings(activity: FragmentActivity) : SettingsProvider {
+class PasswordSettings(private val activity: FragmentActivity) : SettingsProvider {
 
     override fun provideSettings(builder: PreferenceScreen.Builder) {
         builder.apply {
-            // TODO(msfjarvis): add general_show_time preference
+            editText(PreferenceKeys.GENERAL_SHOW_TIME) {
+                titleRes = R.string.pref_clipboard_timeout_title
+                summaryProvider = { activity.getString(R.string.pref_clipboard_timeout_summary) }
+                textInputType = InputType.TYPE_CLASS_NUMBER
+            }
             checkBox(PreferenceKeys.SHOW_PASSWORD) {
                 titleRes = R.string.show_password_pref_title
                 summaryRes = R.string.show_password_pref_summary
