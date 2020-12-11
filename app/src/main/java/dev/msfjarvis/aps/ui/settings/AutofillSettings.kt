@@ -10,9 +10,11 @@ import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.helpers.switch
+import de.Maxr1998.modernpreferences.preferences.SwitchPreference
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 import dev.msfjarvis.aps.BuildConfig
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.autofillManager
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import android.annotation.SuppressLint
@@ -23,6 +25,8 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel
 import com.github.androidpasswordstore.autofillparser.getInstalledBrowsersWithAutofillSupportLevel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,7 +40,16 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
         }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun showAutofillDialog() {
+    private fun showAutofillDialog(pref: SwitchPreference) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    pref.checked = isAutofillServiceEnabled
+                }
+                else -> {
+                }
+            }
+        }
         MaterialAlertDialogBuilder(activity).run {
             setTitle(R.string.pref_autofill_enable_title)
             @SuppressLint("InflateParams")
@@ -67,6 +80,8 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
                 activity.startActivity(intent)
             }
             setNegativeButton(R.string.dialog_cancel, null)
+            setOnDismissListener { pref.checked = isAutofillServiceEnabled }
+            activity.lifecycle.addObserver(observer)
             show()
         }
     }
@@ -76,21 +91,22 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
             switch(PreferenceKeys.AUTOFILL_ENABLE) {
                 titleRes = R.string.pref_autofill_enable_title
                 visible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                defaultValue = false
+                defaultValue = isAutofillServiceEnabled
                 onClick {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return@onClick true
                     if (isAutofillServiceEnabled) {
                         activity.autofillManager?.disableAutofillServices()
                     } else {
-                        showAutofillDialog()
+                        showAutofillDialog(this)
                     }
-                    true
+                    false
                 }
             }
             val values = activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_values)
             val titles = activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_entries)
             val items = values.zip(titles).map { SelectionItem(it.first, it.second, null) }
             singleChoice(PreferenceKeys.OREO_AUTOFILL_DIRECTORY_STRUCTURE, items) {
+                initialSelection = DirectoryStructure.DEFAULT.value
                 dependency = PreferenceKeys.AUTOFILL_ENABLE
                 titleRes = R.string.oreo_autofill_preference_directory_structure
             }
