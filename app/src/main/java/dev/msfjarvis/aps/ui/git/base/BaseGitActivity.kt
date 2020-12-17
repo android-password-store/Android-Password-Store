@@ -112,6 +112,8 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
         return if (err.message?.contains("cannot open additional channels") == true) {
             GitSettings.useMultiplexing = false
             SSHException(DisconnectReason.TOO_MANY_CONNECTIONS, "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used.")
+        } else if (err.message?.contains("int org.eclipse.jgit.lib.AnyObjectId.w1") == true) {
+            IllegalStateException("Your local repository appears to be an incomplete Git clone, please delete and re-clone from settings")
         } else if (err is TransportException && err.disconnectReason == DisconnectReason.HOST_KEY_NOT_VERIFIABLE) {
             SSHException(DisconnectReason.HOST_KEY_NOT_VERIFIABLE,
                 "WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."
