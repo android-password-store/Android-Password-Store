@@ -72,19 +72,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
             GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
             GitOp.RESET -> ResetToRemoteOperation(this)
         }
-        return op.executeAfterAuthentication(GitSettings.authMode).mapError { throwable ->
-            val err = rootCauseException(throwable)
-            if (err.message?.contains("cannot open additional channels") == true) {
-                GitSettings.useMultiplexing = false
-                SSHException(DisconnectReason.TOO_MANY_CONNECTIONS, "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used.")
-            } else if (err is TransportException && err.disconnectReason == DisconnectReason.HOST_KEY_NOT_VERIFIABLE) {
-                SSHException(DisconnectReason.HOST_KEY_NOT_VERIFIABLE,
-                    "WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."
-                )
-            } else {
-                err
-            }
-        }
+        return op.executeAfterAuthentication(GitSettings.authMode).mapError(::transformGitError)
     }
 
     fun finishOnSuccessHandler(@Suppress("UNUSED_PARAMETER") nothing: Unit) {
@@ -112,6 +100,31 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
             }
         } else {
             onPromptDone()
+        }
+    }
+
+    /**
+     * Takes the result of [launchGitOperation] and applies any necessary transformations
+     * on the [throwable] returned from it
+     */
+    private fun transformGitError(throwable: Throwable): Throwable {
+        val err = rootCauseException(throwable)
+        return when {
+            err.message?.contains("cannot open additional channels") == true -> {
+                GitSettings.useMultiplexing = false
+                SSHException(DisconnectReason.TOO_MANY_CONNECTIONS, "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used.")
+            }
+            err.message?.contains("int org.eclipse.jgit.lib.AnyObjectId.w1") == true -> {
+                IllegalStateException("Your local repository appears to be an incomplete Git clone, please delete and re-clone from settings")
+            }
+            err is TransportException && err.disconnectReason == DisconnectReason.HOST_KEY_NOT_VERIFIABLE -> {
+                SSHException(DisconnectReason.HOST_KEY_NOT_VERIFIABLE,
+                    "WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."
+                )
+            }
+            else -> {
+                err
+            }
         }
     }
 
