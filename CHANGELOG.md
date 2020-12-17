@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
+-   Suggest users to re-clone repository when it is deemed to be broken
 
 ### Fixed
 
