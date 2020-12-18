@@ -151,12 +151,12 @@
     <string name="xkpwgen_custom_dict_imported">Lista di parole personalizzata: %1$s</string>
     <string name="xkpwgen_builder_error">Il dizionario selezionato non contiene abbastanza parole della data lunghezza %1$d..%2$d</string>
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_title">Tipo di generatore di password</string>
-    <string name="xkpwgen_pref_custom_dict_title">Lista di parole personalizzata</string>
-    <string name="xkpwgen_pref_custom_dict_summary_on">Usando file di elenco di parole personalizzati</string>
-    <string name="xkpwgen_pref_custom_dict_summary_off">Usando liste di parole integrate</string>
-    <string name="xkpwgen_pref_custom_dict_picker_title">File di elenco di parole personalizzato</string>
-    <string name="xkpwgen_pref_custom_dict_picker_summary">Tocca per selezionare un file di lista di parole personalizzato contenente una parola per riga</string>
+    <string name="pref_password_generator_type_title">Tipo di generatore di password</string>
+    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Lista di parole personalizzata</string>
+    <string name="pref_xkpwgen_custom_dict_summary_on">Usando file di elenco di parole personalizzati</string>
+    <string name="pref_xkpwgen_custom_dict_summary_off">Usando liste di parole integrate</string>
+    <string name="pref_xkpwgen_custom_dict_picker_title">File di elenco di parole personalizzato</string>
+    <string name="pref_xkpwgen_custom_dict_picker_summary">Tocca per selezionare un file di lista di parole personalizzato contenente una parola per riga</string>
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Frase Segreta</string>
     <string name="ssh_keygen_generate">Genera</string>

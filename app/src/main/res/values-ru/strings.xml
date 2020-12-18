@@ -155,12 +155,12 @@
     <string name="xkpwgen_custom_dict_imported">Пользовательский список слов: %1$s</string>
     <string name="xkpwgen_builder_error">Выбранный словарь не содержит достаточного количества слова заданной длинны %1$d..%2$d</string>
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_title">Тип генератора паролей</string>
-    <string name="xkpwgen_pref_custom_dict_title">Пользовательский список слов</string>
-    <string name="xkpwgen_pref_custom_dict_summary_on">Использовать файл списка слов созданный пользователем</string>
-    <string name="xkpwgen_pref_custom_dict_summary_off">Использовать встроенный список слов</string>
-    <string name="xkpwgen_pref_custom_dict_picker_title">Файл пользовательского списка слов</string>
-    <string name="xkpwgen_pref_custom_dict_picker_summary">Нажмите чтобы выбрать файл пользовательского списка слов содержащий одно слово на строку</string>
+    <string name="pref_password_generator_type_title">Тип генератора паролей</string>
+    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Пользовательский список слов</string>
+    <string name="pref_xkpwgen_custom_dict_summary_on">Использовать файл списка слов созданный пользователем</string>
+    <string name="pref_xkpwgen_custom_dict_summary_off">Использовать встроенный список слов</string>
+    <string name="pref_xkpwgen_custom_dict_picker_title">Файл пользовательского списка слов</string>
+    <string name="pref_xkpwgen_custom_dict_picker_summary">Нажмите чтобы выбрать файл пользовательского списка слов содержащий одно слово на строку</string>
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Пароль</string>
     <string name="ssh_keygen_generate">Сгенерировать</string>

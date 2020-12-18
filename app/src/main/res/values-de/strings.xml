@@ -147,12 +147,12 @@
     <string name="xkpwgen_custom_dict_imported">Eigene Wortliste: %1$s</string>
     <string name="xkpwgen_builder_error">Das ausgewählte Wörterbuch enthält nicht genügend Wörter der angegebenen Länge %1$d..%2$d</string>
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_title">Passwortgenerator</string>
-    <string name="xkpwgen_pref_custom_dict_title">Eigene Wortliste</string>
-    <string name="xkpwgen_pref_custom_dict_summary_on">Eigene Wordlist-Datei verwenden</string>
-    <string name="xkpwgen_pref_custom_dict_summary_off">Integrierte Wortliste verwenden</string>
-    <string name="xkpwgen_pref_custom_dict_picker_title">Eigene Wortliste</string>
-    <string name="xkpwgen_pref_custom_dict_picker_summary">Tippen Sie, um eine benutzerdefinierte Wordlist-Datei mit einem Wort pro Zeile auszuwählen</string>
+    <string name="pref_password_generator_type_title">Passwortgenerator</string>
+    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Eigene Wortliste</string>
+    <string name="pref_xkpwgen_custom_dict_summary_on">Eigene Wordlist-Datei verwenden</string>
+    <string name="pref_xkpwgen_custom_dict_summary_off">Integrierte Wortliste verwenden</string>
+    <string name="pref_xkpwgen_custom_dict_picker_title">Eigene Wortliste</string>
+    <string name="pref_xkpwgen_custom_dict_picker_summary">Tippen Sie, um eine benutzerdefinierte Wordlist-Datei mit einem Wort pro Zeile auszuwählen</string>
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Passwort</string>
     <string name="ssh_keygen_generate">Generieren</string>

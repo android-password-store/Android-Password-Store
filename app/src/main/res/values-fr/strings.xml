@@ -149,12 +149,12 @@
     <string name="xkpwgen_custom_dict_imported">Liste de mots personnalisée : %1$s</string>
     <string name="xkpwgen_builder_error">Le dictionnaire sélectionné ne contient pas assez de mots de la longueur %1$d..%2$d</string>
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_title">Type de générateur de mot de passe</string>
-    <string name="xkpwgen_pref_custom_dict_title">Liste de mots personnalisée</string>
-    <string name="xkpwgen_pref_custom_dict_summary_on">Utiliser une liste de mots personnalisée</string>
-    <string name="xkpwgen_pref_custom_dict_summary_off">Utilisation de la liste de mots intégrée</string>
-    <string name="xkpwgen_pref_custom_dict_picker_title">Fichier personnalisé de liste de mots</string>
-    <string name="xkpwgen_pref_custom_dict_picker_summary">Touchez pour choisir un fichier de liste de mots personnalisés contenant un mot par ligne</string>
+    <string name="pref_password_generator_type_title">Type de générateur de mot de passe</string>
+    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Liste de mots personnalisée</string>
+    <string name="pref_xkpwgen_custom_dict_summary_on">Utiliser une liste de mots personnalisée</string>
+    <string name="pref_xkpwgen_custom_dict_summary_off">Utilisation de la liste de mots intégrée</string>
+    <string name="pref_xkpwgen_custom_dict_picker_title">Fichier personnalisé de liste de mots</string>
+    <string name="pref_xkpwgen_custom_dict_picker_summary">Touchez pour choisir un fichier de liste de mots personnalisés contenant un mot par ligne</string>
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Mot de passe</string>
     <string name="ssh_keygen_generate">Générer</string>

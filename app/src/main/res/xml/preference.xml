@@ -71,18 +71,18 @@
             app:entryValues="@array/pwgen_provider_values"
             app:key="pref_key_pwgen_type"
             app:persistent="true"
-            app:title="@string/xkpwgen_pref_gentype_title"
+            app:title="@string/pref_password_generator_type_title"
             app:useSimpleSummaryProvider="true" />
         <CheckBoxPreference
             app:key="pref_key_is_custom_dict"
-            app:summaryOff="@string/xkpwgen_pref_custom_dict_summary_off"
-            app:summaryOn="@string/xkpwgen_pref_custom_dict_summary_on"
-            app:title="@string/xkpwgen_pref_custom_dict_title" />
+            app:summaryOff="@string/pref_xkpwgen_custom_dict_summary_off"
+            app:summaryOn="@string/pref_xkpwgen_custom_dict_summary_on"
+            app:title="@string/pref_xkpwgen_custom_wordlist_enabled_title" />
         <Preference
             app:dependency="pref_key_is_custom_dict"
             app:key="pref_key_custom_dict"
-            app:summary="@string/xkpwgen_pref_custom_dict_picker_summary"
-            app:title="@string/xkpwgen_pref_custom_dict_picker_title" />
+            app:summary="@string/pref_xkpwgen_custom_dict_picker_summary"
+            app:title="@string/pref_xkpwgen_custom_dict_picker_title" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_category_general_title">

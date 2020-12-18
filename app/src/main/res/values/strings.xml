@@ -171,12 +171,12 @@
     <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_title">Password generator type</string>
-    <string name="xkpwgen_pref_custom_dict_title">Custom wordlist</string>
-    <string name="xkpwgen_pref_custom_dict_summary_on">Using custom wordlist file</string>
-    <string name="xkpwgen_pref_custom_dict_summary_off">Using built-in wordlist</string>
-    <string name="xkpwgen_pref_custom_dict_picker_title">Custom worldlist file</string>
-    <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
+    <string name="pref_password_generator_type_title">Password generator type</string>
+    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Custom wordlist</string>
+    <string name="pref_xkpwgen_custom_dict_summary_on">Using custom wordlist file</string>
+    <string name="pref_xkpwgen_custom_dict_summary_off">Using built-in wordlist</string>
+    <string name="pref_xkpwgen_custom_dict_picker_title">Custom worldlist file</string>
+    <string name="pref_xkpwgen_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Passphrase</string>

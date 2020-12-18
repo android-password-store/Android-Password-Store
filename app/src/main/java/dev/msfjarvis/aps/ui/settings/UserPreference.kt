@@ -437,7 +437,7 @@ class UserPreference : AppCompatActivity() {
                     if (customDictFile.exists() && !customDictFile.delete()) {
                         w { "Failed to delete custom XkPassword dictionary: $customDictFile" }
                     }
-                    prefCustomDictPicker?.setSummary(R.string.xkpwgen_pref_custom_dict_picker_summary)
+                    prefCustomDictPicker?.setSummary(R.string.pref_xkpwgen_custom_dict_picker_summary)
                 }
                 true
             }
