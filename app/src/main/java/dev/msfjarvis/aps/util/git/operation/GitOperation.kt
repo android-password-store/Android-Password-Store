@@ -25,6 +25,10 @@ import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.git.sshj.SshjSessionFactory
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.git.GitResult
+import com.github.michaelbull.result.get
+import com.google.android.material.snackbar.Snackbar
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -119,12 +123,14 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         if (!preExecute()) {
             return Ok(Unit)
         }
-        val operationResult = GitCommandExecutor(
-            callingActivity,
-            this,
-        ).execute()
-        postExecute()
-        return operationResult
+        val snackbar = callingActivity.snackbar(
+            message = callingActivity.resources.getString(R.string.git_operation_running),
+            length = Snackbar.LENGTH_INDEFINITE,
+        )
+        val operationResult = GitCommandExecutor(this).execute()
+        snackbar.dismiss()
+        postExecute(operationResult)
+        return Ok(Unit)
     }
 
     private fun onMissingSshKeyFile() {
@@ -200,7 +206,17 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
      */
     open fun preExecute() = true
 
-    private suspend fun postExecute() {
+    private suspend fun postExecute(result: Result<GitResult, Throwable>) {
+        when (result.get()) {
+            GitResult.OK -> {}
+            GitResult.AlreadyUpToDate -> {
+                Toast.makeText(
+                    callingActivity,
+                    callingActivity.getString(R.string.git_push_up_to_date),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
         withContext(Dispatchers.IO) {
             sshSessionFactory?.close()
         }
