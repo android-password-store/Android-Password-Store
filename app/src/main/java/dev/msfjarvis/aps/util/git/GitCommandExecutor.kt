@@ -5,17 +5,12 @@
 
 package dev.msfjarvis.aps.util.git
 
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.runCatching
-import com.google.android.material.snackbar.Snackbar
-import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.git.GitException.PullException
 import dev.msfjarvis.aps.util.git.GitException.PushException
-import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.git.operation.GitOperation
-import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.settings.GitSettings
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.CommitCommand
@@ -27,15 +22,10 @@ import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.RemoteRefUpdate
 
 class GitCommandExecutor(
-    private val activity: FragmentActivity,
     private val operation: GitOperation,
 ) {
 
-    suspend fun execute(): Result<Unit, Throwable> {
-        val snackbar = activity.snackbar(
-            message = activity.resources.getString(R.string.git_operation_running),
-            length = Snackbar.LENGTH_INDEFINITE,
-        )
+    suspend fun execute(): Result<GitResult, Throwable> {
         // Count the number of uncommitted files
         var nbChanges = 0
         return runCatching {
@@ -89,13 +79,7 @@ class GitCommandExecutor(
                                         }
                                     }
                                     RemoteRefUpdate.Status.UP_TO_DATE -> {
-                                        withContext(Dispatchers.Main) {
-                                            Toast.makeText(
-                                                activity.applicationContext,
-                                                activity.applicationContext.getString(R.string.git_push_up_to_date),
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
+                                        return@runCatching GitResult.AlreadyUpToDate
                                     }
                                     else -> {
                                     }
@@ -110,8 +94,7 @@ class GitCommandExecutor(
                     }
                 }
             }
-        }.also {
-            snackbar.dismiss()
+            GitResult.OK
         }
     }
 }
