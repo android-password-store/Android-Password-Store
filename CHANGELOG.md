@@ -407,11 +407,11 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.2...HEAD
 
-[1.13.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.1...1.13.2
+[1.13.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.1...v1.13.2
 
-[1.13.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.0...1.13.1
+[1.13.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.0...v1.13.1
 
 [1.13.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.1...v1.13.0
 
