@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -14,6 +15,7 @@
     <string name="dialog_delete">Excluir diretório</string>
     <string name="dialog_do_not_delete">Cancelar</string>
     <string name="title_activity_git_clone">Informações do repositório</string>
+    <string name="title_activity_git_log">Log de Commits</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Por favor, clone ou crie um novo repositório abaixo antes de tentar adicionar uma senha ou executar qualquer operação de sincronização.</string>
     <plurals name="delete_dialog_text">
@@ -58,6 +60,7 @@
     <string name="passphrase_dialog_text">Por favor, forneça a senha para a sua chave SSH</string>
     <string name="password_dialog_text">Por favor, forneça a senha para este repositório</string>
     <!-- Clone fragment -->
+    <string name="location_dialog_create_text">Selecione onde você deseja criar o repositório de suas senhas</string>
     <string name="location_sdcard">Cartão SD</string>
     <string name="location_hidden">Oculto (preferencial)</string>
     <string name="external_repository_dialog_title">Escolha onde armazenar as senhas</string>
@@ -91,6 +94,8 @@
     <string name="last_changed">Última alteração %s</string>
     <!-- Preferences -->
     <string name="pref_repository_title">Repositório</string>
+    <string name="pref_edit_server_info">Editar configurações do servidor Git</string>
+    <string name="pref_edit_git_config">Configuração local do Git &amp; utilitários</string>
     <string name="pref_ssh_title">Importar chave SSH</string>
     <string name="pref_ssh_keygen_title">Gerar um par de chave SSH</string>
     <string name="pref_ssh_see_key_title">Ver a chave SSH pública gerada</string>
@@ -164,8 +169,25 @@
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Frase Secreta</string>
     <string name="ssh_keygen_generate">Gerar</string>
+    <string name="ssh_keygen_share">Compartilhar</string>
+    <string name="ssh_keygen_later">Depois</string>
+    <string name="ssh_keygen_message">%1$s\n\nForneça esta chave pública para seu servidor Git.</string>
     <string name="ssh_key_gen_generating_progress">Gerando chaves…</string>
+    <string name="ssh_keygen_require_authentication">Proteja com credenciais de bloqueio de tela</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">Ed25519</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bits)</b>\nSuportado por todos os servidores, mas a autenticação é relativamente lenta.</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nAutenticação rápida e suportada pela maioria dos servidores que ainda estão recebendo atualizações.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nAutenticação rápida, mas apenas suportada por servidores bastante modernos.</string>
+    <string name="ssh_keygen_existing_title">Chave SSH</string>
+    <string name="ssh_keygen_existing_message">Substituir a chave SSH existente? Você pode perder o acesso ao seu servidor.</string>
+    <string name="ssh_keygen_existing_replace">Substituir</string>
+    <string name="ssh_keygen_existing_keep">Manter</string>
     <!-- SSH Android Keystore auth -->
+    <string name="biometric_auth_generic_failure">Falha na autenticação de bloqueio de tela</string>
+    <string name="biometric_prompt_title_ssh_auth">Desbloquear chave SSH</string>
+    <string name="biometric_prompt_title_ssh_keygen">Gerar chave SSH</string>
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Sim</string>
@@ -176,6 +198,7 @@
     <string name="git_pull">Pull do remoto</string>
     <string name="git_push">Push do remoto</string>
     <string name="git_push_up_to_date">Tudo atualizado</string>
+    <string name="git_log">Mostrar log de commit</string>
     <string name="show_password_pref_title">Mostrar a senha</string>
     <string name="show_password_pref_summary">Controle a visibilidade das senhas quando descriptografadas. Isso não desativa a cópia para a área de transferência.</string>
     <string name="show_extra_content_pref_title">Exibir conteúdo extra</string>
@@ -236,8 +259,12 @@
     <string name="clear_saved_passphrase_ssh">Limpar a frase secreta salva para chave SSH local</string>
     <string name="clear_saved_passphrase_https">Limpar senha HTTPS salva</string>
     <string name="git_operation_remember_passphrase">Lembrar senha da chave</string>
+    <string name="git_tools">Utilitários</string>
     <string name="abort_rebase">Abortar rebase e realizar push do novo branch</string>
     <string name="reset_to_remote">Hard reset no branch remoto</string>
+    <string name="git_head_on_branch">Na branch %1$s</string>
+    <string name="git_head_detached">HEAD destacada em %1$s</string>
+    <string name="git_head_missing">Impossível localizar o HEAD</string>
     <string name="sdcard_root_warning_title">Raiz do cartão SD selecionada</string>
     <string name="sdcard_root_warning_message">Você selecionou a raiz do seu cartão SD para armazenar. Isto é extremamente perigoso e você perderá seus dados, pois seu conteúdo será eventualmente apagado</string>
     <string name="git_abort_and_push_title">Abortar e executar Push</string>
@@ -251,6 +278,8 @@
     <string name="access_sdcard_text">O local do armazenamento está em seu cartão SD ou armazenamento interno, mas o aplicativo não tem permissão para acessá-lo.</string>
     <string name="your_public_key">Sua chave pública</string>
     <string name="error_generate_ssh_key">Erro ao tentar gerar a chave SSH</string>
+    <string name="pref_show_hidden_title">Mostrar todos os arquivos e pastas</string>
+    <string name="pref_show_hidden_summary">Incluir arquivos sem senha e diretórios na lista de senhas</string>
     <string name="title_create_folder">Criar pasta</string>
     <string name="title_rename_folder">Renomear pasta</string>
     <string name="message_category_error_empty_field">O nome da categoria não pode ser vazio</string>
@@ -272,6 +301,9 @@
     <string name="connection_mode_basic_authentication">Senha</string>
     <string name="git_server_config_save_success">Configuração salva com sucesso</string>
     <string name="git_server_config_save_error">A URL do repositório fornecido não é válida</string>
+    <string name="git_server_config_save_missing_username_https">Por favor, especifique o nome de usuário HTTPS no formulário https://username@example.com/…</string>
+    <string name="git_server_config_save_missing_username_ssh">Por favor, especifique o nome de usuário SSH no formulário@exemplo.com:…</string>
+    <string name="git_server_config_save_auth_mode_mismatch">Modos de autenticação válidos para %1$s: %2$s</string>
     <string name="git_operation_wrong_passphrase">Frase segura incorreta</string>
     <string name="git_operation_wrong_password">Senha incorreta</string>
     <string name="bottom_sheet_create_new_folder">Criar nova pasta</string>
@@ -312,6 +344,8 @@
     <string name="git_push_other_error">O remoto rejeito o push non-fast-foward. Cheque a variável receive.denyNonFastForwards no arquivo de configuração do repositório de destino.</string>
     <string name="git_unknown_host">Host desconhecido: %1$s</string>
     <string name="git_operation_running">Executando operação do git…</string>
+    <string name="git_break_out_of_detached_success">Houve um conflito ao executar o rebase. Houve um push de branch %1$s local para outra branch chamada %2$s\n Use esta branch para resolver o conflito no seu computador</string>
+    <string name="git_break_out_of_detached_unneeded">O repositório não está sendo rebased, não há necessidade de fazer push para outro branch</string>
     <!-- OpenKeychain not installed -->
     <string name="openkeychain_not_installed_title">OpenKeychain não instalado</string>
     <string name="openkeychain_not_installed_message">OpenKeychain é necessário para que o Password Store funcione, por favor, instale-o a partir das lojas abaixo</string>
@@ -325,5 +359,13 @@
     <string name="xkpwgen_extrachars_label">Dígitos/Símbolos (d/s)</string>
     <string name="xk_numbers_symbols_append_default">ds</string>
     <!-- Onboarding flow -->
+    <string name="repository_n_location">Local \ndo repositório</string>
+    <string name="let_s_go">Vamos lá</string>
+    <string name="select_n_repository_type">Selecione \nTipo de Repositório</string>
+    <string name="select_repo_type_text">Selecione se você quer criar um repositório local ou clonar um repositório remoto.</string>
+    <string name="clone_remote_repo">Clonar repositório remoto</string>
+    <string name="create_local_repo">Criar repositório local</string>
     <!-- SSH port validation -->
+    <string name="ssh_scheme_needed_title">URL potencialmente incorreta</string>
+    <string name="ssh_scheme_needed_message">Parece que sua URL contém uma porta personalizada, mas não especifica o esquema ssh://\nIsto pode fazer com que a porta seja considerada uma parte do seu caminho. Pressione OK aqui para corrigir o URL.</string>
 </resources>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -14,6 +15,7 @@
     <string name="dialog_delete">Supprimer le répertoire</string>
     <string name="dialog_do_not_delete">Annuler</string>
     <string name="title_activity_git_clone">Information sur le dépôt Git</string>
+    <string name="title_activity_git_log">Historique des commits</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Clonez ou créez un dépôt suivant avant d\'essayer d\'ajouter un mot de passe ou d\'effectuer une opération de synchronisation.</string>
     <plurals name="delete_dialog_text">
@@ -35,7 +37,7 @@
     <!-- git commits -->
     <string name="git_commit_add_text">Ajout par Android Password Store d\'un mot de passe pour %1$s.</string>
     <string name="git_commit_edit_text">Modification par Android Password Store du mot de passe pour %1$s.</string>
-    <string name="git_commit_remove_text">Retirer %1$s de la mémoire.</string>
+    <string name="git_commit_remove_text">Suppression de %1$s.</string>
     <string name="git_commit_move_text">Renommer %1$sà %2$s. </string>
     <string name="git_commit_move_multiple_text">Déplacement de mots de passe vers %1$s.</string>
     <string name="git_commit_gpg_id">Initialisation des identifiants GPG dans %1$s.</string>
@@ -90,6 +92,8 @@
     <string name="last_changed">Dernière modification le %s</string>
     <!-- Preferences -->
     <string name="pref_repository_title">Dépôt</string>
+    <string name="pref_edit_server_info">Modifier les paramètres du serveur Git</string>
+    <string name="pref_edit_git_config">Configuration locale de Git &amp; utilitaires</string>
     <string name="pref_ssh_title">Importer une clef SSH</string>
     <string name="pref_ssh_keygen_title">Générer une paire de clefs SSH</string>
     <string name="pref_ssh_see_key_title">Voir la clef publique SSH générée</string>
@@ -110,6 +114,7 @@
     <string name="pref_sort_order_title">Ordre de tri des mots de passe</string>
     <string name="pref_folder_first_sort_order">Dossiers en premier</string>
     <string name="pref_file_first_sort_order">Fichiers en premier</string>
+    <string name="pref_type_independent_sort_order">Indifférent au type d\'entrée</string>
     <string name="pref_recently_used_sort_order">Récemment utilisé</string>
     <string name="pref_autofill_title">Saisie automatique</string>
     <string name="pref_autofill_enable_title">Saisie automatique</string>
@@ -162,7 +167,21 @@
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Mot de passe</string>
     <string name="ssh_keygen_generate">Générer</string>
+    <string name="ssh_keygen_share">Partager</string>
+    <string name="ssh_keygen_later">Plus tard</string>
+    <string name="ssh_keygen_message">%1$s\n\nFournissez cette clé publique à votre serveur Git.</string>
     <string name="ssh_key_gen_generating_progress">Génération des clés…</string>
+    <string name="ssh_keygen_require_authentication">Protéger avec les identifiants de verrouillage de l\'écran</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">Ed25519</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 bits)</b>\nAuthentification lente mais prise en charge par tous les serveurs.</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nAuthentification rapide et prise en charge par la plupart des serveurs.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nAuthentification rapide mais prise en charge uniquement par des serveurs récents.</string>
+    <string name="ssh_keygen_existing_title">Clé SSH</string>
+    <string name="ssh_keygen_existing_message">Remplacer la clé SSH existante ? Vous risquez de perdre l\'accès à votre serveur.</string>
+    <string name="ssh_keygen_existing_replace">Remplacer</string>
+    <string name="ssh_keygen_existing_keep">Annuler</string>
     <!-- SSH Android Keystore auth -->
     <!-- Misc -->
     <string name="dialog_ok">Ok</string>
@@ -174,6 +193,7 @@
     <string name="git_pull">Importer du serveur</string>
     <string name="git_push">Pousser sur le serveur</string>
     <string name="git_push_up_to_date">Dépôt à jour</string>
+    <string name="git_log">Afficher l\'historique des commits</string>
     <string name="show_password_pref_title">Montrer le mot de passe</string>
     <string name="show_password_pref_summary">Contrôle la visibilité des mots de passe une fois déchifrées, ceci n\'empêche pas de copier le mot de passe</string>
     <string name="show_extra_content_pref_title">Afficher le contenu supplémentaire</string>
@@ -232,6 +252,8 @@
     <string name="biometric_auth_summary_error">Lecteur d\'empreinte digitale non accessible ou manquant</string>
     <string name="your_public_key">Votre clé publique</string>
     <string name="error_generate_ssh_key">Une erreur est survenue pendant la génération de la clé ssh</string>
+    <string name="pref_show_hidden_title">Afficher tous les fichiers et dossiers</string>
+    <string name="pref_show_hidden_summary">Montrer les fichiers et dossiers autre que des mots de passe dans la liste</string>
     <string name="title_create_folder">Créer un dossier</string>
     <string name="title_rename_folder">Renommer le dossier</string>
     <string name="message_rename_folder">Entrez le chemin pour %1$s</string>
@@ -244,7 +266,11 @@
     <string name="theme_light">Clair</string>
     <string name="theme_dark">Sombre</string>
     <string name="theme_follow_system">Thème système</string>
+    <string name="connection_mode_ssh_key">Clé SSH</string>
     <string name="connection_mode_basic_authentication">Mot de passe</string>
+    <string name="git_server_config_save_error">L\'URL du dépôt fournie n\'est pas valide</string>
+    <string name="git_server_config_save_missing_username_https">Veuillez spécifier le nom d\'utilisateur HTTPS sous la forme https://nom@exemple.com/…</string>
+    <string name="git_server_config_save_missing_username_ssh">Veuillez spécifier le nom d\'utilisateur SSH sous la forme nom@example.com:…</string>
     <string name="git_operation_wrong_password">Mot de passe incorrect</string>
     <string name="bottom_sheet_create_new_folder">Créer un dossier</string>
     <string name="bottom_sheet_create_new_password">Créer un mot de passe</string>
