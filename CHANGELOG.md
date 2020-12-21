@@ -4,10 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.13.2] - 2020-12-20
+
 ### Added
 
 -   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
 -   Suggest users to re-clone repository when it is deemed to be broken
+-   A new browser support level is added for Chrome Canary and Chrome Dev which are shipping fixes developed by Password Store maintainer Fabian to improve the Autofill experience on Chromium browser
+
+### Changed
+
+-   Synced localisations with Crowdin. This adds Galician and Italian translations while getting rid of incomplete Arabic, Chinese Simplified, Chinese Traditional, Czech, Japanese and Spanish.
 
 ### Fixed
 
@@ -400,7 +407,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.1...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.2...HEAD
+
+[1.13.2]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.1...1.13.2
 
 [1.13.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.0...1.13.1
 
