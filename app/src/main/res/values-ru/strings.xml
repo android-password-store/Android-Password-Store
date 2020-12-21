@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -6,7 +7,7 @@
     <plurals name="delete_title">
         <item quantity="one">Выбран %d элемент</item>
         <item quantity="few">Выбрано %d элемента</item>
-        <item quantity="many">Выбрано %d элемента</item>
+        <item quantity="many">Выбрано %d элементов</item>
         <item quantity="other">Выбрано %d элементов</item>
     </plurals>
     <!-- Activity names -->
@@ -16,6 +17,7 @@
     <string name="dialog_delete">Удалить директорию</string>
     <string name="dialog_do_not_delete">Отменить</string>
     <string name="title_activity_git_clone">Информация о репозитории</string>
+    <string name="title_activity_git_log">Журнал изменений</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Пожалуйста, клонируйте или создайте новый репозиторий перед тем, как добавлять пароль или выполнять синхронизацию.</string>
     <plurals name="delete_dialog_text">
@@ -62,6 +64,7 @@
     <string name="passphrase_dialog_text">Пожалуйста, введите пароль от SSH ключа. Оставьте поле пустым, если пароль отсутствует.</string>
     <string name="password_dialog_text">Пожалуйста, введите пароль для репозитория</string>
     <!-- Clone fragment -->
+    <string name="location_dialog_create_text">Выберите, где вы хотите создать хранилище паролей</string>
     <string name="location_sdcard">SD-Карта</string>
     <string name="location_hidden">Скрытый (Предпочтительно)</string>
     <string name="external_repository_dialog_title">Выберете где хранить пароли</string>
@@ -95,6 +98,8 @@
     <string name="last_changed">Последние изменение %s</string>
     <!-- Preferences -->
     <string name="pref_repository_title">Репозиторий</string>
+    <string name="pref_edit_server_info">Изменить настройки сервера Git</string>
+    <string name="pref_edit_git_config">Конфигурация локального Git</string>
     <string name="pref_ssh_title">Импортировать SSH ключ</string>
     <string name="pref_ssh_keygen_title">Сгенерировать пару SSH ключей</string>
     <string name="pref_ssh_see_key_title">Просмотреть публичный SSH ключ</string>
@@ -119,12 +124,6 @@
     <string name="pref_recently_used_sort_order">Недавно использованные</string>
     <string name="pref_autofill_title">Автозаполнение</string>
     <string name="pref_autofill_enable_title">Включить автозаполнение</string>
-    <string name="pref_autofill_apps_title">Настройки приложений и веб сайтов</string>
-    <string name="pref_autofill_default_title">Автоматически сопоставлять по умолчанию</string>
-    <string name="pref_autofill_default_hint">По умолчанию \'Автоматически сопоставлять\' для приложений без пользовательских настроек. В другом случае, \'Никогда не сопоставлять\'</string>
-    <string name="pref_autofill_always_title">Всегда показывать диалоговое окно</string>
-    <string name="pref_autofill_full_path_title">Показать полный путь</string>
-    <string name="pref_autofill_full_path_hint">Показать полный путь к соответствущим файлам паролей</string>
     <string name="pref_misc_title">Другое</string>
     <string name="pref_clear_clipboard_title">Очистить буфер 20 раз</string>
     <string name="pref_clear_clipboard_hint">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
@@ -165,8 +164,25 @@
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Пароль</string>
     <string name="ssh_keygen_generate">Сгенерировать</string>
+    <string name="ssh_keygen_share">Поделиться</string>
+    <string name="ssh_keygen_later">Не сейчас</string>
+    <string name="ssh_keygen_message">%1$s\n\nДобавьте этот публичный ключ на сервер Git.</string>
     <string name="ssh_key_gen_generating_progress">Создание ключей…</string>
+    <string name="ssh_keygen_require_authentication">Использовать настройки блокировки экрана устройства</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">Ed25519</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 бит)</b>\nПоддерживается всеми серверами, но аутентификация является относительно медленной.</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nБыстрая аутентификация, поддерживается большинством современных серверов.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nБыстрая аутентификация, но поддерживается только современными серверами.</string>
+    <string name="ssh_keygen_existing_title">SSH ключ</string>
+    <string name="ssh_keygen_existing_message">Заменить существующий SSH ключ? Вы можете потерять доступ к вашему серверу.</string>
+    <string name="ssh_keygen_existing_replace">Заменить</string>
+    <string name="ssh_keygen_existing_keep">Оставить</string>
     <!-- SSH Android Keystore auth -->
+    <string name="biometric_auth_generic_failure">Ошибка разблокировки экрана устройства</string>
+    <string name="biometric_prompt_title_ssh_auth">Разблокировать SSH ключ</string>
+    <string name="biometric_prompt_title_ssh_keygen">Создать SSH ключ</string>
     <!-- Misc -->
     <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Да</string>
@@ -177,6 +193,7 @@
     <string name="git_pull">Пулл с удаленного сервера</string>
     <string name="git_push">Пуш на удаленный сервер</string>
     <string name="git_push_up_to_date">Все обновлено</string>
+    <string name="git_log">Показать журнал изменений</string>
     <string name="show_password_pref_title">Показывать пароли</string>
     <string name="show_password_pref_summary">Видимость расшифрованных паролей, не влияет на копирование в буфер.</string>
     <string name="show_extra_content_pref_title">Показать дополнительную информацию</string>
@@ -191,10 +208,12 @@
     <string name="oreo_autofill_match_with">Совпадает с %1$s</string>
     <string name="oreo_autofill_matches_clear_existing">Очистить существующие совпадения</string>
     <string name="oreo_autofill_filter_no_results">Не найдено.</string>
+    <string name="oreo_autofill_search_in_store">Искать в хранилище...</string>
     <string name="oreo_autofill_save_internal_error">Сохранение не удалось из-за внутренней ошибки</string>
     <string name="oreo_autofill_save_app_not_supported">Это приложение в настоящее время не поддерживается</string>
     <string name="oreo_autofill_save_passwords_dont_match">Пароли не совпадают</string>
-    <string name="oreo_autofill_fill_otp_from_sms">Извлечение кодов из SMS</string>
+    <string name="oreo_autofill_generate_password">Сгенерировать пароль...</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Извлечение кодов из SMS…</string>
     <string name="oreo_autofill_max_matches_reached">Достигнуто максимальное количество совпадений (%1$d); очистите совпадения перед тем как добавите новые.</string>
     <string name="oreo_autofill_warning_publisher_header">Издатель приложения изменился с тех пор как вы первый раз связали с ним запись хранилища паролей:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>Установленное приложение может попытаться украсть ваши учетные данные, выдавая себя за доверенное приложение</b>\n\nПопробуйте удалить или переустановить  приложение из доверенного источника, такого как Play Store, Amazon Appstore, F-Droid или магазин приложений производителя вашего смартфона.</string>
@@ -203,7 +222,7 @@
     <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Оставить автозаполнение отключенным</string>
     <string name="oreo_autofill_warning_publisher_reenable_button">Включить автозаполнение снова</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Предупреждение</string>
-    <string name="oreo_autofill_warning_publisher_dataset_summary">Нажмите для получения подробностей</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Нажмите для получения подробностей...</string>
     <string name="oreo_autofill_warning_publisher_dataset_title">Возможная попытка фишинга</string>
     <string name="oreo_autofill_general_fill_and_save_support">Заполнить и сохранить учетные данные</string>
     <string name="oreo_autofill_general_fill_support">Заполнить учетные данные</string>
@@ -220,8 +239,12 @@
     <string name="clear_saved_passphrase_ssh">Очистить сохраненную кодовую фразу для локального SSH ключа</string>
     <string name="clear_saved_passphrase_https">Очистить сохраненный пароль HTTPS</string>
     <string name="git_operation_remember_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
+    <string name="git_tools">Утилиты</string>
     <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
     <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
+    <string name="git_head_on_branch">Используется ветка %1$s</string>
+    <string name="git_head_detached">HEAD отсоединён на %1$s</string>
+    <string name="git_head_missing">HEAD не найден</string>
     <string name="sdcard_root_warning_title">Выбран корень SD-Карты</string>
     <string name="sdcard_root_warning_message">Вы выбрали корень вашей sd-карты для хранения. Это очень опасно и вы потеряете ваши данные, поскольку они будут в конечном итоге удалены</string>
     <string name="git_abort_and_push_title">Прервать и записать изменения</string>
@@ -235,6 +258,8 @@
     <string name="access_sdcard_text">Хранилище расположено на вашей SD-карте или во внутреннем хранилище, но у приложения нет разрешения на доступ к нему.</string>
     <string name="your_public_key">Ваш публичный ключ</string>
     <string name="error_generate_ssh_key">Возникла ошибка при попытке генерации ssh ключа</string>
+    <string name="pref_show_hidden_title">Показать все файлы и директории</string>
+    <string name="pref_show_hidden_summary">Отображать пустые файлы и папки</string>
     <string name="title_create_folder">Создать папку</string>
     <string name="title_rename_folder">Переименовать папку</string>
     <string name="message_category_error_empty_field">Название категории не может быть пустым</string>
@@ -256,6 +281,9 @@
     <string name="connection_mode_basic_authentication">Пароль</string>
     <string name="git_server_config_save_success">Конфигурация успешно сохранена</string>
     <string name="git_server_config_save_error">Указанный URL репозитория недействителен</string>
+    <string name="git_server_config_save_missing_username_https">Пожалуйста, укажите имя пользователя (username) в формате https://usrname@example.com/…</string>
+    <string name="git_server_config_save_missing_username_ssh">Пожалуйста, укажите имя пользователя (username) в формате usrname@example.com:…</string>
+    <string name="git_server_config_save_auth_mode_mismatch">Методы аутентификации для %1$s: %2$s</string>
     <string name="git_operation_wrong_passphrase">Неправильная ключевая фраза</string>
     <string name="git_operation_wrong_password">Неверный пароль</string>
     <string name="bottom_sheet_create_new_folder">Новая папка</string>
@@ -296,6 +324,8 @@
     <string name="git_push_other_error">Удаленный репозиторий отклонил запись изменений без быстрой перемотки вперед. Проверьте переменную receive.denyNonFastForwards в файле конфигурации репозитория назначения.</string>
     <string name="git_unknown_host">Неизвестный хост: %1$s</string>
     <string name="git_operation_running">Выполнение операции git…</string>
+    <string name="git_break_out_of_detached_success">При попытке rebase\'а возник конфликт. Ваша локальная ветка %1$s была запушена %2$s\n Используйте эту ветку для разрешения конфликтов с помощью компьютера</string>
+    <string name="git_break_out_of_detached_unneeded">Не нужно пушить в другую ветку - rebase не был запущен</string>
     <!-- OpenKeychain not installed -->
     <string name="openkeychain_not_installed_title">OpenKeychain не установлен</string>
     <string name="openkeychain_not_installed_message">OpenKeychain необходим для работы Password Store, пожалуйста, установите его из магазина приложений ниже</string>
@@ -306,6 +336,16 @@
     <!-- GPG key selection in folder creation -->
     <string name="folder_creation_err_file_exists">Файл с таким именем уже существует</string>
     <string name="folder_creation_err_folder_exists">Папка с таким именем уже существует</string>
+    <string name="xkpwgen_extrachars_label">Цыфры / Символы (d/s)</string>
+    <string name="xk_numbers_symbols_append_default">ds</string>
     <!-- Onboarding flow -->
+    <string name="repository_n_location">Расположение \nрепозитория</string>
+    <string name="let_s_go">Поехали</string>
+    <string name="select_n_repository_type">Выберите \nтип репозитория</string>
+    <string name="select_repo_type_text">Создать локальное хранилище, или клонировать существующее.</string>
+    <string name="clone_remote_repo">Клонировать удаленный репозиторий</string>
+    <string name="create_local_repo">Создать локальное хранилище</string>
     <!-- SSH port validation -->
+    <string name="ssh_scheme_needed_title">Потенциально неправильный URL</string>
+    <string name="ssh_scheme_needed_message">Указание порта в URL будет работать только при использовании SSH (ssh://), иначе порт будет расцениваться как часть URL. Исправить URL?</string>
 </resources>

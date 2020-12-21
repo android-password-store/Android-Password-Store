@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -14,12 +15,15 @@
     <string name="dialog_delete">Ordner löschen</string>
     <string name="dialog_do_not_delete">Abbruch</string>
     <string name="title_activity_git_clone">Repository Informationen</string>
+    <string name="title_activity_git_log">Commit-Log</string>
     <!-- Password Store -->
     <string name="creation_dialog_text">Bitte klone oder erstelle ein neues Repository, bevor du versuchst ein Passwort hinzuzufügen oder jegliche Synchronisation-Operation durchführst.</string>
+    <string name="delete_directory_progress_text">Lösche…</string>
     <string name="move">Verschieben</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
     <string name="change">Ändern</string>
+    <string name="use">Nutze</string>
     <string name="directory_selected_title">Ordner bereits ausgewählt</string>
     <string name="directory_selected_message">Möchtest du \"%1$s\" verwenden?</string>
     <string name="password_exists_title">Passwort existiert bereits!</string>
@@ -29,8 +33,10 @@
     <!-- git commits -->
     <string name="git_commit_add_text">Füge generiertes Passwort für %1$s mittels Android Passwort Store hinzu.</string>
     <string name="git_commit_edit_text">Bearbeite das Passwort für %1$s mittels Android Password Store.</string>
+    <string name="git_commit_remove_text">%1$s aus dem Shop entfernen.</string>
     <string name="git_commit_move_text">Benenne %1$s in %2$s um.</string>
     <string name="git_commit_move_multiple_text">Verschiebe mehrere Passwörter nach %1$s.</string>
+    <string name="git_commit_gpg_id">Initialisiere GPG-IDs in %1$s.</string>
     <!-- PGPHandler -->
     <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
     <string name="clipboard_password_no_clear_toast_text">Passwort wurde in die Zwischenablage kopiert</string>
@@ -50,16 +56,22 @@
     <string name="passphrase_dialog_text">Bitte setze ein Passwort für deinen SSH-Key. Lasse das Feld leer, wenn kein Passwort vergeben werden soll.</string>
     <string name="password_dialog_text">Bitte setze ein Passwort für dieses Repository</string>
     <!-- Clone fragment -->
+    <string name="location_dialog_create_text">Wählen Sie aus, wo Sie Ihr Passwort-Repository erstellen möchten</string>
     <string name="location_sdcard">SD-Karte</string>
     <string name="location_hidden">Versteckt (bevorzugt)</string>
     <string name="external_repository_dialog_title">Wählen Sie, wo die Passwörter gespeichert werden sollen</string>
     <string name="external_repository_dialog_text">Sie müssen ein Verzeichnis auswählen, in dem Ihre Passwörter gespeichert werden sollen. Wenn Sie Ihre Passwörter innerhalb des versteckten Speichers der Anwendung speichern möchten, brechen Sie diesen Dialog ab und deaktivieren Sie die Option \"Externe Repository\".</string>
+    <string name="server_name">Server</string>
+    <string name="server_url">Repository-URL</string>
+    <string name="server_branch">Branch</string>
     <string name="connection_mode">Authentifizierungsmethode</string>
     <!-- Git Config fragment -->
     <string name="git_user_name_hint">Nutzername</string>
+    <string name="git_user_email">E-Mail-Adresse</string>
     <string name="invalid_email_dialog_text">Bitte valide Email eingeben</string>
     <string name="clone_button">Klone!</string>
     <!-- PGP Handler -->
+    <string name="crypto_name_hint">Name</string>
     <string name="crypto_pass_label">Passwort</string>
     <string name="crypto_extra_label">Extra</string>
     <string name="crypto_encrypt_username_label">Benutzername verschlüsseln</string>
@@ -69,6 +81,7 @@
     <!-- DECRYPT Layout -->
     <string name="action_search">Suche</string>
     <string name="password">Passwort:</string>
+    <string name="otp">OTP:</string>
     <string name="extra_content">Weiterer Inhalt:</string>
     <string name="username">Benutzername:</string>
     <string name="edit_password">Passwort bearbeiten</string>
@@ -76,6 +89,9 @@
     <string name="share_as_plaintext">Als Klartext teilen</string>
     <string name="last_changed">Zuletzt geändert %s</string>
     <!-- Preferences -->
+    <string name="pref_repository_title">Repository</string>
+    <string name="pref_edit_server_info">Git-Server Einstellungen</string>
+    <string name="pref_edit_git_config">Lokale Git Konfiguration &amp; Dienstprogramme</string>
     <string name="pref_ssh_title">Importiere SSH-Key</string>
     <string name="pref_ssh_keygen_title">Erstelle SSH-Schlüsselpaar</string>
     <string name="pref_ssh_see_key_title">Zeige erstellten öffentlichen SSH-Key</string>
@@ -83,6 +99,7 @@
     <string name="pref_dialog_delete_title">Repository löschen</string>
     <string name="pref_category_general_title">Allgemein</string>
     <string name="pref_category_title_passwords">Passwörter</string>
+    <string name="pref_clipboard_timeout_title">Timeout für das Kopieren des Passwortes</string>
     <string name="pref_clipboard_timeout_summary">Legen Sie die Zeit (in Sekunden) fest, die das Passwort in der Zwischenablage liegen soll. 0 bedeutet für immer. Aktueller Wert: %1$s</string>
     <string name="pref_copy_title">Kopiere Passwort automatisch</string>
     <string name="pref_copy_dialog_title">Kopiert das Passwort in die Zwischenablage, wenn der Eintrag entschlüsselt wurde.</string>
@@ -97,13 +114,8 @@
     <string name="pref_file_first_sort_order">Dateien zuerst</string>
     <string name="pref_type_independent_sort_order">Typ unabhängig</string>
     <string name="pref_recently_used_sort_order">Zuletzt verwendet</string>
+    <string name="pref_autofill_title">Automatisch ausfüllen</string>
     <string name="pref_autofill_enable_title">Autofill aktivieren</string>
-    <string name="pref_autofill_apps_title">App und Websiten Einstellungen</string>
-    <string name="pref_autofill_default_title">Standardmäßig automatisch abgleichen</string>
-    <string name="pref_autofill_default_hint">Standard auf \'Automatisch abgleichen\' für Apps ohne eine Standardeinstellung, andernfalls \'Niemals abgleichen.\'</string>
-    <string name="pref_autofill_always_title">Zeige den Autofill-Dialog immer</string>
-    <string name="pref_autofill_full_path_title">Zeige vollständigen Pfad</string>
-    <string name="pref_autofill_full_path_hint">Den vollständigen Pfad der passenden Passwortdateien anzeigen</string>
     <string name="pref_misc_title">Verschiedenes</string>
     <string name="pref_clear_clipboard_title">Lösche die Zwischenablage 20-mal</string>
     <string name="pref_clear_clipboard_hint">Speichert Nonsense 20-mal anstatt 1-mal in der Zwischenablage. Nützlich bspw. auf Samsung-Geräten, die den Verlauf der Zwischenablage speichern.</string>
@@ -113,9 +125,11 @@
     <string name="pref_select_external_repository">Wähle ein externes Repository</string>
     <string name="prefs_export_passwords_title">Passwörter exportieren</string>
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
+    <string name="prefs_version">Version</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Passwort generieren</string>
     <string name="pwgen_generate">Generieren</string>
+    <string name="pwgen_include">Einschließen</string>
     <string name="pwgen_length">Länge</string>
     <string name="pwgen_numerals">Nummern</string>
     <string name="pwgen_symbols">Symbole</string>
@@ -123,23 +137,46 @@
     <string name="pwgen_lowercase">Kleinbuchstaben</string>
     <string name="pwgen_ambiguous">Zweideutig</string>
     <string name="pwgen_pronounceable">Aussprechbar</string>
+    <string name="pwgen_no_chars_error">Keine Zeichen hinzugefügt</string>
     <string name="pwgen_length_too_short_error">Länge zu kurz für ausgewählte Kriterien</string>
     <string name="pwgen_max_iterations_exceeded">Fehler beim Generieren eines Passworts, das die Einschränkungen erfüllt. Versuchen Sie, die Länge zu erhöhen.</string>
     <!-- XKPWD password generator -->
+    <string name="xkpwgen_title">Xkpasswd Generator</string>
+    <string name="xkpwgen_length">Wörter insgesamt</string>
     <string name="xkpwgen_separator">Trennzeichen</string>
     <string name="xkpwgen_custom_dict_imported">Eigene Wortliste: %1$s</string>
     <string name="xkpwgen_builder_error">Das ausgewählte Wörterbuch enthält nicht genügend Wörter der angegebenen Länge %1$d..%2$d</string>
     <!-- XKPWD prefs -->
+    <string name="xkpwgen_pref_gentype_title">Passwortgenerator</string>
     <string name="xkpwgen_pref_custom_dict_title">Eigene Wortliste</string>
+    <string name="xkpwgen_pref_custom_dict_summary_on">Eigene Wordlist-Datei verwenden</string>
     <string name="xkpwgen_pref_custom_dict_summary_off">Integrierte Wortliste verwenden</string>
     <string name="xkpwgen_pref_custom_dict_picker_title">Eigene Wortliste</string>
     <string name="xkpwgen_pref_custom_dict_picker_summary">Tippen Sie, um eine benutzerdefinierte Wordlist-Datei mit einem Wort pro Zeile auszuwählen</string>
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Passwort</string>
     <string name="ssh_keygen_generate">Generieren</string>
+    <string name="ssh_keygen_share">Teilen</string>
+    <string name="ssh_keygen_later">Später</string>
+    <string name="ssh_keygen_message">%1$s\n\nFüge den Public-Key zu Deinem Git-Server hinzu.</string>
     <string name="ssh_key_gen_generating_progress">Schlüssel werden generiert…</string>
+    <string name="ssh_keygen_require_authentication">Mit Anmeldedaten für Bildschirmsperre schützen</string>
+    <string name="ssh_keygen_label_rsa">RSA</string>
+    <string name="ssh_keygen_label_ecdsa">ECDSA</string>
+    <string name="ssh_keygen_label_ed25519">Ed25519</string>
+    <string name="ssh_keygen_explanation_rsa"><b>RSA (3072 Bit)</b>\nWird von allen Servern unterstützt, allerdings ist die Authentifizierung recht langsam.</string>
+    <string name="ssh_keygen_explanation_ecdsa"><b>ECDSA (NIST P-256)</b>\nSchnelle Authentifizierung und unterstützt von den meisten Servern, die noch Updates erhalten.</string>
+    <string name="ssh_keygen_explanation_ed25519"><b>Ed25519</b>\nSchnelle Authentifizierung, aber nur von eher modernen Servern unterstützt.</string>
+    <string name="ssh_keygen_existing_title">SSH-Schlüssel</string>
+    <string name="ssh_keygen_existing_message">Existierenden SSH-Schlüssel ersetzen? Möglicherweise verlieren Sie den Zugriff auf Ihren Server.</string>
+    <string name="ssh_keygen_existing_replace">Ersetzen</string>
+    <string name="ssh_keygen_existing_keep">Behalten</string>
     <!-- SSH Android Keystore auth -->
+    <string name="biometric_auth_generic_failure">Authentifizierung der Bildschirmsperre fehlgeschlagen</string>
+    <string name="biometric_prompt_title_ssh_auth">SSH-Schlüssel freischalten</string>
+    <string name="biometric_prompt_title_ssh_keygen">SSH-Schlüssel generieren</string>
     <!-- Misc -->
+    <string name="dialog_ok">OK</string>
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nein</string>
     <string name="dialog_cancel">Abbruch</string>
@@ -147,6 +184,8 @@
     <string name="git_sync">Synchronisiere Repository</string>
     <string name="git_pull">Git Pull</string>
     <string name="git_push">Git Push</string>
+    <string name="git_push_up_to_date">Alles aktuell</string>
+    <string name="git_log">Commit-Log anzeigen</string>
     <string name="show_password_pref_title">Zeige das Password</string>
     <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
     <string name="show_extra_content_pref_title">Zeige weiteren Inhalt</string>
@@ -157,21 +196,46 @@
     <string name="send_plaintext_password_to">Passwort unverschlüsselt senden an…</string>
     <string name="app_icon_hint">App Icon</string>
     <!-- Oreo Autofill -->
-    <string name="oreo_autofill_select_and_fill_into">Eintrag auswählen für Autofill in</string>
     <string name="oreo_autofill_strict_domain_search">Phishing-resistente Suche</string>
+    <string name="oreo_autofill_match_with">Übereinstimmung mit %1$s</string>
+    <string name="oreo_autofill_matches_clear_existing">Bestehende Übereinstimmungen löschen</string>
     <string name="oreo_autofill_filter_no_results">Keine Ergebnisse.</string>
+    <string name="oreo_autofill_search_in_store">Suche im Shop…</string>
     <string name="oreo_autofill_save_internal_error">Speichern aufgrund eines internen Fehlers fehlgeschlagen</string>
     <string name="oreo_autofill_save_app_not_supported">Diese App wird derzeit nicht unterstützt</string>
     <string name="oreo_autofill_save_passwords_dont_match">Die Passwörter stimmen nicht überein</string>
-    <string name="oreo_autofill_generate_password">Eintrag erstellen</string>
-    <string name="oreo_autofill_search_in_store">Eintrag suchen</string>
-    <string name="oreo_autofill_fill_otp_from_sms">Code aus SMS einfügen</string>
+    <string name="oreo_autofill_generate_password">Passwort generieren…</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Code aus SMS extrahieren…</string>
+    <string name="oreo_autofill_max_matches_reached">Maximale Anzahl an Übereinstimmungen (%1$d) erreicht; Lösche Übereinstimmungen, bevor neue hinzugefügt werden.</string>
+    <string name="oreo_autofill_warning_publisher_header">Der Hersteller dieser App hat sich geändert, seit Sie einen Eintrag zum Passwort-Shop mit ihm verknüpft haben:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>Die derzeit installierte App versucht, Ihre Anmeldeinformationen zu stehlen, indem sie vorgibt, eine vertrauenswürdige App zu sein.</b>\n\nVersuchen Sie die App zu deinstallieren und installieren Sie sie erneut aus einer vertrauenswürdigen Quelle wie dem Play Store, Amazon Appstore, F-Droid oder dem Shop Ihres Telefonherstellers.</string>
     <string name="oreo_autofill_warning_publisher_install_time">Installiert: %1$s</string>
+    <string name="oreo_autofill_warning_publisher_advanced_info_button">Erweiterte Informationen</string>
+    <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Autofill deaktiviert lassen</string>
+    <string name="oreo_autofill_warning_publisher_reenable_button">Autofill erneut aktivieren</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Warnung</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Für Details antippen…</string>
+    <string name="oreo_autofill_warning_publisher_dataset_title">Mögliche Phishing-Versuche</string>
+    <string name="oreo_autofill_general_fill_and_save_support">Anmeldedaten ausfüllen und speichern</string>
+    <string name="oreo_autofill_general_fill_support">Anmeldedaten ausfüllen</string>
+    <string name="oreo_autofill_password_fill_support">Passwörter ausfüllen</string>
+    <string name="oreo_autofill_flaky_fill_support">Passwörter ausfüllen (kann manchmal sein, dass Sie den Browser neu starten müssen)</string>
+    <string name="oreo_autofill_no_support">Kein Support</string>
+    <string name="oreo_autofill_preference_directory_structure">Passwort-Datei-Organisation</string>
+    <string name="oreo_autofill_enable_dialog_description">Password Store kann das Ausfüllen von Anmeldeformularen und sogar das Speichern von Anmeldedaten in Apps oder auf Webseiten übernehmen.</string>
+    <string name="oreo_autofill_enable_dialog_instructions">Um diese Funktion zu aktivieren, tippen Sie auf OK, um zu Autofill-Einstellungen zu gelangen. Dort wählen Sie \"Passwortd Store\" aus der Liste und bestätigen Sie die Bestätigungsaufforderung mit \"OK\".</string>
+    <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill-Unterstützung mit installierten Browsern:</string>
     <!-- Autofill -->
     <string name="ssh_key_does_not_exist">Der private SSH-Schlüssel konnte nicht geöffnet werden. Bitte überprüfen Sie, ob die Datei existiert</string>
     <string name="new_password_title">Neues Passwort</string>
+    <string name="clear_saved_passphrase_ssh">Gespeicherte Passphrase für lokalen SSH-Schlüssel löschen</string>
+    <string name="clear_saved_passphrase_https">Gespeichertes HTTPS-Passwort löschen</string>
+    <string name="git_operation_remember_passphrase">Schlüsselpasswort merken</string>
+    <string name="git_head_missing">Kann HEAD nicht lokalisieren</string>
+    <string name="sdcard_root_warning_title">Wurzelverzeichnis der SD-Karte ausgewählt</string>
+    <string name="sdcard_root_warning_message">Sie haben das Wurzelverzeichnis der SD-Karte als Speicherort gewählt. Das ist sehr gefährlich, da der Inhalt letztendlich gelöscht wird</string>
+    <string name="git_abort_and_push_title">Abbrechen und hochladen</string>
+    <string name="biometric_prompt_title">Biometrische Abfrage</string>
     <string name="biometric_auth_error">Authentifizierungsfehler</string>
     <string name="biometric_auth_error_reason">Authentifizierungsfehler: %s</string>
     <string name="biometric_auth_title">Biometrische Authentifizierung aktivieren</string>
@@ -181,30 +245,81 @@
     <string name="access_sdcard_text">Der Speicherort befindet sich in Ihrer SD-Karte oder im internen Speicher, aber die App hat nicht die Berechtigung, darauf zuzugreifen.</string>
     <string name="your_public_key">Ihr öffentlicher Schlüssel</string>
     <string name="error_generate_ssh_key">Fehler beim Generieren des SSH-Schlüssels</string>
+    <string name="pref_show_hidden_title">Dateien und Ordner anzeigen</string>
+    <string name="pref_show_hidden_summary">Nicht-Passwort Dateien und Ordner in der Passwortliste mit einbeziehen</string>
     <string name="title_create_folder">Ordner erstellen</string>
     <string name="title_rename_folder">Ordner umbenennen</string>
+    <string name="message_category_error_empty_field">Der Name der Kategorie darf nicht leer sein</string>
+    <string name="message_category_error_category_exists">Der Kategoriename existiert bereits</string>
+    <string name="message_error_destination_outside_repo">Ziel muss innerhalb des repository sein</string>
+    <string name="message_rename_folder">Ziel für %1$s angeben</string>
+    <string name="button_create">Erstellen</string>
     <string name="pref_search_on_start">Suchfeld beim Start öffnen</string>
     <string name="pref_search_on_start_hint">Suchleiste beim Start der App anzeigen</string>
+    <string name="password_generator_category_title">Passwort Generator</string>
     <string name="tap_clear_clipboard">Hier tippen, um die Zwischenablage zu löschen</string>
+    <string name="clone_git_repo">Das Repository muss geklont werden, bevor Änderungen synchronisert werden können.</string>
+    <string name="theme_title">App Farbthema</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_battery_saver">Durch Energiesparmodus gesetzt</string>
+    <string name="theme_follow_system">Systemstandard</string>
     <string name="connection_mode_ssh_key">SSH-Schlüssel</string>
     <string name="connection_mode_basic_authentication">Passwort</string>
     <string name="git_server_config_save_success">Konfiguration erfolgreich gespeichert</string>
+    <string name="git_server_config_save_error">Die angegebene Repository URL ist ungültig</string>
+    <string name="git_server_config_save_missing_username_https">Bitte geben Sie den HTTPS Benutzernamen in der Form https://username@example.com/… an</string>
+    <string name="git_server_config_save_missing_username_ssh">Bitte geben Sie den SSH Benutzernamen in der Form username@example.com:… an</string>
+    <string name="git_server_config_save_auth_mode_mismatch">Gültige Authentifizierungsarten für %1$s: %2$s</string>
     <string name="git_operation_wrong_passphrase">Falsches Kennwort</string>
     <string name="git_operation_wrong_password">Falsches Passwort</string>
+    <string name="bottom_sheet_create_new_folder">Neuen Ordner erstellen</string>
+    <string name="bottom_sheet_create_new_password">Neues Passwort erstellen</string>
+    <string name="pref_debug_logging_summary">Debug logging aktivieren (Erfordert Neustart der App)</string>
+    <string name="pref_debug_logging_title">Debug logging</string>
+    <string name="preference_default_username_summary">Wenn Autofill den Benutzernamen nicht aus der Passwortdatei oder dem Ordner herleiten kann, wird der hier festgelegte Wert verwendet</string>
+    <string name="preference_default_username_title">Standard Benutzername</string>
+    <string name="git_operation_remember_password">Passwort merken</string>
+    <string name="git_operation_hint_password">Passwort</string>
+    <string name="preference_custom_public_suffixes_title">Benutzerdefinierte Domains</string>
+    <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
     <!-- OpenKeychain errors -->
+    <string name="openpgp_error_wrong_passphrase">Falsches Passwort</string>
+    <string name="openpgp_error_no_user_ids">Kein passender PGP Schlüssel gefunden</string>
+    <string name="openpgp_error_unknown">Fehler von OpenKeyChain : %s</string>
     <!-- Password creation failure -->
+    <string name="password_creation_file_fail_title">Fehler</string>
+    <string name="password_creation_file_write_fail_message">Fehler beim Speichern der Passwortdatei auf dem Speicher, bitte versuchen Sie es erneut.</string>
+    <string name="password_creation_file_delete_fail_message">Fehler beim Löschen der Passwortdatei %1$s vom Speicher, bitte löschen Sie die Datei von Hand.</string>
+    <string name="password_creation_duplicate_error">Datei existiert bereits, bitte benutzen Sie einen anderen Dateinamen</string>
+    <string name="add_otp">OTP hinzufügen</string>
     <string name="otp_import_success">TOTP-Konfiguration erfolgreich importiert</string>
     <string name="otp_import_failure">Import der TOTP-Konfiguration fehlgeschlagen</string>
     <string name="exporting_passwords">Exportiere Passwörter…</string>
     <string name="invalid_gpg_id">.gpg-id gefunden, enthält aber eine ungültige Schlüssel-ID, Fingerabdruck oder Benutzer-ID</string>
     <string name="short_key_ids_unsupported">Eine Schlüssel-ID in .gpg-id ist zu kurz, bitte verwenden Sie entweder lange Schlüssel-IDs (16 Zeichen) oder Fingerabdrücke (40 Zeichen)</string>
+    <string name="directory_hint">Ordner</string>
+    <string name="new_folder_set_gpg_key">GPG Schlüssel für Ordner festlegen</string>
     <!-- GitException messages -->
     <string name="git_unknown_error">Unbekannter Fehler</string>
+    <string name="git_unknown_host">Unbekannter Host: %1$s</string>
     <!-- OpenKeychain not installed -->
     <string name="openkeychain_not_installed_title">OpenKeychain nicht installiert</string>
+    <string name="openkeychain_not_installed_message">OpenKeychain wird für Password Store benötigt, bitte installieren Sie es von einem der unten aufgeführten Stores</string>
+    <string name="openkeychain_not_installed_google_play">Google Play</string>
+    <string name="play_deeplink_template">https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="openkeychain_not_installed_fdroid">F-Droid</string>
+    <string name="fdroid_deeplink_template">https://f-droid.org/en/packages/%1$s/</string>
     <!-- GPG key selection in folder creation -->
     <string name="folder_creation_err_file_exists">Dateiname bereits vergeben</string>
     <string name="folder_creation_err_folder_exists">Ein Ordner mit diesem Namen existiert bereits</string>
     <!-- Onboarding flow -->
+    <string name="let_s_go">Los geht\'s</string>
+    <string name="select_n_repository_type">Wähle\nRepository Art</string>
+    <string name="select_repo_type_text">Wählen Sie aus, ob sie ein lokales Repository, oder ein remote Repository anlegen möchten.</string>
+    <string name="clone_remote_repo">Remote Repository klonen</string>
+    <string name="create_local_repo">Lokales Repository anlegen</string>
     <!-- SSH port validation -->
+    <string name="ssh_scheme_needed_title">Möglicherweise inkorrekte URL</string>
+    <string name="ssh_scheme_needed_message">Es sieht so aus, als ob Sie einen benutzerdefinierten Port in Ihrer URL angegeben haben, aber nicht in dem ssh://-Schema.\nDas kann dazu führen, dass Ihr Port als Teil des Pfades betrachtet wird. Drücken Sie hier auf OK um die URL zu korrigieren.</string>
 </resources>
