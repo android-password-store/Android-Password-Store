@@ -1,4 +1,4 @@
-on: [pull_request_target]
+on: [pull_request]
 
 name: Check pull request
 jobs:
@@ -9,8 +9,8 @@ jobs:
         api-level: [23, 29]
     steps:
 
-    - name: Auto-cancel redundant workflow run
-      uses: technote-space/auto-cancel-redundant-workflow@f9dfa1c127a520e4d71b92892850f861fb861206
+    #- name: Auto-cancel redundant workflow run
+    #  uses: technote-space/auto-cancel-redundant-workflow@f9dfa1c127a520e4d71b92892850f861fb861206
 
     - name: Check if relevant files have changed
       uses: actions/github-script@626af12fe9a53dc2972b48385e7fe7dec79145c9
@@ -31,8 +31,8 @@ jobs:
     - name: Checkout repository
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-      with:
-        ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      #with:
+      #  ref: refs/pull/${{ github.event.pull_request.number }}/merge
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
