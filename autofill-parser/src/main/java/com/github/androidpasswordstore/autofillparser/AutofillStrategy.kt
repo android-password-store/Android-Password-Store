@@ -187,6 +187,26 @@ internal val autofillStrategy = strategy {
         }
     }
 
+    // Fallback rule for the case of a login form with a password field and other fields that are
+    // not recognized by any other rule. If one of the other fields is focused and we return no
+    // response, the system will not invoke the service again if focus later changes to the password
+    // field. Hence, we must mark it as fillable now.
+    // This rule can apply in single origin mode since even though the password field may not be
+    // focused at the time the rule runs, the fill suggestion will only show if it ever receives
+    // focus.
+    rule(applyInSingleOriginMode = true) {
+        currentPassword {
+            takeSingle { hasAutocompleteHintCurrentPassword }
+        }
+    }
+
+    // See above.
+    rule(applyInSingleOriginMode = true) {
+        genericPassword {
+            takeSingle { true }
+        }
+    }
+
     // Match any focused password field with optional username field on manual request.
     rule(applyInSingleOriginMode = true, applyOnManualRequestOnly = true) {
         genericPassword {
