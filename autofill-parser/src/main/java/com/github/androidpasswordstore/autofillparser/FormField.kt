@@ -114,6 +114,7 @@ internal class FormField(
         )
         private val USERNAME_HEURISTIC_TERMS = listOf(
             "alias",
+            "benutzername",
             "e-mail",
             "email",
             "login",
