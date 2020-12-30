@@ -44,9 +44,11 @@ class CrowdinDownloadPlugin : Plugin<Project> {
                     setDependsOn(setOf("extractCrowdin"))
                     from("$buildDir/translations/${project.name}/src/main/res")
                     into("${projectDir}/src/main/res")
-                    doLast {
-                        File("${buildDir}/translations").deleteRecursively()
-                        File("${buildDir}/translations.zip").delete()
+                    if (!extension.skipCleanup) {
+                        doLast {
+                            File("${buildDir}/translations").deleteRecursively()
+                            File("${buildDir}/translations.zip").delete()
+                        }
                     }
                 }
             }

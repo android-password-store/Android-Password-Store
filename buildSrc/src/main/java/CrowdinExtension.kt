@@ -9,4 +9,11 @@ open class CrowdinExtension {
      * Configure the project name on Crowdin
      */
     open var projectName = ""
+
+    /**
+     * Don't delete downloaded and extracted translation archives from build directory.
+     *
+     * Useful for debugging.
+     */
+    open var skipCleanup = false
 }
