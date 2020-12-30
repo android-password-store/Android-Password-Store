@@ -84,10 +84,10 @@
     <string name="crypto_save_and_copy">Gardar e copiar</string>
     <!-- DECRYPT Layout -->
     <string name="action_search">Buscar</string>
-    <string name="password">Contrasinal:</string>
-    <string name="otp">OTP:</string>
+    <string name="password">Contrasinal</string>
+    <string name="otp">OTP</string>
     <string name="extra_content">Contido extra:</string>
-    <string name="username">Nome de usuaria:</string>
+    <string name="username">Nome de usuaria</string>
     <string name="edit_password">Editar contrasinal</string>
     <string name="copy_password">Copiar contrasinal</string>
     <string name="share_as_plaintext">Compartir como texto plano</string>
@@ -200,16 +200,17 @@
     <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando...</string>
     <string name="app_icon_hint">Icona da app</string>
     <!-- Oreo Autofill -->
+    <string name="oreo_autofill_select_and_fill_into">Elixe o elemento a completar</string>
     <string name="oreo_autofill_strict_domain_search">Busca resistente ó phishing</string>
     <string name="oreo_autofill_match_with">Coincidencia con %1$s</string>
     <string name="oreo_autofill_matches_clear_existing">Baleirar coincidencias existentes</string>
     <string name="oreo_autofill_filter_no_results">Sen resultados.</string>
-    <string name="oreo_autofill_search_in_store">Buscar no almacenaxe...</string>
+    <string name="oreo_autofill_search_in_store">Buscar elemento</string>
     <string name="oreo_autofill_save_internal_error">Non se puido gardar por un fallo interno</string>
     <string name="oreo_autofill_save_app_not_supported">Esta app non está soportada actualmente</string>
     <string name="oreo_autofill_save_passwords_dont_match">Non concordan os contrasinais</string>
-    <string name="oreo_autofill_generate_password">Crear contrasinal...</string>
-    <string name="oreo_autofill_fill_otp_from_sms">Extraer código do SMS…</string>
+    <string name="oreo_autofill_generate_password">Crear elemento</string>
+    <string name="oreo_autofill_fill_otp_from_sms">Extraer código do SMS</string>
     <string name="oreo_autofill_max_matches_reached">Acadouse o máximo número de coincidencias (%1$d); eliminar as coincidencias antes de engadir máis.</string>
     <string name="oreo_autofill_warning_publisher_header">A autoría desta app cambiou desde que rexistraches a entrada Password Store con ela:</string>
     <string name="oreo_autofill_warning_publisher_footer"><b>A aplicación actualmente instalada podería intentar roubar as túas credenciais pretendendo ser unha app de confianza.</b>\n\nIntenta desinstalar e reinstalar
@@ -219,7 +220,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="oreo_autofill_warning_publisher_changed_disable_autofill_button">Manter desactivado o autocompletado</string>
     <string name="oreo_autofill_warning_publisher_reenable_button">Reactivar autocompletado</string>
     <string name="oreo_autofill_warning_publisher_warning_sign_description">Aviso</string>
-    <string name="oreo_autofill_warning_publisher_dataset_summary">Toca para detalles...</string>
+    <string name="oreo_autofill_warning_publisher_dataset_summary">Toca para ver detalles</string>
     <string name="oreo_autofill_warning_publisher_dataset_title">Posible intento de phishing</string>
     <string name="oreo_autofill_general_fill_and_save_support">Completar e gardar credenciais</string>
     <string name="oreo_autofill_general_fill_support">Completar credenciais</string>
@@ -342,7 +343,20 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="select_repo_type_text">Escolle se queres crear un repositorio local ou clonar un remoto.</string>
     <string name="clone_remote_repo">Clonar repositorio remoto</string>
     <string name="create_local_repo">Crear repositorio local</string>
+    <string name="select_gpg_key_title">Elixe\nChave\nGPG</string>
+    <string name="select_gpg_key_message">Elixe a chave GPG coa que queres iniciar a almacenaxe</string>
+    <string name="gpg_key_select">Elixe chave</string>
     <!-- SSH port validation -->
     <string name="ssh_scheme_needed_title">URL potencialmente incorrecto</string>
     <string name="ssh_scheme_needed_message">Semella que o teu URL contén un porto personalizado, pero non indica o esquema ssh://.\nEsto pode facer que o porto sexa considerado parte do enderezo. Preme aquí en OK para arranxalo URL.</string>
+    <string name="https_scheme_with_port_title">URL HTTPS con porto personalizado</string>
+    <string name="https_scheme_with_port_message">Semella que estar a usar un URL HTTPS cun porto personalizado. Esta función non está soportada, e causará problemas futuros. Preme OK para eliminar o porto do URL.</string>
+    <!-- Proxy configuration activity -->
+    <string name="proxy_hostname">Servidor proxy</string>
+    <string name="port">Porto</string>
+    <string name="pref_proxy_settings">Axustes do proxy HTTP(S)</string>
+    <string name="invalid_proxy_url">URL non válido</string>
+    <string name="oreo_autofill_password_fill_and_conditional_save_support">Completa e garda contrasinais (gardar require que os servizos de accesibilidade non estén activados)</string>
+    <string name="clear_saved_host_key">Eliminar chave do host gardada</string>
+    <string name="clear_saved_host_key_success">Eliminouse correctamente a chave gardada do host!</string>
 </resources>

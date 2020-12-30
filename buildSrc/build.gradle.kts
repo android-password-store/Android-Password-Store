@@ -21,6 +21,10 @@ gradlePlugin {
             id = "aps-plugin"
             implementationClass = "PasswordStorePlugin"
         }
+        register("crowdin") {
+            id = "crowdin-plugin"
+            implementationClass = "CrowdinDownloadPlugin"
+        }
     }
 }
 
@@ -28,4 +32,5 @@ dependencies {
     implementation(build.getValue("kotlinGradlePlugin"))
     implementation(build.getValue("androidGradlePlugin"))
     implementation(build.getValue("binaryCompatibilityValidator"))
+    implementation(build.getValue("downloadTaskPlugin"))
 }
