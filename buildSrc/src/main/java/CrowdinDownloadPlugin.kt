@@ -49,14 +49,24 @@ class CrowdinDownloadPlugin : Plugin<Project> {
                     from("$buildDir/translations/") {
                         exclude("app/")
                     }
-                    into("${projectDir}/src/nonFree/res")
+                    into("$buildDir/nonFree-translations")
+                    doLast {
+                        File("$buildDir/nonFree-translations")
+                            .listFiles { file: File -> file.isDirectory }?.forEach { file ->
+                                val dest = File("${projectDir}/src/nonFree/values-${file.name}")
+                                val src = File(file, "app/src/nonFree/res/values/strings.xml")
+                                dest.mkdirs()
+                                src.renameTo(File(dest, "strings.xml"))
+                            }
+                    }
                 }
                 tasks.register("crowdin") {
                     setDependsOn(setOf("extractBaseStrings", "extractNonFreeStrings"))
                     if (!extension.skipCleanup) {
                         doLast {
-                            File("${buildDir}/translations").deleteRecursively()
-                            File("${buildDir}/translations.zip").delete()
+                            File("$buildDir/translations").deleteRecursively()
+                            File("$buildDir/nonFree-translations").deleteRecursively()
+                            File("$buildDir/translations.zip").delete()
                         }
                     }
                 }
