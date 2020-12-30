@@ -39,11 +39,20 @@ class CrowdinDownloadPlugin : Plugin<Project> {
                     from(zipTree("$buildDir/translations.zip"))
                     into("$buildDir/translations")
                 }
-
-                tasks.register<Copy>("crowdin") {
+                tasks.register<Copy>("extractBaseStrings") {
                     setDependsOn(setOf("extractCrowdin"))
                     from("$buildDir/translations/${project.name}/src/main/res")
                     into("${projectDir}/src/main/res")
+                }
+                tasks.register<Copy>("extractNonFreeStrings") {
+                    setDependsOn(setOf("extractCrowdin"))
+                    from("$buildDir/translations/") {
+                        exclude("app/")
+                    }
+                    into("${projectDir}/src/nonFree/res")
+                }
+                tasks.register("crowdin") {
+                    setDependsOn(setOf("extractBaseStrings", "extractNonFreeStrings"))
                     if (!extension.skipCleanup) {
                         doLast {
                             File("${buildDir}/translations").deleteRecursively()
