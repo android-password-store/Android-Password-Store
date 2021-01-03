@@ -134,15 +134,15 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
                     addDataset(it)
                 }
             }
-            makeSearchDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
-                datasetCount++
-                addDataset(it)
-            }
             makeGenerateDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
                 datasetCount++
                 addDataset(it)
             }
             makeFillOtpFromSmsDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
+                datasetCount++
+                addDataset(it)
+            }
+            makeSearchDataset(context, imeSpecs.getOrNull(datasetCount))?.let {
                 datasetCount++
                 addDataset(it)
             }

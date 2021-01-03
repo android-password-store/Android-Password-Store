@@ -137,15 +137,15 @@ class AutofillResponseBuilder(form: FillableForm) {
                     addDataset(it)
                 }
             }
-            makeSearchDataset(context)?.let {
-                datasetCount++
-                addDataset(it)
-            }
             makeGenerateDataset(context)?.let {
                 datasetCount++
                 addDataset(it)
             }
             makeFillOtpFromSmsDataset(context)?.let {
+                datasetCount++
+                addDataset(it)
+            }
+            makeSearchDataset(context)?.let {
                 datasetCount++
                 addDataset(it)
             }
