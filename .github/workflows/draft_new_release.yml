@@ -28,7 +28,7 @@ jobs:
           git config user.email noreply@github.com
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@ce699aa2d108e9d04fde047a71e44b2bf444b6dc
+        uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
         with:
           author: GitHub Actions <noreply@github.com>
           base: release

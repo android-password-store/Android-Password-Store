@@ -17,7 +17,7 @@ jobs:
         run: if [[ $(git diff --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@c7f493a8000b8aeb17a1332e326ba76b57cb83eb
+        uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
         if: env.UPDATED == 'true'
         with:
           assignees: msfjarvis
