@@ -11,4 +11,7 @@
     <dimen name="normal_margin">8dp</dimen>
     <dimen name="bottom_sheet_item_height">56dp</dimen>
     <dimen name="toggle_group_text_size">14sp</dimen>
+    <dimen name="onboarding_icon_margin_top">100dp</dimen>
+    <dimen name="onboarding_button_margin_top">140dp</dimen>
+    <dimen name="onboarding_desc_margin_top">48dp</dimen>
 </resources>
