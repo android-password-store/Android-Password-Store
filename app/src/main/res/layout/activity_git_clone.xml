@@ -33,7 +33,8 @@
             android:id="@+id/label_server_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:hint="@string/server_url"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +54,8 @@
             android:id="@+id/label_server_branch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:hint="@string/server_branch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,9 +85,11 @@
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/auth_mode_group"
             style="@style/TextAppearance.MaterialComponents.Headline1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
             app:singleSelection="true">
@@ -95,21 +99,33 @@
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/connection_mode_ssh_key" />
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:padding="8dp"
+                android:text="@string/connection_mode_ssh_key"
+                android:textSize="@dimen/toggle_group_text_size" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/auth_mode_password"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/connection_mode_basic_authentication" />
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:padding="8dp"
+                android:text="@string/connection_mode_basic_authentication"
+                android:textSize="@dimen/toggle_group_text_size" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/auth_mode_open_keychain"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/connection_mode_openkeychain" />
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:padding="8dp"
+                android:text="@string/connection_mode_openkeychain"
+                android:textSize="@dimen/toggle_group_text_size" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.button.MaterialButton
