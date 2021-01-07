@@ -10,4 +10,5 @@
     <dimen name="fab_compat_margin">16dp</dimen>
     <dimen name="normal_margin">8dp</dimen>
     <dimen name="bottom_sheet_item_height">56dp</dimen>
+    <dimen name="toggle_group_text_size">14sp</dimen>
 </resources>
