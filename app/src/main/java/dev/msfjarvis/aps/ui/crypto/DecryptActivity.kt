@@ -60,6 +60,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         bindToOpenKeychain(this)
         title = name
         with(binding) {
@@ -100,8 +101,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             R.id.edit_password -> editPassword()
             R.id.share_password_as_plaintext -> shareAsPlaintext()
             R.id.copy_password -> copyPasswordToClipboard(passwordEntry?.password)
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onBound(service: IOpenPgpService2) {

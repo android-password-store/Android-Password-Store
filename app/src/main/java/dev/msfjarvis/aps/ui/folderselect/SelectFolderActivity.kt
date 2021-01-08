@@ -47,12 +47,12 @@ class SelectFolderActivity : AppCompatActivity(R.layout.select_folder_layout) {
         when (item.itemId) {
             android.R.id.home -> {
                 setResult(RESULT_CANCELED)
-                finish()
-                return true
+                onBackPressed()
             }
             R.id.crypto_select -> selectFolder()
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     private fun selectFolder() {

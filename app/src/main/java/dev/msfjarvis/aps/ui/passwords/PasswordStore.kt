@@ -292,9 +292,6 @@ class PasswordStore : BaseGitActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val initBefore = MaterialAlertDialogBuilder(this)
@@ -307,41 +304,33 @@ class PasswordStore : BaseGitActivity() {
                 }.onFailure { e ->
                     e.printStackTrace()
                 }
-                return true
             }
             R.id.git_push -> {
                 if (!PasswordRepository.isInitialized) {
                     initBefore.show()
-                    return false
+                } else {
+                    runGitOperation(GitOp.PUSH)
                 }
-                runGitOperation(GitOp.PUSH)
-                return true
             }
             R.id.git_pull -> {
                 if (!PasswordRepository.isInitialized) {
                     initBefore.show()
-                    return false
+                } else {
+                    runGitOperation(GitOp.PULL)
                 }
-                runGitOperation(GitOp.PULL)
-                return true
             }
             R.id.git_sync -> {
                 if (!PasswordRepository.isInitialized) {
                     initBefore.show()
-                    return false
+                } else {
+                    runGitOperation(GitOp.SYNC)
                 }
-                runGitOperation(GitOp.SYNC)
-                return true
             }
-            R.id.refresh -> {
-                refreshPasswordList()
-                return true
-            }
+            R.id.refresh -> refreshPasswordList()
             android.R.id.home -> onBackPressed()
-            else -> {
-            }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onBackPressed() {
