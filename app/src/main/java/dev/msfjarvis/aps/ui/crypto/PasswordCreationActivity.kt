@@ -135,6 +135,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         bindToOpenKeychain(this)
         title = if (editing)
             getString(R.string.edit_password)
@@ -232,7 +233,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         when (item.itemId) {
             android.R.id.home -> {
                 setResult(RESULT_CANCELED)
-                finish()
+                onBackPressed()
             }
             R.id.save_password -> {
                 copy = false

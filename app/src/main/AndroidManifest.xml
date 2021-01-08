@@ -71,23 +71,19 @@
 
         <activity
             android:name=".ui.settings.UserPreference"
-            android:label="@string/action_settings"
-            android:parentActivityName=".ui.passwords.PasswordStore" />
+            android:label="@string/action_settings" />
 
         <activity
             android:name=".ui.crypto.PasswordCreationActivity"
             android:label="@string/new_password_title"
-            android:parentActivityName=".ui.passwords.PasswordStore"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.crypto.DecryptActivity"
-            android:parentActivityName=".ui.passwords.PasswordStore"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.crypto.GetKeyIdsActivity"
-            android:parentActivityName=".ui.passwords.PasswordStore"
             android:theme="@style/NoBackgroundTheme" />
 
         <service
