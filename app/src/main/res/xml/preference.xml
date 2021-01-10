@@ -46,7 +46,7 @@
         <Preference app:key="clear_saved_pass" />
         <Preference
             app:key="ssh_openkeystore_clear_keyid"
-            app:title="@string/ssh_openkeystore_clear_keyid" />
+            app:title="@string/pref_title_openkeystore_clear_keyid" />
         <Preference
             app:key="ssh_see_key"
             app:title="@string/pref_ssh_see_key_title" />

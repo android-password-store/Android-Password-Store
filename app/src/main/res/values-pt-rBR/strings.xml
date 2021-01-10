@@ -250,7 +250,7 @@
     <string name="pref_biometric_auth_title">Ativar autenticação biométrica</string>
     <string name="pref_biometric_auth_summary">Quando ativado, o Password Store irá pedir a sua impressão digital ao iniciar o aplicativo</string>
     <string name="pref_biometric_auth_summary_error">Hardware de impressão digital não acessível ou ausente</string>
-    <string name="ssh_openkeystore_clear_keyid">Limpar ID de chave SSH lembrada do OpenKeystore</string>
+    <string name="pref_title_openkeystore_clear_keyid">Limpar ID de chave SSH lembrada do OpenKeystore</string>
     <string name="access_sdcard_text">O local do armazenamento está em seu cartão SD ou armazenamento interno, mas o aplicativo não tem permissão para acessá-lo.</string>
     <string name="your_public_key">Sua chave pública</string>
     <string name="error_generate_ssh_key">Erro ao tentar gerar a chave SSH</string>

@@ -15,6 +15,7 @@ import dev.msfjarvis.aps.ui.git.config.GitConfigActivity
 import dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity
 import dev.msfjarvis.aps.ui.proxy.ProxySelectorActivity
 import dev.msfjarvis.aps.ui.sshkeygen.ShowSshKeyFragment
+import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.git.sshj.SshKey
@@ -118,6 +119,37 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
                 visible = PasswordRepository.isGitRepo()
                 onClick {
                     ShowSshKeyFragment().show(activity.supportFragmentManager, "public_key")
+                    true
+                }
+            }
+            pref(PreferenceKeys.CLEAR_SAVED_PASS) {
+                fun Preference.updatePref() {
+                    val sshPass = encryptedPreferences.getString(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)
+                    val httpsPass = encryptedPreferences.getString(PreferenceKeys.HTTPS_PASSWORD)
+                    if (sshPass == null && httpsPass == null) {
+                        visible = false
+                        return
+                    }
+                    when {
+                        httpsPass != null -> titleRes = R.string.clear_saved_passphrase_https
+                        sshPass != null -> titleRes = R.string.clear_saved_passphrase_ssh
+                    }
+                    visible = true
+                    requestRebind()
+                }
+                onClick {
+                    updatePref()
+                    true
+                }
+                updatePref()
+            }
+            pref(PreferenceKeys.SSH_OPENKEYSTORE_CLEAR_KEY_ID) {
+                titleRes = R.string.pref_title_openkeystore_clear_keyid
+                visible = activity.sharedPrefs.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID)?.isNotEmpty()
+                    ?: false
+                onClick {
+                    activity.sharedPrefs.edit { putString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null) }
+                    visible = false
                     true
                 }
             }

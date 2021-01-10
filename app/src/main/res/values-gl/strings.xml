@@ -252,7 +252,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="pref_biometric_auth_title">Activar autenticación biométrica</string>
     <string name="pref_biometric_auth_summary">Ao activala, Password Store vaiche pedir a túa pegada dactilar ao iniciar a app</string>
     <string name="pref_biometric_auth_summary_error">O hardware de pegada dixital non é accesible ou existente</string>
-    <string name="ssh_openkeystore_clear_keyid">Eliminar o ID lembrado da chave SSH en OpenKeystore</string>
+    <string name="pref_title_openkeystore_clear_keyid">Eliminar o ID lembrado da chave SSH en OpenKeystore</string>
     <string name="access_sdcard_text">O almacenaxe está na tarxeta SD pero a app non ten permiso para acceder a el. Por favor concédelle permiso.</string>
     <string name="your_public_key">A túa chave pública</string>
     <string name="error_generate_ssh_key">Algo fallou ao intentar crear a chave-ssh</string>

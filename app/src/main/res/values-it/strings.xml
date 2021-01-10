@@ -251,7 +251,7 @@
     <string name="pref_biometric_auth_title">Abilita autenticazione biometrica</string>
     <string name="pref_biometric_auth_summary">Quando abilitata, il Password Store ti chiederà la tua impronta digitale al lancio dell\'app</string>
     <string name="pref_biometric_auth_summary_error">L\'hardware delle impronte digitali non è accessibile o mancante</string>
-    <string name="ssh_openkeystore_clear_keyid">Elimina l\'ID della Chiave SSH di OpenKeystore memorizzato</string>
+    <string name="pref_title_openkeystore_clear_keyid">Elimina l\'ID della Chiave SSH di OpenKeystore memorizzato</string>
     <string name="access_sdcard_text">La posizione dell\'archiviazione nella tua Scheda SD o Archiviazione Interna, ma l\'app non ha i permessi per accedervi.</string>
     <string name="your_public_key">La tua chiave pubblica</string>
     <string name="error_generate_ssh_key">Errore provando a generare la chiave-ssh</string>
