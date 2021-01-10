@@ -15,7 +15,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 
-class MainSettingsScreen : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private val miscSettings = MiscSettings(this)
     private val autofillSettings = AutofillSettings(this)

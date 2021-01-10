@@ -71,7 +71,7 @@
             android:label="@string/title_activity_git_log" />
 
         <activity
-            android:name=".ui.settings.MainSettingsScreen"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/action_settings"
             android:parentActivityName=".ui.passwords.PasswordStore" />
 

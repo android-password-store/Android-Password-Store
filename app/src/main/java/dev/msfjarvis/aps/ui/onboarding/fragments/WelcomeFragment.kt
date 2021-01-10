@@ -12,7 +12,7 @@ import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentWelcomeBinding
-import dev.msfjarvis.aps.ui.settings.MainSettingsScreen
+import dev.msfjarvis.aps.ui.settings.SettingsActivity
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.viewBinding
 
@@ -25,6 +25,6 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.letsGo.setOnClickListener { parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance()) }
-        binding.settingsButton.setOnClickListener { startActivity(Intent(requireContext(), MainSettingsScreen::class.java)) }
+        binding.settingsButton.setOnClickListener { startActivity(Intent(requireContext(), SettingsActivity::class.java)) }
     }
 }
