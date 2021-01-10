@@ -27,20 +27,15 @@ import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import android.content.Intent
 import android.content.pm.ShortcutManager
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.provider.DocumentsContract
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
-import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
+class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
     private val encryptedPreferences by lazy(LazyThreadSafetyMode.NONE) { activity.getEncryptedGitPrefs() }
 
@@ -48,40 +43,12 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
         activity.startActivity(Intent(activity, clazz))
     }
 
-    @Suppress("DEPRECATION")
-    private val directorySelectAction = activity.registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
-        if (uri == null) return@registerForActivityResult
-
-        d { "Selected repository URI is $uri" }
-        // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
-        val docId = DocumentsContract.getTreeDocumentId(uri)
-        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val path = if (split.size > 1) split[1] else split[0]
-        val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
-        val prefs = activity.sharedPrefs
-
-        d { "Selected repository path is $repoPath" }
-
-        if (Environment.getExternalStorageDirectory().path == repoPath) {
-            MaterialAlertDialogBuilder(activity)
-                .setTitle(activity.resources.getString(R.string.sdcard_root_warning_title))
-                .setMessage(activity.resources.getString(R.string.sdcard_root_warning_message))
-                .setPositiveButton("Remove everything") { _, _ ->
-                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
-                }
-                .setNegativeButton(R.string.dialog_cancel, null)
-                .show()
-        }
-        prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
-    }
-
-    @Suppress("Deprecation") // for Environment.getExternalStorageDirectory()
     private fun selectExternalGitRepository() {
         MaterialAlertDialogBuilder(activity)
             .setTitle(activity.resources.getString(R.string.external_repository_dialog_title))
             .setMessage(activity.resources.getString(R.string.external_repository_dialog_text))
             .setPositiveButton(R.string.dialog_ok) { _, _ ->
-                directorySelectAction.launch(null)
+                launchActivity(DirectorySelectionActivity::class.java)
             }
             .setNegativeButton(R.string.dialog_cancel, null)
             .show()

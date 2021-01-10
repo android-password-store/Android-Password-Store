@@ -76,6 +76,10 @@
             android:parentActivityName=".ui.passwords.PasswordStore" />
 
         <activity
+            android:name=".ui.settings.DirectorySelectionActivity"
+            android:theme="@style/NoBackgroundTheme" />
+
+        <activity
             android:name=".ui.settings.UserPreference"
             android:label="@string/action_settings" />
 
