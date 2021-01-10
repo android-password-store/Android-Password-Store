@@ -92,7 +92,7 @@
             android:entryValues="@array/app_theme_values"
             android:key="app_theme"
             android:summary="%s"
-            android:title="@string/theme_title" />
+            android:title="@string/pref_app_theme_title" />
         <ListPreference
             app:defaultValue="FOLDER_FIRST"
             app:entries="@array/sort_order_entries"
@@ -104,13 +104,13 @@
         <CheckBoxPreference
             app:defaultValue="true"
             app:key="filter_recursively"
-            app:summary="@string/pref_recursive_filter_hint"
-            app:title="@string/pref_recursive_filter" />
+            app:summary="@string/pref_recursive_filter_summary"
+            app:title="@string/pref_recursive_filter_title" />
         <CheckBoxPreference
             app:defaultValue="false"
             app:key="search_on_start"
-            app:summary="@string/pref_search_on_start_hint"
-            app:title="@string/pref_search_on_start" />
+            app:summary="@string/pref_search_on_start_summary"
+            app:title="@string/pref_search_on_start_title" />
         <CheckBoxPreference
             app:defaultValue="false"
             app:key="show_hidden_contents"
@@ -119,8 +119,8 @@
             app:title="@string/pref_show_hidden_title" />
         <CheckBoxPreference
             app:key="biometric_auth"
-            app:summary="@string/biometric_auth_summary"
-            app:title="@string/biometric_auth_title" />
+            app:summary="@string/pref_biometric_auth_summary"
+            app:title="@string/pref_biometric_auth_title" />
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/pref_category_passwords_title">
         <EditTextPreference

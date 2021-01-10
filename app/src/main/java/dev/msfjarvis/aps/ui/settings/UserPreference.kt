@@ -372,7 +372,7 @@ class UserPreference : AppCompatActivity() {
                 if (!canAuthenticate) {
                     isEnabled = false
                     isChecked = false
-                    summary = getString(R.string.biometric_auth_summary_error)
+                    summary = getString(R.string.pref_biometric_auth_summary_error)
                 } else {
                     setOnPreferenceClickListener {
                         isEnabled = false

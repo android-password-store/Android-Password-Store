@@ -128,8 +128,8 @@
     <string name="ssh_key_success_dialog_title">SSH-key imported</string>
     <string name="ssh_key_error_dialog_title">Key import error</string>
     <string name="ssh_key_error_dialog_text">Message : \n</string>
-    <string name="pref_recursive_filter">Recursive filtering</string>
-    <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
+    <string name="pref_recursive_filter_title">Recursive filtering</string>
+    <string name="pref_recursive_filter_summary">Recursively find passwords of the current directory.</string>
     <string name="pref_sort_order_title">Password sort order</string>
     <string name="pref_folder_first_sort_order">Folders first</string>
     <string name="pref_file_first_sort_order">Files first</string>
@@ -275,9 +275,9 @@
     <string name="biometric_prompt_title">Biometric Prompt</string>
     <string name="biometric_auth_error">Authentication failure</string>
     <string name="biometric_auth_error_reason">Authentication failure: %s</string>
-    <string name="biometric_auth_title">Enable biometric authentication</string>
-    <string name="biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
-    <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
+    <string name="pref_biometric_auth_title">Enable biometric authentication</string>
+    <string name="pref_biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
+    <string name="pref_biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
     <string name="ssh_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
     <string name="access_sdcard_text">The store location is in your SD Card or Internal storage, but the app does not have permission to access it.</string>
     <string name="your_public_key">Your public key</string>
@@ -291,16 +291,16 @@
     <string name="message_error_destination_outside_repo">Destination must be within the repository</string>
     <string name="message_rename_folder">Enter destination for %1$s</string>
     <string name="button_create">Create</string>
-    <string name="pref_search_on_start">Open search on start</string>
-    <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
+    <string name="pref_search_on_start_title">Open search on start</string>
+    <string name="pref_search_on_start_summary">Open search bar when app is launched</string>
     <string name="pref_category_pwgen_title">Password Generator</string>
     <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
     <string name="clone_git_repo">The repository must be cloned before syncing changes.</string>
-    <string name="theme_title">App theme</string>
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="theme_battery_saver">Set by Battery Saver</string>
-    <string name="theme_follow_system">System default</string>
+    <string name="pref_app_theme_title">App theme</string>
+    <string name="pref_app_theme_value_light">Light</string>
+    <string name="pref_app_theme_value_dark">Dark</string>
+    <string name="pref_app_theme_value_battery_saver">Set by Battery Saver</string>
+    <string name="pref_app_theme_value_follow_system">System default</string>
     <string name="connection_mode_ssh_key">SSH key</string>
     <string name="connection_mode_basic_authentication">Password</string>
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>

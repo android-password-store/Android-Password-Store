@@ -21,6 +21,7 @@ class MainSettingsScreen : AppCompatActivity() {
     private val autofillSettings = AutofillSettings(this)
     private val passwordSettings = PasswordSettings(this)
     private val repositorySettings = RepositorySettings(this)
+    private val generalSettings = GeneralSettings(this)
 
     private val binding by viewBinding(ActivityPreferenceRecyclerviewBinding::inflate)
     private val preferencesAdapter: PreferencesAdapter
@@ -30,6 +31,11 @@ class MainSettingsScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val screen = screen(this) {
+            subScreen {
+                titleRes = R.string.pref_category_general_title
+                iconRes = R.drawable.app_settings_alt_24px
+                generalSettings.provideSettings(this)
+            }
             subScreen {
                 titleRes = R.string.pref_category_autofill_title
                 iconRes = R.drawable.ic_wysiwyg_24px
