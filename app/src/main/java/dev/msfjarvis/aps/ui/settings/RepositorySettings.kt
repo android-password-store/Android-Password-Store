@@ -7,6 +7,8 @@ package dev.msfjarvis.aps.ui.settings
 
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
+import de.Maxr1998.modernpreferences.helpers.checkBox
+import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import dev.msfjarvis.aps.R
@@ -25,12 +27,16 @@ import android.content.Intent
 import android.content.pm.ShortcutManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.provider.DocumentsContract
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
+import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -61,6 +67,33 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
         }
     }
 
+    @Suppress("DEPRECATION")
+    private val directorySelectAction = activity.registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+
+        d { "Selected repository URI is $uri" }
+        // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
+        val docId = DocumentsContract.getTreeDocumentId(uri)
+        val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val path = if (split.size > 1) split[1] else split[0]
+        val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
+        val prefs = activity.sharedPrefs
+
+        d { "Selected repository path is $repoPath" }
+
+        if (Environment.getExternalStorageDirectory().path == repoPath) {
+            MaterialAlertDialogBuilder(activity)
+                .setTitle(activity.resources.getString(R.string.sdcard_root_warning_title))
+                .setMessage(activity.resources.getString(R.string.sdcard_root_warning_message))
+                .setPositiveButton("Remove everything") { _, _ ->
+                    prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
+                }
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show()
+        }
+        prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
+    }
+
     /**
      * Opens a file explorer to import the private key
      */
@@ -78,6 +111,18 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
         } else {
             sshKeyImportAction.launch(arrayOf("*/*"))
         }
+    }
+
+    @Suppress("Deprecation") // for Environment.getExternalStorageDirectory()
+    private fun selectExternalGitRepository() {
+        MaterialAlertDialogBuilder(activity)
+            .setTitle(activity.resources.getString(R.string.external_repository_dialog_title))
+            .setMessage(activity.resources.getString(R.string.external_repository_dialog_text))
+            .setPositiveButton(R.string.dialog_ok) { _, _ ->
+                directorySelectAction.launch(null)
+            }
+            .setNegativeButton(R.string.dialog_cancel, null)
+            .show()
     }
 
     override fun provideSettings(builder: PreferenceScreen.Builder) {
@@ -153,7 +198,7 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
                     true
                 }
             }
-            pref(PreferenceKeys.GIT_DELETE_REPO) {
+            val deleteRepoPref = pref(PreferenceKeys.GIT_DELETE_REPO) {
                 titleRes = R.string.pref_git_delete_repo_title
                 summaryRes = R.string.pref_git_delete_repo_summary
                 visible = !activity.sharedPrefs.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
@@ -184,6 +229,31 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
                         }
                         .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ -> run { dialogInterface.cancel() } }
                         .show()
+                    true
+                }
+            }
+            checkBox(PreferenceKeys.GIT_EXTERNAL) {
+                titleRes = R.string.pref_external_repository_title
+                summaryRes = R.string.pref_external_repository_summary
+                onCheckedChange { checked ->
+                    deleteRepoPref.visible = !checked
+                    deleteRepoPref.requestRebind()
+                    PasswordRepository.closeRepository()
+                    activity.sharedPrefs.edit { putBoolean(PreferenceKeys.REPO_CHANGED, true) }
+                    true
+                }
+            }
+            pref(PreferenceKeys.GIT_EXTERNAL_REPO) {
+                val externalRepo = activity.sharedPrefs.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
+                if (externalRepo != null) {
+                    summary = externalRepo
+                } else {
+                    summaryRes = R.string.pref_select_external_repository_summary_no_repo_selected
+                }
+                titleRes = R.string.pref_select_external_repository_title
+                dependency = PreferenceKeys.GIT_EXTERNAL
+                onClick {
+                    selectExternalGitRepository()
                     true
                 }
             }

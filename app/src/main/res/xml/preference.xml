@@ -57,11 +57,11 @@
         <CheckBoxPreference
             app:key="git_external"
             app:summary="@string/pref_external_repository_summary"
-            app:title="@string/pref_external_repository" />
+            app:title="@string/pref_external_repository_title" />
         <Preference
             app:dependency="git_external"
             app:key="pref_select_external"
-            app:title="@string/pref_select_external_repository" />
+            app:title="@string/pref_select_external_repository_title" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_category_pwgen_title">

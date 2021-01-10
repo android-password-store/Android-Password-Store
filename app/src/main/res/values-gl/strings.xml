@@ -124,9 +124,9 @@
     <string name="pref_clear_clipboard_title">Baleirar portapapeis 20 veces</string>
     <string name="pref_clear_clipboard_summary">Gardar números consecutivos no portapapeis 20 veces. Resulta útil nos móbiles Samsung que gardan historial no portapapeis.</string>
     <string name="pref_git_delete_repo_summary">Elimina repositorio local (oculto).</string>
-    <string name="pref_external_repository">Repositorio externo</string>
+    <string name="pref_external_repository_title">Repositorio externo</string>
     <string name="pref_external_repository_summary">Usar un repositorio externo de contrasinais</string>
-    <string name="pref_select_external_repository">Selecciona repositorio externo</string>
+    <string name="pref_select_external_repository_title">Selecciona repositorio externo</string>
     <string name="prefs_export_passwords_title">Exportar contrasinais</string>
     <string name="prefs_export_passwords_summary">Exporta os contrasinais cifrados a un directorio externo</string>
     <string name="prefs_version">Versión</string>
@@ -196,7 +196,7 @@
     <string name="show_extra_content_pref_summary">Controla a visibilidade do contido extra unha vez descifrado</string>
     <string name="pwd_generate_button">Crear</string>
     <string name="refresh_list">Actualizar lista</string>
-    <string name="no_repo_selected">Non hai seleccionado ningún repositorio externo</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">Non hai seleccionado ningún repositorio externo</string>
     <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando...</string>
     <string name="app_icon_hint">Icona da app</string>
     <!-- Oreo Autofill -->

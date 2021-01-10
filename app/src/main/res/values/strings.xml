@@ -141,9 +141,10 @@
     <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
     <string name="pref_clear_clipboard_summary">Store consecutive numbers in the clipboard 20 times. Useful on Samsung phones that feature clipboard history.</string>
     <string name="pref_git_delete_repo_summary">Deletes local (hidden) repository</string>
-    <string name="pref_external_repository">External repository</string>
+    <string name="pref_external_repository_title">External repository</string>
     <string name="pref_external_repository_summary">Use an external password repository</string>
-    <string name="pref_select_external_repository">Select external repository</string>
+    <string name="pref_select_external_repository_title">Select external repository</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">No external repository selected</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
     <string name="prefs_version">Version</string>
@@ -220,7 +221,6 @@
     <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted.</string>
     <string name="pwd_generate_button">Generate</string>
     <string name="refresh_list">Refresh list</string>
-    <string name="no_repo_selected">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="app_icon_hint">App icon</string>
 

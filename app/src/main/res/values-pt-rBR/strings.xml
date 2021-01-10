@@ -124,9 +124,9 @@
     <string name="pref_clear_clipboard_title">Limpar área de transferência 20 vezes</string>
     <string name="pref_clear_clipboard_summary">Armazene números consecutivos na área de transferência 20 vezes. Útil em telefones Samsung que apresentam o histórico da área de transferência.</string>
     <string name="pref_git_delete_repo_summary">Exclui o repositório local (oculto)</string>
-    <string name="pref_external_repository">Repositório externo</string>
+    <string name="pref_external_repository_title">Repositório externo</string>
     <string name="pref_external_repository_summary">Use um repositório de senha externo</string>
-    <string name="pref_select_external_repository">Selecionar repositório externo</string>
+    <string name="pref_select_external_repository_title">Selecionar repositório externo</string>
     <string name="prefs_export_passwords_title">Exportar senhas</string>
     <string name="prefs_export_passwords_summary">Exporta as senhas criptografadas para um diretório externo</string>
     <string name="prefs_version">Versão</string>
@@ -196,7 +196,7 @@
     <string name="show_extra_content_pref_summary">Controlar a visibilidade do conteúdo extra uma vez descriptografado.</string>
     <string name="pwd_generate_button">Gerar</string>
     <string name="refresh_list">Atualizar lista</string>
-    <string name="no_repo_selected">Nenhum repositório externo selecionado</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">Nenhum repositório externo selecionado</string>
     <string name="send_plaintext_password_to">Enviar senha como texto simples usando…</string>
     <string name="app_icon_hint">Ícone do aplicativo</string>
     <!-- Oreo Autofill -->

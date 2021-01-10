@@ -235,7 +235,7 @@ class UserPreference : AppCompatActivity() {
             val appVersionPreference = findPreference<Preference>(PreferenceKeys.APP_VERSION)
 
             selectExternalGitRepositoryPreference?.summary = sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-                ?: getString(R.string.no_repo_selected)
+                ?: getString(R.string.pref_select_external_repository_summary_no_repo_selected)
             deleteRepoPreference?.isVisible = !sharedPreferences.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
             clearClipboard20xPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.GENERAL_SHOW_TIME)?.toInt() != 0
             openkeystoreIdPreference?.isVisible = sharedPreferences.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID)?.isNotEmpty()
@@ -320,7 +320,7 @@ class UserPreference : AppCompatActivity() {
 
             selectExternalGitRepositoryPreference?.summary =
                 sharedPreferences.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-                    ?: context.getString(R.string.no_repo_selected)
+                    ?: context.getString(R.string.pref_select_external_repository_summary_no_repo_selected)
             selectExternalGitRepositoryPreference?.onPreferenceClickListener = ClickListener {
                 prefsActivity.selectExternalGitRepository()
                 true

@@ -128,9 +128,9 @@
     <string name="pref_clear_clipboard_title">Очистить буфер 20 раз</string>
     <string name="pref_clear_clipboard_summary">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
     <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
-    <string name="pref_external_repository">Внешний репозиторий</string>
+    <string name="pref_external_repository_title">Внешний репозиторий</string>
     <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
-    <string name="pref_select_external_repository">Выбрать внешний репозиторий</string>
+    <string name="pref_select_external_repository_title">Выбрать внешний репозиторий</string>
     <string name="prefs_export_passwords_title">Экспортировать пароли</string>
     <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
     <string name="prefs_version">Версия</string>
@@ -200,7 +200,7 @@
     <string name="show_extra_content_pref_summary">Видимость поля дополнительной информации после расшифрования</string>
     <string name="pwd_generate_button">Сгенерировать</string>
     <string name="refresh_list">Обновить список</string>
-    <string name="no_repo_selected">Внешний репозиторий не выбран</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">Внешний репозиторий не выбран</string>
     <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
     <string name="app_icon_hint">Иконка приложения</string>
     <!-- Oreo Autofill -->

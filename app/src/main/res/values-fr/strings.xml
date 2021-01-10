@@ -122,9 +122,9 @@
     <string name="pref_clear_clipboard_title">Effacer le presse-papier 20 fois</string>
     <string name="pref_clear_clipboard_summary">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
     <string name="pref_git_delete_repo_summary">Supprime le dépot local (caché)</string>
-    <string name="pref_external_repository">Dépôt externe</string>
+    <string name="pref_external_repository_title">Dépôt externe</string>
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>
-    <string name="pref_select_external_repository">Choisissez un dépôt externe</string>
+    <string name="pref_select_external_repository_title">Choisissez un dépôt externe</string>
     <string name="prefs_export_passwords_title">Exporter les mots de passe</string>
     <string name="prefs_export_passwords_summary">Exporter les mots de passe (chiffrés) vers un répertoire externe</string>
     <string name="prefs_version">Version</string>
@@ -191,7 +191,7 @@
     <string name="show_extra_content_pref_summary">Controller la visibilité du contenu supplémentaire une fois déchiffré</string>
     <string name="pwd_generate_button">Générer</string>
     <string name="refresh_list">Rafraichir la liste</string>
-    <string name="no_repo_selected">Pas de dépôt externe séléctionné</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">Pas de dépôt externe séléctionné</string>
     <string name="send_plaintext_password_to">Envoyer le mot de passe en clair via…</string>
     <string name="app_icon_hint">Icône de l\'application</string>
     <!-- Oreo Autofill -->

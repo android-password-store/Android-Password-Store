@@ -120,9 +120,9 @@
     <string name="pref_clear_clipboard_title">Lösche die Zwischenablage 20-mal</string>
     <string name="pref_clear_clipboard_summary">Speichert Nonsense 20-mal anstatt 1-mal in der Zwischenablage. Nützlich bspw. auf Samsung-Geräten, die den Verlauf der Zwischenablage speichern.</string>
     <string name="pref_git_delete_repo_summary">Lösche das lokale (versteckte) Repository</string>
-    <string name="pref_external_repository">Externes Repository</string>
+    <string name="pref_external_repository_title">Externes Repository</string>
     <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
-    <string name="pref_select_external_repository">Wähle ein externes Repository</string>
+    <string name="pref_select_external_repository_title">Wähle ein externes Repository</string>
     <string name="prefs_export_passwords_title">Passwörter exportieren</string>
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
     <string name="prefs_version">Version</string>
@@ -192,7 +192,7 @@
     <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
     <string name="pwd_generate_button">Generieren</string>
     <string name="refresh_list">Aktualisieren</string>
-    <string name="no_repo_selected">Kein externes Repository ausgewählt</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">Kein externes Repository ausgewählt</string>
     <string name="send_plaintext_password_to">Passwort unverschlüsselt senden an…</string>
     <string name="app_icon_hint">App Icon</string>
     <!-- Oreo Autofill -->
