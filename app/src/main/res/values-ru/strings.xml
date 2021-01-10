@@ -133,7 +133,6 @@
     <string name="pref_select_external_repository_title">Выбрать внешний репозиторий</string>
     <string name="prefs_export_passwords_title">Экспортировать пароли</string>
     <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
-    <string name="prefs_version">Версия</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Сгенерировать пароль</string>
     <string name="pwgen_generate">Сгенерировать</string>

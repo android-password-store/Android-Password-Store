@@ -80,10 +80,6 @@
             android:theme="@style/NoBackgroundTheme" />
 
         <activity
-            android:name=".ui.settings.UserPreference"
-            android:label="@string/action_settings" />
-
-        <activity
             android:name=".ui.crypto.PasswordCreationActivity"
             android:label="@string/new_password_title"
             android:windowSoftInputMode="adjustResize" />

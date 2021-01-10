@@ -147,7 +147,6 @@
     <string name="pref_select_external_repository_summary_no_repo_selected">No external repository selected</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
-    <string name="prefs_version">Version</string>
 
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Generate Password</string>

@@ -127,7 +127,6 @@
     <string name="pref_select_external_repository_title">Choisissez un dépôt externe</string>
     <string name="prefs_export_passwords_title">Exporter les mots de passe</string>
     <string name="prefs_export_passwords_summary">Exporter les mots de passe (chiffrés) vers un répertoire externe</string>
-    <string name="prefs_version">Version</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Générer un mot de passe</string>
     <string name="pwgen_generate">Générer</string>

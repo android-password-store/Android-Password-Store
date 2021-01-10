@@ -129,7 +129,6 @@
     <string name="pref_select_external_repository_title">Selecionar repositório externo</string>
     <string name="prefs_export_passwords_title">Exportar senhas</string>
     <string name="prefs_export_passwords_summary">Exporta as senhas criptografadas para um diretório externo</string>
-    <string name="prefs_version">Versão</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Gerar Senha</string>
     <string name="pwgen_generate">Gerar</string>

@@ -125,7 +125,6 @@
     <string name="pref_select_external_repository_title">Wähle ein externes Repository</string>
     <string name="prefs_export_passwords_title">Passwörter exportieren</string>
     <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
-    <string name="prefs_version">Version</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Passwort generieren</string>
     <string name="pwgen_generate">Generieren</string>

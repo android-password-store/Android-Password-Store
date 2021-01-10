@@ -129,7 +129,6 @@
     <string name="pref_select_external_repository_title">Selecciona repositorio externo</string>
     <string name="prefs_export_passwords_title">Exportar contrasinais</string>
     <string name="prefs_export_passwords_summary">Exporta os contrasinais cifrados a un directorio externo</string>
-    <string name="prefs_version">Versión</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Crear contrasinal</string>
     <string name="pwgen_generate">Crear</string>
