@@ -111,6 +111,10 @@
 
         <activity android:name=".ui.folderselect.SelectFolderActivity" />
         <activity
+            android:name=".ui.sshkeygen.SshKeyImportActivity"
+            android:theme="@style/NoBackgroundTheme"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.sshkeygen.SshKeyGenActivity"
             android:label="@string/pref_ssh_keygen_title"
             android:windowSoftInputMode="adjustResize" />
