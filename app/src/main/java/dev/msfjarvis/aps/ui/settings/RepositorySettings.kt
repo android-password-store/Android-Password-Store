@@ -17,10 +17,12 @@ import dev.msfjarvis.aps.ui.git.config.GitConfigActivity
 import dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity
 import dev.msfjarvis.aps.ui.proxy.ProxySelectorActivity
 import dev.msfjarvis.aps.ui.sshkeygen.ShowSshKeyFragment
+import dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity
+import dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity
+import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
-import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import android.content.Intent
@@ -29,10 +31,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -47,24 +46,6 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
 
     private fun <T : FragmentActivity> launchActivity(clazz: Class<T>) {
         activity.startActivity(Intent(activity, clazz))
-    }
-
-    private val sshKeyImportAction = activity.registerForActivityResult(OpenDocument()) { uri: Uri? ->
-        if (uri == null) return@registerForActivityResult
-        with(activity) {
-            runCatching {
-                SshKey.import(uri)
-                Toast.makeText(this, resources.getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show()
-                setResult(AppCompatActivity.RESULT_OK)
-                finish()
-            }.onFailure { e ->
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(resources.getString(R.string.ssh_key_error_dialog_title))
-                    .setMessage(e.message)
-                    .setPositiveButton(resources.getString(R.string.dialog_ok), null)
-                    .show()
-            }
-        }
     }
 
     @Suppress("DEPRECATION")
@@ -92,25 +73,6 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
                 .show()
         }
         prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, repoPath) }
-    }
-
-    /**
-     * Opens a file explorer to import the private key
-     */
-    private fun importSshKey() {
-        if (SshKey.exists) {
-            MaterialAlertDialogBuilder(activity).run {
-                setTitle(R.string.ssh_keygen_existing_title)
-                setMessage(R.string.ssh_keygen_existing_message)
-                setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ ->
-                    sshKeyImportAction.launch(arrayOf("*/*"))
-                }
-                setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> }
-                show()
-            }
-        } else {
-            sshKeyImportAction.launch(arrayOf("*/*"))
-        }
     }
 
     @Suppress("Deprecation") // for Environment.getExternalStorageDirectory()
@@ -155,7 +117,14 @@ class RepositorySettings(val activity: FragmentActivity) : SettingsProvider {
                 titleRes = R.string.pref_import_ssh_key_title
                 visible = PasswordRepository.isGitRepo()
                 onClick {
-                    importSshKey()
+                    launchActivity(SshKeyImportActivity::class.java)
+                    true
+                }
+            }
+            pref(PreferenceKeys.SSH_KEYGEN) {
+                titleRes = R.string.pref_ssh_keygen_title
+                onClick {
+                    launchActivity(SshKeyGenActivity::class.java)
                     true
                 }
             }
