@@ -65,7 +65,14 @@ class SettingsActivity : AppCompatActivity() {
                 getString(subScreen.titleRes)
             }
         }
+        savedInstanceState?.getParcelable<PreferencesAdapter.SavedState>("adapter")
+            ?.let(adapter::loadSavedState)
         binding.preferenceRecyclerView.adapter = adapter
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("adapter", preferencesAdapter.getSavedState())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
