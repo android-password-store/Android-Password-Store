@@ -72,9 +72,6 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
                     true
                 }
             }
-            categoryHeader("passwd_header") {
-                titleRes = R.string.pref_category_pwgen_title
-            }
             val values = activity.resources.getStringArray(R.array.pwgen_provider_values)
             val labels = activity.resources.getStringArray(R.array.pwgen_provider_labels)
             val items = values.zip(labels).map { SelectionItem(it.first, it.second, null) }

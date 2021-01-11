@@ -255,7 +255,6 @@
     <string name="button_create">Erstellen</string>
     <string name="pref_search_on_start_title">Suchfeld beim Start öffnen</string>
     <string name="pref_search_on_start_summary">Suchleiste beim Start der App anzeigen</string>
-    <string name="pref_category_pwgen_title">Passwort Generator</string>
     <string name="tap_clear_clipboard">Hier tippen, um die Zwischenablage zu löschen</string>
     <string name="clone_git_repo">Das Repository muss geklont werden, bevor Änderungen synchronisert werden können.</string>
     <string name="pref_app_theme_title">App Farbthema</string>

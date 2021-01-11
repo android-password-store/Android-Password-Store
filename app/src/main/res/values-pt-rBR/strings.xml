@@ -264,7 +264,6 @@
     <string name="button_create">Criar</string>
     <string name="pref_search_on_start_title">Abrir pesquisa ao inicializar</string>
     <string name="pref_search_on_start_summary">Abrir barra de pesquisa quando o aplicativo for iniciado</string>
-    <string name="pref_category_pwgen_title">Gerador de Senha</string>
     <string name="tap_clear_clipboard">Toque aqui para limpar a área de transferência</string>
     <string name="clone_git_repo">O repositório deve ser clonado antes de sincronizar as alterações.</string>
     <string name="pref_app_theme_title">Tema do aplicativo</string>

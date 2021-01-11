@@ -265,7 +265,6 @@
     <string name="button_create">Crea</string>
     <string name="pref_search_on_start_title">Apri ricerca all\'avvio</string>
     <string name="pref_search_on_start_summary">Apri la barra di ricerca al lancio dell\'app</string>
-    <string name="pref_category_pwgen_title">Generatore di Password</string>
     <string name="tap_clear_clipboard">Tocca qui per cancellare gli appunti</string>
     <string name="clone_git_repo">La repository deve essere clonata prima di sincronizzare le modifiche.</string>
     <string name="pref_app_theme_title">Tema dell\'App</string>

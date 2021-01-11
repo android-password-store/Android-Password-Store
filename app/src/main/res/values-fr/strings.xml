@@ -236,7 +236,6 @@
     <string name="button_create">Créer</string>
     <string name="pref_search_on_start_title">Ouvrir la recherche au démarrage</string>
     <string name="pref_search_on_start_summary">Ouvrir la barre de recherche au démarrage de l\'application</string>
-    <string name="pref_category_pwgen_title">Générateur de mot de passe</string>
     <string name="tap_clear_clipboard">Appuyez ici pour effacer le presse-papiers</string>
     <string name="pref_app_theme_title">Thème de l\'application</string>
     <string name="pref_app_theme_value_light">Clair</string>
