@@ -147,6 +147,9 @@
     <string name="pref_select_external_repository_summary_no_repo_selected">No external repository selected</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
+    <string name="pref_rebase_on_pull_title">Rebase on pull</string>
+    <string name="pref_rebase_on_pull_summary">When pulling or syncing, create a merge commit with upstream changes</string>
+    <string name="pref_rebase_on_pull_summary_on">When pulling or syncing, rebase commits that are not present in the remote repository</string>
 
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Generate Password</string>

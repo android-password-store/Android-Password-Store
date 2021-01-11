@@ -147,6 +147,14 @@ object GitSettings {
             }
         }
 
+    var rebaseOnPull
+        get() = settings.getBoolean(PreferenceKeys.REBASE_ON_PULL, true)
+        set(value) {
+            settings.edit {
+                putBoolean(PreferenceKeys.REBASE_ON_PULL, value)
+            }
+        }
+
     sealed class UpdateConnectionSettingsResult {
         class MissingUsername(val newProtocol: Protocol) : UpdateConnectionSettingsResult()
         class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) : UpdateConnectionSettingsResult()

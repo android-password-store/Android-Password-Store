@@ -6,7 +6,10 @@ package dev.msfjarvis.aps.util.git.operation
 
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 
-class SyncOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
+class SyncOperation(
+    callingActivity: ContinuationContainerActivity,
+    rebase: Boolean,
+) : GitOperation(callingActivity) {
 
     override val commands = arrayOf(
         // Stage all files
@@ -16,7 +19,7 @@ class SyncOperation(callingActivity: ContinuationContainerActivity) : GitOperati
         // Commit everything! If needed, obviously.
         git.commit().setAll(true).setMessage("[Android Password Store] Sync"),
         // Pull and rebase on top of the remote branch
-        git.pull().setRebase(true).setRemote("origin"),
+        git.pull().setRebase(rebase).setRemote("origin"),
         // Push it all back
         git.push().setPushAll().setRemote("origin"),
     )

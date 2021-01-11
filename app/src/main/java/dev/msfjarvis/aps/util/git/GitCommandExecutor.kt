@@ -62,9 +62,11 @@ class GitCommandExecutor(
                         val result = withContext(Dispatchers.IO) {
                             command.call()
                         }
-                        val rr = result.rebaseResult
-                        if (rr.status == RebaseResult.Status.STOPPED) {
-                            throw PullException.PullRebaseFailed
+                        if (result.rebaseResult != null) {
+                            val rr = result.rebaseResult
+                            if (rr.status == RebaseResult.Status.STOPPED) {
+                                throw PullException.PullRebaseFailed
+                            }
                         }
                     }
                     is PushCommand -> {

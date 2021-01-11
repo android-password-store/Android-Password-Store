@@ -66,9 +66,9 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
         }
         val op = when (operation) {
             GitOp.CLONE -> CloneOperation(this, GitSettings.url!!)
-            GitOp.PULL -> PullOperation(this)
+            GitOp.PULL -> PullOperation(this, GitSettings.rebaseOnPull)
             GitOp.PUSH -> PushOperation(this)
-            GitOp.SYNC -> SyncOperation(this)
+            GitOp.SYNC -> SyncOperation(this, GitSettings.rebaseOnPull)
             GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
             GitOp.RESET -> ResetToRemoteOperation(this)
         }

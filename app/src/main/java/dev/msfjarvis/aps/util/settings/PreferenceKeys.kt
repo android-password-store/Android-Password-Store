@@ -82,4 +82,6 @@ object PreferenceKeys {
     const val PROXY_PORT = "proxy_port"
     const val PROXY_USERNAME = "proxy_username"
     const val PROXY_PASSWORD = "proxy_password"
+
+    const val REBASE_ON_PULL = "rebase_on_pull"
 }
