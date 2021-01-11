@@ -44,6 +44,7 @@ class SshKeyImportActivity : AppCompatActivity() {
                     importSshKey()
                 }
                 setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
+                setOnCancelListener { finish() }
                 show()
             }
         } else {
