@@ -9,8 +9,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.github.androidpasswordstore.autofillparser.Credentials
 import dev.msfjarvis.aps.data.password.PasswordEntry
+import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.services.getDefaultUsername
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import java.nio.file.Paths
 
@@ -110,8 +112,7 @@ enum class DirectoryStructure(val value: String) {
 
     companion object {
 
-        const val PREFERENCE = "oreo_autofill_directory_structure"
-        private val DEFAULT = FileBased
+        val DEFAULT = FileBased
 
         private val reverseMap = values().associateBy { it.value }
         fun fromValue(value: String?) = if (value != null) reverseMap[value] ?: DEFAULT else DEFAULT
@@ -121,7 +122,7 @@ enum class DirectoryStructure(val value: String) {
 object AutofillPreferences {
 
     fun directoryStructure(context: Context): DirectoryStructure {
-        val value = context.sharedPrefs.getString(DirectoryStructure.PREFERENCE, null)
+        val value = context.sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_DIRECTORY_STRUCTURE)
         return DirectoryStructure.fromValue(value)
     }
 

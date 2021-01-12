@@ -15,7 +15,6 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.ui.settings.UserPreference
 import dev.msfjarvis.aps.util.git.GitCommandExecutor
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.GitSettings
@@ -25,6 +24,8 @@ import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.git.sshj.SshjSessionFactory
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity
+import dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -92,9 +93,11 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
     private fun getSshKey(make: Boolean) {
         runCatching {
-            // Ask the UserPreference to provide us with the ssh-key
-            val intent = Intent(callingActivity.applicationContext, UserPreference::class.java)
-            intent.putExtra("operation", if (make) "make_ssh_key" else "get_ssh_key")
+            val intent = if (make) {
+                Intent(callingActivity.applicationContext, SshKeyGenActivity::class.java)
+            } else {
+                Intent(callingActivity.applicationContext, SshKeyImportActivity::class.java)
+            }
             callingActivity.startActivity(intent)
         }.onFailure { e ->
             e(e)

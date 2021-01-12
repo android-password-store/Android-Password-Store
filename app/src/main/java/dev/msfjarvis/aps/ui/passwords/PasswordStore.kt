@@ -42,7 +42,6 @@ import dev.msfjarvis.aps.ui.main.LaunchActivity
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel
 import dev.msfjarvis.aps.ui.folderselect.SelectFolderActivity
-import dev.msfjarvis.aps.ui.settings.UserPreference
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity.Companion.getLongName
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
@@ -55,6 +54,8 @@ import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
 import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity
+import dev.msfjarvis.aps.ui.settings.SettingsActivity
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
@@ -300,7 +301,7 @@ class PasswordStore : BaseGitActivity() {
         when (id) {
             R.id.user_pref -> {
                 runCatching {
-                    startActivity(Intent(this, UserPreference::class.java))
+                    startActivity(Intent(this, SettingsActivity::class.java))
                 }.onFailure { e ->
                     e.printStackTrace()
                 }
@@ -377,7 +378,7 @@ class PasswordStore : BaseGitActivity() {
     private fun checkLocalRepository() {
         val repo = PasswordRepository.initialize()
         if (repo == null) {
-            directorySelectAction.launch(UserPreference.createDirectorySelectionIntent(this))
+            directorySelectAction.launch(Intent(this, DirectorySelectionActivity::class.java))
         } else {
             checkLocalRepository(PasswordRepository.getRepositoryDirectory())
         }

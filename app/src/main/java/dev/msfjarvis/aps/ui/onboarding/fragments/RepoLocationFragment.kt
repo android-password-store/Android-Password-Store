@@ -19,9 +19,9 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.ui.settings.UserPreference
 import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.finish
@@ -31,11 +31,13 @@ import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import android.content.Intent
 import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
     private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
+    private val directorySelectIntent by lazy(LazyThreadSafetyMode.NONE) { Intent(requireContext(), DirectorySelectionActivity::class.java) }
     private val binding by viewBinding(FragmentRepoLocationBinding::bind)
     private val sortOrder: PasswordSortOrder
         get() = PasswordSortOrder.getSortOrder(settings)
@@ -57,7 +59,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
     }
 
     private val externalDirPermGrantedAction = createPermGrantedAction {
-        externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
+        externalDirectorySelectAction.launch(directorySelectIntent)
     }
 
     private val repositoryUsePermGrantedAction = createPermGrantedAction {
@@ -65,7 +67,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
     }
 
     private val repositoryChangePermGrantedAction = createPermGrantedAction {
-        repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
+        repositoryInitAction.launch(directorySelectIntent)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,7 +104,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
             } else {
                 // Unlikely we have storage permissions without user ever selecting a directory,
                 // but let's not assume.
-                externalDirectorySelectAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
+                externalDirectorySelectAction.launch(directorySelectIntent)
             }
         } else {
             MaterialAlertDialogBuilder(requireActivity())
@@ -119,7 +121,7 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
                     if (!isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         repositoryChangePermGrantedAction.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     } else {
-                        repositoryInitAction.launch(UserPreference.createDirectorySelectionIntent(requireContext()))
+                        repositoryInitAction.launch(directorySelectIntent)
                     }
                 }
                 .show()

@@ -110,43 +110,43 @@
     <string name="last_changed">Last changed %s</string>
 
     <!-- Preferences -->
-    <string name="pref_repository_title">Repository</string>
-    <string name="pref_edit_server_info">Edit Git server settings</string>
+    <string name="pref_category_repository_title">Repository</string>
+    <string name="pref_edit_git_server_settings">Edit Git server settings</string>
     <string name="pref_edit_git_config">Local Git config &amp; utilities</string>
-    <string name="pref_ssh_title">Import SSH key</string>
+    <string name="pref_import_ssh_key_title">Import SSH key</string>
     <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
     <string name="pref_ssh_see_key_title">View generated public SSH key</string>
-    <string name="pref_git_delete_repo">Delete repository</string>
+    <string name="pref_git_delete_repo_title">Delete repository</string>
     <string name="pref_dialog_delete_title">Clear repository</string>
     <string name="pref_category_general_title">General</string>
-    <string name="pref_category_title_passwords">Passwords</string>
+    <string name="pref_category_passwords_title">Passwords</string>
     <string name="pref_clipboard_timeout_title">Password copy timeout</string>
     <string name="pref_clipboard_timeout_summary">Set the time (in seconds) you want the password to be in clipboard. 0 means forever. Current value: %1$s</string>
     <string name="pref_copy_title">Automatically copy password</string>
-    <string name="pref_copy_dialog_title">Automatically copy the password to the clipboard after decryption was successful.</string>
+    <string name="pref_copy_summary">Automatically copy the password to the clipboard after decryption was successful.</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">Selected file does not appear to be an SSH private key.</string>
     <string name="ssh_key_success_dialog_title">SSH-key imported</string>
     <string name="ssh_key_error_dialog_title">Key import error</string>
     <string name="ssh_key_error_dialog_text">Message : \n</string>
-    <string name="pref_recursive_filter">Recursive filtering</string>
-    <string name="pref_recursive_filter_hint">Recursively find passwords of the current directory.</string>
+    <string name="pref_recursive_filter_title">Recursive filtering</string>
+    <string name="pref_recursive_filter_summary">Recursively find passwords of the current directory.</string>
     <string name="pref_sort_order_title">Password sort order</string>
     <string name="pref_folder_first_sort_order">Folders first</string>
     <string name="pref_file_first_sort_order">Files first</string>
     <string name="pref_type_independent_sort_order">Type independent</string>
     <string name="pref_recently_used_sort_order">Recently used</string>
-    <string name="pref_autofill_title">Autofill</string>
+    <string name="pref_category_autofill_title">Autofill</string>
     <string name="pref_autofill_enable_title">Enable Autofill</string>
-    <string name="pref_misc_title">Misc</string>
+    <string name="pref_category_misc_title">Misc</string>
     <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
-    <string name="pref_clear_clipboard_hint">Store consecutive numbers in the clipboard 20 times. Useful on Samsung phones that feature clipboard history.</string>
+    <string name="pref_clear_clipboard_summary">Store consecutive numbers in the clipboard 20 times. Useful on Samsung phones that feature clipboard history.</string>
     <string name="pref_git_delete_repo_summary">Deletes local (hidden) repository</string>
-    <string name="pref_external_repository">External repository</string>
+    <string name="pref_external_repository_title">External repository</string>
     <string name="pref_external_repository_summary">Use an external password repository</string>
-    <string name="pref_select_external_repository">Select external repository</string>
+    <string name="pref_select_external_repository_title">Select external repository</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">No external repository selected</string>
     <string name="prefs_export_passwords_title">Export passwords</string>
     <string name="prefs_export_passwords_summary">Exports the encrypted passwords to an external directory</string>
-    <string name="prefs_version">Version</string>
 
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Generate Password</string>
@@ -171,12 +171,12 @@
     <string name="xkpwgen_builder_error">Selected dictionary does not contain enough words of given length %1$d..%2$d</string>
 
     <!-- XKPWD prefs -->
-    <string name="xkpwgen_pref_gentype_title">Password generator type</string>
-    <string name="xkpwgen_pref_custom_dict_title">Custom wordlist</string>
-    <string name="xkpwgen_pref_custom_dict_summary_on">Using custom wordlist file</string>
-    <string name="xkpwgen_pref_custom_dict_summary_off">Using built-in wordlist</string>
-    <string name="xkpwgen_pref_custom_dict_picker_title">Custom worldlist file</string>
-    <string name="xkpwgen_pref_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
+    <string name="pref_password_generator_type_title">Password generator type</string>
+    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Custom wordlist</string>
+    <string name="pref_xkpwgen_custom_dict_summary_on">Using custom wordlist file</string>
+    <string name="pref_xkpwgen_custom_dict_summary_off">Using built-in wordlist</string>
+    <string name="pref_xkpwgen_custom_dict_picker_title">Custom worldlist file</string>
+    <string name="pref_xkpwgen_custom_dict_picker_summary">Tap to pick a custom wordlist file containing one word per line</string>
 
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Passphrase</string>
@@ -220,7 +220,6 @@
     <string name="show_extra_content_pref_summary">Control the visibility of the extra content once decrypted.</string>
     <string name="pwd_generate_button">Generate</string>
     <string name="refresh_list">Refresh list</string>
-    <string name="no_repo_selected">No external repository selected</string>
     <string name="send_plaintext_password_to">Send password as plaintext using…</string>
     <string name="app_icon_hint">App icon</string>
 
@@ -271,14 +270,15 @@
     <string name="git_head_missing">Unable to locate HEAD</string>
     <string name="sdcard_root_warning_title">SD-Card root selected</string>
     <string name="sdcard_root_warning_message">You have selected the root of your sdcard for the store. This is extremely dangerous and you will lose your data as its content will, eventually, be deleted</string>
+    <string name="sdcard_root_warning_remove_everything">Remove everything</string>
     <string name="git_abort_and_push_title">Abort and Push</string>
     <string name="biometric_prompt_title">Biometric Prompt</string>
     <string name="biometric_auth_error">Authentication failure</string>
     <string name="biometric_auth_error_reason">Authentication failure: %s</string>
-    <string name="biometric_auth_title">Enable biometric authentication</string>
-    <string name="biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
-    <string name="biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
-    <string name="ssh_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
+    <string name="pref_biometric_auth_title">Enable biometric authentication</string>
+    <string name="pref_biometric_auth_summary">When enabled, Password Store will prompt you for your fingerprint when launching the app</string>
+    <string name="pref_biometric_auth_summary_error">Fingerprint hardware not accessible or missing</string>
+    <string name="pref_title_openkeystore_clear_keyid">Clear remembered OpenKeystore SSH Key ID</string>
     <string name="access_sdcard_text">The store location is in your SD Card or Internal storage, but the app does not have permission to access it.</string>
     <string name="your_public_key">Your public key</string>
     <string name="error_generate_ssh_key">Error while trying to generate the ssh-key</string>
@@ -291,16 +291,15 @@
     <string name="message_error_destination_outside_repo">Destination must be within the repository</string>
     <string name="message_rename_folder">Enter destination for %1$s</string>
     <string name="button_create">Create</string>
-    <string name="pref_search_on_start">Open search on start</string>
-    <string name="pref_search_on_start_hint">Open search bar when app is launched</string>
-    <string name="password_generator_category_title">Password Generator</string>
+    <string name="pref_search_on_start_title">Open search on start</string>
+    <string name="pref_search_on_start_summary">Open search bar when app is launched</string>
     <string name="tap_clear_clipboard">Tap here to clear clipboard</string>
     <string name="clone_git_repo">The repository must be cloned before syncing changes.</string>
-    <string name="theme_title">App theme</string>
-    <string name="theme_light">Light</string>
-    <string name="theme_dark">Dark</string>
-    <string name="theme_battery_saver">Set by Battery Saver</string>
-    <string name="theme_follow_system">System default</string>
+    <string name="pref_app_theme_title">App theme</string>
+    <string name="pref_app_theme_value_light">Light</string>
+    <string name="pref_app_theme_value_dark">Dark</string>
+    <string name="pref_app_theme_value_battery_saver">Set by Battery Saver</string>
+    <string name="pref_app_theme_value_follow_system">System default</string>
     <string name="connection_mode_ssh_key">SSH key</string>
     <string name="connection_mode_basic_authentication">Password</string>
     <string name="connection_mode_openkeychain" translatable="false">OpenKeychain</string>
@@ -389,7 +388,7 @@
     <!-- Proxy configuration activity -->
     <string name="proxy_hostname">Proxy hostname</string>
     <string name="port">Port</string>
-    <string name="pref_proxy_settings">HTTP(S) proxy settings</string>
+    <string name="pref_edit_proxy_settings">HTTP(S) proxy settings</string>
     <string name="invalid_proxy_url">Invalid URL</string>
     <string name="oreo_autofill_password_fill_and_conditional_save_support">Fill and save passwords (saving requires that no accessibility services are enabled)</string>
     <string name="clear_saved_host_key">Clear saved host key</string>

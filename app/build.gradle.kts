@@ -73,6 +73,7 @@ dependencies {
 
     implementation(Dependencies.FirstParty.zxing_android_embedded)
 
+    implementation(Dependencies.ThirdParty.bouncycastle)
     implementation(Dependencies.ThirdParty.commons_codec)
     implementation(Dependencies.ThirdParty.eddsa)
     implementation(Dependencies.ThirdParty.fastscroll)
@@ -80,10 +81,10 @@ dependencies {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
     implementation(Dependencies.ThirdParty.kotlin_result)
-    implementation(Dependencies.ThirdParty.sshj)
-    implementation(Dependencies.ThirdParty.bouncycastle)
+    implementation(Dependencies.ThirdParty.modern_android_prefs)
     implementation(Dependencies.ThirdParty.plumber)
     implementation(Dependencies.ThirdParty.ssh_auth)
+    implementation(Dependencies.ThirdParty.sshj)
     implementation(Dependencies.ThirdParty.timber)
     implementation(Dependencies.ThirdParty.timberkt)
 
