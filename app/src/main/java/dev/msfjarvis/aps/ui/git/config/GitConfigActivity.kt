@@ -29,6 +29,7 @@ import dev.msfjarvis.aps.util.extensions.viewBinding
 import kotlinx.coroutines.launch
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.lib.RepositoryState
 
 class GitConfigActivity : BaseGitActivity() {
 
@@ -79,10 +80,10 @@ class GitConfigActivity : BaseGitActivity() {
         val repo = PasswordRepository.getRepository(null)
         if (repo != null) {
             binding.gitHeadStatus.text = headStatusMsg(repo)
-            // enable the abort button only if we're rebasing
-            val isRebasing = repo.repositoryState.isRebasing
-            binding.gitAbortRebase.isEnabled = isRebasing
-            binding.gitAbortRebase.alpha = if (isRebasing) 1.0f else 0.5f
+            // enable the abort button only if we're rebasing or merging
+            val needsAbort = repo.repositoryState.isRebasing || repo.repositoryState == RepositoryState.MERGING
+            binding.gitAbortRebase.isEnabled = needsAbort
+            binding.gitAbortRebase.alpha = if (needsAbort) 1.0f else 0.5f
         }
         binding.gitLog.setOnClickListener {
             runCatching {

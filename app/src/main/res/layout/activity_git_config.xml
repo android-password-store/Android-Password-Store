@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_horizontal_margin"
-    tools:context="dev.msfjarvis.aps.git.GitConfigActivity"
+    tools:context="dev.msfjarvis.aps.ui.git.config.GitConfigActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 

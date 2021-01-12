@@ -56,6 +56,12 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
 
     override fun provideSettings(builder: PreferenceScreen.Builder) {
         builder.apply {
+            checkBox(PreferenceKeys.REBASE_ON_PULL) {
+                titleRes = R.string.pref_rebase_on_pull_title
+                summaryRes = R.string.pref_rebase_on_pull_summary
+                summaryOnRes = R.string.pref_rebase_on_pull_summary_on
+                defaultValue = true
+            }
             pref(PreferenceKeys.GIT_SERVER_INFO) {
                 titleRes = R.string.pref_edit_git_server_settings
                 visible = PasswordRepository.isGitRepo()

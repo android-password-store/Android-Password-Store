@@ -8,12 +8,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.RebaseCommand
+import org.eclipse.jgit.api.ResetCommand
+import org.eclipse.jgit.lib.RepositoryState
 
 class BreakOutOfDetached(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
 
-    override val commands = arrayOf(
-        // abort the rebase
-        git.rebase().setOperation(RebaseCommand.Operation.ABORT),
+    private val merging = repository.repositoryState == RepositoryState.MERGING
+    private val resetCommands = arrayOf(
         // git checkout -b conflict-branch
         git.checkout().setCreateBranch(true).setName("conflicting-$remoteBranch-${System.currentTimeMillis()}"),
         // push the changes
@@ -22,7 +23,26 @@ class BreakOutOfDetached(callingActivity: ContinuationContainerActivity) : GitOp
         git.checkout().setName(remoteBranch),
     )
 
-    override fun preExecute() = if (!git.repository.repositoryState.isRebasing) {
+    override val commands by lazy(LazyThreadSafetyMode.NONE) {
+        if (merging) {
+            // We need to run some non-command operations first
+            repository.writeMergeCommitMsg(null)
+            repository.writeMergeHeads(null)
+            arrayOf(
+                // reset hard back to our local HEAD
+                git.reset().setMode(ResetCommand.ResetType.HARD),
+                *resetCommands,
+            )
+        } else {
+            arrayOf(
+                // abort the rebase
+                git.rebase().setOperation(RebaseCommand.Operation.ABORT),
+                *resetCommands,
+            )
+        }
+    }
+
+    override fun preExecute() = if (!git.repository.repositoryState.isRebasing && !merging) {
         MaterialAlertDialogBuilder(callingActivity)
             .setTitle(callingActivity.resources.getString(R.string.git_abort_and_push_title))
             .setMessage(callingActivity.resources.getString(R.string.git_break_out_of_detached_unneeded))

@@ -313,7 +313,7 @@
     <string name="new_folder_set_gpg_key">Imposta la chiave GPG per la directory</string>
     <!-- GitException messages -->
     <string name="git_unknown_error">Errore sconosciuto</string>
-    <string name="git_pull_fail_error">Pull non è riuscito, sei in un capo distaccato. Usando \"impostazioni e utilità di git\", salvi le tue modifiche in remoto in un nuovo ramo e risolvi il conflitto sul tuo computer.</string>
+    <string name="git_pull_rebase_fail_error">Pull non è riuscito, sei in un capo distaccato. Usando \"impostazioni e utilità di git\", salvi le tue modifiche in remoto in un nuovo ramo e risolvi il conflitto sul tuo computer.</string>
     <string name="git_push_nff_error">Push è stato rifiutato da remoto, esegui pull prima di premere nuovamente. Puoi usare Sincronizza piuttosto che pull/push implementando entrambi</string>
     <string name="git_push_generic_error">Push è stato rifiutato da remoto, ragione: %1$s</string>
     <string name="git_push_other_error">Remoto ha rifiutato il push non avanti veloce. Controlla la variabile receive.denyNonFastForwards nel file di configurazione della repository di destinazione.</string>

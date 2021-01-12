@@ -21,7 +21,6 @@ import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.CommitCommand
 import org.eclipse.jgit.api.PullCommand
 import org.eclipse.jgit.api.PushCommand
-import org.eclipse.jgit.api.RebaseResult
 import org.eclipse.jgit.api.StatusCommand
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.transport.RemoteRefUpdate
@@ -62,9 +61,14 @@ class GitCommandExecutor(
                         val result = withContext(Dispatchers.IO) {
                             command.call()
                         }
-                        val rr = result.rebaseResult
-                        if (rr.status == RebaseResult.Status.STOPPED) {
-                            throw PullException.PullRebaseFailed
+                        if (result.rebaseResult != null) {
+                            if (!result.rebaseResult.status.isSuccessful) {
+                                throw PullException.PullRebaseFailed
+                            }
+                        } else if (result.mergeResult != null) {
+                            if (!result.mergeResult.mergeStatus.isSuccessful) {
+                                throw PullException.PullMergeFailed
+                            }
                         }
                     }
                     is PushCommand -> {

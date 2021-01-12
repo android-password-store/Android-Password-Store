@@ -7,7 +7,10 @@ package dev.msfjarvis.aps.util.git.operation
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.GitCommand
 
-class PullOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
+class PullOperation(
+    callingActivity: ContinuationContainerActivity,
+    rebase: Boolean,
+) : GitOperation(callingActivity) {
 
     /**
      * The story of why the pull operation is committing files goes like this: Once upon a time when
@@ -26,6 +29,6 @@ class PullOperation(callingActivity: ContinuationContainerActivity) : GitOperati
         // Commit everything! If needed, obviously.
         git.commit().setAll(true).setMessage("[Android Password Store] Sync"),
         // Pull and rebase on top of the remote branch
-        git.pull().setRebase(true).setRemote("origin"),
+        git.pull().setRebase(rebase).setRemote("origin"),
     )
 }

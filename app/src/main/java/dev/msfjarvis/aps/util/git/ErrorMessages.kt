@@ -28,7 +28,8 @@ sealed class GitException(@StringRes res: Int, vararg fmt: String) : Exception(b
      */
     sealed class PullException(@StringRes res: Int, vararg fmt: String) : GitException(res, *fmt) {
 
-        object PullRebaseFailed : PullException(R.string.git_pull_fail_error)
+        object PullRebaseFailed : PullException(R.string.git_pull_rebase_fail_error)
+        object PullMergeFailed : PullException(R.string.git_pull_merge_fail_error)
     }
 
     /**
