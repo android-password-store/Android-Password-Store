@@ -348,7 +348,9 @@
 
     <!-- GitException messages -->
     <string name="git_unknown_error">Unknown error</string>
-    <string name="git_pull_fail_error">Pull has failed, you\'re in a detached head. Using "settings > git utils", save your changes to the remote in a new branch and resolve the conflict on your computer.</string>
+    <string name="git_pull_rebase_fail_error">Pull has failed, you\'re in a detached head. Using "settings > git utils", save your changes to the remote in a new branch and resolve the conflict on your computer.</string>
+    <string name="git_pull_merge_fail_error">Merge has failed, you\'re in a conflicting state. TODO: Add a recovery method.</string>
+
     <string name="git_push_nff_error">Push was rejected by remote, run pull before pushing again. You can use Synchronize rather than pull/push as it implements both</string>
     <string name="git_push_generic_error">Push was rejected by remote, reason: %1$s</string>
     <string name="git_push_other_error">Remote rejected non-fast-forward push. Check receive.denyNonFastForwards variable in config file of destination repository.</string>

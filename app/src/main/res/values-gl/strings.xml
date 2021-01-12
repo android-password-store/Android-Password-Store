@@ -314,7 +314,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="new_folder_set_gpg_key">Establece chave GPG para o directorio</string>
     <!-- GitException messages -->
     <string name="git_unknown_error">Fallo descoñecido</string>
-    <string name="git_pull_fail_error">Fallou a acción pull, estás nun head diferente. Utiliza \"axustes &gt; utilidades git\", garda os cambios no remoto nunha nova rama e resolve o conflicto nun ordenador.</string>
+    <string name="git_pull_rebase_fail_error">Fallou a acción pull, estás nun head diferente. Utiliza \"axustes &gt; utilidades git\", garda os cambios no remoto nunha nova rama e resolve o conflicto nun ordenador.</string>
     <string name="git_push_nff_error">O push foi rexeitado polo remoto, executa pull antes de voltar a subilos de novo. Podes usar Sincronizar mellor que push/pull xa que inclú ambos.</string>
     <string name="git_push_generic_error">O push foi rexeitado polo remoto, razón:</string>
     <string name="git_push_other_error">O remoto rexeitou o push non-fast-forward. Comproba a variable receive.denyNonFastForwards no ficheiro de configuración do repositorio de destino.</string>

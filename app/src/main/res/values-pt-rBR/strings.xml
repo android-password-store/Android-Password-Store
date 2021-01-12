@@ -312,7 +312,7 @@
     <string name="new_folder_set_gpg_key">Definir chave GPG para diretório</string>
     <!-- GitException messages -->
     <string name="git_unknown_error">Erro desconhecido</string>
-    <string name="git_pull_fail_error">O pull falhou, você está em uma Head avulsa. Usando \"configurações &gt; utils\" do git, salve suas alterações no remoto em uma nova branch e resolva o conflito no seu computador.</string>
+    <string name="git_pull_rebase_fail_error">O pull falhou, você está em uma Head avulsa. Usando \"configurações &gt; utils\" do git, salve suas alterações no remoto em uma nova branch e resolva o conflito no seu computador.</string>
     <string name="git_push_nff_error">Push rejeitado pelo remoto, execute o pull antes de fazer push novamente. Você pode usar Sincronização em vez de pull/push conforme implementa ambos</string>
     <string name="git_push_generic_error">Push rejeitado pelo remoto, razão: %1$s</string>
     <string name="git_push_other_error">O remoto rejeito o push non-fast-foward. Cheque a variável receive.denyNonFastForwards no arquivo de configuração do repositório de destino.</string>
