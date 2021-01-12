@@ -19,7 +19,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class SshKeyImportActivity : AppCompatActivity() {
 
     private val sshKeyImportAction = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        if (uri == null) return@registerForActivityResult
+        if (uri == null)  {
+            finish()
+            return@registerForActivityResult
+        }
         runCatching {
             SshKey.import(uri)
             Toast.makeText(this, resources.getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show()
