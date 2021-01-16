@@ -93,42 +93,43 @@
     <string name="share_as_plaintext">Compartir como texto plano</string>
     <string name="last_changed">Último cambio %s</string>
     <!-- Preferences -->
-    <string name="pref_category_repository_title">Repositorio</string>
-    <string name="pref_edit_git_server_settings">Editar axustes do servidor git</string>
+    <string name="pref_repository_title">Repositorio</string>
+    <string name="pref_edit_server_info">Editar axustes do servidor git</string>
     <string name="pref_edit_git_config">Utilidades Git</string>
-    <string name="pref_import_ssh_key_title">Importar chave SSH</string>
+    <string name="pref_ssh_title">Importar chave SSH</string>
     <string name="pref_ssh_keygen_title">Crear par de chaves SSH</string>
     <string name="pref_ssh_see_key_title">Ver a chave pública SSH creada</string>
-    <string name="pref_git_delete_repo_title">Eliminar repositorio</string>
+    <string name="pref_git_delete_repo">Eliminar repositorio</string>
     <string name="pref_dialog_delete_title">Baleirar repositorio</string>
     <string name="pref_category_general_title">Xeral</string>
-    <string name="pref_category_passwords_title">Contrasinais</string>
+    <string name="pref_category_title_passwords">Contrasinais</string>
     <string name="pref_clipboard_timeout_title">Caducidade do copiado do contrasinal</string>
     <string name="pref_clipboard_timeout_summary">Establece os segundos que queres que o contrasinal permaneza copiado no portapapeis. 0 significa para sempre. Valor actual: %1$s</string>
     <string name="pref_copy_title">Copiar contrasinal automáticamente</string>
-    <string name="pref_copy_summary">Copia automáticamente o contrasinal ao portapapeis se o descifra correctamente</string>
+    <string name="pref_copy_dialog_title">Copia automáticamente o contrasinal ao portapapeis se o descifra correctamente</string>
     <string name="ssh_key_import_error_not_an_ssh_key_message">O ficheiro escollido non semella ser unha chave privada SSH.</string>
     <string name="ssh_key_success_dialog_title">Chave-SSH importada</string>
     <string name="ssh_key_error_dialog_title">Houbo un fallo ao importar a chave ssh</string>
     <string name="ssh_key_error_dialog_text">Mensaxe : \n</string>
-    <string name="pref_recursive_filter_title">Filtro recursivo</string>
-    <string name="pref_recursive_filter_summary">Atopa as chaves de xeito recursivo no directorio actual.</string>
+    <string name="pref_recursive_filter">Filtro recursivo</string>
+    <string name="pref_recursive_filter_hint">Atopa as chaves de xeito recursivo no directorio actual.</string>
     <string name="pref_sort_order_title">Orde para mostrar contrasinais</string>
     <string name="pref_folder_first_sort_order">Primeiro cartafoles</string>
     <string name="pref_file_first_sort_order">Primeiro ficheiros</string>
     <string name="pref_type_independent_sort_order">Independentemente do tipo</string>
     <string name="pref_recently_used_sort_order">Usadas recentemente</string>
-    <string name="pref_category_autofill_title">Completado automático</string>
+    <string name="pref_autofill_title">Completado automático</string>
     <string name="pref_autofill_enable_title">Activar completado automático</string>
-    <string name="pref_category_misc_title">Varios</string>
+    <string name="pref_misc_title">Varios</string>
     <string name="pref_clear_clipboard_title">Baleirar portapapeis 20 veces</string>
-    <string name="pref_clear_clipboard_summary">Gardar números consecutivos no portapapeis 20 veces. Resulta útil nos móbiles Samsung que gardan historial no portapapeis.</string>
+    <string name="pref_clear_clipboard_hint">Gardar números consecutivos no portapapeis 20 veces. Resulta útil nos móbiles Samsung que gardan historial no portapapeis.</string>
     <string name="pref_git_delete_repo_summary">Elimina repositorio local (oculto).</string>
-    <string name="pref_external_repository_title">Repositorio externo</string>
+    <string name="pref_external_repository">Repositorio externo</string>
     <string name="pref_external_repository_summary">Usar un repositorio externo de contrasinais</string>
-    <string name="pref_select_external_repository_title">Selecciona repositorio externo</string>
+    <string name="pref_select_external_repository">Selecciona repositorio externo</string>
     <string name="prefs_export_passwords_title">Exportar contrasinais</string>
     <string name="prefs_export_passwords_summary">Exporta os contrasinais cifrados a un directorio externo</string>
+    <string name="prefs_version">Versión</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Crear contrasinal</string>
     <string name="pwgen_generate">Crear</string>
@@ -150,12 +151,12 @@
     <string name="xkpwgen_custom_dict_imported">Lista persoal de palabras: %1$s</string>
     <string name="xkpwgen_builder_error">O dicionario non contén palabras suficientes da lonxitude dada %1$d .. %2$d</string>
     <!-- XKPWD prefs -->
-    <string name="pref_password_generator_type_title">Tipo de creador de contrasinais</string>
-    <string name="pref_xkpwgen_custom_wordlist_enabled_title">Lista persoal de palabras</string>
-    <string name="pref_xkpwgen_custom_dict_summary_on">Usar ficheiro con palabras personalizadas</string>
-    <string name="pref_xkpwgen_custom_dict_summary_off">Usar lista de palabras incluída</string>
-    <string name="pref_xkpwgen_custom_dict_picker_title">Ficheiro persoal de palabras</string>
-    <string name="pref_xkpwgen_custom_dict_picker_summary">Toca para escoller un ficheiro persoal con palabras que conteña unha palabra por liña</string>
+    <string name="xkpwgen_pref_gentype_title">Tipo de creador de contrasinais</string>
+    <string name="xkpwgen_pref_custom_dict_title">Lista persoal de palabras</string>
+    <string name="xkpwgen_pref_custom_dict_summary_on">Usar ficheiro con palabras personalizadas</string>
+    <string name="xkpwgen_pref_custom_dict_summary_off">Usar lista de palabras incluída</string>
+    <string name="xkpwgen_pref_custom_dict_picker_title">Ficheiro persoal de palabras</string>
+    <string name="xkpwgen_pref_custom_dict_picker_summary">Toca para escoller un ficheiro persoal con palabras que conteña unha palabra por liña</string>
     <!-- ssh keygen fragment -->
     <string name="ssh_keygen_passphrase">Frase de paso</string>
     <string name="ssh_keygen_generate">Crear</string>
@@ -195,7 +196,7 @@
     <string name="show_extra_content_pref_summary">Controla a visibilidade do contido extra unha vez descifrado</string>
     <string name="pwd_generate_button">Crear</string>
     <string name="refresh_list">Actualizar lista</string>
-    <string name="pref_select_external_repository_summary_no_repo_selected">Non hai seleccionado ningún repositorio externo</string>
+    <string name="no_repo_selected">Non hai seleccionado ningún repositorio externo</string>
     <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando...</string>
     <string name="app_icon_hint">Icona da app</string>
     <!-- Oreo Autofill -->
@@ -248,10 +249,10 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="biometric_prompt_title">Petición biométrica</string>
     <string name="biometric_auth_error">Fallo de autenticación</string>
     <string name="biometric_auth_error_reason">Fallou a autenticación: %s</string>
-    <string name="pref_biometric_auth_title">Activar autenticación biométrica</string>
-    <string name="pref_biometric_auth_summary">Ao activala, Password Store vaiche pedir a túa pegada dactilar ao iniciar a app</string>
-    <string name="pref_biometric_auth_summary_error">O hardware de pegada dixital non é accesible ou existente</string>
-    <string name="pref_title_openkeystore_clear_keyid">Eliminar o ID lembrado da chave SSH en OpenKeystore</string>
+    <string name="biometric_auth_title">Activar autenticación biométrica</string>
+    <string name="biometric_auth_summary">Ao activala, Password Store vaiche pedir a túa pegada dactilar ao iniciar a app</string>
+    <string name="biometric_auth_summary_error">O hardware de pegada dixital non é accesible ou existente</string>
+    <string name="ssh_openkeystore_clear_keyid">Eliminar o ID lembrado da chave SSH en OpenKeystore</string>
     <string name="access_sdcard_text">O almacenaxe está na tarxeta SD pero a app non ten permiso para acceder a el. Por favor concédelle permiso.</string>
     <string name="your_public_key">A túa chave pública</string>
     <string name="error_generate_ssh_key">Algo fallou ao intentar crear a chave-ssh</string>
@@ -264,15 +265,16 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="message_error_destination_outside_repo">O destino debe estar dentro do repositorio</string>
     <string name="message_rename_folder">Escribe o destino para %1$s</string>
     <string name="button_create">Crear</string>
-    <string name="pref_search_on_start_title">Abrir busca ao inicio</string>
-    <string name="pref_search_on_start_summary">Abrir a barra de busca cando se inicia a app</string>
+    <string name="pref_search_on_start">Abrir busca ao inicio</string>
+    <string name="pref_search_on_start_hint">Abrir a barra de busca cando se inicia a app</string>
+    <string name="password_generator_category_title">Creador de contrasinais</string>
     <string name="tap_clear_clipboard">Toca aquí para baleirar o portapapeis</string>
     <string name="clone_git_repo">Clonar un repositorio git para sincronizar os cambios</string>
-    <string name="pref_app_theme_title">Decorado da App</string>
-    <string name="pref_app_theme_value_light">Claro</string>
-    <string name="pref_app_theme_value_dark">Escuro</string>
-    <string name="pref_app_theme_value_battery_saver">Establecido polo Aforrador de enerxía</string>
-    <string name="pref_app_theme_value_follow_system">Por omisión do sistema</string>
+    <string name="theme_title">Decorado da App</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="theme_battery_saver">Establecido polo Aforrador de enerxía</string>
+    <string name="theme_follow_system">Por omisión do sistema</string>
     <string name="connection_mode_ssh_key">Chave SSH</string>
     <string name="connection_mode_basic_authentication">Contrasinal</string>
     <string name="git_server_config_save_success">Configuración gardada</string>
@@ -314,7 +316,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="new_folder_set_gpg_key">Establece chave GPG para o directorio</string>
     <!-- GitException messages -->
     <string name="git_unknown_error">Fallo descoñecido</string>
-    <string name="git_pull_rebase_fail_error">Fallou a acción pull, estás nun head diferente. Utiliza \"axustes &gt; utilidades git\", garda os cambios no remoto nunha nova rama e resolve o conflicto nun ordenador.</string>
+    <string name="git_pull_fail_error">Fallou a acción pull, estás nun head diferente. Utiliza \"axustes &gt; utilidades git\", garda os cambios no remoto nunha nova rama e resolve o conflicto nun ordenador.</string>
     <string name="git_push_nff_error">O push foi rexeitado polo remoto, executa pull antes de voltar a subilos de novo. Podes usar Sincronizar mellor que push/pull xa que inclú ambos.</string>
     <string name="git_push_generic_error">O push foi rexeitado polo remoto, razón:</string>
     <string name="git_push_other_error">O remoto rexeitou o push non-fast-forward. Comproba a variable receive.denyNonFastForwards no ficheiro de configuración do repositorio de destino.</string>
@@ -352,7 +354,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <!-- Proxy configuration activity -->
     <string name="proxy_hostname">Servidor proxy</string>
     <string name="port">Porto</string>
-    <string name="pref_edit_proxy_settings">Axustes do proxy HTTP(S)</string>
+    <string name="pref_proxy_settings">Axustes do proxy HTTP(S)</string>
     <string name="invalid_proxy_url">URL non válido</string>
     <string name="oreo_autofill_password_fill_and_conditional_save_support">Completa e garda contrasinais (gardar require que os servizos de accesibilidade non estén activados)</string>
     <string name="clear_saved_host_key">Eliminar chave do host gardada</string>
