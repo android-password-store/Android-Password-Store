@@ -57,10 +57,11 @@ jobs:
           git add CHANGELOG.md
           git commit -m "CHANGELOG: bump for ${{ github.event.milestone.title }}"
 
-          # Increment the version as necessary. If we're on develop it means
-          # This is a new minor version.
+          # Increment the version as necessary. If we checked out develop it means
+          # that the version number is already correct, and we only need to drop the
+          # -SNAPSHOT suffix.
           if [[ "${CHECKOUT_REF}" == "develop" ]]; then
-            ./gradlew bumpMinor
+            ./gradlew clearPreRelease
           else
             ./gradlew bumpPatch
           fi
