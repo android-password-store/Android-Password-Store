@@ -50,6 +50,13 @@ class VersioningPlugin : Plugin<Project> {
         props.store(stream, VERSIONING_PROP_COMMENT)
     }
 
+    /**
+     * Returns the same [Version], but with build metadata stripped.
+     */
+    private fun Version.clearPreRelease(): Version {
+        return Version.forIntegers(majorVersion, minorVersion, patchVersion)
+    }
+
     override fun apply(project: Project) {
         with(project) {
             val appPlugin = requireNotNull(plugins.findPlugin(AppPlugin::class.java)) {
@@ -71,6 +78,12 @@ class VersioningPlugin : Plugin<Project> {
             appPlugin.extension.defaultConfig.versionCode = versionCode
             afterEvaluate {
                 val version = Version.valueOf(versionName)
+                tasks.register("clearPreRelease") {
+                    doLast {
+                        version.clearPreRelease()
+                            .writeForAndroid(propFile.asFile.outputStream())
+                    }
+                }
                 tasks.register("bumpMajor") {
                     doLast {
                         version.incrementMajorVersion()
