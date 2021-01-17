@@ -3,6 +3,7 @@ rootProject.ext.versions = [
         kotlin                         : '1.4.21',
         binary_compatibility_validator : '0.2.4',
         download_plugin                : '4.1.1',
+        semver                         : '0.9.0',
 ]
 
 rootProject.ext.build = [
@@ -10,4 +11,5 @@ rootProject.ext.build = [
         kotlinGradlePlugin           : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
         binaryCompatibilityValidator : "org.jetbrains.kotlinx:binary-compatibility-validator:${versions.binary_compatibility_validator}",
         downloadTaskPlugin           : "de.undercouch:gradle-download-task:${versions.download_plugin}",
+        jsemver                      : "com.github.zafarkhaja:java-semver:${versions.semver}",
 ]
