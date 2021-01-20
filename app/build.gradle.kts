@@ -7,6 +7,7 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 plugins {
     id("com.android.application")
     kotlin("android")
+    `versioning-plugin`
     `aps-plugin`
     `crowdin-plugin`
 }
@@ -26,8 +27,6 @@ android {
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 2_00_00
-        versionName = "2.0.0-SNAPSHOT"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

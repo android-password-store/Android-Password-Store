@@ -9,32 +9,73 @@ jobs:
     name: "Draft a new release"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-        with:
-          ref: 'release'
       - name: Extract version from milestone
         run: |
           VERSION="${{ github.event.milestone.title }}"
-          echo "RELEASE_VERSION=${VERSION/v/}" >> $GITHUB_ENV
+          RELEASE_VERSION="${VERSION/v/}"
+          # Transforms 1.13.2 to 1.13 so that we can re-use the same
+          # branch for patch releases.
+          BRANCH_VERSION="${RELEASE_VERSION:$i:-2}"
+          if [[ "${RELEASE_VERSION: -1}" == "0" ]]; then
+            CHECKOUT_REF="develop"
+          else
+            CHECKOUT_REF="release-${BRANCH_VERSION}"
+          fi
+
+          # Export variables separately so the scripting above is more legible,
+          # and we can actually use them within this block. Changes to $GITHUB_ENV
+          # only affect the next step, not the current one.
+          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
+          echo "CHECKOUT_REF=${CHECKOUT_REF}" >> $GITHUB_ENV
+          echo "BRANCH_VERSION=${BRANCH_VERSION}" >> $GITHUB_ENV
+          echo "PR_BASE=release-${BRANCH_VERSION}" >> $GITHUB_ENV
+          echo "PR_HEAD=release-prep" >> $GITHUB_ENV
+
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        with:
+          ref: ${{ env.CHECKOUT_REF }}
 
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@96ebf19f2bddaf72406c84691b9c2d827da53140
         with:
-          version: ${{ env.RELEASE_VERSION }}
+          version: ${{ github.event.milestone.title }}
 
       - name: Initialize git config and commit changes
         run: |
+          # Configure name and email for Actions user
           git config user.name "GitHub Actions"
           git config user.email noreply@github.com
+
+          # It is necessary to create the $PR_BASE branch if it doesn't
+          # already exist because we want to start a PR against it.
+          if [[ "${CHECKOUT_REF}" == "develop" ]]; then
+            git branch -c develop "${PR_BASE}"
+            git push origin "${PR_BASE}"
+          fi
+
+          # Stage and commit changes to the changelog
+          git add CHANGELOG.md
+          git commit -m "CHANGELOG: bump for ${{ github.event.milestone.title }}"
+
+          # Increment the version as necessary. If we checked out develop it means
+          # that the version number is already correct, and we only need to drop the
+          # -SNAPSHOT suffix.
+          if [[ "${CHECKOUT_REF}" == "develop" ]]; then
+            ./gradlew clearPreRelease
+          else
+            ./gradlew bumpPatch
+          fi
+
+          # Commit changes to the versioning
+          git add **/version.properties
+          git commit -m "build: bump version"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@45c510e1f68ba052e3cd911f661a799cfb9ba3a3
         with:
           author: GitHub Actions <noreply@github.com>
-          base: release
-          body: This is an automated pull request to bump the changelog for the v${{ env.RELEASE_VERSION }} release.
-          branch: release-${{ env.RELEASE_VERSION }}
-          commit-message: "CHANGELOG: bump for ${{ env.RELEASE_VERSION }}"
-          draft: true
+          body: This is an automated pull request to bump the changelog for the ${{ github.event.milestone.title }} release.
+          base: ${{ env.PR_BASE }}
+          branch: ${{ env.PR_HEAD }}
           title: Release v${{ env.RELEASE_VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}

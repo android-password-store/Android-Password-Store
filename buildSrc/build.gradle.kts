@@ -25,6 +25,10 @@ gradlePlugin {
             id = "crowdin-plugin"
             implementationClass = "CrowdinDownloadPlugin"
         }
+        register("versioning") {
+            id = "versioning-plugin"
+            implementationClass = "VersioningPlugin"
+        }
     }
 }
 
@@ -33,4 +37,5 @@ dependencies {
     implementation(build.getValue("androidGradlePlugin"))
     implementation(build.getValue("binaryCompatibilityValidator"))
     implementation(build.getValue("downloadTaskPlugin"))
+    implementation(build.getValue("jsemver"))
 }
