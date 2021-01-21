@@ -164,7 +164,7 @@ class PasswordEntryTest {
 
         // This implementation is hardcoded for the URI above.
         val testFinder = object : TotpFinder {
-            override fun findSecret(content: String): String? {
+            override fun findSecret(content: String): String {
                 return "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"
             }
 
