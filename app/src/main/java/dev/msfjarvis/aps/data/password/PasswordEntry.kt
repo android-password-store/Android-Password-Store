@@ -9,7 +9,6 @@ import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import dev.msfjarvis.aps.util.totp.UriTotpFinder
 import java.io.ByteArrayOutputStream
-import java.io.UnsupportedEncodingException
 import java.util.Date
 
 /**
@@ -28,8 +27,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     val extraContentWithoutAuthData: String
     val extraContentMap: Map<String, String>
 
-    @Throws(UnsupportedEncodingException::class)
-    constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
+    constructor(os: ByteArrayOutputStream) : this(os.toString(Charsets.UTF_8.name()), UriTotpFinder())
 
     init {
         val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
