@@ -23,9 +23,9 @@ import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.databinding.ActivityOreoAutofillPublisherChangedBinding
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPublisherChangedException
-import dev.msfjarvis.aps.databinding.ActivityOreoAutofillPublisherChangedBinding
 import dev.msfjarvis.aps.util.extensions.viewBinding
 
 @TargetApi(Build.VERSION_CODES.O)

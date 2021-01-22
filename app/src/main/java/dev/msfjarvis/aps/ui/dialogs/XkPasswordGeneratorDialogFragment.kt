@@ -22,9 +22,9 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentXkpwgenBinding
+import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.pwgenxkpwd.CapsType
 import dev.msfjarvis.aps.util.pwgenxkpwd.PasswordBuilder
-import dev.msfjarvis.aps.util.extensions.getString
 
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {

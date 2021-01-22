@@ -7,9 +7,9 @@ package dev.msfjarvis.aps.util.pwgen
 import android.content.Context
 import androidx.core.content.edit
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.clearFlag
 import dev.msfjarvis.aps.util.extensions.hasFlag
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 enum class PasswordOption(val key: String) {
     NoDigits("0"),

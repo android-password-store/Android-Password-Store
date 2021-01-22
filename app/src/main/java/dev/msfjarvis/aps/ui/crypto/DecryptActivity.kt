@@ -19,10 +19,10 @@ import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
 import dev.msfjarvis.aps.data.password.PasswordEntry
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.time.ExperimentalTime

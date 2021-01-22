@@ -9,8 +9,8 @@ import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
-import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.git.operation.CredentialFinder
+import dev.msfjarvis.aps.util.settings.AuthMode
 import java.io.File
 import java.io.IOException
 import java.io.InputStream

@@ -5,18 +5,18 @@
 
 package dev.msfjarvis.aps.ui.settings
 
-import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.extensions.sharedPrefs
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class DirectorySelectionActivity : AppCompatActivity() {
 

@@ -5,18 +5,6 @@
 
 package dev.msfjarvis.aps.ui.settings
 
-import de.Maxr1998.modernpreferences.PreferenceScreen
-import de.Maxr1998.modernpreferences.helpers.editText
-import de.Maxr1998.modernpreferences.helpers.onClick
-import de.Maxr1998.modernpreferences.helpers.singleChoice
-import de.Maxr1998.modernpreferences.helpers.switch
-import de.Maxr1998.modernpreferences.preferences.SwitchPreference
-import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
-import dev.msfjarvis.aps.BuildConfig
-import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.autofill.DirectoryStructure
-import dev.msfjarvis.aps.util.extensions.autofillManager
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
@@ -30,6 +18,18 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.github.androidpasswordstore.autofillparser.BrowserAutofillSupportLevel
 import com.github.androidpasswordstore.autofillparser.getInstalledBrowsersWithAutofillSupportLevel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import de.Maxr1998.modernpreferences.PreferenceScreen
+import de.Maxr1998.modernpreferences.helpers.editText
+import de.Maxr1998.modernpreferences.helpers.onClick
+import de.Maxr1998.modernpreferences.helpers.singleChoice
+import de.Maxr1998.modernpreferences.helpers.switch
+import de.Maxr1998.modernpreferences.preferences.SwitchPreference
+import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import dev.msfjarvis.aps.BuildConfig
+import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.util.autofill.DirectoryStructure
+import dev.msfjarvis.aps.util.extensions.autofillManager
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class AutofillSettings(private val activity: FragmentActivity) : SettingsProvider {
 

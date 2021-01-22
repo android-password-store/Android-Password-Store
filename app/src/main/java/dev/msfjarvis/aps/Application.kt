@@ -12,11 +12,11 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
-import dev.msfjarvis.aps.util.git.sshj.setUpBouncyCastleForSshj
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import dev.msfjarvis.aps.util.proxy.ProxyUtils
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.git.sshj.setUpBouncyCastleForSshj
+import dev.msfjarvis.aps.util.proxy.ProxyUtils
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.settings.runMigrations
 
 @Suppress("Unused")

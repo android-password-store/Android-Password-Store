@@ -13,8 +13,8 @@ import androidx.core.content.edit
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
 import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class LaunchActivity : AppCompatActivity() {
 

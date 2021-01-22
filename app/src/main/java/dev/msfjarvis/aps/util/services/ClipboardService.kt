@@ -18,9 +18,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

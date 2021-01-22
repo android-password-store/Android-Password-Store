@@ -5,9 +5,13 @@
 
 package dev.msfjarvis.aps.ui.settings
 
+import android.text.InputType
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
-import de.Maxr1998.modernpreferences.helpers.categoryHeader
 import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onCheckedChange
@@ -21,11 +25,6 @@ import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.pwgenxkpwd.XkpwdDictionary
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import android.text.InputType
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.edit
-import androidx.fragment.app.FragmentActivity
 import java.io.File
 
 class PasswordSettings(private val activity: FragmentActivity) : SettingsProvider {

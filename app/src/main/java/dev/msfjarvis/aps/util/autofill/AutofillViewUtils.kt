@@ -18,9 +18,9 @@ import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.DrawableRes
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
-import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import java.io.File
 
 data class DatasetMetadata(val title: String, val subtitle: String?, @DrawableRes val iconRes: Int)

@@ -10,8 +10,8 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.Closeable
 import java.security.PublicKey
 import kotlin.coroutines.resume

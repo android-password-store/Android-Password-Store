@@ -18,11 +18,11 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivitySshKeygenBinding
-import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
 import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.keyguardManager
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.git.sshj.SshKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers

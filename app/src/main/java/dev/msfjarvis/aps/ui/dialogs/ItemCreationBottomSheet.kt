@@ -16,11 +16,11 @@ import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ACTION_FOLDER
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ACTION_KEY
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ACTION_PASSWORD
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ITEM_CREATION_REQUEST_KEY
-import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.resolveAttribute
 
 class ItemCreationBottomSheet : BottomSheetDialogFragment() {

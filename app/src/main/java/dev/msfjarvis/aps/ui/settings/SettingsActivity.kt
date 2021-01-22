@@ -5,15 +5,15 @@
 
 package dev.msfjarvis.aps.ui.settings
 
+import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import de.Maxr1998.modernpreferences.PreferencesAdapter
 import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.subScreen
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityPreferenceRecyclerviewBinding
 import dev.msfjarvis.aps.util.extensions.viewBinding
-import android.os.Bundle
-import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
 

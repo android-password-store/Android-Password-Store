@@ -26,11 +26,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.password.PasswordItem
+import dev.msfjarvis.aps.databinding.ActivityOreoAutofillFilterBinding
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
-import dev.msfjarvis.aps.databinding.ActivityOreoAutofillFilterBinding
-import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.viewmodel.FilterMode
 import dev.msfjarvis.aps.util.viewmodel.ListMode
