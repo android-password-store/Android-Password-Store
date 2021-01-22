@@ -5,6 +5,13 @@
 
 package dev.msfjarvis.aps.ui.settings
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.onClick
@@ -13,13 +20,6 @@ import dev.msfjarvis.aps.BuildConfig
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.services.PasswordExportService
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.documentfile.provider.DocumentFile
-import androidx.fragment.app.FragmentActivity
 
 class MiscSettings(activity: FragmentActivity) : SettingsProvider {
 

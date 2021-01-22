@@ -7,6 +7,7 @@
 package dev.msfjarvis.aps.ui.onboarding.fragments
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,11 +20,9 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.databinding.FragmentRepoLocationBinding
 import dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity
-import dev.msfjarvis.aps.util.settings.PasswordSortOrder
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.isPermissionGranted
@@ -31,7 +30,8 @@ import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.viewBinding
-import android.content.Intent
+import dev.msfjarvis.aps.util.settings.PasswordSortOrder
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {

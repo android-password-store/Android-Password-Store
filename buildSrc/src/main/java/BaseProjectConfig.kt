@@ -4,12 +4,12 @@
  */
 
 import com.android.build.gradle.TestedExtension
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType

@@ -6,9 +6,9 @@ package dev.msfjarvis.aps.util.pwgenxkpwd
 
 import android.content.Context
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 
 class XkpwdDictionary(context: Context) {

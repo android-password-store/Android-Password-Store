@@ -14,14 +14,14 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.ui.crypto.GetKeyIdsActivity
-import dev.msfjarvis.aps.databinding.FragmentKeySelectionBinding
 import dev.msfjarvis.aps.data.repo.PasswordRepository
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import dev.msfjarvis.aps.databinding.FragmentKeySelectionBinding
+import dev.msfjarvis.aps.ui.crypto.GetKeyIdsActivity
 import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -11,11 +11,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.settings.AuthMode
-import dev.msfjarvis.aps.util.git.sshj.InteractivePasswordFinder
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
+import dev.msfjarvis.aps.util.git.sshj.InteractivePasswordFinder
+import dev.msfjarvis.aps.util.settings.AuthMode
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 

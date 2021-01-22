@@ -5,6 +5,15 @@
 
 package dev.msfjarvis.aps.ui.settings
 
+import android.content.Intent
+import android.content.pm.ShortcutManager
+import android.os.Build
+import androidx.core.content.edit
+import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.checkBox
@@ -25,15 +34,6 @@ import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import android.content.Intent
-import android.content.pm.ShortcutManager
-import android.os.Build
-import androidx.core.content.edit
-import androidx.core.content.getSystemService
-import androidx.fragment.app.FragmentActivity
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 

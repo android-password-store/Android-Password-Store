@@ -17,11 +17,11 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
 import dev.msfjarvis.aps.ui.crypto.GetKeyIdsActivity
-import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import java.io.File

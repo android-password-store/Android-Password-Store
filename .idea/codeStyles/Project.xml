@@ -20,17 +20,6 @@
       <option name="PACKAGES_IMPORT_LAYOUT">
         <value>
           <package name="" alias="false" withSubpackages="true" />
-          <package name="android" alias="false" withSubpackages="true" />
-          <package name="androidx" alias="false" withSubpackages="true" />
-          <package name="com" alias="false" withSubpackages="true" />
-          <package name="java" alias="false" withSubpackages="true" />
-          <package name="javax" alias="false" withSubpackages="true" />
-          <package name="kotlin" alias="false" withSubpackages="true" />
-          <package name="kotlinx" alias="false" withSubpackages="true" />
-          <package name="me" alias="false" withSubpackages="true" />
-          <package name="mozilla" alias="false" withSubpackages="true" />
-          <package name="net" alias="false" withSubpackages="true" />
-          <package name="org" alias="false" withSubpackages="true" />
           <package name="" alias="true" withSubpackages="true" />
         </value>
       </option>
@@ -170,6 +159,9 @@
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
       <option name="RIGHT_MARGIN" value="100" />
+      <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="0" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="0" />
+      <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
       <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
       <option name="CALL_PARAMETERS_WRAP" value="0" />
       <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="false" />

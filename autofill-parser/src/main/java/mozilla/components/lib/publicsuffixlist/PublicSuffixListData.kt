@@ -7,8 +7,8 @@
 
 package mozilla.components.lib.publicsuffixlist
 
-import mozilla.components.lib.publicsuffixlist.ext.binarySearch
 import java.net.IDN
+import mozilla.components.lib.publicsuffixlist.ext.binarySearch
 
 /**
  * Class wrapping the public suffix list data and offering methods for accessing rules in it.

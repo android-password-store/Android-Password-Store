@@ -13,14 +13,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import dev.msfjarvis.aps.util.viewmodel.ListMode
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel
+import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.databinding.PasswordRecyclerViewBinding
 import dev.msfjarvis.aps.ui.adapters.PasswordItemRecyclerAdapter
-import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.viewmodel.ListMode
+import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel
 import java.io.File
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 

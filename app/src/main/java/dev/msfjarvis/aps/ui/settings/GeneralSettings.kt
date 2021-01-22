@@ -5,6 +5,11 @@
 
 package dev.msfjarvis.aps.ui.settings
 
+import android.content.pm.ShortcutManager
+import android.os.Build
+import androidx.core.content.edit
+import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.checkBox
 import de.Maxr1998.modernpreferences.helpers.onClick
@@ -14,11 +19,6 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import android.content.pm.ShortcutManager
-import android.os.Build
-import androidx.core.content.edit
-import androidx.core.content.getSystemService
-import androidx.fragment.app.FragmentActivity
 
 class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider {
 

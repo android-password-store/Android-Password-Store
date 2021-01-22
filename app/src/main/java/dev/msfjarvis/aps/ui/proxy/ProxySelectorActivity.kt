@@ -15,12 +15,12 @@ import androidx.core.os.postDelayed
 import androidx.core.widget.doOnTextChanged
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityProxySelectorBinding
-import dev.msfjarvis.aps.util.settings.GitSettings
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import dev.msfjarvis.aps.util.proxy.ProxyUtils
 import dev.msfjarvis.aps.util.extensions.getEncryptedProxyPrefs
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.proxy.ProxyUtils
+import dev.msfjarvis.aps.util.settings.GitSettings
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 private val IP_ADDRESS_REGEX = Patterns.IP_ADDRESS.toRegex()
 private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()

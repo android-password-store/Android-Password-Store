@@ -22,10 +22,10 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import java.io.IOException
 import java.security.KeyFactory

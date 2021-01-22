@@ -30,10 +30,10 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
 import dev.msfjarvis.aps.util.autofill.Api30AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.hasFlag
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OreoAutofillService : AutofillService() {

@@ -13,9 +13,9 @@ import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
-import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.git.sshj.SshKey
 import java.io.File
 import java.net.URI
 

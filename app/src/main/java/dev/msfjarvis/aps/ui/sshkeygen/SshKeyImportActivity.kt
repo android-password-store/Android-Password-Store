@@ -5,8 +5,6 @@
 
 package dev.msfjarvis.aps.ui.sshkeygen
 
-import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.git.sshj.SshKey
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -15,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.util.git.sshj.SshKey
 
 class SshKeyImportActivity : AppCompatActivity() {
 

@@ -20,12 +20,12 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.databinding.ActivityGitConfigBinding
-import dev.msfjarvis.aps.util.settings.GitSettings
-import dev.msfjarvis.aps.ui.git.log.GitLogActivity
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.databinding.ActivityGitConfigBinding
 import dev.msfjarvis.aps.ui.git.base.BaseGitActivity
+import dev.msfjarvis.aps.ui.git.log.GitLogActivity
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.settings.GitSettings
 import kotlinx.coroutines.launch
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository

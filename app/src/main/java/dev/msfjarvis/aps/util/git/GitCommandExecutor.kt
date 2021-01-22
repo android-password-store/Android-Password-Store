@@ -11,11 +11,11 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.snackbar.Snackbar
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.git.GitException.PullException
 import dev.msfjarvis.aps.util.git.GitException.PushException
-import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.git.operation.GitOperation
-import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.settings.GitSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jgit.api.CommitCommand

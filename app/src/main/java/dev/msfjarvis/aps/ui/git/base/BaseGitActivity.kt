@@ -13,7 +13,9 @@ import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.mapError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.settings.GitSettings
+import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
+import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.git.ErrorMessages
 import dev.msfjarvis.aps.util.git.operation.BreakOutOfDetached
 import dev.msfjarvis.aps.util.git.operation.CloneOperation
 import dev.msfjarvis.aps.util.git.operation.PullOperation
@@ -21,10 +23,8 @@ import dev.msfjarvis.aps.util.git.operation.PushOperation
 import dev.msfjarvis.aps.util.git.operation.ResetToRemoteOperation
 import dev.msfjarvis.aps.util.git.operation.SyncOperation
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
+import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
-import dev.msfjarvis.aps.util.extensions.sharedPrefs
-import dev.msfjarvis.aps.util.git.ErrorMessages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason

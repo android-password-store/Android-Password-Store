@@ -12,10 +12,10 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.data.password.PasswordItem
-import dev.msfjarvis.aps.util.settings.PasswordSortOrder
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.settings.PasswordSortOrder
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import java.io.FileFilter
 import java.nio.file.Files

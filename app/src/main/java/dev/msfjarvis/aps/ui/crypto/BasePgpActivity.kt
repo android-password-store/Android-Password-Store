@@ -25,14 +25,14 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import dev.msfjarvis.aps.util.services.ClipboardService
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.services.ClipboardService
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection

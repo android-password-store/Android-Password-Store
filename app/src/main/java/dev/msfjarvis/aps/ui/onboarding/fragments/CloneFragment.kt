@@ -15,11 +15,11 @@ import androidx.fragment.app.Fragment
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentCloneBinding
 import dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class CloneFragment : Fragment(R.layout.fragment_clone) {
 

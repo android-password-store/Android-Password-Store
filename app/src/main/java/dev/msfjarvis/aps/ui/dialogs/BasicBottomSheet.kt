@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.BasicBottomSheetBinding
+import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet.Builder
 import dev.msfjarvis.aps.util.extensions.resolveAttribute
 import dev.msfjarvis.aps.util.extensions.viewBinding
 
