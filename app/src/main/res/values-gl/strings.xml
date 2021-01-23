@@ -127,8 +127,12 @@
     <string name="pref_external_repository_title">Repositorio externo</string>
     <string name="pref_external_repository_summary">Usar un repositorio externo de contrasinais</string>
     <string name="pref_select_external_repository_title">Selecciona repositorio externo</string>
+    <string name="pref_select_external_repository_summary_no_repo_selected">Non hai seleccionado ningún repositorio externo</string>
     <string name="prefs_export_passwords_title">Exportar contrasinais</string>
     <string name="prefs_export_passwords_summary">Exporta os contrasinais cifrados a un directorio externo</string>
+    <string name="pref_rebase_on_pull_title">Rebase ó facer pull</string>
+    <string name="pref_rebase_on_pull_summary">Ao facer pull ou sincronizar, crear un commit tipo merge cos cambios remotos</string>
+    <string name="pref_rebase_on_pull_summary_on">Ao facer pull ou sincronizar, facer rebase aos commits que non están presentes no repositorio remoto</string>
     <!-- PasswordGenerator fragment -->
     <string name="pwgen_title">Crear contrasinal</string>
     <string name="pwgen_generate">Crear</string>
@@ -195,7 +199,6 @@
     <string name="show_extra_content_pref_summary">Controla a visibilidade do contido extra unha vez descifrado</string>
     <string name="pwd_generate_button">Crear</string>
     <string name="refresh_list">Actualizar lista</string>
-    <string name="pref_select_external_repository_summary_no_repo_selected">Non hai seleccionado ningún repositorio externo</string>
     <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando...</string>
     <string name="app_icon_hint">Icona da app</string>
     <!-- Oreo Autofill -->
@@ -244,6 +247,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <string name="git_head_missing">Non se localiza o HEAD</string>
     <string name="sdcard_root_warning_title">Raíz da Tarxeta-SD non seleccionada</string>
     <string name="sdcard_root_warning_message">Escolleches a raíz da tarxeta SD para a almacenaxe. Esto é moi perigoso e perderás todos os datos e contido se, por calquera razón, son eliminados.</string>
+    <string name="sdcard_root_warning_remove_everything">Eliminar todo</string>
     <string name="git_abort_and_push_title">Abortar e Push</string>
     <string name="biometric_prompt_title">Petición biométrica</string>
     <string name="biometric_auth_error">Fallo de autenticación</string>
@@ -315,6 +319,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
     <!-- GitException messages -->
     <string name="git_unknown_error">Fallo descoñecido</string>
     <string name="git_pull_rebase_fail_error">Fallou a acción pull, estás nun head diferente. Utiliza \"axustes &gt; utilidades git\", garda os cambios no remoto nunha nova rama e resolve o conflicto nun ordenador.</string>
+    <string name="git_pull_merge_fail_error">Fallou o merge, hai un conflito nos datos. TAREFA: engadir método de recuperación.</string>
     <string name="git_push_nff_error">O push foi rexeitado polo remoto, executa pull antes de voltar a subilos de novo. Podes usar Sincronizar mellor que push/pull xa que inclú ambos.</string>
     <string name="git_push_generic_error">O push foi rexeitado polo remoto, razón:</string>
     <string name="git_push_other_error">O remoto rexeitou o push non-fast-forward. Comproba a variable receive.denyNonFastForwards no ficheiro de configuración do repositorio de destino.</string>
