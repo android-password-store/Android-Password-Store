@@ -401,7 +401,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                                 // Additionally, if we were editing and the incoming and outgoing
                                 // filenames differ, it means we renamed. Ensure that the target
                                 // doesn't already exist to prevent an accidental overwrite.
-                                if ((!editing || editing && suggestedName != file.nameWithoutExtension) && file.exists()) {
+                                if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) && file.exists()) {
                                     snackbar(message = getString(R.string.password_creation_duplicate_error))
                                     return@executeApiAsync
                                 }
