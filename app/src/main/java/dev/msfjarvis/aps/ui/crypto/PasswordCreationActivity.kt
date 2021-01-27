@@ -398,7 +398,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                             runCatching {
                                 val file = File(path)
                                 // If we're not editing, this file should not already exist!
-                                if (!editing && file.exists()) {
+                                // Additionally, if we were editing and the incoming and outgoing
+                                // filenames differ, it means we renamed. Ensure that the target
+                                // doesn't already exist to prevent an accidental overwrite.
+                                if ((!editing || editing && suggestedName != file.nameWithoutExtension) && file.exists()) {
                                     snackbar(message = getString(R.string.password_creation_duplicate_error))
                                     return@executeApiAsync
                                 }
