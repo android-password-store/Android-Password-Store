@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   Editing a password allowed accidentally overwriting an existing one
+
+
 ## [1.13.2] - 2020-12-20
 
 ### Added
