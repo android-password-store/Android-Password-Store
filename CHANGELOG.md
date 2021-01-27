@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 -   Connection attempts now use a reasonable 10 second timeout as opposed to the default of 30 seconds
 -   A change to the remote host key for a server would prevent the user from being able to connect to it
 -   Pressing the back button in the navigation bar and the one in the toolbar behaved differently
+-   Editing a password allowed accidentally overwriting an existing one
 
 ### Changed
 
