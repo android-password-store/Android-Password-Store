@@ -146,6 +146,7 @@ private val BROWSER_SAVE_FLAG = mapOf(
 
 @RequiresApi(Build.VERSION_CODES.O)
 private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY = mapOf(
+    "com.chrome.beta" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "com.chrome.canary" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "com.chrome.dev" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
 )
@@ -181,7 +182,6 @@ internal fun getBrowserAutofillSupportInfoIfTrusted(
 
 private val FLAKY_BROWSERS = listOf(
     "com.android.chrome",
-    "com.chrome.beta",
     "org.bromite.bromite",
     "org.ungoogled.chromium.stable",
     "com.kiwibrowser.browser",
