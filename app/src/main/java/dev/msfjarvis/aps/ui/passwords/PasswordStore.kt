@@ -20,6 +20,7 @@ import android.view.MenuItem.OnActionExpandListener
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.content.edit
@@ -452,22 +453,32 @@ class PasswordStore : BaseGitActivity() {
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val shortcutManager: ShortcutManager = getSystemService() ?: return
-            val shortcut = Builder(this, item.fullPathToParent)
-                .setShortLabel(item.toString())
-                .setLongLabel(item.fullPathToParent + item.toString())
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_lock_open_24px))
-                .setIntent(authDecryptIntent)
-                .build()
-            val shortcuts = shortcutManager.dynamicShortcuts
-            if (shortcuts.size >= shortcutManager.maxShortcutCountPerActivity && shortcuts.size > 0) {
-                shortcuts.removeAt(shortcuts.size - 1)
-                shortcuts.add(0, shortcut)
-                shortcutManager.dynamicShortcuts = shortcuts
-            } else {
-                shortcutManager.addDynamicShortcuts(listOf(shortcut))
-            }
+            addShortcut(item, authDecryptIntent)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    private fun addShortcut(item: PasswordItem, intent: Intent) {
+        val shortcutManager: ShortcutManager = getSystemService() ?: return
+        val shortcut = Builder(this, item.fullPathToParent)
+            .setShortLabel(item.toString())
+            .setLongLabel(item.fullPathToParent + item.toString())
+            .setIcon(Icon.createWithResource(this, R.drawable.ic_lock_open_24px))
+            .setIntent(intent)
+            .build()
+        val shortcuts = shortcutManager.dynamicShortcuts
+        // If we're above or equal to the maximum shortcuts allowed, drop the last item.
+        if (shortcuts.size >= MAX_SHORTCUT_COUNT) {
+            shortcuts.removeLast()
+        }
+        // Reverse the list so we can append our new shortcut at the 'end'.
+        shortcuts.reverse()
+        shortcuts.add(shortcut)
+        // Reverse it again, so the previous items are now in the correct order and our new item
+        // is at the front like it's supposed to.
+        shortcuts.reverse()
+        // Write back the new shortcuts.
+        shortcutManager.dynamicShortcuts = shortcuts
     }
 
     private fun validateState(): Boolean {
@@ -677,6 +688,10 @@ class PasswordStore : BaseGitActivity() {
 
     companion object {
 
+        // The max shortcut count from the system is set to 15 for some godforsaken reason, which
+        // makes zero sense and is why our update logic just never worked. Capping it at 4 which is
+        // what most launchers seem to have agreed upon is the only reasonable solution.
+        private const val MAX_SHORTCUT_COUNT = 4
         const val REQUEST_ARG_PATH = "PATH"
         private fun isPrintable(c: Char): Boolean {
             val block = UnicodeBlock.of(c)

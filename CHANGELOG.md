@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 -   A change to the remote host key for a server would prevent the user from being able to connect to it
 -   Pressing the back button in the navigation bar and the one in the toolbar behaved differently
 -   Editing a password allowed accidentally overwriting an existing one
+-   App shortcuts would never update once the first 4 were set
 
 ### Changed
 
