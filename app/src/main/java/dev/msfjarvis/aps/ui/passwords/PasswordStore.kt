@@ -468,7 +468,7 @@ class PasswordStore : BaseGitActivity() {
             .build()
         val shortcuts = shortcutManager.dynamicShortcuts
         if (shortcuts.size >= MAX_SHORTCUT_COUNT && shortcuts.size > 0) {
-            shortcuts.removeAt(shortcuts.size - 1)
+            shortcuts.removeLast()
             shortcuts.add(0, shortcut)
             shortcutManager.dynamicShortcuts = shortcuts
         } else {
