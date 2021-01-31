@@ -467,7 +467,7 @@ class PasswordStore : BaseGitActivity() {
             .setIntent(intent)
             .build()
         val shortcuts = shortcutManager.dynamicShortcuts
-        if (shortcuts.size >= shortcutManager.maxShortcutCountPerActivity && shortcuts.size > 0) {
+        if (shortcuts.size >= MAX_SHORTCUT_COUNT && shortcuts.size > 0) {
             shortcuts.removeAt(shortcuts.size - 1)
             shortcuts.add(0, shortcut)
             shortcutManager.dynamicShortcuts = shortcuts
@@ -683,6 +683,10 @@ class PasswordStore : BaseGitActivity() {
 
     companion object {
 
+        // The max shortcut count from the system is set to 15 for some godforsaken reason, which
+        // makes zero sense and is why our update logic just never worked. Capping it at 4 which is
+        // what most launchers seem to have agreed upon is the only reasonable solution.
+        private const val MAX_SHORTCUT_COUNT = 4
         const val REQUEST_ARG_PATH = "PATH"
         private fun isPrintable(c: Char): Boolean {
             val block = UnicodeBlock.of(c)
