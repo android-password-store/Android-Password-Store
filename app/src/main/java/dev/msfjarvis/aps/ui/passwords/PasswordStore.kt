@@ -20,6 +20,7 @@ import android.view.MenuItem.OnActionExpandListener
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.content.edit
@@ -452,21 +453,26 @@ class PasswordStore : BaseGitActivity() {
 
         // Adds shortcut
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            val shortcutManager: ShortcutManager = getSystemService() ?: return
-            val shortcut = Builder(this, item.fullPathToParent)
-                .setShortLabel(item.toString())
-                .setLongLabel(item.fullPathToParent + item.toString())
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_lock_open_24px))
-                .setIntent(authDecryptIntent)
-                .build()
-            val shortcuts = shortcutManager.dynamicShortcuts
-            if (shortcuts.size >= shortcutManager.maxShortcutCountPerActivity && shortcuts.size > 0) {
-                shortcuts.removeAt(shortcuts.size - 1)
-                shortcuts.add(0, shortcut)
-                shortcutManager.dynamicShortcuts = shortcuts
-            } else {
-                shortcutManager.addDynamicShortcuts(listOf(shortcut))
-            }
+            addShortcut(item, authDecryptIntent)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    private fun addShortcut(item: PasswordItem, intent: Intent) {
+        val shortcutManager: ShortcutManager = getSystemService() ?: return
+        val shortcut = Builder(this, item.fullPathToParent)
+            .setShortLabel(item.toString())
+            .setLongLabel(item.fullPathToParent + item.toString())
+            .setIcon(Icon.createWithResource(this, R.drawable.ic_lock_open_24px))
+            .setIntent(intent)
+            .build()
+        val shortcuts = shortcutManager.dynamicShortcuts
+        if (shortcuts.size >= shortcutManager.maxShortcutCountPerActivity && shortcuts.size > 0) {
+            shortcuts.removeAt(shortcuts.size - 1)
+            shortcuts.add(0, shortcut)
+            shortcutManager.dynamicShortcuts = shortcuts
+        } else {
+            shortcutManager.addDynamicShortcuts(listOf(shortcut))
         }
     }
 
