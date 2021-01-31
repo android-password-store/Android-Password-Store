@@ -467,13 +467,18 @@ class PasswordStore : BaseGitActivity() {
             .setIntent(intent)
             .build()
         val shortcuts = shortcutManager.dynamicShortcuts
-        if (shortcuts.size >= MAX_SHORTCUT_COUNT && shortcuts.size > 0) {
+        // If we're above or equal to the maximum shortcuts allowed, drop the last item.
+        if (shortcuts.size >= MAX_SHORTCUT_COUNT) {
             shortcuts.removeLast()
-            shortcuts.add(0, shortcut)
-            shortcutManager.dynamicShortcuts = shortcuts
-        } else {
-            shortcutManager.addDynamicShortcuts(listOf(shortcut))
         }
+        // Reverse the list so we can append our new shortcut at the 'end'.
+        shortcuts.reverse()
+        shortcuts.add(shortcut)
+        // Reverse it again, so the previous items are now in the correct order and our new item
+        // is at the front like it's supposed to.
+        shortcuts.reverse()
+        // Write back the new shortcuts.
+        shortcutManager.dynamicShortcuts = shortcuts
     }
 
     private fun validateState(): Boolean {
