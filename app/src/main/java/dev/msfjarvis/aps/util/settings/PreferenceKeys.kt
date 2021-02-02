@@ -11,7 +11,12 @@ object PreferenceKeys {
     const val APP_VERSION = "app_version"
     const val AUTOFILL_ENABLE = "autofill_enable"
     const val BIOMETRIC_AUTH = "biometric_auth"
+    @Deprecated(
+        message = "Use CLEAR_CLIPBOARD_HISTORY instead",
+        replaceWith = ReplaceWith("PreferenceKeys.CLEAR_CLIPBOARD_HISTORY"),
+    )
     const val CLEAR_CLIPBOARD_20X = "clear_clipboard_20x"
+    const val CLEAR_CLIPBOARD_HISTORY = "clear_clipboard_history"
     const val CLEAR_SAVED_PASS = "clear_saved_pass"
     const val COPY_ON_DECRYPT = "copy_on_decrypt"
     const val ENABLE_DEBUG_LOGGING = "enable_debug_logging"

@@ -13,6 +13,7 @@ import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -103,5 +104,17 @@ class MigrationsTest {
         runMigrations(context)
         assertEquals(false, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false))
         assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
+    }
+
+    @Test
+    fun verifyClearClipboardHistoryMigration() {
+        val context = Application.instance.applicationContext
+        context.sharedPrefs.edit {
+            clear()
+            putBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, true)
+        }
+        runMigrations(context)
+        assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false))
+        assertFalse(context.sharedPrefs.contains(PreferenceKeys.CLEAR_CLIPBOARD_20X))
     }
 }

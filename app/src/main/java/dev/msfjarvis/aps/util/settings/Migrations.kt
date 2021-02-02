@@ -24,6 +24,7 @@ fun runMigrations(context: Context) {
     migrateToGitUrlBasedConfig(sharedPrefs)
     migrateToHideAll(sharedPrefs)
     migrateToSshKey(context, sharedPrefs)
+    migrateToClipboardHistory(sharedPrefs)
 }
 
 private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
@@ -109,6 +110,18 @@ private fun migrateToSshKey(context: Context, sharedPrefs: SharedPreferences) {
         SshKey.useLegacyKey(isGeneratedKey)
         sharedPrefs.edit {
             remove(PreferenceKeys.USE_GENERATED_KEY)
+        }
+    }
+}
+
+private fun migrateToClipboardHistory(sharedPrefs: SharedPreferences) {
+    if (sharedPrefs.contains(PreferenceKeys.CLEAR_CLIPBOARD_20X)) {
+        sharedPrefs.edit {
+            putBoolean(
+                PreferenceKeys.CLEAR_CLIPBOARD_HISTORY,
+                sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
+            )
+            remove(PreferenceKeys.CLEAR_CLIPBOARD_20X)
         }
     }
 }

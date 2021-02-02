@@ -80,7 +80,7 @@ class ClipboardService : Service() {
     }
 
     private fun clearClipboard() {
-        val deepClear = sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
+        val deepClear = sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false)
         val clipboard = clipboard
 
         if (clipboard != null) {

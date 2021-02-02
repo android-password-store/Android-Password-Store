@@ -60,7 +60,7 @@ class MiscSettings(activity: FragmentActivity) : SettingsProvider {
                     true
                 }
             }
-            checkBox(PreferenceKeys.CLEAR_CLIPBOARD_20X) {
+            checkBox(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY) {
                 defaultValue = false
                 titleRes = R.string.pref_clear_clipboard_title
                 summaryRes = R.string.pref_clear_clipboard_summary
