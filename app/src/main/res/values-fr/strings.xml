@@ -119,8 +119,6 @@
     <string name="pref_category_autofill_title">Saisie automatique</string>
     <string name="pref_autofill_enable_title">Saisie automatique</string>
     <string name="pref_category_misc_title">Divers</string>
-    <string name="pref_clear_clipboard_title">Effacer le presse-papier 20 fois</string>
-    <string name="pref_clear_clipboard_summary">Enregistre des informations absurdes dans le presse-papier 20 fois à la place d\'une seule. Utile sur les téléphones Samsung qui disposent d\'un historique du presse-papier.</string>
     <string name="pref_git_delete_repo_summary">Supprime le dépot local (caché)</string>
     <string name="pref_external_repository_title">Dépôt externe</string>
     <string name="pref_external_repository_summary">Utilise un dépôt externe pour les mots de passe</string>

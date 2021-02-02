@@ -121,8 +121,6 @@
     <string name="pref_category_autofill_title">Preenchimento Automático</string>
     <string name="pref_autofill_enable_title">Ativar preenchimento automático</string>
     <string name="pref_category_misc_title">Outros</string>
-    <string name="pref_clear_clipboard_title">Limpar área de transferência 20 vezes</string>
-    <string name="pref_clear_clipboard_summary">Armazene números consecutivos na área de transferência 20 vezes. Útil em telefones Samsung que apresentam o histórico da área de transferência.</string>
     <string name="pref_git_delete_repo_summary">Exclui o repositório local (oculto)</string>
     <string name="pref_external_repository_title">Repositório externo</string>
     <string name="pref_external_repository_summary">Use um repositório de senha externo</string>

@@ -121,8 +121,6 @@
     <string name="pref_category_autofill_title">Auto-compilazione</string>
     <string name="pref_autofill_enable_title">Abilita Auto-Compilazione</string>
     <string name="pref_category_misc_title">Varie</string>
-    <string name="pref_clear_clipboard_title">Cancella 20 volte gli appunti</string>
-    <string name="pref_clear_clipboard_summary">Archivia i numeri consecutivi negli appunti per 20 volte. Utile sui telefoni Samsung che presentano la cronologia degli appunti.</string>
     <string name="pref_git_delete_repo_summary">Elimina repository locale (nascosta)</string>
     <string name="pref_external_repository_title">Repository Esterna</string>
     <string name="pref_external_repository_summary">Usa una repository di password esterna</string>

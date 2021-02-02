@@ -138,8 +138,8 @@
     <string name="pref_category_autofill_title">Autofill</string>
     <string name="pref_autofill_enable_title">Enable Autofill</string>
     <string name="pref_category_misc_title">Misc</string>
-    <string name="pref_clear_clipboard_title">Clear clipboard 20 times</string>
-    <string name="pref_clear_clipboard_summary">Store consecutive numbers in the clipboard 20 times. Useful on Samsung phones that feature clipboard history.</string>
+    <string name="pref_clear_clipboard_title">Workaround clipboard history feature</string>
+    <string name="pref_clear_clipboard_summary">Enable to flood clipboard history on devices that include such a feature with consecutive numbers, flushing out any passwords</string>
     <string name="pref_git_delete_repo_summary">Deletes local (hidden) repository</string>
     <string name="pref_external_repository_title">External repository</string>
     <string name="pref_external_repository_summary">Use an external password repository</string>
