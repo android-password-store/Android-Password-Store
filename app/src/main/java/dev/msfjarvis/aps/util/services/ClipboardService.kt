@@ -80,7 +80,7 @@ class ClipboardService : Service() {
     }
 
     private fun clearClipboard() {
-        val deepClear = sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
+        val deepClear = sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false)
         val clipboard = clipboard
 
         if (clipboard != null) {
@@ -90,7 +90,7 @@ class ClipboardService : Service() {
                 clipboard.setPrimaryClip(clip)
                 if (deepClear) {
                     withContext(Dispatchers.IO) {
-                        repeat(20) {
+                        repeat(CLIPBOARD_CLEAR_COUNT) {
                             val count = (it * 500).toString()
                             clipboard.setPrimaryClip(ClipData.newPlainText(count, count))
                         }
@@ -179,5 +179,8 @@ class ClipboardService : Service() {
         const val EXTRA_NOTIFICATION_TIME = "EXTRA_NOTIFICATION_TIME"
         private const val ACTION_CLEAR = "ACTION_CLEAR_CLIPBOARD"
         private const val CHANNEL_ID = "NotificationService"
+        // Newest Samsung phones now feature a history of up to 30 items. To err on the side of caution,
+        // push 35 fake ones.
+        private const val CLIPBOARD_CLEAR_COUNT = 35
     }
 }

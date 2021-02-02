@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 -   Pressing the back button in the navigation bar and the one in the toolbar behaved differently
 -   Editing a password allowed accidentally overwriting an existing one
 -   App shortcuts would never update once the first 4 were set
+-   Clipboard history now attempts to flush through 35 times rather than 20 to combat increased clipboard history item count in Samsung devices
 
 ### Changed
 

@@ -125,8 +125,6 @@
     <string name="pref_category_autofill_title">Автозаполнение</string>
     <string name="pref_autofill_enable_title">Включить автозаполнение</string>
     <string name="pref_category_misc_title">Другое</string>
-    <string name="pref_clear_clipboard_title">Очистить буфер 20 раз</string>
-    <string name="pref_clear_clipboard_summary">Вставлять чепуху в буфер обмена 20 раз вместо одного. Полезно на некоторых моделях телефонов с запоминанием истории буфера обмена</string>
     <string name="pref_git_delete_repo_summary">Удалить локальный (скрытый) репозиторий</string>
     <string name="pref_external_repository_title">Внешний репозиторий</string>
     <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>

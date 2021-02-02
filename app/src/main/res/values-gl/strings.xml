@@ -121,8 +121,6 @@
     <string name="pref_category_autofill_title">Completado automático</string>
     <string name="pref_autofill_enable_title">Activar completado automático</string>
     <string name="pref_category_misc_title">Varios</string>
-    <string name="pref_clear_clipboard_title">Baleirar portapapeis 20 veces</string>
-    <string name="pref_clear_clipboard_summary">Gardar números consecutivos no portapapeis 20 veces. Resulta útil nos móbiles Samsung que gardan historial no portapapeis.</string>
     <string name="pref_git_delete_repo_summary">Elimina repositorio local (oculto).</string>
     <string name="pref_external_repository_title">Repositorio externo</string>
     <string name="pref_external_repository_summary">Usar un repositorio externo de contrasinais</string>
