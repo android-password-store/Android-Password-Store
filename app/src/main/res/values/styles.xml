@@ -35,6 +35,22 @@
         <item name="colorSecondary">@color/secondary_color</item>
     </style>
 
+    <style name="AppTheme.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipSurfaceColor">@color/chip_surface_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.AppTheme.SmallComponent</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.AppTheme.Body2</item>
+    </style>
+
+    <style name="TextAppearance.AppTheme.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ShapeAppearance.AppTheme.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">@color/primary_color</item>
     </style>

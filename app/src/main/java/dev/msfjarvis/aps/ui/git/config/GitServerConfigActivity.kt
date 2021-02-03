@@ -63,8 +63,8 @@ class GitServerConfigActivity : BaseGitActivity() {
                 AuthMode.OpenKeychain -> check(binding.authModeOpenKeychain.id)
                 AuthMode.None -> check(View.NO_ID)
             }
-            addOnButtonCheckedListener { _, _, _ ->
-                when (checkedButtonId) {
+            setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
                     binding.authModeSshKey.id -> newAuthMode = AuthMode.SshKey
                     binding.authModeOpenKeychain.id -> newAuthMode = AuthMode.OpenKeychain
                     binding.authModePassword.id -> newAuthMode = AuthMode.Password
@@ -184,13 +184,13 @@ class GitServerConfigActivity : BaseGitActivity() {
             authModeSshKey.isVisible = false
             authModeOpenKeychain.isVisible = false
             authModePassword.isVisible = true
-            if (authModeGroup.checkedButtonId != authModePassword.id)
+            if (authModeGroup.checkedChipId != authModePassword.id)
                 authModeGroup.check(View.NO_ID)
         } else {
             authModeSshKey.isVisible = true
             authModeOpenKeychain.isVisible = true
             authModePassword.isVisible = true
-            if (authModeGroup.checkedButtonId == View.NO_ID)
+            if (authModeGroup.checkedChipId == View.NO_ID)
                 authModeGroup.check(authModeSshKey.id)
         }
     }
