@@ -1,6 +1,3 @@
-apply(from = "buildDependencies.gradle")
-val build: Map<Any, Any> by extra
-
 plugins {
     `kotlin-dsl`
 }
@@ -9,6 +6,8 @@ repositories {
     google()
     gradlePluginPortal()
     jcenter()
+    // For binary compatibility validator.
+    maven { url = uri("https://kotlin.bintray.com/kotlinx") }
 }
 
 kotlinDslPluginOptions {
@@ -33,9 +32,9 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation(build.getValue("kotlinGradlePlugin"))
-    implementation(build.getValue("androidGradlePlugin"))
-    implementation(build.getValue("binaryCompatibilityValidator"))
-    implementation(build.getValue("downloadTaskPlugin"))
-    implementation(build.getValue("jsemver"))
+    implementation(Plugins.androidGradlePlugin)
+    implementation(Plugins.binaryCompatibilityValidator)
+    implementation(Plugins.downloadTaskPlugin)
+    implementation(Plugins.jsemver)
+    implementation(Plugins.kotlinGradlePlugin)
 }

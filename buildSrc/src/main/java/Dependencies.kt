@@ -3,7 +3,15 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-private const val KOTLIN_VERSION = "1.4.21"
+private const val KOTLIN_VERSION = "1.4.30"
+
+object Plugins {
+    val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
+    val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
+    val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
+    val jsemver = "com.github.zafarkhaja:java-semver:0.9.0"
+    val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+}
 
 object Dependencies {
     object Kotlin {
@@ -51,7 +59,7 @@ object Dependencies {
         const val eddsa = "net.i2p.crypto:eddsa:0.3.0"
         const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
-        const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
+        const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.10"
         const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.5"
         const val modern_android_prefs = "de.Maxr1998.android:modernpreferences:1.2.0-alpha1"
         const val plumber = "com.squareup.leakcanary:plumber-android:2.5"
