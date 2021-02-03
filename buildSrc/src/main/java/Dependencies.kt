@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-private const val KOTLIN_VERSION = "1.4.21"
+private const val KOTLIN_VERSION = "1.4.30"
 
 object Plugins {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
