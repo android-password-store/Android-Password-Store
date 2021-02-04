@@ -60,14 +60,14 @@ object Dependencies {
         const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
         const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
         const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.10"
-        const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.5"
+        const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.6"
         const val modern_android_prefs = "de.Maxr1998.android:modernpreferences:1.2.0-alpha1"
-        const val plumber = "com.squareup.leakcanary:plumber-android:2.5"
+        const val plumber = "com.squareup.leakcanary:plumber-android:2.6"
         const val sshj = "com.hierynomus:sshj:0.30.0"
         const val ssh_auth = "org.sufficientlysecure:sshauthentication-api:1.0"
         const val timber = "com.jakewharton.timber:timber:4.7.1"
         const val timberkt = "com.github.ajalt:timberkt:1.5.1"
-        const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.2.0"
+        const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.0"
     }
 
     object NonFree {
