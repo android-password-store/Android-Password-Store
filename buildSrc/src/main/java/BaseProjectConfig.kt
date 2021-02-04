@@ -25,9 +25,9 @@ internal fun Project.configureForRootProject() {
         delete(rootProject.buildDir)
     }
     tasks.withType<Wrapper> {
-        gradleVersion = "6.8-rc-4"
+        gradleVersion = "6.8.1"
         distributionType = Wrapper.DistributionType.ALL
-        distributionSha256Sum = "8bea06ceea02f8809a056553a9d9a200b95f11eaf15017ff6a819790070d2a29"
+        distributionSha256Sum = "3db89524a3981819ff28c3f979236c1274a726e146ced0c8a2020417f9bc0782"
     }
     configureBinaryCompatibilityValidator()
 }
