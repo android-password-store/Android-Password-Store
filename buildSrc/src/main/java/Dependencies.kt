@@ -9,8 +9,8 @@ object Plugins {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
     val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
     val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
-    val jsemver = "com.github.zafarkhaja:java-semver:0.9.0"
     val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+    val semver4j = "com.vdurmont:semver4j:3.1.0"
 }
 
 object Dependencies {

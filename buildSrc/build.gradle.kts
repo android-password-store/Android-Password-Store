@@ -35,6 +35,6 @@ dependencies {
     implementation(Plugins.androidGradlePlugin)
     implementation(Plugins.binaryCompatibilityValidator)
     implementation(Plugins.downloadTaskPlugin)
-    implementation(Plugins.jsemver)
     implementation(Plugins.kotlinGradlePlugin)
+    implementation(Plugins.semver4j)
 }
