@@ -39,6 +39,12 @@ internal fun Project.configureForAllProjects() {
     repositories {
         google()
         mavenCentral()
+        jcenter() {
+            content {
+                includeModule("me.zhanghai.android.fastscroll", "library")
+                includeModule("org.sufficientlysecure", "sshauthentication-api")
+            }
+        }
         maven { setUrl("https://jitpack.io") }
     }
     tasks.withType<KotlinCompile> {
