@@ -5,7 +5,7 @@ plugins {
 repositories {
     google()
     gradlePluginPortal()
-    jcenter()
+    mavenCentral()
     // For binary compatibility validator.
     maven { url = uri("https://kotlin.bintray.com/kotlinx") }
 }
