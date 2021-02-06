@@ -38,7 +38,25 @@ internal fun Project.configureForRootProject() {
 internal fun Project.configureForAllProjects() {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        jcenter() {
+            content {
+                // Direct dependencies
+                // https://github.com/zhanghai/AndroidFastScroll/issues/35
+                includeModule("me.zhanghai.android.fastscroll", "library")
+                // https://github.com/open-keychain/open-keychain/issues/2645
+                includeModule("org.sufficientlysecure", "sshauthentication-api")
+
+                // Indirect dependencies
+                // https://youtrack.jetbrains.com/issue/IDEA-261387
+                includeModule("org.jetbrains.trove4j", "trove4j")
+
+                // https://github.com/Kotlin/dokka/issues/41
+                includeGroup("org.jetbrains.dokka")
+                includeGroup("org.jetbrains.kotlinx")
+                includeModule("org.jetbrains", "markdown")
+            }
+        }
         maven { setUrl("https://jitpack.io") }
     }
     tasks.withType<KotlinCompile> {

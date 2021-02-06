@@ -9,6 +9,6 @@ include(":openpgp-ktx")
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        jcenter()
+        mavenCentral()
     }
 }
