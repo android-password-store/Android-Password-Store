@@ -50,6 +50,11 @@ internal fun Project.configureForAllProjects() {
                 // Indirect dependencies
                 // https://youtrack.jetbrains.com/issue/IDEA-261387
                 includeModule("org.jetbrains.trove4j", "trove4j")
+
+                // https://github.com/Kotlin/dokka/issues/41
+                includeGroup("org.jetbrains.dokka")
+                includeGroup("org.jetbrains.kotlinx")
+                includeModule("org.jetbrains", "markdown")
             }
         }
         maven { setUrl("https://jitpack.io") }

@@ -34,7 +34,9 @@ gradlePlugin {
 dependencies {
     implementation(Plugins.androidGradlePlugin)
     implementation(Plugins.binaryCompatibilityValidator)
+    implementation(Plugins.dokkaPlugin)
     implementation(Plugins.downloadTaskPlugin)
     implementation(Plugins.kotlinGradlePlugin)
+    implementation(Plugins.mavenPublishPlugin)
     implementation(Plugins.semver4j)
 }
