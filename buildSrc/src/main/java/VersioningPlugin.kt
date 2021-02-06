@@ -5,7 +5,7 @@
 
 
 import com.android.build.gradle.internal.plugins.AppPlugin
-import com.github.zafarkhaja.semver.Version
+import com.vdurmont.semver4j.Semver
 import java.io.OutputStream
 import java.util.Properties
 import org.gradle.api.Plugin
@@ -33,28 +33,21 @@ class VersioningPlugin : Plugin<Project> {
     /**
      * Generate the Android 'versionCode' property
      */
-    private fun Version.androidCode(): Int {
-        return majorVersion * 1_00_00 +
-            minorVersion * 1_00 +
-            patchVersion
+    private fun Semver.androidCode(): Int {
+        return major * 1_00_00 +
+            minor * 1_00 +
+            patch
     }
 
     /**
      * Write an Android-specific variant of [this] to [stream]
      */
-    private fun Version.writeForAndroid(stream: OutputStream) {
+    private fun Semver.writeForAndroid(stream: OutputStream) {
         val newVersionCode = androidCode()
         val props = Properties()
         props.setProperty(VERSIONING_PROP_VERSION_CODE, "$newVersionCode")
         props.setProperty(VERSIONING_PROP_VERSION_NAME, toString())
         props.store(stream, VERSIONING_PROP_COMMENT)
-    }
-
-    /**
-     * Returns the same [Version], but with build metadata stripped.
-     */
-    private fun Version.clearPreRelease(): Version {
-        return Version.forIntegers(majorVersion, minorVersion, patchVersion)
     }
 
     override fun apply(project: Project) {
@@ -77,35 +70,38 @@ class VersioningPlugin : Plugin<Project> {
             appPlugin.extension.defaultConfig.versionName = versionName
             appPlugin.extension.defaultConfig.versionCode = versionCode
             afterEvaluate {
-                val version = Version.valueOf(versionName)
+                val version = Semver(versionName)
                 tasks.register("clearPreRelease") {
                     doLast {
-                        version.clearPreRelease()
+                        version.withClearedSuffix()
                             .writeForAndroid(propFile.asFile.outputStream())
                     }
                 }
                 tasks.register("bumpMajor") {
                     doLast {
-                        version.incrementMajorVersion()
+                        version.withIncMajor()
+                            .withClearedSuffix()
                             .writeForAndroid(propFile.asFile.outputStream())
                     }
                 }
                 tasks.register("bumpMinor") {
                     doLast {
-                        version.incrementMinorVersion()
+                        version.withIncMinor()
+                            .withClearedSuffix()
                             .writeForAndroid(propFile.asFile.outputStream())
                     }
                 }
                 tasks.register("bumpPatch") {
                     doLast {
-                        version.incrementPatchVersion()
+                        version.withIncPatch()
+                            .withClearedSuffix()
                             .writeForAndroid(propFile.asFile.outputStream())
                     }
                 }
                 tasks.register("bumpSnapshot") {
                     doLast {
-                        version.incrementMinorVersion()
-                            .setPreReleaseVersion("SNAPSHOT")
+                        version.withIncMinor()
+                            .withSuffix("SNAPSHOT")
                             .writeForAndroid(propFile.asFile.outputStream())
                     }
                 }

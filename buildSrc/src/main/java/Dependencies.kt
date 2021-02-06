@@ -9,8 +9,8 @@ object Plugins {
     val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
     val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
     val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
-    val jsemver = "com.github.zafarkhaja:java-semver:0.9.0"
     val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+    val semver4j = "com.vdurmont:semver4j:3.1.0"
 }
 
 object Dependencies {
@@ -39,7 +39,7 @@ object Dependencies {
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-        const val material = "com.google.android.material:material:1.3.0-rc01"
+        const val material = "com.google.android.material:material:1.3.0"
         const val preference = "androidx.preference:preference:1.1.1"
         const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-beta01"
         const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0"
