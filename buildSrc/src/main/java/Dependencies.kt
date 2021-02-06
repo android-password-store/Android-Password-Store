@@ -39,7 +39,7 @@ object Dependencies {
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-        const val material = "com.google.android.material:material:1.3.0-rc01"
+        const val material = "com.google.android.material:material:1.3.0"
         const val preference = "androidx.preference:preference:1.1.1"
         const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-beta01"
         const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0"
