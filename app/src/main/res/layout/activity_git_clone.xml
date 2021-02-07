@@ -33,8 +33,7 @@
             android:id="@+id/label_server_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_margin="8dp"
             android:hint="@string/server_url"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,8 +53,7 @@
             android:id="@+id/label_server_branch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_margin="8dp"
             android:hint="@string/server_branch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,51 +80,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
+        <com.google.android.material.chip.ChipGroup
             android:id="@+id/auth_mode_group"
-            style="@style/TextAppearance.MaterialComponents.Headline1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
             app:singleSelection="true">
 
-            <com.google.android.material.button.MaterialButton
+            <com.google.android.material.chip.Chip
                 android:id="@+id/auth_mode_ssh_key"
-                style="?attr/materialButtonOutlinedStyle"
+                style="@style/AppTheme.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minWidth="0dp"
-                android:padding="8dp"
-                android:text="@string/connection_mode_ssh_key"
-                android:textSize="@dimen/toggle_group_text_size" />
+                android:text="@string/connection_mode_ssh_key" />
 
-            <com.google.android.material.button.MaterialButton
+            <com.google.android.material.chip.Chip
                 android:id="@+id/auth_mode_password"
-                style="?attr/materialButtonOutlinedStyle"
+                style="@style/AppTheme.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minWidth="0dp"
-                android:padding="8dp"
-                android:text="@string/connection_mode_basic_authentication"
-                android:textSize="@dimen/toggle_group_text_size" />
+                android:text="@string/connection_mode_basic_authentication" />
 
-            <com.google.android.material.button.MaterialButton
+            <com.google.android.material.chip.Chip
                 android:id="@+id/auth_mode_open_keychain"
-                style="?attr/materialButtonOutlinedStyle"
+                style="@style/AppTheme.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minWidth="0dp"
-                android:padding="8dp"
-                android:text="@string/connection_mode_openkeychain"
-                android:textSize="@dimen/toggle_group_text_size" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+                android:text="@string/connection_mode_openkeychain" />
+        </com.google.android.material.chip.ChipGroup>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_button"

@@ -8,6 +8,7 @@
     <color name="primary_color">#ff111111</color>
     <color name="primary_light_color">#ff373737</color>
     <color name="secondary_color">#ff3b6888</color>
+    <color name="secondary_light_color">#ff6b96b8</color>
     <color name="primary_text_color">#ffffffff</color>
 
     <!-- Theme variables -->
