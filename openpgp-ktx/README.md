@@ -1,4 +1,4 @@
-# openpgp-ktx [![Download](https://api.bintray.com/packages/android-password-store/openpgp-ktx/openpgp-ktx/images/download.svg)](https://bintray.com/android-password-store/openpgp-ktx/openpgp-ktx/_latestVersion)
+# openpgp-ktx [![Maven Central](https://img.shields.io/maven-central/v/com.github.android-password-store/openpgp-ktx.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.android-password-store%22%20AND%20a:%22openpgp-ktx%22)
 
 Reimplementation of [OpenKeychain]'s integration library [openpgp-api]. Written entirely in Kotlin, it leverages Jetpack to be compatible with modern apps, unlike the original library.
 
@@ -6,7 +6,7 @@ Reimplementation of [OpenKeychain]'s integration library [openpgp-api]. Written 
 
 ```gradle
 dependencies {
-    implementation("com.github.androidpasswordstore:openpgp-ktx:<latest-version>")
+    implementation("com.github.android-password-store:openpgp-ktx:<latest-version>")
 }
 ```
 
