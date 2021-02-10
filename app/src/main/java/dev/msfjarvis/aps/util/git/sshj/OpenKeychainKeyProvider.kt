@@ -15,6 +15,7 @@ import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.Closeable
 import java.security.PublicKey
+import java.security.interfaces.ECKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -177,6 +178,7 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
                 }
 
             override fun getAlgorithm() = publicKey!!.algorithm
+            override fun getParams() = (publicKey as? ECKey)?.params
         }
     }
 
