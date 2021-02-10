@@ -9,6 +9,7 @@ import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.runCatching
 import com.hierynomus.sshj.key.KeyAlgorithms
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
+import com.hierynomus.sshj.transport.cipher.GcmCiphers
 import com.hierynomus.sshj.transport.kex.ExtInfoClientFactory
 import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
@@ -256,6 +257,8 @@ class SshjConfig : ConfigImpl() {
 
     private fun initCipherFactories() {
         cipherFactories = listOf(
+            GcmCiphers.AES128GCM(),
+            GcmCiphers.AES256GCM(),
             BlockCiphers.AES256CTR(),
             BlockCiphers.AES192CTR(),
             BlockCiphers.AES128CTR(),
