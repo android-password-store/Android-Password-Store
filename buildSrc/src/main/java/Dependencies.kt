@@ -65,7 +65,7 @@ object Dependencies {
         const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.6"
         const val modern_android_prefs = "de.maxr1998:modernandroidpreferences:2.0"
         const val plumber = "com.squareup.leakcanary:plumber-android:2.6"
-        const val sshj = "com.hierynomus:sshj:0.30.0"
+        const val sshj = "com.hierynomus:sshj:0.31.0"
         const val ssh_auth = "org.sufficientlysecure:sshauthentication-api:1.0"
         const val timber = "com.jakewharton.timber:timber:4.7.1"
         const val timberkt = "com.github.ajalt:timberkt:1.5.1"

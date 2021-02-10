@@ -8,15 +8,18 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.activity.result.IntentSenderRequest
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.Closeable
 import java.security.PublicKey
+import java.security.interfaces.ECKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.KeyType
@@ -175,11 +178,16 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
                 }
 
             override fun getAlgorithm() = publicKey!!.algorithm
+            override fun getParams() = (publicKey as? ECKey)?.params
         }
     }
 
     override fun close() {
-        activity.continueAfterUserInteraction.unregister()
+        activity.lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                activity.continueAfterUserInteraction.unregister()
+            }
+        }
         sshServiceConnection.disconnect()
     }
 
@@ -187,5 +195,5 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
 
     override fun getPublic() = publicKey
 
-    override fun getType() = KeyType.fromKey(publicKey)
+    override fun getType(): KeyType = KeyType.fromKey(publicKey)
 }

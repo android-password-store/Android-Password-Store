@@ -9,6 +9,7 @@ import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.runCatching
 import com.hierynomus.sshj.key.KeyAlgorithms
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
+import com.hierynomus.sshj.transport.cipher.GcmCiphers
 import com.hierynomus.sshj.transport.kex.ExtInfoClientFactory
 import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
@@ -21,6 +22,7 @@ import net.schmizz.sshj.transport.compression.NoneCompression
 import net.schmizz.sshj.transport.kex.Curve25519SHA256
 import net.schmizz.sshj.transport.kex.Curve25519SHA256.FactoryLibSsh
 import net.schmizz.sshj.transport.kex.DHGexSHA256
+import net.schmizz.sshj.transport.kex.ECDHNistP
 import net.schmizz.sshj.transport.random.JCERandom
 import net.schmizz.sshj.transport.random.SingletonRandomFactory
 import net.schmizz.sshj.userauth.keyprovider.OpenSSHKeyFile
@@ -213,6 +215,9 @@ class SshjConfig : ConfigImpl() {
         keyExchangeFactories = listOf(
             Curve25519SHA256.Factory(),
             FactoryLibSsh(),
+            ECDHNistP.Factory521(),
+            ECDHNistP.Factory384(),
+            ECDHNistP.Factory256(),
             DHGexSHA256.Factory(),
             // Sends "ext-info-c" with the list of key exchange algorithms. This is needed to get
             // rsa-sha2-* key types to work with some servers (e.g. GitHub).
@@ -224,12 +229,12 @@ class SshjConfig : ConfigImpl() {
         keyAlgorithms = listOf(
             KeyAlgorithms.SSHRSACertV01(),
             KeyAlgorithms.EdDSA25519(),
-            KeyAlgorithms.RSASHA512(),
-            KeyAlgorithms.RSASHA256(),
-            KeyAlgorithms.SSHRSA(),
             KeyAlgorithms.ECDSASHANistp521(),
             KeyAlgorithms.ECDSASHANistp384(),
             KeyAlgorithms.ECDSASHANistp256(),
+            KeyAlgorithms.RSASHA512(),
+            KeyAlgorithms.RSASHA256(),
+            KeyAlgorithms.SSHRSA(),
         ).map {
             OpenKeychainWrappedKeyAlgorithmFactory(it)
         }
@@ -252,6 +257,8 @@ class SshjConfig : ConfigImpl() {
 
     private fun initCipherFactories() {
         cipherFactories = listOf(
+            GcmCiphers.AES128GCM(),
+            GcmCiphers.AES256GCM(),
             BlockCiphers.AES256CTR(),
             BlockCiphers.AES192CTR(),
             BlockCiphers.AES128CTR(),
