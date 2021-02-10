@@ -7,13 +7,16 @@ package com.zeapo.pwdstore.git.sshj
 import com.hierynomus.sshj.key.KeyAlgorithm
 import java.io.ByteArrayOutputStream
 import java.security.PrivateKey
+import java.security.interfaces.ECKey
+import java.security.interfaces.ECPrivateKey
+import java.security.spec.ECParameterSpec
 import kotlinx.coroutines.runBlocking
 import net.schmizz.sshj.common.Buffer
 import net.schmizz.sshj.common.Factory
 import net.schmizz.sshj.signature.Signature
 import org.openintents.ssh.authentication.SshAuthenticationApi
 
-interface OpenKeychainPrivateKey : PrivateKey {
+interface OpenKeychainPrivateKey : PrivateKey, ECKey {
 
     suspend fun sign(challenge: ByteArray, hashAlgorithm: Int): ByteArray
 
