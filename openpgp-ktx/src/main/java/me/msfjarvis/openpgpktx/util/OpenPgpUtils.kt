@@ -6,7 +6,6 @@ package me.msfjarvis.openpgpktx.util
 
 import android.content.Context
 import android.content.Intent
-import android.text.TextUtils
 import java.io.Serializable
 import java.util.Locale
 import java.util.regex.Pattern
@@ -64,7 +63,7 @@ public object OpenPgpUtils {
      * See SplitUserIdTest for examples.
      */
     public fun splitUserId(userId: String): UserId {
-        if (!TextUtils.isEmpty(userId)) {
+        if (userId.isNotEmpty()) {
             val matcher = USER_ID_PATTERN.matcher(userId)
             if (matcher.matches()) {
                 var name = if (matcher.group(1).isEmpty()) null else matcher.group(1)
@@ -95,15 +94,15 @@ public object OpenPgpUtils {
      */
     public fun createUserId(userId: UserId): String? {
         val userIdBuilder = StringBuilder()
-        if (!TextUtils.isEmpty(userId.name)) {
+        if (!userId.name.isNullOrEmpty()) {
             userIdBuilder.append(userId.name)
         }
-        if (!TextUtils.isEmpty(userId.comment)) {
+        if (!userId.comment.isNullOrEmpty()) {
             userIdBuilder.append(" (")
             userIdBuilder.append(userId.comment)
             userIdBuilder.append(")")
         }
-        if (!TextUtils.isEmpty(userId.email)) {
+        if (!userId.email.isNullOrEmpty()) {
             userIdBuilder.append(" <")
             userIdBuilder.append(userId.email)
             userIdBuilder.append(">")
