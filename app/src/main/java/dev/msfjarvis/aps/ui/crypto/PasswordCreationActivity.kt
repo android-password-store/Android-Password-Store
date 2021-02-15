@@ -34,6 +34,7 @@ import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
+import dev.msfjarvis.aps.util.crypto.GpgIdentifier
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.getString
@@ -50,7 +51,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
-import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
@@ -271,39 +271,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         otpImportButton.isVisible = !entry.hasTotp()
     }
 
-    private sealed class GpgIdentifier {
-        data class KeyId(val id: Long) : GpgIdentifier()
-        data class UserId(val email: String) : GpgIdentifier()
-    }
-
-    @OptIn(ExperimentalUnsignedTypes::class)
-    private fun parseGpgIdentifier(identifier: String): GpgIdentifier? {
-        if (identifier.isEmpty()) return null
-        // Match long key IDs:
-        // FF22334455667788 or 0xFF22334455667788
-        val maybeLongKeyId = identifier.removePrefix("0x").takeIf {
-            it.matches("[a-fA-F0-9]{16}".toRegex())
-        }
-        if (maybeLongKeyId != null) {
-            val keyId = maybeLongKeyId.toULong(16)
-            return GpgIdentifier.KeyId(keyId.toLong())
-        }
-
-        // Match fingerprints:
-        // FF223344556677889900112233445566778899 or 0xFF223344556677889900112233445566778899
-        val maybeFingerprint = identifier.removePrefix("0x").takeIf {
-            it.matches("[a-fA-F0-9]{40}".toRegex())
-        }
-        if (maybeFingerprint != null) {
-            // Truncating to the long key ID is not a security issue since OpenKeychain only accepts
-            // non-ambiguous key IDs.
-            val keyId = maybeFingerprint.takeLast(16).toULong(16)
-            return GpgIdentifier.KeyId(keyId.toLong())
-        }
-
-        return OpenPgpUtils.splitUserId(identifier).email?.let { GpgIdentifier.UserId(it) }
-    }
-
     /**
      * Encrypts the password and the extra content
      */
@@ -340,7 +307,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             val gpgIdentifiers = gpgIdentifierFile.readLines()
                 .filter { it.isNotBlank() }
                 .map { line ->
-                    parseGpgIdentifier(line) ?: run {
+                    GpgIdentifier.fromString(line) ?: run {
                         // The line being empty means this is most likely an empty `.gpg-id` file
                         // we created. Skip the validation so we can make the user add a real ID.
                         if (line.isEmpty()) return@run
