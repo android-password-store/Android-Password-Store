@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.edit
 import androidx.fragment.app.DialogFragment
 import com.github.ajalt.timberkt.Timber.tag
@@ -29,20 +28,15 @@ import dev.msfjarvis.aps.util.pwgenxkpwd.PasswordBuilder
 /** A placeholder fragment containing a simple view.  */
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
-    private lateinit var prefs: SharedPreferences
-    private lateinit var binding: FragmentXkpwgenBinding
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity = requireActivity()
         val inflater = callingActivity.layoutInflater
-        binding = FragmentXkpwgenBinding.inflate(inflater)
-
+        val binding = FragmentXkpwgenBinding.inflate(inflater)
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
+        val prefs = callingActivity.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
         builder.setView(binding.root)
-
-        prefs = callingActivity.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
         val previousStoredCapStyle: String = runCatching {
             prefs.getString(PREF_KEY_CAPITALS_STYLE)!!
@@ -60,7 +54,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         binding.xkPasswordText.typeface = monoTypeface
 
         builder.setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
-            setPreferences()
+            setPreferences(binding, prefs)
             val edit = callingActivity.findViewById<EditText>(R.id.password)
             edit.setText(binding.xkPasswordText.text)
         }
@@ -72,18 +66,18 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         val dialog = builder.setTitle(this.resources.getString(R.string.xkpwgen_title)).create()
 
         dialog.setOnShowListener {
-            setPreferences()
-            makeAndSetPassword(binding.xkPasswordText)
+            setPreferences(binding, prefs)
+            makeAndSetPassword(binding)
 
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                setPreferences()
-                makeAndSetPassword(binding.xkPasswordText)
+                setPreferences(binding, prefs)
+                makeAndSetPassword(binding)
             }
         }
         return dialog
     }
 
-    private fun makeAndSetPassword(passwordText: AppCompatTextView) {
+    private fun makeAndSetPassword(binding: FragmentXkpwgenBinding) {
         PasswordBuilder(requireContext())
             .setNumberOfWords(Integer.valueOf(binding.xkNumWords.text.toString()))
             .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
@@ -93,16 +87,16 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
             .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL })
             .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString())).create()
             .fold(
-                success = { passwordText.text = it },
+                success = { binding.xkPasswordText.text = it },
                 failure = { e ->
                     Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
                     tag("xkpw").e(e, "failure generating xkpasswd")
-                    passwordText.text = FALLBACK_ERROR_PASS
+                    binding.xkPasswordText.text = FALLBACK_ERROR_PASS
                 },
             )
     }
 
-    private fun setPreferences() {
+    private fun setPreferences(binding: FragmentXkpwgenBinding, prefs: SharedPreferences) {
         prefs.edit {
             putString(PREF_KEY_CAPITALS_STYLE, binding.xkCapType.selectedItem.toString())
             putString(PREF_KEY_NUM_WORDS, binding.xkNumWords.text.toString())
