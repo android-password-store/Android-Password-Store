@@ -30,6 +30,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordEntry
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
+import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
@@ -145,12 +146,30 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             setContentView(root)
             generatePassword.setOnClickListener { generatePassword() }
             otpImportButton.setOnClickListener {
-                otpImportAction.launch(IntentIntegrator(this@PasswordCreationActivity)
-                    .setOrientationLocked(false)
-                    .setBeepEnabled(false)
-                    .setDesiredBarcodeFormats(QR_CODE)
-                    .createScanIntent()
-                )
+                supportFragmentManager.setFragmentResultListener(OTP_RESULT_REQUEST_KEY, this@PasswordCreationActivity) { requestKey, bundle ->
+                    if (requestKey == OTP_RESULT_REQUEST_KEY) {
+                        val contents = bundle.getString(RESULT)
+                        val currentExtras = binding.extraContent.text.toString()
+                        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+                            binding.extraContent.append("\n$contents")
+                        else
+                            binding.extraContent.append(contents)
+                    }
+                }
+                val items = arrayOf(getString(R.string.otp_import_qr_code), getString(R.string.otp_import_manual_entry))
+                MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                    .setItems(items) { _, index ->
+                        if (index == 0) {
+                            otpImportAction.launch(IntentIntegrator(this@PasswordCreationActivity)
+                                .setOrientationLocked(false)
+                                .setBeepEnabled(false)
+                                .setDesiredBarcodeFormats(QR_CODE)
+                                .createScanIntent())
+                        } else if (index == 1) {
+                            OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+                        }
+                    }
+                    .show()
             }
 
             directoryInputLayout.apply {
@@ -473,6 +492,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
         const val PASSWORD_RESULT_REQUEST_KEY = "PASSWORD_GENERATOR"
+        const val OTP_RESULT_REQUEST_KEY = "OTP_IMPORT"
         const val RESULT = "RESULT"
         const val RETURN_EXTRA_CREATED_FILE = "CREATED_FILE"
         const val RETURN_EXTRA_NAME = "NAME"
