@@ -249,6 +249,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     }
 
     private fun generatePassword() {
+        supportFragmentManager.setFragmentResultListener(PASSWORD_RESULT_REQUEST_KEY, this) { requestKey, bundle ->
+            if (requestKey == PASSWORD_RESULT_REQUEST_KEY) {
+                binding.password.setText(bundle.getString(RESULT))
+            }
+        }
         when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) ?: KEY_PWGEN_TYPE_CLASSIC) {
             KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment()
                 .show(supportFragmentManager, "generator")
@@ -467,6 +472,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
         private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
         private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
+        const val PASSWORD_RESULT_REQUEST_KEY = "PASSWORD_GENERATOR"
+        const val RESULT = "RESULT"
         const val RETURN_EXTRA_CREATED_FILE = "CREATED_FILE"
         const val RETURN_EXTRA_NAME = "NAME"
         const val RETURN_EXTRA_LONG_NAME = "LONG_NAME"

@@ -14,12 +14,15 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentPwgenBinding
+import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.generate
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.setPrefs
@@ -50,8 +53,10 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
         return builder.run {
             setTitle(R.string.pwgen_title)
             setPositiveButton(R.string.dialog_ok) { _, _ ->
-                val edit = callingActivity.findViewById<EditText>(R.id.password)
-                edit.setText(binding.passwordText.text)
+                setFragmentResult(
+                    PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
+                    bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
+                )
             }
             setNeutralButton(R.string.dialog_cancel) { _, _ -> }
             setNegativeButton(R.string.pwgen_generate, null)
