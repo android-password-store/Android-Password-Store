@@ -50,6 +50,33 @@ class PasswordEntryTest {
         assertEquals("", makeEntry("").extraContent)
     }
 
+    @Test fun parseExtraContentWithoutAuth() {
+        var entry = makeEntry("username: abc\npassword: abc\ntest: abcdef")
+        assertEquals(1, entry.extraContentWithoutAuthDataMap.size)
+        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test"))
+        assertEquals("abcdef", entry.extraContentWithoutAuthDataMap["test"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest: :abcdef:")
+        assertEquals(1, entry.extraContentWithoutAuthDataMap.size)
+        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test"))
+        assertEquals(":abcdef:", entry.extraContentWithoutAuthDataMap["test"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest : ::abc:def::")
+        assertEquals(1, entry.extraContentWithoutAuthDataMap.size)
+        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test"))
+        assertEquals("::abc:def::", entry.extraContentWithoutAuthDataMap["test"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\ntest2: ghijkl")
+        assertEquals(2, entry.extraContentWithoutAuthDataMap.size)
+        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test2"))
+        assertEquals("ghijkl", entry.extraContentWithoutAuthDataMap["test2"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\n: ghijkl\n mnopqr:")
+        assertEquals(2, entry.extraContentWithoutAuthDataMap.size)
+        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("Extra Content"))
+        assertEquals(": ghijkl\n mnopqr:", entry.extraContentWithoutAuthDataMap["Extra Content"])
+    }
+
     @Test fun testGetUsername() {
         for (field in PasswordEntry.USERNAME_FIELDS) {
             assertEquals("username", makeEntry("\n$field username").username)
