@@ -172,9 +172,6 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                         startAutoDismissTimer()
                         runCatching {
                             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-                            // TODO: Remove show extra content from here and settings
-                            val showExtraContent =
-                                settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
                             val entry = PasswordEntry(outputStream)
                             val items = arrayListOf<FieldItem>()
                             val adapter = FieldItemAdapter(emptyList(), showPassword) { text ->
