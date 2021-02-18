@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 -   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
 -   Suggest users to re-clone repository when it is deemed to be broken
 -   Allow doing a merge instead of a rebase when pulling or syncing
+-   Add support for manually providing TOTP parameters
 
 ### Fixed
 

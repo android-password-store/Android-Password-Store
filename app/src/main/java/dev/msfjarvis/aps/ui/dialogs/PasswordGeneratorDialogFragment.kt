@@ -4,7 +4,6 @@
  */
 package dev.msfjarvis.aps.ui.dialogs
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -14,13 +13,16 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.IdRes
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.databinding.FragmentPwgenBinding
+import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.generate
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.setPrefs
@@ -30,41 +32,40 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = MaterialAlertDialogBuilder(requireContext())
         val callingActivity = requireActivity()
-        val inflater = callingActivity.layoutInflater
-
-        @SuppressLint("InflateParams")
-        val view = inflater.inflate(R.layout.fragment_pwgen, null)
+        val binding = FragmentPwgenBinding.inflate(layoutInflater)
         val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
         val prefs = requireActivity().applicationContext
             .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        view.findViewById<CheckBox>(R.id.numerals)?.isChecked = !prefs.getBoolean(PasswordOption.NoDigits.key, false)
-        view.findViewById<CheckBox>(R.id.symbols)?.isChecked = prefs.getBoolean(PasswordOption.AtLeastOneSymbol.key, false)
-        view.findViewById<CheckBox>(R.id.uppercase)?.isChecked = !prefs.getBoolean(PasswordOption.NoUppercaseLetters.key, false)
-        view.findViewById<CheckBox>(R.id.lowercase)?.isChecked = !prefs.getBoolean(PasswordOption.NoLowercaseLetters.key, false)
-        view.findViewById<CheckBox>(R.id.ambiguous)?.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
-        view.findViewById<CheckBox>(R.id.pronounceable)?.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
+        builder.setView(binding.root)
 
-        val textView: AppCompatEditText = view.findViewById(R.id.lengthNumber)
-        textView.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
-        val passwordText: AppCompatTextView = view.findViewById(R.id.passwordText)
-        passwordText.typeface = monoTypeface
-        return MaterialAlertDialogBuilder(requireContext()).run {
+        binding.numerals.isChecked = !prefs.getBoolean(PasswordOption.NoDigits.key, false)
+        binding.symbols.isChecked = prefs.getBoolean(PasswordOption.AtLeastOneSymbol.key, false)
+        binding.uppercase.isChecked = !prefs.getBoolean(PasswordOption.NoUppercaseLetters.key, false)
+        binding.lowercase.isChecked = !prefs.getBoolean(PasswordOption.NoLowercaseLetters.key, false)
+        binding.ambiguous.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
+        binding.pronounceable.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
+
+        binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
+        binding.passwordText.typeface = monoTypeface
+        return builder.run {
             setTitle(R.string.pwgen_title)
-            setView(view)
             setPositiveButton(R.string.dialog_ok) { _, _ ->
-                val edit = callingActivity.findViewById<EditText>(R.id.password)
-                edit.setText(passwordText.text)
+                setFragmentResult(
+                    PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
+                    bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
+                )
             }
             setNeutralButton(R.string.dialog_cancel) { _, _ -> }
             setNegativeButton(R.string.pwgen_generate, null)
             create()
         }.apply {
             setOnShowListener {
-                generate(passwordText)
+                generate(binding.passwordText)
                 getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                    generate(passwordText)
+                    generate(binding.passwordText)
                 }
             }
         }

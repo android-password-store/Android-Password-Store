@@ -398,5 +398,9 @@
     <string name="oreo_autofill_password_fill_and_conditional_save_support">Fill and save passwords (saving requires that no accessibility services are enabled)</string>
     <string name="clear_saved_host_key">Clear saved host key</string>
     <string name="clear_saved_host_key_success">Successfully cleared saved host key!</string>
+    <string name="otp_import_qr_code">Scan QR code</string>
+    <string name="otp_import_manual_entry">Enter manually</string>
+    <string name="otp_import_manual_hint_secret">Secret</string>
+    <string name="otp_import_manual_hint_account">Account</string>
 
 </resources>
