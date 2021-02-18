@@ -52,29 +52,33 @@ class PasswordEntryTest {
 
     @Test fun parseExtraContentWithoutAuth() {
         var entry = makeEntry("username: abc\npassword: abc\ntest: abcdef")
-        assertEquals(1, entry.extraContentWithoutAuthDataMap.size)
-        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test"))
-        assertEquals("abcdef", entry.extraContentWithoutAuthDataMap["test"])
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test"))
+        assertEquals("abcdef", entry.extraContentMap["test"])
 
         entry = makeEntry("username: abc\npassword: abc\ntest: :abcdef:")
-        assertEquals(1, entry.extraContentWithoutAuthDataMap.size)
-        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test"))
-        assertEquals(":abcdef:", entry.extraContentWithoutAuthDataMap["test"])
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test"))
+        assertEquals(":abcdef:", entry.extraContentMap["test"])
 
         entry = makeEntry("username: abc\npassword: abc\ntest : ::abc:def::")
-        assertEquals(1, entry.extraContentWithoutAuthDataMap.size)
-        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test"))
-        assertEquals("::abc:def::", entry.extraContentWithoutAuthDataMap["test"])
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test"))
+        assertEquals("::abc:def::", entry.extraContentMap["test"])
 
         entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\ntest2: ghijkl")
-        assertEquals(2, entry.extraContentWithoutAuthDataMap.size)
-        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("test2"))
-        assertEquals("ghijkl", entry.extraContentWithoutAuthDataMap["test2"])
+        assertEquals(2, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test2"))
+        assertEquals("ghijkl", entry.extraContentMap["test2"])
 
         entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\n: ghijkl\n mnopqr:")
-        assertEquals(2, entry.extraContentWithoutAuthDataMap.size)
-        assertTrue(entry.extraContentWithoutAuthDataMap.containsKey("Extra Content"))
-        assertEquals(": ghijkl\n mnopqr:", entry.extraContentWithoutAuthDataMap["Extra Content"])
+        assertEquals(1, entry.extraContentMap.size)
+        /*
+        Whether or not the catch-all 'Extra Content' field will be a thing is up for debate
+        assertEquals(2, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("Extra Content"))
+        assertEquals(": ghijkl\n mnopqr:", entry.extraContentMap["Extra Content"])
+        */
     }
 
     @Test fun testGetUsername() {

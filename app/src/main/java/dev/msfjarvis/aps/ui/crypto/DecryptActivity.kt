@@ -217,7 +217,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                             }
 
                             if (entry.hasExtraContentWithoutAuthData()) {
-                                entry.extraContentWithoutAuthDataMap.forEach { (key, value) ->
+                                entry.extraContentMap.forEach { (key, value) ->
                                     items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
                                 }
                             }

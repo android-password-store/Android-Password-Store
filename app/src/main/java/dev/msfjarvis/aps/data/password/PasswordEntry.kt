@@ -24,8 +24,9 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     val totpSecret: String?
     val totpPeriod: Long
     val totpAlgorithm: String
-    var extraContent: String
-        private set
+    val extraContent: String
+    val extraContentWithoutAuthData: String
+    val extraContentMap: Map<String, String>
 
     @Throws(UnsupportedEncodingException::class)
     constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
@@ -34,6 +35,8 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
         password = foundPassword
         extraContent = passContent.joinToString("\n")
+        extraContentWithoutAuthData = generateExtraContentWithoutAuthData()
+        extraContentMap = generateExtraContentPairs()
         username = findUsername()
         digits = findOtpDigits(content)
         totpSecret = findTotpSecret(content)
@@ -63,51 +66,46 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return Otp.calculateCode(totpSecret, Date().time / (1000 * totpPeriod), totpAlgorithm, digits).get()
     }
 
-    val extraContentWithoutAuthData by lazy(LazyThreadSafetyMode.NONE) {
+    private fun generateExtraContentWithoutAuthData(): String {
         var foundUsername = false
-        extraContent.splitToSequence("\n").filter { line ->
-            return@filter when {
-                USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } && !foundUsername -> {
-                    foundUsername = true
-                    false
+        return extraContent
+            .lineSequence()
+            .filter { line ->
+                return@filter when {
+                    USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } && !foundUsername -> {
+                        foundUsername = true
+                        false
+                    }
+                    line.startsWith("otpauth://", ignoreCase = true) ||
+                        line.startsWith("totp:", ignoreCase = true) -> {
+                        false
+                    }
+                    else -> {
+                        true
+                    }
                 }
-                line.startsWith("otpauth://", ignoreCase = true) ||
-                    line.startsWith("totp:", ignoreCase = true) -> {
-                    false
-                }
-                else -> {
-                    true
-                }
-            }
-        }.joinToString(separator = "\n")
+            }.joinToString(separator = "\n")
     }
 
-    val extraContentWithoutAuthDataMap by lazy(LazyThreadSafetyMode.NONE) {
-        val map = mutableMapOf<String, String>()
-        extraContentWithoutAuthData.split("\n").forEach { item ->
-            val splitArray = item.split(':')
-            val key = splitArray.first().trimEnd()
-            val value = (splitArray - splitArray.first()).joinToString(":").trimStart()
-            if (key.isNotEmpty() && value.isNotEmpty()) {
-                // When both key and value are available
-                map[key] = value
-            } else {
-                // If we cannot form a key-value pair, add the item as-it-is
-                if (item.isNotEmpty()) {
-                    map.putOrAppend("Extra Content", item)
-                }
-            }
-        }
-        map
-    }
+    private fun generateExtraContentPairs(): Map<String, String> {
+        val items = mutableMapOf<String, String>()
+        extraContentWithoutAuthData
+            .lines()
+            // Split on ':'
+            .map { line -> line.split(':') }
+            // Only take the item when a pair can be formed
+            .filter { list -> list.size >= 2 }
+            // Convert them to a Pair so it's easier to perform checks
+            // Since the actual values can also contain colons,
+            // we join them back and trim any initial spaces in them,
+            // and trailing spaces in the keys.
+            .map { list -> list[0].trimEnd() to list.drop(1).joinToString(":").trimStart() }
+            // Ensure neither key nor value are empty
+            .filter { pair -> pair.first.isNotBlank() && pair.second.isNotBlank() }
+            // Write the validated contents into the map
+            .map { pair -> items[pair.first] = pair.second }
 
-    private fun <K : Any> MutableMap<K, String>.putOrAppend(key: K, value: String) {
-        if (!this.containsKey(key)) {
-            this[key] = value
-            return
-        }
-        val previousData = this[key]
-        this[key] = previousData + "\n" + value
+        return items
     }
 
     private fun findUsername(): String? {
@@ -159,9 +157,8 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             "name:",
             "handle:",
             "id:",
-            "identity:"
+            "identity:",
         )
-
         val PASSWORD_FIELDS = arrayOf(
             "password:",
             "secret:",
