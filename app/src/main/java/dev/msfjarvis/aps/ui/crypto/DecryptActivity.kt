@@ -202,7 +202,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                         entry.totpPeriod - (System.currentTimeMillis() % entry.totpPeriod)
                                     withContext(Dispatchers.Main) {
                                         val code = entry.calculateTotpCode() ?: "Error"
-                                        items.add(FieldItem("OTP", code, FieldItem.ActionType.COPY))
+                                        items.add(FieldItem.createOtpField(code))
                                     }
                                     delay(remainingTime.seconds)
                                     repeat(Int.MAX_VALUE) {
