@@ -87,9 +87,27 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             val splitArray = item.split(':')
             val key = splitArray.first()
             val value = (splitArray - splitArray.first()).joinToString(":").trimStart()
-            map[key] = value
+            if (key.isNotEmpty() && value.isNotEmpty()) {
+                // When both key and value are available
+                map[key] = value
+            } else if (key.isNotEmpty()) {
+                // If we're here it means value is empty
+                map.putOrAppend("Extra Content", key)
+            } else if (value.isNotEmpty()) {
+                // If we're here it means key is empty
+                map.putOrAppend("Extra Content", value)
+            }
         }
         map
+    }
+
+    private fun <K : Any> MutableMap<K, String>.putOrAppend(key: K, value: String) {
+        if (!this.containsKey(key)) {
+            this[key] = value
+            return
+        }
+        val previousData = this[key]
+        this[key] = previousData + "\n" + value
     }
 
     private fun findUsername(): String? {
