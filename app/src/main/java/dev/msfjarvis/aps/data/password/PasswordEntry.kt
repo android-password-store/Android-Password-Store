@@ -93,23 +93,37 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     private fun generateExtraContentPairs(): Map<String, String> {
+        fun MutableMap<String, String>.putOrAppend(key: String, value: String) {
+            val existing = this[key]
+            this[key] = if (existing == null) {
+                value
+            } else {
+                "$existing\n$value"
+            }
+        }
         val items = mutableMapOf<String, String>()
         extraContentWithoutAuthData
             .lines()
-            // Split on ':'
-            .map { line -> line.split(':') }
+            // Split on ':', but pass down the line using a Pair because we may need it later
+            .map { line -> line to line.split(':') }
             // Only take the item when a pair can be formed
-            .filter { list -> list.size >= 2 }
+            .filter { (_, list) -> list.size >= 2 }
             // Convert them to a Pair so it's easier to perform checks
             // Since the actual values can also contain colons,
             // we join them back and trim any initial spaces in them,
             // and trailing spaces in the keys.
-            .map { list -> list[0].trimEnd() to list.drop(1).joinToString(":").trimStart() }
+            .map { (line, list) -> line to (list[0].trimEnd() to list.drop(1).joinToString(":").trimStart()) }
             // Ensure neither key nor value are empty
-            .filter { pair -> pair.first.isNotBlank() && pair.second.isNotBlank() }
+            .filter { (line, pair) ->
+                if (pair.first.isNotBlank() && pair.second.isNotBlank()) {
+                    true
+                } else {
+                    items.putOrAppend(EXTRA_CONTENT, line)
+                    false
+                }
+            }
             // Write the validated contents into the map
-            .map { pair -> items[pair.first] = pair.second }
-
+            .map { (_, pair) -> items[pair.first] = pair.second }
         return items
     }
 
@@ -152,6 +166,8 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     companion object {
+
+        private const val EXTRA_CONTENT = "Extra Content"
 
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val USERNAME_FIELDS = arrayOf(

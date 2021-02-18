@@ -72,13 +72,9 @@ class PasswordEntryTest {
         assertEquals("ghijkl", entry.extraContentMap["test2"])
 
         entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\n: ghijkl\n mnopqr:")
-        assertEquals(1, entry.extraContentMap.size)
-        /*
-        Whether or not the catch-all 'Extra Content' field will be a thing is up for debate
         assertEquals(2, entry.extraContentMap.size)
         assertTrue(entry.extraContentMap.containsKey("Extra Content"))
         assertEquals(": ghijkl\n mnopqr:", entry.extraContentMap["Extra Content"])
-        */
     }
 
     @Test fun testGetUsername() {
