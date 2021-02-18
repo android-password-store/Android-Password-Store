@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 -   Suggest users to re-clone repository when it is deemed to be broken
 -   Allow doing a merge instead of a rebase when pulling or syncing
 -   Add support for manually providing TOTP parameters
+-   Parse extra content as individual fields
 
 ### Fixed
 
