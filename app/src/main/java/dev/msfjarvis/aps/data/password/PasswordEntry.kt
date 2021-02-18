@@ -81,6 +81,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             }
         }.joinToString(separator = "\n")
     }
+
     val extraContentWithoutAuthDataMap by lazy(LazyThreadSafetyMode.NONE) {
         val map = mutableMapOf<String, String>()
         extraContentWithoutAuthData.split("\n").forEach { item ->
