@@ -207,8 +207,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                     delay(remainingTime.seconds)
                                     repeat(Int.MAX_VALUE) {
                                         val code = entry.calculateTotpCode() ?: "Error"
-                                        adapter.updateOTPCode(code)
                                         withContext(Dispatchers.Main) {
+                                            adapter.updateOTPCode(code)
                                         }
                                         delay(30.seconds)
                                     }
