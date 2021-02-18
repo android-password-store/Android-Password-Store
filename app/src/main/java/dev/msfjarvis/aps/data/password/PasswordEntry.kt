@@ -45,6 +45,10 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return extraContent.isNotEmpty()
     }
 
+    fun hasExtraContentWithoutAuthData(): Boolean {
+        return extraContentWithoutAuthData.isNotEmpty()
+    }
+
     fun hasTotp(): Boolean {
         return totpSecret != null
     }
@@ -76,6 +80,16 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
                 }
             }
         }.joinToString(separator = "\n")
+    }
+    val extraContentWithoutAuthDataMap by lazy(LazyThreadSafetyMode.NONE) {
+        val map = mutableMapOf<String, String>()
+        extraContentWithoutAuthData.split("\n").forEach { item ->
+            val splitArray = item.split(':')
+            val key = splitArray.first()
+            val value = (splitArray - splitArray.first()).joinToString(":").trimStart()
+            map[key] = value
+        }
+        map
     }
 
     private fun findUsername(): String? {

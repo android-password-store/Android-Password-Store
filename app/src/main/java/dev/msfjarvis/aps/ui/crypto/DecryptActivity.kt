@@ -6,9 +6,7 @@
 package dev.msfjarvis.aps.ui.crypto
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,8 +17,10 @@ import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.data.password.PasswordEntry
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
+import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
@@ -172,80 +172,61 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                         startAutoDismissTimer()
                         runCatching {
                             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-                            val showExtraContent = settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
-                            val monoTypeface = Typeface.createFromAsset(assets, "fonts/sourcecodepro.ttf")
+                            // TODO: Remove show extra content from here and settings
+                            val showExtraContent =
+                                settings.getBoolean(PreferenceKeys.SHOW_EXTRA_CONTENT, true)
                             val entry = PasswordEntry(outputStream)
-
-                            passwordEntry = entry
-                            invalidateOptionsMenu()
-
-                            with(binding) {
-                                if (entry.password.isEmpty()) {
-                                    passwordTextContainer.visibility = View.GONE
-                                } else {
-                                    passwordTextContainer.visibility = View.VISIBLE
-                                    passwordText.typeface = monoTypeface
-                                    passwordText.setText(entry.password)
-                                    if (!showPassword) {
-                                        passwordText.transformationMethod = PasswordTransformationMethod.getInstance()
-                                    }
-                                    passwordTextContainer.setOnClickListener { copyPasswordToClipboard(entry.password) }
-                                    passwordText.setOnClickListener { copyPasswordToClipboard(entry.password) }
-                                }
-
-                                if (entry.hasExtraContent()) {
-                                    if (entry.extraContentWithoutAuthData.isNotEmpty()) {
-                                        extraContentContainer.visibility = View.VISIBLE
-                                        extraContent.typeface = monoTypeface
-                                        extraContent.setText(entry.extraContentWithoutAuthData)
-                                        if (!showExtraContent) {
-                                            extraContent.transformationMethod = PasswordTransformationMethod.getInstance()
-                                        }
-                                        extraContentContainer.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutAuthData) }
-                                        extraContent.setOnClickListener { copyTextToClipboard(entry.extraContentWithoutAuthData) }
-                                    }
-
-                                    if (entry.hasUsername()) {
-                                        usernameText.typeface = monoTypeface
-                                        usernameText.setText(entry.username)
-                                        usernameTextContainer.setEndIconOnClickListener { copyTextToClipboard(entry.username) }
-                                        usernameTextContainer.visibility = View.VISIBLE
-                                    } else {
-                                        usernameTextContainer.visibility = View.GONE
-                                    }
-
-                                    if (entry.hasTotp()) {
-                                        otpTextContainer.visibility = View.VISIBLE
-                                        otpTextContainer.setEndIconOnClickListener {
-                                            copyTextToClipboard(
-                                                otpText.text.toString(),
-                                                snackbarTextRes = R.string.clipboard_otp_copied_text
-                                            )
-                                        }
-                                        launch(Dispatchers.IO) {
-                                            // Calculate the actual remaining time for the first pass
-                                            // then return to the standard 30 second affair.
-                                            val remainingTime = entry.totpPeriod - (System.currentTimeMillis() % entry.totpPeriod)
-                                            withContext(Dispatchers.Main) {
-                                                otpText.setText(entry.calculateTotpCode()
-                                                    ?: "Error")
-                                            }
-                                            delay(remainingTime.seconds)
-                                            repeat(Int.MAX_VALUE) {
-                                                val code = entry.calculateTotpCode() ?: "Error"
-                                                withContext(Dispatchers.Main) {
-                                                    otpText.setText(code)
-                                                }
-                                                delay(30.seconds)
-                                            }
-                                        }
-                                    }
-                                }
+                            val items = arrayListOf<FieldItem>()
+                            val adapter = FieldItemAdapter(emptyList(), showPassword) { text ->
+                                copyTextToClipboard(text)
                             }
 
                             if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
                                 copyPasswordToClipboard(entry.password)
                             }
+
+                            passwordEntry = entry
+                            invalidateOptionsMenu()
+
+                            if (entry.password.isNotEmpty()) {
+                                items.add(FieldItem.createPasswordField(entry.password))
+                            }
+
+                            if (!entry.hasExtraContent()) return@runCatching
+
+                            if (entry.hasTotp()) {
+                                launch(Dispatchers.IO) {
+                                    // Calculate the actual remaining time for the first pass
+                                    // then return to the standard 30 second affair.
+                                    val remainingTime =
+                                        entry.totpPeriod - (System.currentTimeMillis() % entry.totpPeriod)
+                                    withContext(Dispatchers.Main) {
+                                        val code = entry.calculateTotpCode() ?: "Error"
+                                        items.add(FieldItem("OTP", code, FieldItem.ActionType.COPY))
+                                    }
+                                    delay(remainingTime.seconds)
+                                    repeat(Int.MAX_VALUE) {
+                                        val code = entry.calculateTotpCode() ?: "Error"
+                                        adapter.updateOTPCode(code)
+                                        withContext(Dispatchers.Main) {
+                                        }
+                                        delay(30.seconds)
+                                    }
+                                }
+                            }
+
+                            if (!entry.username.isNullOrEmpty()) {
+                                items.add(FieldItem.createUsernameField(entry.username))
+                            }
+
+                            if (entry.hasExtraContentWithoutAuthData()) {
+                                entry.extraContentWithoutAuthDataMap.forEach { (key, value) ->
+                                    items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
+                                }
+                            }
+
+                            binding.recyclerView.adapter = adapter
+                            adapter.updateItems(items)
                         }.onFailure { e ->
                             e(e)
                         }

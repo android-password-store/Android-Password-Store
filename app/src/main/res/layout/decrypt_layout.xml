@@ -3,7 +3,7 @@
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -67,92 +67,107 @@
             app:layout_constraintTop_toBottomOf="@id/password_last_changed"
             tools:ignore="ContentDescription" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_text_container"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/password"
-            android:visibility="gone"
-            app:endIconMode="password_toggle"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:fontFamily="@font/sourcecodepro"
-                android:textIsSelectable="true"
-                tools:text="p@55w0rd!" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/otp_text_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/otp"
-            android:visibility="gone"
-            app:endIconDrawable="@drawable/ic_content_copy"
-            app:endIconMode="custom"
-            app:layout_constraintTop_toBottomOf="@id/password_text_container"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/otp_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:fontFamily="@font/sourcecodepro"
-                android:textIsSelectable="true"
-                tools:text="123456" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username_text_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/username"
-            android:visibility="gone"
-            app:endIconDrawable="@drawable/ic_content_copy"
-            app:endIconMode="custom"
-            app:layout_constraintTop_toBottomOf="@id/otp_text_container"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:textIsSelectable="true"
-                tools:text="totally_real_user@example.com" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/extra_content_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/extra_content"
-            android:visibility="gone"
-            app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/username_text_container"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/extra_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:textIsSelectable="true"
-                tools:text="lots of extra content that will surely fill this \n up well" />
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:listitem="@layout/item_field"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    <!--
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_text_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/password"
+                android:visibility="gone"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:fontFamily="@font/sourcecodepro"
+                    android:textIsSelectable="true"
+                    tools:text="p@55w0rd!" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/otp_text_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/otp"
+                android:visibility="gone"
+                app:endIconDrawable="@drawable/ic_content_copy"
+                app:endIconMode="custom"
+                app:layout_constraintTop_toBottomOf="@id/password_text_container"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/otp_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:fontFamily="@font/sourcecodepro"
+                    android:textIsSelectable="true"
+                    tools:text="123456" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/username_text_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/username"
+                android:visibility="gone"
+                app:endIconDrawable="@drawable/ic_content_copy"
+                app:endIconMode="custom"
+                app:layout_constraintTop_toBottomOf="@id/otp_text_container"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/username_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:textIsSelectable="true"
+                    tools:text="totally_real_user@example.com" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/extra_content_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/extra_content"
+                android:visibility="gone"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/username_text_container"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/extra_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:textIsSelectable="true"
+                    tools:text="lots of extra content that will surely fill this \n up well" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+    -->
+
+</androidx.core.widget.NestedScrollView>
