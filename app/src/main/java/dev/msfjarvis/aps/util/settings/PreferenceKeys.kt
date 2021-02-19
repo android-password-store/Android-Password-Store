@@ -62,7 +62,6 @@ object PreferenceKeys {
     const val REPOSITORY_INITIALIZED = "repository_initialized"
     const val REPO_CHANGED = "repo_changed"
     const val SEARCH_ON_START = "search_on_start"
-    const val SHOW_EXTRA_CONTENT = "show_extra_content"
 
     @Deprecated(
         message = "Use SHOW_HIDDEN_CONTENTS instead",

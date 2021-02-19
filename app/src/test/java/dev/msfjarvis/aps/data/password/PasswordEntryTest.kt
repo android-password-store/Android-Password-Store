@@ -50,6 +50,38 @@ class PasswordEntryTest {
         assertEquals("", makeEntry("").extraContent)
     }
 
+    @Test fun parseExtraContentWithoutAuth() {
+        var entry = makeEntry("username: abc\npassword: abc\ntest: abcdef")
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test"))
+        assertEquals("abcdef", entry.extraContentMap["test"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest: :abcdef:")
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test"))
+        assertEquals(":abcdef:", entry.extraContentMap["test"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest : ::abc:def::")
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test"))
+        assertEquals("::abc:def::", entry.extraContentMap["test"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\ntest2: ghijkl")
+        assertEquals(2, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("test2"))
+        assertEquals("ghijkl", entry.extraContentMap["test2"])
+
+        entry = makeEntry("username: abc\npassword: abc\ntest: abcdef\n: ghijkl\n mnopqr:")
+        assertEquals(2, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("Extra Content"))
+        assertEquals(": ghijkl\n mnopqr:", entry.extraContentMap["Extra Content"])
+
+        entry = makeEntry("username: abc\npassword: abc\n:\n\n")
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("Extra Content"))
+        assertEquals(":", entry.extraContentMap["Extra Content"])
+    }
+
     @Test fun testGetUsername() {
         for (field in PasswordEntry.USERNAME_FIELDS) {
             assertEquals("username", makeEntry("\n$field username").username)
@@ -133,7 +165,7 @@ class PasswordEntryTest {
 
         // This implementation is hardcoded for the URI above.
         val testFinder = object : TotpFinder {
-            override fun findSecret(content: String): String? {
+            override fun findSecret(content: String): String {
                 return "HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ"
             }
 

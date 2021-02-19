@@ -103,11 +103,6 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
                 summaryRes = R.string.show_password_pref_summary
                 defaultValue = true
             }
-            checkBox(PreferenceKeys.SHOW_EXTRA_CONTENT) {
-                titleRes = R.string.show_extra_content_pref_title
-                summaryRes = R.string.show_extra_content_pref_summary
-                defaultValue = true
-            }
             checkBox(PreferenceKeys.COPY_ON_DECRYPT) {
                 titleRes = R.string.pref_copy_title
                 summaryRes = R.string.pref_copy_summary

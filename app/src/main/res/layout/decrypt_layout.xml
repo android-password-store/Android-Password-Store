@@ -3,156 +3,73 @@
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ui.crypto.DecryptActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="fill_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/password_category"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:textColor="?android:attr/textColor"
+        android:textIsSelectable="false"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="CATEGORY HERE" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/password_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:textColor="?android:attr/textColor"
-            android:textIsSelectable="false"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="CATEGORY HERE" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/password_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_category"
+        tools:text="PASSWORD FILE NAME HERE" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/password_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:textColor="?attr/colorSecondary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_category"
-            tools:text="PASSWORD FILE NAME HERE" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/password_last_changed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:textColor="?android:attr/textColor"
-            android:textIsSelectable="false"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password_file"
-            tools:text="LAST CHANGED HERE" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/password_last_changed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:textColor="?android:attr/textColor"
+        android:textIsSelectable="false"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_file"
+        tools:text="LAST CHANGED HERE" />
 
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/divider"
-            app:layout_constraintTop_toBottomOf="@id/password_last_changed"
-            tools:ignore="ContentDescription" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/divider"
+        app:layout_constraintTop_toBottomOf="@id/password_last_changed"
+        tools:ignore="ContentDescription" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_text_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/password"
-            android:visibility="gone"
-            app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:visibility="visible">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_field" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:fontFamily="@font/sourcecodepro"
-                android:textIsSelectable="true"
-                tools:text="p@55w0rd!" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/otp_text_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/otp"
-            android:visibility="gone"
-            app:endIconDrawable="@drawable/ic_content_copy"
-            app:endIconMode="custom"
-            app:layout_constraintTop_toBottomOf="@id/password_text_container"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/otp_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:fontFamily="@font/sourcecodepro"
-                android:textIsSelectable="true"
-                tools:text="123456" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username_text_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/username"
-            android:visibility="gone"
-            app:endIconDrawable="@drawable/ic_content_copy"
-            app:endIconMode="custom"
-            app:layout_constraintTop_toBottomOf="@id/otp_text_container"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:textIsSelectable="true"
-                tools:text="totally_real_user@example.com" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/extra_content_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/extra_content"
-            android:visibility="gone"
-            app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/username_text_container"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/extra_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:textIsSelectable="true"
-                tools:text="lots of extra content that will surely fill this \n up well" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

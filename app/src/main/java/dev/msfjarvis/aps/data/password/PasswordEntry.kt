@@ -4,12 +4,12 @@
  */
 package dev.msfjarvis.aps.data.password
 
+import androidx.annotation.VisibleForTesting
 import com.github.michaelbull.result.get
 import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import dev.msfjarvis.aps.util.totp.UriTotpFinder
 import java.io.ByteArrayOutputStream
-import java.io.UnsupportedEncodingException
 import java.util.Date
 
 /**
@@ -20,20 +20,28 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     val password: String
     val username: String?
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val digits: String
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val totpSecret: String?
     val totpPeriod: Long
-    val totpAlgorithm: String
-    var extraContent: String
-        private set
 
-    @Throws(UnsupportedEncodingException::class)
-    constructor(os: ByteArrayOutputStream) : this(os.toString("UTF-8"), UriTotpFinder())
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val totpAlgorithm: String
+    val extraContent: String
+    val extraContentWithoutAuthData: String
+    val extraContentMap: Map<String, String>
+
+    constructor(os: ByteArrayOutputStream) : this(os.toString(Charsets.UTF_8.name()), UriTotpFinder())
 
     init {
         val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
         password = foundPassword
         extraContent = passContent.joinToString("\n")
+        extraContentWithoutAuthData = generateExtraContentWithoutAuthData()
+        extraContentMap = generateExtraContentPairs()
         username = findUsername()
         digits = findOtpDigits(content)
         totpSecret = findTotpSecret(content)
@@ -43,6 +51,10 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     fun hasExtraContent(): Boolean {
         return extraContent.isNotEmpty()
+    }
+
+    fun hasExtraContentWithoutAuthData(): Boolean {
+        return extraContentWithoutAuthData.isNotEmpty()
     }
 
     fun hasTotp(): Boolean {
@@ -59,23 +71,63 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
         return Otp.calculateCode(totpSecret, Date().time / (1000 * totpPeriod), totpAlgorithm, digits).get()
     }
 
-    val extraContentWithoutAuthData by lazy(LazyThreadSafetyMode.NONE) {
+    private fun generateExtraContentWithoutAuthData(): String {
         var foundUsername = false
-        extraContent.splitToSequence("\n").filter { line ->
-            return@filter when {
-                USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } && !foundUsername -> {
-                    foundUsername = true
-                    false
+        return extraContent
+            .lineSequence()
+            .filter { line ->
+                return@filter when {
+                    USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } && !foundUsername -> {
+                        foundUsername = true
+                        false
+                    }
+                    line.startsWith("otpauth://", ignoreCase = true) ||
+                        line.startsWith("totp:", ignoreCase = true) -> {
+                        false
+                    }
+                    else -> {
+                        true
+                    }
                 }
-                line.startsWith("otpauth://", ignoreCase = true) ||
-                    line.startsWith("totp:", ignoreCase = true) -> {
-                    false
-                }
-                else -> {
-                    true
-                }
+            }.joinToString(separator = "\n")
+    }
+
+    private fun generateExtraContentPairs(): Map<String, String> {
+        fun MutableMap<String, String>.putOrAppend(key: String, value: String) {
+            if (value.isEmpty()) return
+            val existing = this[key]
+            this[key] = if (existing == null) {
+                value
+            } else {
+                "$existing\n$value"
             }
-        }.joinToString(separator = "\n")
+        }
+
+        val items = mutableMapOf<String, String>()
+        // Take extraContentWithoutAuthData and onEach line perform the following tasks
+        extraContentWithoutAuthData.lines().forEach { line ->
+            // Split the line on ':' and save all the parts into an array
+            // "ABC : DEF:GHI" --> ["ABC", "DEF", "GHI"]
+            val splitArray = line.split(":")
+            // Take the first element of the array. This will be the key for the key-value pair.
+            // ["ABC ", " DEF", "GHI"] -> key = "ABC"
+            val key = splitArray.first().trimEnd()
+            // Remove the first element from the array and join the rest of the string again with ':' as separator.
+            // ["ABC ", " DEF", "GHI"] -> value = "DEF:GHI"
+            val value = splitArray.drop(1).joinToString(":").trimStart()
+
+            if (key.isNotEmpty() && value.isNotEmpty()) {
+                // If both key and value are not empty, we can form a pair with this so add it to the map.
+                // key = "ABC", value = "DEF:GHI"
+                items[key] = value
+            } else {
+                // If either key or value is empty, we were not able to form proper key-value pair.
+                // So append the original line into an "EXTRA CONTENT" map entry
+                items.putOrAppend(EXTRA_CONTENT, line)
+            }
+        }
+
+        return items
     }
 
     private fun findUsername(): String? {
@@ -118,6 +170,9 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     companion object {
 
+        private const val EXTRA_CONTENT = "Extra Content"
+
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val USERNAME_FIELDS = arrayOf(
             "login:",
             "username:",
@@ -127,9 +182,10 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
             "name:",
             "handle:",
             "id:",
-            "identity:"
+            "identity:",
         )
 
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val PASSWORD_FIELDS = arrayOf(
             "password:",
             "secret:",
