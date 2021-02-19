@@ -189,8 +189,6 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                                 items.add(FieldItem.createPasswordField(entry.password))
                             }
 
-                            if (!entry.hasExtraContent()) return@runCatching
-
                             if (entry.hasTotp()) {
                                 launch(Dispatchers.IO) {
                                     // Calculate the actual remaining time for the first pass
