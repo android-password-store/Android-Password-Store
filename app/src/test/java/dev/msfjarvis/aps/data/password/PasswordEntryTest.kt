@@ -75,6 +75,11 @@ class PasswordEntryTest {
         assertEquals(2, entry.extraContentMap.size)
         assertTrue(entry.extraContentMap.containsKey("Extra Content"))
         assertEquals(": ghijkl\n mnopqr:", entry.extraContentMap["Extra Content"])
+
+        entry = makeEntry("username: abc\npassword: abc\n:\n\n")
+        assertEquals(1, entry.extraContentMap.size)
+        assertTrue(entry.extraContentMap.containsKey("Extra Content"))
+        assertEquals(":", entry.extraContentMap["Extra Content"])
     }
 
     @Test fun testGetUsername() {
