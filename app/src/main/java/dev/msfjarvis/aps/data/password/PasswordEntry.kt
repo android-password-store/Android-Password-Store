@@ -94,6 +94,7 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
 
     private fun generateExtraContentPairs(): Map<String, String> {
         fun MutableMap<String, String>.putOrAppend(key: String, value: String) {
+            if (value.isEmpty()) return
             val existing = this[key]
             this[key] = if (existing == null) {
                 value
@@ -101,29 +102,31 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
                 "$existing\n$value"
             }
         }
+
         val items = mutableMapOf<String, String>()
-        extraContentWithoutAuthData
-            .lines()
-            // Split on ':', but pass down the line using a Pair because we may need it later
-            .map { line -> line to line.split(':') }
-            // Only take the item when a pair can be formed
-            .filter { (_, list) -> list.size >= 2 }
-            // Convert them to a Pair so it's easier to perform checks
-            // Since the actual values can also contain colons,
-            // we join them back and trim any initial spaces in them,
-            // and trailing spaces in the keys.
-            .map { (line, list) -> line to (list[0].trimEnd() to list.drop(1).joinToString(":").trimStart()) }
-            // Ensure neither key nor value are empty
-            .filter { (line, pair) ->
-                if (pair.first.isNotBlank() && pair.second.isNotBlank()) {
-                    true
-                } else {
-                    items.putOrAppend(EXTRA_CONTENT, line)
-                    false
-                }
+        // Take extraContentWithoutAuthData and onEach line perform the following tasks
+        extraContentWithoutAuthData.lines().forEach { line ->
+            // Split the line on ':' and save all the parts into an array
+            // "ABC : DEF:GHI" --> ["ABC", "DEF", "GHI"]
+            val splitArray = line.split(":")
+            // Take the first element of the array. This will be the key for the key-value pair.
+            // ["ABC ", " DEF", "GHI"] -> key = "ABC"
+            val key = splitArray.first().trimEnd()
+            // Remove the first element from the array and join the rest of the string again with ':' as separator.
+            // ["ABC ", " DEF", "GHI"] -> value = "DEF:GHI"
+            val value = splitArray.drop(1).joinToString(":").trimStart()
+
+            if (key.isNotEmpty() && value.isNotEmpty()) {
+                // If both key and value are not empty, we can form a pair with this so add it to the map.
+                // key = "ABC", value = "DEF:GHI"
+                items[key] = value
+            } else {
+                // If either key or value is empty, we were not able to form proper key-value pair.
+                // So append the original line into an "EXTRA CONTENT" map entry
+                items.putOrAppend(EXTRA_CONTENT, line)
             }
-            // Write the validated contents into the map
-            .map { (_, pair) -> items[pair.first] = pair.second }
+        }
+
         return items
     }
 
