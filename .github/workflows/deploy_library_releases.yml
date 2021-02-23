@@ -50,5 +50,5 @@ jobs:
 
     - name: Close and release repository
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
-        with:
-          arguments: closeAndReleaseRepository
+      with:
+        arguments: closeAndReleaseRepository
