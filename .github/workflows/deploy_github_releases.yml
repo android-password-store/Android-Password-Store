@@ -75,7 +75,7 @@ jobs:
 
       - name: Get Changelog Entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@30552f0e948002519ff6b36ffbf889ef4da47246
+        uses: mindsers/changelog-reader-action@e1a36842bddbd512340f882735802de843998e1f
         with:
           version: ${{ github.ref }}
           path: ./CHANGELOG.md
@@ -88,7 +88,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body: ${{ steps.changelog_reader.outputs.log_entry }}
+          body: ${{ steps.changelog_reader.outputs.changes }}
           draft: true
           prerelease: false
 
