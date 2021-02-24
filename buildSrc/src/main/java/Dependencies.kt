@@ -37,7 +37,7 @@ object Dependencies {
         const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.1.0-alpha2"
         const val core_ktx = "androidx.core:core-ktx:1.5.0-beta02"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
-        const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0-rc02"
+        const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0"
         const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
