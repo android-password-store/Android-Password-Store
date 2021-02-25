@@ -7,11 +7,33 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   On Android 11, Autofill will use the new [inline autofill](https://developer.android.com/guide/topics/text/ime-autofill#configure-provider) UI that integrates Autofill results into your keyboard app.
--   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
--   Suggest users to re-clone repository when it is deemed to be broken
 -   Allow doing a merge instead of a rebase when pulling or syncing
 -   Add support for manually providing TOTP parameters
 -   Parse extra content as individual fields
+
+### Fixed
+
+-   Pressing the back button in the navigation bar and the one in the toolbar behaved differently
+-   Editing a password allowed accidentally overwriting an existing one
+-   App shortcuts would never update once the first 4 were set
+-   Clipboard history now attempts to flush through 35 times rather than 20 to combat increased clipboard history item count in Samsung devices
+
+### Changed
+
+-   Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
+-   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
+
+## [1.13.2] - 2020-12-21
+
+### Added
+
+-   Invalid `.gpg-id` files can now be fixed automatically by deleting them and then trying to create a new password.
+-   Suggest users to re-clone repository when it is deemed to be broken
+-   A new browser support level is added for Chrome Canary and Chrome Dev which are shipping fixes developed by Password Store maintainer Fabian to improve the Autofill experience on Chromium browsers
+
+### Changed
+
+-   Synced localisations with Crowdin. This adds Galician and Italian translations while getting rid of incomplete Arabic, Chinese Simplified, Chinese Traditional, Czech, Japanese and Spanish.
 
 ### Fixed
 
@@ -22,15 +44,6 @@ All notable changes to this project will be documented in this file.
 -   Git commits in the store would wrongly use the 'default' committer as opposed to the user's configured one
 -   Connection attempts now use a reasonable 10 second timeout as opposed to the default of 30 seconds
 -   A change to the remote host key for a server would prevent the user from being able to connect to it
--   Pressing the back button in the navigation bar and the one in the toolbar behaved differently
--   Editing a password allowed accidentally overwriting an existing one
--   App shortcuts would never update once the first 4 were set
--   Clipboard history now attempts to flush through 35 times rather than 20 to combat increased clipboard history item count in Samsung devices
-
-### Changed
-
--   Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
--   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
 
 ## [1.13.1] - 2020-10-23
 
@@ -413,9 +426,11 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.1...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.2...HEAD
 
-[1.13.1]: https://github.com/android-password-store/Android-Password-Store/compare/1.13.0...1.13.1
+[1.13.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.1...v1.13.2
+
+[1.13.1]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.0...v1.13.1
 
 [1.13.0]: https://github.com/android-password-store/Android-Password-Store/compare/v1.12.1...v1.13.0
 
