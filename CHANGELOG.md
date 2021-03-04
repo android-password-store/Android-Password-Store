@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+-   Autofill now works much more reliably in Chrome 89 and later, including support for saving passwords if no accessibility service is enabled.
 -   Pressing the back button in the navigation bar and the one in the toolbar behaved differently
 -   Editing a password allowed accidentally overwriting an existing one
 -   App shortcuts would never update once the first 4 were set
