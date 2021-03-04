@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+-   Autofill now works much more reliably in Chrome 89 and later, including support for saving passwords if no accessibility service is enabled.
 -   Editing a password allowed accidentally overwriting an existing one
 
 
