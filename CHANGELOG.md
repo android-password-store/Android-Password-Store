@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.13.3] - 2021-03-06
+
 ### Fixed
 
 -   Autofill now works much more reliably in Chrome 89 and later, including support for saving passwords if no accessibility service is enabled.
@@ -413,7 +415,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.2...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...HEAD
+
+[1.13.3]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.2...v1.13.3
 
 [1.13.2]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.1...v1.13.2
 
