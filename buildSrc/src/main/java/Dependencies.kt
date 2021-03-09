@@ -6,13 +6,13 @@
 private const val KOTLIN_VERSION = "1.4.30"
 
 object Plugins {
-    val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
-    val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
-    val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
-    val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
-    val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
-    val mavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
-    val semver4j = "com.vdurmont:semver4j:3.1.0"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
+    const val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
+    const val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
+    const val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
+    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+    const val mavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
+    const val semver4j = "com.vdurmont:semver4j:3.1.0"
 }
 
 object Dependencies {
