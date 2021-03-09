@@ -4,65 +4,65 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?attr/colorPrimary"
+  android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/settings_button"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@string/action_settings"
-        android:textColor="?attr/colorOnPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/settings_button"
+    style="@style/Widget.MaterialComponents.Button.TextButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:text="@string/action_settings"
+    android:textColor="?attr/colorOnPrimary"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/app_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:contentDescription="@string/app_icon_hint"
-        android:src="@mipmap/ic_launcher"
-        android:transitionName="transition_first_app_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/app_icon"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:contentDescription="@string/app_icon_hint"
+    android:src="@mipmap/ic_launcher"
+    android:transitionName="transition_first_app_icon"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        android:transitionName="transition_first_run_app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_icon" />
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/app_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="16dp"
+    android:text="@string/app_name"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+    android:textColor="@color/color_control_normal"
+    android:textStyle="bold"
+    android:transitionName="transition_first_run_app_name"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/app_icon" />
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/lets_go"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:maxWidth="300dp"
-        android:minWidth="100dp"
-        android:text="@string/let_s_go"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_name" />
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/lets_go"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="48dp"
+    android:layout_marginEnd="16dp"
+    android:maxWidth="300dp"
+    android:minWidth="100dp"
+    android:text="@string/let_s_go"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/app_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

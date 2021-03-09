@@ -4,48 +4,48 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingTop="20dp"
-        android:paddingRight="24dp"
-        android:paddingBottom="20dp">
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingTop="20dp"
+    android:paddingRight="24dp"
+    android:paddingBottom="20dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/intro_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/oreo_autofill_enable_dialog_description"
-            android:textSize="16sp" />
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/intro_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/oreo_autofill_enable_dialog_description"
+      android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/oreo_autofill_enable_dialog_instructions"
-            android:textSize="16sp" />
+    <androidx.appcompat.widget.AppCompatTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+      android:text="@string/oreo_autofill_enable_dialog_instructions"
+      android:textSize="16sp" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/oreo_autofill_enable_dialog_installed_browsers"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+    <androidx.appcompat.widget.AppCompatTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+      android:text="@string/oreo_autofill_enable_dialog_installed_browsers"
+      android:textSize="16sp"
+      android:textStyle="bold" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/supportedBrowsers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            tools:text="Firefox: Fill and save credentials" />
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/supportedBrowsers"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="16sp"
+      tools:text="Firefox: Fill and save credentials" />
 
 
-    </LinearLayout>
+  </LinearLayout>
 </ScrollView>

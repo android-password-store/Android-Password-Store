@@ -4,6 +4,6 @@
   -->
 
 <resources>
-    <bool name="leak_canary_allow_in_non_debuggable_build">true</bool>
-    <bool name="light_status_bar">true</bool>
+  <bool name="leak_canary_allow_in_non_debuggable_build">true</bool>
+  <bool name="light_status_bar">true</bool>
 </resources>

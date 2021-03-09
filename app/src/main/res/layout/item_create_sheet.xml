@@ -4,39 +4,39 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/create_folder"
+    style="@style/Widget.MaterialComponents.Button.TextButton"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="@dimen/bottom_sheet_item_height"
+    android:layout_margin="@dimen/normal_margin"
+    android:text="@string/bottom_sheet_create_new_folder"
+    android:textAlignment="viewStart"
+    android:textColor="?attr/colorOnSurface"
+    app:icon="@drawable/ic_action_new_folder"
+    app:iconPadding="@dimen/normal_margin"
+    app:iconTint="?attr/colorSecondary"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:rippleColor="?attr/colorSecondary" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/create_folder"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_sheet_item_height"
-        android:layout_margin="@dimen/normal_margin"
-        android:text="@string/bottom_sheet_create_new_folder"
-        android:textAlignment="viewStart"
-        android:textColor="?attr/colorOnSurface"
-        app:icon="@drawable/ic_action_new_folder"
-        app:iconPadding="@dimen/normal_margin"
-        app:iconTint="?attr/colorSecondary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:rippleColor="?attr/colorSecondary" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/create_password"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_sheet_item_height"
-        android:layout_margin="@dimen/normal_margin"
-        android:text="@string/bottom_sheet_create_new_password"
-        android:textAlignment="viewStart"
-        android:textColor="?attr/colorOnSurface"
-        app:icon="@drawable/ic_action_new_password"
-        app:iconPadding="@dimen/normal_margin"
-        app:iconTint="?attr/colorSecondary"
-        app:layout_constraintTop_toBottomOf="@id/create_folder"
-        app:rippleColor="?attr/colorSecondary" />
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/create_password"
+    style="@style/Widget.MaterialComponents.Button.TextButton"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_sheet_item_height"
+    android:layout_margin="@dimen/normal_margin"
+    android:text="@string/bottom_sheet_create_new_password"
+    android:textAlignment="viewStart"
+    android:textColor="?attr/colorOnSurface"
+    app:icon="@drawable/ic_action_new_password"
+    app:iconPadding="@dimen/normal_margin"
+    app:iconTint="?attr/colorSecondary"
+    app:layout_constraintTop_toBottomOf="@id/create_folder"
+    app:rippleColor="?attr/colorSecondary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,20 +4,20 @@
   -->
 
 <resources>
-    <!-- Base palette -->
-    <color name="primary_color">@color/white</color>
-    <color name="primary_light_color">@color/white</color>
-    <color name="secondary_color">#003e5b</color>
-    <color name="secondary_dark_color">#001831</color>
-    <color name="secondary_light_color">#3b6888</color>
-    <color name="primary_text_color">#212121</color>
-    <color name="white">#ffffffff</color>
+  <!-- Base palette -->
+  <color name="primary_color">@color/white</color>
+  <color name="primary_light_color">@color/white</color>
+  <color name="secondary_color">#003e5b</color>
+  <color name="secondary_dark_color">#001831</color>
+  <color name="secondary_light_color">#3b6888</color>
+  <color name="primary_text_color">#212121</color>
+  <color name="white">#ffffffff</color>
 
-    <!-- Theme variables -->
-    <color name="color_control_normal">@color/primary_text_color</color>
-    <color name="list_multiselect_background">#668eacbb</color>
-    <color name="navigation_bar_color">#000000</color>
-    <color name="status_bar_color">@color/primary_color</color>
-    <color name="ripple_color">#aa003e5b</color>
-    <color name="button_color">#44003e5b</color>
+  <!-- Theme variables -->
+  <color name="color_control_normal">@color/primary_text_color</color>
+  <color name="list_multiselect_background">#668eacbb</color>
+  <color name="navigation_bar_color">#000000</color>
+  <color name="status_bar_color">@color/primary_color</color>
+  <color name="ripple_color">#aa003e5b</color>
+  <color name="button_color">#44003e5b</color>
 </resources>

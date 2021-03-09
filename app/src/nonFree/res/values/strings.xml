@@ -5,5 +5,5 @@
 
 <resources>
 
-    <string name="oreo_autofill_waiting_for_sms">Waiting for SMS…</string>
+  <string name="oreo_autofill_waiting_for_sms">Waiting for SMS…</string>
 </resources>

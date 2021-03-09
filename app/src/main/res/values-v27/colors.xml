@@ -4,5 +4,5 @@
   -->
 
 <resources>
-    <color name="navigation_bar_color">@color/primary_color</color>
+  <color name="navigation_bar_color">@color/primary_color</color>
 </resources>

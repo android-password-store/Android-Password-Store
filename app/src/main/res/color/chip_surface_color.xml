@@ -4,6 +4,6 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/secondary_light_color" android:state_checked="true"/>
-    <item android:color="?attr/colorSecondary"/>
+  <item android:color="@color/secondary_light_color" android:state_checked="true" />
+  <item android:color="?attr/colorSecondary" />
 </selector>

@@ -4,5 +4,5 @@
   -->
 
 <resources>
-    <string name="app_theme_def" translatable="false">follow_system</string>
+  <string name="app_theme_def" translatable="false">follow_system</string>
 </resources>

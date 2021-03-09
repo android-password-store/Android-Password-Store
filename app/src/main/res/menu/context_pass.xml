@@ -4,25 +4,25 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".pwdstore">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".pwdstore">
 
-    <item
-        android:id="@+id/menu_move_password"
-        android:icon="@drawable/ic_move_folder_24dp"
-        android:title="@string/move"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_move_password"
+    android:icon="@drawable/ic_move_folder_24dp"
+    android:title="@string/move"
+    app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/menu_delete_password"
-        android:icon="@drawable/ic_delete_24dp"
-        android:title="@string/delete"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_delete_password"
+    android:icon="@drawable/ic_delete_24dp"
+    android:title="@string/delete"
+    app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/menu_edit_password"
-        android:icon="@drawable/ic_edit_24dp"
-        android:title="@string/edit"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_edit_password"
+    android:icon="@drawable/ic_edit_24dp"
+    android:title="@string/edit"
+    app:showAsAction="ifRoom" />
 </menu>

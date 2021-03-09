@@ -4,103 +4,103 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/proxy_host_input_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:hint="@string/proxy_hostname"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:layout_editor_absoluteY="64dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/proxy_host_input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:hint="@string/proxy_hostname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteY="64dp">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/proxy_host"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="textUri"
+      android:nextFocusForward="@id/proxy_user" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/proxy_host"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textUri"
-            android:nextFocusForward="@id/proxy_user" />
+  </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/proxy_user_input_layout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginEnd="@dimen/normal_margin"
+    android:hint="@string/username"
+    app:layout_constraintEnd_toStartOf="@id/proxy_port_input_layout"
+    app:layout_constraintHorizontal_weight="0.65"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/proxy_host_input_layout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/proxy_user_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/normal_margin"
-        android:hint="@string/username"
-        app:layout_constraintEnd_toStartOf="@id/proxy_port_input_layout"
-        app:layout_constraintHorizontal_weight="0.65"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/proxy_host_input_layout">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/proxy_user"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="textWebEmailAddress"
+      android:nextFocusForward="@id/proxy_port" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/proxy_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textWebEmailAddress"
-            android:nextFocusForward="@id/proxy_port" />
+  </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/proxy_port_input_layout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/normal_margin"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:hint="@string/port"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_weight="0.35"
+    app:layout_constraintStart_toEndOf="@id/proxy_user_input_layout"
+    app:layout_constraintTop_toBottomOf="@id/proxy_host_input_layout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/proxy_port_input_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/normal_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:hint="@string/port"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="0.35"
-        app:layout_constraintStart_toEndOf="@id/proxy_user_input_layout"
-        app:layout_constraintTop_toBottomOf="@id/proxy_host_input_layout">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/proxy_port"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="number"
+      android:nextFocusForward="@id/proxy_password" />
+  </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/proxy_port"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:nextFocusForward="@id/proxy_password" />
-    </com.google.android.material.textfield.TextInputLayout>
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/proxy_password_input_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:hint="@string/password"
+    app:endIconMode="password_toggle"
+    app:layout_constraintStart_toStartOf="@id/proxy_user_input_layout"
+    app:layout_constraintTop_toBottomOf="@id/proxy_user_input_layout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/proxy_password_input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:hint="@string/password"
-        app:endIconMode="password_toggle"
-        app:layout_constraintStart_toStartOf="@id/proxy_user_input_layout"
-        app:layout_constraintTop_toBottomOf="@id/proxy_user_input_layout">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/proxy_password"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="textPassword" />
+  </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/proxy_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/save"
-        style="@style/AppTheme.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@string/crypto_save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/proxy_password_input_layout" />
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/save"
+    style="@style/AppTheme.OutlinedButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:text="@string/crypto_save"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/proxy_password_input_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

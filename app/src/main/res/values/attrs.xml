@@ -4,7 +4,7 @@
   -->
 
 <resources>
-    <declare-styleable name="Multiselected">
-        <attr name="state_multiselected" format="boolean" />
-    </declare-styleable>
+  <declare-styleable name="Multiselected">
+    <attr name="state_multiselected" format="boolean" />
+  </declare-styleable>
 </resources>

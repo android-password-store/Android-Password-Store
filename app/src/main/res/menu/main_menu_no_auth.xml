@@ -4,25 +4,25 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_24dp"
-        android:title="@string/action_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
+  <item
+    android:id="@+id/action_search"
+    android:icon="@drawable/ic_search_24dp"
+    android:title="@string/action_search"
+    app:actionViewClass="androidx.appcompat.widget.SearchView"
+    app:showAsAction="always|collapseActionView" />
 
-    <item
-        android:id="@+id/git_pull"
-        android:title="@string/git_pull" />
+  <item
+    android:id="@+id/git_pull"
+    android:title="@string/git_pull" />
 
-    <item
-        android:id="@+id/refresh"
-        android:title="@string/refresh_list" />
+  <item
+    android:id="@+id/refresh"
+    android:title="@string/refresh_list" />
 
-    <item
-        android:id="@+id/user_pref"
-        android:orderInCategory="100"
-        android:title="@string/action_settings" />
+  <item
+    android:id="@+id/user_pref"
+    android:orderInCategory="100"
+    android:title="@string/action_settings" />
 </menu>

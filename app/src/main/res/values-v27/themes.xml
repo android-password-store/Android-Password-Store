@@ -5,7 +5,7 @@
 
 <resources>
 
-    <style name="AppTheme" parent="APSTheme">
-        <item name="android:windowLightNavigationBar">@bool/light_status_bar</item>
-    </style>
+  <style name="AppTheme" parent="APSTheme">
+    <item name="android:windowLightNavigationBar">@bool/light_status_bar</item>
+  </style>
 </resources>

@@ -4,141 +4,141 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="dev.msfjarvis.aps"
-    android:installLocation="auto">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="dev.msfjarvis.aps"
+  android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <application
-        android:name=".Application"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+  <application
+    android:name=".Application"
+    android:allowBackup="false"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:requestLegacyExternalStorage="true"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    tools:ignore="GoogleAppIndexingWarning">
 
-        <activity
-            android:name=".ui.passwords.PasswordStore"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name" />
+    <activity
+      android:name=".ui.passwords.PasswordStore"
+      android:configChanges="orientation|screenSize"
+      android:label="@string/app_name" />
 
-        <activity
-            android:name=".ui.onboarding.activity.OnboardingActivity"
-            android:configChanges="orientation|screenSize" />
+    <activity
+      android:name=".ui.onboarding.activity.OnboardingActivity"
+      android:configChanges="orientation|screenSize" />
 
-        <activity
-            android:name=".ui.proxy.ProxySelectorActivity"
-            android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.proxy.ProxySelectorActivity"
+      android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.main.LaunchActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/NoBackgroundTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+    <activity
+      android:name=".ui.main.LaunchActivity"
+      android:configChanges="orientation|screenSize"
+      android:label="@string/app_name"
+      android:theme="@style/NoBackgroundTheme">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
 
-        <activity
-            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:clearTaskOnLaunch="true"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            tools:node="replace" />
+    <activity
+      android:name="com.journeyapps.barcodescanner.CaptureActivity"
+      android:clearTaskOnLaunch="true"
+      android:stateNotNeeded="true"
+      android:theme="@style/zxing_CaptureTheme"
+      android:windowSoftInputMode="stateAlwaysHidden"
+      tools:node="replace" />
 
-        <activity
-            android:name=".ui.git.config.GitServerConfigActivity"
-            android:label="@string/title_activity_git_clone"
-            android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.git.config.GitServerConfigActivity"
+      android:label="@string/title_activity_git_clone"
+      android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.git.config.GitConfigActivity"
-            android:label="@string/title_activity_git_config"
-            android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.git.config.GitConfigActivity"
+      android:label="@string/title_activity_git_config"
+      android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.git.log.GitLogActivity"
-            android:label="@string/title_activity_git_log" />
+    <activity
+      android:name=".ui.git.log.GitLogActivity"
+      android:label="@string/title_activity_git_log" />
 
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName=".ui.passwords.PasswordStore" />
+    <activity
+      android:name=".ui.settings.SettingsActivity"
+      android:label="@string/action_settings"
+      android:parentActivityName=".ui.passwords.PasswordStore" />
 
-        <activity
-            android:name=".ui.settings.DirectorySelectionActivity"
-            android:theme="@style/NoBackgroundTheme" />
+    <activity
+      android:name=".ui.settings.DirectorySelectionActivity"
+      android:theme="@style/NoBackgroundTheme" />
 
-        <activity
-            android:name=".ui.crypto.PasswordCreationActivity"
-            android:label="@string/new_password_title"
-            android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.crypto.PasswordCreationActivity"
+      android:label="@string/new_password_title"
+      android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.crypto.DecryptActivity"
-            android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.crypto.DecryptActivity"
+      android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".ui.crypto.GetKeyIdsActivity"
-            android:theme="@style/NoBackgroundTheme" />
+    <activity
+      android:name=".ui.crypto.GetKeyIdsActivity"
+      android:theme="@style/NoBackgroundTheme" />
 
-        <service
-            android:name=".util.services.ClipboardService"
-            android:process=":clipboard_service_process" />
-        <service
-            android:name=".util.services.PasswordExportService"
-            android:process=":password_export_service_process" />
-        <service
-            android:name=".util.services.OreoAutofillService"
-            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.autofill.AutofillService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.autofill"
-                android:resource="@xml/oreo_autofill_service" />
-        </service>
+    <service
+      android:name=".util.services.ClipboardService"
+      android:process=":clipboard_service_process" />
+    <service
+      android:name=".util.services.PasswordExportService"
+      android:process=":password_export_service_process" />
+    <service
+      android:name=".util.services.OreoAutofillService"
+      android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+      <intent-filter>
+        <action android:name="android.service.autofill.AutofillService" />
+      </intent-filter>
+      <meta-data
+        android:name="android.autofill"
+        android:resource="@xml/oreo_autofill_service" />
+    </service>
 
-        <activity android:name=".ui.folderselect.SelectFolderActivity" />
-        <activity
-            android:name=".ui.sshkeygen.SshKeyImportActivity"
-            android:theme="@style/NoBackgroundTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ui.sshkeygen.SshKeyGenActivity"
-            android:label="@string/pref_ssh_keygen_title"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ui.autofill.AutofillDecryptActivity"
-            android:theme="@style/NoBackgroundTheme" />
-        <activity
-            android:name=".ui.autofill.AutofillFilterView"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/DialogLikeTheme"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".ui.autofill.AutofillSaveActivity"
-            android:theme="@style/NoBackgroundTheme" />
-        <activity
-            android:name=".autofill.oreo.ui.AutofillSmsActivity"
-            android:configChanges="orientation"
-            android:theme="@style/DialogLikeTheme"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".ui.autofill.AutofillPublisherChangedActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/DialogLikeTheme"
-            android:windowSoftInputMode="adjustNothing" />
-    </application>
+    <activity android:name=".ui.folderselect.SelectFolderActivity" />
+    <activity
+      android:name=".ui.sshkeygen.SshKeyImportActivity"
+      android:theme="@style/NoBackgroundTheme"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.sshkeygen.SshKeyGenActivity"
+      android:label="@string/pref_ssh_keygen_title"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".ui.autofill.AutofillDecryptActivity"
+      android:theme="@style/NoBackgroundTheme" />
+    <activity
+      android:name=".ui.autofill.AutofillFilterView"
+      android:configChanges="orientation|keyboardHidden"
+      android:theme="@style/DialogLikeTheme"
+      android:windowSoftInputMode="adjustNothing" />
+    <activity
+      android:name=".ui.autofill.AutofillSaveActivity"
+      android:theme="@style/NoBackgroundTheme" />
+    <activity
+      android:name=".autofill.oreo.ui.AutofillSmsActivity"
+      android:configChanges="orientation"
+      android:theme="@style/DialogLikeTheme"
+      android:windowSoftInputMode="adjustNothing" />
+    <activity
+      android:name=".ui.autofill.AutofillPublisherChangedActivity"
+      android:configChanges="orientation|keyboardHidden"
+      android:theme="@style/DialogLikeTheme"
+      android:windowSoftInputMode="adjustNothing" />
+  </application>
 
 </manifest>
