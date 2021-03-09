@@ -11,16 +11,16 @@ import dev.msfjarvis.aps.R
 
 class OnboardingActivity : AppCompatActivity(R.layout.activity_onboarding) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    supportActionBar?.hide()
+  }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            finishAffinity()
-        } else {
-            super.onBackPressed()
-        }
+  override fun onBackPressed() {
+    if (supportFragmentManager.backStackEntryCount == 0) {
+      finishAffinity()
+    } else {
+      super.onBackPressed()
     }
+  }
 }

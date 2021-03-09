@@ -6,6 +6,6 @@
 import com.ncorti.ktfmt.gradle.KtfmtExtension
 
 fun KtfmtExtension.configureKtfmt() {
-    googleStyle()
-    maxWidth.set(120)
+  googleStyle()
+  maxWidth.set(120)
 }

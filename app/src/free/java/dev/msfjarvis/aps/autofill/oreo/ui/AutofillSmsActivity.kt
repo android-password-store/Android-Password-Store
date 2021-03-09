@@ -14,14 +14,14 @@ import androidx.appcompat.app.AppCompatActivity
 @Suppress("UNUSED_PARAMETER")
 class AutofillSmsActivity : AppCompatActivity() {
 
-    companion object {
+  companion object {
 
-        fun shouldOfferFillFromSms(context: Context): Boolean {
-            return false
-        }
-
-        fun makeFillOtpFromSmsIntentSender(context: Context): IntentSender {
-            throw NotImplementedError("Filling OTPs from SMS requires non-free dependencies")
-        }
+    fun shouldOfferFillFromSms(context: Context): Boolean {
+      return false
     }
+
+    fun makeFillOtpFromSmsIntentSender(context: Context): IntentSender {
+      throw NotImplementedError("Filling OTPs from SMS requires non-free dependencies")
+    }
+  }
 }

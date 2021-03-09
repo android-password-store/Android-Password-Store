@@ -20,30 +20,30 @@ import dev.msfjarvis.aps.util.extensions.viewBinding
  */
 class GitLogActivity : BaseGitActivity() {
 
-    private val binding by viewBinding(ActivityGitLogBinding::inflate)
+  private val binding by viewBinding(ActivityGitLogBinding::inflate)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        createRecyclerView()
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(binding.root)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    createRecyclerView()
+  }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+      android.R.id.home -> {
+        finish()
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
     }
+  }
 
-    private fun createRecyclerView() {
-        binding.gitLogRecyclerView.apply {
-            setHasFixedSize(true)
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-            adapter = GitLogAdapter()
-        }
+  private fun createRecyclerView() {
+    binding.gitLogRecyclerView.apply {
+      setHasFixedSize(true)
+      addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+      adapter = GitLogAdapter()
     }
+  }
 }

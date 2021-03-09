@@ -4,30 +4,20 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("com.vanniktech.maven.publish")
-    kotlin("android")
-    `aps-plugin`
+  id("com.android.library")
+  id("com.vanniktech.maven.publish")
+  kotlin("android")
+  `aps-plugin`
 }
 
 android {
-    defaultConfig {
-        consumerProguardFiles("consumer-proguard-rules.pro")
-    }
+  defaultConfig { consumerProguardFiles("consumer-proguard-rules.pro") }
 
-    buildFeatures.aidl = true
+  buildFeatures.aidl = true
 
-    kotlin {
-        explicitApi()
-    }
+  kotlin { explicitApi() }
 
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-Xexplicit-api=strict"
-        )
-    }
+  kotlinOptions { freeCompilerArgs = freeCompilerArgs + listOf("-Xexplicit-api=strict") }
 }
 
-dependencies {
-    implementation(Dependencies.Kotlin.Coroutines.core)
-}
+dependencies { implementation(Dependencies.Kotlin.Coroutines.core) }

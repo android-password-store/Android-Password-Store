@@ -22,37 +22,34 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class CloneFragment : Fragment(R.layout.fragment_clone) {
 
-    private val binding by viewBinding(FragmentCloneBinding::bind)
+  private val binding by viewBinding(FragmentCloneBinding::bind)
 
-    private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
+  private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
 
-    private val cloneAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-            finish()
-        }
+  private val cloneAction =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == AppCompatActivity.RESULT_OK) {
+        settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
+        finish()
+      }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.cloneRemote.setOnClickListener {
-            cloneToHiddenDir()
-        }
-        binding.createLocal.setOnClickListener {
-            parentFragmentManager.performTransactionWithBackStack(RepoLocationFragment.newInstance())
-        }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding.cloneRemote.setOnClickListener { cloneToHiddenDir() }
+    binding.createLocal.setOnClickListener {
+      parentFragmentManager.performTransactionWithBackStack(RepoLocationFragment.newInstance())
     }
+  }
 
-    /**
-     * Clones a remote Git repository to the app's private directory
-     */
-    private fun cloneToHiddenDir() {
-        settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
-        cloneAction.launch(GitServerConfigActivity.createCloneIntent(requireContext()))
-    }
+  /** Clones a remote Git repository to the app's private directory */
+  private fun cloneToHiddenDir() {
+    settings.edit { putBoolean(PreferenceKeys.GIT_EXTERNAL, false) }
+    cloneAction.launch(GitServerConfigActivity.createCloneIntent(requireContext()))
+  }
 
-    companion object {
+  companion object {
 
-        fun newInstance(): CloneFragment = CloneFragment()
-    }
+    fun newInstance(): CloneFragment = CloneFragment()
+  }
 }

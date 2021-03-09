@@ -11,6 +11,6 @@ import dev.msfjarvis.aps.R
 
 class PasswordViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    val title: TextView = itemView.findViewById(R.id.title)
-    val subtitle: TextView = itemView.findViewById(R.id.subtitle)
+  val title: TextView = itemView.findViewById(R.id.title)
+  val subtitle: TextView = itemView.findViewById(R.id.subtitle)
 }

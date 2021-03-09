@@ -20,32 +20,30 @@ import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 
 class OtpImportDialogFragment : DialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = MaterialAlertDialogBuilder(requireContext())
-        val binding = FragmentManualOtpEntryBinding.inflate(layoutInflater)
-        builder.setView(binding.root)
-        builder.setPositiveButton(android.R.string.ok) { _, _ ->
-            setFragmentResult(
-                PasswordCreationActivity.OTP_RESULT_REQUEST_KEY,
-                bundleOf(
-                    PasswordCreationActivity.RESULT to getTOTPUri(binding)
-                )
-            )
-        }
-        val dialog = builder.create()
-        dialog.requestInputFocusOnView<TextInputEditText>(R.id.secret)
-        return dialog
+  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    val builder = MaterialAlertDialogBuilder(requireContext())
+    val binding = FragmentManualOtpEntryBinding.inflate(layoutInflater)
+    builder.setView(binding.root)
+    builder.setPositiveButton(android.R.string.ok) { _, _ ->
+      setFragmentResult(
+        PasswordCreationActivity.OTP_RESULT_REQUEST_KEY,
+        bundleOf(PasswordCreationActivity.RESULT to getTOTPUri(binding))
+      )
     }
+    val dialog = builder.create()
+    dialog.requestInputFocusOnView<TextInputEditText>(R.id.secret)
+    return dialog
+  }
 
-    private fun getTOTPUri(binding: FragmentManualOtpEntryBinding): String {
-        val secret = binding.secret.text.toString()
-        val account = binding.account.text.toString()
-        if (secret.isBlank()) return ""
-        val builder = Uri.Builder()
-        builder.scheme("otpauth")
-        builder.authority("totp")
-        builder.appendQueryParameter("secret", secret)
-        if (account.isNotBlank()) builder.appendQueryParameter("issuer", account)
-        return builder.build().toString()
-    }
+  private fun getTOTPUri(binding: FragmentManualOtpEntryBinding): String {
+    val secret = binding.secret.text.toString()
+    val account = binding.account.text.toString()
+    if (secret.isBlank()) return ""
+    val builder = Uri.Builder()
+    builder.scheme("otpauth")
+    builder.authority("totp")
+    builder.appendQueryParameter("secret", secret)
+    if (account.isNotBlank()) builder.appendQueryParameter("issuer", account)
+    return builder.build().toString()
+  }
 }

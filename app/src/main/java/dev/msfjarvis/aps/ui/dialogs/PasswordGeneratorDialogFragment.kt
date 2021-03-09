@@ -31,72 +31,70 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = MaterialAlertDialogBuilder(requireContext())
-        val callingActivity = requireActivity()
-        val binding = FragmentPwgenBinding.inflate(layoutInflater)
-        val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
-        val prefs = requireActivity().applicationContext
-            .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
+  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    val builder = MaterialAlertDialogBuilder(requireContext())
+    val callingActivity = requireActivity()
+    val binding = FragmentPwgenBinding.inflate(layoutInflater)
+    val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
+    val prefs = requireActivity().applicationContext.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
-        builder.setView(binding.root)
+    builder.setView(binding.root)
 
-        binding.numerals.isChecked = !prefs.getBoolean(PasswordOption.NoDigits.key, false)
-        binding.symbols.isChecked = prefs.getBoolean(PasswordOption.AtLeastOneSymbol.key, false)
-        binding.uppercase.isChecked = !prefs.getBoolean(PasswordOption.NoUppercaseLetters.key, false)
-        binding.lowercase.isChecked = !prefs.getBoolean(PasswordOption.NoLowercaseLetters.key, false)
-        binding.ambiguous.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
-        binding.pronounceable.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
+    binding.numerals.isChecked = !prefs.getBoolean(PasswordOption.NoDigits.key, false)
+    binding.symbols.isChecked = prefs.getBoolean(PasswordOption.AtLeastOneSymbol.key, false)
+    binding.uppercase.isChecked = !prefs.getBoolean(PasswordOption.NoUppercaseLetters.key, false)
+    binding.lowercase.isChecked = !prefs.getBoolean(PasswordOption.NoLowercaseLetters.key, false)
+    binding.ambiguous.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
+    binding.pronounceable.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
 
-        binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
-        binding.passwordText.typeface = monoTypeface
-        return builder.run {
-            setTitle(R.string.pwgen_title)
-            setPositiveButton(R.string.dialog_ok) { _, _ ->
-                setFragmentResult(
-                    PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
-                    bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
-                )
-            }
-            setNeutralButton(R.string.dialog_cancel) { _, _ -> }
-            setNegativeButton(R.string.pwgen_generate, null)
-            create()
-        }.apply {
-            setOnShowListener {
-                generate(binding.passwordText)
-                getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-                    generate(binding.passwordText)
-                }
-            }
+    binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
+    binding.passwordText.typeface = monoTypeface
+    return builder
+      .run {
+        setTitle(R.string.pwgen_title)
+        setPositiveButton(R.string.dialog_ok) { _, _ ->
+          setFragmentResult(
+            PasswordCreationActivity.PASSWORD_RESULT_REQUEST_KEY,
+            bundleOf(PasswordCreationActivity.RESULT to "${binding.passwordText.text}")
+          )
         }
-    }
-
-    private fun generate(passwordField: AppCompatTextView) {
-        setPreferences()
-        passwordField.text = runCatching {
-            generate(requireContext().applicationContext)
-        }.getOrElse { e ->
-            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-            ""
+        setNeutralButton(R.string.dialog_cancel) { _, _ -> }
+        setNegativeButton(R.string.pwgen_generate, null)
+        create()
+      }
+      .apply {
+        setOnShowListener {
+          generate(binding.passwordText)
+          getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener { generate(binding.passwordText) }
         }
-    }
+      }
+  }
 
-    private fun isChecked(@IdRes id: Int): Boolean {
-        return requireDialog().findViewById<CheckBox>(id).isChecked
-    }
+  private fun generate(passwordField: AppCompatTextView) {
+    setPreferences()
+    passwordField.text =
+      runCatching { generate(requireContext().applicationContext) }.getOrElse { e ->
+        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+        ""
+      }
+  }
 
-    private fun setPreferences() {
-        val preferences = listOfNotNull(
-            PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
-            PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
-            PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
-            PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
-            PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
-            PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
-        )
-        val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
-        val length = lengthText.toIntOrNull()?.takeIf { it >= 0 }
-            ?: PasswordGenerator.DEFAULT_LENGTH
-        setPrefs(requireActivity().applicationContext, preferences, length)
-    }
+  private fun isChecked(@IdRes id: Int): Boolean {
+    return requireDialog().findViewById<CheckBox>(id).isChecked
+  }
+
+  private fun setPreferences() {
+    val preferences =
+      listOfNotNull(
+        PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
+        PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
+        PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
+        PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
+        PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
+        PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
+      )
+    val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
+    val length = lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
+    setPrefs(requireActivity().applicationContext, preferences, length)
+  }
 }

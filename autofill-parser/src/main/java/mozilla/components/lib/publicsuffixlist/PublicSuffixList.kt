@@ -22,52 +22,48 @@ import kotlinx.coroutines.async
 /**
  * API for reading and accessing the public suffix list.
  *
- * > A "public suffix" is one under which Internet users can (or historically could) directly register names. Some
- * > examples of public suffixes are .com, .co.uk and pvt.k12.ma.us. The Public Suffix List is a list of all known
- * > public suffixes.
+ * > A "public suffix" is one under which Internet users can (or historically could) directly
+ * register names. Some > examples of public suffixes are .com, .co.uk and pvt.k12.ma.us. The Public
+ * Suffix List is a list of all known > public suffixes.
  *
- * Note that this implementation applies the rules of the public suffix list only and does not validate domains.
+ * Note that this implementation applies the rules of the public suffix list only and does not
+ * validate domains.
  *
- * https://publicsuffix.org/
- * https://github.com/publicsuffix/list
+ * https://publicsuffix.org/ https://github.com/publicsuffix/list
  */
 internal class PublicSuffixList(
-    context: Context,
-    dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val scope: CoroutineScope = CoroutineScope(dispatcher)
+  context: Context,
+  dispatcher: CoroutineDispatcher = Dispatchers.IO,
+  private val scope: CoroutineScope = CoroutineScope(dispatcher)
 ) {
 
-    private val data: PublicSuffixListData by lazy(LazyThreadSafetyMode.PUBLICATION) { PublicSuffixListLoader.load(context) }
+  private val data: PublicSuffixListData by lazy(LazyThreadSafetyMode.PUBLICATION) {
+    PublicSuffixListLoader.load(context)
+  }
 
-    /**
-     * Prefetch the public suffix list from disk so that it is available in memory.
-     */
-    fun prefetch(): Deferred<Unit> = scope.async {
-        data.run { Unit }
+  /** Prefetch the public suffix list from disk so that it is available in memory. */
+  fun prefetch(): Deferred<Unit> = scope.async { data.run { Unit } }
+
+  /**
+   * Returns the public suffix and one more level; known as the registrable domain. Returns `null`
+   * if [domain] is a public suffix itself.
+   *
+   * E.g.:
+   * ```
+   * wwww.mozilla.org -> mozilla.org
+   * www.bcc.co.uk    -> bbc.co.uk
+   * a.b.ide.kyoto.jp -> b.ide.kyoto.jp
+   * ```
+   *
+   * @param [domain] _must_ be a valid domain. [PublicSuffixList] performs no validation, and if any
+   * unexpected values are passed (e.g., a full URL, a domain with a trailing '/', etc) this may
+   * return an incorrect result.
+   */
+  fun getPublicSuffixPlusOne(domain: String): Deferred<String?> =
+    scope.async {
+      when (val offset = data.getPublicSuffixOffset(domain)) {
+        is PublicSuffixOffset.Offset -> domain.split('.').drop(offset.value).joinToString(separator = ".")
+        else -> null
+      }
     }
-
-    /**
-     * Returns the public suffix and one more level; known as the registrable domain. Returns `null` if
-     * [domain] is a public suffix itself.
-     *
-     * E.g.:
-     * ```
-     * wwww.mozilla.org -> mozilla.org
-     * www.bcc.co.uk    -> bbc.co.uk
-     * a.b.ide.kyoto.jp -> b.ide.kyoto.jp
-     * ```
-     *
-     * @param [domain] _must_ be a valid domain. [PublicSuffixList] performs no validation, and if any unexpected values
-     * are passed (e.g., a full URL, a domain with a trailing '/', etc) this may return an incorrect result.
-     */
-    fun getPublicSuffixPlusOne(domain: String): Deferred<String?> = scope.async {
-        when (val offset = data.getPublicSuffixOffset(domain)) {
-            is PublicSuffixOffset.Offset -> domain
-                .split('.')
-                .drop(offset.value)
-                .joinToString(separator = ".")
-            else -> null
-        }
-    }
-
 }

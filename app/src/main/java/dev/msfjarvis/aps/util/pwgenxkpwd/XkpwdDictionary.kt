@@ -13,28 +13,28 @@ import java.io.File
 
 class XkpwdDictionary(context: Context) {
 
-    val words: Map<Int, List<String>>
+  val words: Map<Int, List<String>>
 
-    init {
-        val prefs = context.sharedPrefs
-        val uri = prefs.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT) ?: ""
-        val customDictFile = File(context.filesDir, XKPWD_CUSTOM_DICT_FILE)
+  init {
+    val prefs = context.sharedPrefs
+    val uri = prefs.getString(PreferenceKeys.PREF_KEY_CUSTOM_DICT) ?: ""
+    val customDictFile = File(context.filesDir, XKPWD_CUSTOM_DICT_FILE)
 
-        val lines = if (prefs.getBoolean(PreferenceKeys.PREF_KEY_IS_CUSTOM_DICT, false) &&
-            uri.isNotEmpty() && customDictFile.canRead()) {
-            customDictFile.readLines()
-        } else {
-            context.resources.openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
-        }
+    val lines =
+      if (prefs.getBoolean(PreferenceKeys.PREF_KEY_IS_CUSTOM_DICT, false) &&
+          uri.isNotEmpty() &&
+          customDictFile.canRead()
+      ) {
+        customDictFile.readLines()
+      } else {
+        context.resources.openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
+      }
 
-        words = lines.asSequence()
-            .map { it.trim() }
-            .filter { it.isNotEmpty() && !it.contains(' ') }
-            .groupBy { it.length }
-    }
+    words = lines.asSequence().map { it.trim() }.filter { it.isNotEmpty() && !it.contains(' ') }.groupBy { it.length }
+  }
 
-    companion object {
+  companion object {
 
-        const val XKPWD_CUSTOM_DICT_FILE = "custom_dict.txt"
-    }
+    const val XKPWD_CUSTOM_DICT_FILE = "custom_dict.txt"
+  }
 }

@@ -5,5 +5,9 @@
 package dev.msfjarvis.aps.util.pwgenxkpwd
 
 enum class CapsType {
-    lowercase, UPPERCASE, TitleCase, Sentence, As_iS
+  lowercase,
+  UPPERCASE,
+  TitleCase,
+  Sentence,
+  As_iS
 }

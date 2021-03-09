@@ -7,13 +7,9 @@ package dev.msfjarvis.aps.ui.settings
 
 import de.Maxr1998.modernpreferences.PreferenceScreen
 
-/**
- * Used to generate a uniform API for all settings UI classes.
- */
+/** Used to generate a uniform API for all settings UI classes. */
 interface SettingsProvider {
 
-    /**
-     * Inserts the settings items for the class into the given [builder].
-     */
-    fun provideSettings(builder: PreferenceScreen.Builder)
+  /** Inserts the settings items for the class into the given [builder]. */
+  fun provideSettings(builder: PreferenceScreen.Builder)
 }

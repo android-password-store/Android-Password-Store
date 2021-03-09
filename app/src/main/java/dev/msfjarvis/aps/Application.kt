@@ -22,45 +22,45 @@ import dev.msfjarvis.aps.util.settings.runMigrations
 @Suppress("Unused")
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private val prefs by lazy { sharedPrefs }
+  private val prefs by lazy { sharedPrefs }
 
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-        if (BuildConfig.ENABLE_DEBUG_FEATURES ||
-            prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)) {
-            plant(DebugTree())
-        }
-        prefs.registerOnSharedPreferenceChangeListener(this)
-        setNightMode()
-        setUpBouncyCastleForSshj()
-        runMigrations(applicationContext)
-        ProxyUtils.setDefaultProxy()
+  override fun onCreate() {
+    super.onCreate()
+    instance = this
+    if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)) {
+      plant(DebugTree())
     }
+    prefs.registerOnSharedPreferenceChangeListener(this)
+    setNightMode()
+    setUpBouncyCastleForSshj()
+    runMigrations(applicationContext)
+    ProxyUtils.setDefaultProxy()
+  }
 
-    override fun onTerminate() {
-        prefs.unregisterOnSharedPreferenceChangeListener(this)
-        super.onTerminate()
+  override fun onTerminate() {
+    prefs.unregisterOnSharedPreferenceChangeListener(this)
+    super.onTerminate()
+  }
+
+  override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+    if (key == PreferenceKeys.APP_THEME) {
+      setNightMode()
     }
+  }
 
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
-        if (key == PreferenceKeys.APP_THEME) {
-            setNightMode()
-        }
-    }
+  private fun setNightMode() {
+    AppCompatDelegate.setDefaultNightMode(
+      when (prefs.getString(PreferenceKeys.APP_THEME) ?: getString(R.string.app_theme_def)) {
+        "light" -> MODE_NIGHT_NO
+        "dark" -> MODE_NIGHT_YES
+        "follow_system" -> MODE_NIGHT_FOLLOW_SYSTEM
+        else -> MODE_NIGHT_AUTO_BATTERY
+      }
+    )
+  }
 
-    private fun setNightMode() {
-        AppCompatDelegate.setDefaultNightMode(when (prefs.getString(PreferenceKeys.APP_THEME)
-            ?: getString(R.string.app_theme_def)) {
-            "light" -> MODE_NIGHT_NO
-            "dark" -> MODE_NIGHT_YES
-            "follow_system" -> MODE_NIGHT_FOLLOW_SYSTEM
-            else -> MODE_NIGHT_AUTO_BATTERY
-        })
-    }
+  companion object {
 
-    companion object {
-
-        lateinit var instance: Application
-    }
+    lateinit var instance: Application
+  }
 }

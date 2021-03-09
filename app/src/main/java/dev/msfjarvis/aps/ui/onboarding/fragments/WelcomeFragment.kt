@@ -20,11 +20,13 @@ import dev.msfjarvis.aps.util.extensions.viewBinding
 @Suppress("unused")
 class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
-    private val binding by viewBinding(FragmentWelcomeBinding::bind)
+  private val binding by viewBinding(FragmentWelcomeBinding::bind)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.letsGo.setOnClickListener { parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance()) }
-        binding.settingsButton.setOnClickListener { startActivity(Intent(requireContext(), SettingsActivity::class.java)) }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding.letsGo.setOnClickListener {
+      parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance())
     }
+    binding.settingsButton.setOnClickListener { startActivity(Intent(requireContext(), SettingsActivity::class.java)) }
+  }
 }

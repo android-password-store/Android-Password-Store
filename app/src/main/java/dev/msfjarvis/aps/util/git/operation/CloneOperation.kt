@@ -16,7 +16,8 @@ import org.eclipse.jgit.api.GitCommand
  */
 class CloneOperation(callingActivity: ContinuationContainerActivity, uri: String) : GitOperation(callingActivity) {
 
-    override val commands: Array<GitCommand<out Any>> = arrayOf(
-        Git.cloneRepository().setBranch(remoteBranch).setDirectory(repository.workTree).setURI(uri),
+  override val commands: Array<GitCommand<out Any>> =
+    arrayOf(
+      Git.cloneRepository().setBranch(remoteBranch).setDirectory(repository.workTree).setURI(uri),
     )
 }

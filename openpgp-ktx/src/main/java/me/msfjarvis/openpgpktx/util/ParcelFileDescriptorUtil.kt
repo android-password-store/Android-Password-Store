@@ -14,50 +14,47 @@ import java.io.OutputStream
 
 internal object ParcelFileDescriptorUtil {
 
-    private const val TAG = "PFDUtils"
+  private const val TAG = "PFDUtils"
 
-    @Throws(IOException::class)
-    internal fun pipeFrom(inputStream: InputStream): ParcelFileDescriptor {
-        val pipe = ParcelFileDescriptor.createPipe()
-        val readSide = pipe[0]
-        val writeSide = pipe[1]
-        TransferThread(inputStream, AutoCloseOutputStream(writeSide))
-            .start()
-        return readSide
-    }
+  @Throws(IOException::class)
+  internal fun pipeFrom(inputStream: InputStream): ParcelFileDescriptor {
+    val pipe = ParcelFileDescriptor.createPipe()
+    val readSide = pipe[0]
+    val writeSide = pipe[1]
+    TransferThread(inputStream, AutoCloseOutputStream(writeSide)).start()
+    return readSide
+  }
 
-    @Throws(IOException::class)
-    internal fun pipeTo(outputStream: OutputStream, output: ParcelFileDescriptor?): TransferThread {
-        val t = TransferThread(AutoCloseInputStream(output), outputStream)
-        t.start()
-        return t
-    }
+  @Throws(IOException::class)
+  internal fun pipeTo(outputStream: OutputStream, output: ParcelFileDescriptor?): TransferThread {
+    val t = TransferThread(AutoCloseInputStream(output), outputStream)
+    t.start()
+    return t
+  }
 
-    internal class TransferThread(val `in`: InputStream, private val out: OutputStream) : Thread("IPC Transfer Thread") {
+  internal class TransferThread(val `in`: InputStream, private val out: OutputStream) : Thread("IPC Transfer Thread") {
 
-        override fun run() {
-            val buf = ByteArray(4096)
-            var len: Int
-            try {
-                while (`in`.read(buf).also { len = it } > 0) {
-                    out.write(buf, 0, len)
-                }
-            } catch (e: IOException) {
-                Log.e(TAG, "IOException when writing to out", e)
-            } finally {
-                try {
-                    `in`.close()
-                } catch (ignored: IOException) {
-                }
-                try {
-                    out.close()
-                } catch (ignored: IOException) {
-                }
-            }
+    override fun run() {
+      val buf = ByteArray(4096)
+      var len: Int
+      try {
+        while (`in`.read(buf).also { len = it } > 0) {
+          out.write(buf, 0, len)
         }
-
-        init {
-            isDaemon = true
-        }
+      } catch (e: IOException) {
+        Log.e(TAG, "IOException when writing to out", e)
+      } finally {
+        try {
+          `in`.close()
+        } catch (ignored: IOException) {}
+        try {
+          out.close()
+        } catch (ignored: IOException) {}
+      }
     }
+
+    init {
+      isDaemon = true
+    }
+  }
 }

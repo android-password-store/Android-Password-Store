@@ -19,36 +19,39 @@ import org.gradle.kotlin.dsl.withType
 
 class PasswordStorePlugin : Plugin<Project> {
 
-    override fun apply(project: Project) {
-        project.configureForAllProjects()
+  override fun apply(project: Project) {
+    project.configureForAllProjects()
 
-        if (project.isRoot) {
-            project.configureForRootProject()
-        }
-
-        project.plugins.all {
-            when (this) {
-                is JavaPlugin,
-                is JavaLibraryPlugin -> {
-                    project.tasks.withType<JavaCompile> {
-                        options.compilerArgs.add("-Xlint:unchecked")
-                        options.isDeprecation = true
-                    }
-                }
-                is LibraryPlugin -> {
-                    project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
-                }
-                is AppPlugin -> {
-                    project.extensions.getByType<BaseAppModuleExtension>().configureAndroidApplicationOptions(project)
-                    project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
-                    project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
-                }
-                is KtfmtPlugin -> {
-                    project.extensions.getByType<KtfmtExtension>().configureKtfmt()
-                }
-            }
-        }
+    if (project.isRoot) {
+      project.configureForRootProject()
     }
+
+    project.plugins.all {
+      when (this) {
+        is JavaPlugin, is JavaLibraryPlugin -> {
+          project.tasks.withType<JavaCompile> {
+            options.compilerArgs.add("-Xlint:unchecked")
+            options.isDeprecation = true
+          }
+        }
+        is LibraryPlugin -> {
+          project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
+        }
+        is AppPlugin -> {
+          project
+              .extensions
+              .getByType<BaseAppModuleExtension>()
+              .configureAndroidApplicationOptions(project)
+          project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
+          project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
+        }
+        is KtfmtPlugin -> {
+          project.extensions.getByType<KtfmtExtension>().configureKtfmt()
+        }
+      }
+    }
+  }
 }
 
-private val Project.isRoot get() = this == this.rootProject
+private val Project.isRoot
+  get() = this == this.rootProject

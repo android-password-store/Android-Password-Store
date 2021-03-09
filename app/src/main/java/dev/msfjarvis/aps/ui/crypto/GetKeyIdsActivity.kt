@@ -21,56 +21,54 @@ import org.openintents.openpgp.IOpenPgpService2
 
 class GetKeyIdsActivity : BasePgpActivity() {
 
-    private val userInteractionRequiredResult = registerForActivityResult(StartIntentSenderForResult()) { result ->
-        if (result.data == null || result.resultCode == RESULT_CANCELED) {
-            setResult(RESULT_CANCELED, result.data)
-            finish()
-            return@registerForActivityResult
-        }
-        getKeyIds(result.data!!)
+  private val userInteractionRequiredResult =
+    registerForActivityResult(StartIntentSenderForResult()) { result ->
+      if (result.data == null || result.resultCode == RESULT_CANCELED) {
+        setResult(RESULT_CANCELED, result.data)
+        finish()
+        return@registerForActivityResult
+      }
+      getKeyIds(result.data!!)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bindToOpenKeychain(this)
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    bindToOpenKeychain(this)
+  }
 
-    override fun onBound(service: IOpenPgpService2) {
-        super.onBound(service)
-        getKeyIds()
-    }
+  override fun onBound(service: IOpenPgpService2) {
+    super.onBound(service)
+    getKeyIds()
+  }
 
-    override fun onError(e: Exception) {
-        e(e)
-    }
+  override fun onError(e: Exception) {
+    e(e)
+  }
 
-    /**
-     * Get the Key ids from OpenKeychain
-     */
-    private fun getKeyIds(data: Intent = Intent()) {
-        data.action = OpenPgpApi.ACTION_GET_KEY_IDS
-        lifecycleScope.launch(Dispatchers.IO) {
-            api?.executeApiAsync(data, null, null) { result ->
-                when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-                    OpenPgpApi.RESULT_CODE_SUCCESS -> {
-                        runCatching {
-                            val ids = result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map {
-                                OpenPgpUtils.convertKeyIdToHex(it)
-                            } ?: emptyList()
-                            val keyResult = Intent().putExtra(OpenPgpApi.EXTRA_KEY_IDS, ids.toTypedArray())
-                            setResult(RESULT_OK, keyResult)
-                            finish()
-                        }.onFailure { e ->
-                            e(e)
-                        }
-                    }
-                    OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                        val sender = getUserInteractionRequestIntent(result)
-                        userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
-                    }
-                    OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
-                }
+  /** Get the Key ids from OpenKeychain */
+  private fun getKeyIds(data: Intent = Intent()) {
+    data.action = OpenPgpApi.ACTION_GET_KEY_IDS
+    lifecycleScope.launch(Dispatchers.IO) {
+      api?.executeApiAsync(data, null, null) { result ->
+        when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+          OpenPgpApi.RESULT_CODE_SUCCESS -> {
+            runCatching {
+              val ids =
+                result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map { OpenPgpUtils.convertKeyIdToHex(it) }
+                  ?: emptyList()
+              val keyResult = Intent().putExtra(OpenPgpApi.EXTRA_KEY_IDS, ids.toTypedArray())
+              setResult(RESULT_OK, keyResult)
+              finish()
             }
+              .onFailure { e -> e(e) }
+          }
+          OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+            val sender = getUserInteractionRequestIntent(result)
+            userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
+          }
+          OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
         }
+      }
     }
+  }
 }

@@ -8,9 +8,5 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
 internal fun Project.configureBinaryCompatibilityValidator() {
-    extensions.configure<ApiValidationExtension> {
-        ignoredProjects = mutableSetOf(
-            "app"
-        )
-    }
+  extensions.configure<ApiValidationExtension> { ignoredProjects = mutableSetOf("app") }
 }

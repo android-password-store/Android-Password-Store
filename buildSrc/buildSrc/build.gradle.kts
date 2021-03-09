@@ -1,6 +1,4 @@
-plugins {
-  `kotlin-dsl`
-}
+plugins { `kotlin-dsl` }
 
 repositories {
   mavenCentral()
@@ -8,9 +6,7 @@ repositories {
   gradlePluginPortal()
 }
 
-kotlinDslPluginOptions {
-  experimentalWarning.set(false)
-}
+kotlinDslPluginOptions { experimentalWarning.set(false) }
 
 // force compilation of Dependencies.kt so it can be referenced in buildSrc/build.gradle.kts
 sourceSets.main {

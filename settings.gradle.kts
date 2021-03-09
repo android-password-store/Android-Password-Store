@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 include(":autofill-parser")
+
 include(":app")
+
 include(":openpgp-ktx")
 
 pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-    }
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
+  }
 }

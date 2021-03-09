@@ -30,37 +30,37 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi
 
 class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
 
-    private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
-    private val binding by viewBinding(FragmentKeySelectionBinding::bind)
+  private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
+  private val binding by viewBinding(FragmentKeySelectionBinding::bind)
 
-    private val gpgKeySelectAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
-                        gpgIdentifierFile.writeText((keyIds + "").joinToString("\n"))
-                    }
-                    settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-                    requireActivity().commitChange(getString(
-                        R.string.git_commit_gpg_id,
-                        getString(R.string.app_name)
-                    ))
-                }
+  private val gpgKeySelectAction =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      if (result.resultCode == AppCompatActivity.RESULT_OK) {
+        result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
+          lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+              val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+              gpgIdentifierFile.writeText((keyIds + "").joinToString("\n"))
             }
-        } else {
-            throw IllegalStateException("Failed to initialize repository state.")
+            settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
+            requireActivity().commitChange(getString(R.string.git_commit_gpg_id, getString(R.string.app_name)))
+          }
         }
-        finish()
+      } else {
+        throw IllegalStateException("Failed to initialize repository state.")
+      }
+      finish()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.selectKey.setOnClickListener { gpgKeySelectAction.launch(Intent(requireContext(), GetKeyIdsActivity::class.java)) }
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding.selectKey.setOnClickListener {
+      gpgKeySelectAction.launch(Intent(requireContext(), GetKeyIdsActivity::class.java))
     }
+  }
 
-    companion object {
+  companion object {
 
-        fun newInstance() = KeySelectionFragment()
-    }
+    fun newInstance() = KeySelectionFragment()
+  }
 }
