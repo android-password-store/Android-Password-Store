@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
 <resources>
     <dimen name="toggle_group_text_size">12sp</dimen>
     <dimen name="onboarding_icon_margin_top">50dp</dimen>

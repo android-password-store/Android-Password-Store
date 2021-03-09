@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only
+#
+
 set -ex
 
 # Simple script that uses OpenSSL to encrypt a provided file with a provided key, and writes the result

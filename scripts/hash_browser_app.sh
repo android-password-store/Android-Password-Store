@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#
+# Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+# SPDX-License-Identifier: GPL-3.0-only
+#
+
 set -euo pipefail
 
 PACKAGE_NAME="$(aapt dump badging "$1" | grep package: | grep -Eo " name='[a-zA-Z0-9_\.]*" | cut -c8-)"
