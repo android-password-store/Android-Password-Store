@@ -7,6 +7,16 @@ plugins {
     `aps-plugin`
 }
 
+buildscript {
+    dependencies {
+        classpath(Plugins.ktfmtGradlePlugin)
+    }
+}
+
+allprojects {
+    apply(plugin = "com.ncorti.ktfmt.gradle")
+}
+
 subprojects {
     configurations.all {
         resolutionStrategy.dependencySubstitution {

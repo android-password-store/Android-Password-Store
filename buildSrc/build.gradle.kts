@@ -37,6 +37,7 @@ dependencies {
     implementation(Plugins.dokkaPlugin)
     implementation(Plugins.downloadTaskPlugin)
     implementation(Plugins.kotlinGradlePlugin)
+    implementation(Plugins.ktfmtGradlePlugin)
     implementation(Plugins.mavenPublishPlugin)
     implementation(Plugins.semver4j)
 }

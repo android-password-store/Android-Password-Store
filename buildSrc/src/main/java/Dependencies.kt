@@ -11,6 +11,7 @@ object Plugins {
     const val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
     const val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
+    const val ktfmtGradlePlugin = "com.ncorti.ktfmt.gradle:plugin:0.4.0"
     const val mavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
     const val semver4j = "com.vdurmont:semver4j:3.1.0"
 }
