@@ -105,7 +105,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 lifecycleScope.launch {
                     val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
                     withContext(Dispatchers.IO) {
-                        gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
+                        gpgIdentifierFile.writeText((keyIds + "").joinToString("\n"))
                     }
                     commitChange(getString(
                         R.string.git_commit_gpg_id,
