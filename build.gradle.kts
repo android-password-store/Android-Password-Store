@@ -6,3 +6,12 @@ plugins {
     `binary-compatibility-validator`
     `aps-plugin`
 }
+
+subprojects {
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute(module("org.jetbrains.trove4j:trove4j:20160824"))
+                .using(module("org.jetbrains.intellij.deps:trove4j:1.0.20200330"))
+        }
+    }
+}
