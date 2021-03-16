@@ -11,6 +11,7 @@ import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.api.tasks.wrapper.Wrapper
+import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -25,9 +26,9 @@ internal fun Project.configureForRootProject() {
         delete(rootProject.buildDir)
     }
     tasks.withType<Wrapper> {
-        gradleVersion = "6.8.2"
+        gradleVersion = "6.8.3"
         distributionType = Wrapper.DistributionType.ALL
-        distributionSha256Sum = "1433372d903ffba27496f8d5af24265310d2da0d78bf6b4e5138831d4fe066e9"
+        distributionSha256Sum = "9af5c8e7e2cd1a3b0f694a4ac262b9f38c75262e74a9e8b5101af302a6beadd7"
     }
     configureBinaryCompatibilityValidator()
 }
@@ -41,23 +42,19 @@ internal fun Project.configureForAllProjects() {
         mavenCentral()
         jcenter() {
             content {
-                // Direct dependencies
                 // https://github.com/zhanghai/AndroidFastScroll/issues/35
                 includeModule("me.zhanghai.android.fastscroll", "library")
                 // https://github.com/open-keychain/open-keychain/issues/2645
                 includeModule("org.sufficientlysecure", "sshauthentication-api")
-
-                // Indirect dependencies
-                // https://youtrack.jetbrains.com/issue/IDEA-261387
-                includeModule("org.jetbrains.trove4j", "trove4j")
-
-                // https://github.com/Kotlin/dokka/issues/41
-                includeGroup("org.jetbrains.dokka")
-                includeGroup("org.jetbrains.kotlinx")
-                includeModule("org.jetbrains", "markdown")
             }
         }
-        maven { setUrl("https://jitpack.io") }
+        maven("https://jitpack.io") {
+            name = "Jitpack"
+            content {
+                includeModule("com.github.android-password-store", "zxing-android-embedded")
+                includeModule("com.github.haroldadmin", "WhatTheStack")
+            }
+        }
     }
     tasks.withType<KotlinCompile> {
         kotlinOptions {
