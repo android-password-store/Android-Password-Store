@@ -11,6 +11,7 @@ import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.api.tasks.wrapper.Wrapper
+import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -47,7 +48,13 @@ internal fun Project.configureForAllProjects() {
                 includeModule("org.sufficientlysecure", "sshauthentication-api")
             }
         }
-        maven { setUrl("https://jitpack.io") }
+        maven("https://jitpack.io") {
+            name = "Jitpack"
+            content {
+                includeModule("com.github.android-password-store", "zxing-android-embedded")
+                includeModule("com.github.haroldadmin", "WhatTheStack")
+            }
+        }
     }
     tasks.withType<KotlinCompile> {
         kotlinOptions {
