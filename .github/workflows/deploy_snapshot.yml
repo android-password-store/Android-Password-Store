@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
+    - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
+      with:
+        java-version: '11'
+
     - name: Checkout repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
