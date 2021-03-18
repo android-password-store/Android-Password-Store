@@ -42,7 +42,7 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
-        arguments: apiCheck testFreeDebug lintFreeDebug
+        arguments: apiCheck testFreeDebug lintFreeDebug ktfmtCheck
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
