@@ -23,6 +23,7 @@ private const val BITMASK = 0xff.toByte()
  * https://github.com/square/okhttp/blob/1977136/okhttp/src/main/kotlin/okhttp3/internal/publicsuffix/PublicSuffixDatabase.kt
  */
 @Suppress("ComplexMethod", "NestedBlockDepth")
+@OptIn(ExperimentalUnsignedTypes::class)
 internal fun ByteArray.binarySearch(labels: List<ByteArray>, labelIndex: Int): String? {
   var low = 0
   var high = size
@@ -55,7 +56,7 @@ internal fun ByteArray.binarySearch(labels: List<ByteArray>, labelIndex: Int): S
       // Compare the bytes. Note that the file stores UTF-8 encoded bytes, so we must compare
       // the
       // unsigned bytes.
-      @Suppress("EXPERIMENTAL_API_USAGE") compareResult = (byte0.toUByte() - byte1.toUByte()).toInt()
+      compareResult = (byte0.toUByte() - byte1.toUByte()).toInt()
       if (compareResult != 0) {
         break
       }
