@@ -40,15 +40,14 @@ internal fun Project.configureForAllProjects() {
       content {
         // https://github.com/zhanghai/AndroidFastScroll/issues/35
         includeModule("me.zhanghai.android.fastscroll", "library")
-        // https://github.com/open-keychain/open-keychain/issues/2645
-        includeModule("org.sufficientlysecure", "sshauthentication-api")
       }
     }
     maven("https://jitpack.io") {
-      name = "Jitpack"
+      name = "JitPack"
       content {
         includeModule("com.github.android-password-store", "zxing-android-embedded")
         includeModule("com.github.haroldadmin", "WhatTheStack")
+        includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
       }
     }
   }
