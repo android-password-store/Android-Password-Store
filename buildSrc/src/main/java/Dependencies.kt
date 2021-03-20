@@ -6,7 +6,7 @@
 private const val KOTLIN_VERSION = "1.4.31"
 
 object Plugins {
-  const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.3"
   const val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
   const val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
   const val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
