@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -120,6 +121,8 @@
   <string name="pref_category_autofill_title">Completado automático</string>
   <string name="pref_autofill_enable_title">Activar completado automático</string>
   <string name="pref_category_misc_title">Varios</string>
+  <string name="pref_clear_clipboard_title">Truco de seguridade para o historial do portapapeis</string>
+  <string name="pref_clear_clipboard_summary">Activar a función de asulagar o historial do portapapeis con números consecutivos en dispositivos que inclúan dita función, ocultando así calquera contrasinal</string>
   <string name="pref_git_delete_repo_summary">Elimina repositorio local (oculto).</string>
   <string name="pref_external_repository_title">Repositorio externo</string>
   <string name="pref_external_repository_summary">Usar un repositorio externo de contrasinais</string>
@@ -359,4 +362,8 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="oreo_autofill_password_fill_and_conditional_save_support">Completa e garda contrasinais (gardar require que os servizos de accesibilidade non estén activados)</string>
   <string name="clear_saved_host_key">Eliminar chave do host gardada</string>
   <string name="clear_saved_host_key_success">Eliminouse correctamente a chave gardada do host!</string>
+  <string name="otp_import_qr_code">Escanear código QR</string>
+  <string name="otp_import_manual_entry">Escribir manualmente</string>
+  <string name="otp_import_manual_hint_secret">Segredo</string>
+  <string name="otp_import_manual_hint_account">Conta</string>
 </resources>

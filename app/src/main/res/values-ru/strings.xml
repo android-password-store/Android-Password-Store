@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -128,6 +129,7 @@
   <string name="pref_external_repository_title">Внешний репозиторий</string>
   <string name="pref_external_repository_summary">Использовать внешний репозиторий</string>
   <string name="pref_select_external_repository_title">Выбрать внешний репозиторий</string>
+  <string name="pref_select_external_repository_summary_no_repo_selected">Внешний репозиторий не выбран</string>
   <string name="prefs_export_passwords_title">Экспортировать пароли</string>
   <string name="prefs_export_passwords_summary">Экспортировать пароли в открытом виде во внешнее хранилище</string>
   <!-- PasswordGenerator fragment -->
@@ -196,10 +198,10 @@
   <string name="show_extra_content_pref_summary">Видимость поля дополнительной информации после расшифрования</string>
   <string name="pwd_generate_button">Сгенерировать</string>
   <string name="refresh_list">Обновить список</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Внешний репозиторий не выбран</string>
   <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
   <string name="app_icon_hint">Иконка приложения</string>
   <!-- Oreo Autofill -->
+  <string name="oreo_autofill_select_and_fill_into">Выберите запись для заполнения</string>
   <string name="oreo_autofill_strict_domain_search">Устойчивый к фишингу поиск</string>
   <string name="oreo_autofill_match_with">Совпадает с %1$s</string>
   <string name="oreo_autofill_matches_clear_existing">Очистить существующие совпадения</string>
@@ -340,7 +342,18 @@
   <string name="select_repo_type_text">Создать локальное хранилище, или клонировать существующее.</string>
   <string name="clone_remote_repo">Клонировать удаленный репозиторий</string>
   <string name="create_local_repo">Создать локальное хранилище</string>
+  <string name="select_gpg_key_message">Выберите GPG ключ для инициализации хранилища</string>
+  <string name="gpg_key_select">Выберите ключ:</string>
   <!-- SSH port validation -->
   <string name="ssh_scheme_needed_title">Потенциально неправильный URL</string>
   <string name="ssh_scheme_needed_message">Указание порта в URL будет работать только при использовании SSH (ssh://), иначе порт будет расцениваться как часть URL. Исправить URL?</string>
+  <string name="https_scheme_with_port_title">URL HTTPS с произвольным портом</string>
+  <string name="https_scheme_with_port_message">Похоже, что вы используете URL HTTPS с произвольным портом. Это не поддерживается, и вызовет проблемы в дальнейшем. Нажмите ОК, чтобы удалить порт из URL.</string>
+  <!-- Proxy configuration activity -->
+  <string name="proxy_hostname">Хост прокси</string>
+  <string name="port">Порт</string>
+  <string name="invalid_proxy_url">Недопустимый URL-адрес</string>
+  <string name="oreo_autofill_password_fill_and_conditional_save_support">Автозаполнение и созранение паролей (сохранение требует отсутствия специальных средств доступности)</string>
+  <string name="clear_saved_host_key">Очистить сохраненный ключ хоста</string>
+  <string name="clear_saved_host_key_success">Сохраненный ключ хоста успешно очищен!</string>
 </resources>

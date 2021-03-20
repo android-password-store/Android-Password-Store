@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -120,12 +121,18 @@
   <string name="pref_category_autofill_title">Preenchimento Automático</string>
   <string name="pref_autofill_enable_title">Ativar preenchimento automático</string>
   <string name="pref_category_misc_title">Outros</string>
+  <string name="pref_clear_clipboard_title">Solução do histórico de transferência</string>
+  <string name="pref_clear_clipboard_summary">Ative para inundar o histórico de área de transferência em dispositivos que incluem tal recurso com números consecutivos, expurgando quaisquer senhas</string>
   <string name="pref_git_delete_repo_summary">Exclui o repositório local (oculto)</string>
   <string name="pref_external_repository_title">Repositório externo</string>
   <string name="pref_external_repository_summary">Use um repositório de senha externo</string>
   <string name="pref_select_external_repository_title">Selecionar repositório externo</string>
+  <string name="pref_select_external_repository_summary_no_repo_selected">Nenhum repositório externo selecionado</string>
   <string name="prefs_export_passwords_title">Exportar senhas</string>
   <string name="prefs_export_passwords_summary">Exporta as senhas criptografadas para um diretório externo</string>
+  <string name="pref_rebase_on_pull_title">Rebasear em pull</string>
+  <string name="pref_rebase_on_pull_summary">Ao realizar um pull ou sincronizar, crie um merge commit com as alterações do upstream</string>
+  <string name="pref_rebase_on_pull_summary_on">Ao realizar um pull ou sincronizar, rebase commits que não estão presentes no repositório remoto</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Gerar Senha</string>
   <string name="pwgen_generate">Gerar</string>
@@ -192,10 +199,10 @@
   <string name="show_extra_content_pref_summary">Controlar a visibilidade do conteúdo extra uma vez descriptografado.</string>
   <string name="pwd_generate_button">Gerar</string>
   <string name="refresh_list">Atualizar lista</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Nenhum repositório externo selecionado</string>
   <string name="send_plaintext_password_to">Enviar senha como texto simples usando…</string>
   <string name="app_icon_hint">Ícone do aplicativo</string>
   <!-- Oreo Autofill -->
+  <string name="oreo_autofill_select_and_fill_into">Selecione a entrada para preencher</string>
   <string name="oreo_autofill_strict_domain_search">Busca resistente a phishing</string>
   <string name="oreo_autofill_match_with">Combinar com %1$s</string>
   <string name="oreo_autofill_matches_clear_existing">Limpar correspondências existentes</string>
@@ -239,6 +246,7 @@
   <string name="git_head_missing">Impossível localizar o HEAD</string>
   <string name="sdcard_root_warning_title">Raiz do cartão SD selecionada</string>
   <string name="sdcard_root_warning_message">Você selecionou a raiz do seu cartão SD para armazenar. Isto é extremamente perigoso e você perderá seus dados, pois seu conteúdo será eventualmente apagado</string>
+  <string name="sdcard_root_warning_remove_everything">Remover tudo</string>
   <string name="git_abort_and_push_title">Abortar e executar Push</string>
   <string name="biometric_prompt_title">Confirmação Biométrica</string>
   <string name="biometric_auth_error">Falha de autenticação</string>
@@ -310,6 +318,7 @@
   <!-- GitException messages -->
   <string name="git_unknown_error">Erro desconhecido</string>
   <string name="git_pull_rebase_fail_error">O pull falhou, você está em uma Head avulsa. Usando \"configurações &gt; utils\" do git, salve suas alterações no remoto em uma nova branch e resolva o conflito no seu computador.</string>
+  <string name="git_pull_merge_fail_error">Falha ao realizar o merge, você está em estado de conflito. TODO: Adicione um método de recuperação.</string>
   <string name="git_push_nff_error">Push rejeitado pelo remoto, execute o pull antes de fazer push novamente. Você pode usar Sincronização em vez de pull/push conforme implementa ambos</string>
   <string name="git_push_generic_error">Push rejeitado pelo remoto, razão: %1$s</string>
   <string name="git_push_other_error">O remoto rejeito o push non-fast-foward. Cheque a variável receive.denyNonFastForwards no arquivo de configuração do repositório de destino.</string>
@@ -336,7 +345,20 @@
   <string name="select_repo_type_text">Selecione se você quer criar um repositório local ou clonar um repositório remoto.</string>
   <string name="clone_remote_repo">Clonar repositório remoto</string>
   <string name="create_local_repo">Criar repositório local</string>
+  <string name="select_gpg_key_title">Selecione\nChave GPG</string>
+  <string name="select_gpg_key_message">Selecione uma chave GPG para inicializar o armazenamento com</string>
+  <string name="gpg_key_select">Selecione a chave</string>
   <!-- SSH port validation -->
   <string name="ssh_scheme_needed_title">URL potencialmente incorreta</string>
   <string name="ssh_scheme_needed_message">Parece que sua URL contém uma porta personalizada, mas não especifica o esquema ssh://\nIsto pode fazer com que a porta seja considerada uma parte do seu caminho. Pressione OK aqui para corrigir o URL.</string>
+  <string name="https_scheme_with_port_title">URL HTTPS com porta personalizada</string>
+  <string name="https_scheme_with_port_message">Parece que você está usando uma URL HTTPS com uma porta personalizada. Isto não é suportado e causará problemas na linha. Pressione OK para remover a porta da URL.</string>
+  <!-- Proxy configuration activity -->
+  <string name="proxy_hostname">Nome do Host de proxy</string>
+  <string name="port">Porta</string>
+  <string name="pref_edit_proxy_settings">Configurações de proxy HTTP(S)</string>
+  <string name="invalid_proxy_url">URL inválido</string>
+  <string name="oreo_autofill_password_fill_and_conditional_save_support">Preencha e salve as senhas (salvamento requer que nenhum serviço de acessibilidade esteja ativado)</string>
+  <string name="clear_saved_host_key">Limpar chave de host salva</string>
+  <string name="clear_saved_host_key_success">Chave de host limpa com sucesso!</string>
 </resources>

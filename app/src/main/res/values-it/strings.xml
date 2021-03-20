@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -92,7 +93,6 @@
   <string name="share_as_plaintext">Condividi come testo semplice</string>
   <string name="last_changed">Ultima modifica %s</string>
   <!-- Preferences -->
-  <string name="pref_category_repository_title">Repository</string>
   <string name="pref_edit_git_server_settings">Modifica impostazioni del server di Git</string>
   <string name="pref_edit_git_config">Configurazione &amp; utilità della configurazione di Git</string>
   <string name="pref_import_ssh_key_title">Importa chiave SSH</string>
@@ -124,6 +124,7 @@
   <string name="pref_external_repository_title">Repository Esterna</string>
   <string name="pref_external_repository_summary">Usa una repository di password esterna</string>
   <string name="pref_select_external_repository_title">Seleziona repository esterna</string>
+  <string name="pref_select_external_repository_summary_no_repo_selected">Nessuna repository esterna selezionata</string>
   <string name="prefs_export_passwords_title">Esporta password</string>
   <string name="prefs_export_passwords_summary">Esporta le password crittografate ad una directory esterna</string>
   <!-- PasswordGenerator fragment -->
@@ -192,7 +193,6 @@
   <string name="show_extra_content_pref_summary">Controlla la visibilità del contenuto extra una volta decrittografato.</string>
   <string name="pwd_generate_button">Genera</string>
   <string name="refresh_list">Aggiorna elenco</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Nessuna repository esterna selezionata</string>
   <string name="send_plaintext_password_to">Invia password come testo semplice usando…</string>
   <string name="app_icon_hint">Icona app</string>
   <!-- Oreo Autofill -->

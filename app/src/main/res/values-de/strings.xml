@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
@@ -88,7 +89,6 @@
   <string name="share_as_plaintext">Als Klartext teilen</string>
   <string name="last_changed">Zuletzt geändert %s</string>
   <!-- Preferences -->
-  <string name="pref_category_repository_title">Repository</string>
   <string name="pref_edit_git_server_settings">Git-Server Einstellungen</string>
   <string name="pref_edit_git_config">Lokale Git Konfiguration &amp; Dienstprogramme</string>
   <string name="pref_import_ssh_key_title">Importiere SSH-Key</string>
@@ -120,6 +120,7 @@
   <string name="pref_external_repository_title">Externes Repository</string>
   <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
   <string name="pref_select_external_repository_title">Wähle ein externes Repository</string>
+  <string name="pref_select_external_repository_summary_no_repo_selected">Kein externes Repository ausgewählt</string>
   <string name="prefs_export_passwords_title">Passwörter exportieren</string>
   <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
   <!-- PasswordGenerator fragment -->
@@ -188,7 +189,6 @@
   <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
   <string name="pwd_generate_button">Generieren</string>
   <string name="refresh_list">Aktualisieren</string>
-  <string name="pref_select_external_repository_summary_no_repo_selected">Kein externes Repository ausgewählt</string>
   <string name="send_plaintext_password_to">Passwort unverschlüsselt senden an…</string>
   <string name="app_icon_hint">App Icon</string>
   <!-- Oreo Autofill -->
@@ -317,4 +317,5 @@
   <!-- SSH port validation -->
   <string name="ssh_scheme_needed_title">Möglicherweise inkorrekte URL</string>
   <string name="ssh_scheme_needed_message">Es sieht so aus, als ob Sie einen benutzerdefinierten Port in Ihrer URL angegeben haben, aber nicht in dem ssh://-Schema.\nDas kann dazu führen, dass Ihr Port als Teil des Pfades betrachtet wird. Drücken Sie hier auf OK um die URL zu korrigieren.</string>
+  <!-- Proxy configuration activity -->
 </resources>
