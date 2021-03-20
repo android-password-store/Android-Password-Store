@@ -43,20 +43,32 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
+    - name: Boot emulator in background
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: |
+        ./scripts/setup_environment.sh
+        ./scripts/boot_emulator.sh &
+      env:
+        ANDROID_API_LEVEL: ${{ matrix.api-level }}
+
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: apiCheck testFreeDebug lintFreeDebug ktfmtCheck
 
+    - name: Wait for emulator bootup
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: |
+        until [ "$(adb shell getprop sys.boot_completed)" == "1" ]
+          do sleep 5
+        done
+
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@08b092e904025fada32a01b711af1e7ff7b7a4a3
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
-        api-level: ${{ matrix.api-level }}
-        target: default
-        script: |
-          ./gradlew :app:connectedFreeDebugAndroidTest
+        arguments: :app:connectedFreeDebugAndroidTest
 
     - name: (Fail-only) upload test report
       if: failure()
