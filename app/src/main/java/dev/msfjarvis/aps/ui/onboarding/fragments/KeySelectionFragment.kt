@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.FragmentKeySelectionBinding
@@ -20,6 +21,7 @@ import dev.msfjarvis.aps.ui.crypto.GetKeyIdsActivity
 import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
@@ -46,10 +48,11 @@ class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
             requireActivity().commitChange(getString(R.string.git_commit_gpg_id, getString(R.string.app_name)))
           }
         }
+        finish()
       } else {
-        throw IllegalStateException("Failed to initialize repository state.")
+        requireActivity()
+          .snackbar(message = getString(R.string.gpg_key_select_mandatory), length = Snackbar.LENGTH_LONG)
       }
-      finish()
     }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
