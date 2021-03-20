@@ -8,6 +8,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutInfo.Builder
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
@@ -466,7 +467,23 @@ class PasswordStore : BaseGitActivity() {
     // is at the front like it's supposed to.
     shortcuts.reverse()
     // Write back the new shortcuts.
-    shortcutManager.dynamicShortcuts = shortcuts
+    shortcutManager.dynamicShortcuts = shortcuts.map(::rebuildShortcut)
+  }
+
+  /**
+   * Takes an existing [ShortcutInfo] and builds a fresh instance of [ShortcutInfo] with the same
+   * data, which ensures that the get/set dance in [addShortcut] does not cause invalidation of icon
+   * assets, resulting in invisible icons in all but the newest launcher shortcut.
+   */
+  @RequiresApi(Build.VERSION_CODES.N_MR1)
+  private fun rebuildShortcut(shortcut: ShortcutInfo): ShortcutInfo {
+    // Non-null assertions are fine since we know these values aren't null.
+    return Builder(this@PasswordStore, shortcut.id)
+      .setShortLabel(shortcut.shortLabel!!)
+      .setLongLabel(shortcut.longLabel!!)
+      .setIcon(Icon.createWithResource(this@PasswordStore, R.drawable.ic_lock_open_24px))
+      .setIntent(shortcut.intent!!)
+      .build()
   }
 
   private fun validateState(): Boolean {
