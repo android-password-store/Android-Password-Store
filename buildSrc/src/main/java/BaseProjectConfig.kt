@@ -78,8 +78,7 @@ fun Project.isSnapshot(): Boolean {
 /** Apply configurations for app module */
 @Suppress("UnstableApiUsage")
 internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: Project) {
-  val minifySwitch =
-      project.providers.environmentVariable("DISABLE_MINIFY").forUseAtConfigurationTime()
+  val minifySwitch = project.providers.environmentVariable("DISABLE_MINIFY").forUseAtConfigurationTime()
 
   adbOptions.installOptions("--user 0")
 

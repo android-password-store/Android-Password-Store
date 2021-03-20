@@ -38,10 +38,7 @@ class PasswordStorePlugin : Plugin<Project> {
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
         }
         is AppPlugin -> {
-          project
-              .extensions
-              .getByType<BaseAppModuleExtension>()
-              .configureAndroidApplicationOptions(project)
+          project.extensions.getByType<BaseAppModuleExtension>().configureAndroidApplicationOptions(project)
           project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
         }

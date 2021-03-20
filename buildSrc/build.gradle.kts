@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-plugins { `kotlin-dsl` }
+plugins {
+  `kotlin-dsl`
+  id("com.ncorti.ktfmt.gradle") version "0.4.0"
+}
 
 repositories {
   google()
@@ -11,6 +14,11 @@ repositories {
   mavenCentral()
   // For binary compatibility validator.
   maven { url = uri("https://kotlin.bintray.com/kotlinx") }
+}
+
+ktfmt {
+  googleStyle()
+  maxWidth.set(120)
 }
 
 kotlinDslPluginOptions { experimentalWarning.set(false) }

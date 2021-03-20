@@ -12,6 +12,9 @@ import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.register
 
+private const val EXCEPTION_MESSAGE =
+  """Applying `crowdin-plugin` requires a projectName to be configured via the "crowdin" extension."""
+
 class CrowdinDownloadPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
@@ -20,10 +23,7 @@ class CrowdinDownloadPlugin : Plugin<Project> {
       afterEvaluate {
         val projectName = extension.projectName
         if (projectName.isEmpty()) {
-          throw GradleException(
-              """
-                        Applying `crowdin-plugin` requires a projectName to be configured via the "crowdin" extension.
-                        """.trimIndent())
+          throw GradleException(EXCEPTION_MESSAGE)
         }
         tasks.register<Download>("downloadCrowdin") {
           src("https://crowdin.com/backend/download/project/$projectName.zip")

@@ -7,8 +7,7 @@ private const val KOTLIN_VERSION = "1.4.31"
 
 object Plugins {
   const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.2"
-  const val binaryCompatibilityValidator =
-      "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
+  const val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
   const val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
   const val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
   const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
@@ -42,8 +41,7 @@ object Dependencies {
     const val fragment_ktx = "androidx.fragment:fragment-ktx:1.3.0"
     const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    const val lifecycle_viewmodel_ktx =
-        "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     const val material = "com.google.android.material:material:1.3.0"
     const val preference = "androidx.preference:preference:1.1.1"
     const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-beta02"
@@ -54,8 +52,7 @@ object Dependencies {
 
   object FirstParty {
 
-    const val zxing_android_embedded =
-        "com.github.android-password-store:zxing-android-embedded:4.1.0-aps"
+    const val zxing_android_embedded = "com.github.android-password-store:zxing-android-embedded:4.1.0-aps"
   }
 
   object ThirdParty {
@@ -78,8 +75,7 @@ object Dependencies {
 
   object NonFree {
 
-    const val google_play_auth_api_phone =
-        "com.google.android.gms:play-services-auth-api-phone:17.5.0"
+    const val google_play_auth_api_phone = "com.google.android.gms:play-services-auth-api-phone:17.5.0"
   }
 
   object Testing {
