@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.13.4] - 2021-03-20
+
+-  Fix support for ECDSA SSH keys and support AES-GCM
+-  Fix a couple issues with Autofill
+
 ## [1.13.3] - 2021-03-06
 
 ### Fixed
@@ -415,7 +420,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.4...HEAD
+
+[1.13.4]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...v1.13.4
 
 [1.13.3]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.2...v1.13.3
 

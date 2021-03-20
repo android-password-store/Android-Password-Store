@@ -35,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "dev.msfjarvis.aps"
-        versionCode = 1_13_30
-        versionName = "1.13.3"
+        versionCode = 1_13_40
+        versionName = "1.13.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
