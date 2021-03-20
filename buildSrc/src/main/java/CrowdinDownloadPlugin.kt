@@ -36,28 +36,13 @@ class CrowdinDownloadPlugin : Plugin<Project> {
           from(zipTree("$buildDir/translations.zip"))
           into("$buildDir/translations")
         }
-        tasks.register<Copy>("extractBaseStrings") {
+        tasks.register<Copy>("extractStrings") {
           setDependsOn(setOf("extractCrowdin"))
-          from("$buildDir/translations/${project.name}/src/main/res")
-          into("${projectDir}/src/main/res")
-        }
-        tasks.register<Copy>("extractNonFreeStrings") {
-          setDependsOn(setOf("extractCrowdin"))
-          from("$buildDir/translations/") { exclude("app/") }
-          into("$buildDir/nonFree-translations")
-          doLast {
-            File("$buildDir/nonFree-translations")
-                .listFiles { file: File -> file.isDirectory }
-                ?.forEach { file ->
-                  val dest = File("${projectDir}/src/nonFree/values-${file.name}")
-                  val src = File(file, "app/src/nonFree/res/values/strings.xml")
-                  dest.mkdirs()
-                  src.renameTo(File(dest, "strings.xml"))
-                }
-          }
+          from("$buildDir/translations/")
+          into("${projectDir}/src/")
         }
         tasks.register("crowdin") {
-          setDependsOn(setOf("extractBaseStrings", "extractNonFreeStrings"))
+          setDependsOn(setOf("extractStrings"))
           if (!extension.skipCleanup) {
             doLast {
               File("$buildDir/translations").deleteRecursively()
