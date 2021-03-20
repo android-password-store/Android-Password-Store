@@ -24,6 +24,13 @@ All notable changes to this project will be documented in this file.
 -   Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
 -   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
 
+## [1.13.4] - 2021-03-20
+
+### Fixed
+
+-  Fix support for ECDSA SSH keys and support AES-GCM
+-  Fix a couple issues with Autofill
+
 ## [1.13.3] - 2021-03-06
 
 ### Fixed
@@ -434,7 +441,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.4...HEAD
+
+[1.13.4]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...v1.13.4
 
 [1.13.3]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.2...v1.13.3
 
