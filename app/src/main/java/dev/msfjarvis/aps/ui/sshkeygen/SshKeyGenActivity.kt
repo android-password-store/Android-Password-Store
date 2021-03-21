@@ -109,7 +109,10 @@ class SshKeyGenActivity : AppCompatActivity() {
                 BiometricAuthenticator.authenticate(
                   this@SshKeyGenActivity,
                   R.string.biometric_prompt_title_ssh_keygen
-                ) { cont.resume(it) }
+                ) {
+                  // Do not cancel on failed attempts as these are handled by the authenticator UI.
+                  if (it !is BiometricAuthenticator.Result.Failure) cont.resume(it)
+                }
               }
             }
           if (result !is BiometricAuthenticator.Result.Success)
