@@ -24,6 +24,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import com.zeapo.pwdstore.R
@@ -114,6 +115,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                     }
                 }
             }
+        } else {
+            snackbar(message = getString(R.string.gpg_key_select_mandatory), length = Snackbar.LENGTH_LONG)
         }
     }
 

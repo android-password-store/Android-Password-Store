@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.zeapo.pwdstore.R
 import com.zeapo.pwdstore.crypto.GetKeyIdsActivity
 import com.zeapo.pwdstore.databinding.FragmentKeySelectionBinding
@@ -21,6 +22,7 @@ import com.zeapo.pwdstore.utils.PreferenceKeys
 import com.zeapo.pwdstore.utils.commitChange
 import com.zeapo.pwdstore.utils.finish
 import com.zeapo.pwdstore.utils.sharedPrefs
+import com.zeapo.pwdstore.utils.snackbar
 import com.zeapo.pwdstore.utils.viewBinding
 import java.io.File
 import kotlinx.coroutines.Dispatchers
@@ -48,10 +50,11 @@ class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
                     ))
                 }
             }
+            finish()
         } else {
-            throw IllegalStateException("Failed to initialize repository state.")
+            requireActivity()
+                .snackbar(message = getString(R.string.gpg_key_select_mandatory), length = Snackbar.LENGTH_LONG)
         }
-        finish()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

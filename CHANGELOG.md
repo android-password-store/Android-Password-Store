@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-   When prompted to select a GPG key during onboarding, the app would crash if the user did not make a selection in OpenKeychain
+
 ## [1.13.4] - 2021-03-20
 
 -  Fix support for ECDSA SSH keys and support AES-GCM
