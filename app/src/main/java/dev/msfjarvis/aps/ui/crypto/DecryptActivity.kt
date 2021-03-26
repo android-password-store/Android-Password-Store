@@ -190,7 +190,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
               if (entry.hasTotp()) {
                 launch(Dispatchers.IO) {
                   // Calculate the actual remaining time for the first pass
-                  // then return to the standard 30 second affair.
+                  // then return to the standard rotation.
                   val remainingTime = entry.totpPeriod - (System.currentTimeMillis() % entry.totpPeriod)
                   withContext(Dispatchers.Main) {
                     val code = entry.calculateTotpCode() ?: "Error"
@@ -200,7 +200,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
                   repeat(Int.MAX_VALUE) {
                     val code = entry.calculateTotpCode() ?: "Error"
                     withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
-                    delay(30.seconds)
+                    delay(entry.totpPeriod.seconds)
                   }
                 }
               }
