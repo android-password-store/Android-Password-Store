@@ -49,11 +49,13 @@ internal class FormField(
       HINTS_NEW_PASSWORD +
         listOf(
           HintConstants.AUTOFILL_HINT_PASSWORD,
+          HintConstants.AUTOFILL_HINT_WIFI_PASSWORD,
         )
 
     private val HINTS_OTP =
       listOf(
         HintConstants.AUTOFILL_HINT_SMS_OTP,
+        HintConstants.AUTOFILL_HINT_TFA_APP_OTP,
       )
 
     @Suppress("DEPRECATION")
