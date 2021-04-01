@@ -157,6 +157,8 @@ private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY =
     "com.chrome.beta" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "com.chrome.canary" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "com.chrome.dev" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "org.bromite.bromite" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "org.ungoogled.chromium.stable" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
   )
 
 private fun isNoAccessibilityServiceEnabled(context: Context): Boolean {
@@ -183,8 +185,6 @@ internal fun getBrowserAutofillSupportInfoIfTrusted(context: Context, appPackage
 
 private val FLAKY_BROWSERS =
   listOf(
-    "org.bromite.bromite",
-    "org.ungoogled.chromium.stable",
     "com.kiwibrowser.browser",
   )
 
