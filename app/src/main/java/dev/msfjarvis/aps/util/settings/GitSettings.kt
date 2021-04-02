@@ -17,6 +17,7 @@ import java.io.File
 import org.eclipse.jgit.transport.URIish
 
 enum class Protocol(val pref: String) {
+  Git("git://"),
   Ssh("ssh://"),
   Https("https://"),
   ;
@@ -152,6 +153,7 @@ object GitSettings {
       when (parsedUrl.scheme) {
         in listOf("http", "https") -> Protocol.Https
         in listOf("ssh", null) -> Protocol.Ssh
+        in listOf("git", null) -> Protocol.Git
         else -> return UpdateConnectionSettingsResult.FailedToParseUrl
       }
     if (newAuthMode != AuthMode.None && parsedUrl.user.isNullOrBlank())
@@ -159,12 +161,16 @@ object GitSettings {
 
     val validHttpsAuth = listOf(AuthMode.None, AuthMode.Password)
     val validSshAuth = listOf(AuthMode.OpenKeychain, AuthMode.Password, AuthMode.SshKey)
+    val validGitAuth = listOf(AuthMode.None)
     when {
       newProtocol == Protocol.Https && newAuthMode !in validHttpsAuth -> {
         return UpdateConnectionSettingsResult.AuthModeMismatch(newProtocol, validHttpsAuth)
       }
       newProtocol == Protocol.Ssh && newAuthMode !in validSshAuth -> {
         return UpdateConnectionSettingsResult.AuthModeMismatch(newProtocol, validSshAuth)
+      }
+      newProtocol == Protocol.Git && newAuthMode !in validGitAuth -> {
+        return UpdateConnectionSettingsResult.AuthModeMismatch(newProtocol, validGitAuth)
       }
     }
 

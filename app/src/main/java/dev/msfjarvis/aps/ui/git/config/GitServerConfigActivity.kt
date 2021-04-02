@@ -76,14 +76,14 @@ class GitServerConfigActivity : BaseGitActivity() {
     binding.serverUrl.setText(
       GitSettings.url.also {
         if (it.isNullOrEmpty()) return@also
-        setAuthModes(it.startsWith("http://") || it.startsWith("https://"))
+        setAuthModes(it)
       }
     )
     binding.serverBranch.setText(GitSettings.branch)
 
     binding.serverUrl.doOnTextChanged { text, _, _, _ ->
       if (text.isNullOrEmpty()) return@doOnTextChanged
-      setAuthModes(text.startsWith("http://") || text.startsWith("https://"))
+      setAuthModes(text)
     }
 
     binding.clearHostKeyButton.isVisible = GitSettings.hasSavedHostKey()
@@ -106,7 +106,7 @@ class GitServerConfigActivity : BaseGitActivity() {
             .build()
             .show(supportFragmentManager, "SSH_SCHEME_WARNING")
           return@setOnClickListener
-        } else if (!newUrl.startsWith("ssh://")) {
+        } else if (!newUrl.startsWith("ssh://") && !newUrl.startsWith("git://")) {
           BasicBottomSheet.Builder(this)
             .setTitleRes(R.string.ssh_scheme_needed_title)
             .setMessageRes(R.string.ssh_scheme_needed_message)
@@ -177,9 +177,14 @@ class GitServerConfigActivity : BaseGitActivity() {
     }
   }
 
-  private fun setAuthModes(isHttps: Boolean) =
+  private fun setAuthModes(url: CharSequence) =
     with(binding) {
-      if (isHttps) {
+      if (url.startsWith("git://")) {
+        authModeSshKey.isVisible = false
+        authModeOpenKeychain.isVisible = false
+        authModePassword.isVisible = false
+        if (authModeGroup.checkedChipId != View.NO_ID) authModeGroup.check(View.NO_ID)
+      } else if (url.startsWith("http://") || url.startsWith("https://")) {
         authModeSshKey.isVisible = false
         authModeOpenKeychain.isVisible = false
         authModePassword.isVisible = true

@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 -   Allow doing a merge instead of a rebase when pulling or syncing
 -   Add support for manually providing TOTP parameters
 -   Parse extra content as individual fields
+-   Support for the [Git protocol](https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols#_the_git_protocol)
 
 ### Fixed
 

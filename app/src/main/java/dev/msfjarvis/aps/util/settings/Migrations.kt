@@ -65,6 +65,7 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
           }
         runCatching { if (URI(url).rawAuthority != null) url else null }.get()
       }
+      Protocol.Git -> null
     }
 
   sharedPrefs.edit {
