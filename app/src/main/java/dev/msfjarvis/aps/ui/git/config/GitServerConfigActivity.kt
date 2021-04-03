@@ -116,6 +116,15 @@ class GitServerConfigActivity : BaseGitActivity() {
           return@setOnClickListener
         }
       }
+      if (newUrl.startsWith("git://")) {
+        BasicBottomSheet.Builder(this)
+          .setTitleRes(R.string.git_scheme_disallowed_title)
+          .setMessageRes(R.string.git_scheme_disallowed_message)
+          .setPositiveButtonClickListener {}
+          .build()
+          .show(supportFragmentManager, "SSH_SCHEME_WARNING")
+        return@setOnClickListener
+      }
       when (val updateResult =
           GitSettings.updateConnectionSettingsIfValid(
             newAuthMode = newAuthMode,
