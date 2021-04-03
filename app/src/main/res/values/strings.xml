@@ -389,6 +389,8 @@
   <string name="ssh_scheme_needed_message">It appears that your URL contains a custom port, but does not specify the ssh:// scheme.\nThis can cause the port to be considered a part of your path. Press OK here to fix the URL.</string>
   <string name="https_scheme_with_port_title">HTTPS URL with custom port</string>
   <string name="https_scheme_with_port_message">It looks like you are using a HTTPS URL with a custom port. This is not supported, and will cause problems down the line. Press OK to remove the port from your URL.</string>
+  <string name="git_scheme_disallowed_title">Using the git:// protocol is discouraged</string>
+  <string name="git_scheme_disallowed_message">The git protocol provided by git-daemon performs no transport encryption and is unsuitable for secure operations.</string>
 
   <!-- Proxy configuration activity -->
   <string name="proxy_hostname">Proxy hostname</string>
