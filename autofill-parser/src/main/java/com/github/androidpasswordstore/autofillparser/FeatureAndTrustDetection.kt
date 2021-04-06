@@ -48,7 +48,6 @@ import androidx.annotation.RequiresApi
    check whether it correctly distinguishes web origins even if iframes are present on the page.
    You can use https://fabianhenneke.github.io/Android-Password-Store/ as a test form.
 */
-
 /*
  * **Security assumption**: Browsers on this list correctly report the web origin of the top-level
  * window as part of their AssistStructure.
@@ -208,7 +207,14 @@ private fun getBrowserAutofillSupportLevel(context: Context, appPackage: String)
     browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None -> BrowserAutofillSupportLevel.PasswordFill
     browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
     else -> BrowserAutofillSupportLevel.GeneralFillAndSave
+  }.takeUnless { supportLevel ->
+    // On Android Oreo, only browsers with native Autofill support can be used with Password Store
+    // (compatibility mode is only available on Android Pie and higher). Since all known browsers
+    // with native Autofill support offer full save support as well, we reuse the list of those
+    // browsers here.
+    supportLevel != BrowserAutofillSupportLevel.GeneralFillAndSave && Build.VERSION.SDK_INT < Build.VERSION_CODES.P
   }
+    ?: BrowserAutofillSupportLevel.None
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
