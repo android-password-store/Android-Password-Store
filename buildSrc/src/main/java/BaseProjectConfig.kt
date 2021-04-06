@@ -48,7 +48,6 @@ internal fun Project.configureForAllProjects() {
         includeModule("com.github.android-password-store", "zxing-android-embedded")
         includeModule("com.github.haroldadmin", "WhatTheStack")
         includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
-        includeModule("com.github.android-password-store", "sublime-fuzzy")
       }
     }
   }

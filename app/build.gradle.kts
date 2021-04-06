@@ -66,13 +66,13 @@ dependencies {
   implementation(Dependencies.Kotlin.Coroutines.android)
   implementation(Dependencies.Kotlin.Coroutines.core)
 
+  implementation(Dependencies.FirstParty.sublime_fuzzy)
   implementation(Dependencies.FirstParty.zxing_android_embedded)
 
   implementation(Dependencies.ThirdParty.bouncycastle)
   implementation(Dependencies.ThirdParty.commons_codec)
   implementation(Dependencies.ThirdParty.eddsa)
   implementation(Dependencies.ThirdParty.fastscroll)
-  implementation(Dependencies.ThirdParty.fuzzy)
   implementation(Dependencies.ThirdParty.jgit) {
     exclude(group = "org.apache.httpcomponents", module = "httpclient")
   }
