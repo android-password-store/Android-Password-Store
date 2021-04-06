@@ -71,6 +71,7 @@ object Dependencies {
     const val timber = "com.jakewharton.timber:timber:4.7.1"
     const val timberkt = "com.github.ajalt:timberkt:1.5.1"
     const val whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.0"
+    const val fuzzy = "com.github.android-password-store:sublime-fuzzy:develop-SNAPSHOT"
   }
 
   object NonFree {
