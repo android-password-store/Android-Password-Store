@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 -   Allow doing a merge instead of a rebase when pulling or syncing
 -   Add support for manually providing TOTP parameters
 -   Parse extra content as individual fields
--   Improved fuzzy matching algorithm
+-   Improve search result filtering logic
 
 ### Fixed
 
