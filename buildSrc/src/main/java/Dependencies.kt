@@ -52,6 +52,7 @@ object Dependencies {
 
   object FirstParty {
 
+    const val sublime_fuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0-alpha01"
     const val zxing_android_embedded = "com.github.android-password-store:zxing-android-embedded:4.1.0-aps"
   }
 

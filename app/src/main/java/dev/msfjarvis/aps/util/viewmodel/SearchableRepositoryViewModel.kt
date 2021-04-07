@@ -31,6 +31,7 @@ import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import dev.sphericalkat.sublimefuzzy.Fuzzy
 import java.io.File
 import java.text.Collator
 import java.util.Locale
@@ -55,31 +56,8 @@ private fun File.toPasswordItem() =
   else PasswordItem.newCategory(name, this, PasswordRepository.getRepositoryDirectory())
 
 private fun PasswordItem.fuzzyMatch(filter: String): Int {
-  var i = 0
-  var j = 0
-  var score = 0
-  var bonus = 0
-  var bonusIncrement = 0
-
-  val toMatch = longName
-
-  while (i < filter.length && j < toMatch.length) {
-    when {
-      filter[i].isWhitespace() -> i++
-      filter[i].toLowerCase() == toMatch[j].toLowerCase() -> {
-        i++
-        bonusIncrement += 1
-        bonus += bonusIncrement
-        score += bonus
-      }
-      else -> {
-        bonus = 0
-        bonusIncrement = 0
-      }
-    }
-    j++
-  }
-  return if (i == filter.length) score else 0
+  val (_, score) = Fuzzy.fuzzyMatch(filter, longName)
+  return score
 }
 
 private val CaseInsensitiveComparator = Collator.getInstance().apply { strength = Collator.PRIMARY }

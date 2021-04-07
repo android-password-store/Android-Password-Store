@@ -66,6 +66,7 @@ dependencies {
   implementation(Dependencies.Kotlin.Coroutines.android)
   implementation(Dependencies.Kotlin.Coroutines.core)
 
+  implementation(Dependencies.FirstParty.sublime_fuzzy)
   implementation(Dependencies.FirstParty.zxing_android_embedded)
 
   implementation(Dependencies.ThirdParty.bouncycastle)
