@@ -58,49 +58,43 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
         defaultValue = false
       }
 
+      val canAuthenticate = BiometricAuthenticator.canAuthenticate(activity)
       checkBox(PreferenceKeys.BIOMETRIC_AUTH) {
         titleRes = R.string.pref_biometric_auth_title
         defaultValue = false
-      }
-        .apply {
-          val canAuthenticate = BiometricAuthenticator.canAuthenticate(activity)
-          if (!canAuthenticate) {
-            enabled = false
-            checked = false
-            summaryRes = R.string.pref_biometric_auth_summary_error
-          } else {
-            summaryRes = R.string.pref_biometric_auth_summary
-            onClick {
-              enabled = false
-              val isChecked = checked
-              activity.sharedPrefs.edit {
-                BiometricAuthenticator.authenticate(activity) { result ->
-                  when (result) {
-                    is BiometricAuthenticator.Result.Success -> {
-                      // Apply the changes
-                      putBoolean(PreferenceKeys.BIOMETRIC_AUTH, checked)
-                      enabled = true
-                    }
-                    else -> {
-                      // If any error occurs, revert back to the previous
-                      // state. This
-                      // catch-all clause includes the cancellation case.
-                      putBoolean(PreferenceKeys.BIOMETRIC_AUTH, !checked)
-                      checked = !isChecked
-                      enabled = true
-                    }
-                  }
+        enabled = canAuthenticate
+        summaryRes =
+          if (canAuthenticate) R.string.pref_biometric_auth_summary else R.string.pref_biometric_auth_summary_error
+        onClick {
+          enabled = false
+          val isChecked = checked
+          activity.sharedPrefs.edit {
+            BiometricAuthenticator.authenticate(activity) { result ->
+              when (result) {
+                is BiometricAuthenticator.Result.Success -> {
+                  // Apply the changes
+                  putBoolean(PreferenceKeys.BIOMETRIC_AUTH, checked)
+                  enabled = true
+                }
+                else -> {
+                  // If any error occurs, revert back to the previous
+                  // state. This
+                  // catch-all clause includes the cancellation case.
+                  putBoolean(PreferenceKeys.BIOMETRIC_AUTH, !checked)
+                  checked = !isChecked
+                  enabled = true
                 }
               }
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                activity.getSystemService<ShortcutManager>()?.apply {
-                  removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
-                }
-              }
-              false
             }
           }
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            activity.getSystemService<ShortcutManager>()?.apply {
+              removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
+            }
+          }
+          false
         }
+      }
     }
   }
 }
