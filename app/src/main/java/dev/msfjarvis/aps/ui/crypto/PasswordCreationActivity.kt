@@ -7,6 +7,7 @@ package dev.msfjarvis.aps.ui.crypto
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputType
 import android.view.Menu
@@ -158,22 +159,27 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             else binding.extraContent.append(contents)
           }
         }
-        val items = arrayOf(getString(R.string.otp_import_qr_code), getString(R.string.otp_import_manual_entry))
-        MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-          .setItems(items) { _, index ->
-            if (index == 0) {
-              otpImportAction.launch(
-                IntentIntegrator(this@PasswordCreationActivity)
-                  .setOrientationLocked(false)
-                  .setBeepEnabled(false)
-                  .setDesiredBarcodeFormats(QR_CODE)
-                  .createScanIntent()
-              )
-            } else if (index == 1) {
-              OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+        val hasCamera = packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true
+        if (hasCamera) {
+          val items = arrayOf(getString(R.string.otp_import_qr_code), getString(R.string.otp_import_manual_entry))
+          MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+            .setItems(items) { _, index ->
+              when (index) {
+                0 ->
+                  otpImportAction.launch(
+                    IntentIntegrator(this@PasswordCreationActivity)
+                      .setOrientationLocked(false)
+                      .setBeepEnabled(false)
+                      .setDesiredBarcodeFormats(QR_CODE)
+                      .createScanIntent()
+                  )
+                1 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+              }
             }
-          }
-          .show()
+            .show()
+        } else {
+          OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+        }
       }
 
       directoryInputLayout.apply {
