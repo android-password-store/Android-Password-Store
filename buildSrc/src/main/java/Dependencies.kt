@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-private const val KOTLIN_VERSION = "1.4.31"
+private const val KOTLIN_VERSION = "1.4.32"
 
 object Plugins {
   const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.3"
   const val binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4"
-  const val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
+  const val dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.30"
   const val downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
   const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
   const val ktfmtGradlePlugin = "com.ncorti.ktfmt.gradle:plugin:0.5.0"
@@ -30,7 +30,7 @@ object Dependencies {
 
     private const val lifecycleVersion = "2.4.0-alpha01"
 
-    const val activity_ktx = "androidx.activity:activity-ktx:1.3.0-alpha05"
+    const val activity_ktx = "androidx.activity:activity-ktx:1.3.0-alpha06"
     const val annotation = "androidx.annotation:annotation:1.2.0"
     const val autofill = "androidx.autofill:autofill:1.2.0-alpha01"
     const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
@@ -42,9 +42,9 @@ object Dependencies {
     const val lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-    const val material = "com.google.android.material:material:1.4.0-alpha01"
+    const val material = "com.google.android.material:material:1.4.0-alpha02"
     const val preference = "androidx.preference:preference:1.1.1"
-    const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0-rc01"
+    const val recycler_view = "androidx.recyclerview:recyclerview:1.2.0"
     const val recycler_view_selection = "androidx.recyclerview:recyclerview-selection:1.1.0"
     const val security = "androidx.security:security-crypto:1.1.0-alpha03"
     const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
@@ -52,7 +52,7 @@ object Dependencies {
 
   object FirstParty {
 
-    const val sublime_fuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0-alpha01"
+    const val sublime_fuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
     const val zxing_android_embedded = "com.github.android-password-store:zxing-android-embedded:4.1.0-aps"
   }
 
@@ -64,9 +64,9 @@ object Dependencies {
     const val fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
     const val jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
     const val kotlin_result = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.6"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
     const val modern_android_prefs = "de.maxr1998:modernandroidpreferences:2.0"
-    const val plumber = "com.squareup.leakcanary:plumber-android:2.6"
+    const val plumber = "com.squareup.leakcanary:plumber-android:2.7"
     const val sshj = "com.hierynomus:sshj:0.31.0"
     const val ssh_auth = "com.github.open-keychain.open-keychain:sshauthentication-api:v5.7.1"
     const val timber = "com.jakewharton.timber:timber:4.7.1"
