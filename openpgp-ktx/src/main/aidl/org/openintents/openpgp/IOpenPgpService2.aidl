@@ -1,6 +1,6 @@
 /*
  * Copyright © 2019 The Android Password Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-Only
+ * SPDX-License-Identifier: Apache-2.0
  */
 package org.openintents.openpgp;
 
