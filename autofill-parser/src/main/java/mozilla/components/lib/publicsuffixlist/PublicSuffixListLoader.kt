@@ -1,11 +1,7 @@
 /*
- * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
- * SPDX-License-Identifier: GPL-3.0-only
- */
-
-/*
  * SPDX-License-Identifier: (LGPL-3.0-only WITH LGPL-3.0-linking-exception) OR MPL-2.0
  */
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
