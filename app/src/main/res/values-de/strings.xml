@@ -33,7 +33,7 @@
   <!-- git commits -->
   <string name="git_commit_add_text">Füge generiertes Passwort für %1$s mittels Android Passwort Store hinzu.</string>
   <string name="git_commit_edit_text">Bearbeite das Passwort für %1$s mittels Android Password Store.</string>
-  <string name="git_commit_remove_text">%1$s aus dem Speicher entfernen.</string>
+  <string name="git_commit_remove_text">%1$s aus dem Shop entfernen.</string>
   <string name="git_commit_move_text">Benenne %1$s in %2$s um.</string>
   <string name="git_commit_move_multiple_text">Verschiebe mehrere Passwörter nach %1$s.</string>
   <string name="git_commit_gpg_id">Initialisiere GPG-IDs in %1$s.</string>
@@ -196,14 +196,14 @@
   <string name="oreo_autofill_match_with">Übereinstimmung mit %1$s</string>
   <string name="oreo_autofill_matches_clear_existing">Bestehende Übereinstimmungen löschen</string>
   <string name="oreo_autofill_filter_no_results">Keine Ergebnisse.</string>
-  <string name="oreo_autofill_search_in_store">Suche im Speicher…</string>
+  <string name="oreo_autofill_search_in_store">Suche im Shop…</string>
   <string name="oreo_autofill_save_internal_error">Speichern aufgrund eines internen Fehlers fehlgeschlagen</string>
   <string name="oreo_autofill_save_app_not_supported">Diese App wird derzeit nicht unterstützt</string>
   <string name="oreo_autofill_save_passwords_dont_match">Die Passwörter stimmen nicht überein</string>
   <string name="oreo_autofill_generate_password">Passwort generieren…</string>
   <string name="oreo_autofill_fill_otp_from_sms">Code aus SMS extrahieren…</string>
   <string name="oreo_autofill_max_matches_reached">Maximale Anzahl an Übereinstimmungen (%1$d) erreicht; Lösche Übereinstimmungen, bevor neue hinzugefügt werden.</string>
-  <string name="oreo_autofill_warning_publisher_header">Der Hersteller dieser App hat sich geändert, seit Sie einen Eintrag zum Passwort-Speicher mit ihm verknüpft haben:</string>
+  <string name="oreo_autofill_warning_publisher_header">Der Hersteller dieser App hat sich geändert, seit Sie einen Eintrag zum Passwort-Shop mit ihm verknüpft haben:</string>
   <string name="oreo_autofill_warning_publisher_footer"><b>Die derzeit installierte App versucht, Ihre Anmeldeinformationen zu stehlen, indem sie vorgibt, eine vertrauenswürdige App zu sein.</b>\n\nVersuchen Sie die App zu deinstallieren und installieren Sie sie erneut aus einer vertrauenswürdigen Quelle wie dem Play Store, Amazon Appstore, F-Droid oder dem Shop Ihres Telefonherstellers.</string>
   <string name="oreo_autofill_warning_publisher_install_time">Installiert: %1$s</string>
   <string name="oreo_autofill_warning_publisher_advanced_info_button">Erweiterte Informationen</string>
