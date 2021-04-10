@@ -40,6 +40,8 @@ internal fun Project.configureForAllProjects() {
       content {
         // https://github.com/zhanghai/AndroidFastScroll/issues/35
         includeModule("me.zhanghai.android.fastscroll", "library")
+
+        includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
       }
     }
     maven("https://jitpack.io") {
