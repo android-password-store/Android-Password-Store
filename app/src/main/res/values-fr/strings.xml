@@ -46,7 +46,7 @@
   <string name="clipboard_password_no_clear_toast_text">Mot de passe copié dans le presse-papiers</string>
   <string name="clipboard_copied_text">Copié dans le presse-papiers</string>
   <string name="clipboard_otp_copied_text">Code OTP copié dans le presse-papiers</string>
-  <string name="file_toast_text">Renseignez un nom de fichier</string>
+  <string name="file_toast_text">Veuillez fournir un nom de fichier</string>
   <string name="path_toast_text">Veuillez fournir un chemin d\'accès au fichier</string>
   <string name="empty_toast_text">Vous ne pouvez pas utiliser un mot de passe vide ou des données supplémentaires vide</string>
   <!-- Git Async Task -->
@@ -273,11 +273,17 @@
   <string name="clone_git_repo">Le dépôt doit être cloné avant de synchroniser les modifications.</string>
   <string name="pref_app_theme_title">Thème de l\'application</string>
   <string name="pref_app_theme_value_light">Clair</string>
+  <string name="pref_app_theme_value_dark">Sombre</string>
+  <string name="pref_app_theme_value_battery_saver">Défini par l\'économiseur de batterie</string>
+  <string name="pref_app_theme_value_follow_system">Valeur par défaut du système</string>
   <string name="connection_mode_ssh_key">Clé SSH</string>
   <string name="connection_mode_basic_authentication">Mot de passe</string>
+  <string name="git_server_config_save_success">Configuration enregistrée avec succès</string>
   <string name="git_server_config_save_error">L\'URL du dépôt fournie n\'est pas valide</string>
   <string name="git_server_config_save_missing_username_https">Veuillez spécifier le nom d\'utilisateur HTTPS sous la forme https://nom@exemple.com/…</string>
   <string name="git_server_config_save_missing_username_ssh">Veuillez spécifier le nom d\'utilisateur SSH sous la forme nom@example.com:…</string>
+  <string name="git_server_config_save_auth_mode_mismatch">Modes d\'authentification valides pour %1$s: %2$s</string>
+  <string name="git_operation_wrong_passphrase">Phrase de passe erronée</string>
   <string name="git_operation_wrong_password">Mot de passe incorrect</string>
   <string name="bottom_sheet_create_new_folder">Créer un dossier</string>
   <string name="bottom_sheet_create_new_password">Créer un mot de passe</string>
@@ -292,20 +298,34 @@
   <string name="preference_custom_public_suffixes_summary">Le remplissage automatique distinguera les sous-domaines de ces domaines</string>
   <string name="preference_custom_public_suffixes_hint">societe.com\npersonnel.com</string>
   <!-- OpenKeychain errors -->
+  <string name="openpgp_error_wrong_passphrase">Phrase de passe incorrecte</string>
   <string name="openpgp_error_no_user_ids">Aucune clé PGP correspondante trouvée</string>
   <string name="openpgp_error_unknown">Erreur d\'OpenKeyChain : %s</string>
   <!-- Password creation failure -->
   <string name="password_creation_file_fail_title">Erreur</string>
+  <string name="password_creation_file_write_fail_message">Impossible d\'écrire le fichier de mot de passe dans le magasin, veuillez réessayer.</string>
+  <string name="password_creation_file_delete_fail_message">Impossible de supprimer le fichier de mot de passe %1$s du magasin, veuillez le supprimer manuellement.</string>
+  <string name="password_creation_duplicate_error">Le fichier existe déjà, veuillez utiliser un autre nom</string>
+  <string name="add_otp">Ajouter OTP</string>
+  <string name="otp_import_success">Configuration TOTP importée avec succès</string>
+  <string name="otp_import_failure">Impossible d\'importer la configuration TOTP</string>
   <string name="exporting_passwords">Exportation des mots de passe…</string>
+  <string name="invalid_gpg_id">.gpg-id trouvé, mais il contient un ID de clé, une empreinte digitale ou un ID utilisateur invalide</string>
   <string name="short_key_ids_unsupported">Un ID de clé dans .gpg-id est trop court, veuillez utiliser soit des identifiants de clés longs (16 caractères) soit des empreintes digitales (40 caractères)</string>
+  <string name="invalid_filename_text">Le nom du fichier ne doit pas contenir \'/\', définir le répertoire parent</string>
   <string name="directory_hint">Dossier</string>
   <string name="new_folder_set_gpg_key">Définir la clé GPG pour le dossier</string>
   <!-- GitException messages -->
   <string name="git_unknown_error">Erreur inconnue</string>
+  <string name="git_pull_rebase_fail_error">Tirer a échoué, vous êtes dans un \'head\' détaché. En utilisant \"settings &gt; git utils\", enregistrez vos modifications sur le dépôt distant dans une nouvelle branche et résolvez le conflit sur votre ordinateur.</string>
+  <string name="git_pull_merge_fail_error">La fusion a échoué, vous êtes dans un état de conflit. TODO : Ajouter une méthode de récupération.</string>
   <string name="git_push_nff_error">La poussée a été rejetée par le dépôt distant, exécutez une tirée avant de pousser à nouveau. Vous pouvez utiliser Synchroniser plutôt que de tirer/pousser car il implémente les deux.</string>
+  <string name="git_push_generic_error">L\'envoi a été rejeté par le dépôt distant, raison : %1$s</string>
   <string name="git_push_other_error">Pousser au dépôt distant sans avance rapide rejetée. Vérifiez la variable receive.denyNonFastForwards dans le fichier de configuration du répertoire de destination.</string>
   <string name="git_unknown_host">Hôte inconnu : %1$s</string>
   <string name="git_operation_running">Opération git en cours…</string>
+  <string name="git_break_out_of_detached_success">Il y a eu un conflit lors de la tentative de rebase. Votre branche locale %1$s a été poussée vers une autre branche nommée %2$s\n Utilisez cette branche pour résoudre les conflits sur votre ordinateur</string>
+  <string name="git_break_out_of_detached_unneeded">Le dépôt n\'est pas rebasé, pas besoin de pousser vers une autre branche</string>
   <!-- OpenKeychain not installed -->
   <string name="openkeychain_not_installed_title">OpenKeychain non installé</string>
   <string name="openkeychain_not_installed_message">OpenKeychain est nécessaire pour le fonctionnement de Password Store, veuillez l\'installer depuis l\'une des boutiques d\'applications ci-dessous</string>
@@ -318,6 +338,30 @@
   <string name="folder_creation_err_folder_exists">Un dossier portant ce nom existe déjà</string>
   <string name="xkpwgen_extrachars_label">Chiffres(d)/Symboles(s)</string>
   <!-- Onboarding flow -->
+  <string name="repository_n_location">Emplacement du dépôt \n</string>
+  <string name="let_s_go">Allons-y</string>
+  <string name="select_n_repository_type">Sélectionnez le type de dépôt \n</string>
+  <string name="select_repo_type_text">Sélectionnez si vous voulez créer un dépôt local ou cloner un dépôt distant.</string>
+  <string name="clone_remote_repo">Cloner le dépôt distant</string>
+  <string name="create_local_repo">Créer un dépôt local</string>
+  <string name="select_gpg_key_title">Sélectionnez\nla clé GPG</string>
+  <string name="select_gpg_key_message">Sélectionnez une clé GPG pour initialiser votre magasin</string>
+  <string name="gpg_key_select">Sélectionner la clé</string>
   <!-- SSH port validation -->
+  <string name="ssh_scheme_needed_title">URL potentiellement incorrecte</string>
+  <string name="ssh_scheme_needed_message">Il semble que votre URL contienne un port personnalisé, mais ne spécifie pas le schéma ssh:// .\nCela peut faire que le port soit considéré comme une partie de votre chemin. Appuyez sur OK ici pour corriger l\'URL.</string>
+  <string name="https_scheme_with_port_title">URL HTTPS avec port personnalisé</string>
+  <string name="https_scheme_with_port_message">Il semble que vous utilisez une URL HTTPS avec un port personnalisé. Ceci n\'est pas pris en charge et causera des problèmes par la suite. Appuyez sur OK pour supprimer le port de votre URL.</string>
   <!-- Proxy configuration activity -->
+  <string name="proxy_hostname">Nom d\'hôte du proxy</string>
+  <string name="port">Port</string>
+  <string name="pref_edit_proxy_settings">Paramètres du proxy HTTP(S)</string>
+  <string name="invalid_proxy_url">URL invalide</string>
+  <string name="oreo_autofill_password_fill_and_conditional_save_support">Remplir et enregistrer les mots de passe (enregistrer nécessite qu\'aucun service d\'accessibilité ne soit activé)</string>
+  <string name="clear_saved_host_key">Effacer la clé d\'hôte enregistrée</string>
+  <string name="clear_saved_host_key_success">La clé d\'hôte a été effacée avec succès!</string>
+  <string name="otp_import_qr_code">Scanner le code QR</string>
+  <string name="otp_import_manual_entry">Saisir manuellement</string>
+  <string name="otp_import_manual_hint_secret">Secret</string>
+  <string name="otp_import_manual_hint_account">Compte</string>
 </resources>
