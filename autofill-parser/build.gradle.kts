@@ -23,9 +23,9 @@ android {
 }
 
 dependencies {
-  compileOnly(Dependencies.AndroidX.annotation)
-  implementation(Dependencies.AndroidX.autofill)
-  implementation(Dependencies.Kotlin.Coroutines.android)
-  implementation(Dependencies.Kotlin.Coroutines.core)
-  implementation(Dependencies.ThirdParty.timberkt)
+  compileOnly(libs.androidx.annotation)
+  implementation(libs.androidx.autofill)
+  implementation(libs.kotlin.coroutines.android)
+  implementation(libs.kotlin.coroutines.core)
+  implementation(libs.thirdparty.timberkt)
 }
