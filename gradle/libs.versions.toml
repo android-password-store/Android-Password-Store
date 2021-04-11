@@ -69,5 +69,6 @@ androidx-testing-runner = { module = "androidx.test:runner", version.ref="androi
 
 # Bundles of dependencies usually used together so they can be included in one go
 [bundles]
+androidxLifecycle = ["androidx-lifecycle_common", "androidx-lifecycle_livedataKtx", "androidx-lifecycle_viewmodelKtx"]
 testDependencies = ["testing-junit", "testing-kotlin_test_junit"]
 androidTestDependencies = ["androidx-testing-rules", "androidx-testing-runner"]
