@@ -63,12 +63,12 @@ thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-service
 
 # Testing dependencies
 testing-junit = "junit:junit:4.13.2"
-testing-kotlin_test_junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 androidx-testing-rules = { module = "androidx.test:rules", version.ref="androidx_test" }
 androidx-testing-runner = { module = "androidx.test:runner", version.ref="androidx_test" }
 
 # Bundles of dependencies usually used together so they can be included in one go
 [bundles]
 androidxLifecycle = ["androidx-lifecycle_common", "androidx-lifecycle_livedataKtx", "androidx-lifecycle_viewmodelKtx"]
-testDependencies = ["testing-junit", "testing-kotlin_test_junit"]
+testDependencies = ["testing-junit", "testing-kotlintest-junit"]
 androidTestDependencies = ["androidx-testing-rules", "androidx-testing-runner"]
