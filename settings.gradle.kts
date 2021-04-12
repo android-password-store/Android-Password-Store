@@ -8,6 +8,9 @@ include(":app")
 
 include(":openpgp-ktx")
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("VERSION_CATALOGS")
+
 pluginManagement {
   repositories {
     gradlePluginPortal()

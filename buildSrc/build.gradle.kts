@@ -5,7 +5,7 @@
 
 plugins {
   `kotlin-dsl`
-  id("com.ncorti.ktfmt.gradle") version "0.4.0"
+  id("com.ncorti.ktfmt.gradle") version "0.5.0"
 }
 
 repositories {
@@ -20,8 +20,6 @@ ktfmt {
   googleStyle()
   maxWidth.set(120)
 }
-
-kotlinDslPluginOptions { experimentalWarning.set(false) }
 
 gradlePlugin {
   plugins {
@@ -41,12 +39,12 @@ gradlePlugin {
 }
 
 dependencies {
-  implementation(Plugins.androidGradlePlugin)
-  implementation(Plugins.binaryCompatibilityValidator)
-  implementation(Plugins.dokkaPlugin)
-  implementation(Plugins.downloadTaskPlugin)
-  implementation(Plugins.kotlinGradlePlugin)
-  implementation(Plugins.ktfmtGradlePlugin)
-  implementation(Plugins.mavenPublishPlugin)
-  implementation(Plugins.semver4j)
+  implementation(libs.androidGradlePlugin)
+  implementation(libs.binaryCompatibilityValidator)
+  implementation(libs.dokkaPlugin)
+  implementation(libs.downloadTaskPlugin)
+  implementation(libs.kotlinGradlePlugin)
+  implementation(libs.ktfmtGradlePlugin)
+  implementation(libs.mavenPublishPlugin)
+  implementation(libs.semver4j)
 }

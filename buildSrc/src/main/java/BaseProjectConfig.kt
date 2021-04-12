@@ -24,9 +24,9 @@ internal fun Project.configureForRootProject() {
   // register task for cleaning the build directory in the root project
   tasks.register("clean", Delete::class.java) { delete(rootProject.buildDir) }
   tasks.withType<Wrapper> {
-    gradleVersion = "6.8.3"
+    gradleVersion = "7.0"
     distributionType = Wrapper.DistributionType.ALL
-    distributionSha256Sum = "9af5c8e7e2cd1a3b0f694a4ac262b9f38c75262e74a9e8b5101af302a6beadd7"
+    distributionSha256Sum = "81003f83b0056d20eedf48cddd4f52a9813163d4ba185bcf8abd34b8eeea4cbd"
   }
   configureBinaryCompatibilityValidator()
 }
@@ -40,6 +40,8 @@ internal fun Project.configureForAllProjects() {
       content {
         // https://github.com/zhanghai/AndroidFastScroll/issues/35
         includeModule("me.zhanghai.android.fastscroll", "library")
+
+        includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
       }
     }
     maven("https://jitpack.io") {

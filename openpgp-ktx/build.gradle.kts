@@ -20,4 +20,4 @@ android {
   kotlinOptions { freeCompilerArgs = freeCompilerArgs + listOf("-Xexplicit-api=strict") }
 }
 
-dependencies { implementation(Dependencies.Kotlin.Coroutines.core) }
+dependencies { implementation(libs.kotlin.coroutines.core) }
