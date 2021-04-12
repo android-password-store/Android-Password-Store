@@ -27,32 +27,21 @@ jobs:
           echo '::set-output name=PROJECT::autofill-parser'
         fi
 
-    - name: Setup secrets
-      run: |
-        # Using --batch doesn't prompt for a password for importing, which works
-        # out for us since we supply it to the Gradle plugin directly.
-        echo "${NEXUS_PUBLISH_GPG_KEY}" | base64 --decode | gpg --batch --import
-
-        # Set environment variables
-        echo "SONATYPE_NEXUS_USERNAME=${NEXUS_PUBLISH_USERNAME}" >> $GITHUB_ENV
-        echo "SONATYPE_NEXUS_PASSWORD=${NEXUS_PUBLISH_PASSWORD}" >> $GITHUB_ENV
-        # The ORG_GRADLE_PROJECT_ prefixed properties are equivalent to ./gradlew -Pproperty.name=value
-        echo "ORG_GRADLE_PROJECT_signing.keyId=${NEXUS_PUBLISH_GPG_KEY_ID}" >> $GITHUB_ENV
-        echo "ORG_GRADLE_PROJECT_signing.password=${NEXUS_PUBLISH_GPG_KEY_PASSWORD}" >> $GITHUB_ENV
-        echo "ORG_GRADLE_PROJECT_signing.secretKeyRingFile=$HOME/.gnupg/secring.gpg" >> $GITHUB_ENV
-      env:
-        NEXUS_PUBLISH_GPG_KEY: ${{ secrets.NEXUS_PUBLISH_GPG_KEY }}
-        NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
-        NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
-        NEXUS_PUBLISH_GPG_KEY_ID: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_ID }}
-        NEXUS_PUBLISH_GPG_KEY_PASSWORD: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
-
     - name: Upload binaries
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: :${{ steps.task-select.outputs.PROJECT }}:uploadArchives
+      env:
+        SONATYPE_NEXUS_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+        SONATYPE_NEXUS_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.NEXUS_PUBLISH_GPG_KEY }}
+        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_ID }}
+        ORG_GRADLE_PROJECT_signingKeyPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
 
     - name: Close and release repository
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: closeAndReleaseRepository
+      env:
+        SONATYPE_NEXUS_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+        SONATYPE_NEXUS_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
