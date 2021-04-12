@@ -21,8 +21,6 @@ ktfmt {
   maxWidth.set(120)
 }
 
-kotlinDslPluginOptions { experimentalWarning.set(false) }
-
 gradlePlugin {
   plugins {
     register("aps") {
