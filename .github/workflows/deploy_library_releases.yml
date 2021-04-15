@@ -35,8 +35,7 @@ jobs:
         SONATYPE_NEXUS_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
         SONATYPE_NEXUS_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.NEXUS_PUBLISH_GPG_KEY }}
-        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_ID }}
-        ORG_GRADLE_PROJECT_signingKeyPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
 
     - name: Close and release repository
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
