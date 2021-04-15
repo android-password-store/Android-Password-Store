@@ -16,6 +16,8 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.gradle.plugins.signing.SigningExtension
+import org.gradle.plugins.signing.SigningPlugin
 
 class PasswordStorePlugin : Plugin<Project> {
 
@@ -44,6 +46,9 @@ class PasswordStorePlugin : Plugin<Project> {
         }
         is KtfmtPlugin -> {
           project.extensions.getByType<KtfmtExtension>().configureKtfmt()
+        }
+        is SigningPlugin -> {
+          project.extensions.getByType<SigningExtension>().configureBuildSigning()
         }
       }
     }

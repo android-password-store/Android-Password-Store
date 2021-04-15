@@ -6,6 +6,8 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import java.util.Properties
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.plugins.signing.SigningExtension
 
 private const val KEYSTORE_CONFIG_PATH = "keystore.properties"
 
@@ -29,4 +31,10 @@ internal fun BaseAppModuleExtension.configureBuildSigning(project: Project) {
     val signingConfig = signingConfigs.getByName("release")
     buildTypes.all { setSigningConfig(signingConfig) }
   }
+}
+
+internal fun SigningExtension.configureBuildSigning() {
+  val signingKey: String? by project
+  val signingPassword: String? by project
+  useInMemoryPgpKeys(signingKey, signingPassword)
 }
