@@ -114,6 +114,11 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
     targetSdkVersion(29)
   }
 
+  sourceSets {
+    named("main") { java.srcDirs("src/main/kotlin") }
+    named("test") { java.srcDirs("src/test/kotlin") }
+  }
+
   packagingOptions {
     exclude("**/*.version")
     exclude("**/*.txt")
