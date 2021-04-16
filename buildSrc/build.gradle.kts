@@ -12,8 +12,6 @@ repositories {
   google()
   gradlePluginPortal()
   mavenCentral()
-  // For binary compatibility validator.
-  maven { url = uri("https://kotlin.bintray.com/kotlinx") }
 }
 
 ktfmt {
@@ -40,7 +38,7 @@ gradlePlugin {
 
 dependencies {
   implementation("com.android.tools.build:gradle:4.1.3")
-  implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4")
+  implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.5.0")
   implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
   implementation("de.undercouch:gradle-download-task:4.1.1")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
