@@ -39,12 +39,12 @@ gradlePlugin {
 }
 
 dependencies {
-  implementation(libs.androidGradlePlugin)
-  implementation(libs.binaryCompatibilityValidator)
-  implementation(libs.dokkaPlugin)
-  implementation(libs.downloadTaskPlugin)
-  implementation(libs.kotlinGradlePlugin)
-  implementation(libs.ktfmtGradlePlugin)
-  implementation(libs.mavenPublishPlugin)
-  implementation(libs.semver4j)
+  implementation("com.android.tools.build:gradle:4.1.3")
+  implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.2.4")
+  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
+  implementation("de.undercouch:gradle-download-task:4.1.1")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
+  implementation("com.ncorti.ktfmt.gradle:plugin:0.5.0")
+  implementation("com.vanniktech:gradle-maven-publish-plugin:0.13.0")
+  implementation("com.vdurmont:semver4j:3.1.0")
 }

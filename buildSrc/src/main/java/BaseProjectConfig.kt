@@ -36,7 +36,7 @@ internal fun Project.configureForAllProjects() {
   repositories {
     google()
     mavenCentral()
-    jcenter() {
+    jcenter {
       content {
         // https://github.com/zhanghai/AndroidFastScroll/issues/35
         includeModule("me.zhanghai.android.fastscroll", "library")
