@@ -41,6 +41,7 @@ dependencies {
   implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.5.0")
   implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
   implementation("de.undercouch:gradle-download-task:4.1.1")
+  implementation("com.google.dagger:hilt-android-gradle-plugin:2.34.1-beta")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
   implementation("com.ncorti.ktfmt.gradle:plugin:0.5.0")
   implementation("com.vanniktech:gradle-maven-publish-plugin:0.13.0")
