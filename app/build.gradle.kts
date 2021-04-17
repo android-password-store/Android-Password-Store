@@ -7,6 +7,8 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 plugins {
   id("com.android.application")
   kotlin("android")
+  kotlin("kapt")
+  id("dagger.hilt.android.plugin")
   `versioning-plugin`
   `aps-plugin`
   `crowdin-plugin`
@@ -22,6 +24,7 @@ android {
       }
     }
   }
+  compileOptions { isCoreLibraryDesugaringEnabled = true }
 
   defaultConfig {
     applicationId = "dev.msfjarvis.aps"
@@ -42,7 +45,9 @@ android {
 }
 
 dependencies {
+  kapt(libs.dagger.hilt.compiler)
   compileOnly(libs.androidx.annotation)
+  coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.autofillParser)
   implementation(projects.openpgpKtx)
   implementation(libs.androidx.activityKtx)
@@ -60,6 +65,7 @@ dependencies {
   implementation(libs.androidx.recyclerviewSelection)
   implementation(libs.androidx.security)
   implementation(libs.androidx.swiperefreshlayout)
+  implementation(libs.dagger.hilt.android)
 
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)

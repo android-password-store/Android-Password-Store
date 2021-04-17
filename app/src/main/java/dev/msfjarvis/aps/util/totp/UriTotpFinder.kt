@@ -6,9 +6,10 @@
 package dev.msfjarvis.aps.util.totp
 
 import android.net.Uri
+import javax.inject.Inject
 
 /** [Uri] backed TOTP URL parser. */
-class UriTotpFinder : TotpFinder {
+class UriTotpFinder @Inject constructor() : TotpFinder {
 
   override fun findSecret(content: String): String? {
     content.split("\n".toRegex()).forEach { line ->
