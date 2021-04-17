@@ -1,0 +1,30 @@
+public final class dev/msfjarvis/aps/data/passfile/PasswordEntry {
+	public static final field Companion Ldev/msfjarvis/aps/data/passfile/PasswordEntry$Companion;
+	public fun <init> (Ldev/msfjarvis/aps/util/time/UserClock;Ldev/msfjarvis/aps/util/totp/TotpFinder;Lkotlinx/coroutines/CoroutineScope;[B)V
+	public final fun getExtraContent ()Ljava/util/Map;
+	public final fun getExtraContentWithoutAuthData ()Ljava/lang/String;
+	public final fun getPassword ()Ljava/lang/String;
+	public final fun getTotp ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getUsername ()Ljava/lang/String;
+	public final fun hasTotp ()Z
+}
+
+public class dev/msfjarvis/aps/util/time/UserClock : java/time/Clock {
+	public fun <init> ()V
+	public fun getZone ()Ljava/time/ZoneId;
+	public fun instant ()Ljava/time/Instant;
+	public fun withZone (Ljava/time/ZoneId;)Ljava/time/Clock;
+}
+
+public abstract interface class dev/msfjarvis/aps/util/totp/TotpFinder {
+	public static final field Companion Ldev/msfjarvis/aps/util/totp/TotpFinder$Companion;
+	public abstract fun findAlgorithm (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun findDigits (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun findPeriod (Ljava/lang/String;)J
+	public abstract fun findSecret (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class dev/msfjarvis/aps/util/totp/TotpFinder$Companion {
+	public final fun getTOTP_FIELDS ()[Ljava/lang/String;
+}
+
