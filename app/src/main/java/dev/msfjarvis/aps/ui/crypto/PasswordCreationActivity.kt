@@ -28,10 +28,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.data.password.PasswordEntry
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
+import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
@@ -49,15 +50,18 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 
+@AndroidEntryPoint
 class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
+  @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
 
   private val suggestedName by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_FILE_NAME) }
   private val suggestedPass by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_PASSWORD) }
@@ -221,7 +225,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             } else {
               // User wants to disable username encryption, so we extract the
               // username from the encrypted extras and use it as the filename.
-              val entry = PasswordEntry("PASSWORD\n${extraContent.text}")
+              val entry =
+                passwordEntryFactory.create(lifecycleScope, "PASSWORD\n${extraContent.text}".encodeToByteArray())
               val username = entry.username
 
               // username should not be null here by the logic in
@@ -288,11 +293,11 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
   private fun updateViewState() =
     with(binding) {
       // Use PasswordEntry to parse extras for username
-      val entry = PasswordEntry("PLACEHOLDER\n${extraContent.text}")
+      val entry = passwordEntryFactory.create(lifecycleScope, "PLACEHOLDER\n${extraContent.text}".encodeToByteArray())
       encryptUsername.apply {
         if (visibility != View.VISIBLE) return@apply
         val hasUsernameInFileName = filename.text.toString().isNotBlank()
-        val hasUsernameInExtras = entry.hasUsername()
+        val hasUsernameInExtras = !entry.username.isNullOrBlank()
         isEnabled = hasUsernameInFileName xor hasUsernameInExtras
         isChecked = hasUsernameInExtras
       }
@@ -430,7 +435,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
                 if (shouldGeneratePassword) {
                   val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
-                  val entry = PasswordEntry(content)
+                  val entry = passwordEntryFactory.create(lifecycleScope, content.encodeToByteArray())
                   returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
                   val username = entry.username ?: directoryStructure.getUsernameFor(file)
                   returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)

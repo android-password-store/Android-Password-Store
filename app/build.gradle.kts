@@ -49,6 +49,7 @@ dependencies {
   compileOnly(libs.androidx.annotation)
   coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.autofillParser)
+  implementation(projects.formatCommon)
   implementation(projects.openpgpKtx)
   implementation(libs.androidx.activityKtx)
   implementation(libs.androidx.appcompat)
@@ -74,7 +75,6 @@ dependencies {
   implementation(libs.aps.zxingAndroidEmbedded)
 
   implementation(libs.thirdparty.bouncycastle)
-  implementation(libs.thirdparty.commons.codec)
   implementation(libs.thirdparty.eddsa)
   implementation(libs.thirdparty.fastscroll)
   implementation(libs.thirdparty.jgit) {

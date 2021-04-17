@@ -16,6 +16,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
@@ -24,7 +25,8 @@ import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
-import dev.msfjarvis.aps.data.password.PasswordEntry
+import dagger.hilt.android.AndroidEntryPoint
+import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
@@ -33,6 +35,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
+import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -49,6 +52,7 @@ import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
 @RequiresApi(Build.VERSION_CODES.O)
+@AndroidEntryPoint
 class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
 
   companion object {
@@ -76,6 +80,8 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
         .intentSender
     }
   }
+
+  @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
 
   private val decryptInteractionRequiredAction =
     registerForActivityResult(StartIntentSenderForResult()) { result ->
@@ -183,7 +189,8 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
                 runCatching {
                   val entry =
                     withContext(Dispatchers.IO) {
-                      @Suppress("BlockingMethodInNonBlockingContext") (PasswordEntry(decryptedOutput))
+                      @Suppress("BlockingMethodInNonBlockingContext")
+                      passwordEntryFactory.create(lifecycleScope, decryptedOutput.toByteArray())
                     }
                   AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
                 }

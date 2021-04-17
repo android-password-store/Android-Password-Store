@@ -8,7 +8,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.github.androidpasswordstore.autofillparser.Credentials
-import dev.msfjarvis.aps.data.password.PasswordEntry
+import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.services.getDefaultUsername
@@ -139,6 +139,6 @@ object AutofillPreferences {
   ): Credentials {
     // Always give priority to a username stored in the encrypted extras
     val username = entry.username ?: directoryStructure.getUsernameFor(file) ?: context.getDefaultUsername()
-    return Credentials(username, entry.password, entry.calculateTotpCode())
+    return Credentials(username, entry.password, entry.totp.value)
   }
 }
