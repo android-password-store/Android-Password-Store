@@ -14,10 +14,14 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class PasswordStorePlugin : Plugin<Project> {
 
@@ -38,6 +42,7 @@ class PasswordStorePlugin : Plugin<Project> {
         }
         is LibraryPlugin -> {
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
+          project.configureExplicitApi()
         }
         is AppPlugin -> {
           project.extensions.getByType<BaseAppModuleExtension>().configureAndroidApplicationOptions(project)
@@ -50,7 +55,17 @@ class PasswordStorePlugin : Plugin<Project> {
         is SigningPlugin -> {
           project.extensions.getByType<SigningExtension>().configureBuildSigning()
         }
+        is KotlinPluginWrapper -> {
+          project.configureExplicitApi()
+        }
       }
+    }
+  }
+
+  private fun Project.configureExplicitApi() {
+    configure<KotlinProjectExtension> { explicitApi() }
+    tasks.withType<KotlinCompile> {
+      kotlinOptions { freeCompilerArgs = freeCompilerArgs + listOf("-Xexplicit-api=strict") }
     }
   }
 }
