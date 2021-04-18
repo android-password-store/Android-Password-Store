@@ -91,7 +91,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     passwordEntry?.let { entry ->
       if (menu != null) {
         menu.findItem(R.id.edit_password).isVisible = true
-        if (entry.password.isNullOrBlank()) {
+        if (!entry.password.isNullOrBlank()) {
           menu.findItem(R.id.share_password_as_plaintext).isVisible = true
           menu.findItem(R.id.copy_password).isVisible = true
         }
@@ -189,7 +189,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
               passwordEntry = entry
               invalidateOptionsMenu()
 
-              if (entry.password.isNullOrBlank()) {
+              if (!entry.password.isNullOrBlank()) {
                 items.add(FieldItem.createPasswordField(entry.password!!))
               }
 
