@@ -40,10 +40,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
@@ -53,7 +50,7 @@ import org.openintents.openpgp.OpenPgpError
 
 @RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
-class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
+class AutofillDecryptActivity : AppCompatActivity() {
 
   companion object {
 
@@ -101,9 +98,6 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
   private var continueAfterUserInteraction: Continuation<Intent>? = null
   private lateinit var directoryStructure: DirectoryStructure
 
-  override val coroutineContext
-    get() = Dispatchers.IO + SupervisorJob()
-
   override fun onStart() {
     super.onStart()
     val filePath =
@@ -124,7 +118,7 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
     val action = if (isSearchAction) AutofillAction.Search else AutofillAction.Match
     directoryStructure = AutofillPreferences.directoryStructure(this)
     d { action.toString() }
-    launch {
+    lifecycleScope.launch {
       val credentials = decryptCredential(File(filePath))
       if (credentials == null) {
         setResult(RESULT_CANCELED)
@@ -141,7 +135,6 @@ class AutofillDecryptActivity : AppCompatActivity(), CoroutineScope {
 
   override fun onDestroy() {
     super.onDestroy()
-    coroutineContext.cancelChildren()
   }
 
   private suspend fun executeOpenPgpApi(data: Intent, input: InputStream, output: OutputStream): Intent? {
