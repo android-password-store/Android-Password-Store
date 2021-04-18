@@ -86,7 +86,7 @@ constructor(
         delay(remainingTime)
         repeat(Int.MAX_VALUE) {
           updateTotp(clock.millis())
-          delay(totpPeriod)
+          delay(totpPeriod * 1_000)
         }
       }
     }
