@@ -14,6 +14,7 @@ import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import kotlin.collections.set
 import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,10 +84,10 @@ constructor(
       scope.launch {
         updateTotp(clock.millis())
         val remainingTime = totpPeriod - (System.currentTimeMillis() % totpPeriod)
-        delay(remainingTime)
+        delay(remainingTime.seconds)
         repeat(Int.MAX_VALUE) {
           updateTotp(clock.millis())
-          delay(totpPeriod * 1_000)
+          delay(totpPeriod.seconds)
         }
       }
     }
