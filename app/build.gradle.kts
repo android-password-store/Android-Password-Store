@@ -100,5 +100,6 @@ dependencies {
 
   androidTestImplementation(libs.bundles.testDependencies)
   androidTestImplementation(libs.bundles.androidTestDependencies)
+  testImplementation(libs.testing.robolectric)
   testImplementation(libs.bundles.testDependencies)
 }
