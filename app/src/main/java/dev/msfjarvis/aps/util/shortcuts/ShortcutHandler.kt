@@ -13,6 +13,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import com.github.ajalt.timberkt.d
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.msfjarvis.aps.R
@@ -57,6 +58,23 @@ constructor(
     shortcuts.reverse()
     // Write back the new shortcuts.
     shortcutManager.dynamicShortcuts = shortcuts.map(::rebuildShortcut)
+  }
+
+  /**
+   * Creates a
+   * [pinned shortcut](https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts#pinned)
+   * which presents a UI to users, allowing manual placement on the launcher screen. This method is
+   * a no-op if the user's default launcher does not support pinned shortcuts.
+   */
+  fun addPinnedShortcut(item: PasswordItem, intent: Intent) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+    val shortcutManager: ShortcutManager = context.getSystemService() ?: return
+    if (!shortcutManager.isRequestPinShortcutSupported) {
+      d { "addPinnedShortcut: pin shortcuts unsupported" }
+      return
+    }
+    val shortcut = buildShortcut(item, intent)
+    shortcutManager.requestPinShortcut(shortcut, null)
   }
 
   /** Creates a [ShortcutInfo] from [item] and assigns [intent] to it. */
