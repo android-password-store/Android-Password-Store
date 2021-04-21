@@ -43,13 +43,7 @@ constructor(
   fun addDynamicShortcut(item: PasswordItem, intent: Intent) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
     val shortcutManager: ShortcutManager = context.getSystemService() ?: return
-    val shortcut =
-      ShortcutInfo.Builder(context, item.fullPathToParent)
-        .setShortLabel(item.toString())
-        .setLongLabel(item.fullPathToParent + item.toString())
-        .setIcon(Icon.createWithResource(context, R.drawable.ic_lock_open_24px))
-        .setIntent(intent)
-        .build()
+    val shortcut = buildShortcut(item, intent)
     val shortcuts = shortcutManager.dynamicShortcuts
     // If we're above or equal to the maximum shortcuts allowed, drop the last item.
     if (shortcuts.size >= MAX_SHORTCUT_COUNT) {
@@ -63,6 +57,17 @@ constructor(
     shortcuts.reverse()
     // Write back the new shortcuts.
     shortcutManager.dynamicShortcuts = shortcuts.map(::rebuildShortcut)
+  }
+
+  /** Creates a [ShortcutInfo] from [item] and assigns [intent] to it. */
+  @RequiresApi(Build.VERSION_CODES.N_MR1)
+  private fun buildShortcut(item: PasswordItem, intent: Intent): ShortcutInfo {
+    return ShortcutInfo.Builder(context, item.fullPathToParent)
+      .setShortLabel(item.toString())
+      .setLongLabel(item.fullPathToParent + item.toString())
+      .setIcon(Icon.createWithResource(context, R.drawable.ic_lock_open_24px))
+      .setIntent(intent)
+      .build()
   }
 
   /**
