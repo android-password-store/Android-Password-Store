@@ -4,7 +4,11 @@
  */
 package dev.msfjarvis.aps.data.password
 
+import android.content.Context
+import android.content.Intent
+import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
+import dev.msfjarvis.aps.ui.main.LaunchActivity
 import java.io.File
 
 data class PasswordItem(
@@ -33,6 +37,16 @@ data class PasswordItem(
 
   override fun hashCode(): Int {
     return 0
+  }
+
+  /** Creates an [Intent] to launch this [PasswordItem] through the authentication process. */
+  fun createAuthEnabledIntent(context: Context): Intent {
+    val intent = Intent(context, LaunchActivity::class.java)
+    intent.putExtra("NAME", toString())
+    intent.putExtra("FILE_PATH", file.absolutePath)
+    intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
+    intent.action = LaunchActivity.ACTION_DECRYPT_PASS
+    return intent
   }
 
   companion object {
