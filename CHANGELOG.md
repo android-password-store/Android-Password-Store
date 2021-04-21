@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 -   Add support for manually providing TOTP parameters
 -   Parse extra content as individual fields
 -   Improve search result filtering logic
+-   Allow pinning shortcuts directly to the launcher home screen
 
 ### Fixed
 
