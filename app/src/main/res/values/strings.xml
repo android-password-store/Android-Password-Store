@@ -405,5 +405,6 @@
   <string name="otp_import_manual_hint_secret">Secret</string>
   <string name="otp_import_manual_hint_account">Account</string>
   <string name="gpg_key_select_mandatory">Selecting a GPG key is necessary to proceed</string>
+  <string name="place_shortcut_on_home_screen">Place shortcut on home screen</string>
 
 </resources>

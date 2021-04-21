@@ -38,19 +38,6 @@
     app:layout_constraintTop_toBottomOf="@id/password_category"
     tools:text="PASSWORD FILE NAME HERE" />
 
-  <androidx.appcompat.widget.AppCompatTextView
-    android:id="@+id/password_last_changed"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:layout_marginStart="16dp"
-    android:textColor="?android:attr/textColor"
-    android:textIsSelectable="false"
-    android:textSize="18sp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/password_file"
-    tools:text="LAST CHANGED HERE" />
-
 
   <androidx.appcompat.widget.AppCompatImageView
     android:id="@+id/divider"
@@ -59,7 +46,7 @@
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     android:src="@drawable/divider"
-    app:layout_constraintTop_toBottomOf="@id/password_last_changed"
+    app:layout_constraintTop_toBottomOf="@id/password_file"
     tools:ignore="ContentDescription" />
 
   <androidx.recyclerview.widget.RecyclerView

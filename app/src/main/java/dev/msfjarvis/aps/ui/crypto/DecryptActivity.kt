@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
@@ -77,11 +76,6 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
       passwordFile.setOnLongClickListener {
         copyTextToClipboard(name)
         true
-      }
-      passwordLastChanged.run {
-        runCatching { text = resources.getString(R.string.last_changed, lastChangedString) }.onFailure {
-          visibility = View.GONE
-        }
       }
     }
   }
