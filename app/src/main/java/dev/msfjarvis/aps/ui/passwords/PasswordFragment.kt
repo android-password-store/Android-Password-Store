@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
@@ -42,13 +43,17 @@ import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import dev.msfjarvis.aps.util.shortcuts.ShortcutHandler
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel
 import java.io.File
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
+@AndroidEntryPoint
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
+  @Inject lateinit var shortcutHandler: ShortcutHandler
   private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
   private lateinit var listener: OnFragmentInteractionListener
   private lateinit var settings: SharedPreferences
@@ -193,11 +198,12 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
       }
 
       // Called each time the action mode is shown. Always called after onCreateActionMode,
-      // but
-      // may be called multiple times if the mode is invalidated.
+      // but may be called multiple times if the mode is invalidated.
       override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-        menu.findItem(R.id.menu_edit_password).isVisible =
-          recyclerAdapter.getSelectedItems().all { it.type == PasswordItem.TYPE_CATEGORY }
+        val selectedItems = recyclerAdapter.getSelectedItems()
+        menu.findItem(R.id.menu_edit_password).isVisible = selectedItems.all { it.type == PasswordItem.TYPE_CATEGORY }
+        menu.findItem(R.id.menu_pin_password).isVisible =
+          selectedItems.size == 1 && selectedItems[0].type == PasswordItem.TYPE_PASSWORD
         return true
       }
 
@@ -217,6 +223,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
           R.id.menu_edit_password -> {
             requireStore().renameCategory(recyclerAdapter.getSelectedItems())
             mode.finish()
+            false
+          }
+          R.id.menu_pin_password -> {
+            val passwordItem = recyclerAdapter.getSelectedItems()[0]
+            shortcutHandler.addPinnedShortcut(passwordItem, passwordItem.createAuthEnabledIntent(requireContext()))
             false
           }
           else -> false
