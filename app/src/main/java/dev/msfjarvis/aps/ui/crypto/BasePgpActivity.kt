@@ -13,7 +13,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
@@ -54,11 +53,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
    * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org
    */
   val name: String by lazy(LazyThreadSafetyMode.NONE) { File(fullPath).nameWithoutExtension }
-
-  /** Get the timestamp for when this file was last modified. */
-  val lastChangedString: CharSequence by lazy(LazyThreadSafetyMode.NONE) {
-    getLastChangedString(intent.getLongExtra("LAST_CHANGED_TIMESTAMP", -1L))
-  }
 
   /** [SharedPreferences] instance used by subclasses to persist settings */
   val settings: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) { sharedPrefs }
@@ -177,15 +171,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     return result.getParcelableExtra<PendingIntent>(OpenPgpApi.RESULT_INTENT)!!.intentSender
   }
 
-  /** Gets a relative string describing when this shape was last changed (e.g. "one hour ago") */
-  private fun getLastChangedString(timeStamp: Long): CharSequence {
-    if (timeStamp < 0) {
-      throw RuntimeException()
-    }
-
-    return DateUtils.getRelativeTimeSpanString(this, timeStamp, true)
-  }
-
   /**
    * Base handling of OpenKeychain errors based on the error contained in [result]. Subclasses can
    * use this when they want to default to sane error handling.
@@ -256,8 +241,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
   companion object {
 
     private const val TAG = "APS/BasePgpActivity"
-    const val KEY_PWGEN_TYPE_CLASSIC = "classic"
-    const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
 
     /** Gets the relative path to the repository */
     fun getRelativePath(fullPath: String, repositoryPath: String): String =
