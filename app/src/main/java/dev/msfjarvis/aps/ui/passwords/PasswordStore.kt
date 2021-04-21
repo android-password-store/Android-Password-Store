@@ -6,6 +6,7 @@ package dev.msfjarvis.aps.ui.passwords
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,9 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.d
 import com.github.ajalt.timberkt.e
 import com.github.ajalt.timberkt.i
-import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -44,7 +43,6 @@ import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet
 import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
 import dev.msfjarvis.aps.ui.folderselect.SelectFolderActivity
 import dev.msfjarvis.aps.ui.git.base.BaseGitActivity
-import dev.msfjarvis.aps.ui.main.LaunchActivity
 import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
 import dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity
 import dev.msfjarvis.aps.ui.settings.SettingsActivity
@@ -69,7 +67,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.eclipse.jgit.api.Git
 
 const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
 
@@ -403,37 +400,10 @@ class PasswordStore : BaseGitActivity() {
     return fullPath.replace(repositoryPath, "").replace("/+".toRegex(), "/")
   }
 
-  private fun getLastChangedTimestamp(fullPath: String): Long {
-    val repoPath = PasswordRepository.getRepositoryDirectory()
-    val repository = PasswordRepository.getRepository(repoPath)
-    if (repository == null) {
-      d { "getLastChangedTimestamp: No git repository" }
-      return File(fullPath).lastModified()
-    }
-    val git = Git(repository)
-    val relativePath = getRelativePath(fullPath, repoPath.absolutePath).substring(1) // Removes leading '/'
-    return runCatching {
-        val iterator = git.log().addPath(relativePath).call().iterator()
-        if (!iterator.hasNext()) {
-          w { "getLastChangedTimestamp: No commits for file: $relativePath" }
-          return -1
-        }
-        iterator.next().commitTime.toLong() * 1000
-      }
-      .getOr(-1)
-  }
-
   fun decryptPassword(item: PasswordItem) {
-    val decryptIntent = Intent(this, DecryptActivity::class.java)
-    val authDecryptIntent = Intent(this, LaunchActivity::class.java)
-    for (intent in arrayOf(decryptIntent, authDecryptIntent)) {
-      intent.putExtra("NAME", item.toString())
-      intent.putExtra("FILE_PATH", item.file.absolutePath)
-      intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
-      intent.putExtra("LAST_CHANGED_TIMESTAMP", getLastChangedTimestamp(item.file.absolutePath))
-    }
-    // Needs an action to be a shortcut intent
-    authDecryptIntent.action = LaunchActivity.ACTION_DECRYPT_PASS
+    val authDecryptIntent = item.createAuthEnabledIntent(this)
+    val decryptIntent =
+      (authDecryptIntent.clone() as Intent).setComponent(ComponentName(this, DecryptActivity::class.java))
 
     startActivity(decryptIntent)
 
