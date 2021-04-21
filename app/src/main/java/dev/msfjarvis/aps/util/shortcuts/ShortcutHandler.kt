@@ -34,7 +34,7 @@ constructor(
     private const val MAX_SHORTCUT_COUNT = 4
   }
 
-  fun addShortcut(item: PasswordItem, intent: Intent) {
+  fun addDynamicShortcut(item: PasswordItem, intent: Intent) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
     val shortcutManager: ShortcutManager = context.getSystemService() ?: return
     val shortcut =
@@ -61,8 +61,8 @@ constructor(
 
   /**
    * Takes an existing [ShortcutInfo] and builds a fresh instance of [ShortcutInfo] with the same
-   * data, which ensures that the get/set dance in [addShortcut] does not cause invalidation of icon
-   * assets, resulting in invisible icons in all but the newest launcher shortcut.
+   * data, which ensures that the get/set dance in [addDynamicShortcut] does not cause invalidation
+   * of icon assets, resulting in invisible icons in all but the newest launcher shortcut.
    */
   @RequiresApi(Build.VERSION_CODES.N_MR1)
   private fun rebuildShortcut(shortcut: ShortcutInfo): ShortcutInfo {

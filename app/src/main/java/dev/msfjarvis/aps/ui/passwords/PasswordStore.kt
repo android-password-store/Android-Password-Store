@@ -438,9 +438,7 @@ class PasswordStore : BaseGitActivity() {
     startActivity(decryptIntent)
 
     // Adds shortcut
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-      shortcutHandler.addShortcut(item, authDecryptIntent)
-    }
+    shortcutHandler.addDynamicShortcut(item, authDecryptIntent)
   }
 
   private fun validateState(): Boolean {
