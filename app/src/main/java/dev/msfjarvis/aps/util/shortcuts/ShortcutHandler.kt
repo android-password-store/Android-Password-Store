@@ -34,6 +34,12 @@ constructor(
     private const val MAX_SHORTCUT_COUNT = 4
   }
 
+  /**
+   * Creates a
+   * [dynamic shortcut](https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts#dynamic)
+   * that shows up with the app icon on long press. The list of items is capped to
+   * [MAX_SHORTCUT_COUNT] and older items are removed by a simple LRU sweep.
+   */
   fun addDynamicShortcut(item: PasswordItem, intent: Intent) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return
     val shortcutManager: ShortcutManager = context.getSystemService() ?: return
