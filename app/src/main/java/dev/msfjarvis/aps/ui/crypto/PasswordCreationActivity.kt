@@ -366,7 +366,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         encryptionIntent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds)
       }
 
-      encryptionIntent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true)
+      encryptionIntent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, false)
 
       val content = "$editPass\n$editExtra"
       val inputStream = ByteArrayInputStream(content.toByteArray())
