@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 -   Accessibility autofill has been removed completely due to being buggy, insecure and lacking in features. Upgrade to Android 8 or preferably later to gain access to our advanced Autofill implementation.
 -   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
 -   Using the `git://` protocol in the server URL now presents an explicit discouragement rather than a generic error
+-   Encrypted data is no longer ASCII armored, bringing it in line with `pass`
 
 ## [1.13.4] - 2021-03-20
 
