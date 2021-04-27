@@ -36,6 +36,7 @@ internal fun Project.configureForAllProjects() {
   repositories {
     google()
     mavenCentral()
+    @Suppress("DEPRECATION")
     jcenter {
       content {
         // https://github.com/zhanghai/AndroidFastScroll/issues/35
@@ -57,7 +58,7 @@ internal fun Project.configureForAllProjects() {
     kotlinOptions {
       jvmTarget = JavaVersion.VERSION_1_8.toString()
       freeCompilerArgs = freeCompilerArgs + additionalCompilerArgs
-      languageVersion = "1.4"
+      languageVersion = "1.5"
       useIR = true
     }
   }
