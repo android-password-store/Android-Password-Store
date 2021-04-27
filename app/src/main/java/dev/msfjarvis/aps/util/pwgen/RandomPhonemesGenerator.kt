@@ -60,8 +60,8 @@ object RandomPhonemesGenerator {
 
   private class Element(str: String, val flags: Int) {
 
-    val upperCase = str.toUpperCase(Locale.ROOT)
-    val lowerCase = str.toLowerCase(Locale.ROOT)
+    val upperCase = str.uppercase(Locale.ROOT)
+    val lowerCase = str.lowercase(Locale.ROOT)
     val length = str.length
     val isAmbiguous = str.any { it in PasswordGenerator.AMBIGUOUS_STR }
   }

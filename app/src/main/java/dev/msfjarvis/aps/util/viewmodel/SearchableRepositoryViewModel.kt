@@ -442,8 +442,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
       }
     }
   }
-
   final override fun getPopupText(position: Int): String {
-    return getItem(position).name[0].toString().toUpperCase(Locale.getDefault())
+    return getItem(position).name[0].toString().uppercase(Locale.getDefault())
   }
 }

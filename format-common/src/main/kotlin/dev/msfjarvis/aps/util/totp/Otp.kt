@@ -24,7 +24,7 @@ internal object Otp {
   }
 
   fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String) = runCatching {
-    val algo = "Hmac${algorithm.toUpperCase(Locale.ROOT)}"
+    val algo = "Hmac${algorithm.uppercase(Locale.ROOT)}"
     val decodedSecret = BASE_32.decode(secret)
     val secretKey = SecretKeySpec(decodedSecret, algo)
     val digest =
