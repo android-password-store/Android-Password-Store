@@ -2,6 +2,8 @@
 
 ### [Unreleased]
 
+- The library now requires Kotlin 1.5.0 configured with `kotlinOptions.languageVersion = "1.5"`.
+
 ### [3.0.0] - 2021-04-10
 - Relicence under Apache 2.0
 
