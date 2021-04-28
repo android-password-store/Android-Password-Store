@@ -101,10 +101,16 @@ class PasswordBuilder(ctx: Context) {
         val candidate = wordBank.secureRandomElement()
         val s =
           when (capsType) {
-            CapsType.UPPERCASE -> candidate.toUpperCase(Locale.getDefault())
-            CapsType.Sentence -> if (i == 0) candidate.capitalize(Locale.getDefault()) else candidate
-            CapsType.TitleCase -> candidate.capitalize(Locale.getDefault())
-            CapsType.lowercase -> candidate.toLowerCase(Locale.getDefault())
+            CapsType.UPPERCASE -> candidate.uppercase(Locale.getDefault())
+            CapsType.Sentence ->
+              if (i == 0)
+                candidate.replaceFirstChar {
+                  if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                }
+              else candidate
+            CapsType.TitleCase ->
+              candidate.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+            CapsType.lowercase -> candidate.lowercase(Locale.getDefault())
             CapsType.As_iS -> candidate
           }
         password.append(s)

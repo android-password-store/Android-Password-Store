@@ -46,7 +46,7 @@ public object OpenPgpUtils {
   }
 
   private fun convertKeyIdToHex32bit(keyId: Long): String {
-    var hexString = java.lang.Long.toHexString(keyId and 0xffffffffL).toLowerCase(Locale.ENGLISH)
+    var hexString = java.lang.Long.toHexString(keyId and 0xffffffffL).lowercase(Locale.ENGLISH)
     while (hexString.length < 8) {
       hexString = "0$hexString"
     }

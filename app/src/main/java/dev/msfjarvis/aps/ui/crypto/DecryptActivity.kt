@@ -27,8 +27,8 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
+import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -121,7 +121,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
   @OptIn(ExperimentalTime::class)
   private fun startAutoDismissTimer() {
     lifecycleScope.launch {
-      delay(60.seconds)
+      delay(Duration.seconds(60))
       finish()
     }
   }

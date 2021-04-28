@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 
 - Updated `androidx.annotation` to 1.1.0 and `androidx.autofill` to `1.2.0-alpha01`.
 
+- The library now requires Kotlin 1.5.0 configured with `kotlinOptions.languageVersion = "1.5"`.
+
 ### Fixed
 
 - Fix build warning from undeclared unsigned type use.

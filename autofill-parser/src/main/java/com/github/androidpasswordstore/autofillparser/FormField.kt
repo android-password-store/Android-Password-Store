@@ -39,19 +39,16 @@ internal class FormField(
         HintConstants.AUTOFILL_HINT_USERNAME,
         HintConstants.AUTOFILL_HINT_NEW_USERNAME,
       )
-
     private val HINTS_NEW_PASSWORD =
       listOf(
         HintConstants.AUTOFILL_HINT_NEW_PASSWORD,
       )
-
     private val HINTS_PASSWORD =
       HINTS_NEW_PASSWORD +
         listOf(
           HintConstants.AUTOFILL_HINT_PASSWORD,
           HintConstants.AUTOFILL_HINT_WIFI_PASSWORD,
         )
-
     private val HINTS_OTP =
       listOf(
         HintConstants.AUTOFILL_HINT_SMS_OTP,
@@ -70,7 +67,6 @@ internal class FormField(
           HintConstants.AUTOFILL_HINT_PHONE,
           HintConstants.AUTOFILL_HINT_PHONE_NUMBER,
         )
-
     private val ANDROID_TEXT_FIELD_CLASS_NAMES =
       listOf(
         "android.widget.EditText",
@@ -79,9 +75,7 @@ internal class FormField(
         "android.support.v7.widget.AppCompatEditText",
         "com.google.android.material.textfield.TextInputEditText",
       )
-
     private const val ANDROID_WEB_VIEW_CLASS_NAME = "android.webkit.WebView"
-
     private fun isPasswordInputType(inputType: Int): Boolean {
       val typeClass = inputType and InputType.TYPE_MASK_CLASS
       val typeVariation = inputType and InputType.TYPE_MASK_VARIATION
@@ -117,7 +111,6 @@ internal class FormField(
       (HTML_INPUT_FIELD_TYPES_USERNAME + HTML_INPUT_FIELD_TYPES_PASSWORD + HTML_INPUT_FIELD_TYPES_OTP).toSet().toList()
 
     @RequiresApi(Build.VERSION_CODES.O) private fun isSupportedHint(hint: String) = hint in HINTS_FILLABLE
-
     private val EXCLUDED_TERMS =
       listOf(
         "url_bar", // Chrome/Edge/Firefox address bar
@@ -158,14 +151,13 @@ internal class FormField(
 
   private val List<String>.anyMatchesFieldInfo
     get() = any { fieldId.contains(it) || hint.contains(it) || htmlName.contains(it) }
-
   val autofillId: AutofillId = node.autofillId!!
 
   // Information for heuristics and exclusion rules based only on the current field
   private val htmlId = node.htmlInfo?.attributes?.firstOrNull { it.first == "id" }?.second
   private val resourceId = node.idEntry
-  private val fieldId = (htmlId ?: resourceId ?: "").toLowerCase(Locale.US)
-  private val hint = node.hint?.toLowerCase(Locale.US) ?: ""
+  private val fieldId = (htmlId ?: resourceId ?: "").lowercase(Locale.US)
+  private val hint = node.hint?.lowercase(Locale.US) ?: ""
   private val className: String? = node.className
   private val inputType = node.inputType
 
@@ -186,10 +178,9 @@ internal class FormField(
   private val htmlTag = node.htmlInfo?.tag
   private val htmlAttributes: Map<String, String> =
     node.htmlInfo?.attributes?.filter { it.first != null && it.second != null }?.associate {
-      Pair(it.first.toLowerCase(Locale.US), it.second.toLowerCase(Locale.US))
+      Pair(it.first.lowercase(Locale.US), it.second.lowercase(Locale.US))
     }
       ?: emptyMap()
-
   private val htmlAttributesDebug = htmlAttributes.entries.joinToString { "${it.key}=${it.value}" }
   private val htmlInputType = htmlAttributes["type"]
   private val htmlName = htmlAttributes["name"] ?: ""
@@ -204,7 +195,6 @@ internal class FormField(
   // HTML fields with non-fillable types (such as submit buttons) should be excluded here
   private val isAndroidTextField = !isHtmlField && className in ANDROID_TEXT_FIELD_CLASS_NAMES
   private val isAndroidPasswordField = isAndroidTextField && hasPasswordInputType
-
   private val isTextField = isAndroidTextField || isHtmlTextField
 
   // Autofill hint detection for native fields
