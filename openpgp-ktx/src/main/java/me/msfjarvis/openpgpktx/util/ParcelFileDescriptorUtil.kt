@@ -2,6 +2,8 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+@file:Suppress("BlockingMethodInNonBlockingContext")
+
 package me.msfjarvis.openpgpktx.util
 
 import android.os.ParcelFileDescriptor
@@ -11,30 +13,27 @@ import android.util.Log
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 internal object ParcelFileDescriptorUtil {
 
   private const val TAG = "PFDUtils"
 
-  @Throws(IOException::class)
-  internal fun pipeFrom(inputStream: InputStream): ParcelFileDescriptor {
+  internal suspend fun pipeFrom(inputStream: InputStream): ParcelFileDescriptor {
     val pipe = ParcelFileDescriptor.createPipe()
     val readSide = pipe[0]
     val writeSide = pipe[1]
-    TransferThread(inputStream, AutoCloseOutputStream(writeSide)).start()
+    transferStreams(inputStream, AutoCloseOutputStream(writeSide))
     return readSide
   }
 
-  @Throws(IOException::class)
-  internal fun pipeTo(outputStream: OutputStream, output: ParcelFileDescriptor?): TransferThread {
-    val t = TransferThread(AutoCloseInputStream(output), outputStream)
-    t.start()
-    return t
+  internal suspend fun pipeTo(outputStream: OutputStream, output: ParcelFileDescriptor?) {
+    transferStreams(AutoCloseInputStream(output), outputStream)
   }
 
-  internal class TransferThread(val `in`: InputStream, private val out: OutputStream) : Thread("IPC Transfer Thread") {
-
-    override fun run() {
+  private suspend fun transferStreams(`in`: InputStream, `out`: OutputStream) {
+    withContext(Dispatchers.IO) {
       val buf = ByteArray(4096)
       var len: Int
       try {
@@ -51,10 +50,6 @@ internal object ParcelFileDescriptorUtil {
           out.close()
         } catch (ignored: IOException) {}
       }
-    }
-
-    init {
-      isDaemon = true
     }
   }
 }

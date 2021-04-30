@@ -15,6 +15,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.openintents.openpgp.IOpenPgpService2
@@ -48,26 +49,25 @@ class GetKeyIdsActivity : BasePgpActivity() {
   /** Get the Key ids from OpenKeychain */
   private fun getKeyIds(data: Intent = Intent()) {
     data.action = OpenPgpApi.ACTION_GET_KEY_IDS
-    lifecycleScope.launch(Dispatchers.IO) {
-      api?.executeApiAsync(data, null, null) { result ->
-        when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-          OpenPgpApi.RESULT_CODE_SUCCESS -> {
-            runCatching {
-              val ids =
-                result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map { OpenPgpUtils.convertKeyIdToHex(it) }
-                  ?: emptyList()
-              val keyResult = Intent().putExtra(OpenPgpApi.EXTRA_KEY_IDS, ids.toTypedArray())
-              setResult(RESULT_OK, keyResult)
-              finish()
-            }
-              .onFailure { e -> e(e) }
+    lifecycleScope.launch(Dispatchers.Main) {
+      val result = withContext(Dispatchers.IO) { checkNotNull(api).executeApi(data, null, null) }
+      when (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+        OpenPgpApi.RESULT_CODE_SUCCESS -> {
+          runCatching {
+            val ids =
+              result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map { OpenPgpUtils.convertKeyIdToHex(it) }
+                ?: emptyList()
+            val keyResult = Intent().putExtra(OpenPgpApi.EXTRA_KEY_IDS, ids.toTypedArray())
+            setResult(RESULT_OK, keyResult)
+            finish()
           }
-          OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-            val sender = getUserInteractionRequestIntent(result)
-            userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
-          }
-          OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
+            .onFailure { e -> e(e) }
         }
+        OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+          val sender = getUserInteractionRequestIntent(result)
+          userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
+        }
+        OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
       }
     }
   }

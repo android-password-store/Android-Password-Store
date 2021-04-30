@@ -2,7 +2,7 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-@file:Suppress("Unused")
+@file:Suppress("BlockingMethodInNonBlockingContext", "Unused")
 
 package me.msfjarvis.openpgpktx.util
 
@@ -14,8 +14,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.concurrent.atomic.AtomicInteger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
@@ -23,17 +21,7 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
 
   private val pipeIdGen: AtomicInteger = AtomicInteger()
 
-  public suspend fun executeApiAsync(
-    data: Intent?,
-    inputStream: InputStream?,
-    outputStream: OutputStream?,
-    callback: (intent: Intent?) -> Unit
-  ) {
-    val result = executeApi(data, inputStream, outputStream)
-    withContext(Dispatchers.Main) { callback.invoke(result) }
-  }
-
-  public fun executeApi(data: Intent?, inputStream: InputStream?, outputStream: OutputStream?): Intent? {
+  public suspend fun executeApi(data: Intent, inputStream: InputStream?, outputStream: OutputStream?): Intent {
     var input: ParcelFileDescriptor? = null
     return try {
       if (inputStream != null) {
@@ -57,37 +45,38 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
     }
   }
 
-  /** InputStream and OutputStreams are always closed after operating on them! */
-  private fun executeApi(data: Intent?, input: ParcelFileDescriptor?, os: OutputStream?): Intent? {
+  private suspend fun executeApi(
+    data: Intent,
+    inputFd: ParcelFileDescriptor?,
+    outputStream: OutputStream?,
+  ): Intent {
     var output: ParcelFileDescriptor? = null
     return try {
       // always send version from client
-      data?.putExtra(EXTRA_API_VERSION, API_VERSION)
+      data.putExtra(EXTRA_API_VERSION, API_VERSION)
       val result: Intent
-      var pumpThread: Thread? = null
       var outputPipeId = 0
-      if (os != null) {
+      if (outputStream != null) {
         outputPipeId = pipeIdGen.incrementAndGet()
         output = service.createOutputPipe(outputPipeId)
-        pumpThread = ParcelFileDescriptorUtil.pipeTo(os, output)
       }
       // blocks until result is ready
-      result = service.execute(data, input, outputPipeId)
+      result = service.execute(data, inputFd, outputPipeId)
       // set class loader to current context to allow unparcelling
       // of OpenPgpError and OpenPgpSignatureResult
       // http://stackoverflow.com/a/3806769
       result.setExtrasClassLoader(context.classLoader)
-      // wait for ALL data being pumped from remote side
-      pumpThread?.join()
+      if (outputStream != null) {
+        ParcelFileDescriptorUtil.pipeTo(outputStream, output)
+      }
       result
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
       Log.e(TAG, "Exception in executeApi call", e)
       val result = Intent()
       result.putExtra(RESULT_CODE, RESULT_CODE_ERROR)
       result.putExtra(RESULT_ERROR, OpenPgpError(OpenPgpError.CLIENT_SIDE_ERROR, e.message))
       result
     } finally {
-      // close() is required to halt the TransferThread
       if (output != null) {
         try {
           output.close()

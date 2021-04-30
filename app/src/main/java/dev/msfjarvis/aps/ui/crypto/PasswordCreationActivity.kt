@@ -394,97 +394,97 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
           else -> "$fullPath/$editName.gpg"
         }
 
-      lifecycleScope.launch(Dispatchers.IO) {
-        api?.executeApiAsync(encryptionIntent, inputStream, outputStream) { result ->
-          when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-            OpenPgpApi.RESULT_CODE_SUCCESS -> {
-              runCatching {
-                val file = File(path)
-                // If we're not editing, this file should not already exist!
-                // Additionally, if we were editing and the incoming and outgoing
-                // filenames differ, it means we renamed. Ensure that the target
-                // doesn't already exist to prevent an accidental overwrite.
-                if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) && file.exists()) {
-                  snackbar(message = getString(R.string.password_creation_duplicate_error))
-                  return@executeApiAsync
-                }
+      lifecycleScope.launch(Dispatchers.Main) {
+        val result =
+          withContext(Dispatchers.IO) { checkNotNull(api).executeApi(encryptionIntent, inputStream, outputStream) }
+        when (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+          OpenPgpApi.RESULT_CODE_SUCCESS -> {
+            runCatching {
+              val file = File(path)
+              // If we're not editing, this file should not already exist!
+              // Additionally, if we were editing and the incoming and outgoing
+              // filenames differ, it means we renamed. Ensure that the target
+              // doesn't already exist to prevent an accidental overwrite.
+              if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) && file.exists()) {
+                snackbar(message = getString(R.string.password_creation_duplicate_error))
+                return@runCatching
+              }
 
-                if (!file.isInsideRepository()) {
-                  snackbar(message = getString(R.string.message_error_destination_outside_repo))
-                  return@executeApiAsync
-                }
+              if (!file.isInsideRepository()) {
+                snackbar(message = getString(R.string.message_error_destination_outside_repo))
+                return@runCatching
+              }
 
-                file.outputStream().use { it.write(outputStream.toByteArray()) }
+              withContext(Dispatchers.IO) { file.outputStream().use { it.write(outputStream.toByteArray()) } }
 
-                // associate the new password name with the last name's timestamp in
-                // history
-                val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
-                val oldFilePathHash = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg".base64()
-                val timestamp = preference.getString(oldFilePathHash)
-                if (timestamp != null) {
-                  preference.edit {
-                    remove(oldFilePathHash)
-                    putString(file.absolutePath.base64(), timestamp)
-                  }
-                }
-
-                val returnIntent = Intent()
-                returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
-                returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
-                returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
-
-                if (shouldGeneratePassword) {
-                  val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
-                  val entry = passwordEntryFactory.create(lifecycleScope, content.encodeToByteArray())
-                  returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
-                  val username = entry.username ?: directoryStructure.getUsernameFor(file)
-                  returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
-                }
-
-                if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
-                  val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
-                  if (oldFile.path != file.path && !oldFile.delete()) {
-                    setResult(RESULT_CANCELED)
-                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                      .setTitle(R.string.password_creation_file_fail_title)
-                      .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
-                      .setCancelable(false)
-                      .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-                      .show()
-                    return@executeApiAsync
-                  }
-                }
-
-                val commitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
-                lifecycleScope.launch {
-                  commitChange(resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName)))
-                    .onSuccess {
-                      setResult(RESULT_OK, returnIntent)
-                      finish()
-                    }
+              // associate the new password name with the last name's timestamp in
+              // history
+              val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+              val oldFilePathHash = "$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg".base64()
+              val timestamp = preference.getString(oldFilePathHash)
+              if (timestamp != null) {
+                preference.edit {
+                  remove(oldFilePathHash)
+                  putString(file.absolutePath.base64(), timestamp)
                 }
               }
-                .onFailure { e ->
-                  if (e is IOException) {
-                    e(e) { "Failed to write password file" }
-                    setResult(RESULT_CANCELED)
-                    MaterialAlertDialogBuilder(this@PasswordCreationActivity)
-                      .setTitle(getString(R.string.password_creation_file_fail_title))
-                      .setMessage(getString(R.string.password_creation_file_write_fail_message))
-                      .setCancelable(false)
-                      .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-                      .show()
-                  } else {
-                    e(e)
-                  }
+
+              val returnIntent = Intent()
+              returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
+              returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
+              returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
+
+              if (shouldGeneratePassword) {
+                val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
+                val entry = passwordEntryFactory.create(lifecycleScope, content.encodeToByteArray())
+                returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
+                val username = entry.username ?: directoryStructure.getUsernameFor(file)
+                returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
+              }
+
+              if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
+                val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
+                if (oldFile.path != file.path && !oldFile.delete()) {
+                  setResult(RESULT_CANCELED)
+                  MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                    .setTitle(R.string.password_creation_file_fail_title)
+                    .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+                    .show()
+                  return@runCatching
                 }
+              }
+
+              val commitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
+              lifecycleScope.launch {
+                commitChange(resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName)))
+                  .onSuccess {
+                    setResult(RESULT_OK, returnIntent)
+                    finish()
+                  }
+              }
             }
-            OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-              val sender = getUserInteractionRequestIntent(result)
-              userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
-            }
-            OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
+              .onFailure { e ->
+                if (e is IOException) {
+                  e(e) { "Failed to write password file" }
+                  setResult(RESULT_CANCELED)
+                  MaterialAlertDialogBuilder(this@PasswordCreationActivity)
+                    .setTitle(getString(R.string.password_creation_file_fail_title))
+                    .setMessage(getString(R.string.password_creation_file_write_fail_message))
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+                    .show()
+                } else {
+                  e(e)
+                }
+              }
           }
+          OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+            val sender = getUserInteractionRequestIntent(result)
+            userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
+          }
+          OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
         }
       }
     }
