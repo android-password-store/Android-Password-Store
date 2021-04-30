@@ -88,8 +88,7 @@ public final class me/msfjarvis/openpgpktx/util/OpenPgpApi {
 	public static final field RESULT_SIGNATURE_MICALG Ljava/lang/String;
 	public static final field SERVICE_INTENT_2 Ljava/lang/String;
 	public fun <init> (Landroid/content/Context;Lorg/openintents/openpgp/IOpenPgpService2;)V
-	public final fun executeApi (Landroid/content/Intent;Ljava/io/InputStream;Ljava/io/OutputStream;)Landroid/content/Intent;
-	public final fun executeApiAsync (Landroid/content/Intent;Ljava/io/InputStream;Ljava/io/OutputStream;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun executeApi (Landroid/content/Intent;Ljava/io/InputStream;Ljava/io/OutputStream;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class me/msfjarvis/openpgpktx/util/OpenPgpApi$Companion {

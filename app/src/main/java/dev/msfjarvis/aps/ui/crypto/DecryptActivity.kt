@@ -165,55 +165,51 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     val inputStream = File(fullPath).inputStream()
     val outputStream = ByteArrayOutputStream()
 
-    lifecycleScope.launch(Dispatchers.IO) {
-      api?.executeApiAsync(data, inputStream, outputStream) { result ->
-        when (result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-          OpenPgpApi.RESULT_CODE_SUCCESS -> {
-            startAutoDismissTimer()
-            runCatching {
-              val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-              val entry = passwordEntryFactory.create(lifecycleScope, outputStream.toByteArray())
-              val items = arrayListOf<FieldItem>()
-              val adapter = FieldItemAdapter(emptyList(), showPassword) { text -> copyTextToClipboard(text) }
+    lifecycleScope.launch(Dispatchers.Main) {
+      val result = withContext(Dispatchers.IO) { checkNotNull(api).executeApi(data, inputStream, outputStream) }
+      when (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+        OpenPgpApi.RESULT_CODE_SUCCESS -> {
+          startAutoDismissTimer()
+          runCatching {
+            val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
+            val entry = passwordEntryFactory.create(lifecycleScope, outputStream.toByteArray())
+            val items = arrayListOf<FieldItem>()
+            val adapter = FieldItemAdapter(emptyList(), showPassword) { text -> copyTextToClipboard(text) }
 
-              if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
-                copyPasswordToClipboard(entry.password)
-              }
-
-              passwordEntry = entry
-              invalidateOptionsMenu()
-
-              if (!entry.password.isNullOrBlank()) {
-                items.add(FieldItem.createPasswordField(entry.password!!))
-              }
-
-              if (entry.hasTotp()) {
-                launch(Dispatchers.IO) {
-                  withContext(Dispatchers.Main) {
-                    val code = entry.totp.value
-                    items.add(FieldItem.createOtpField(code))
-                  }
-                  entry.totp.collect { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
-                }
-              }
-
-              if (!entry.username.isNullOrBlank()) {
-                items.add(FieldItem.createUsernameField(entry.username!!))
-              }
-
-              entry.extraContent.forEach { (key, value) -> items.add(FieldItem(key, value, FieldItem.ActionType.COPY)) }
-
-              binding.recyclerView.adapter = adapter
-              adapter.updateItems(items)
+            if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
+              copyPasswordToClipboard(entry.password)
             }
-              .onFailure { e -> e(e) }
+
+            passwordEntry = entry
+            invalidateOptionsMenu()
+
+            if (!entry.password.isNullOrBlank()) {
+              items.add(FieldItem.createPasswordField(entry.password!!))
+            }
+
+            if (entry.hasTotp()) {
+              launch {
+                items.add(FieldItem.createOtpField(entry.totp.value))
+                entry.totp.collect { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
+              }
+            }
+
+            if (!entry.username.isNullOrBlank()) {
+              items.add(FieldItem.createUsernameField(entry.username!!))
+            }
+
+            entry.extraContent.forEach { (key, value) -> items.add(FieldItem(key, value, FieldItem.ActionType.COPY)) }
+
+            binding.recyclerView.adapter = adapter
+            adapter.updateItems(items)
           }
-          OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-            val sender = getUserInteractionRequestIntent(result)
-            userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
-          }
-          OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
+            .onFailure { e -> e(e) }
         }
+        OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
+          val sender = getUserInteractionRequestIntent(result)
+          userInteractionRequiredResult.launch(IntentSenderRequest.Builder(sender).build())
+        }
+        OpenPgpApi.RESULT_CODE_ERROR -> handleError(result)
       }
     }
   }

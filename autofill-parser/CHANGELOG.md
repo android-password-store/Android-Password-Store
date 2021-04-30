@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 
 - The library now requires Kotlin 1.5.0 configured with `kotlinOptions.languageVersion = "1.5"`.
 
+- The synchronous and callback based APIs in `OpenPgpApi` have been removed in favor of a singular coroutines-based entrypoint.
+
 ### Fixed
 
 - Fix build warning from undeclared unsigned type use.
