@@ -189,8 +189,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
 
             if (entry.hasTotp()) {
               launch {
-                val code = entry.totp.value
-                items.add(FieldItem.createOtpField(code))
+                items.add(FieldItem.createOtpField(entry.totp.value))
                 entry.totp.collect { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
               }
             }
