@@ -4,7 +4,7 @@ on:
     - cron: '0 0 * * 6'
 
 jobs:
-  update-publicsuffix-data:
+  sync-crowdin:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
