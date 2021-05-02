@@ -6,6 +6,8 @@
 import de.undercouch.gradle.tasks.download.Download
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,6 +18,7 @@ import org.w3c.dom.Document
 
 private const val EXCEPTION_MESSAGE =
   """Applying `crowdin-plugin` requires a projectName to be configured via the "crowdin" extension."""
+private const val CROWDIN_BUILD_API_URL = "https://api.crowdin.com/api/project/%s/export?login=%s&account-key=%s"
 
 class CrowdinDownloadPlugin : Plugin<Project> {
 
@@ -27,7 +30,22 @@ class CrowdinDownloadPlugin : Plugin<Project> {
         if (projectName.isEmpty()) {
           throw GradleException(EXCEPTION_MESSAGE)
         }
+        tasks.register("buildOnApi") {
+          val login = providers.environmentVariable("CROWDIN_LOGIN").forUseAtConfigurationTime()
+          val key = providers.environmentVariable("CROWDIN_PROJECT_KEY").forUseAtConfigurationTime()
+          if (!login.isPresent) {
+            throw GradleException("CROWDIN_LOGIN environment variable must be set")
+          }
+          if (!key.isPresent) {
+            throw GradleException("CROWDIN_PROJECT_KEY environment variable must be set")
+          }
+          val client = OkHttpClient()
+          val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
+          val request = Request.Builder().url(url).get().build()
+          client.newCall(request).execute()
+        }
         tasks.register<Download>("downloadCrowdin") {
+          setDependsOn(setOf("buildOnApi"))
           src("https://crowdin.com/backend/download/project/$projectName.zip")
           dest("$buildDir/translations.zip")
           overwrite(true)

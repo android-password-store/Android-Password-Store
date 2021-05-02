@@ -45,5 +45,6 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0")
   implementation("com.ncorti.ktfmt.gradle:plugin:0.5.0")
   implementation("com.vanniktech:gradle-maven-publish-plugin:0.13.0")
+  implementation("com.squareup.okhttp3:okhttp:4.9.0")
   implementation("com.vdurmont:semver4j:3.1.0")
 }
