@@ -5,7 +5,6 @@
 
 package dev.msfjarvis.aps.util.crypto
 
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -28,15 +27,14 @@ class GpgIdentifierTest {
 
   @Test
   fun `parses email as user id`() {
-    val identifier = GpgIdentifier.fromString("aps@msfjarvis.dev")
+    val identifier = GpgIdentifier.fromString("john.doe@example.org")
     assertNotNull(identifier)
     assertTrue { identifier is GpgIdentifier.UserId }
   }
 
   @Test
-  @Ignore("OpenKeychain can't yet handle these so we don't either")
-  fun `parses non-email user id`() {
-    val identifier = GpgIdentifier.fromString("john.doe")
+  fun `parses user@host without TLD`() {
+    val identifier = GpgIdentifier.fromString("john.doe@example")
     assertNotNull(identifier)
     assertTrue { identifier is GpgIdentifier.UserId }
   }
