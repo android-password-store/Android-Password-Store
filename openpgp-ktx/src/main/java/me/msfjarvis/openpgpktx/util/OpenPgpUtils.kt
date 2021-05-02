@@ -20,7 +20,7 @@ public object OpenPgpUtils {
       Pattern.DOTALL
     )
   private val USER_ID_PATTERN = Pattern.compile("^(.*?)(?: \\((.*)\\))?(?: <(.*)>)?$")
-  private val EMAIL_PATTERN = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*\\.[^<>\"]*)\"?>?$")
+  private val EMAIL_PATTERN = Pattern.compile("^<?\"?([^<>\"]*@[^<>\"]*[.]?[^<>\"]*)\"?>?$")
   public const val PARSE_RESULT_NO_PGP: Int = -1
   public const val PARSE_RESULT_MESSAGE: Int = 0
   public const val PARSE_RESULT_SIGNED_MESSAGE: Int = 1
