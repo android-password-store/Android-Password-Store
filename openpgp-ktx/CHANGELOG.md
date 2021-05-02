@@ -3,6 +3,7 @@
 ### [Unreleased]
 
 - The library now requires Kotlin 1.5.0 configured with `kotlinOptions.languageVersion = "1.5"`.
+- The synchronous and callback based APIs in `OpenPgpApi` have been removed in favor of a singular coroutines-based entrypoint.
 - Accept emails without a TLD
 
 ### [3.0.0] - 2021-04-10
