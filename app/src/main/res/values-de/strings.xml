@@ -314,8 +314,15 @@
   <string name="select_repo_type_text">Wählen Sie aus, ob sie ein lokales Repository, oder ein remote Repository anlegen möchten.</string>
   <string name="clone_remote_repo">Remote Repository klonen</string>
   <string name="create_local_repo">Lokales Repository anlegen</string>
+  <string name="select_gpg_key_title">Wähle\nGPG Key</string>
+  <string name="gpg_key_select">Schlüssel auswählen</string>
   <!-- SSH port validation -->
   <string name="ssh_scheme_needed_title">Möglicherweise inkorrekte URL</string>
   <string name="ssh_scheme_needed_message">Es sieht so aus, als ob Sie einen benutzerdefinierten Port in Ihrer URL angegeben haben, aber nicht in dem ssh://-Schema.\nDas kann dazu führen, dass Ihr Port als Teil des Pfades betrachtet wird. Drücken Sie hier auf OK um die URL zu korrigieren.</string>
   <!-- Proxy configuration activity -->
+  <string name="port">Port</string>
+  <string name="otp_import_qr_code">QR-Code scannen</string>
+  <string name="otp_import_manual_entry">Manuell eingeben</string>
+  <string name="otp_import_manual_hint_secret">Schlüssel</string>
+  <string name="gpg_key_select_mandatory">Die Auswahl eines GPG-Schlüssels ist notwendig, um fortzufahren</string>
 </resources>

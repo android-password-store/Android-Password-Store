@@ -354,6 +354,8 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="ssh_scheme_needed_message">Semella que o teu URL contén un porto personalizado, pero non indica o esquema ssh://.\nEsto pode facer que o porto sexa considerado parte do enderezo. Preme aquí en OK para arranxalo URL.</string>
   <string name="https_scheme_with_port_title">URL HTTPS con porto personalizado</string>
   <string name="https_scheme_with_port_message">Semella que estar a usar un URL HTTPS cun porto personalizado. Esta función non está soportada, e causará problemas futuros. Preme OK para eliminar o porto do URL.</string>
+  <string name="git_scheme_disallowed_title">Non se recomenda utilizar o protocolo git://</string>
+  <string name="git_scheme_disallowed_message">O protocolo git proporcionado polo git-daemon non realiza o transporte cifrado e non é válido para operacións seguras.</string>
   <!-- Proxy configuration activity -->
   <string name="proxy_hostname">Servidor proxy</string>
   <string name="port">Porto</string>
@@ -366,4 +368,5 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="otp_import_manual_entry">Escribir manualmente</string>
   <string name="otp_import_manual_hint_secret">Segredo</string>
   <string name="otp_import_manual_hint_account">Conta</string>
+  <string name="gpg_key_select_mandatory">É preciso elexir unha chave GPG para continuar</string>
 </resources>

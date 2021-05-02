@@ -353,6 +353,8 @@
   <string name="ssh_scheme_needed_message">Parece que sua URL contém uma porta personalizada, mas não especifica o esquema ssh://\nIsto pode fazer com que a porta seja considerada uma parte do seu caminho. Pressione OK aqui para corrigir o URL.</string>
   <string name="https_scheme_with_port_title">URL HTTPS com porta personalizada</string>
   <string name="https_scheme_with_port_message">Parece que você está usando uma URL HTTPS com uma porta personalizada. Isto não é suportado e causará problemas na linha. Pressione OK para remover a porta da URL.</string>
+  <string name="git_scheme_disallowed_title">Usa o protocolo git:// não é recomendado</string>
+  <string name="git_scheme_disallowed_message">O protocolo git fornecido pelo git-daemon não produz qualquer encriptação de transporte e não é adequado para operações seguras.</string>
   <!-- Proxy configuration activity -->
   <string name="proxy_hostname">Nome do Host de proxy</string>
   <string name="port">Porta</string>
@@ -361,4 +363,9 @@
   <string name="oreo_autofill_password_fill_and_conditional_save_support">Preencha e salve as senhas (salvamento requer que nenhum serviço de acessibilidade esteja ativado)</string>
   <string name="clear_saved_host_key">Limpar chave de host salva</string>
   <string name="clear_saved_host_key_success">Chave de host limpa com sucesso!</string>
+  <string name="otp_import_qr_code">Escanear QR code</string>
+  <string name="otp_import_manual_entry">Inserir manualmente</string>
+  <string name="otp_import_manual_hint_secret">Segredo</string>
+  <string name="otp_import_manual_hint_account">Conta</string>
+  <string name="gpg_key_select_mandatory">A seleção de uma chave GPG é necessária para prosseguir</string>
 </resources>
