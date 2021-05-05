@@ -1,6 +1,6 @@
 # Centralized versions for dependencies that share versions
 [versions]
-androidx_test = "1.4.0-alpha05"
+androidx_test = "1.4.0-alpha06"
 coroutines = "1.5.0-RC"
 hilt = "2.35.1"
 kotlin = "1.5.0"
@@ -8,9 +8,9 @@ lifecycle = "2.4.0-alpha01"
 
 [libraries]
 # buildSrc dependencies
-androidGradlePlugin = "com.android.tools.build:gradle:4.1.3"
+androidGradlePlugin = "com.android.tools.build:gradle:4.2.0"
 binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.5.0"
-dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.30"
+dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.32"
 downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
 hiltGradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -29,7 +29,7 @@ androidx-annotation = "androidx.annotation:annotation:1.1.0"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-alpha01"
 androidx-appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
-androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0-beta01"
+androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0-beta02"
 androidx-coreKtx = "androidx.core:core-ktx:1.6.0-alpha02"
 androidx-documentfile = "androidx.documentfile:documentfile:1.0.1"
 androidx-fragmentKtx = "androidx.fragment:fragment-ktx:1.3.3"
@@ -63,10 +63,10 @@ thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
 thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
 thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
 thirdparty-leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
-thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.0"
+thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.1.0"
 thirdparty-plumber = "com.squareup.leakcanary:plumber-android:2.7"
 thirdparty-sshj = "com.hierynomus:sshj:0.31.0"
-thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:v5.7.1"
+thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
 thirdparty-timber = "com.jakewharton.timber:timber:4.7.1"
 thirdparty-timberkt = "com.github.ajalt:timberkt:1.5.1"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.0"
