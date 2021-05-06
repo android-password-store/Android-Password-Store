@@ -12,6 +12,8 @@ repositories {
   google()
   gradlePluginPortal()
   mavenCentral()
+  // Dokka's transitive kotlinx-html dependency is only published to their Space repo
+  // https://github.com/Kotlin/dokka/releases/tag/v1.4.32
   maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") {
     name = "KotlinX HTML Maven"
     content {
