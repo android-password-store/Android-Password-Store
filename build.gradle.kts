@@ -5,6 +5,7 @@
 plugins {
   `binary-compatibility-validator`
   `aps-plugin`
+  id("dev.zacsweers.kgp-150-leak-patcher") version "1.0.1"
 }
 
 allprojects { apply(plugin = "com.ncorti.ktfmt.gradle") }
