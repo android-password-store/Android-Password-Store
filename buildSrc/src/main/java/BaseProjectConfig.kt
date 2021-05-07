@@ -43,7 +43,6 @@ internal fun Project.configureForAllProjects() {
     maven("https://jitpack.io") {
       name = "JitPack"
       content {
-        includeModule("com.github.android-password-store", "zxing-android-embedded")
         includeModule("com.github.haroldadmin", "WhatTheStack")
         includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
       }

@@ -53,7 +53,7 @@ android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.0.10"
 
 # First-party libraries
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
-aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.1.0-aps"
+aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.0"
 
 # Third-party dependencies
 thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.68"
