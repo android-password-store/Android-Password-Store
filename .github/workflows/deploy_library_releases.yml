@@ -30,10 +30,10 @@ jobs:
     - name: Upload binaries
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
-        arguments: :${{ steps.task-select.outputs.PROJECT }}:uploadArchives
+        arguments: :${{ steps.task-select.outputs.PROJECT }}:publishAllPublicationsToMavenCentralRepository
       env:
-        SONATYPE_NEXUS_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
-        SONATYPE_NEXUS_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.NEXUS_PUBLISH_GPG_KEY }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
 
@@ -42,5 +42,5 @@ jobs:
       with:
         arguments: closeAndReleaseRepository
       env:
-        SONATYPE_NEXUS_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
-        SONATYPE_NEXUS_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}

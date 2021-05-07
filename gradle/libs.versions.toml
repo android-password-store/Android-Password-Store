@@ -15,7 +15,7 @@ downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
 hiltGradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 ktfmtGradlePlugin = "com.ncorti.ktfmt.gradle:plugin:0.5.0"
-mavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.13.0"
+mavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.15.1"
 okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
 semver4j = "com.vdurmont:semver4j:3.1.0"
 
