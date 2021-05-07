@@ -31,33 +31,36 @@ class CrowdinDownloadPlugin : Plugin<Project> {
           throw GradleException(EXCEPTION_MESSAGE)
         }
         tasks.register("buildOnApi") {
-          val login = providers.environmentVariable("CROWDIN_LOGIN").forUseAtConfigurationTime()
-          val key = providers.environmentVariable("CROWDIN_PROJECT_KEY").forUseAtConfigurationTime()
-          if (!login.isPresent) {
-            throw GradleException("CROWDIN_LOGIN environment variable must be set")
+          doLast {
+            val login = providers.environmentVariable("CROWDIN_LOGIN").forUseAtConfigurationTime()
+            val key =
+              providers.environmentVariable("CROWDIN_PROJECT_KEY").forUseAtConfigurationTime()
+            if (!login.isPresent) {
+              throw GradleException("CROWDIN_LOGIN environment variable must be set")
+            }
+            if (!key.isPresent) {
+              throw GradleException("CROWDIN_PROJECT_KEY environment variable must be set")
+            }
+            val client = OkHttpClient()
+            val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
+            val request = Request.Builder().url(url).get().build()
+            client.newCall(request).execute()
           }
-          if (!key.isPresent) {
-            throw GradleException("CROWDIN_PROJECT_KEY environment variable must be set")
-          }
-          val client = OkHttpClient()
-          val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
-          val request = Request.Builder().url(url).get().build()
-          client.newCall(request).execute()
         }
         tasks.register<Download>("downloadCrowdin") {
-          setDependsOn(setOf("buildOnApi"))
+          dependsOn("buildOnApi")
           src("https://crowdin.com/backend/download/project/$projectName.zip")
           dest("$buildDir/translations.zip")
           overwrite(true)
         }
         tasks.register<Copy>("extractCrowdin") {
-          setDependsOn(setOf("downloadCrowdin"))
+          dependsOn("downloadCrowdin")
           doFirst { File(buildDir, "translations").deleteRecursively() }
           from(zipTree("$buildDir/translations.zip"))
           into("$buildDir/translations")
         }
         tasks.register<Copy>("extractStrings") {
-          setDependsOn(setOf("extractCrowdin"))
+          dependsOn("extractCrowdin")
           from("$buildDir/translations/")
           into("${projectDir}/src/")
           setFinalizedBy(setOf("removeIncompleteStrings"))
@@ -86,7 +89,7 @@ class CrowdinDownloadPlugin : Plugin<Project> {
           }
         }
         tasks.register("crowdin") {
-          setDependsOn(setOf("extractStrings"))
+          dependsOn("extractStrings")
           if (!extension.skipCleanup) {
             doLast {
               File("$buildDir/translations").deleteRecursively()
