@@ -9,4 +9,4 @@ plugins {
   id("dev.zacsweers.kgp-150-leak-patcher") version "1.0.1"
 }
 
-allprojects { apply(plugin = "com.ncorti.ktfmt.gradle") }
+allprojects { apply(plugin = "com.diffplug.spotless") }

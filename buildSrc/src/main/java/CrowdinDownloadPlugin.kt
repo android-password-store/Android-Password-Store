@@ -18,7 +18,8 @@ import org.w3c.dom.Document
 
 private const val EXCEPTION_MESSAGE =
   """Applying `crowdin-plugin` requires a projectName to be configured via the "crowdin" extension."""
-private const val CROWDIN_BUILD_API_URL = "https://api.crowdin.com/api/project/%s/export?login=%s&account-key=%s"
+private const val CROWDIN_BUILD_API_URL =
+  "https://api.crowdin.com/api/project/%s/export?login=%s&account-key=%s"
 
 class CrowdinDownloadPlugin : Plugin<Project> {
 
@@ -69,7 +70,10 @@ class CrowdinDownloadPlugin : Plugin<Project> {
           doLast {
             val sourceSets = arrayOf("main", "nonFree")
             for (sourceSet in sourceSets) {
-              val stringFiles = File("${projectDir}/src/$sourceSet").walkTopDown().filter { it.name == "strings.xml" }
+              val stringFiles =
+                File("${projectDir}/src/$sourceSet").walkTopDown().filter {
+                  it.name == "strings.xml"
+                }
               val sourceFile =
                 stringFiles.firstOrNull { it.path.endsWith("values/strings.xml") }
                   ?: throw GradleException("No root strings.xml found in '$sourceSet' sourceSet")

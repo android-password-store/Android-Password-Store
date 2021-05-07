@@ -7,8 +7,8 @@ import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
-import com.ncorti.ktfmt.gradle.KtfmtExtension
-import com.ncorti.ktfmt.gradle.KtfmtPlugin
+import com.diffplug.gradle.spotless.SpotlessExtension
+import com.diffplug.gradle.spotless.SpotlessPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaLibraryPlugin
@@ -45,12 +45,15 @@ class PasswordStorePlugin : Plugin<Project> {
           project.configureExplicitApi()
         }
         is AppPlugin -> {
-          project.extensions.getByType<BaseAppModuleExtension>().configureAndroidApplicationOptions(project)
+          project
+            .extensions
+            .getByType<BaseAppModuleExtension>()
+            .configureAndroidApplicationOptions(project)
           project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
         }
-        is KtfmtPlugin -> {
-          project.extensions.getByType<KtfmtExtension>().configureKtfmt()
+        is SpotlessPlugin -> {
+          project.extensions.getByType<SpotlessExtension>().configureSpotless()
         }
         is SigningPlugin -> {
           project.extensions.getByType<SigningExtension>().configureBuildSigning()

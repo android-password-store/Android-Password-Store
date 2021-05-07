@@ -44,6 +44,8 @@ jobs:
     - name: Checkout repository
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      with:
+        fetch-depth: 0
       #with:
       #  ref: refs/pull/${{ github.event.pull_request.number }}/merge
 
@@ -55,7 +57,7 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
-        arguments: apiCheck testFreeDebug lintFreeDebug ktfmtCheck
+        arguments: apiCheck testFreeDebug lintFreeDebug spotlessCheck
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}

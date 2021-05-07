@@ -69,16 +69,36 @@ class VersioningPlugin : Plugin<Project> {
           doLast { version.withClearedSuffix().writeForAndroid(propFile.asFile.outputStream()) }
         }
         tasks.register("bumpMajor") {
-          doLast { version.withIncMajor().withClearedSuffix().writeForAndroid(propFile.asFile.outputStream()) }
+          doLast {
+            version
+              .withIncMajor()
+              .withClearedSuffix()
+              .writeForAndroid(propFile.asFile.outputStream())
+          }
         }
         tasks.register("bumpMinor") {
-          doLast { version.withIncMinor().withClearedSuffix().writeForAndroid(propFile.asFile.outputStream()) }
+          doLast {
+            version
+              .withIncMinor()
+              .withClearedSuffix()
+              .writeForAndroid(propFile.asFile.outputStream())
+          }
         }
         tasks.register("bumpPatch") {
-          doLast { version.withIncPatch().withClearedSuffix().writeForAndroid(propFile.asFile.outputStream()) }
+          doLast {
+            version
+              .withIncPatch()
+              .withClearedSuffix()
+              .writeForAndroid(propFile.asFile.outputStream())
+          }
         }
         tasks.register("bumpSnapshot") {
-          doLast { version.withIncMinor().withSuffix("SNAPSHOT").writeForAndroid(propFile.asFile.outputStream()) }
+          doLast {
+            version
+              .withIncMinor()
+              .withSuffix("SNAPSHOT")
+              .writeForAndroid(propFile.asFile.outputStream())
+          }
         }
       }
     }
