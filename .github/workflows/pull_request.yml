@@ -51,7 +51,7 @@ jobs:
 
     - name: Run instrumentation tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@08b092e904025fada32a01b711af1e7ff7b7a4a3
+      uses: reactivecircus/android-emulator-runner@599839e4285455fff52cd8e3614575e02f1b673f
       with:
         api-level: ${{ matrix.api-level }}
         target: default
