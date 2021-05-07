@@ -57,7 +57,6 @@ internal fun Project.configureForAllProjects() {
       jvmTarget = JavaVersion.VERSION_1_8.toString()
       freeCompilerArgs = freeCompilerArgs + additionalCompilerArgs
       languageVersion = "1.5"
-      useIR = true
     }
   }
   tasks.withType<Test> {
