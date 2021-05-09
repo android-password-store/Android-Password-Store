@@ -13,7 +13,7 @@ jobs:
     #  uses: technote-space/auto-cancel-redundant-workflow@f9dfa1c127a520e4d71b92892850f861fb861206
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
+      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
       id: service-changed
       with:
         result-encoding: string
