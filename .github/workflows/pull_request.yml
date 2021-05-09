@@ -24,9 +24,17 @@ jobs:
             pull_number: context.payload.number,
             per_page: 100
           })
-          const shouldRun = result.data.filter(f => !f.filename.endsWith(".md") || !f.filename.endsWith(".txt") || !f.filename.startsWith("contrib/") || !f.filename.endsWith(".yml")).length > 0
-          console.log(shouldRun)
-          return shouldRun
+          const files = result.data.filter(file =>
+            // We wanna run this if the PR workflow is modified
+            (file.filename.endsWith(".yml") && !file.filename.endsWith("pull_request.yml")) ||
+            // Changes in Markdown files don't need tests
+            file.filename.endsWith(".md") ||
+            // Changes to fastlane metadata aren't covered by tests
+            file.filename.startsWith("fastlane/")
+          )
+          // If filtered file count and source file count is equal, it means all files
+          // in this PR are skip-worthy.
+          return files.length != result.data.length
 
     - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
       if: ${{ steps.service-changed.outputs.result == 'true' }}
