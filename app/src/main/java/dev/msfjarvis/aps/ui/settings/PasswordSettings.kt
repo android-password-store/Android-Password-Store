@@ -44,7 +44,8 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
       sharedPrefs.edit { putString(PreferenceKeys.PREF_KEY_CUSTOM_DICT, uri.toString()) }
 
       val inputStream = activity.contentResolver.openInputStream(uri)
-      val customDictFile = File(activity.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
+      val customDictFile =
+        File(activity.filesDir.toString(), XkpwdDictionary.XKPWD_CUSTOM_DICT_FILE).outputStream()
       inputStream?.copyTo(customDictFile, 1024)
       inputStream?.close()
       customDictFile.close()
@@ -100,7 +101,10 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
       addPreferenceItem(customDictPathPref)
       editText(PreferenceKeys.GENERAL_SHOW_TIME) {
         titleRes = R.string.pref_clipboard_timeout_title
-        summaryProvider = { activity.getString(R.string.pref_clipboard_timeout_summary) }
+        summaryProvider =
+          { timeout ->
+            activity.getString(R.string.pref_clipboard_timeout_summary, timeout ?: "45")
+          }
         textInputType = InputType.TYPE_CLASS_NUMBER
       }
       checkBox(PreferenceKeys.SHOW_PASSWORD) {
