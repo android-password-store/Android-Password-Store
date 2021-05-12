@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-  compileOnly(libs.androidx.annotation)
+  implementation(libs.androidx.annotation)
   implementation(libs.androidx.autofill)
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
