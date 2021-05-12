@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-  compileOnly(libs.androidx.annotation)
+  implementation(libs.androidx.annotation)
   implementation(libs.dagger.hilt.core)
   implementation(libs.thirdparty.commons.codec)
   implementation(libs.thirdparty.kotlinResult)

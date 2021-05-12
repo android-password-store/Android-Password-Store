@@ -51,7 +51,7 @@ android {
 
 dependencies {
   kapt(libs.dagger.hilt.compiler)
-  compileOnly(libs.androidx.annotation)
+  implementation(libs.androidx.annotation)
   coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.autofillParser)
   implementation(projects.formatCommon)
