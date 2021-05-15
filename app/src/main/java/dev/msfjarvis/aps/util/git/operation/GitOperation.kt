@@ -60,7 +60,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   private val authActivity
     get() = callingActivity as ContinuationContainerActivity
 
-  private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) : CredentialsProvider() {
+  private class HttpsCredentialsProvider(private val passwordFinder: PasswordFinder) :
+    CredentialsProvider() {
 
     private var cachedPassword: CharArray? = null
 
@@ -72,7 +73,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
           is CredentialItem.Username -> item.value = uri?.user
           is CredentialItem.Password -> {
             item.value =
-              cachedPassword?.clone() ?: passwordFinder.reqPassword(null).also { cachedPassword = it.clone() }
+              cachedPassword?.clone()
+                ?: passwordFinder.reqPassword(null).also { cachedPassword = it.clone() }
           }
           else -> UnsupportedCredentialItem(uri, item.javaClass.name)
         }
@@ -102,7 +104,10 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
       .onFailure { e -> e(e) }
   }
 
-  private fun registerAuthProviders(authMethod: SshAuthMethod, credentialsProvider: CredentialsProvider? = null) {
+  private fun registerAuthProviders(
+    authMethod: SshAuthMethod,
+    credentialsProvider: CredentialsProvider? = null
+  ) {
     sshSessionFactory = SshjSessionFactory(authMethod, hostKeyFile)
     commands.filterIsInstance<TransportCommand<*, *>>().forEach { command ->
       command.setTransportConfigCallback { transport: Transport ->
@@ -132,12 +137,12 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     MaterialAlertDialogBuilder(callingActivity)
       .setMessage(callingActivity.resources.getString(R.string.ssh_preferences_dialog_text))
       .setTitle(callingActivity.resources.getString(R.string.ssh_preferences_dialog_title))
-      .setPositiveButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)) { _, _ ->
-        getSshKey(false)
-      }
-      .setNegativeButton(callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)) { _, _ ->
-        getSshKey(true)
-      }
+      .setPositiveButton(
+        callingActivity.resources.getString(R.string.ssh_preferences_dialog_import)
+      ) { _, _ -> getSshKey(false) }
+      .setNegativeButton(
+        callingActivity.resources.getString(R.string.ssh_preferences_dialog_generate)
+      ) { _, _ -> getSshKey(true) }
       .setNeutralButton(callingActivity.resources.getString(R.string.dialog_cancel)) { _, _ ->
         // Finish the blank GitActivity so user doesn't have to press back
         callingActivity.finish()
@@ -153,9 +158,10 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
             val result =
               withContext(Dispatchers.Main) {
                 suspendCoroutine<BiometricAuthenticator.Result> { cont ->
-                  BiometricAuthenticator.authenticate(callingActivity, R.string.biometric_prompt_title_ssh_auth) {
-                    if (it !is BiometricAuthenticator.Result.Failure) cont.resume(it)
-                  }
+                  BiometricAuthenticator.authenticate(
+                    callingActivity,
+                    R.string.biometric_prompt_title_ssh_auth
+                  ) { if (it !is BiometricAuthenticator.Result.Failure) cont.resume(it) }
                 }
               }
             when (result) {
@@ -193,7 +199,8 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         }
       AuthMode.OpenKeychain -> registerAuthProviders(SshAuthMethod.OpenKeychain(authActivity))
       AuthMode.Password -> {
-        val httpsCredentialProvider = HttpsCredentialsProvider(CredentialFinder(callingActivity, AuthMode.Password))
+        val httpsCredentialProvider =
+          HttpsCredentialsProvider(CredentialFinder(callingActivity, AuthMode.Password))
         registerAuthProviders(SshAuthMethod.Password(authActivity), httpsCredentialProvider)
       }
       AuthMode.None -> {}

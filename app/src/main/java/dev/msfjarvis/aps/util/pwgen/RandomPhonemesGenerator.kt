@@ -100,7 +100,9 @@ object RandomPhonemesGenerator {
       if (!candidate.flags.hasFlag(nextBasicType) ||
           (isStartOfPart && candidate.flags hasFlag NOT_FIRST) ||
           // Don't let a diphthong that starts with a vowel follow a vowel.
-          (previousFlags hasFlag VOWEL && candidate.flags hasFlag VOWEL && candidate.flags hasFlag DIPHTHONG) ||
+          (previousFlags hasFlag VOWEL &&
+            candidate.flags hasFlag VOWEL &&
+            candidate.flags hasFlag DIPHTHONG) ||
           // Don't add multi-character candidates if we would go over the targetLength.
           (password.length + candidate.length > targetLength) ||
           (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS && candidate.isAmbiguous)
@@ -129,11 +131,15 @@ object RandomPhonemesGenerator {
       // Second part: Add digits and symbols with a certain probability (if requested) if
       // they would not directly follow the first character in a pronounceable part.
 
-      if (!isStartOfPart && pwFlags hasFlag PasswordGenerator.DIGITS && secureRandomBiasedBoolean(30)) {
+      if (!isStartOfPart &&
+          pwFlags hasFlag PasswordGenerator.DIGITS &&
+          secureRandomBiasedBoolean(30)
+      ) {
         var randomDigit: Char
         do {
           randomDigit = secureRandomNumber(10).toString(10).first()
-        } while (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS && randomDigit in PasswordGenerator.AMBIGUOUS_STR)
+        } while (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS &&
+          randomDigit in PasswordGenerator.AMBIGUOUS_STR)
 
         password += randomDigit
         // Begin a new pronounceable part after every digit.
@@ -143,11 +149,15 @@ object RandomPhonemesGenerator {
         continue
       }
 
-      if (!isStartOfPart && pwFlags hasFlag PasswordGenerator.SYMBOLS && secureRandomBiasedBoolean(20)) {
+      if (!isStartOfPart &&
+          pwFlags hasFlag PasswordGenerator.SYMBOLS &&
+          secureRandomBiasedBoolean(20)
+      ) {
         var randomSymbol: Char
         do {
           randomSymbol = PasswordGenerator.SYMBOLS_STR.secureRandomCharacter()
-        } while (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS && randomSymbol in PasswordGenerator.AMBIGUOUS_STR)
+        } while (pwFlags hasFlag PasswordGenerator.NO_AMBIGUOUS &&
+          randomSymbol in PasswordGenerator.AMBIGUOUS_STR)
         password += randomSymbol
         // Continue the password generation as if nothing was added.
       }
@@ -157,8 +167,9 @@ object RandomPhonemesGenerator {
       nextBasicType =
         when {
           candidate.flags.hasFlag(CONSONANT) -> VOWEL
-          previousFlags.hasFlag(VOWEL) || candidate.flags.hasFlag(DIPHTHONG) || secureRandomBiasedBoolean(60) ->
-            CONSONANT
+          previousFlags.hasFlag(VOWEL) ||
+            candidate.flags.hasFlag(DIPHTHONG) ||
+            secureRandomBiasedBoolean(60) -> CONSONANT
           else -> VOWEL
         }
       previousFlags = candidate.flags

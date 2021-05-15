@@ -30,7 +30,10 @@ class XkpwdDictionary(context: Context) {
         context.resources.openRawResource(R.raw.xkpwdict).bufferedReader().readLines()
       }
 
-    words = lines.asSequence().map { it.trim() }.filter { it.isNotEmpty() && !it.contains(' ') }.groupBy { it.length }
+    words =
+      lines.asSequence().map { it.trim() }.filter { it.isNotEmpty() && !it.contains(' ') }.groupBy {
+        it.length
+      }
   }
 
   companion object {

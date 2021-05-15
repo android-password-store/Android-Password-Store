@@ -65,7 +65,12 @@ public class OpenPgpServiceConnection(context: Context, providerPackageName: Str
         val serviceIntent = Intent(OpenPgpApi.SERVICE_INTENT_2)
         // NOTE: setPackage is very important to restrict the intent to this provider only!
         serviceIntent.setPackage(mProviderPackageName)
-        val connect = mApplicationContext.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE)
+        val connect =
+          mApplicationContext.bindService(
+            serviceIntent,
+            mServiceConnection,
+            Context.BIND_AUTO_CREATE
+          )
         if (!connect) {
           throw Exception("bindService() returned false!")
         }

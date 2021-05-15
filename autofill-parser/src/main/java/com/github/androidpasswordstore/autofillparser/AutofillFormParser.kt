@@ -41,7 +41,8 @@ public sealed class FormOrigin(public open val identifier: String) {
     when (this) {
       is Web -> identifier
       is App -> {
-        val info = context.packageManager.getApplicationInfo(identifier, PackageManager.GET_META_DATA)
+        val info =
+          context.packageManager.getApplicationInfo(identifier, PackageManager.GET_META_DATA)
         val label = context.packageManager.getApplicationLabel(info)
         if (untrusted) "“$label”" else "$label"
       }
@@ -174,7 +175,10 @@ private class AutofillFormParser(
         // the single origin among the detected fillable or saveable fields. If this origin
         // is null, but we encountered web origins elsewhere in the AssistStructure, the
         // situation is uncertain and Autofill should not be offered.
-        webOriginToFormOrigin(context, scenario.allFields.map { it.webOrigin }.toSet().singleOrNull() ?: return null)
+        webOriginToFormOrigin(
+          context,
+          scenario.allFields.map { it.webOrigin }.toSet().singleOrNull() ?: return null
+        )
       }
     }
   }
@@ -204,7 +208,12 @@ private constructor(
     ): FillableForm? {
       val form = AutofillFormParser(context, structure, isManualRequest, customSuffixes)
       if (form.formOrigin == null || form.scenario == null) return null
-      return FillableForm(form.formOrigin, form.scenario.map { it.autofillId }, form.ignoredIds, form.saveFlags)
+      return FillableForm(
+        form.formOrigin,
+        form.scenario.map { it.autofillId },
+        form.ignoredIds,
+        form.saveFlags
+      )
     }
   }
 

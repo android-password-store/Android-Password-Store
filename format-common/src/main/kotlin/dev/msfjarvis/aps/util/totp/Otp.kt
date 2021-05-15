@@ -23,7 +23,8 @@ internal object Otp {
     check(STEAM_ALPHABET.size == 26)
   }
 
-  fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String) = runCatching {
+  fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String) =
+      runCatching {
     val algo = "Hmac${algorithm.uppercase(Locale.ROOT)}"
     val decodedSecret = BASE_32.decode(secret)
     val secretKey = SecretKeySpec(decodedSecret, algo)

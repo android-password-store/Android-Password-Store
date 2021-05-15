@@ -61,7 +61,11 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
     }
   }
 
-  private fun makeMatchDataset(context: Context, file: File, imeSpec: InlinePresentationSpec?): Dataset? {
+  private fun makeMatchDataset(
+    context: Context,
+    file: File,
+    imeSpec: InlinePresentationSpec?
+  ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
     val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
@@ -82,12 +86,21 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
     return makeIntentDataset(context, AutofillAction.Generate, intentSender, metadata, imeSpec)
   }
 
-  private fun makeFillOtpFromSmsDataset(context: Context, imeSpec: InlinePresentationSpec?): Dataset? {
+  private fun makeFillOtpFromSmsDataset(
+    context: Context,
+    imeSpec: InlinePresentationSpec?
+  ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.FillOtpFromSms)) return null
     if (!AutofillSmsActivity.shouldOfferFillFromSms(context)) return null
     val metadata = makeFillOtpFromSmsMetadata(context)
     val intentSender = AutofillSmsActivity.makeFillOtpFromSmsIntentSender(context)
-    return makeIntentDataset(context, AutofillAction.FillOtpFromSms, intentSender, metadata, imeSpec)
+    return makeIntentDataset(
+      context,
+      AutofillAction.FillOtpFromSms,
+      intentSender,
+      metadata,
+      imeSpec
+    )
   }
 
   private fun makePublisherChangedDataset(
@@ -150,7 +163,12 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
         addDataset(it)
       }
       if (datasetCount == 0) return null
-      setHeader(makeRemoteView(context, makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))))
+      setHeader(
+        makeRemoteView(
+          context,
+          makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))
+        )
+      )
       makeSaveInfo()?.let { setSaveInfo(it) }
       setClientState(clientState)
       setIgnoredIds(*ignoredIds.toTypedArray())
@@ -177,7 +195,11 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
   }
 
   /** Creates and returns a suitable [FillResponse] to the Autofill framework. */
-  fun fillCredentials(context: Context, inlineSuggestionsRequest: InlineSuggestionsRequest?, callback: FillCallback) {
+  fun fillCredentials(
+    context: Context,
+    inlineSuggestionsRequest: InlineSuggestionsRequest?,
+    callback: FillCallback
+  ) {
     AutofillMatcher.getMatchesFor(context, formOrigin)
       .fold(
         success = { matchedFiles ->

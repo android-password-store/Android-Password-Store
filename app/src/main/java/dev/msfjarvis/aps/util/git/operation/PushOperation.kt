@@ -7,7 +7,8 @@ package dev.msfjarvis.aps.util.git.operation
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.GitCommand
 
-class PushOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
+class PushOperation(callingActivity: ContinuationContainerActivity) :
+  GitOperation(callingActivity) {
 
   override val commands: Array<GitCommand<out Any>> =
     arrayOf(

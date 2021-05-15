@@ -35,7 +35,9 @@ private fun Context.matchPreferences(formOrigin: FormOrigin): SharedPreferences 
 }
 
 class AutofillPublisherChangedException(val formOrigin: FormOrigin) :
-  Exception("The publisher of '${formOrigin.identifier}' changed since an entry was first matched with this app") {
+  Exception(
+    "The publisher of '${formOrigin.identifier}' changed since an entry was first matched with this app"
+  ) {
 
   init {
     require(formOrigin is FormOrigin.App)
@@ -50,10 +52,12 @@ class AutofillMatcher {
     private const val MAX_NUM_MATCHES = 10
 
     private const val PREFERENCE_PREFIX_TOKEN = "token;"
-    private fun tokenKey(formOrigin: FormOrigin.App) = "$PREFERENCE_PREFIX_TOKEN${formOrigin.identifier}"
+    private fun tokenKey(formOrigin: FormOrigin.App) =
+      "$PREFERENCE_PREFIX_TOKEN${formOrigin.identifier}"
 
     private const val PREFERENCE_PREFIX_MATCHES = "matches;"
-    private fun matchesKey(formOrigin: FormOrigin) = "$PREFERENCE_PREFIX_MATCHES${formOrigin.identifier}"
+    private fun matchesKey(formOrigin: FormOrigin) =
+      "$PREFERENCE_PREFIX_MATCHES${formOrigin.identifier}"
 
     private fun hasFormOriginHashChanged(context: Context, formOrigin: FormOrigin): Boolean {
       return when (formOrigin) {
@@ -61,7 +65,8 @@ class AutofillMatcher {
         is FormOrigin.App -> {
           val packageName = formOrigin.identifier
           val certificatesHash = computeCertificatesHash(context, packageName)
-          val storedCertificatesHash = context.autofillAppMatches.getString(tokenKey(formOrigin), null) ?: return false
+          val storedCertificatesHash =
+            context.autofillAppMatches.getString(tokenKey(formOrigin), null) ?: return false
           val hashHasChanged = certificatesHash != storedCertificatesHash
           if (hashHasChanged) {
             e { "$packageName: stored=$storedCertificatesHash, new=$certificatesHash" }
@@ -91,15 +96,21 @@ class AutofillMatcher {
      * time the user associated an entry with it, an [AutofillPublisherChangedException] will be
      * thrown.
      */
-    fun getMatchesFor(context: Context, formOrigin: FormOrigin): Result<List<File>, AutofillPublisherChangedException> {
+    fun getMatchesFor(
+      context: Context,
+      formOrigin: FormOrigin
+    ): Result<List<File>, AutofillPublisherChangedException> {
       if (hasFormOriginHashChanged(context, formOrigin)) {
         return Err(AutofillPublisherChangedException(formOrigin))
       }
       val matchPreferences = context.matchPreferences(formOrigin)
-      val matchedFiles = matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
+      val matchedFiles =
+        matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
       return Ok(
         matchedFiles.filter { it.exists() }.also { validFiles ->
-          matchPreferences.edit { putStringSet(matchesKey(formOrigin), validFiles.map { it.absolutePath }.toSet()) }
+          matchPreferences.edit {
+            putStringSet(matchesKey(formOrigin), validFiles.map { it.absolutePath }.toSet())
+          }
         }
       )
     }
@@ -127,7 +138,8 @@ class AutofillMatcher {
         throw AutofillPublisherChangedException(formOrigin)
       }
       val matchPreferences = context.matchPreferences(formOrigin)
-      val matchedFiles = matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
+      val matchedFiles =
+        matchPreferences.getStringSet(matchesKey(formOrigin), emptySet())!!.map { File(it) }
       val newFiles = setOf(file.absoluteFile).union(matchedFiles)
       if (newFiles.size > MAX_NUM_MATCHES) {
         Toast.makeText(
@@ -138,7 +150,9 @@ class AutofillMatcher {
           .show()
         return
       }
-      matchPreferences.edit { putStringSet(matchesKey(formOrigin), newFiles.map { it.absolutePath }.toSet()) }
+      matchPreferences.edit {
+        putStringSet(matchesKey(formOrigin), newFiles.map { it.absolutePath }.toSet())
+      }
       storeFormOriginHash(context, formOrigin)
       d { "Stored match for $formOrigin" }
     }
@@ -153,7 +167,8 @@ class AutofillMatcher {
       delete: Collection<File> = emptyList()
     ) {
       val deletePathList = delete.map { it.absolutePath }
-      val oldNewPathMap = moveFromTo.mapValues { it.value.absolutePath }.mapKeys { it.key.absolutePath }
+      val oldNewPathMap =
+        moveFromTo.mapValues { it.value.absolutePath }.mapKeys { it.key.absolutePath }
       for (prefs in listOf(context.autofillAppMatches, context.autofillWebMatches)) {
         for ((key, value) in prefs.all) {
           if (!key.startsWith(PREFERENCE_PREFIX_MATCHES)) continue

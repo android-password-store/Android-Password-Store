@@ -157,7 +157,10 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
       return
     } else {
       previousListener = null
-      serviceConnection = OpenPgpServiceConnection(this, OPENPGP_PROVIDER, onBoundListener).also { it.bindToService() }
+      serviceConnection =
+        OpenPgpServiceConnection(this, OPENPGP_PROVIDER, onBoundListener).also {
+          it.bindToService()
+        }
     }
   }
 
@@ -250,7 +253,10 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
     fun getParentPath(fullPath: String, repositoryPath: String): String {
       val relativePath = getRelativePath(fullPath, repositoryPath)
       val index = relativePath.lastIndexOf("/")
-      return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace("/+".toRegex(), "/")
+      return "/${relativePath.substring(startIndex = 0, endIndex = index + 1)}/".replace(
+        "/+".toRegex(),
+        "/"
+      )
     }
 
     /** /path/to/store/social/facebook.gpg -> social/facebook */

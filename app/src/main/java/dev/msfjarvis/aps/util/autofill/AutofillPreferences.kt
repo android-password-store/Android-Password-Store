@@ -96,7 +96,8 @@ enum class DirectoryStructure(val value: String) {
     when (this) {
       EncryptedUsername -> null
       FileBased -> file.nameWithoutExtension.takeIf { file.parentFile != null }
-      DirectoryBased -> file.parentFile?.let { parentFile -> "${parentFile.name}/${file.nameWithoutExtension}" }
+      DirectoryBased ->
+        file.parentFile?.let { parentFile -> "${parentFile.name}/${file.nameWithoutExtension}" }
           ?: file.nameWithoutExtension
     }
 
@@ -138,7 +139,8 @@ object AutofillPreferences {
     directoryStructure: DirectoryStructure
   ): Credentials {
     // Always give priority to a username stored in the encrypted extras
-    val username = entry.username ?: directoryStructure.getUsernameFor(file) ?: context.getDefaultUsername()
+    val username =
+      entry.username ?: directoryStructure.getUsernameFor(file) ?: context.getDefaultUsername()
     return Credentials(username, entry.password, entry.totp.value)
   }
 }

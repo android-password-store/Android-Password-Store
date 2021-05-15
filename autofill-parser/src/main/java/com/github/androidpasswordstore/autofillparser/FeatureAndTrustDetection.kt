@@ -63,7 +63,10 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "com.chrome.canary" to arrayOf("IBnfofsj779wxbzRRDxb6rBPPy/0Nm6aweNFdjmiTPw="),
     "com.chrome.dev" to arrayOf("kETuX+5LvF4h3URmVDHE6x8fcaMnFqC8knvLs5Izyr8="),
     "com.duckduckgo.mobile.android" to
-      arrayOf("u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=", "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="),
+      arrayOf(
+        "u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=",
+        "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="
+      ),
     "com.microsoft.emmx" to arrayOf("AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk="),
     "com.opera.mini.native" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
@@ -80,7 +83,8 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "org.mozilla.klar" to arrayOf("YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w="),
     "org.torproject.torbrowser" to arrayOf("IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg="),
     "org.ungoogled.chromium.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
-    "org.ungoogled.chromium.extensions.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
+    "org.ungoogled.chromium.extensions.stable" to
+      arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
     "com.kiwibrowser.browser" to arrayOf("wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig="),
   )
 
@@ -162,19 +166,30 @@ private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY =
 
 private fun isNoAccessibilityServiceEnabled(context: Context): Boolean {
   // See https://chromium.googlesource.com/chromium/src/+/447a31e977a65e2eb78804e4a09633699b4ede33
-  return Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+  return Settings.Secure.getString(
+      context.contentResolver,
+      Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+    )
     .isNullOrEmpty()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun getBrowserSaveFlag(context: Context, appPackage: String): Int? =
   BROWSER_SAVE_FLAG[appPackage]
-    ?: BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY[appPackage]?.takeIf { isNoAccessibilityServiceEnabled(context) }
+    ?: BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY[appPackage]?.takeIf {
+      isNoAccessibilityServiceEnabled(context)
+    }
 
-internal data class BrowserAutofillSupportInfo(val multiOriginMethod: BrowserMultiOriginMethod, val saveFlags: Int?)
+internal data class BrowserAutofillSupportInfo(
+  val multiOriginMethod: BrowserMultiOriginMethod,
+  val saveFlags: Int?
+)
 
 @RequiresApi(Build.VERSION_CODES.O)
-internal fun getBrowserAutofillSupportInfoIfTrusted(context: Context, appPackage: String): BrowserAutofillSupportInfo? {
+internal fun getBrowserAutofillSupportInfoIfTrusted(
+  context: Context,
+  appPackage: String
+): BrowserAutofillSupportInfo? {
   if (!isTrustedBrowser(context, appPackage)) return null
   return BrowserAutofillSupportInfo(
     multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
@@ -197,14 +212,18 @@ public enum class BrowserAutofillSupportLevel {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun getBrowserAutofillSupportLevel(context: Context, appPackage: String): BrowserAutofillSupportLevel {
+private fun getBrowserAutofillSupportLevel(
+  context: Context,
+  appPackage: String
+): BrowserAutofillSupportLevel {
   val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
   return when {
     browserInfo == null -> BrowserAutofillSupportLevel.None
     appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
     appPackage in BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY ->
       BrowserAutofillSupportLevel.PasswordFillAndSaveIfNoAccessibility
-    browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None -> BrowserAutofillSupportLevel.PasswordFill
+    browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None ->
+      BrowserAutofillSupportLevel.PasswordFill
     browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
     else -> BrowserAutofillSupportLevel.GeneralFillAndSave
   }.takeUnless { supportLevel ->
@@ -212,7 +231,8 @@ private fun getBrowserAutofillSupportLevel(context: Context, appPackage: String)
     // (compatibility mode is only available on Android Pie and higher). Since all known browsers
     // with native Autofill support offer full save support as well, we reuse the list of those
     // browsers here.
-    supportLevel != BrowserAutofillSupportLevel.GeneralFillAndSave && Build.VERSION.SDK_INT < Build.VERSION_CODES.P
+    supportLevel != BrowserAutofillSupportLevel.GeneralFillAndSave &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.P
   }
     ?: BrowserAutofillSupportLevel.None
 }
@@ -222,9 +242,15 @@ public fun getInstalledBrowsersWithAutofillSupportLevel(
   context: Context
 ): List<Pair<String, BrowserAutofillSupportLevel>> {
   val testWebIntent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse("http://example.org") }
-  val installedBrowsers = context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
+  val installedBrowsers =
+    context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
   return installedBrowsers
     .map { it to getBrowserAutofillSupportLevel(context, it.activityInfo.packageName) }
     .filter { it.first.isDefault || it.second != BrowserAutofillSupportLevel.None }
-    .map { context.packageManager.getApplicationLabel(it.first.activityInfo.applicationInfo).toString() to it.second }
+    .map {
+      context
+        .packageManager
+        .getApplicationLabel(it.first.activityInfo.applicationInfo)
+        .toString() to it.second
+    }
 }

@@ -14,7 +14,8 @@ import org.eclipse.jgit.api.GitCommand
  * @param uri URL to clone the repository from
  * @param callingActivity the calling activity
  */
-class CloneOperation(callingActivity: ContinuationContainerActivity, uri: String) : GitOperation(callingActivity) {
+class CloneOperation(callingActivity: ContinuationContainerActivity, uri: String) :
+  GitOperation(callingActivity) {
 
   override val commands: Array<GitCommand<out Any>> =
     arrayOf(

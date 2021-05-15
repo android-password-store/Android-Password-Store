@@ -83,9 +83,15 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
         resetButton.visibility = View.VISIBLE
       }
       resetButton.setOnClickListener {
-        AutofillMatcher.clearMatchesFor(this@AutofillPublisherChangedActivity, FormOrigin.App(appPackage))
+        AutofillMatcher.clearMatchesFor(
+          this@AutofillPublisherChangedActivity,
+          FormOrigin.App(appPackage)
+        )
         val fillResponse = intent.getParcelableExtra<FillResponse>(EXTRA_FILL_RESPONSE_AFTER_RESET)
-        setResult(RESULT_OK, Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse) })
+        setResult(
+          RESULT_OK,
+          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillResponse) }
+        )
         finish()
       }
     }
@@ -96,13 +102,18 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
       with(binding) {
         val packageInfo = packageManager.getPackageInfo(appPackage, PackageManager.GET_META_DATA)
         val installTime = DateUtils.getRelativeTimeSpanString(packageInfo.firstInstallTime)
-        warningAppInstallDate.text = getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
+        warningAppInstallDate.text =
+          getString(R.string.oreo_autofill_warning_publisher_install_time, installTime)
         val appInfo = packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
         warningAppName.text = "“${packageManager.getApplicationLabel(appInfo)}”"
 
         val currentHash = computeCertificatesHash(this@AutofillPublisherChangedActivity, appPackage)
         warningAppAdvancedInfo.text =
-          getString(R.string.oreo_autofill_warning_publisher_advanced_info_template, appPackage, currentHash)
+          getString(
+            R.string.oreo_autofill_warning_publisher_advanced_info_template,
+            appPackage,
+            currentHash
+          )
       }
     }
       .onFailure { e ->

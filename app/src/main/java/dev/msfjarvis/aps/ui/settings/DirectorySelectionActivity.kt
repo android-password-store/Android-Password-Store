@@ -39,7 +39,9 @@ class DirectorySelectionActivity : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
           .setTitle(resources.getString(R.string.sdcard_root_warning_title))
           .setMessage(resources.getString(R.string.sdcard_root_warning_message))
-          .setPositiveButton(resources.getString(R.string.sdcard_root_warning_remove_everything)) { _, _ ->
+          .setPositiveButton(resources.getString(R.string.sdcard_root_warning_remove_everything)) {
+            _,
+            _ ->
             prefs.edit { putString(PreferenceKeys.GIT_EXTERNAL_REPO, uri.path) }
           }
           .setNegativeButton(R.string.dialog_cancel, null)

@@ -19,7 +19,8 @@ import dev.msfjarvis.aps.R
 object BiometricAuthenticator {
 
   private const val TAG = "BiometricAuthenticator"
-  private const val validAuthenticators = Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
+  private const val validAuthenticators =
+    Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
 
   sealed class Result {
     data class Success(val cryptoObject: BiometricPrompt.CryptoObject?) : Result()
@@ -29,7 +30,8 @@ object BiometricAuthenticator {
   }
 
   fun canAuthenticate(activity: FragmentActivity): Boolean {
-    return BiometricManager.from(activity).canAuthenticate(validAuthenticators) == BiometricManager.BIOMETRIC_SUCCESS
+    return BiometricManager.from(activity).canAuthenticate(validAuthenticators) ==
+      BiometricManager.BIOMETRIC_SUCCESS
   }
 
   fun authenticate(
@@ -55,7 +57,11 @@ object BiometricAuthenticator {
               BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
                 Result.HardwareUnavailableOrDisabled
               }
-              else -> Result.Failure(errorCode, activity.getString(R.string.biometric_auth_error_reason, errString))
+              else ->
+                Result.Failure(
+                  errorCode,
+                  activity.getString(R.string.biometric_auth_error_reason, errString)
+                )
             }
           )
         }
@@ -77,7 +83,11 @@ object BiometricAuthenticator {
           .setTitle(activity.getString(dialogTitleRes))
           .setAllowedAuthenticators(validAuthenticators)
           .build()
-      BiometricPrompt(activity, ContextCompat.getMainExecutor(activity.applicationContext), authCallback)
+      BiometricPrompt(
+          activity,
+          ContextCompat.getMainExecutor(activity.applicationContext),
+          authCallback
+        )
         .authenticate(promptInfo)
     } else {
       callback(Result.HardwareUnavailableOrDisabled)

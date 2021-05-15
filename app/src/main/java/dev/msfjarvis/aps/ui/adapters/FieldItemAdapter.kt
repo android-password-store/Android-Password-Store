@@ -55,7 +55,8 @@ class FieldItemAdapter(
     notifyDataSetChanged()
   }
 
-  class FieldItemViewHolder(itemView: View, val binding: ItemFieldBinding) : RecyclerView.ViewHolder(itemView) {
+  class FieldItemViewHolder(itemView: View, val binding: ItemFieldBinding) :
+    RecyclerView.ViewHolder(itemView) {
 
     fun bind(fieldItem: FieldItem, showPassword: Boolean, copyTextToClipBoard: (String?) -> Unit) {
       with(binding) {
@@ -66,7 +67,8 @@ class FieldItemAdapter(
         when (fieldItem.action) {
           FieldItem.ActionType.COPY -> {
             itemTextContainer.apply {
-              endIconDrawable = ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)
+              endIconDrawable =
+                ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)
               endIconMode = TextInputLayout.END_ICON_CUSTOM
               setEndIconOnClickListener { copyTextToClipBoard(itemText.text.toString()) }
             }

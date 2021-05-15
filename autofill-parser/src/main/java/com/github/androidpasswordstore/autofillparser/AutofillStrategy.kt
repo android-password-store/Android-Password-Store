@@ -9,11 +9,14 @@ import androidx.annotation.RequiresApi
 import com.github.androidpasswordstore.autofillparser.CertaintyLevel.Certain
 import com.github.androidpasswordstore.autofillparser.CertaintyLevel.Likely
 
-private inline fun <T> Pair<T, T>.all(predicate: T.() -> Boolean) = predicate(first) && predicate(second)
+private inline fun <T> Pair<T, T>.all(predicate: T.() -> Boolean) =
+  predicate(first) && predicate(second)
 
-private inline fun <T> Pair<T, T>.any(predicate: T.() -> Boolean) = predicate(first) || predicate(second)
+private inline fun <T> Pair<T, T>.any(predicate: T.() -> Boolean) =
+  predicate(first) || predicate(second)
 
-private inline fun <T> Pair<T, T>.none(predicate: T.() -> Boolean) = !predicate(first) && !predicate(second)
+private inline fun <T> Pair<T, T>.none(predicate: T.() -> Boolean) =
+  !predicate(first) && !predicate(second)
 
 /**
  * The strategy used to detect [AutofillScenario] s; expressed using the DSL implemented in
@@ -32,7 +35,8 @@ internal val autofillStrategy = strategy {
     }
     currentPassword(optional = true) {
       takeSingle { alreadyMatched ->
-        val adjacentToNewPasswords = directlyPrecedes(alreadyMatched) || directlyFollows(alreadyMatched)
+        val adjacentToNewPasswords =
+          directlyPrecedes(alreadyMatched) || directlyFollows(alreadyMatched)
         // The Autofill framework has not hint that applies to current passwords only.
         // In this scenario, we have already matched fields a pair of fields with a specific
         // new password hint, so we take a generic Autofill password hint to mean a current
@@ -109,7 +113,9 @@ internal val autofillStrategy = strategy {
   rule(applyInSingleOriginMode = true) {
     newPassword { takeSingle { hasHintNewPassword && isFocused } }
     username(optional = true) {
-      takeSingle { alreadyMatched -> usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull()) }
+      takeSingle { alreadyMatched ->
+        usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull())
+      }
     }
   }
 
@@ -119,7 +125,9 @@ internal val autofillStrategy = strategy {
   rule(applyInSingleOriginMode = true) {
     currentPassword { takeSingle { hasAutocompleteHintCurrentPassword && isFocused } }
     username(optional = true) {
-      takeSingle { alreadyMatched -> usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull()) }
+      takeSingle { alreadyMatched ->
+        usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull())
+      }
     }
   }
 
@@ -129,7 +137,9 @@ internal val autofillStrategy = strategy {
   rule(applyInSingleOriginMode = true) {
     genericPassword { takeSingle { passwordCertainty >= Likely && isFocused } }
     username(optional = true) {
-      takeSingle { alreadyMatched -> usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull()) }
+      takeSingle { alreadyMatched ->
+        usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull())
+      }
     }
   }
 
@@ -139,12 +149,16 @@ internal val autofillStrategy = strategy {
   rule {
     username { takeSingle { hasHintUsername && isFocused } }
     currentPassword(matchHidden = true) {
-      takeSingle { alreadyMatched -> directlyFollows(alreadyMatched.singleOrNull()) && couldBeTwoStepHiddenPassword }
+      takeSingle { alreadyMatched ->
+        directlyFollows(alreadyMatched.singleOrNull()) && couldBeTwoStepHiddenPassword
+      }
     }
   }
 
   // Match a single focused OTP field.
-  rule(applyInSingleOriginMode = true) { otp { takeSingle { otpCertainty >= Likely && isFocused } } }
+  rule(applyInSingleOriginMode = true) {
+    otp { takeSingle { otpCertainty >= Likely && isFocused } }
+  }
 
   // Match a single focused username field without a password field.
   rule(applyInSingleOriginMode = true) {
@@ -162,7 +176,9 @@ internal val autofillStrategy = strategy {
   // This rule can apply in single origin mode since even though the password field may not be
   // focused at the time the rule runs, the fill suggestion will only show if it ever receives
   // focus.
-  rule(applyInSingleOriginMode = true) { currentPassword { takeSingle { hasAutocompleteHintCurrentPassword } } }
+  rule(applyInSingleOriginMode = true) {
+    currentPassword { takeSingle { hasAutocompleteHintCurrentPassword } }
+  }
 
   // See above.
   rule(applyInSingleOriginMode = true) { genericPassword { takeSingle { true } } }
@@ -171,10 +187,14 @@ internal val autofillStrategy = strategy {
   rule(applyInSingleOriginMode = true, applyOnManualRequestOnly = true) {
     genericPassword { takeSingle { isFocused } }
     username(optional = true) {
-      takeSingle { alreadyMatched -> usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull()) }
+      takeSingle { alreadyMatched ->
+        usernameCertainty >= Likely && directlyPrecedes(alreadyMatched.singleOrNull())
+      }
     }
   }
 
   // Match any focused username field on manual request.
-  rule(applyInSingleOriginMode = true, applyOnManualRequestOnly = true) { username { takeSingle { isFocused } } }
+  rule(applyInSingleOriginMode = true, applyOnManualRequestOnly = true) {
+    username { takeSingle { isFocused } }
+  }
 }

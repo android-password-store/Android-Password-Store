@@ -46,11 +46,16 @@ class AutofillFilterView : AppCompatActivity() {
     private const val HEIGHT_PERCENTAGE = 0.9
     private const val WIDTH_PERCENTAGE = 0.75
 
-    private const val EXTRA_FORM_ORIGIN_WEB = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_FORM_ORIGIN_WEB"
-    private const val EXTRA_FORM_ORIGIN_APP = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_FORM_ORIGIN_APP"
+    private const val EXTRA_FORM_ORIGIN_WEB =
+      "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_FORM_ORIGIN_WEB"
+    private const val EXTRA_FORM_ORIGIN_APP =
+      "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_FORM_ORIGIN_APP"
     private var matchAndDecryptFileRequestCode = 1
 
-    fun makeMatchAndDecryptFileIntentSender(context: Context, formOrigin: FormOrigin): IntentSender {
+    fun makeMatchAndDecryptFileIntentSender(
+      context: Context,
+      formOrigin: FormOrigin
+    ): IntentSender {
       val intent =
         Intent(context, AutofillFilterView::class.java).apply {
           when (formOrigin) {
@@ -108,7 +113,9 @@ class AutofillFilterView : AppCompatActivity() {
           FormOrigin.App(intent!!.getStringExtra(EXTRA_FORM_ORIGIN_APP)!!)
         }
         else -> {
-          e { "AutofillFilterActivity started without EXTRA_FORM_ORIGIN_WEB or EXTRA_FORM_ORIGIN_APP" }
+          e {
+            "AutofillFilterActivity started without EXTRA_FORM_ORIGIN_WEB or EXTRA_FORM_ORIGIN_APP"
+          }
           finish()
           return
         }
@@ -125,7 +132,8 @@ class AutofillFilterView : AppCompatActivity() {
     with(binding) {
       rvPassword.apply {
         adapter =
-          SearchableRepositoryAdapter(R.layout.oreo_autofill_filter_row, ::PasswordViewHolder) { item ->
+          SearchableRepositoryAdapter(R.layout.oreo_autofill_filter_row, ::PasswordViewHolder) {
+            item ->
             val file = item.file.relativeTo(item.rootDir)
             val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
             val identifier = directoryStructure.getIdentifierFor(file)
@@ -171,10 +179,15 @@ class AutofillFilterView : AppCompatActivity() {
         setOnCheckedChangeListener { _, _ -> updateSearch() }
       }
       shouldMatch.text =
-        getString(R.string.oreo_autofill_match_with, formOrigin.getPrettyIdentifier(applicationContext))
+        getString(
+          R.string.oreo_autofill_match_with,
+          formOrigin.getPrettyIdentifier(applicationContext)
+        )
       model.searchResult.observe(this@AutofillFilterView) { result ->
         val list = result.passwordItems
-        (rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) { rvPassword.scrollToPosition(0) }
+        (rvPassword.adapter as SearchableRepositoryAdapter).submitList(list) {
+          rvPassword.scrollToPosition(0)
+        }
         // Switch RecyclerView out for a "no results" message if the new list is empty and
         // the message is not yet shown (and vice versa).
         if ((list.isEmpty() && rvPasswordSwitcher.nextView.id == rvPasswordEmpty.id) ||
@@ -189,16 +202,21 @@ class AutofillFilterView : AppCompatActivity() {
   private fun updateSearch() {
     model.search(
       binding.search.text.toString().trim(),
-      filterMode = if (binding.strictDomainSearch.isChecked) FilterMode.StrictDomain else FilterMode.Fuzzy,
+      filterMode =
+        if (binding.strictDomainSearch.isChecked) FilterMode.StrictDomain else FilterMode.Fuzzy,
       searchMode = SearchMode.RecursivelyInSubdirectories,
       listMode = ListMode.FilesOnly
     )
   }
 
   private fun decryptAndFill(item: PasswordItem) {
-    if (binding.shouldClear.isChecked) AutofillMatcher.clearMatchesFor(applicationContext, formOrigin)
-    if (binding.shouldMatch.isChecked) AutofillMatcher.addMatchFor(applicationContext, formOrigin, item.file)
+    if (binding.shouldClear.isChecked)
+      AutofillMatcher.clearMatchesFor(applicationContext, formOrigin)
+    if (binding.shouldMatch.isChecked)
+      AutofillMatcher.addMatchFor(applicationContext, formOrigin, item.file)
     // intent?.extras? is checked to be non-null in onCreate
-    decryptAction.launch(AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this))
+    decryptAction.launch(
+      AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
+    )
   }
 }

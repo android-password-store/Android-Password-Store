@@ -41,7 +41,11 @@ fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
   setOnShowListener {
     findViewById<T>(id)?.apply {
       setOnFocusChangeListener { v, _ ->
-        v.post { context.getSystemService<InputMethodManager>()?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT) }
+        v.post {
+          context
+            .getSystemService<InputMethodManager>()
+            ?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+        }
       }
       requestFocus()
     }
@@ -64,7 +68,8 @@ fun Context.getEncryptedProxyPrefs() = getEncryptedPrefs("http_proxy")
 
 /** Get an instance of [EncryptedSharedPreferences] with the given [fileName] */
 private fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
-  val masterKeyAlias = MasterKey.Builder(applicationContext).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+  val masterKeyAlias =
+    MasterKey.Builder(applicationContext).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
   return EncryptedSharedPreferences.create(
     applicationContext,
     fileName,

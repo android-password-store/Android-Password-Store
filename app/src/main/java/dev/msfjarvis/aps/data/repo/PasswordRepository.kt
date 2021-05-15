@@ -199,8 +199,11 @@ object PasswordRepository {
   fun getFilesList(path: File?): ArrayList<File> {
     if (path == null || !path.exists()) return ArrayList()
 
-    val directories = (path.listFiles(FileFilter { pathname -> pathname.isDirectory }) ?: emptyArray()).toList()
-    val files = (path.listFiles(FileFilter { pathname -> pathname.extension == "gpg" }) ?: emptyArray()).toList()
+    val directories =
+      (path.listFiles(FileFilter { pathname -> pathname.isDirectory }) ?: emptyArray()).toList()
+    val files =
+      (path.listFiles(FileFilter { pathname -> pathname.extension == "gpg" }) ?: emptyArray())
+        .toList()
 
     val items = ArrayList<File>()
     items.addAll(directories)
@@ -216,7 +219,11 @@ object PasswordRepository {
    * @return a list of password items
    */
   @JvmStatic
-  fun getPasswords(path: File, rootDir: File, sortOrder: PasswordSortOrder): ArrayList<PasswordItem> {
+  fun getPasswords(
+    path: File,
+    rootDir: File,
+    sortOrder: PasswordSortOrder
+  ): ArrayList<PasswordItem> {
     // We need to recover the passwords then parse the files
     val passList = getFilesList(path).also { it.sortBy { f -> f.name } }
     val passwordList = ArrayList<PasswordItem>()

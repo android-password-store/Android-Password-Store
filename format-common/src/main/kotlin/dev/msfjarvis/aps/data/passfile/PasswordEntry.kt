@@ -115,11 +115,13 @@ constructor(
       .lineSequence()
       .filter { line ->
         return@filter when {
-          USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } && !foundUsername -> {
+          USERNAME_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } &&
+            !foundUsername -> {
             foundUsername = true
             false
           }
-          line.startsWith("otpauth://", ignoreCase = true) || line.startsWith("totp:", ignoreCase = true) -> {
+          line.startsWith("otpauth://", ignoreCase = true) ||
+            line.startsWith("totp:", ignoreCase = true) -> {
             false
           }
           else -> {
@@ -174,7 +176,8 @@ constructor(
   private fun findUsername(): String? {
     extraContentString.splitToSequence("\n").forEach { line ->
       for (prefix in USERNAME_FIELDS) {
-        if (line.startsWith(prefix, ignoreCase = true)) return line.substring(prefix.length).trimStart()
+        if (line.startsWith(prefix, ignoreCase = true))
+          return line.substring(prefix.length).trimStart()
       }
     }
     return null

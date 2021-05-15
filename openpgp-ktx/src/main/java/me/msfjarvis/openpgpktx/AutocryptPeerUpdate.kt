@@ -15,7 +15,11 @@ public class AutocryptPeerUpdate() : Parcelable {
   private var effectiveDate: Date? = null
   private lateinit var preferEncrypt: PreferEncrypt
 
-  internal constructor(keyData: ByteArray?, effectiveDate: Date?, preferEncrypt: PreferEncrypt) : this() {
+  internal constructor(
+    keyData: ByteArray?,
+    effectiveDate: Date?,
+    preferEncrypt: PreferEncrypt
+  ) : this() {
     this.keyData = keyData
     this.effectiveDate = effectiveDate
     this.preferEncrypt = preferEncrypt

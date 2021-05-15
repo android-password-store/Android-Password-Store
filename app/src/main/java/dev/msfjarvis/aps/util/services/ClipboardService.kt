@@ -140,7 +140,10 @@ class ClipboardService : Service() {
   }
 
   @RequiresApi(Build.VERSION_CODES.N)
-  private fun createNotificationApi24(pendingIntent: PendingIntent, clearTimeMs: Long): Notification {
+  private fun createNotificationApi24(
+    pendingIntent: PendingIntent,
+    clearTimeMs: Long
+  ): Notification {
     return NotificationCompat.Builder(this, CHANNEL_ID)
       .setContentTitle(getString(R.string.app_name))
       .setContentText(getString(R.string.tap_clear_clipboard))
@@ -157,7 +160,11 @@ class ClipboardService : Service() {
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val serviceChannel =
-        NotificationChannel(CHANNEL_ID, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW)
+        NotificationChannel(
+          CHANNEL_ID,
+          getString(R.string.app_name),
+          NotificationManager.IMPORTANCE_LOW
+        )
       val manager = getSystemService<NotificationManager>()
       if (manager != null) {
         manager.createNotificationChannel(serviceChannel)

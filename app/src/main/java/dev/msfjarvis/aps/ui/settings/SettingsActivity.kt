@@ -68,7 +68,9 @@ class SettingsActivity : AppCompatActivity() {
             getString(subScreen.titleRes)
           }
       }
-    savedInstanceState?.getParcelable<PreferencesAdapter.SavedState>("adapter")?.let(adapter::loadSavedState)
+    savedInstanceState
+      ?.getParcelable<PreferencesAdapter.SavedState>("adapter")
+      ?.let(adapter::loadSavedState)
     binding.preferenceRecyclerView.adapter = adapter
   }
 

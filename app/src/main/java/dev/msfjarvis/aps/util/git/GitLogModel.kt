@@ -40,7 +40,9 @@ class GitLogModel {
   // Additionally, tests with 1000 commits in the log have not produced a significant delay in the
   // user experience.
   private val cache: MutableList<GitCommit> by lazy(LazyThreadSafetyMode.NONE) {
-    commits().map { GitCommit(it.hash, it.shortMessage, it.authorIdent.name, it.time) }.toMutableList()
+    commits()
+      .map { GitCommit(it.hash, it.shortMessage, it.authorIdent.name, it.time) }
+      .toMutableList()
   }
   val size = cache.size
 

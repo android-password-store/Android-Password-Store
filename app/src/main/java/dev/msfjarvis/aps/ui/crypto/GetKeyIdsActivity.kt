@@ -55,7 +55,9 @@ class GetKeyIdsActivity : BasePgpActivity() {
         OpenPgpApi.RESULT_CODE_SUCCESS -> {
           runCatching {
             val ids =
-              result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map { OpenPgpUtils.convertKeyIdToHex(it) }
+              result.getLongArrayExtra(OpenPgpApi.RESULT_KEY_IDS)?.map {
+                OpenPgpUtils.convertKeyIdToHex(it)
+              }
                 ?: emptyList()
             val keyResult = Intent().putExtra(OpenPgpApi.EXTRA_KEY_IDS, ids.toTypedArray())
             setResult(RESULT_OK, keyResult)

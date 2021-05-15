@@ -35,7 +35,9 @@ open class PasswordItemRecyclerAdapter :
     return super.onItemClicked(listener) as PasswordItemRecyclerAdapter
   }
 
-  override fun onSelectionChanged(listener: (selection: Selection<String>) -> Unit): PasswordItemRecyclerAdapter {
+  override fun onSelectionChanged(
+    listener: (selection: Selection<String>) -> Unit
+  ): PasswordItemRecyclerAdapter {
     return super.onSelectionChanged(listener) as PasswordItemRecyclerAdapter
   }
 
@@ -59,7 +61,8 @@ open class PasswordItemRecyclerAdapter :
       name.text = spannable
       if (item.type == PasswordItem.TYPE_CATEGORY) {
         folderIndicator.visibility = View.VISIBLE
-        val count = item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
+        val count =
+          item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
         childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
         childCount.text = "$count"
       } else {
@@ -74,7 +77,8 @@ open class PasswordItemRecyclerAdapter :
     }
   }
 
-  class PasswordItemDetailsLookup(private val recyclerView: RecyclerView) : ItemDetailsLookup<String>() {
+  class PasswordItemDetailsLookup(private val recyclerView: RecyclerView) :
+    ItemDetailsLookup<String>() {
 
     override fun getItemDetails(event: MotionEvent): ItemDetails<String>? {
       val view = recyclerView.findChildViewUnder(event.x, event.y) ?: return null

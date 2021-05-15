@@ -108,9 +108,14 @@ internal class FormField(
         "text",
       )
     private val HTML_INPUT_FIELD_TYPES_FILLABLE =
-      (HTML_INPUT_FIELD_TYPES_USERNAME + HTML_INPUT_FIELD_TYPES_PASSWORD + HTML_INPUT_FIELD_TYPES_OTP).toSet().toList()
+      (HTML_INPUT_FIELD_TYPES_USERNAME +
+          HTML_INPUT_FIELD_TYPES_PASSWORD +
+          HTML_INPUT_FIELD_TYPES_OTP)
+        .toSet()
+        .toList()
 
-    @RequiresApi(Build.VERSION_CODES.O) private fun isSupportedHint(hint: String) = hint in HINTS_FILLABLE
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun isSupportedHint(hint: String) = hint in HINTS_FILLABLE
     private val EXCLUDED_TERMS =
       listOf(
         "url_bar", // Chrome/Edge/Firefox address bar
@@ -214,7 +219,8 @@ internal class FormField(
   private val hasAutocompleteHintUsername = htmlAutocomplete == "username"
   val hasAutocompleteHintCurrentPassword = htmlAutocomplete == "current-password"
   private val hasAutocompleteHintNewPassword = htmlAutocomplete == "new-password"
-  private val hasAutocompleteHintPassword = hasAutocompleteHintCurrentPassword || hasAutocompleteHintNewPassword
+  private val hasAutocompleteHintPassword =
+    hasAutocompleteHintCurrentPassword || hasAutocompleteHintNewPassword
   private val hasAutocompleteHintOtp = htmlAutocomplete == "one-time-code"
 
   // Results of hint-based field type detection
@@ -238,7 +244,9 @@ internal class FormField(
   // fields to the fill rules and only exclude those fields that have incompatible autocomplete
   // hint.
   val couldBeTwoStepHiddenPassword =
-    !isVisible && isHtmlPasswordField && (hasAutocompleteHintCurrentPassword || htmlAutocomplete == null)
+    !isVisible &&
+      isHtmlPasswordField &&
+      (hasAutocompleteHintCurrentPassword || htmlAutocomplete == null)
 
   // Since many site put autocomplete=off on login forms for compliance reasons or since they are
   // worried of the user's browser automatically (i.e., without any user interaction) filling
@@ -247,7 +255,8 @@ internal class FormField(
   private val excludedByHints = excludedByAutofillHints
 
   // Only offer to fill into custom views if they explicitly opted into Autofill.
-  val relevantField = hasAutofillTypeText && (isTextField || autofillHints.isNotEmpty()) && !excludedByHints
+  val relevantField =
+    hasAutofillTypeText && (isTextField || autofillHints.isNotEmpty()) && !excludedByHints
 
   // Exclude fields based on hint, resource ID or HTML name.
   // Note: We still report excluded fields as relevant since they count for adjacency heuristics,
@@ -260,7 +269,8 @@ internal class FormField(
     notExcluded && (isAndroidPasswordField || isHtmlPasswordField || hasHintPassword)
   private val isCertainPasswordField = isPossiblePasswordField && hasHintPassword
   private val isLikelyPasswordField =
-    isPossiblePasswordField && (isCertainPasswordField || PASSWORD_HEURISTIC_TERMS.anyMatchesFieldInfo)
+    isPossiblePasswordField &&
+      (isCertainPasswordField || PASSWORD_HEURISTIC_TERMS.anyMatchesFieldInfo)
   val passwordCertainty =
     if (isCertainPasswordField) CertaintyLevel.Certain
     else if (isLikelyPasswordField) CertaintyLevel.Likely
@@ -273,17 +283,20 @@ internal class FormField(
     isPossibleOtpField &&
       (isCertainOtpField ||
         OTP_HEURISTIC_TERMS.anyMatchesFieldInfo ||
-        ((htmlMaxLength == null || htmlMaxLength in 6..8) && OTP_WEAK_HEURISTIC_TERMS.anyMatchesFieldInfo))
+        ((htmlMaxLength == null || htmlMaxLength in 6..8) &&
+          OTP_WEAK_HEURISTIC_TERMS.anyMatchesFieldInfo))
   val otpCertainty =
     if (isCertainOtpField) CertaintyLevel.Certain
     else if (isLikelyOtpField) CertaintyLevel.Likely
     else if (isPossibleOtpField) CertaintyLevel.Possible else CertaintyLevel.Impossible
 
   // Username field heuristics (based only on the current field)
-  private val isPossibleUsernameField = notExcluded && !isPossiblePasswordField && !isCertainOtpField
+  private val isPossibleUsernameField =
+    notExcluded && !isPossiblePasswordField && !isCertainOtpField
   private val isCertainUsernameField = isPossibleUsernameField && hasHintUsername
   private val isLikelyUsernameField =
-    isPossibleUsernameField && (isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.anyMatchesFieldInfo))
+    isPossibleUsernameField &&
+      (isCertainUsernameField || (USERNAME_HEURISTIC_TERMS.anyMatchesFieldInfo))
   val usernameCertainty =
     if (isCertainUsernameField) CertaintyLevel.Certain
     else if (isLikelyUsernameField) CertaintyLevel.Likely

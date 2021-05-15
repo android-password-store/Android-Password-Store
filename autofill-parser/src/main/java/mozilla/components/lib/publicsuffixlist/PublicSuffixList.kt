@@ -58,7 +58,8 @@ internal class PublicSuffixList(
   fun getPublicSuffixPlusOne(domain: String): Deferred<String?> =
     scope.async {
       when (val offset = data.getPublicSuffixOffset(domain)) {
-        is PublicSuffixOffset.Offset -> domain.split('.').drop(offset.value).joinToString(separator = ".")
+        is PublicSuffixOffset.Offset ->
+          domain.split('.').drop(offset.value).joinToString(separator = ".")
         else -> null
       }
     }

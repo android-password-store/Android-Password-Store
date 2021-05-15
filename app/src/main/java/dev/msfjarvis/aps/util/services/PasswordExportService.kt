@@ -137,7 +137,11 @@ class PasswordExportService : Service() {
   private fun createNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val serviceChannel =
-        NotificationChannel(CHANNEL_ID, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW)
+        NotificationChannel(
+          CHANNEL_ID,
+          getString(R.string.app_name),
+          NotificationManager.IMPORTANCE_LOW
+        )
       val manager = getSystemService<NotificationManager>()
       if (manager != null) {
         manager.createNotificationChannel(serviceChannel)

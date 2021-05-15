@@ -55,7 +55,12 @@ class GitConfigActivity : BaseGitActivity() {
       } else {
         GitSettings.authorEmail = email
         GitSettings.authorName = name
-        Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(
+            binding.root,
+            getString(R.string.git_server_config_save_success),
+            Snackbar.LENGTH_SHORT
+          )
+          .show()
         Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
       }
     }
@@ -77,7 +82,8 @@ class GitConfigActivity : BaseGitActivity() {
     if (repo != null) {
       binding.gitHeadStatus.text = headStatusMsg(repo)
       // enable the abort button only if we're rebasing or merging
-      val needsAbort = repo.repositoryState.isRebasing || repo.repositoryState == RepositoryState.MERGING
+      val needsAbort =
+        repo.repositoryState.isRebasing || repo.repositoryState == RepositoryState.MERGING
       binding.gitAbortRebase.isEnabled = needsAbort
       binding.gitAbortRebase.alpha = if (needsAbort) 1.0f else 0.5f
     }

@@ -21,7 +21,11 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
 
   private val pipeIdGen: AtomicInteger = AtomicInteger()
 
-  public suspend fun executeApi(data: Intent, inputStream: InputStream?, outputStream: OutputStream?): Intent {
+  public suspend fun executeApi(
+    data: Intent,
+    inputStream: InputStream?,
+    outputStream: OutputStream?
+  ): Intent {
     var input: ParcelFileDescriptor? = null
     return try {
       if (inputStream != null) {
@@ -124,7 +128,8 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
      *
      * This action uses no extras.
      */
-    public const val ACTION_CHECK_PERMISSION: String = "org.openintents.openpgp.action.CHECK_PERMISSION"
+    public const val ACTION_CHECK_PERMISSION: String =
+      "org.openintents.openpgp.action.CHECK_PERMISSION"
 
     /**
      * Sign text resulting in a cleartext signature Some magic pre-processing of the text is done to
@@ -178,9 +183,11 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
      * passphrase) String EXTRA_ORIGINAL_FILENAME (original filename to be encrypted as metadata)
      * boolean EXTRA_ENABLE_COMPRESSION (enable ZLIB compression, default ist true)
      */
-    public const val ACTION_SIGN_AND_ENCRYPT: String = "org.openintents.openpgp.action.SIGN_AND_ENCRYPT"
+    public const val ACTION_SIGN_AND_ENCRYPT: String =
+      "org.openintents.openpgp.action.SIGN_AND_ENCRYPT"
 
-    public const val ACTION_QUERY_AUTOCRYPT_STATUS: String = "org.openintents.openpgp.action.QUERY_AUTOCRYPT_STATUS"
+    public const val ACTION_QUERY_AUTOCRYPT_STATUS: String =
+      "org.openintents.openpgp.action.QUERY_AUTOCRYPT_STATUS"
 
     /**
      * Decrypts and verifies given input stream. This methods handles encrypted-only,
@@ -208,7 +215,8 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
      * returned extras: OpenPgpDecryptMetadata RESULT_METADATA String RESULT_CHARSET (charset which
      * was specified in the headers of ascii armored input, if any)
      */
-    public const val ACTION_DECRYPT_METADATA: String = "org.openintents.openpgp.action.DECRYPT_METADATA"
+    public const val ACTION_DECRYPT_METADATA: String =
+      "org.openintents.openpgp.action.DECRYPT_METADATA"
 
     /**
      * Select key id for signing
@@ -217,7 +225,8 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
      *
      * returned extras: long EXTRA_SIGN_KEY_ID
      */
-    public const val ACTION_GET_SIGN_KEY_ID: String = "org.openintents.openpgp.action.GET_SIGN_KEY_ID"
+    public const val ACTION_GET_SIGN_KEY_ID: String =
+      "org.openintents.openpgp.action.GET_SIGN_KEY_ID"
 
     /**
      * Get key ids based on given user ids (=emails)
@@ -254,7 +263,8 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
      */
     public const val ACTION_BACKUP: String = "org.openintents.openpgp.action.BACKUP"
 
-    public const val ACTION_UPDATE_AUTOCRYPT_PEER: String = "org.openintents.openpgp.action.UPDATE_AUTOCRYPT_PEER"
+    public const val ACTION_UPDATE_AUTOCRYPT_PEER: String =
+      "org.openintents.openpgp.action.UPDATE_AUTOCRYPT_PEER"
 
     /* Intent extras */
     public const val EXTRA_API_VERSION: String = "api_version"
@@ -323,7 +333,8 @@ public class OpenPgpApi(private val context: Context, private val service: IOpen
     public const val EXTRA_DATA_LENGTH: String = "data_length"
     public const val EXTRA_DECRYPTION_RESULT: String = "decryption_result"
     public const val EXTRA_SENDER_ADDRESS: String = "sender_address"
-    public const val EXTRA_SUPPORT_OVERRIDE_CRYPTO_WARNING: String = "support_override_crpto_warning"
+    public const val EXTRA_SUPPORT_OVERRIDE_CRYPTO_WARNING: String =
+      "support_override_crpto_warning"
     public const val EXTRA_AUTOCRYPT_PEER_ID: String = "autocrypt_peer_id"
     public const val EXTRA_AUTOCRYPT_PEER_UPDATE: String = "autocrypt_peer_update"
     public const val EXTRA_AUTOCRYPT_PEER_GOSSIP_UPDATES: String = "autocrypt_peer_gossip_updates"

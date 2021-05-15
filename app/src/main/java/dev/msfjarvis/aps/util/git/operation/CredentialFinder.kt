@@ -24,7 +24,8 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
-class CredentialFinder(val callingActivity: FragmentActivity, val authMode: AuthMode) : InteractivePasswordFinder() {
+class CredentialFinder(val callingActivity: FragmentActivity, val authMode: AuthMode) :
+  InteractivePasswordFinder() {
 
   override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
     val gitOperationPrefs = callingActivity.getEncryptedGitPrefs()
@@ -49,18 +50,22 @@ class CredentialFinder(val callingActivity: FragmentActivity, val authMode: Auth
         rememberRes = R.string.git_operation_remember_password
         errorRes = R.string.git_operation_wrong_password
       }
-      else -> throw IllegalStateException("Only SshKey and Password connection mode ask for passwords")
+      else ->
+        throw IllegalStateException("Only SshKey and Password connection mode ask for passwords")
     }
     if (isRetry) gitOperationPrefs.edit { remove(credentialPref) }
     val storedCredential = gitOperationPrefs.getString(credentialPref, null)
     if (storedCredential == null) {
       val layoutInflater = LayoutInflater.from(callingActivity)
 
-      @SuppressLint("InflateParams") val dialogView = layoutInflater.inflate(R.layout.git_credential_layout, null)
-      val credentialLayout = dialogView.findViewById<TextInputLayout>(R.id.git_auth_passphrase_layout)
+      @SuppressLint("InflateParams")
+      val dialogView = layoutInflater.inflate(R.layout.git_credential_layout, null)
+      val credentialLayout =
+        dialogView.findViewById<TextInputLayout>(R.id.git_auth_passphrase_layout)
       val editCredential = dialogView.findViewById<TextInputEditText>(R.id.git_auth_credential)
       editCredential.setHint(hintRes)
-      val rememberCredential = dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
+      val rememberCredential =
+        dialogView.findViewById<MaterialCheckBox>(R.id.git_auth_remember_credential)
       rememberCredential.setText(rememberRes)
       if (isRetry) {
         credentialLayout.error = callingActivity.resources.getString(errorRes)

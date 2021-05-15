@@ -154,7 +154,10 @@ class AutofillResponseBuilder(form: FillableForm) {
       if (datasetCount == 0) return null
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         setHeader(
-          makeRemoteView(context, makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true)))
+          makeRemoteView(
+            context,
+            makeHeaderMetadata(formOrigin.getPrettyIdentifier(context, untrusted = true))
+          )
         )
       }
       makeSaveInfo()?.let { setSaveInfo(it) }

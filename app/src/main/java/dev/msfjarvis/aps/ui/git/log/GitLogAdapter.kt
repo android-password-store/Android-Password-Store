@@ -45,7 +45,8 @@ class GitLogAdapter : RecyclerView.Adapter<GitLogAdapter.ViewHolder>() {
 
   override fun getItemCount() = model.size
 
-  class ViewHolder(private val binding: GitLogRowLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+  class ViewHolder(private val binding: GitLogRowLayoutBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(commit: GitCommit) =
       with(binding) {

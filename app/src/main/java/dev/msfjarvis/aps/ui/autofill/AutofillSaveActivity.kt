@@ -34,13 +34,20 @@ class AutofillSaveActivity : AppCompatActivity() {
     private const val EXTRA_FOLDER_NAME = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_FOLDER_NAME"
     private const val EXTRA_PASSWORD = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_PASSWORD"
     private const val EXTRA_NAME = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_NAME"
-    private const val EXTRA_SHOULD_MATCH_APP = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_SHOULD_MATCH_APP"
-    private const val EXTRA_SHOULD_MATCH_WEB = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_SHOULD_MATCH_WEB"
-    private const val EXTRA_GENERATE_PASSWORD = "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_GENERATE_PASSWORD"
+    private const val EXTRA_SHOULD_MATCH_APP =
+      "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_SHOULD_MATCH_APP"
+    private const val EXTRA_SHOULD_MATCH_WEB =
+      "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_SHOULD_MATCH_WEB"
+    private const val EXTRA_GENERATE_PASSWORD =
+      "dev.msfjarvis.aps.autofill.oreo.ui.EXTRA_GENERATE_PASSWORD"
 
     private var saveRequestCode = 1
 
-    fun makeSaveIntentSender(context: Context, credentials: Credentials?, formOrigin: FormOrigin): IntentSender {
+    fun makeSaveIntentSender(
+      context: Context,
+      credentials: Credentials?,
+      formOrigin: FormOrigin
+    ): IntentSender {
       val identifier = formOrigin.getPrettyIdentifier(context, untrusted = false)
       // Prevent directory traversals
       val sanitizedIdentifier =
@@ -52,7 +59,11 @@ class AutofillSaveActivity : AppCompatActivity() {
           sanitizedIdentifier = sanitizedIdentifier,
           username = credentials?.username
         )
-      val fileName = directoryStructure.getSaveFileName(username = credentials?.username, identifier = identifier)
+      val fileName =
+        directoryStructure.getSaveFileName(
+          username = credentials?.username,
+          identifier = identifier
+        )
       val intent =
         Intent(context, AutofillSaveActivity::class.java).apply {
           putExtras(
@@ -60,13 +71,20 @@ class AutofillSaveActivity : AppCompatActivity() {
               EXTRA_FOLDER_NAME to folderName,
               EXTRA_NAME to fileName,
               EXTRA_PASSWORD to credentials?.password,
-              EXTRA_SHOULD_MATCH_APP to formOrigin.identifier.takeIf { formOrigin is FormOrigin.App },
-              EXTRA_SHOULD_MATCH_WEB to formOrigin.identifier.takeIf { formOrigin is FormOrigin.Web },
+              EXTRA_SHOULD_MATCH_APP to
+                formOrigin.identifier.takeIf { formOrigin is FormOrigin.App },
+              EXTRA_SHOULD_MATCH_WEB to
+                formOrigin.identifier.takeIf { formOrigin is FormOrigin.Web },
               EXTRA_GENERATE_PASSWORD to (credentials == null)
             )
           )
         }
-      return PendingIntent.getActivity(context, saveRequestCode++, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+      return PendingIntent.getActivity(
+          context,
+          saveRequestCode++,
+          intent,
+          PendingIntent.FLAG_CANCEL_CURRENT
+        )
         .intentSender
     }
   }
@@ -94,7 +112,8 @@ class AutofillSaveActivity : AppCompatActivity() {
             "FILE_PATH" to repo.resolve(intent.getStringExtra(EXTRA_FOLDER_NAME)!!).absolutePath,
             PasswordCreationActivity.EXTRA_FILE_NAME to intent.getStringExtra(EXTRA_NAME),
             PasswordCreationActivity.EXTRA_PASSWORD to intent.getStringExtra(EXTRA_PASSWORD),
-            PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
+            PasswordCreationActivity.EXTRA_GENERATE_PASSWORD to
+              intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
           )
         )
       }
@@ -117,8 +136,15 @@ class AutofillSaveActivity : AppCompatActivity() {
                   }
               val credentials = Credentials(username, password, null)
               val fillInDataset =
-                AutofillResponseBuilder.makeFillInDataset(this, credentials, clientState, AutofillAction.Generate)
-              Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
+                AutofillResponseBuilder.makeFillInDataset(
+                  this,
+                  credentials,
+                  clientState,
+                  AutofillAction.Generate
+                )
+              Intent().apply {
+                putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset)
+              }
             } else {
               // Password was extracted from a form, there is nothing to fill.
               Intent()

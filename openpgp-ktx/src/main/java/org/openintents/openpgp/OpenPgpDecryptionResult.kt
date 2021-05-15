@@ -22,7 +22,11 @@ public class OpenPgpDecryptionResult() : Parcelable {
     decryptedSessionKey = null
   }
 
-  private constructor(result: Int, sessionKey: ByteArray?, decryptedSessionKey: ByteArray?) : this() {
+  private constructor(
+    result: Int,
+    sessionKey: ByteArray?,
+    decryptedSessionKey: ByteArray?
+  ) : this() {
     this.result = result
     if (sessionKey == null != (decryptedSessionKey == null)) {
       throw AssertionError("sessionkey must be null iff decryptedSessionKey is null")

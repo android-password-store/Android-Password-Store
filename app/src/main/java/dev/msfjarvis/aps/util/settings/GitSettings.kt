@@ -25,7 +25,8 @@ enum class Protocol(val pref: String) {
 
     private val map = values().associateBy(Protocol::pref)
     fun fromString(type: String?): Protocol {
-      return map[type ?: return Ssh] ?: throw IllegalArgumentException("$type is not a valid Protocol")
+      return map[type ?: return Ssh]
+        ?: throw IllegalArgumentException("$type is not a valid Protocol")
     }
   }
 }
@@ -41,7 +42,8 @@ enum class AuthMode(val pref: String) {
 
     private val map = values().associateBy(AuthMode::pref)
     fun fromString(type: String?): AuthMode {
-      return map[type ?: return SshKey] ?: throw IllegalArgumentException("$type is not a valid AuthMode")
+      return map[type ?: return SshKey]
+        ?: throw IllegalArgumentException("$type is not a valid AuthMode")
     }
   }
 }
@@ -50,12 +52,18 @@ object GitSettings {
 
   private const val DEFAULT_BRANCH = "master"
 
-  private val settings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.sharedPrefs }
+  private val settings by lazy(LazyThreadSafetyMode.PUBLICATION) {
+    Application.instance.sharedPrefs
+  }
   private val encryptedSettings by lazy(LazyThreadSafetyMode.PUBLICATION) {
     Application.instance.getEncryptedGitPrefs()
   }
-  private val proxySettings by lazy(LazyThreadSafetyMode.PUBLICATION) { Application.instance.getEncryptedProxyPrefs() }
-  private val hostKeyPath by lazy(LazyThreadSafetyMode.NONE) { "${Application.instance.filesDir}/.host_key" }
+  private val proxySettings by lazy(LazyThreadSafetyMode.PUBLICATION) {
+    Application.instance.getEncryptedProxyPrefs()
+  }
+  private val hostKeyPath by lazy(LazyThreadSafetyMode.NONE) {
+    "${Application.instance.filesDir}/.host_key"
+  }
 
   var authMode
     get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))

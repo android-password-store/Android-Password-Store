@@ -35,7 +35,10 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding.fab.hide()
-    recyclerAdapter = PasswordItemRecyclerAdapter().onItemClicked { _, item -> listener.onFragmentInteraction(item) }
+    recyclerAdapter =
+      PasswordItemRecyclerAdapter().onItemClicked { _, item ->
+        listener.onFragmentInteraction(item)
+      }
     binding.passRecycler.apply {
       layoutManager = LinearLayoutManager(requireContext())
       itemAnimator = null
@@ -47,7 +50,9 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
 
     val path = requireNotNull(requireArguments().getString(PasswordStore.REQUEST_ARG_PATH))
     model.navigateTo(File(path), listMode = ListMode.DirectoriesOnly, pushPreviousLocation = false)
-    model.searchResult.observe(viewLifecycleOwner) { result -> recyclerAdapter.submitList(result.passwordItems) }
+    model.searchResult.observe(viewLifecycleOwner) { result ->
+      recyclerAdapter.submitList(result.passwordItems)
+    }
   }
 
   override fun onAttach(context: Context) {
@@ -58,12 +63,16 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
           override fun onFragmentInteraction(item: PasswordItem) {
             if (item.type == PasswordItem.TYPE_CATEGORY) {
               model.navigateTo(item.file, listMode = ListMode.DirectoriesOnly)
-              (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+              (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(
+                true
+              )
             }
           }
         }
     }
-      .onFailure { throw ClassCastException("$context must implement OnFragmentInteractionListener") }
+      .onFailure {
+        throw ClassCastException("$context must implement OnFragmentInteractionListener")
+      }
   }
 
   val currentDir: File

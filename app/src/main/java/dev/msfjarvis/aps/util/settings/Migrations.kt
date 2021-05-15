@@ -60,7 +60,8 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
         val url =
           when {
             urlWithFreeEntryScheme.startsWith("https://") -> urlWithFreeEntryScheme
-            urlWithFreeEntryScheme.startsWith("http://") -> urlWithFreeEntryScheme.replaceFirst("http", "https")
+            urlWithFreeEntryScheme.startsWith("http://") ->
+              urlWithFreeEntryScheme.replaceFirst("http", "https")
             else -> "https://$urlWithFreeEntryScheme"
           }
         runCatching { if (URI(url).rawAuthority != null) url else null }.get()
@@ -96,7 +97,10 @@ private fun migrateToHideAll(sharedPrefs: SharedPreferences) {
 
 private fun migrateToSshKey(context: Context, sharedPrefs: SharedPreferences) {
   val privateKeyFile = File(context.filesDir, ".ssh_key")
-  if (sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) && !SshKey.exists && privateKeyFile.exists()) {
+  if (sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
+      !SshKey.exists &&
+      privateKeyFile.exists()
+  ) {
     // Currently uses a private key imported or generated with an old version of Password Store.
     // Generated keys come with a public key which the user should still be able to view after
     // the migration (not possible for regular imported keys), hence the special case.

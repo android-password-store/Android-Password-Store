@@ -32,7 +32,12 @@ public class OpenPgpMetadata() : Parcelable {
     this.charset = charset
   }
 
-  private constructor(filename: String?, mimeType: String?, modificationTime: Long, originalSize: Long) : this() {
+  private constructor(
+    filename: String?,
+    mimeType: String?,
+    modificationTime: Long,
+    originalSize: Long
+  ) : this() {
     this.filename = filename
     this.mimeType = mimeType
     this.modificationTime = modificationTime

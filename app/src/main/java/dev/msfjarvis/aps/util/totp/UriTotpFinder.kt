@@ -44,7 +44,8 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
 
   override fun findAlgorithm(content: String): String {
     content.split("\n".toRegex()).forEach { line ->
-      if (line.startsWith(TOTP_FIELDS[0]) && Uri.parse(line).getQueryParameter("algorithm") != null) {
+      if (line.startsWith(TOTP_FIELDS[0]) && Uri.parse(line).getQueryParameter("algorithm") != null
+      ) {
         return Uri.parse(line).getQueryParameter("algorithm")!!
       }
     }

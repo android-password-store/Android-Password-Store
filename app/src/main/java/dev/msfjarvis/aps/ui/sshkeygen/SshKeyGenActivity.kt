@@ -30,9 +30,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private enum class KeyGenType(val generateKey: suspend (requireAuthentication: Boolean) -> Unit) {
-  Rsa({ requireAuthentication -> SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Rsa, requireAuthentication) }),
-  Ecdsa({ requireAuthentication -> SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Ecdsa, requireAuthentication) }),
-  Ed25519({ requireAuthentication -> SshKey.generateKeystoreWrappedEd25519Key(requireAuthentication) }),
+  Rsa({ requireAuthentication ->
+    SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Rsa, requireAuthentication)
+  }),
+  Ecdsa({ requireAuthentication ->
+    SshKey.generateKeystoreNativeKey(SshKey.Algorithm.Ecdsa, requireAuthentication)
+  }),
+  Ed25519({ requireAuthentication ->
+    SshKey.generateKeystoreWrappedEd25519Key(requireAuthentication)
+  }),
 }
 
 class SshKeyGenActivity : AppCompatActivity() {
@@ -50,7 +56,9 @@ class SshKeyGenActivity : AppCompatActivity() {
           MaterialAlertDialogBuilder(this@SshKeyGenActivity).run {
             setTitle(R.string.ssh_keygen_existing_title)
             setMessage(R.string.ssh_keygen_existing_message)
-            setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ -> lifecycleScope.launch { generate() } }
+            setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ ->
+              lifecycleScope.launch { generate() }
+            }
             setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
             show()
           }

@@ -18,10 +18,15 @@ enum class PasswordSortOrder(val comparator: java.util.Comparator<PasswordItem>)
       (p1.type + p1.name).compareTo(p2.type + p2.name, ignoreCase = true)
     }
   ),
-  INDEPENDENT(Comparator { p1: PasswordItem, p2: PasswordItem -> p1.name.compareTo(p2.name, ignoreCase = true) }),
+  INDEPENDENT(
+    Comparator { p1: PasswordItem, p2: PasswordItem ->
+      p1.name.compareTo(p2.name, ignoreCase = true)
+    }
+  ),
   RECENTLY_USED(
     Comparator { p1: PasswordItem, p2: PasswordItem ->
-      val recentHistory = Application.instance.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+      val recentHistory =
+        Application.instance.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
       val timeP1 = recentHistory.getString(p1.file.absolutePath.base64())
       val timeP2 = recentHistory.getString(p2.file.absolutePath.base64())
       when {

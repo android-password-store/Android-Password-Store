@@ -37,7 +37,9 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
-  private val encryptedPreferences by lazy(LazyThreadSafetyMode.NONE) { activity.getEncryptedGitPrefs() }
+  private val encryptedPreferences by lazy(LazyThreadSafetyMode.NONE) {
+    activity.getEncryptedGitPrefs()
+  }
 
   private fun <T : FragmentActivity> launchActivity(clazz: Class<T>) {
     activity.startActivity(Intent(activity, clazz))
@@ -47,7 +49,9 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
     MaterialAlertDialogBuilder(activity)
       .setTitle(activity.resources.getString(R.string.external_repository_dialog_title))
       .setMessage(activity.resources.getString(R.string.external_repository_dialog_text))
-      .setPositiveButton(R.string.dialog_ok) { _, _ -> launchActivity(DirectorySelectionActivity::class.java) }
+      .setPositiveButton(R.string.dialog_ok) { _, _ ->
+        launchActivity(DirectorySelectionActivity::class.java)
+      }
       .setNegativeButton(R.string.dialog_cancel, null)
       .show()
   }
@@ -130,7 +134,9 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
       }
       pref(PreferenceKeys.SSH_OPENKEYSTORE_CLEAR_KEY_ID) {
         titleRes = R.string.pref_title_openkeystore_clear_keyid
-        visible = activity.sharedPrefs.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID)?.isNotEmpty() ?: false
+        visible =
+          activity.sharedPrefs.getString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID)?.isNotEmpty()
+            ?: false
         onClick {
           activity.sharedPrefs.edit { putString(PreferenceKeys.SSH_OPENKEYSTORE_KEYID, null) }
           visible = false
@@ -160,7 +166,9 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
                     removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
                   }
                 }
-                activity.sharedPrefs.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false) }
+                activity.sharedPrefs.edit {
+                  putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
+                }
                 dialogInterface.cancel()
                 activity.finish()
               }

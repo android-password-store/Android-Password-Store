@@ -32,7 +32,9 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi
 
 class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
 
-  private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
+  private val settings by lazy(LazyThreadSafetyMode.NONE) {
+    requireActivity().applicationContext.sharedPrefs
+  }
   private val binding by viewBinding(FragmentKeySelectionBinding::bind)
 
   private val gpgKeySelectAction =
@@ -45,13 +47,17 @@ class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
               gpgIdentifierFile.writeText((keyIds + "").joinToString("\n"))
             }
             settings.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true) }
-            requireActivity().commitChange(getString(R.string.git_commit_gpg_id, getString(R.string.app_name)))
+            requireActivity()
+              .commitChange(getString(R.string.git_commit_gpg_id, getString(R.string.app_name)))
           }
         }
         finish()
       } else {
         requireActivity()
-          .snackbar(message = getString(R.string.gpg_key_select_mandatory), length = Snackbar.LENGTH_LONG)
+          .snackbar(
+            message = getString(R.string.gpg_key_select_mandatory),
+            length = Snackbar.LENGTH_LONG
+          )
       }
     }
 

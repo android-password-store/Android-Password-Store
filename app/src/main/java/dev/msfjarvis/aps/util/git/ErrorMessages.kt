@@ -14,7 +14,8 @@ import java.net.UnknownHostException
 /**
  * Supertype for all Git-related [Exception] s that can be thrown by [GitCommandExecutor.execute].
  */
-sealed class GitException(@StringRes res: Int, vararg fmt: String) : Exception(buildMessage(res, *fmt)) {
+sealed class GitException(@StringRes res: Int, vararg fmt: String) :
+  Exception(buildMessage(res, *fmt)) {
 
   override val message = super.message!!
 

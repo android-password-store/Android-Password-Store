@@ -59,13 +59,18 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
           val appLabel = it.first
           val supportDescription =
             when (it.second) {
-              BrowserAutofillSupportLevel.None -> activity.getString(R.string.oreo_autofill_no_support)
-              BrowserAutofillSupportLevel.FlakyFill -> activity.getString(R.string.oreo_autofill_flaky_fill_support)
+              BrowserAutofillSupportLevel.None ->
+                activity.getString(R.string.oreo_autofill_no_support)
+              BrowserAutofillSupportLevel.FlakyFill ->
+                activity.getString(R.string.oreo_autofill_flaky_fill_support)
               BrowserAutofillSupportLevel.PasswordFill ->
                 activity.getString(R.string.oreo_autofill_password_fill_support)
               BrowserAutofillSupportLevel.PasswordFillAndSaveIfNoAccessibility ->
-                activity.getString(R.string.oreo_autofill_password_fill_and_conditional_save_support)
-              BrowserAutofillSupportLevel.GeneralFill -> activity.getString(R.string.oreo_autofill_general_fill_support)
+                activity.getString(
+                  R.string.oreo_autofill_password_fill_and_conditional_save_support
+                )
+              BrowserAutofillSupportLevel.GeneralFill ->
+                activity.getString(R.string.oreo_autofill_general_fill_support)
               BrowserAutofillSupportLevel.GeneralFillAndSave ->
                 activity.getString(R.string.oreo_autofill_general_fill_and_save_support)
             }
@@ -102,8 +107,10 @@ class AutofillSettings(private val activity: FragmentActivity) : SettingsProvide
           false
         }
       }
-      val values = activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_values)
-      val titles = activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_entries)
+      val values =
+        activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_values)
+      val titles =
+        activity.resources.getStringArray(R.array.oreo_autofill_directory_structure_entries)
       val items = values.zip(titles).map { SelectionItem(it.first, it.second, null) }
       singleChoice(PreferenceKeys.OREO_AUTOFILL_DIRECTORY_STRUCTURE, items) {
         initialSelection = DirectoryStructure.DEFAULT.value

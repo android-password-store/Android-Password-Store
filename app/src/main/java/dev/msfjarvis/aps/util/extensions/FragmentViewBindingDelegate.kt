@@ -20,8 +20,10 @@ import kotlin.reflect.KProperty
  * Imported from
  * https://medium.com/@Zhuinden/simple-one-liner-viewbinding-in-fragments-and-activities-with-kotlin-961430c6c07c
  */
-class FragmentViewBindingDelegate<T : ViewBinding>(val fragment: Fragment, val viewBindingFactory: (View) -> T) :
-  ReadOnlyProperty<Fragment, T> {
+class FragmentViewBindingDelegate<T : ViewBinding>(
+  val fragment: Fragment,
+  val viewBindingFactory: (View) -> T
+) : ReadOnlyProperty<Fragment, T> {
 
   private var binding: T? = null
 
@@ -51,7 +53,9 @@ class FragmentViewBindingDelegate<T : ViewBinding>(val fragment: Fragment, val v
 
     val lifecycle = fragment.viewLifecycleOwner.lifecycle
     if (!lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED)) {
-      throw IllegalStateException("Should not attempt to get bindings when Fragment views are destroyed.")
+      throw IllegalStateException(
+        "Should not attempt to get bindings when Fragment views are destroyed."
+      )
     }
 
     return viewBindingFactory(thisRef.requireView()).also { this.binding = it }
@@ -61,5 +65,6 @@ class FragmentViewBindingDelegate<T : ViewBinding>(val fragment: Fragment, val v
 fun <T : ViewBinding> Fragment.viewBinding(viewBindingFactory: (View) -> T) =
   FragmentViewBindingDelegate(this, viewBindingFactory)
 
-inline fun <T : ViewBinding> AppCompatActivity.viewBinding(crossinline bindingInflater: (LayoutInflater) -> T) =
-  lazy(LazyThreadSafetyMode.NONE) { bindingInflater.invoke(layoutInflater) }
+inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
+  crossinline bindingInflater: (LayoutInflater) -> T
+) = lazy(LazyThreadSafetyMode.NONE) { bindingInflater.invoke(layoutInflater) }

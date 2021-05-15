@@ -32,7 +32,9 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   override fun onCreate() {
     super.onCreate()
     instance = this
-    if (BuildConfig.ENABLE_DEBUG_FEATURES || prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)) {
+    if (BuildConfig.ENABLE_DEBUG_FEATURES ||
+        prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
+    ) {
       plant(DebugTree())
       StrictMode.setVmPolicy(VmPolicy.Builder().detectAll().penaltyLog().build())
       StrictMode.setThreadPolicy(ThreadPolicy.Builder().detectAll().penaltyLog().build())

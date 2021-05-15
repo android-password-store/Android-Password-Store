@@ -27,6 +27,8 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
     binding.letsGo.setOnClickListener {
       parentFragmentManager.performTransactionWithBackStack(CloneFragment.newInstance())
     }
-    binding.settingsButton.setOnClickListener { startActivity(Intent(requireContext(), SettingsActivity::class.java)) }
+    binding.settingsButton.setOnClickListener {
+      startActivity(Intent(requireContext(), SettingsActivity::class.java))
+    }
   }
 }

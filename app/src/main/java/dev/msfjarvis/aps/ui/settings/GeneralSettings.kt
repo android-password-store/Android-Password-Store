@@ -26,7 +26,8 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
     builder.apply {
       val themeValues = activity.resources.getStringArray(R.array.app_theme_values)
       val themeOptions = activity.resources.getStringArray(R.array.app_theme_options)
-      val themeItems = themeValues.zip(themeOptions).map { SelectionItem(it.first, it.second, null) }
+      val themeItems =
+        themeValues.zip(themeOptions).map { SelectionItem(it.first, it.second, null) }
       singleChoice(PreferenceKeys.APP_THEME, themeItems) {
         initialSelection = activity.resources.getString(R.string.app_theme_def)
         titleRes = R.string.pref_app_theme_title
@@ -64,7 +65,8 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
         defaultValue = false
         enabled = canAuthenticate
         summaryRes =
-          if (canAuthenticate) R.string.pref_biometric_auth_summary else R.string.pref_biometric_auth_summary_error
+          if (canAuthenticate) R.string.pref_biometric_auth_summary
+          else R.string.pref_biometric_auth_summary_error
         onClick {
           enabled = false
           val isChecked = checked

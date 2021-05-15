@@ -52,7 +52,11 @@ private constructor(
       }
     }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     if (savedInstanceState != null) dismiss()
     return layoutInflater.inflate(R.layout.basic_bottom_sheet, container, false)
   }
@@ -85,7 +89,9 @@ private constructor(
           }
           if (negativeButtonClickListener != null) {
             binding.bottomSheetCancelButton.isVisible = true
-            negativeButtonLabel?.let { buttonLbl -> binding.bottomSheetCancelButton.text = buttonLbl }
+            negativeButtonLabel?.let { buttonLbl ->
+              binding.bottomSheetCancelButton.text = buttonLbl
+            }
             binding.bottomSheetCancelButton.setOnClickListener {
               negativeButtonClickListener.onClick(it)
               dismiss()
@@ -95,7 +101,9 @@ private constructor(
       }
     )
     val gradientDrawable =
-      GradientDrawable().apply { setColor(requireContext().resolveAttribute(android.R.attr.windowBackground)) }
+      GradientDrawable().apply {
+        setColor(requireContext().resolveAttribute(android.R.attr.windowBackground))
+      }
     view.background = gradientDrawable
   }
 
@@ -133,13 +141,19 @@ private constructor(
       return this
     }
 
-    fun setPositiveButtonClickListener(buttonLabel: String? = null, listener: View.OnClickListener): Builder {
+    fun setPositiveButtonClickListener(
+      buttonLabel: String? = null,
+      listener: View.OnClickListener
+    ): Builder {
       this.positiveButtonClickListener = listener
       this.positiveButtonLabel = buttonLabel
       return this
     }
 
-    fun setNegativeButtonClickListener(buttonLabel: String? = null, listener: View.OnClickListener): Builder {
+    fun setNegativeButtonClickListener(
+      buttonLabel: String? = null,
+      listener: View.OnClickListener
+    ): Builder {
       this.negativeButtonClickListener = listener
       this.negativeButtonLabel = buttonLabel
       return this

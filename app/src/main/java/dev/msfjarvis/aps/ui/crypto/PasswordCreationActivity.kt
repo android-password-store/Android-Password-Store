@@ -63,14 +63,24 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
 
-  private val suggestedName by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_FILE_NAME) }
-  private val suggestedPass by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_PASSWORD) }
-  private val suggestedExtra by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
+  private val suggestedName by lazy(LazyThreadSafetyMode.NONE) {
+    intent.getStringExtra(EXTRA_FILE_NAME)
+  }
+  private val suggestedPass by lazy(LazyThreadSafetyMode.NONE) {
+    intent.getStringExtra(EXTRA_PASSWORD)
+  }
+  private val suggestedExtra by lazy(LazyThreadSafetyMode.NONE) {
+    intent.getStringExtra(EXTRA_EXTRA_CONTENT)
+  }
   private val shouldGeneratePassword by lazy(LazyThreadSafetyMode.NONE) {
     intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
   }
-  private val editing by lazy(LazyThreadSafetyMode.NONE) { intent.getBooleanExtra(EXTRA_EDITING, false) }
-  private val oldFileName by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra(EXTRA_FILE_NAME) }
+  private val editing by lazy(LazyThreadSafetyMode.NONE) {
+    intent.getBooleanExtra(EXTRA_EDITING, false)
+  }
+  private val oldFileName by lazy(LazyThreadSafetyMode.NONE) {
+    intent.getStringExtra(EXTRA_FILE_NAME)
+  }
   private var oldCategory: String? = null
   private var copy: Boolean = false
   private var encryptionIntent: Intent = Intent()
@@ -99,7 +109,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         val intentResult = IntentIntegrator.parseActivityResult(RESULT_OK, result.data)
         val contents = "${intentResult.contents}\n"
         val currentExtras = binding.extraContent.text.toString()
-        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n') binding.extraContent.append("\n$contents")
+        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+          binding.extraContent.append("\n$contents")
         else binding.extraContent.append(contents)
         snackbar(message = getString(R.string.otp_import_success))
       } else {
@@ -113,18 +124,27 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
           lifecycleScope.launch {
             val gpgIdentifierFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
-            withContext(Dispatchers.IO) { gpgIdentifierFile.writeText((keyIds + "").joinToString("\n")) }
+            withContext(Dispatchers.IO) {
+              gpgIdentifierFile.writeText((keyIds + "").joinToString("\n"))
+            }
             commitChange(
               getString(
                 R.string.git_commit_gpg_id,
-                getLongName(gpgIdentifierFile.parentFile!!.absolutePath, repoPath, gpgIdentifierFile.name)
+                getLongName(
+                  gpgIdentifierFile.parentFile!!.absolutePath,
+                  repoPath,
+                  gpgIdentifierFile.name
+                )
               )
             )
               .onSuccess { encrypt(encryptionIntent) }
           }
         }
       } else {
-        snackbar(message = getString(R.string.gpg_key_select_mandatory), length = Snackbar.LENGTH_LONG)
+        snackbar(
+          message = getString(R.string.gpg_key_select_mandatory),
+          length = Snackbar.LENGTH_LONG
+        )
       }
     }
 
@@ -148,24 +168,31 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     super.onCreate(savedInstanceState)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     bindToOpenKeychain(this)
-    title = if (editing) getString(R.string.edit_password) else getString(R.string.new_password_title)
+    title =
+      if (editing) getString(R.string.edit_password) else getString(R.string.new_password_title)
     with(binding) {
       setContentView(root)
       generatePassword.setOnClickListener { generatePassword() }
       otpImportButton.setOnClickListener {
-        supportFragmentManager.setFragmentResultListener(OTP_RESULT_REQUEST_KEY, this@PasswordCreationActivity) {
-          requestKey,
-          bundle ->
+        supportFragmentManager.setFragmentResultListener(
+          OTP_RESULT_REQUEST_KEY,
+          this@PasswordCreationActivity
+        ) { requestKey, bundle ->
           if (requestKey == OTP_RESULT_REQUEST_KEY) {
             val contents = bundle.getString(RESULT)
             val currentExtras = binding.extraContent.text.toString()
-            if (currentExtras.isNotEmpty() && currentExtras.last() != '\n') binding.extraContent.append("\n$contents")
+            if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+              binding.extraContent.append("\n$contents")
             else binding.extraContent.append(contents)
           }
         }
         val hasCamera = packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true
         if (hasCamera) {
-          val items = arrayOf(getString(R.string.otp_import_qr_code), getString(R.string.otp_import_manual_entry))
+          val items =
+            arrayOf(
+              getString(R.string.otp_import_qr_code),
+              getString(R.string.otp_import_manual_entry)
+            )
           MaterialAlertDialogBuilder(this@PasswordCreationActivity)
             .setItems(items) { _, index ->
               when (index) {
@@ -209,7 +236,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
       // in the encrypted extras. This only makes sense if the directory structure is
       // FileBased.
       if (suggestedName == null &&
-          AutofillPreferences.directoryStructure(this@PasswordCreationActivity) == DirectoryStructure.FileBased
+          AutofillPreferences.directoryStructure(this@PasswordCreationActivity) ==
+            DirectoryStructure.FileBased
       ) {
         encryptUsername.apply {
           visibility = View.VISIBLE
@@ -226,7 +254,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
               // User wants to disable username encryption, so we extract the
               // username from the encrypted extras and use it as the filename.
               val entry =
-                passwordEntryFactory.create(lifecycleScope, "PASSWORD\n${extraContent.text}".encodeToByteArray())
+                passwordEntryFactory.create(
+                  lifecycleScope,
+                  "PASSWORD\n${extraContent.text}".encodeToByteArray()
+                )
               val username = entry.username
 
               // username should not be null here by the logic in
@@ -239,7 +270,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             }
           }
         }
-        listOf(filename, extraContent).forEach { it.doOnTextChanged { _, _, _, _ -> updateViewState() } }
+        listOf(filename, extraContent).forEach {
+          it.doOnTextChanged { _, _, _, _ -> updateViewState() }
+        }
       }
       suggestedPass?.let {
         password.setText(it)
@@ -279,21 +312,29 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
   }
 
   private fun generatePassword() {
-    supportFragmentManager.setFragmentResultListener(PASSWORD_RESULT_REQUEST_KEY, this) { requestKey, bundle ->
+    supportFragmentManager.setFragmentResultListener(PASSWORD_RESULT_REQUEST_KEY, this) {
+      requestKey,
+      bundle ->
       if (requestKey == PASSWORD_RESULT_REQUEST_KEY) {
         binding.password.setText(bundle.getString(RESULT))
       }
     }
     when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) ?: KEY_PWGEN_TYPE_CLASSIC) {
-      KEY_PWGEN_TYPE_CLASSIC -> PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
-      KEY_PWGEN_TYPE_XKPASSWD -> XkPasswordGeneratorDialogFragment().show(supportFragmentManager, "xkpwgenerator")
+      KEY_PWGEN_TYPE_CLASSIC ->
+        PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
+      KEY_PWGEN_TYPE_XKPASSWD ->
+        XkPasswordGeneratorDialogFragment().show(supportFragmentManager, "xkpwgenerator")
     }
   }
 
   private fun updateViewState() =
     with(binding) {
       // Use PasswordEntry to parse extras for username
-      val entry = passwordEntryFactory.create(lifecycleScope, "PLACEHOLDER\n${extraContent.text}".encodeToByteArray())
+      val entry =
+        passwordEntryFactory.create(
+          lifecycleScope,
+          "PLACEHOLDER\n${extraContent.text}".encodeToByteArray()
+        )
       encryptUsername.apply {
         if (visibility != View.VISIBLE) return@apply
         val hasUsernameInFileName = filename.text.toString().isNotBlank()
@@ -354,14 +395,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             }
         }
       if (gpgIdentifiers.isEmpty()) {
-        gpgKeySelectAction.launch(Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java))
+        gpgKeySelectAction.launch(
+          Intent(this@PasswordCreationActivity, GetKeyIdsActivity::class.java)
+        )
         return@with
       }
-      val keyIds = gpgIdentifiers.filterIsInstance<GpgIdentifier.KeyId>().map { it.id }.toLongArray()
+      val keyIds =
+        gpgIdentifiers.filterIsInstance<GpgIdentifier.KeyId>().map { it.id }.toLongArray()
       if (keyIds.isNotEmpty()) {
         encryptionIntent.putExtra(OpenPgpApi.EXTRA_KEY_IDS, keyIds)
       }
-      val userIds = gpgIdentifiers.filterIsInstance<GpgIdentifier.UserId>().map { it.email }.toTypedArray()
+      val userIds =
+        gpgIdentifiers.filterIsInstance<GpgIdentifier.UserId>().map { it.email }.toTypedArray()
       if (userIds.isNotEmpty()) {
         encryptionIntent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds)
       }
@@ -396,7 +441,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
 
       lifecycleScope.launch(Dispatchers.Main) {
         val result =
-          withContext(Dispatchers.IO) { checkNotNull(api).executeApi(encryptionIntent, inputStream, outputStream) }
+          withContext(Dispatchers.IO) {
+            checkNotNull(api).executeApi(encryptionIntent, inputStream, outputStream)
+          }
         when (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
           OpenPgpApi.RESULT_CODE_SUCCESS -> {
             runCatching {
@@ -405,7 +452,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
               // Additionally, if we were editing and the incoming and outgoing
               // filenames differ, it means we renamed. Ensure that the target
               // doesn't already exist to prevent an accidental overwrite.
-              if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) && file.exists()) {
+              if ((!editing || (editing && suggestedName != file.nameWithoutExtension)) &&
+                  file.exists()
+              ) {
                 snackbar(message = getString(R.string.password_creation_duplicate_error))
                 return@runCatching
               }
@@ -415,7 +464,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 return@runCatching
               }
 
-              withContext(Dispatchers.IO) { file.outputStream().use { it.write(outputStream.toByteArray()) } }
+              withContext(Dispatchers.IO) {
+                file.outputStream().use { it.write(outputStream.toByteArray()) }
+              }
 
               // associate the new password name with the last name's timestamp in
               // history
@@ -432,7 +483,10 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
               val returnIntent = Intent()
               returnIntent.putExtra(RETURN_EXTRA_CREATED_FILE, path)
               returnIntent.putExtra(RETURN_EXTRA_NAME, editName)
-              returnIntent.putExtra(RETURN_EXTRA_LONG_NAME, getLongName(fullPath, repoPath, editName))
+              returnIntent.putExtra(
+                RETURN_EXTRA_LONG_NAME,
+                getLongName(fullPath, repoPath, editName)
+              )
 
               if (shouldGeneratePassword) {
                 val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
@@ -442,13 +496,18 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
               }
 
-              if (directoryInputLayout.isVisible && directoryInputLayout.isEnabled && oldFileName != null) {
+              if (directoryInputLayout.isVisible &&
+                  directoryInputLayout.isEnabled &&
+                  oldFileName != null
+              ) {
                 val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
                 if (oldFile.path != file.path && !oldFile.delete()) {
                   setResult(RESULT_CANCELED)
                   MaterialAlertDialogBuilder(this@PasswordCreationActivity)
                     .setTitle(R.string.password_creation_file_fail_title)
-                    .setMessage(getString(R.string.password_creation_file_delete_fail_message, oldFileName))
+                    .setMessage(
+                      getString(R.string.password_creation_file_delete_fail_message, oldFileName)
+                    )
                     .setCancelable(false)
                     .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
                     .show()
@@ -456,9 +515,12 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 }
               }
 
-              val commitMessageRes = if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
+              val commitMessageRes =
+                if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
               lifecycleScope.launch {
-                commitChange(resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName)))
+                commitChange(
+                  resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
+                )
                   .onSuccess {
                     setResult(RESULT_OK, returnIntent)
                     finish()

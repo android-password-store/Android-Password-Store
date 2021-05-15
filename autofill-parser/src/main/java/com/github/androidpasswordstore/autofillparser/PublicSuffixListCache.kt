@@ -34,12 +34,18 @@ public fun cachePublicSuffixList(context: Context) {
  * Note: Invalid domains, such as IP addresses, are returned unchanged and thus never collide with
  * the return value for valid domains.
  */
-internal fun getPublicSuffixPlusOne(context: Context, domain: String, customSuffixes: Sequence<String>) = runBlocking {
+internal fun getPublicSuffixPlusOne(
+  context: Context,
+  domain: String,
+  customSuffixes: Sequence<String>
+) = runBlocking {
   // We only feed valid domain names which are not IP addresses into getPublicSuffixPlusOne.
   // We do not check whether the domain actually exists (actually, not even whether its TLD
   // exists). As long as we restrict ourselves to syntactically valid domain names,
   // getPublicSuffixPlusOne will return non-colliding results.
-  if (!Patterns.DOMAIN_NAME.matcher(domain).matches() || Patterns.IP_ADDRESS.matcher(domain).matches()) {
+  if (!Patterns.DOMAIN_NAME.matcher(domain).matches() ||
+      Patterns.IP_ADDRESS.matcher(domain).matches()
+  ) {
     domain
   } else {
     getCanonicalSuffix(context, domain, customSuffixes)
@@ -60,7 +66,11 @@ private fun getSuffixPlusUpToOne(domain: String, suffix: String): String? {
   return "$lastPrefixPart.$suffix"
 }
 
-private suspend fun getCanonicalSuffix(context: Context, domain: String, customSuffixes: Sequence<String>): String {
+private suspend fun getCanonicalSuffix(
+  context: Context,
+  domain: String,
+  customSuffixes: Sequence<String>
+): String {
   val publicSuffixList = PublicSuffixListCache.getOrCachePublicSuffixList(context)
   val publicSuffixPlusOne = publicSuffixList.getPublicSuffixPlusOne(domain).await() ?: return domain
   var longestSuffix = publicSuffixPlusOne

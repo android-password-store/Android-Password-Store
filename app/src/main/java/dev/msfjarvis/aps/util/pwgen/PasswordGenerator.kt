@@ -42,7 +42,10 @@ object PasswordGenerator {
    */
   fun setPrefs(ctx: Context, options: List<PasswordOption>, targetLength: Int): Boolean {
     ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE).edit {
-      for (possibleOption in PasswordOption.values()) putBoolean(possibleOption.key, possibleOption in options)
+      for (possibleOption in PasswordOption.values()) putBoolean(
+        possibleOption.key,
+        possibleOption in options
+      )
       putInt("length", targetLength)
     }
     return true
@@ -82,7 +85,9 @@ object PasswordGenerator {
       } else {
         // The No* options are false, so the respective character category will be included.
         when (option) {
-          PasswordOption.NoDigits, PasswordOption.NoUppercaseLetters, PasswordOption.NoLowercaseLetters -> {
+          PasswordOption.NoDigits,
+          PasswordOption.NoUppercaseLetters,
+          PasswordOption.NoLowercaseLetters -> {
             numCharacterCategories++
           }
           PasswordOption.NoAmbiguousCharacters,
@@ -98,7 +103,9 @@ object PasswordGenerator {
       throw PasswordGeneratorException(ctx.resources.getString(R.string.pwgen_no_chars_error))
     }
     if (length < numCharacterCategories) {
-      throw PasswordGeneratorException(ctx.resources.getString(R.string.pwgen_length_too_short_error))
+      throw PasswordGeneratorException(
+        ctx.resources.getString(R.string.pwgen_length_too_short_error)
+      )
     }
     if (!(pwgenFlags hasFlag UPPERS) && !(pwgenFlags hasFlag LOWERS)) {
       phonemes = false
@@ -114,7 +121,9 @@ object PasswordGenerator {
     var iterations = 0
     do {
       if (iterations++ > 1000)
-        throw PasswordGeneratorException(ctx.resources.getString(R.string.pwgen_max_iterations_exceeded))
+        throw PasswordGeneratorException(
+          ctx.resources.getString(R.string.pwgen_max_iterations_exceeded)
+        )
       password =
         if (phonemes) {
           RandomPhonemesGenerator.generate(length, pwgenFlags)

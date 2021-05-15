@@ -60,7 +60,11 @@ class OreoAutofillService : AutofillService() {
     cachePublicSuffixList(applicationContext)
   }
 
-  override fun onFillRequest(request: FillRequest, cancellationSignal: CancellationSignal, callback: FillCallback) {
+  override fun onFillRequest(
+    request: FillRequest,
+    cancellationSignal: CancellationSignal,
+    callback: FillCallback
+  ) {
     val structure =
       request.fillContexts.lastOrNull()?.structure
         ?: run {
@@ -93,7 +97,8 @@ class OreoAutofillService : AutofillService() {
           return
         }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      Api30AutofillResponseBuilder(formToFill).fillCredentials(this, request.inlineSuggestionsRequest, callback)
+      Api30AutofillResponseBuilder(formToFill)
+        .fillCredentials(this, request.inlineSuggestionsRequest, callback)
     } else {
       AutofillResponseBuilder(formToFill).fillCredentials(this, callback)
     }
@@ -148,11 +153,13 @@ class OreoAutofillService : AutofillService() {
   }
 }
 
-fun Context.getDefaultUsername() = sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
+fun Context.getDefaultUsername() =
+  sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_DEFAULT_USERNAME)
 
 fun Context.getCustomSuffixes(): Sequence<String> {
-  return sharedPrefs.getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)?.splitToSequence('\n')?.filter {
-    it.isNotBlank() && it.first() != '.' && it.last() != '.'
-  }
+  return sharedPrefs
+    .getString(PreferenceKeys.OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES)
+    ?.splitToSequence('\n')
+    ?.filter { it.isNotBlank() && it.first() != '.' && it.last() != '.' }
     ?: emptySequence()
 }

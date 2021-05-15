@@ -77,7 +77,12 @@ class AutofillSmsActivity : AppCompatActivity() {
 
     fun makeFillOtpFromSmsIntentSender(context: Context): IntentSender {
       val intent = Intent(context, AutofillSmsActivity::class.java)
-      return PendingIntent.getActivity(context, fillOtpFromSmsRequestCode++, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+      return PendingIntent.getActivity(
+          context,
+          fillOtpFromSmsRequestCode++,
+          intent,
+          PendingIntent.FLAG_CANCEL_CURRENT
+        )
         .intentSender
     }
   }
@@ -122,15 +127,17 @@ class AutofillSmsActivity : AppCompatActivity() {
 
   private suspend fun waitForSms() {
     val smsClient = SmsCodeRetriever.getAutofillClient(this@AutofillSmsActivity)
-    runCatching { withContext(Dispatchers.IO) { smsClient.startSmsCodeRetriever().suspendableAwait() } }.onFailure { e
-      ->
-      if (e is ResolvableApiException) {
-        e.startResolutionForResult(this@AutofillSmsActivity, 1)
-      } else {
-        e(e)
-        withContext(Dispatchers.Main) { finish() }
-      }
+    runCatching {
+      withContext(Dispatchers.IO) { smsClient.startSmsCodeRetriever().suspendableAwait() }
     }
+      .onFailure { e ->
+        if (e is ResolvableApiException) {
+          e.startResolutionForResult(this@AutofillSmsActivity, 1)
+        } else {
+          e(e)
+          withContext(Dispatchers.Main) { finish() }
+        }
+      }
   }
 
   private val smsCodeRetrievedReceiver =
@@ -144,7 +151,10 @@ class AutofillSmsActivity : AppCompatActivity() {
             clientState,
             AutofillAction.FillOtpFromSms
           )
-        setResult(RESULT_OK, Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) })
+        setResult(
+          RESULT_OK,
+          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
+        )
         finish()
       }
     }

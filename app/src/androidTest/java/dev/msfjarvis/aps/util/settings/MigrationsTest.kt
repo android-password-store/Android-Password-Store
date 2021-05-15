@@ -115,7 +115,10 @@ class MigrationsTest {
       putBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, true)
     }
     runMigrations(context)
-    assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false))
+    assertEquals(
+      true,
+      context.sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false)
+    )
     assertFalse(context.sharedPrefs.contains(PreferenceKeys.CLEAR_CLIPBOARD_20X))
   }
 }

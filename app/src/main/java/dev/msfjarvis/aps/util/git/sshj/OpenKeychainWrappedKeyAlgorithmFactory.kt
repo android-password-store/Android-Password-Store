@@ -28,7 +28,8 @@ class OpenKeychainWrappedKeyAlgorithmFactory(private val factory: Factory.Named<
   override fun create() = OpenKeychainWrappedKeyAlgorithm(factory.create())
 }
 
-class OpenKeychainWrappedKeyAlgorithm(private val keyAlgorithm: KeyAlgorithm) : KeyAlgorithm by keyAlgorithm {
+class OpenKeychainWrappedKeyAlgorithm(private val keyAlgorithm: KeyAlgorithm) :
+  KeyAlgorithm by keyAlgorithm {
 
   private val hashAlgorithm =
     when (keyAlgorithm.keyAlgorithm) {
@@ -39,11 +40,14 @@ class OpenKeychainWrappedKeyAlgorithm(private val keyAlgorithm: KeyAlgorithm) : 
       else -> SshAuthenticationApi.SHA512
     }
 
-  override fun newSignature() = OpenKeychainWrappedSignature(keyAlgorithm.newSignature(), hashAlgorithm)
+  override fun newSignature() =
+    OpenKeychainWrappedSignature(keyAlgorithm.newSignature(), hashAlgorithm)
 }
 
-class OpenKeychainWrappedSignature(private val wrappedSignature: Signature, private val hashAlgorithm: Int) :
-  Signature by wrappedSignature {
+class OpenKeychainWrappedSignature(
+  private val wrappedSignature: Signature,
+  private val hashAlgorithm: Int
+) : Signature by wrappedSignature {
 
   private val data = ByteArrayOutputStream()
 

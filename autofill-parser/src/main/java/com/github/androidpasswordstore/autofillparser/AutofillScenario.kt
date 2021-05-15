@@ -56,9 +56,15 @@ public sealed class AutofillScenario<out T : Any> {
             username = clientState.getParcelable(BUNDLE_KEY_USERNAME_ID)
             fillUsername = clientState.getBoolean(BUNDLE_KEY_FILL_USERNAME)
             otp = clientState.getParcelable(BUNDLE_KEY_OTP_ID)
-            currentPassword.addAll(clientState.getParcelableArrayList(BUNDLE_KEY_CURRENT_PASSWORD_IDS) ?: emptyList())
-            newPassword.addAll(clientState.getParcelableArrayList(BUNDLE_KEY_NEW_PASSWORD_IDS) ?: emptyList())
-            genericPassword.addAll(clientState.getParcelableArrayList(BUNDLE_KEY_GENERIC_PASSWORD_IDS) ?: emptyList())
+            currentPassword.addAll(
+              clientState.getParcelableArrayList(BUNDLE_KEY_CURRENT_PASSWORD_IDS) ?: emptyList()
+            )
+            newPassword.addAll(
+              clientState.getParcelableArrayList(BUNDLE_KEY_NEW_PASSWORD_IDS) ?: emptyList()
+            )
+            genericPassword.addAll(
+              clientState.getParcelableArrayList(BUNDLE_KEY_GENERIC_PASSWORD_IDS) ?: emptyList()
+            )
           }
           .build()
       } catch (e: Throwable) {
@@ -227,7 +233,9 @@ public fun Dataset.Builder.fillWith(
   }
 }
 
-internal inline fun <T : Any, S : Any> AutofillScenario<T>.map(transform: (T) -> S): AutofillScenario<S> {
+internal inline fun <T : Any, S : Any> AutofillScenario<T>.map(
+  transform: (T) -> S
+): AutofillScenario<S> {
   val builder = AutofillScenario.Builder<S>()
   builder.username = username?.let(transform)
   builder.fillUsername = fillUsername
@@ -253,7 +261,10 @@ internal fun AutofillScenario<AutofillId>.toBundle(): Bundle =
         putParcelable(AutofillScenario.BUNDLE_KEY_USERNAME_ID, username)
         putBoolean(AutofillScenario.BUNDLE_KEY_FILL_USERNAME, fillUsername)
         putParcelable(AutofillScenario.BUNDLE_KEY_OTP_ID, otp)
-        putParcelableArrayList(AutofillScenario.BUNDLE_KEY_CURRENT_PASSWORD_IDS, ArrayList(currentPassword))
+        putParcelableArrayList(
+          AutofillScenario.BUNDLE_KEY_CURRENT_PASSWORD_IDS,
+          ArrayList(currentPassword)
+        )
         putParcelableArrayList(AutofillScenario.BUNDLE_KEY_NEW_PASSWORD_IDS, ArrayList(newPassword))
       }
     }
@@ -262,7 +273,10 @@ internal fun AutofillScenario<AutofillId>.toBundle(): Bundle =
         putParcelable(AutofillScenario.BUNDLE_KEY_USERNAME_ID, username)
         putBoolean(AutofillScenario.BUNDLE_KEY_FILL_USERNAME, fillUsername)
         putParcelable(AutofillScenario.BUNDLE_KEY_OTP_ID, otp)
-        putParcelableArrayList(AutofillScenario.BUNDLE_KEY_GENERIC_PASSWORD_IDS, ArrayList(genericPassword))
+        putParcelableArrayList(
+          AutofillScenario.BUNDLE_KEY_GENERIC_PASSWORD_IDS,
+          ArrayList(genericPassword)
+        )
       }
     }
   }

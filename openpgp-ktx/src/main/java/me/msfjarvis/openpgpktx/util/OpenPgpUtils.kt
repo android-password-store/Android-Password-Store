@@ -13,7 +13,10 @@ import java.util.regex.Pattern
 public object OpenPgpUtils {
 
   private val PGP_MESSAGE: Pattern =
-    Pattern.compile(".*?(-----BEGIN PGP MESSAGE-----.*?-----END PGP MESSAGE-----).*", Pattern.DOTALL)
+    Pattern.compile(
+      ".*?(-----BEGIN PGP MESSAGE-----.*?-----END PGP MESSAGE-----).*",
+      Pattern.DOTALL
+    )
   private val PGP_SIGNED_MESSAGE: Pattern =
     Pattern.compile(
       ".*?(-----BEGIN PGP SIGNED MESSAGE-----.*?-----BEGIN PGP SIGNATURE-----.*?-----END PGP SIGNATURE-----).*",
@@ -103,5 +106,9 @@ public object OpenPgpUtils {
     return if (userIdBuilder.isEmpty()) null else userIdBuilder.toString()
   }
 
-  public class UserId(public val name: String?, public val email: String?, public val comment: String?) : Serializable
+  public class UserId(
+    public val name: String?,
+    public val email: String?,
+    public val comment: String?
+  ) : Serializable
 }

@@ -49,7 +49,9 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
     binding.xkNumWords.setText(prefs.getString(PREF_KEY_NUM_WORDS, DEFAULT_NUMBER_OF_WORDS))
 
     binding.xkSeparator.setText(prefs.getString(PREF_KEY_SEPARATOR, DEFAULT_WORD_SEPARATOR))
-    binding.xkNumberSymbolMask.setText(prefs.getString(PREF_KEY_EXTRA_SYMBOLS_MASK, DEFAULT_EXTRA_SYMBOLS_MASK))
+    binding.xkNumberSymbolMask.setText(
+      prefs.getString(PREF_KEY_EXTRA_SYMBOLS_MASK, DEFAULT_EXTRA_SYMBOLS_MASK)
+    )
 
     binding.xkPasswordText.typeface = monoTypeface
 
@@ -85,8 +87,12 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
       .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
       .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
       .setSeparator(binding.xkSeparator.text.toString())
-      .appendNumbers(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_DIGIT })
-      .appendSymbols(binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL })
+      .appendNumbers(
+        binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_DIGIT }
+      )
+      .appendSymbols(
+        binding.xkNumberSymbolMask.text!!.count { c -> c == EXTRA_CHAR_PLACEHOLDER_SYMBOL }
+      )
       .setCapitalization(CapsType.valueOf(binding.xkCapType.selectedItem.toString()))
       .create()
       .fold(

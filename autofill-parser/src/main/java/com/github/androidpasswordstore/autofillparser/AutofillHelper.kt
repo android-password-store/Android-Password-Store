@@ -49,14 +49,19 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
   // hashes comparable between versions and hence default to using the deprecated API.
   @SuppressLint("PackageManagerGetSignatures")
   @Suppress("DEPRECATION")
-  val signaturesOld = context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNATURES).signatures
+  val signaturesOld =
+    context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNATURES).signatures
   val stableHashOld = stableHash(signaturesOld.map { it.toByteArray() })
   if (Build.VERSION.SDK_INT >= 28) {
-    val info = context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
-    val signaturesNew = info.signingInfo.signingCertificateHistory ?: info.signingInfo.apkContentsSigners
+    val info =
+      context.packageManager.getPackageInfo(appPackage, PackageManager.GET_SIGNING_CERTIFICATES)
+    val signaturesNew =
+      info.signingInfo.signingCertificateHistory ?: info.signingInfo.apkContentsSigners
     val stableHashNew = stableHash(signaturesNew.map { it.toByteArray() })
     if (stableHashNew != stableHashOld)
-      tag("CertificatesHash").e { "Mismatch between old and new hash: $stableHashNew != $stableHashOld" }
+      tag("CertificatesHash").e {
+        "Mismatch between old and new hash: $stableHashNew != $stableHashOld"
+      }
   }
   return stableHashOld
 }
@@ -106,7 +111,10 @@ private fun visitViewNodes(structure: AssistStructure, block: (AssistStructure.V
   }
 }
 
-private fun visitViewNode(node: AssistStructure.ViewNode, block: (AssistStructure.ViewNode) -> Unit) {
+private fun visitViewNode(
+  node: AssistStructure.ViewNode,
+  block: (AssistStructure.ViewNode) -> Unit
+) {
   block(node)
   for (i in 0 until node.childCount) {
     visitViewNode(node.getChildAt(i), block)
@@ -114,7 +122,9 @@ private fun visitViewNode(node: AssistStructure.ViewNode, block: (AssistStructur
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-internal fun AssistStructure.findNodeByAutofillId(autofillId: AutofillId): AssistStructure.ViewNode? {
+internal fun AssistStructure.findNodeByAutofillId(
+  autofillId: AutofillId
+): AssistStructure.ViewNode? {
   var node: AssistStructure.ViewNode? = null
   visitViewNodes(this) { if (it.autofillId == autofillId) node = it }
   return node

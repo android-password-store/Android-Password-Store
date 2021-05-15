@@ -37,7 +37,11 @@ class ItemCreationBottomSheet : BottomSheetDialogFragment() {
       }
     }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     if (savedInstanceState != null) dismiss()
     return inflater.inflate(R.layout.item_create_sheet, container, false)
   }
@@ -67,7 +71,9 @@ class ItemCreationBottomSheet : BottomSheetDialogFragment() {
       }
     )
     val gradientDrawable =
-      GradientDrawable().apply { setColor(requireContext().resolveAttribute(android.R.attr.windowBackground)) }
+      GradientDrawable().apply {
+        setColor(requireContext().resolveAttribute(android.R.attr.windowBackground))
+      }
     view.background = gradientDrawable
   }
 

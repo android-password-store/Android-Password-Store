@@ -20,28 +20,41 @@ internal interface FieldMatcher {
   class Builder {
 
     private var takeSingle: (FormField.(List<FormField>) -> Boolean)? = null
-    private val tieBreakersSingle: MutableList<FormField.(List<FormField>) -> Boolean> = mutableListOf()
+    private val tieBreakersSingle: MutableList<FormField.(List<FormField>) -> Boolean> =
+      mutableListOf()
 
     private var takePair: (Pair<FormField, FormField>.(List<FormField>) -> Boolean)? = null
-    private var tieBreakersPair: MutableList<Pair<FormField, FormField>.(List<FormField>) -> Boolean> = mutableListOf()
+    private var tieBreakersPair:
+      MutableList<Pair<FormField, FormField>.(List<FormField>) -> Boolean> =
+      mutableListOf()
 
     fun takeSingle(block: FormField.(alreadyMatched: List<FormField>) -> Boolean = { true }) {
-      check(takeSingle == null && takePair == null) { "Every block can only have at most one take{Single,Pair} block" }
+      check(takeSingle == null && takePair == null) {
+        "Every block can only have at most one take{Single,Pair} block"
+      }
       takeSingle = block
     }
 
     fun breakTieOnSingle(block: FormField.(alreadyMatched: List<FormField>) -> Boolean) {
-      check(takeSingle != null) { "Every block needs a takeSingle block before a breakTieOnSingle block" }
+      check(takeSingle != null) {
+        "Every block needs a takeSingle block before a breakTieOnSingle block"
+      }
       check(takePair == null) { "takePair cannot be mixed with breakTieOnSingle" }
       tieBreakersSingle.add(block)
     }
 
-    fun takePair(block: Pair<FormField, FormField>.(alreadyMatched: List<FormField>) -> Boolean = { true }) {
-      check(takeSingle == null && takePair == null) { "Every block can only have at most one take{Single,Pair} block" }
+    fun takePair(
+      block: Pair<FormField, FormField>.(alreadyMatched: List<FormField>) -> Boolean = { true }
+    ) {
+      check(takeSingle == null && takePair == null) {
+        "Every block can only have at most one take{Single,Pair} block"
+      }
       takePair = block
     }
 
-    fun breakTieOnPair(block: Pair<FormField, FormField>.(alreadyMatched: List<FormField>) -> Boolean) {
+    fun breakTieOnPair(
+      block: Pair<FormField, FormField>.(alreadyMatched: List<FormField>) -> Boolean
+    ) {
       check(takePair != null) { "Every block needs a takePair block before a breakTieOnPair block" }
       check(takeSingle == null) { "takeSingle cannot be mixed with breakTieOnPair" }
       tieBreakersPair.add(block)
@@ -69,7 +82,8 @@ internal class SingleFieldMatcher(
   class Builder {
 
     private var takeSingle: (FormField.(List<FormField>) -> Boolean)? = null
-    private val tieBreakersSingle: MutableList<FormField.(List<FormField>) -> Boolean> = mutableListOf()
+    private val tieBreakersSingle: MutableList<FormField.(List<FormField>) -> Boolean> =
+      mutableListOf()
 
     fun takeSingle(block: FormField.(alreadyMatched: List<FormField>) -> Boolean = { true }) {
       check(takeSingle == null) { "Every block can only have at most one takeSingle block" }
@@ -77,7 +91,9 @@ internal class SingleFieldMatcher(
     }
 
     fun breakTieOnSingle(block: FormField.(alreadyMatched: List<FormField>) -> Boolean) {
-      check(takeSingle != null) { "Every block needs a takeSingle block before a breakTieOnSingle block" }
+      check(takeSingle != null) {
+        "Every block needs a takeSingle block before a breakTieOnSingle block"
+      }
       tieBreakersSingle.add(block)
     }
 
@@ -180,7 +196,10 @@ private constructor(
   }
 
   @AutofillDsl
-  class Builder(private val applyInSingleOriginMode: Boolean, private val applyOnManualRequestOnly: Boolean) {
+  class Builder(
+    private val applyInSingleOriginMode: Boolean,
+    private val applyOnManualRequestOnly: Boolean
+  ) {
 
     companion object {
 
@@ -286,9 +305,13 @@ private constructor(
           "Rules with applyInSingleOriginMode set to true must not fill into hidden fields"
         }
       }
-      return AutofillRule(matchers, applyInSingleOriginMode, applyOnManualRequestOnly, name ?: "Rule #$ruleId").also {
-        ruleId++
-      }
+      return AutofillRule(
+          matchers,
+          applyInSingleOriginMode,
+          applyOnManualRequestOnly,
+          name ?: "Rule #$ruleId"
+        )
+        .also { ruleId++ }
     }
   }
 
@@ -409,4 +432,5 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
   }
 }
 
-internal fun strategy(block: AutofillStrategy.Builder.() -> Unit) = AutofillStrategy.Builder().apply(block).build()
+internal fun strategy(block: AutofillStrategy.Builder.() -> Unit) =
+  AutofillStrategy.Builder().apply(block).build()

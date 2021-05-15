@@ -37,7 +37,8 @@ fun setUpBouncyCastleForSshj() {
   // Replace the Android BC provider with the Java BouncyCastle provider since the former does
   // not include all the required algorithms.
   // Note: This may affect crypto operations in other parts of the application.
-  val bcIndex = Security.getProviders().indexOfFirst { it.name == BouncyCastleProvider.PROVIDER_NAME }
+  val bcIndex =
+    Security.getProviders().indexOfFirst { it.name == BouncyCastleProvider.PROVIDER_NAME }
   if (bcIndex == -1) {
     // No Android BC found, install Java BC at lowest priority.
     Security.addProvider(BouncyCastleProvider())
@@ -77,9 +78,11 @@ private abstract class AbstractLogger(private val name: String) : Logger {
   override fun trace(msg: String, t: Throwable?) = t(msg, t)
   override fun trace(marker: Marker, msg: String) = trace(msg)
   override fun trace(marker: Marker?, format: String, arg: Any?) = trace(format, arg)
-  override fun trace(marker: Marker?, format: String, arg1: Any?, arg2: Any?) = trace(format, arg1, arg2)
+  override fun trace(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
+    trace(format, arg1, arg2)
 
-  override fun trace(marker: Marker?, format: String, vararg arguments: Any?) = trace(format, *arguments)
+  override fun trace(marker: Marker?, format: String, vararg arguments: Any?) =
+    trace(format, *arguments)
 
   override fun trace(marker: Marker?, msg: String, t: Throwable?) = trace(msg, t)
 
@@ -90,9 +93,11 @@ private abstract class AbstractLogger(private val name: String) : Logger {
   override fun debug(msg: String, t: Throwable?) = d(msg, t)
   override fun debug(marker: Marker, msg: String) = debug(msg)
   override fun debug(marker: Marker?, format: String, arg: Any?) = debug(format, arg)
-  override fun debug(marker: Marker?, format: String, arg1: Any?, arg2: Any?) = debug(format, arg1, arg2)
+  override fun debug(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
+    debug(format, arg1, arg2)
 
-  override fun debug(marker: Marker?, format: String, vararg arguments: Any?) = debug(format, *arguments)
+  override fun debug(marker: Marker?, format: String, vararg arguments: Any?) =
+    debug(format, *arguments)
 
   override fun debug(marker: Marker?, msg: String, t: Throwable?) = debug(msg, t)
 
@@ -103,9 +108,11 @@ private abstract class AbstractLogger(private val name: String) : Logger {
   override fun info(msg: String, t: Throwable?) = i(msg, t)
   override fun info(marker: Marker, msg: String) = info(msg)
   override fun info(marker: Marker?, format: String, arg: Any?) = info(format, arg)
-  override fun info(marker: Marker?, format: String, arg1: Any?, arg2: Any?) = info(format, arg1, arg2)
+  override fun info(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
+    info(format, arg1, arg2)
 
-  override fun info(marker: Marker?, format: String, vararg arguments: Any?) = info(format, *arguments)
+  override fun info(marker: Marker?, format: String, vararg arguments: Any?) =
+    info(format, *arguments)
 
   override fun info(marker: Marker?, msg: String, t: Throwable?) = info(msg, t)
 
@@ -116,9 +123,11 @@ private abstract class AbstractLogger(private val name: String) : Logger {
   override fun warn(msg: String, t: Throwable?) = w(msg, t)
   override fun warn(marker: Marker, msg: String) = warn(msg)
   override fun warn(marker: Marker?, format: String, arg: Any?) = warn(format, arg)
-  override fun warn(marker: Marker?, format: String, arg1: Any?, arg2: Any?) = warn(format, arg1, arg2)
+  override fun warn(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
+    warn(format, arg1, arg2)
 
-  override fun warn(marker: Marker?, format: String, vararg arguments: Any?) = warn(format, *arguments)
+  override fun warn(marker: Marker?, format: String, vararg arguments: Any?) =
+    warn(format, *arguments)
 
   override fun warn(marker: Marker?, msg: String, t: Throwable?) = warn(msg, t)
 
@@ -129,9 +138,11 @@ private abstract class AbstractLogger(private val name: String) : Logger {
   override fun error(msg: String, t: Throwable?) = e(msg, t)
   override fun error(marker: Marker, msg: String) = error(msg)
   override fun error(marker: Marker?, format: String, arg: Any?) = error(format, arg)
-  override fun error(marker: Marker?, format: String, arg1: Any?, arg2: Any?) = error(format, arg1, arg2)
+  override fun error(marker: Marker?, format: String, arg1: Any?, arg2: Any?) =
+    error(format, arg1, arg2)
 
-  override fun error(marker: Marker?, format: String, vararg arguments: Any?) = error(format, *arguments)
+  override fun error(marker: Marker?, format: String, vararg arguments: Any?) =
+    error(format, *arguments)
 
   override fun error(marker: Marker?, msg: String, t: Throwable?) = error(msg, t)
 }
@@ -148,7 +159,8 @@ object TimberLoggerFactory : LoggerFactory {
 
     // Replace slf4j's "{}" format string style with standard Java's "%s".
     // The supposedly redundant escape on the } is not redundant.
-    @Suppress("RegExpRedundantEscape") private fun String.fix() = replace("""(?!<\\)\{\}""".toRegex(), "%s")
+    @Suppress("RegExpRedundantEscape")
+    private fun String.fix() = replace("""(?!<\\)\{\}""".toRegex(), "%s")
 
     override fun t(message: String, t: Throwable?, vararg args: Any?) {
       Timber.tag(name).v(t, message.fix(), *args)

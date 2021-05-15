@@ -36,7 +36,10 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     val callingActivity = requireActivity()
     val binding = FragmentPwgenBinding.inflate(layoutInflater)
     val monoTypeface = Typeface.createFromAsset(callingActivity.assets, "fonts/sourcecodepro.ttf")
-    val prefs = requireActivity().applicationContext.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
+    val prefs =
+      requireActivity()
+        .applicationContext
+        .getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
 
     builder.setView(binding.root)
 
@@ -65,7 +68,9 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
       .apply {
         setOnShowListener {
           generate(binding.passwordText)
-          getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener { generate(binding.passwordText) }
+          getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+            generate(binding.passwordText)
+          }
         }
       }
   }

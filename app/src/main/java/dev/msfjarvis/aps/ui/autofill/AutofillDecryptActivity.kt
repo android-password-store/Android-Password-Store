@@ -73,7 +73,12 @@ class AutofillDecryptActivity : AppCompatActivity() {
           putExtra(EXTRA_SEARCH_ACTION, false)
           putExtra(EXTRA_FILE_PATH, file.absolutePath)
         }
-      return PendingIntent.getActivity(context, decryptFileRequestCode++, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+      return PendingIntent.getActivity(
+          context,
+          decryptFileRequestCode++,
+          intent,
+          PendingIntent.FLAG_CANCEL_CURRENT
+        )
         .intentSender
     }
   }
@@ -124,9 +129,17 @@ class AutofillDecryptActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED)
       } else {
         val fillInDataset =
-          AutofillResponseBuilder.makeFillInDataset(this@AutofillDecryptActivity, credentials, clientState, action)
+          AutofillResponseBuilder.makeFillInDataset(
+            this@AutofillDecryptActivity,
+            credentials,
+            clientState,
+            action
+          )
         withContext(Dispatchers.Main) {
-          setResult(RESULT_OK, Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) })
+          setResult(
+            RESULT_OK,
+            Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
+          )
         }
       }
       withContext(Dispatchers.Main) { finish() }
@@ -137,7 +150,11 @@ class AutofillDecryptActivity : AppCompatActivity() {
     super.onDestroy()
   }
 
-  private suspend fun executeOpenPgpApi(data: Intent, input: InputStream, output: OutputStream): Intent? {
+  private suspend fun executeOpenPgpApi(
+    data: Intent,
+    input: InputStream,
+    output: OutputStream
+  ): Intent? {
     var openPgpServiceConnection: OpenPgpServiceConnection? = null
     val openPgpService =
       suspendCoroutine<IOpenPgpService2> { cont ->
@@ -177,7 +194,9 @@ class AutofillDecryptActivity : AppCompatActivity() {
             return null
           }
           .onSuccess { result ->
-            return when (val resultCode = result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+            return when (val resultCode =
+                result?.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)
+            ) {
               OpenPgpApi.RESULT_CODE_SUCCESS -> {
                 runCatching {
                   val entry =
@@ -185,7 +204,12 @@ class AutofillDecryptActivity : AppCompatActivity() {
                       @Suppress("BlockingMethodInNonBlockingContext")
                       passwordEntryFactory.create(lifecycleScope, decryptedOutput.toByteArray())
                     }
-                  AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
+                  AutofillPreferences.credentialsFromStoreEntry(
+                    this,
+                    file,
+                    entry,
+                    directoryStructure
+                  )
                 }
                   .getOrElse { e ->
                     e(e) { "Failed to parse password entry" }
@@ -193,7 +217,8 @@ class AutofillDecryptActivity : AppCompatActivity() {
                   }
               }
               OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-                val pendingIntent: PendingIntent = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)!!
+                val pendingIntent: PendingIntent =
+                  result.getParcelableExtra(OpenPgpApi.RESULT_INTENT)!!
                 runCatching {
                   val intentToResume =
                     withContext(Dispatchers.Main) {
@@ -215,10 +240,16 @@ class AutofillDecryptActivity : AppCompatActivity() {
                 val error = result.getParcelableExtra<OpenPgpError>(OpenPgpApi.RESULT_ERROR)
                 if (error != null) {
                   withContext(Dispatchers.Main) {
-                    Toast.makeText(applicationContext, "Error from OpenKeyChain: ${error.message}", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        applicationContext,
+                        "Error from OpenKeyChain: ${error.message}",
+                        Toast.LENGTH_LONG
+                      )
                       .show()
                   }
-                  e { "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}" }
+                  e {
+                    "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}"
+                  }
                 }
                 null
               }

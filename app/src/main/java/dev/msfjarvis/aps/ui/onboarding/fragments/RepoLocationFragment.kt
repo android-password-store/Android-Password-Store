@@ -35,7 +35,9 @@ import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
-  private val settings by lazy(LazyThreadSafetyMode.NONE) { requireActivity().applicationContext.sharedPrefs }
+  private val settings by lazy(LazyThreadSafetyMode.NONE) {
+    requireActivity().applicationContext.sharedPrefs
+  }
   private val directorySelectIntent by lazy(LazyThreadSafetyMode.NONE) {
     Intent(requireContext(), DirectorySelectionActivity::class.java)
   }
@@ -65,7 +67,9 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
     externalDirectorySelectAction.launch(directorySelectIntent)
   }
 
-  private val repositoryUsePermGrantedAction = createPermGrantedAction { initializeRepositoryInfo() }
+  private val repositoryUsePermGrantedAction = createPermGrantedAction {
+    initializeRepositoryInfo()
+  }
 
   private val repositoryChangePermGrantedAction = createPermGrantedAction {
     repositoryInitAction.launch(directorySelectIntent)
@@ -132,7 +136,12 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
           dir.isDirectory && // The directory, is really a directory
           dir.listFilesRecursively().isNotEmpty() && // The directory contains files
           // The directory contains a non-zero number of password files
-          PasswordRepository.getPasswords(dir, PasswordRepository.getRepositoryDirectory(), sortOrder).isNotEmpty()
+          PasswordRepository.getPasswords(
+              dir,
+              PasswordRepository.getRepositoryDirectory(),
+              sortOrder
+            )
+            .isNotEmpty()
       ) {
         PasswordRepository.closeRepository()
         return true

@@ -44,7 +44,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
 
-  private val relativeParentPath by lazy(LazyThreadSafetyMode.NONE) { getParentPath(fullPath, repoPath) }
+  private val relativeParentPath by lazy(LazyThreadSafetyMode.NONE) {
+    getParentPath(fullPath, repoPath)
+  }
   private var passwordEntry: PasswordEntry? = null
 
   private val userInteractionRequiredResult =
@@ -136,7 +138,10 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     intent.putExtra("REPO_PATH", repoPath)
     intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
     intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
-    intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContentWithoutAuthData)
+    intent.putExtra(
+      PasswordCreationActivity.EXTRA_EXTRA_CONTENT,
+      passwordEntry?.extraContentWithoutAuthData
+    )
     intent.putExtra(PasswordCreationActivity.EXTRA_EDITING, true)
     startActivity(intent)
     finish()
@@ -150,7 +155,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
         type = "text/plain"
       }
     // Always show a picker to give the user a chance to cancel
-    startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_plaintext_password_to)))
+    startActivity(
+      Intent.createChooser(sendIntent, resources.getText(R.string.send_plaintext_password_to))
+    )
   }
 
   @OptIn(ExperimentalTime::class)
@@ -166,7 +173,10 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     val outputStream = ByteArrayOutputStream()
 
     lifecycleScope.launch(Dispatchers.Main) {
-      val result = withContext(Dispatchers.IO) { checkNotNull(api).executeApi(data, inputStream, outputStream) }
+      val result =
+        withContext(Dispatchers.IO) {
+          checkNotNull(api).executeApi(data, inputStream, outputStream)
+        }
       when (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
         OpenPgpApi.RESULT_CODE_SUCCESS -> {
           startAutoDismissTimer()
@@ -174,7 +184,8 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
             val entry = passwordEntryFactory.create(lifecycleScope, outputStream.toByteArray())
             val items = arrayListOf<FieldItem>()
-            val adapter = FieldItemAdapter(emptyList(), showPassword) { text -> copyTextToClipboard(text) }
+            val adapter =
+              FieldItemAdapter(emptyList(), showPassword) { text -> copyTextToClipboard(text) }
 
             if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
               copyPasswordToClipboard(entry.password)
@@ -190,7 +201,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             if (entry.hasTotp()) {
               launch {
                 items.add(FieldItem.createOtpField(entry.totp.value))
-                entry.totp.collect { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
+                entry.totp.collect { code ->
+                  withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
+                }
               }
             }
 
@@ -198,7 +211,9 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
               items.add(FieldItem.createUsernameField(entry.username!!))
             }
 
-            entry.extraContent.forEach { (key, value) -> items.add(FieldItem(key, value, FieldItem.ActionType.COPY)) }
+            entry.extraContent.forEach { (key, value) ->
+              items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
+            }
 
             binding.recyclerView.adapter = adapter
             adapter.updateItems(items)

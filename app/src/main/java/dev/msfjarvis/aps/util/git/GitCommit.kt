@@ -15,4 +15,9 @@ import java.util.Date
  * @property authorName name of the commit's author without email address.
  * @property time time when the commit was created.
  */
-data class GitCommit(val hash: String, val shortMessage: String, val authorName: String, val time: Date)
+data class GitCommit(
+  val hash: String,
+  val shortMessage: String,
+  val authorName: String,
+  val time: Date
+)

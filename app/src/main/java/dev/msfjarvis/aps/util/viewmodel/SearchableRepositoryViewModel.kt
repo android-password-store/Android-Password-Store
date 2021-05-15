@@ -75,8 +75,14 @@ private fun PasswordItem.Companion.makeComparator(
       PasswordSortOrder.FILE_FIRST -> compareByDescending { it.type }
       PasswordSortOrder.RECENTLY_USED -> PasswordSortOrder.RECENTLY_USED.comparator
     }
-    .then(compareBy(nullsLast(CaseInsensitiveComparator)) { directoryStructure.getIdentifierFor(it.file) })
-    .then(compareBy(nullsLast(CaseInsensitiveComparator)) { directoryStructure.getUsernameFor(it.file) })
+    .then(
+      compareBy(nullsLast(CaseInsensitiveComparator)) {
+        directoryStructure.getIdentifierFor(it.file)
+      }
+    )
+    .then(
+      compareBy(nullsLast(CaseInsensitiveComparator)) { directoryStructure.getUsernameFor(it.file) }
+    )
 }
 
 val PasswordItem.stableId: String
@@ -179,7 +185,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
       .mapLatest { searchAction ->
         val listResultFlow =
           when (searchAction.searchMode) {
-            SearchMode.RecursivelyInSubdirectories -> listFilesRecursively(searchAction.baseDirectory)
+            SearchMode.RecursivelyInSubdirectories ->
+              listFilesRecursively(searchAction.baseDirectory)
             SearchMode.InCurrentDirectoryOnly -> listFiles(searchAction.baseDirectory)
           }
         val prefilteredResultFlow =
@@ -188,9 +195,8 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
             ListMode.DirectoriesOnly -> listResultFlow.filter { it.isDirectory }
             ListMode.AllEntries -> listResultFlow
           }
-        val filterModeToUse = if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode
         val passwordList =
-          when (filterModeToUse) {
+          when (if (searchAction.filter == "") FilterMode.NoFilter else searchAction.filterMode) {
             FilterMode.NoFilter -> {
               prefilteredResultFlow.map { it.toPasswordItem() }.toList().sortedWith(itemComparator)
             }
@@ -201,7 +207,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
               val regex = generateStrictDomainRegex(searchAction.filter)
               if (regex != null) {
                 prefilteredResultFlow
-                  .filter { absoluteFile -> regex.containsMatchIn(absoluteFile.relativeTo(root).path) }
+                  .filter { absoluteFile ->
+                    regex.containsMatchIn(absoluteFile.relativeTo(root).path)
+                  }
                   .map { it.toPasswordItem() }
                   .toList()
                   .sortedWith(itemComparator)
@@ -218,7 +226,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
                 .filter { it.first > 0 }
                 .toList()
                 .sortedWith(
-                  compareByDescending<Pair<Int, PasswordItem>> { it.first }.thenBy(itemComparator) { it.second }
+                  compareByDescending<Pair<Int, PasswordItem>> { it.first }.thenBy(itemComparator) {
+                    it.second
+                  }
                 )
                 .map { it.second }
             }
@@ -387,7 +397,9 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
           addObserver(
             object : SelectionTracker.SelectionObserver<String>() {
               override fun onSelectionChanged() {
-                this@SearchableRepositoryAdapter.onSelectionChangedListener?.invoke(requireSelectionTracker().selection)
+                this@SearchableRepositoryAdapter.onSelectionChangedListener?.invoke(
+                  requireSelectionTracker().selection
+                )
               }
             }
           )
@@ -395,15 +407,23 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   }
 
   private var onItemClickedListener: ((holder: T, item: PasswordItem) -> Unit)? = null
-  open fun onItemClicked(listener: (holder: T, item: PasswordItem) -> Unit): SearchableRepositoryAdapter<T> {
-    check(onItemClickedListener == null) { "Only a single listener can be registered for onItemClicked" }
+  open fun onItemClicked(
+    listener: (holder: T, item: PasswordItem) -> Unit
+  ): SearchableRepositoryAdapter<T> {
+    check(onItemClickedListener == null) {
+      "Only a single listener can be registered for onItemClicked"
+    }
     onItemClickedListener = listener
     return this
   }
 
   private var onSelectionChangedListener: ((selection: Selection<String>) -> Unit)? = null
-  open fun onSelectionChanged(listener: (selection: Selection<String>) -> Unit): SearchableRepositoryAdapter<T> {
-    check(onSelectionChangedListener == null) { "Only a single listener can be registered for onSelectionChanged" }
+  open fun onSelectionChanged(
+    listener: (selection: Selection<String>) -> Unit
+  ): SearchableRepositoryAdapter<T> {
+    check(onSelectionChangedListener == null) {
+      "Only a single listener can be registered for onSelectionChanged"
+    }
     onSelectionChangedListener = listener
     return this
   }

@@ -89,7 +89,12 @@ class GitServerConfigActivity : BaseGitActivity() {
     binding.clearHostKeyButton.isVisible = GitSettings.hasSavedHostKey()
     binding.clearHostKeyButton.setOnClickListener {
       GitSettings.clearSavedHostKey()
-      Snackbar.make(binding.root, getString(R.string.clear_saved_host_key_success), Snackbar.LENGTH_LONG).show()
+      Snackbar.make(
+          binding.root,
+          getString(R.string.clear_saved_host_key_success),
+          Snackbar.LENGTH_LONG
+        )
+        .show()
       it.isVisible = false
     }
     binding.saveButton.setOnClickListener {
@@ -102,7 +107,9 @@ class GitServerConfigActivity : BaseGitActivity() {
           BasicBottomSheet.Builder(this)
             .setTitleRes(R.string.https_scheme_with_port_title)
             .setMessageRes(R.string.https_scheme_with_port_message)
-            .setPositiveButtonClickListener { binding.serverUrl.setText(newUrl.replace(PORT_REGEX, "/")) }
+            .setPositiveButtonClickListener {
+              binding.serverUrl.setText(newUrl.replace(PORT_REGEX, "/"))
+            }
             .build()
             .show(supportFragmentManager, "SSH_SCHEME_WARNING")
           return@setOnClickListener
@@ -110,7 +117,9 @@ class GitServerConfigActivity : BaseGitActivity() {
           BasicBottomSheet.Builder(this)
             .setTitleRes(R.string.ssh_scheme_needed_title)
             .setMessageRes(R.string.ssh_scheme_needed_message)
-            .setPositiveButtonClickListener { @Suppress("SetTextI18n") binding.serverUrl.setText("ssh://$newUrl") }
+            .setPositiveButtonClickListener {
+              @Suppress("SetTextI18n") binding.serverUrl.setText("ssh://$newUrl")
+            }
             .build()
             .show(supportFragmentManager, "SSH_SCHEME_WARNING")
           return@setOnClickListener
@@ -133,7 +142,12 @@ class GitServerConfigActivity : BaseGitActivity() {
           )
       ) {
         GitSettings.UpdateConnectionSettingsResult.FailedToParseUrl -> {
-          Snackbar.make(binding.root, getString(R.string.git_server_config_save_error), Snackbar.LENGTH_LONG).show()
+          Snackbar.make(
+              binding.root,
+              getString(R.string.git_server_config_save_error),
+              Snackbar.LENGTH_LONG
+            )
+            .show()
         }
         is GitSettings.UpdateConnectionSettingsResult.MissingUsername -> {
           when (updateResult.newProtocol) {
@@ -154,9 +168,14 @@ class GitServerConfigActivity : BaseGitActivity() {
           }
         }
         GitSettings.UpdateConnectionSettingsResult.Valid -> {
-          if (isClone && PasswordRepository.getRepository(null) == null) PasswordRepository.initialize()
+          if (isClone && PasswordRepository.getRepository(null) == null)
+            PasswordRepository.initialize()
           if (!isClone) {
-            Snackbar.make(binding.root, getString(R.string.git_server_config_save_success), Snackbar.LENGTH_SHORT)
+            Snackbar.make(
+                binding.root,
+                getString(R.string.git_server_config_save_success),
+                Snackbar.LENGTH_SHORT
+              )
               .show()
             Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
           } else {
@@ -206,7 +225,9 @@ class GitServerConfigActivity : BaseGitActivity() {
     val localDir = requireNotNull(PasswordRepository.getRepositoryDirectory())
     val localDirFiles = localDir.listFiles() ?: emptyArray()
     // Warn if non-empty folder unless it's a just-initialized store that has just a .git folder
-    if (localDir.exists() && localDirFiles.isNotEmpty() && !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")
+    if (localDir.exists() &&
+        localDirFiles.isNotEmpty() &&
+        !(localDirFiles.size == 1 && localDirFiles[0].name == ".git")
     ) {
       MaterialAlertDialogBuilder(this)
         .setTitle(R.string.dialog_delete_title)
@@ -269,7 +290,9 @@ class GitServerConfigActivity : BaseGitActivity() {
     private val PORT_REGEX = ":[0-9]{1,5}/".toRegex()
 
     fun createCloneIntent(context: Context): Intent {
-      return Intent(context, GitServerConfigActivity::class.java).apply { putExtra("cloning", true) }
+      return Intent(context, GitServerConfigActivity::class.java).apply {
+        putExtra("cloning", true)
+      }
     }
   }
 }

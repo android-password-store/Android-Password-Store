@@ -109,7 +109,9 @@ class PasswordBuilder(ctx: Context) {
                 }
               else candidate
             CapsType.TitleCase ->
-              candidate.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+              candidate.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+              }
             CapsType.lowercase -> candidate.lowercase(Locale.getDefault())
             CapsType.As_iS -> candidate
           }

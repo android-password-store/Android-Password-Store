@@ -7,7 +7,8 @@ package dev.msfjarvis.aps.util.git.operation
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.ResetCommand
 
-class ResetToRemoteOperation(callingActivity: ContinuationContainerActivity) : GitOperation(callingActivity) {
+class ResetToRemoteOperation(callingActivity: ContinuationContainerActivity) :
+  GitOperation(callingActivity) {
 
   override val commands =
     arrayOf(

@@ -52,7 +52,10 @@ abstract class InteractivePasswordFinder : PasswordFinder {
   abstract fun askForPassword(cont: Continuation<String?>, isRetry: Boolean)
 
   final override fun reqPassword(resource: Resource<*>?): CharArray {
-    val password = runBlocking(Dispatchers.Main) { suspendCoroutine<String?> { cont -> askForPassword(cont, isRetry) } }
+    val password =
+      runBlocking(Dispatchers.Main) {
+        suspendCoroutine<String?> { cont -> askForPassword(cont, isRetry) }
+      }
     isRetry = true
     return password?.toCharArray() ?: throw SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER)
   }
@@ -60,11 +63,17 @@ abstract class InteractivePasswordFinder : PasswordFinder {
   final override fun shouldRetry(resource: Resource<*>?) = true
 }
 
-class SshjSessionFactory(private val authMethod: SshAuthMethod, private val hostKeyFile: File) : SshSessionFactory() {
+class SshjSessionFactory(private val authMethod: SshAuthMethod, private val hostKeyFile: File) :
+  SshSessionFactory() {
 
   private var currentSession: SshjSession? = null
 
-  override fun getSession(uri: URIish, credentialsProvider: CredentialsProvider?, fs: FS?, tms: Int): RemoteSession {
+  override fun getSession(
+    uri: URIish,
+    credentialsProvider: CredentialsProvider?,
+    fs: FS?,
+    tms: Int
+  ): RemoteSession {
     return currentSession
       ?: SshjSession(uri, uri.user, authMethod, hostKeyFile).connect().also {
         d { "New SSH connection created" }
@@ -81,7 +90,9 @@ private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
   if (!hostKeyFile.exists()) {
     return HostKeyVerifier { _, _, key ->
       val digest =
-        runCatching { SecurityUtils.getMessageDigest("SHA-256") }.getOrElse { e -> throw SSHRuntimeException(e) }
+        runCatching { SecurityUtils.getMessageDigest("SHA-256") }.getOrElse { e ->
+          throw SSHRuntimeException(e)
+        }
       digest.update(PlainBuffer().putPublicKey(key).compactData)
       val digestData = digest.digest()
       val hostKeyEntry = "SHA256:${Base64.encodeToString(digestData, Base64.NO_WRAP)}"
@@ -115,7 +126,9 @@ private class SshjSession(
       val userPlusHost = "${uri.user}@${uri.host}"
       val realUser = userPlusHost.substringBeforeLast('@')
       val realHost = userPlusHost.substringAfterLast('@')
-      uri.setUser(realUser).setHost(realHost).also { d { "After fixup: user=${it.user}, host=${it.host}" } }
+      uri.setUser(realUser).setHost(realHost).also {
+        d { "After fixup: user=${it.user}, host=${it.host}" }
+      }
     } else {
       uri
     }
@@ -131,7 +144,8 @@ private class SshjSession(
         ssh.auth(username, passwordAuth)
       }
       is SshAuthMethod.SshKey -> {
-        val pubkeyAuth = AuthPublickey(SshKey.provide(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
+        val pubkeyAuth =
+          AuthPublickey(SshKey.provide(ssh, CredentialFinder(authMethod.activity, AuthMode.SshKey)))
         ssh.auth(username, pubkeyAuth, passwordAuth)
       }
       is SshAuthMethod.OpenKeychain -> {
@@ -174,7 +188,8 @@ private class SshjSession(
   }
 }
 
-private class SshjProcess(private val command: Session.Command, private val timeout: Long) : Process() {
+private class SshjProcess(private val command: Session.Command, private val timeout: Long) :
+  Process() {
 
   override fun waitFor(): Int {
     command.join(timeout, TimeUnit.SECONDS)

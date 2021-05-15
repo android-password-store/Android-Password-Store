@@ -82,7 +82,9 @@ class PasswordStore : BaseGitActivity() {
   }
 
   private val storagePermissionRequest =
-    registerForActivityResult(RequestPermission()) { granted -> if (granted) checkLocalRepository() }
+    registerForActivityResult(RequestPermission()) { granted ->
+      if (granted) checkLocalRepository()
+    }
 
   private val directorySelectAction =
     registerForActivityResult(StartActivityForResult()) { result ->
@@ -128,7 +130,13 @@ class PasswordStore : BaseGitActivity() {
             withContext(Dispatchers.Main) {
               MaterialAlertDialogBuilder(this@PasswordStore)
                 .setTitle(resources.getString(R.string.password_exists_title))
-                .setMessage(resources.getString(R.string.password_exists_message, destinationLongName, sourceLongName))
+                .setMessage(
+                  resources.getString(
+                    R.string.password_exists_message,
+                    destinationLongName,
+                    sourceLongName
+                  )
+                )
                 .setPositiveButton(R.string.dialog_ok) { _, _ ->
                   launch(Dispatchers.IO) { moveFile(source, destinationFile) }
                 }
@@ -143,11 +151,16 @@ class PasswordStore : BaseGitActivity() {
           1 -> {
             val source = File(filesToMove[0])
             val basename = source.nameWithoutExtension
-            val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
+            val sourceLongName =
+              getLongName(requireNotNull(source.parent), repositoryPath, basename)
             val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
             withContext(Dispatchers.Main) {
               commitChange(
-                resources.getString(R.string.git_commit_move_text, sourceLongName, destinationLongName),
+                resources.getString(
+                  R.string.git_commit_move_text,
+                  sourceLongName,
+                  destinationLongName
+                ),
               )
             }
           }
@@ -168,8 +181,8 @@ class PasswordStore : BaseGitActivity() {
 
   override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
     // open search view on search key, or Ctr+F
-    if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) &&
-        !searchItem.isActionViewExpanded
+    if ((keyCode == KeyEvent.KEYCODE_SEARCH ||
+        keyCode == KeyEvent.KEYCODE_F && event.isCtrlPressed) && !searchItem.isActionViewExpanded
     ) {
       searchItem.expandActionView()
       return true
@@ -202,7 +215,9 @@ class PasswordStore : BaseGitActivity() {
 
     model.currentDir.observe(this) { dir ->
       val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
-      supportActionBar!!.apply { if (dir != basePath) title = dir.name else setTitle(R.string.app_name) }
+      supportActionBar!!.apply {
+        if (dir != basePath) title = dir.name else setTitle(R.string.app_name)
+      }
     }
   }
 
@@ -253,7 +268,8 @@ class PasswordStore : BaseGitActivity() {
           val filter = s.trim()
           // List the contents of the current directory if the user enters a blank
           // search term.
-          if (filter.isEmpty()) model.navigateTo(newDirectory = model.currentDir.value!!, pushPreviousLocation = false)
+          if (filter.isEmpty())
+            model.navigateTo(newDirectory = model.currentDir.value!!, pushPreviousLocation = false)
           else model.search(filter)
           return true
         }
@@ -288,7 +304,9 @@ class PasswordStore : BaseGitActivity() {
         .setPositiveButton(resources.getString(R.string.dialog_ok), null)
     when (id) {
       R.id.user_pref -> {
-        runCatching { startActivity(Intent(this, SettingsActivity::class.java)) }.onFailure { e -> e.printStackTrace() }
+        runCatching { startActivity(Intent(this, SettingsActivity::class.java)) }.onFailure { e ->
+          e.printStackTrace()
+        }
       }
       R.id.git_push -> {
         if (!PasswordRepository.isInitialized) {
@@ -372,7 +390,8 @@ class PasswordStore : BaseGitActivity() {
     if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
       d { "Check, dir: ${localDir.absolutePath}" }
       // do not push the fragment if we already have it
-      if (getPasswordFragment() == null || settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)) {
+      if (getPasswordFragment() == null || settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)
+      ) {
         settings.edit { putBoolean(PreferenceKeys.REPO_CHANGED, false) }
         val args = Bundle()
         args.putString(REQUEST_ARG_PATH, PasswordRepository.getRepositoryDirectory().absolutePath)
@@ -403,7 +422,9 @@ class PasswordStore : BaseGitActivity() {
   fun decryptPassword(item: PasswordItem) {
     val authDecryptIntent = item.createAuthEnabledIntent(this)
     val decryptIntent =
-      (authDecryptIntent.clone() as Intent).setComponent(ComponentName(this, DecryptActivity::class.java))
+      (authDecryptIntent.clone() as Intent).setComponent(
+        ComponentName(this, DecryptActivity::class.java)
+      )
 
     startActivity(decryptIntent)
 
@@ -439,7 +460,9 @@ class PasswordStore : BaseGitActivity() {
 
   fun deletePasswords(selectedItems: List<PasswordItem>) {
     var size = 0
-    selectedItems.forEach { if (it.file.isFile) size++ else size += it.file.listFilesRecursively().size }
+    selectedItems.forEach {
+      if (it.file.isFile) size++ else size += it.file.listFilesRecursively().size
+    }
     if (size == 0) {
       selectedItems.map { item -> item.file.deleteRecursively() }
       refreshPasswordList()
@@ -497,7 +520,10 @@ class PasswordStore : BaseGitActivity() {
    * @see [CategoryRenameError]
    * @see [isInsideRepository]
    */
-  private fun renameCategory(oldCategory: PasswordItem, error: CategoryRenameError = CategoryRenameError.None) {
+  private fun renameCategory(
+    oldCategory: PasswordItem,
+    error: CategoryRenameError = CategoryRenameError.None
+  ) {
     val view = layoutInflater.inflate(R.layout.folder_dialog_fragment, null)
     val newCategoryEditText = view.findViewById<TextInputEditText>(R.id.folder_name_text)
 
@@ -513,16 +539,19 @@ class PasswordStore : BaseGitActivity() {
         .setPositiveButton(R.string.dialog_ok) { _, _ ->
           val newCategory = File("${oldCategory.file.parent}/${newCategoryEditText.text}")
           when {
-            newCategoryEditText.text.isNullOrBlank() -> renameCategory(oldCategory, CategoryRenameError.EmptyField)
+            newCategoryEditText.text.isNullOrBlank() ->
+              renameCategory(oldCategory, CategoryRenameError.EmptyField)
             newCategory.exists() -> renameCategory(oldCategory, CategoryRenameError.CategoryExists)
-            !newCategory.isInsideRepository() -> renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
+            !newCategory.isInsideRepository() ->
+              renameCategory(oldCategory, CategoryRenameError.DestinationOutsideRepo)
             else ->
               lifecycleScope.launch(Dispatchers.IO) {
                 moveFile(oldCategory.file, newCategory)
 
                 // associate the new category with the last category's timestamp in
                 // history
-                val preference = getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+                val preference =
+                  getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
                 val timestamp = preference.getString(oldCategory.file.absolutePath.base64())
                 if (timestamp != null) {
                   preference.edit {
@@ -533,7 +562,11 @@ class PasswordStore : BaseGitActivity() {
 
                 withContext(Dispatchers.Main) {
                   commitChange(
-                    resources.getString(R.string.git_commit_move_text, oldCategory.name, newCategory.name),
+                    resources.getString(
+                      R.string.git_commit_move_text,
+                      oldCategory.name,
+                      newCategory.name
+                    ),
                   )
                 }
               }
@@ -584,7 +617,9 @@ class PasswordStore : BaseGitActivity() {
         // Recursively list all files (not directories) below `source`, then
         // obtain the corresponding target file by resolving the relative path
         // starting at the destination folder.
-        source.listFilesRecursively().associateWith { destinationFile.resolve(it.relativeTo(source)) }
+        source.listFilesRecursively().associateWith {
+          destinationFile.resolve(it.relativeTo(source))
+        }
       } else {
         mapOf(source to destinationFile)
       }

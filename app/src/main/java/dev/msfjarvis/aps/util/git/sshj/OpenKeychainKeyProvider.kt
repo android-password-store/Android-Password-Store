@@ -106,7 +106,8 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
         val response = sshPublicKeyResponse.response as SshPublicKeyResponse
         val sshPublicKey = response.sshPublicKey!!
         publicKey =
-          parseSshPublicKey(sshPublicKey) ?: throw IllegalStateException("OpenKeychain API returned invalid SSH key")
+          parseSshPublicKey(sshPublicKey)
+            ?: throw IllegalStateException("OpenKeychain API returned invalid SSH key")
       }
       is ApiResponse.NoSuchKey ->
         if (isRetry) {
@@ -122,13 +123,17 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
 
   private suspend fun selectKey() {
     when (val keySelectionResponse = executeApiRequest(KeySelectionRequest())) {
-      is ApiResponse.Success -> keyId = (keySelectionResponse.response as KeySelectionResponse).keyId
+      is ApiResponse.Success ->
+        keyId = (keySelectionResponse.response as KeySelectionResponse).keyId
       is ApiResponse.GeneralError -> throw keySelectionResponse.exception
       is ApiResponse.NoSuchKey -> throw keySelectionResponse.exception
     }
   }
 
-  private suspend fun executeApiRequest(request: Request, resultOfUserInteraction: Intent? = null): ApiResponse {
+  private suspend fun executeApiRequest(
+    request: Request,
+    resultOfUserInteraction: Intent? = null
+  ): ApiResponse {
     d { "executeRequest($request) called" }
     val result =
       withContext(Dispatchers.Main) {
@@ -141,7 +146,11 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
   }
 
   private suspend fun parseResult(request: Request, result: Intent): ApiResponse {
-    return when (result.getIntExtra(SshAuthenticationApi.EXTRA_RESULT_CODE, SshAuthenticationApi.RESULT_CODE_ERROR)) {
+    return when (result.getIntExtra(
+        SshAuthenticationApi.EXTRA_RESULT_CODE,
+        SshAuthenticationApi.RESULT_CODE_ERROR
+      )
+    ) {
       SshAuthenticationApi.RESULT_CODE_SUCCESS -> {
         ApiResponse.Success(
           when (request) {
@@ -153,20 +162,27 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
         )
       }
       SshAuthenticationApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
-        val pendingIntent: PendingIntent = result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT)!!
+        val pendingIntent: PendingIntent =
+          result.getParcelableExtra(SshAuthenticationApi.EXTRA_PENDING_INTENT)!!
         val resultOfUserInteraction: Intent =
           withContext(Dispatchers.Main) {
             suspendCoroutine { cont ->
               activity.stashedCont = cont
-              activity.continueAfterUserInteraction.launch(IntentSenderRequest.Builder(pendingIntent).build())
+              activity.continueAfterUserInteraction.launch(
+                IntentSenderRequest.Builder(pendingIntent).build()
+              )
             }
           }
         executeApiRequest(request, resultOfUserInteraction)
       }
       else -> {
-        val error = result.getParcelableExtra<SshAuthenticationApiError>(SshAuthenticationApi.EXTRA_ERROR)
+        val error =
+          result.getParcelableExtra<SshAuthenticationApiError>(SshAuthenticationApi.EXTRA_ERROR)
         val exception =
-          UserAuthException(DisconnectReason.UNKNOWN, "Request ${request::class.simpleName} failed: ${error?.message}")
+          UserAuthException(
+            DisconnectReason.UNKNOWN,
+            "Request ${request::class.simpleName} failed: ${error?.message}"
+          )
         when (error?.error) {
           SshAuthenticationApiError.NO_AUTH_KEY, SshAuthenticationApiError.NO_SUCH_KEY ->
             ApiResponse.NoSuchKey(exception)
@@ -181,7 +197,9 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
     privateKey =
       object : OpenKeychainPrivateKey {
         override suspend fun sign(challenge: ByteArray, hashAlgorithm: Int) =
-          when (val signingResponse = executeApiRequest(SigningRequest(challenge, keyId, hashAlgorithm))) {
+          when (val signingResponse =
+              executeApiRequest(SigningRequest(challenge, keyId, hashAlgorithm))
+          ) {
             is ApiResponse.Success -> (signingResponse.response as SigningResponse).signature
             is ApiResponse.GeneralError -> throw signingResponse.exception
             is ApiResponse.NoSuchKey -> throw signingResponse.exception

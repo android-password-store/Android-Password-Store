@@ -77,8 +77,12 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     super.onViewCreated(view, savedInstanceState)
     settings = requireContext().sharedPrefs
     initializePasswordList()
-    binding.fab.setOnClickListener { ItemCreationBottomSheet().show(childFragmentManager, "BOTTOM_SHEET") }
-    childFragmentManager.setFragmentResultListener(ITEM_CREATION_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
+    binding.fab.setOnClickListener {
+      ItemCreationBottomSheet().show(childFragmentManager, "BOTTOM_SHEET")
+    }
+    childFragmentManager.setFragmentResultListener(ITEM_CREATION_REQUEST_KEY, viewLifecycleOwner) {
+      _,
+      bundle ->
       when (bundle.getString(ACTION_KEY)) {
         ACTION_FOLDER -> requireStore().createFolder()
         ACTION_PASSWORD -> requireStore().createPassword()
@@ -88,7 +92,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
   private fun initializePasswordList() {
     val gitDir = File(PasswordRepository.getRepositoryDirectory(), ".git")
-    val hasGitDir = gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
+    val hasGitDir =
+      gitDir.exists() && gitDir.isDirectory && (gitDir.listFiles()?.isNotEmpty() == true)
     binding.swipeRefresher.setOnRefreshListener {
       if (!hasGitDir) {
         requireStore().refreshPasswordList()
@@ -118,7 +123,9 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
                   binding.swipeRefresher.isRefreshing = false
                   refreshPasswordList()
                 },
-                failure = { err -> promptOnErrorHandler(err) { binding.swipeRefresher.isRefreshing = false } },
+                failure = { err ->
+                  promptOnErrorHandler(err) { binding.swipeRefresher.isRefreshing = false }
+                },
               )
           }
         }
@@ -135,10 +142,16 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
           binding.swipeRefresher.isEnabled = selection.isEmpty
 
           if (actionMode == null)
-            actionMode = requireStore().startSupportActionMode(actionModeCallback) ?: return@onSelectionChanged
+            actionMode =
+              requireStore().startSupportActionMode(actionModeCallback) ?: return@onSelectionChanged
 
           if (!selection.isEmpty) {
-            actionMode!!.title = resources.getQuantityString(R.plurals.delete_title, selection.size(), selection.size())
+            actionMode!!.title =
+              resources.getQuantityString(
+                R.plurals.delete_title,
+                selection.size(),
+                selection.size()
+              )
             actionMode!!.invalidate()
           } else {
             actionMode!!.finish()
@@ -171,14 +184,18 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
             recyclerView.scrollToPosition(0)
           }
           scrollTarget != null -> {
-            scrollTarget?.let { recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it)) }
+            scrollTarget?.let {
+              recyclerView.scrollToPosition(recyclerAdapter.getPositionForFile(it))
+            }
             scrollTarget = null
           }
           else -> {
             // When the result is not filtered and there is a saved scroll position for
             // it,
             // we try to restore it.
-            recyclerViewStateToRestore?.let { recyclerView.layoutManager!!.onRestoreInstanceState(it) }
+            recyclerViewStateToRestore?.let {
+              recyclerView.layoutManager!!.onRestoreInstanceState(it)
+            }
             recyclerViewStateToRestore = null
           }
         }
@@ -201,7 +218,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
       // but may be called multiple times if the mode is invalidated.
       override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
         val selectedItems = recyclerAdapter.getSelectedItems()
-        menu.findItem(R.id.menu_edit_password).isVisible = selectedItems.all { it.type == PasswordItem.TYPE_CATEGORY }
+        menu.findItem(R.id.menu_edit_password).isVisible =
+          selectedItems.all { it.type == PasswordItem.TYPE_CATEGORY }
         menu.findItem(R.id.menu_pin_password).isVisible =
           selectedItems.size == 1 && selectedItems[0].type == PasswordItem.TYPE_PASSWORD
         return true
@@ -227,7 +245,10 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
           }
           R.id.menu_pin_password -> {
             val passwordItem = recyclerAdapter.getSelectedItems()[0]
-            shortcutHandler.addPinnedShortcut(passwordItem, passwordItem.createAuthEnabledIntent(requireContext()))
+            shortcutHandler.addPinnedShortcut(
+              passwordItem,
+              passwordItem.createAuthEnabledIntent(requireContext())
+            )
             false
           }
           else -> false
@@ -244,7 +265,8 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
       private fun animateFab(show: Boolean) =
         with(binding.fab) {
-          val animation = AnimationUtils.loadAnimation(context, if (show) R.anim.scale_up else R.anim.scale_down)
+          val animation =
+            AnimationUtils.loadAnimation(context, if (show) R.anim.scale_up else R.anim.scale_down)
           animation.setAnimationListener(
             object : Animation.AnimationListener {
               override fun onAnimationRepeat(animation: Animation?) {}
@@ -258,7 +280,11 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
               }
             }
           )
-          animate().rotationBy(if (show) -90f else 90f).setStartDelay(if (show) 100 else 0).setDuration(100).start()
+          animate()
+            .rotationBy(if (show) -90f else 90f)
+            .setStartDelay(if (show) 100 else 0)
+            .setDuration(100)
+            .start()
           startAnimation(animation)
         }
     }
@@ -269,10 +295,15 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
       listener =
         object : OnFragmentInteractionListener {
           override fun onFragmentInteraction(item: PasswordItem) {
-            if (settings.getString(PreferenceKeys.SORT_ORDER) == PasswordSortOrder.RECENTLY_USED.name) {
+            if (settings.getString(PreferenceKeys.SORT_ORDER) ==
+                PasswordSortOrder.RECENTLY_USED.name
+            ) {
               // save the time when password was used
-              val preferences = context.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
-              preferences.edit { putString(item.file.absolutePath.base64(), System.currentTimeMillis().toString()) }
+              val preferences =
+                context.getSharedPreferences("recent_password_history", Context.MODE_PRIVATE)
+              preferences.edit {
+                putString(item.file.absolutePath.base64(), System.currentTimeMillis().toString())
+              }
             }
 
             if (item.type == PasswordItem.TYPE_CATEGORY) {
@@ -287,7 +318,9 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
           }
         }
     }
-      .onFailure { throw ClassCastException("$context must implement OnFragmentInteractionListener") }
+      .onFailure {
+        throw ClassCastException("$context must implement OnFragmentInteractionListener")
+      }
   }
 
   private fun requireStore() = requireActivity() as PasswordStore
@@ -322,7 +355,10 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
   fun navigateTo(file: File) {
     requireStore().clearSearch()
-    model.navigateTo(file, recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState())
+    model.navigateTo(
+      file,
+      recyclerViewState = binding.passRecycler.layoutManager!!.onSaveInstanceState()
+    )
     requireStore().supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 

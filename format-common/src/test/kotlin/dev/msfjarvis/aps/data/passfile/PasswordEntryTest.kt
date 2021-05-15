@@ -19,7 +19,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 internal class PasswordEntryTest {
 
-  private fun makeEntry(content: String) = PasswordEntry(fakeClock, testFinder, testScope, content.encodeToByteArray())
+  private fun makeEntry(content: String) =
+    PasswordEntry(fakeClock, testFinder, testScope, content.encodeToByteArray())
 
   @Test
   fun testGetPassword() {
@@ -49,7 +50,10 @@ internal class PasswordEntryTest {
     assertEquals("blubb", makeEntry("\nblubb").extraContentString)
     assertEquals("blubb", makeEntry("blubb\npassword: foo").extraContentString)
     assertEquals("blubb", makeEntry("password: foo\nblubb").extraContentString)
-    assertEquals("blubb\nusername: bar", makeEntry("blubb\npassword: foo\nusername: bar").extraContentString)
+    assertEquals(
+      "blubb\nusername: bar",
+      makeEntry("blubb\npassword: foo\nusername: bar").extraContentString
+    )
     assertEquals("", makeEntry("\n").extraContentString)
     assertEquals("", makeEntry("").extraContentString)
   }

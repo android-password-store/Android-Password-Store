@@ -116,7 +116,8 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
           "Your local repository appears to be an incomplete Git clone, please delete and re-clone from settings"
         )
       }
-      err is TransportException && err.disconnectReason == DisconnectReason.HOST_KEY_NOT_VERIFIABLE -> {
+      err is TransportException &&
+        err.disconnectReason == DisconnectReason.HOST_KEY_NOT_VERIFIABLE -> {
         SSHException(
           DisconnectReason.HOST_KEY_NOT_VERIFIABLE,
           "WARNING: The remote host key has changed. If this is expected, please go to Git server settings and clear the saved host key."
@@ -135,7 +136,9 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
   private fun isExplicitlyUserInitiatedError(throwable: Throwable): Boolean {
     var cause: Throwable? = throwable
     while (cause != null) {
-      if (cause is SSHException && cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER) return true
+      if (cause is SSHException && cause.disconnectReason == DisconnectReason.AUTH_CANCELLED_BY_USER
+      )
+        return true
       cause = cause.cause
     }
     return false
@@ -154,7 +157,8 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
     while ((rootCause is org.eclipse.jgit.errors.TransportException ||
       rootCause is org.eclipse.jgit.api.errors.TransportException ||
       rootCause is org.eclipse.jgit.api.errors.InvalidRemoteException ||
-      (rootCause is UserAuthException && rootCause.message == "Exhausted available authentication methods"))) {
+      (rootCause is UserAuthException &&
+        rootCause.message == "Exhausted available authentication methods"))) {
       rootCause = rootCause.cause ?: break
     }
     return rootCause

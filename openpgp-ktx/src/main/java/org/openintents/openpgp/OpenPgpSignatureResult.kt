@@ -58,7 +58,8 @@ public class OpenPgpSignatureResult : Parcelable {
       }
     // backward compatibility for this exact version
     if (version > 2) {
-      senderStatusResult = readEnumWithNullAndFallback(source, SenderStatusResult.values(), SenderStatusResult.UNKNOWN)
+      senderStatusResult =
+        readEnumWithNullAndFallback(source, SenderStatusResult.values(), SenderStatusResult.UNKNOWN)
       confirmedUserIds = source.createStringArrayList()
     } else {
       senderStatusResult = SenderStatusResult.UNKNOWN
@@ -151,7 +152,9 @@ public class OpenPgpSignatureResult : Parcelable {
     )
   }
 
-  public fun withAutocryptPeerResult(autocryptPeerentityResult: AutocryptPeerResult?): OpenPgpSignatureResult {
+  public fun withAutocryptPeerResult(
+    autocryptPeerentityResult: AutocryptPeerResult?
+  ): OpenPgpSignatureResult {
     return OpenPgpSignatureResult(
       result,
       primaryUserId,
@@ -253,18 +256,55 @@ public class OpenPgpSignatureResult : Parcelable {
     }
 
     public fun createWithNoSignature(): OpenPgpSignatureResult {
-      return OpenPgpSignatureResult(RESULT_NO_SIGNATURE, null, 0L, null, null, null, null, null, null)
+      return OpenPgpSignatureResult(
+        RESULT_NO_SIGNATURE,
+        null,
+        0L,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      )
     }
 
-    public fun createWithKeyMissing(keyId: Long, signatureTimestamp: Date?): OpenPgpSignatureResult {
-      return OpenPgpSignatureResult(RESULT_KEY_MISSING, null, keyId, null, null, null, null, signatureTimestamp, null)
+    public fun createWithKeyMissing(
+      keyId: Long,
+      signatureTimestamp: Date?
+    ): OpenPgpSignatureResult {
+      return OpenPgpSignatureResult(
+        RESULT_KEY_MISSING,
+        null,
+        keyId,
+        null,
+        null,
+        null,
+        null,
+        signatureTimestamp,
+        null
+      )
     }
 
     public fun createWithInvalidSignature(): OpenPgpSignatureResult {
-      return OpenPgpSignatureResult(RESULT_INVALID_SIGNATURE, null, 0L, null, null, null, null, null, null)
+      return OpenPgpSignatureResult(
+        RESULT_INVALID_SIGNATURE,
+        null,
+        0L,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      )
     }
 
-    private fun <T : Enum<T>?> readEnumWithNullAndFallback(source: Parcel, enumValues: Array<T>, fallback: T?): T? {
+    private fun <T : Enum<T>?> readEnumWithNullAndFallback(
+      source: Parcel,
+      enumValues: Array<T>,
+      fallback: T?
+    ): T? {
       val valueOrdinal = source.readInt()
       if (valueOrdinal == -1) {
         return null

@@ -5,12 +5,16 @@
 
 // Modules
 include(":app")
+
 include(":autofill-parser")
+
 include(":format-common")
+
 include(":openpgp-ktx")
 
 // Experimental features
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 enableFeaturePreview("VERSION_CATALOGS")
 
 // Plugin repositories

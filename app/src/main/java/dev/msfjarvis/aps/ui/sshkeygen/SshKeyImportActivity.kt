@@ -26,7 +26,12 @@ class SshKeyImportActivity : AppCompatActivity() {
       }
       runCatching {
         SshKey.import(uri)
-        Toast.makeText(this, resources.getString(R.string.ssh_key_success_dialog_title), Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            this,
+            resources.getString(R.string.ssh_key_success_dialog_title),
+            Toast.LENGTH_LONG
+          )
+          .show()
         setResult(RESULT_OK)
         finish()
       }

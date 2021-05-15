@@ -115,7 +115,8 @@ object SshKey {
 
   private var type: Type?
     get() = Type.fromValue(context.sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_KEY_TYPE))
-    set(value) = context.sharedPrefs.edit { putString(PreferenceKeys.GIT_REMOTE_KEY_TYPE, value?.value) }
+    set(value) =
+      context.sharedPrefs.edit { putString(PreferenceKeys.GIT_REMOTE_KEY_TYPE, value?.value) }
 
   private val isStrongBoxSupported by lazy(LazyThreadSafetyMode.NONE) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -138,13 +139,20 @@ object SshKey {
     }
   }
 
-  enum class Algorithm(val algorithm: String, val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit) {
+  enum class Algorithm(
+    val algorithm: String,
+    val applyToSpec: KeyGenParameterSpec.Builder.() -> Unit
+  ) {
     Rsa(
       KeyProperties.KEY_ALGORITHM_RSA,
       {
         setKeySize(3072)
         setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
-        setDigests(KeyProperties.DIGEST_SHA1, KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+        setDigests(
+          KeyProperties.DIGEST_SHA1,
+          KeyProperties.DIGEST_SHA256,
+          KeyProperties.DIGEST_SHA512
+        )
       }
     ),
     Ecdsa(
@@ -163,7 +171,9 @@ object SshKey {
   private fun delete() {
     androidKeystore.deleteEntry(KEYSTORE_ALIAS)
     // Remove Tink key set used by AndroidX's EncryptedFile.
-    context.getSharedPreferences(ANDROIDX_SECURITY_KEYSET_PREF_NAME, Context.MODE_PRIVATE).edit { clear() }
+    context.getSharedPreferences(ANDROIDX_SECURITY_KEYSET_PREF_NAME, Context.MODE_PRIVATE).edit {
+      clear()
+    }
     if (privateKeyFile.isFile) {
       privateKeyFile.delete()
     }
@@ -177,7 +187,8 @@ object SshKey {
   fun import(uri: Uri) {
     // First check whether the content at uri is likely an SSH private key.
     val fileSize =
-      context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use { cursor ->
+      context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use {
+        cursor ->
         // Cursor returns only a single row.
         cursor.moveToFirst()
         cursor.getInt(0)
@@ -186,7 +197,9 @@ object SshKey {
 
     // We assume that an SSH key's ideal size is > 0 bytes && < 100 kilobytes.
     if (fileSize > 100_000 || fileSize == 0)
-      throw IllegalArgumentException(context.getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
+      throw IllegalArgumentException(
+        context.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)
+      )
 
     val sshKeyInputStream =
       context.contentResolver.openInputStream(uri)
@@ -199,7 +212,9 @@ object SshKey {
         !Regex("BEGIN .* PRIVATE KEY").containsMatchIn(lines.first()) ||
         !Regex("END .* PRIVATE KEY").containsMatchIn(lines.last())
     )
-      throw IllegalArgumentException(context.getString(R.string.ssh_key_import_error_not_an_ssh_key_message))
+      throw IllegalArgumentException(
+        context.getString(R.string.ssh_key_import_error_not_an_ssh_key_message)
+      )
 
     // At this point, we are reasonably confident that we have actually been provided a private
     // key and delete the old key.
@@ -249,7 +264,9 @@ object SshKey {
       val encryptedPrivateKeyFile = getOrCreateWrappedPrivateKeyFile(requireAuthentication)
       // Generate the ed25519 key pair and encrypt the private key.
       val keyPair = net.i2p.crypto.eddsa.KeyPairGenerator().generateKeyPair()
-      encryptedPrivateKeyFile.openFileOutput().use { os -> os.write((keyPair.private as EdDSAPrivateKey).seed) }
+      encryptedPrivateKeyFile.openFileOutput().use { os ->
+        os.write((keyPair.private as EdDSAPrivateKey).seed)
+      }
 
       // Write public key in SSH format to .ssh_key.pub.
       publicKeyFile.writeText(toSshPublicKey(keyPair.public))
@@ -288,7 +305,8 @@ object SshKey {
 
   fun provide(client: SSHClient, passphraseFinder: InteractivePasswordFinder): KeyProvider? =
     when (type) {
-      Type.LegacyGenerated, Type.Imported -> client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
+      Type.LegacyGenerated, Type.Imported ->
+        client.loadKeys(privateKeyFile.absolutePath, passphraseFinder)
       Type.KeystoreNative -> KeystoreNativeKeyProvider
       Type.KeystoreWrappedEd25519 -> KeystoreWrappedEd25519KeyProvider
       null -> null
@@ -305,7 +323,10 @@ object SshKey {
     override fun getPrivate(): PrivateKey =
       runCatching { androidKeystore.sshPrivateKey!! }.getOrElse { error ->
         e(error)
-        throw IOException("Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore", error)
+        throw IOException(
+          "Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore",
+          error
+        )
       }
 
     override fun getType(): KeyType = KeyType.fromKey(public)
@@ -326,7 +347,9 @@ object SshKey {
         // for `requireAuthentication` is not used as the key already exists at this point.
         val encryptedPrivateKeyFile = runBlocking { getOrCreateWrappedPrivateKeyFile(false) }
         val rawPrivateKey = encryptedPrivateKeyFile.openFileInput().use { it.readBytes() }
-        EdDSAPrivateKey(EdDSAPrivateKeySpec(rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC))
+        EdDSAPrivateKey(
+          EdDSAPrivateKeySpec(rawPrivateKey, EdDSANamedCurveTable.ED_25519_CURVE_SPEC)
+        )
       }
         .getOrElse { error ->
           e(error)
