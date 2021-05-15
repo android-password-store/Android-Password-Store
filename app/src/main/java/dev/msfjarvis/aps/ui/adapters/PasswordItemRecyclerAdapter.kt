@@ -17,12 +17,16 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryAdapter
 import dev.msfjarvis.aps.util.viewmodel.stableId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-open class PasswordItemRecyclerAdapter :
+open class PasswordItemRecyclerAdapter(coroutineScope: CoroutineScope) :
   SearchableRepositoryAdapter<PasswordItemRecyclerAdapter.PasswordItemViewHolder>(
     R.layout.password_row_layout,
     ::PasswordItemViewHolder,
-    PasswordItemViewHolder::bind
+    coroutineScope,
+    PasswordItemViewHolder::bind,
   ) {
 
   fun makeSelectable(recyclerView: RecyclerView) {
@@ -48,7 +52,7 @@ open class PasswordItemRecyclerAdapter :
     private val folderIndicator: AppCompatImageView = itemView.findViewById(R.id.folder_indicator)
     lateinit var itemDetails: ItemDetailsLookup.ItemDetails<String>
 
-    fun bind(item: PasswordItem) {
+    suspend fun bind(item: PasswordItem) {
       val parentPath = item.fullPathToParent.replace("(^/)|(/$)".toRegex(), "")
       val source =
         if (parentPath.isNotEmpty()) {
@@ -62,7 +66,9 @@ open class PasswordItemRecyclerAdapter :
       if (item.type == PasswordItem.TYPE_CATEGORY) {
         folderIndicator.visibility = View.VISIBLE
         val count =
-          item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
+          withContext(Dispatchers.IO) {
+            item.file.listFiles { path -> path.isDirectory || path.extension == "gpg" }?.size ?: 0
+          }
         childCount.visibility = if (count > 0) View.VISIBLE else View.GONE
         childCount.text = "$count"
       } else {

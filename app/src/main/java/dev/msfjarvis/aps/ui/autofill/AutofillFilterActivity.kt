@@ -22,6 +22,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.underline
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.FormOrigin
@@ -132,8 +133,11 @@ class AutofillFilterView : AppCompatActivity() {
     with(binding) {
       rvPassword.apply {
         adapter =
-          SearchableRepositoryAdapter(R.layout.oreo_autofill_filter_row, ::PasswordViewHolder) {
-            item ->
+          SearchableRepositoryAdapter(
+              R.layout.oreo_autofill_filter_row,
+              ::PasswordViewHolder,
+              lifecycleScope,
+            ) { item ->
             val file = item.file.relativeTo(item.rootDir)
             val pathToIdentifier = directoryStructure.getPathToIdentifierFor(file)
             val identifier = directoryStructure.getIdentifierFor(file)

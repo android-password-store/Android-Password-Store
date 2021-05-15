@@ -36,6 +36,7 @@ import java.io.File
 import java.text.Collator
 import java.util.Locale
 import java.util.Stack
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
@@ -376,7 +378,8 @@ private object PasswordItemDiffCallback : DiffUtil.ItemCallback<PasswordItem>() 
 open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   private val layoutRes: Int,
   private val viewHolderCreator: (view: View) -> T,
-  private val viewHolderBinder: T.(item: PasswordItem) -> Unit
+  private val coroutineScope: CoroutineScope,
+  private val viewHolderBinder: suspend T.(item: PasswordItem) -> Unit,
 ) : ListAdapter<PasswordItem, T>(PasswordItemDiffCallback), PopupTextProvider {
 
   fun <T : ItemDetailsLookup<String>> makeSelectable(
@@ -454,7 +457,7 @@ open class SearchableRepositoryAdapter<T : RecyclerView.ViewHolder>(
   final override fun onBindViewHolder(holder: T, position: Int) {
     val item = getItem(position)
     holder.apply {
-      viewHolderBinder.invoke(this, item)
+      coroutineScope.launch(Dispatchers.Main.immediate) { viewHolderBinder.invoke(holder, item) }
       selectionTracker?.let { itemView.isSelected = it.isSelected(item.stableId) }
       itemView.setOnClickListener {
         // Do not emit custom click events while the user is selecting items.

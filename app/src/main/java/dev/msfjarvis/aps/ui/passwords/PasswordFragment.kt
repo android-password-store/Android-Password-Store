@@ -133,7 +133,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
     }
 
     recyclerAdapter =
-      PasswordItemRecyclerAdapter()
+      PasswordItemRecyclerAdapter(lifecycleScope)
         .onItemClicked { _, item -> listener.onFragmentInteraction(item) }
         .onSelectionChanged { selection ->
           // In order to not interfere with drag selection, we disable the

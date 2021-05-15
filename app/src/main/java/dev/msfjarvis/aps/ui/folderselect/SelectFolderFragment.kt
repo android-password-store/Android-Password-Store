@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
@@ -36,7 +37,7 @@ class SelectFolderFragment : Fragment(R.layout.password_recycler_view) {
     super.onViewCreated(view, savedInstanceState)
     binding.fab.hide()
     recyclerAdapter =
-      PasswordItemRecyclerAdapter().onItemClicked { _, item ->
+      PasswordItemRecyclerAdapter(lifecycleScope).onItemClicked { _, item ->
         listener.onFragmentInteraction(item)
       }
     binding.passRecycler.apply {
