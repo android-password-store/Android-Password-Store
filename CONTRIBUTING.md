@@ -21,6 +21,8 @@ The source code is split across 4 modules.
 
 In most scenarios, the `app` directory is where you'd be contributing changes to. While most of the code has been rewritten and documented, there are still gnarly "legacy" parts that might be challenging to understand at a glance. Please get in touch via the [Discussions](https://github.com/android-password-store/Android-Password-Store/discussions) page with any questions you have, and we'd love to explain and improve things.
 
+We bundle a [`ignore-revs-file`](https://git-scm.com/docs/git-blame#Documentation/git-blame.txt---ignore-revs-fileltfilegt) to ensure `git blame` is not affected by noisy changes. To make use of this, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` from inside this repository.
+
 ## Building the project
 
 ### Building with Gradle
