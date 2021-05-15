@@ -6,7 +6,6 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 
 internal fun SpotlessExtension.configureSpotless() {
-  ratchetFrom = "origin/develop"
   kotlin {
     ktfmt().googleStyle()
     target("src/**/*.kt", "**/*.kts")
