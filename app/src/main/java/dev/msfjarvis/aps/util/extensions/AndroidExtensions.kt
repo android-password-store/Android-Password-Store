@@ -29,6 +29,7 @@ import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.google.android.material.snackbar.Snackbar
+import dev.msfjarvis.aps.BuildConfig
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.git.operation.GitOperation
@@ -85,7 +86,7 @@ val Context.keyguardManager: KeyguardManager
 
 /** Get the default [SharedPreferences] instance */
 val Context.sharedPrefs: SharedPreferences
-  get() = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+  get() = getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", 0)
 
 /** Resolve [attr] from the [Context]'s theme */
 fun Context.resolveAttribute(attr: Int): Int {
