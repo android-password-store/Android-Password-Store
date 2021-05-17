@@ -45,6 +45,7 @@ internal fun Project.configureForAllProjects() {
       content {
         includeModule("com.github.haroldadmin", "WhatTheStack")
         includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
+        includeModule("com.github.IvanShafran", "shared-preferences-mock")
       }
     }
   }
