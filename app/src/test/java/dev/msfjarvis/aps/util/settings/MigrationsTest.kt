@@ -9,6 +9,7 @@ package dev.msfjarvis.aps.util.settings
 
 import android.content.Context
 import androidx.core.content.edit
+import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
@@ -30,7 +31,7 @@ class MigrationsTest {
 
   @Test
   fun verifySshWithCustomPortMigration() {
-    val context = Application.instance.applicationContext
+    val context = SPMockBuilder().createContext()
     context.sharedPrefs.edit {
       clear()
       putString(PreferenceKeys.GIT_REMOTE_PORT, "2200")
@@ -50,7 +51,7 @@ class MigrationsTest {
 
   @Test
   fun verifySshWithDefaultPortMigration() {
-    val context = Application.instance.applicationContext
+    val context = SPMockBuilder().createContext()
     context.sharedPrefs.edit {
       clear()
       putString(PreferenceKeys.GIT_REMOTE_USERNAME, "msfjarvis")
@@ -69,7 +70,7 @@ class MigrationsTest {
 
   @Test
   fun verifyHttpsWithGitHubMigration() {
-    val context = Application.instance.applicationContext
+    val context = SPMockBuilder().createContext()
     context.sharedPrefs.edit {
       clear()
       putString(PreferenceKeys.GIT_REMOTE_USERNAME, "msfjarvis")
@@ -88,7 +89,7 @@ class MigrationsTest {
 
   @Test
   fun verifyHiddenFoldersMigrationIfDisabled() {
-    val context = Application.instance.applicationContext
+    val context = SPMockBuilder().createContext()
     context.sharedPrefs.edit { clear() }
     runMigrations(context)
     assertEquals(true, context.sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true))
@@ -97,7 +98,7 @@ class MigrationsTest {
 
   @Test
   fun verifyHiddenFoldersMigrationIfEnabled() {
-    val context = Application.instance.applicationContext
+    val context = SPMockBuilder().createContext()
     context.sharedPrefs.edit {
       clear()
       putBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true)
@@ -109,7 +110,7 @@ class MigrationsTest {
 
   @Test
   fun verifyClearClipboardHistoryMigration() {
-    val context = Application.instance.applicationContext
+    val context = SPMockBuilder().createContext()
     context.sharedPrefs.edit {
       clear()
       putBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, true)
