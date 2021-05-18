@@ -1,6 +1,6 @@
 # Centralized versions for dependencies that share versions
 [versions]
-androidx_test = "1.4.0-alpha06"
+androidx_test = "1.4.0-beta01"
 coroutines = "1.5.0"
 hilt = "2.35.1"
 kotlin = "1.5.0"
@@ -24,15 +24,15 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 # AndroidX dependencies
-androidx-activityKtx = "androidx.activity:activity-ktx:1.3.0-alpha07"
+androidx-activityKtx = "androidx.activity:activity-ktx:1.3.0-alpha08"
 androidx-annotation = "androidx.annotation:annotation:1.2.0"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-alpha01"
-androidx-appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
+androidx-appcompat = "androidx.appcompat:appcompat:1.4.0-alpha01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0-beta02"
-androidx-coreKtx = "androidx.core:core-ktx:1.6.0-alpha03"
+androidx-coreKtx = "androidx.core:core-ktx:1.6.0-beta01"
 androidx-documentfile = "androidx.documentfile:documentfile:1.0.1"
-androidx-fragmentKtx = "androidx.fragment:fragment-ktx:1.3.3"
+androidx-fragmentKtx = "androidx.fragment:fragment-ktx:1.4.0-alpha01"
 androidx-lifecycle_common = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref="lifecycle" }
 androidx-lifecycle_livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref="lifecycle" }
 androidx-lifecycle_viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref="lifecycle" }
