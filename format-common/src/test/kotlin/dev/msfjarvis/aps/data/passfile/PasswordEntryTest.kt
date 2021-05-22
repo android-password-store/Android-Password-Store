@@ -7,6 +7,7 @@ package dev.msfjarvis.aps.data.passfile
 
 import dev.msfjarvis.aps.util.time.TestUserClock
 import dev.msfjarvis.aps.util.totp.TotpFinder
+import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -34,7 +35,7 @@ internal class PasswordEntryTest {
     assertEquals("", makeEntry("").password)
     for (field in PasswordEntry.PASSWORD_FIELDS) {
       assertEquals("fooooo", makeEntry("\n$field fooooo").password)
-      assertEquals("fooooo", makeEntry("\n${field.toUpperCase()} fooooo").password)
+      assertEquals("fooooo", makeEntry("\n${field.uppercase(Locale.getDefault())} fooooo").password)
       assertEquals("fooooo", makeEntry("GOPASS-SECRET-1.0\n$field fooooo").password)
       assertEquals("fooooo", makeEntry("someFirstLine\nUsername: bar\n$field fooooo").password)
     }
@@ -95,7 +96,10 @@ internal class PasswordEntryTest {
   fun testGetUsername() {
     for (field in PasswordEntry.USERNAME_FIELDS) {
       assertEquals("username", makeEntry("\n$field username").username)
-      assertEquals("username", makeEntry("\n${field.toUpperCase()} username").username)
+      assertEquals(
+        "username",
+        makeEntry("\n${field.uppercase(Locale.getDefault())} username").username
+      )
     }
     assertEquals("username", makeEntry("secret\nextra\nlogin: username\ncontent\n").username)
     assertEquals("username", makeEntry("\nextra\nusername: username\ncontent\n").username)
