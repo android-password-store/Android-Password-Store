@@ -17,7 +17,6 @@ import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
-import java.io.FileFilter
 import java.nio.file.Files
 import java.nio.file.LinkOption
 import org.eclipse.jgit.api.Git
@@ -66,7 +65,6 @@ object PasswordRepository {
    * @param localDir needed only on the creation
    * @return the git repository
    */
-  @JvmStatic
   fun getRepository(localDir: File?): Repository? {
     if (repository == null && localDir != null) {
       val builder = FileRepositoryBuilder()
@@ -90,20 +88,13 @@ object PasswordRepository {
     return repository
   }
 
-  @JvmStatic
   val isInitialized: Boolean
     get() = repository != null
 
-  @JvmStatic
   fun isGitRepo(): Boolean {
-    if (repository != null) {
-      return repository!!.objectDatabase.exists()
-    }
-    return false
+    return repository?.objectDatabase?.exists() ?: false
   }
 
-  @JvmStatic
-  @Throws(Exception::class)
   fun createRepository(localDir: File) {
     localDir.delete()
 
@@ -112,7 +103,6 @@ object PasswordRepository {
   }
 
   // TODO add multiple remotes support for pull/push
-  @JvmStatic
   fun addRemote(name: String, url: String, replace: Boolean = false) {
     val storedConfig = repository!!.config
     val remotes = storedConfig.getSubsections("remote")
@@ -157,13 +147,11 @@ object PasswordRepository {
     }
   }
 
-  @JvmStatic
   fun closeRepository() {
-    if (repository != null) repository!!.close()
+    repository?.close()
     repository = null
   }
 
-  @JvmStatic
   fun getRepositoryDirectory(): File {
     return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
       val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
@@ -173,7 +161,6 @@ object PasswordRepository {
     }
   }
 
-  @JvmStatic
   fun initialize(): Repository? {
     val dir = getRepositoryDirectory()
     // uninitialize the repo if the dir does not exist or is absolutely empty
@@ -195,20 +182,13 @@ object PasswordRepository {
    * @param path the directory path
    * @return the list of gpg files in that directory
    */
-  @JvmStatic
-  fun getFilesList(path: File?): ArrayList<File> {
-    if (path == null || !path.exists()) return ArrayList()
-
-    val directories =
-      (path.listFiles(FileFilter { pathname -> pathname.isDirectory }) ?: emptyArray()).toList()
+  private fun getFilesList(path: File): ArrayList<File> {
+    if (!path.exists()) return ArrayList()
     val files =
-      (path.listFiles(FileFilter { pathname -> pathname.extension == "gpg" }) ?: emptyArray())
+      (path.listFiles { file -> file.isDirectory || file.extension == "gpg" } ?: emptyArray())
         .toList()
-
     val items = ArrayList<File>()
-    items.addAll(directories)
     items.addAll(files)
-
     return items
   }
 
@@ -218,7 +198,6 @@ object PasswordRepository {
    * @param path the directory path
    * @return a list of password items
    */
-  @JvmStatic
   fun getPasswords(
     path: File,
     rootDir: File,
