@@ -86,7 +86,7 @@ class MigrationsTest {
       sharedPrefs,
       GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
     )
-    checkOldKeysAreRemoved(context)
+    checkOldKeysAreRemoved()
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
       "msfjarvis@192.168.0.102:/mnt/disk3/pass-repo"
@@ -108,7 +108,7 @@ class MigrationsTest {
       sharedPrefs,
       GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
     )
-    checkOldKeysAreRemoved(context)
+    checkOldKeysAreRemoved()
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
       "https://github.com/Android-Password-Store/pass-test"
