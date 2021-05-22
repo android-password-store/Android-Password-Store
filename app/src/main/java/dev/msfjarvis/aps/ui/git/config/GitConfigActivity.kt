@@ -25,7 +25,6 @@ import dev.msfjarvis.aps.databinding.ActivityGitConfigBinding
 import dev.msfjarvis.aps.ui.git.base.BaseGitActivity
 import dev.msfjarvis.aps.ui.git.log.GitLogActivity
 import dev.msfjarvis.aps.util.extensions.viewBinding
-import dev.msfjarvis.aps.util.settings.GitSettings
 import kotlinx.coroutines.launch
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
@@ -40,9 +39,9 @@ class GitConfigActivity : BaseGitActivity() {
     setContentView(binding.root)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    if (GitSettings.authorName.isEmpty()) binding.gitUserName.requestFocus()
-    else binding.gitUserName.setText(GitSettings.authorName)
-    binding.gitUserEmail.setText(GitSettings.authorEmail)
+    if (gitSettings.authorName.isEmpty()) binding.gitUserName.requestFocus()
+    else binding.gitUserName.setText(gitSettings.authorName)
+    binding.gitUserEmail.setText(gitSettings.authorEmail)
     setupTools()
     binding.saveButton.setOnClickListener {
       val email = binding.gitUserEmail.text.toString().trim()
@@ -53,8 +52,8 @@ class GitConfigActivity : BaseGitActivity() {
           .setPositiveButton(getString(R.string.dialog_ok), null)
           .show()
       } else {
-        GitSettings.authorEmail = email
-        GitSettings.authorName = name
+        gitSettings.authorEmail = email
+        gitSettings.authorName = name
         Snackbar.make(
             binding.root,
             getString(R.string.git_server_config_save_success),
@@ -102,8 +101,8 @@ class GitConfigActivity : BaseGitActivity() {
                 setMessage(
                   resources.getString(
                     R.string.git_break_out_of_detached_success,
-                    GitSettings.branch,
-                    "conflicting-${GitSettings.branch}-...",
+                    gitSettings.branch,
+                    "conflicting-${gitSettings.branch}-...",
                   )
                 )
                 setOnDismissListener { finish() }

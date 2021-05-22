@@ -6,7 +6,6 @@
 
 package dev.msfjarvis.aps.util.settings
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.e
@@ -14,20 +13,18 @@ import com.github.ajalt.timberkt.i
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.util.extensions.getString
-import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.git.sshj.SshKey
 import java.io.File
 import java.net.URI
 
-fun runMigrations(context: Context) {
-  val sharedPrefs = context.sharedPrefs
-  migrateToGitUrlBasedConfig(sharedPrefs)
+fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
+  migrateToGitUrlBasedConfig(sharedPrefs, gitSettings)
   migrateToHideAll(sharedPrefs)
-  migrateToSshKey(context, sharedPrefs)
+  migrateToSshKey(filesDirPath, sharedPrefs)
   migrateToClipboardHistory(sharedPrefs)
 }
 
-private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
+private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
   val serverHostname = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_SERVER) ?: return
   i { "Migrating to URL-based Git config" }
   val serverPort = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PORT) ?: ""
@@ -76,10 +73,10 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences) {
     remove(PreferenceKeys.GIT_REMOTE_PROTOCOL)
   }
   if (url == null ||
-      GitSettings.updateConnectionSettingsIfValid(
-        newAuthMode = GitSettings.authMode,
+      gitSettings.updateConnectionSettingsIfValid(
+        newAuthMode = gitSettings.authMode,
         newUrl = url,
-        newBranch = GitSettings.branch
+        newBranch = gitSettings.branch
       ) != GitSettings.UpdateConnectionSettingsResult.Valid
   ) {
     e { "Failed to migrate to URL-based Git config, generated URL is invalid" }
@@ -95,8 +92,8 @@ private fun migrateToHideAll(sharedPrefs: SharedPreferences) {
   }
 }
 
-private fun migrateToSshKey(context: Context, sharedPrefs: SharedPreferences) {
-  val privateKeyFile = File(context.filesDir, ".ssh_key")
+private fun migrateToSshKey(filesDirPath: String, sharedPrefs: SharedPreferences) {
+  val privateKeyFile = File(filesDirPath, ".ssh_key")
   if (sharedPrefs.contains(PreferenceKeys.USE_GENERATED_KEY) &&
       !SshKey.exists &&
       privateKeyFile.exists()

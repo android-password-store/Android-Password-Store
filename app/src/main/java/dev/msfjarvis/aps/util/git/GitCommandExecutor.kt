@@ -10,6 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.git.GitException.PullException
@@ -30,6 +34,9 @@ class GitCommandExecutor(
   private val operation: GitOperation,
 ) {
 
+  private val hiltEntryPoint = EntryPointAccessors.fromApplication(activity.applicationContext, GitCommandExecutorEntryPoint::class.java)
+  private val gitSettings = hiltEntryPoint.gitSettings()
+
   suspend fun execute(): Result<Unit, Throwable> {
     val snackbar =
       activity.snackbar(
@@ -49,8 +56,8 @@ class GitCommandExecutor(
             // the previous status will eventually be used to avoid a commit
             if (nbChanges > 0) {
               withContext(Dispatchers.IO) {
-                val name = GitSettings.authorName.ifEmpty { "root" }
-                val email = GitSettings.authorEmail.ifEmpty { "localhost" }
+                val name = gitSettings.authorName.ifEmpty { "root" }
+                val email = gitSettings.authorEmail.ifEmpty { "localhost" }
                 val identity = PersonIdent(name, email)
                 command.setAuthor(identity).setCommitter(identity).call()
               }
@@ -110,5 +117,11 @@ class GitCommandExecutor(
       }
     }
       .also { snackbar.dismiss() }
+  }
+
+  @EntryPoint
+  @InstallIn(SingletonComponent::class)
+  interface GitCommandExecutorEntryPoint {
+    fun gitSettings(): GitSettings
   }
 }

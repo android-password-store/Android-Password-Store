@@ -54,7 +54,7 @@ class GitServerConfigActivity : BaseGitActivity() {
     setContentView(binding.root)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-    newAuthMode = GitSettings.authMode
+    newAuthMode = gitSettings.authMode
 
     binding.authModeGroup.apply {
       when (newAuthMode) {
@@ -74,21 +74,21 @@ class GitServerConfigActivity : BaseGitActivity() {
     }
 
     binding.serverUrl.setText(
-      GitSettings.url.also {
+      gitSettings.url.also {
         if (it.isNullOrEmpty()) return@also
         setAuthModes(it.startsWith("http://") || it.startsWith("https://"))
       }
     )
-    binding.serverBranch.setText(GitSettings.branch)
+    binding.serverBranch.setText(gitSettings.branch)
 
     binding.serverUrl.doOnTextChanged { text, _, _, _ ->
       if (text.isNullOrEmpty()) return@doOnTextChanged
       setAuthModes(text.startsWith("http://") || text.startsWith("https://"))
     }
 
-    binding.clearHostKeyButton.isVisible = GitSettings.hasSavedHostKey()
+    binding.clearHostKeyButton.isVisible = gitSettings.hasSavedHostKey()
     binding.clearHostKeyButton.setOnClickListener {
-      GitSettings.clearSavedHostKey()
+      gitSettings.clearSavedHostKey()
       Snackbar.make(
           binding.root,
           getString(R.string.clear_saved_host_key_success),
@@ -135,7 +135,7 @@ class GitServerConfigActivity : BaseGitActivity() {
         return@setOnClickListener
       }
       when (val updateResult =
-          GitSettings.updateConnectionSettingsIfValid(
+          gitSettings.updateConnectionSettingsIfValid(
             newAuthMode = newAuthMode,
             newUrl = binding.serverUrl.text.toString().trim(),
             newBranch = binding.serverBranch.text.toString().trim()

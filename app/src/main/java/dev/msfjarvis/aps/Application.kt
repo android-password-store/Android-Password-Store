@@ -16,18 +16,24 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.github.ajalt.timberkt.Timber.DebugTree
 import com.github.ajalt.timberkt.Timber.plant
 import dagger.hilt.android.HiltAndroidApp
+import dev.msfjarvis.aps.injection.context.FilesDirPath
+import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
 import dev.msfjarvis.aps.util.extensions.getString
-import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.git.sshj.setUpBouncyCastleForSshj
 import dev.msfjarvis.aps.util.proxy.ProxyUtils
+import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.settings.runMigrations
+import javax.inject.Inject
 
 @Suppress("Unused")
 @HiltAndroidApp
 class Application : android.app.Application(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-  private val prefs by lazy { sharedPrefs }
+  @Inject @SettingsPreferences lateinit var prefs: SharedPreferences
+  @Inject @FilesDirPath lateinit var filesDirPath: String
+  @Inject lateinit var proxyUtils: ProxyUtils
+  @Inject lateinit var gitSettings: GitSettings
 
   override fun onCreate() {
     super.onCreate()
@@ -42,8 +48,8 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     prefs.registerOnSharedPreferenceChangeListener(this)
     setNightMode()
     setUpBouncyCastleForSshj()
-    runMigrations(applicationContext)
-    ProxyUtils.setDefaultProxy()
+    runMigrations(filesDirPath, prefs, gitSettings)
+    proxyUtils.setDefaultProxy()
   }
 
   override fun onTerminate() {

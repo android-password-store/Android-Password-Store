@@ -53,6 +53,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 @AndroidEntryPoint
 class PasswordFragment : Fragment(R.layout.password_recycler_view) {
 
+  @Inject lateinit var gitSettings: GitSettings
   @Inject lateinit var shortcutHandler: ShortcutHandler
   private lateinit var recyclerAdapter: PasswordItemRecyclerAdapter
   private lateinit var listener: OnFragmentInteractionListener
@@ -111,7 +112,7 @@ class PasswordFragment : Fragment(R.layout.password_recycler_view) {
         // When authentication is set to AuthMode.None then the only git operation we can
         // run is a pull, so automatically fallback to that.
         val operationId =
-          when (GitSettings.authMode) {
+          when (gitSettings.authMode) {
             AuthMode.None -> BaseGitActivity.GitOp.PULL
             else -> BaseGitActivity.GitOp.SYNC
           }

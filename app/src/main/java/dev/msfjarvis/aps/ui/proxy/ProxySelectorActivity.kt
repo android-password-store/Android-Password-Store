@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.os.postDelayed
 import androidx.core.widget.doOnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityProxySelectorBinding
 import dev.msfjarvis.aps.util.extensions.getEncryptedProxyPrefs
@@ -21,11 +22,16 @@ import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.proxy.ProxyUtils
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import javax.inject.Inject
 
 private val IP_ADDRESS_REGEX = Patterns.IP_ADDRESS.toRegex()
 private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()
 
+@AndroidEntryPoint
 class ProxySelectorActivity : AppCompatActivity() {
+
+  @Inject lateinit var gitSettings: GitSettings
+  @Inject lateinit var proxyUtils: ProxyUtils
 
   private val binding by viewBinding(ActivityProxySelectorBinding::inflate)
   private val proxyPrefs by lazy(LazyThreadSafetyMode.NONE) {
@@ -59,19 +65,19 @@ class ProxySelectorActivity : AppCompatActivity() {
   private fun saveSettings() {
     proxyPrefs.edit {
       binding.proxyHost.text?.toString()?.takeIf { it.isNotEmpty() }.let {
-        GitSettings.proxyHost = it
+        gitSettings.proxyHost = it
       }
       binding.proxyUser.text?.toString()?.takeIf { it.isNotEmpty() }.let {
-        GitSettings.proxyUsername = it
+        gitSettings.proxyUsername = it
       }
       binding.proxyPort.text?.toString()?.takeIf { it.isNotEmpty() }?.let {
-        GitSettings.proxyPort = it.toInt()
+        gitSettings.proxyPort = it.toInt()
       }
       binding.proxyPassword.text?.toString()?.takeIf { it.isNotEmpty() }.let {
-        GitSettings.proxyPassword = it
+        gitSettings.proxyPassword = it
       }
     }
-    ProxyUtils.setDefaultProxy()
+    proxyUtils.setDefaultProxy()
     Handler(Looper.getMainLooper()).postDelayed(500) { finish() }
   }
 }

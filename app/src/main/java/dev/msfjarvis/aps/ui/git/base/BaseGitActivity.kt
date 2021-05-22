@@ -12,6 +12,7 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.mapError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
@@ -25,6 +26,7 @@ import dev.msfjarvis.aps.util.git.operation.SyncOperation
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.common.DisconnectReason
@@ -36,6 +38,7 @@ import net.schmizz.sshj.userauth.UserAuthException
  * Abstract [AppCompatActivity] that holds some information that is commonly shared across
  * git-related tasks and makes sense to be held here.
  */
+@AndroidEntryPoint
 abstract class BaseGitActivity : ContinuationContainerActivity() {
 
   /** Enum of possible Git operations than can be run through [launchGitOperation]. */
@@ -48,29 +51,31 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
     SYNC,
   }
 
+  @Inject lateinit var gitSettings: GitSettings
+
   /**
    * Attempt to launch the requested Git operation.
    * @param operation The type of git operation to launch
    */
   suspend fun launchGitOperation(operation: GitOp): Result<Unit, Throwable> {
-    if (GitSettings.url == null) {
+    if (gitSettings.url == null) {
       return Err(IllegalStateException("Git url is not set!"))
     }
-    if (operation == GitOp.SYNC && !GitSettings.useMultiplexing) {
+    if (operation == GitOp.SYNC && !gitSettings.useMultiplexing) {
       // If the server does not support multiple SSH channels per connection, we cannot run
       // a sync operation without reconnecting and thus break sync into its two parts.
       return launchGitOperation(GitOp.PULL).andThen { launchGitOperation(GitOp.PUSH) }
     }
     val op =
       when (operation) {
-        GitOp.CLONE -> CloneOperation(this, GitSettings.url!!)
-        GitOp.PULL -> PullOperation(this, GitSettings.rebaseOnPull)
+        GitOp.CLONE -> CloneOperation(this, gitSettings.url!!)
+        GitOp.PULL -> PullOperation(this, gitSettings.rebaseOnPull)
         GitOp.PUSH -> PushOperation(this)
-        GitOp.SYNC -> SyncOperation(this, GitSettings.rebaseOnPull)
+        GitOp.SYNC -> SyncOperation(this, gitSettings.rebaseOnPull)
         GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
         GitOp.RESET -> ResetToRemoteOperation(this)
       }
-    return op.executeAfterAuthentication(GitSettings.authMode).mapError(::transformGitError)
+    return op.executeAfterAuthentication(gitSettings.authMode).mapError(::transformGitError)
   }
 
   fun finishOnSuccessHandler(@Suppress("UNUSED_PARAMETER") nothing: Unit) {
@@ -105,7 +110,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
     val err = rootCauseException(throwable)
     return when {
       err.message?.contains("cannot open additional channels") == true -> {
-        GitSettings.useMultiplexing = false
+        gitSettings.useMultiplexing = false
         SSHException(
           DisconnectReason.TOO_MANY_CONNECTIONS,
           "The server does not support multiple Git operations per SSH session. Please try again, a slower fallback mode will be used."

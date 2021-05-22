@@ -14,20 +14,20 @@ import java.net.Proxy
 import java.net.ProxySelector
 import java.net.SocketAddress
 import java.net.URI
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /** Utility class for [Proxy] handling. */
-object ProxyUtils {
-
-  private const val HTTP_PROXY_USER_PROPERTY = "http.proxyUser"
-  private const val HTTP_PROXY_PASSWORD_PROPERTY = "http.proxyPassword"
+@Singleton
+class ProxyUtils @Inject constructor(private val gitSettings: GitSettings) {
 
   /** Set the default [Proxy] and [Authenticator] for the app based on user provided settings. */
   fun setDefaultProxy() {
     ProxySelector.setDefault(
       object : ProxySelector() {
         override fun select(uri: URI?): MutableList<Proxy> {
-          val host = GitSettings.proxyHost
-          val port = GitSettings.proxyPort
+          val host = gitSettings.proxyHost
+          val port = gitSettings.proxyPort
           return if (host == null || port == -1) {
             mutableListOf(Proxy.NO_PROXY)
           } else {
@@ -42,8 +42,8 @@ object ProxyUtils {
         }
       }
     )
-    val user = GitSettings.proxyUsername ?: ""
-    val password = GitSettings.proxyPassword ?: ""
+    val user = gitSettings.proxyUsername ?: ""
+    val password = gitSettings.proxyPassword ?: ""
     if (user.isEmpty() || password.isEmpty()) {
       System.clearProperty(HTTP_PROXY_USER_PROPERTY)
       System.clearProperty(HTTP_PROXY_PASSWORD_PROPERTY)
@@ -62,5 +62,10 @@ object ProxyUtils {
         }
       }
     )
+  }
+
+  companion object {
+    private const val HTTP_PROXY_USER_PROPERTY = "http.proxyUser"
+    private const val HTTP_PROXY_PASSWORD_PROPERTY = "http.proxyPassword"
   }
 }

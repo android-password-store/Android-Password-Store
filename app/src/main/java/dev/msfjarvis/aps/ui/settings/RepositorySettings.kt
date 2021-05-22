@@ -6,6 +6,7 @@
 package dev.msfjarvis.aps.ui.settings
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.edit
@@ -14,6 +15,10 @@ import androidx.fragment.app.FragmentActivity
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.checkBox
@@ -22,13 +27,13 @@ import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.injection.prefs.GitPreferences
 import dev.msfjarvis.aps.ui.git.config.GitConfigActivity
 import dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity
 import dev.msfjarvis.aps.ui.proxy.ProxySelectorActivity
 import dev.msfjarvis.aps.ui.sshkeygen.ShowSshKeyFragment
 import dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity
 import dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity
-import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
@@ -37,9 +42,10 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
-  private val encryptedPreferences by lazy(LazyThreadSafetyMode.NONE) {
-    activity.getEncryptedGitPrefs()
-  }
+  private val hiltEntryPoint = EntryPointAccessors.fromApplication(activity.applicationContext, RepositorySettingsEntryPoint::class.java)
+  private val encryptedPreferences = hiltEntryPoint.encryptedPreferences()
+  private val gitSettings = hiltEntryPoint.gitSettings()
+
 
   private fun <T : FragmentActivity> launchActivity(clazz: Class<T>) {
     activity.startActivity(Intent(activity, clazz))
@@ -74,7 +80,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
       }
       pref(PreferenceKeys.PROXY_SETTINGS) {
         titleRes = R.string.pref_edit_proxy_settings
-        visible = GitSettings.url?.startsWith("https") == true && PasswordRepository.isGitRepo()
+        visible = gitSettings.url?.startsWith("https") == true && PasswordRepository.isGitRepo()
         onClick {
           launchActivity(ProxySelectorActivity::class.java)
           true
@@ -205,5 +211,12 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
         }
       }
     }
+  }
+
+  @EntryPoint
+  @InstallIn(SingletonComponent::class)
+  interface RepositorySettingsEntryPoint {
+    fun gitSettings(): GitSettings
+    @GitPreferences fun encryptedPreferences(): SharedPreferences
   }
 }
