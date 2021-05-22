@@ -16,6 +16,10 @@ jobs:
 
       - name: Download new translations from Crowdin
         run: ./gradlew crowdin
+        env:
+          CROWDIN_LOGIN: ${{ secrets.CROWDIN_LOGIN }}
+          CROWDIN_PROJECT_KEY: ${{ secrets.CROWDIN_PROJECT_KEY }}
+          CROWDIN_PROJECT_IDENTIFIER: ${{ secrets.CROWDIN_PROJECT_IDENTIFIER }}
 
       - name: Compare list changes
         run: if [[ $(git diff --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
