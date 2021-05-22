@@ -35,11 +35,8 @@ android {
     isAbortOnError = true
     isCheckReleaseBuilds = false
     disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
-    // Kotlin 1.5 + AGP 4.1.3 trip up NewApi for Kotlin intrinsics like forEach
-    // This can be fixed by either switching to AGP 4.2.0-rc1, or disabling it
-    // outright.
-    // https://issuetracker.google.com/issues/185418482
-    disable("NewApi")
+    // https://issuetracker.google.com/issues/187524311
+    disable("DialogFragmentCallbacksDetector")
   }
 
   flavorDimensions("free")
