@@ -8,7 +8,7 @@ lifecycle = "2.4.0-alpha01"
 
 [libraries]
 # buildSrc dependencies
-androidGradlePlugin = "com.android.tools.build:gradle:4.2.0"
+androidGradlePlugin = "com.android.tools.build:gradle:4.2.1"
 binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.5.0"
 dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.32"
 downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.1"
