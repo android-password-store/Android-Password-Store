@@ -16,7 +16,6 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.R
@@ -31,8 +30,6 @@ import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.git.sshj.SshjSessionFactory
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.GitSettings
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +57,11 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
   abstract val commands: Array<GitCommand<out Any>>
   private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
   private var sshSessionFactory: SshjSessionFactory? = null
-  private val hiltEntryPoint = EntryPointAccessors.fromApplication(callingActivity.applicationContext, GitOperationEntryPoint::class.java)
+  private val hiltEntryPoint =
+    EntryPointAccessors.fromApplication(
+      callingActivity.applicationContext,
+      GitOperationEntryPoint::class.java
+    )
 
   protected val repository = PasswordRepository.getRepository(null)!!
   protected val git = Git(repository)
@@ -229,7 +230,6 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
     private const val CONNECT_TIMEOUT = 10
   }
 
-  // Using @EntryPoint seems to be our best option here, changing this to constructor injection would require a larger refactor.
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   interface GitOperationEntryPoint {

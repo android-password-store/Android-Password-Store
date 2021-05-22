@@ -17,7 +17,10 @@ import dev.msfjarvis.aps.BuildConfig
 @InstallIn(SingletonComponent::class)
 class PreferenceModule {
 
-  private fun provideBaseEncryptedPreferences(context: Context, fileName: String): SharedPreferences {
+  private fun provideBaseEncryptedPreferences(
+    context: Context,
+    fileName: String
+  ): SharedPreferences {
     val masterKeyAlias =
       MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
     return EncryptedSharedPreferences.create(

@@ -34,7 +34,11 @@ class GitCommandExecutor(
   private val operation: GitOperation,
 ) {
 
-  private val hiltEntryPoint = EntryPointAccessors.fromApplication(activity.applicationContext, GitCommandExecutorEntryPoint::class.java)
+  private val hiltEntryPoint =
+    EntryPointAccessors.fromApplication(
+      activity.applicationContext,
+      GitCommandExecutorEntryPoint::class.java
+    )
   private val gitSettings = hiltEntryPoint.gitSettings()
 
   suspend fun execute(): Result<Unit, Throwable> {

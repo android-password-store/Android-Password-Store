@@ -52,16 +52,16 @@ enum class AuthMode(val pref: String) {
 }
 
 @Singleton
-class GitSettings @Inject constructor(
+class GitSettings
+@Inject
+constructor(
   @SettingsPreferences private val settings: SharedPreferences,
   @GitPreferences private val encryptedSettings: SharedPreferences,
   @ProxyPreferences private val proxySettings: SharedPreferences,
   @FilesDirPath private val filesDirPath: String,
 ) {
 
-  private val hostKeyPath by lazy(LazyThreadSafetyMode.NONE) {
-    "$filesDirPath/.host_key"
-  }
+  private val hostKeyPath by lazy(LazyThreadSafetyMode.NONE) { "$filesDirPath/.host_key" }
   var authMode
     get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
     private set(value) {
@@ -128,7 +128,8 @@ class GitSettings @Inject constructor(
 
   sealed class UpdateConnectionSettingsResult {
     class MissingUsername(val newProtocol: Protocol) : UpdateConnectionSettingsResult()
-    class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) : UpdateConnectionSettingsResult()
+    class AuthModeMismatch(val newProtocol: Protocol, val validModes: List<AuthMode>) :
+      UpdateConnectionSettingsResult()
     object Valid : UpdateConnectionSettingsResult()
     object FailedToParseUrl : UpdateConnectionSettingsResult()
   }

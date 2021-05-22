@@ -42,10 +42,13 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
-  private val hiltEntryPoint = EntryPointAccessors.fromApplication(activity.applicationContext, RepositorySettingsEntryPoint::class.java)
+  private val hiltEntryPoint =
+    EntryPointAccessors.fromApplication(
+      activity.applicationContext,
+      RepositorySettingsEntryPoint::class.java,
+    )
   private val encryptedPreferences = hiltEntryPoint.encryptedPreferences()
   private val gitSettings = hiltEntryPoint.gitSettings()
-
 
   private fun <T : FragmentActivity> launchActivity(clazz: Class<T>) {
     activity.startActivity(Intent(activity, clazz))

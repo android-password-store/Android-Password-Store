@@ -57,7 +57,6 @@ import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.AuthMode
-import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.shortcuts.ShortcutHandler
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel

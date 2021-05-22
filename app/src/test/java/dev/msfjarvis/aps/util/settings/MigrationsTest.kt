@@ -59,7 +59,11 @@ class MigrationsTest {
       putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, Protocol.Ssh.pref)
       putString(PreferenceKeys.GIT_REMOTE_AUTH, AuthMode.Password.pref)
     }
-    runMigrations(filesDir, sharedPrefs, GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir))
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+    )
     checkOldKeysAreRemoved()
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
@@ -77,7 +81,11 @@ class MigrationsTest {
       putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, Protocol.Ssh.pref)
       putString(PreferenceKeys.GIT_REMOTE_AUTH, AuthMode.SshKey.pref)
     }
-    runMigrations(filesDir, sharedPrefs, GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir))
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+    )
     checkOldKeysAreRemoved(context)
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
@@ -95,7 +103,11 @@ class MigrationsTest {
       putString(PreferenceKeys.GIT_REMOTE_PROTOCOL, Protocol.Https.pref)
       putString(PreferenceKeys.GIT_REMOTE_AUTH, AuthMode.None.pref)
     }
-    runMigrations(filesDir, sharedPrefs, GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir))
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+    )
     checkOldKeysAreRemoved(context)
     assertEquals(
       sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_URL),
@@ -106,7 +118,11 @@ class MigrationsTest {
   @Test
   fun verifyHiddenFoldersMigrationIfDisabled() {
     sharedPrefs.edit { clear() }
-    runMigrations(filesDir, sharedPrefs, GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir))
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+    )
     assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true))
     assertEquals(false, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
   }
@@ -117,7 +133,11 @@ class MigrationsTest {
       clear()
       putBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true)
     }
-    runMigrations(filesDir, sharedPrefs, GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir))
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
+    )
     assertEquals(false, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, false))
     assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false))
   }
@@ -128,11 +148,12 @@ class MigrationsTest {
       clear()
       putBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, true)
     }
-    runMigrations(filesDir, sharedPrefs, GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir))
-    assertEquals(
-      true,
-      sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false)
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir)
     )
+    assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false))
     assertFalse(sharedPrefs.contains(PreferenceKeys.CLEAR_CLIPBOARD_20X))
   }
 }
