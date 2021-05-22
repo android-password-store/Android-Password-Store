@@ -1,11 +1,9 @@
 package dev.msfjarvis.aps.injection.prefs
 
 import android.content.SharedPreferences
-import dev.msfjarvis.aps.util.settings.GitSettings
 import javax.inject.Qualifier
 
 /**
- * Qualifier for a [SharedPreferences] that needs to be provided to the [GitSettings]. It provides a
- * [SharedPreferences] with the file name "http_proxy" which stores all the http proxy settings.
+ * Qualifies a [SharedPreferences] instance specifically used for encrypted proxy-related settings.
  */
 @Qualifier @Retention(AnnotationRetention.RUNTIME) annotation class ProxyPreferences

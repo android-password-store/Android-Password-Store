@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import dev.msfjarvis.aps.util.extensions.getString
-import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
