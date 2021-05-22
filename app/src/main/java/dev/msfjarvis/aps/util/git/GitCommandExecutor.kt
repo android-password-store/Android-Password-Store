@@ -34,14 +34,14 @@ class GitCommandExecutor(
   private val operation: GitOperation,
 ) {
 
-  private val hiltEntryPoint =
+  private val hiltEntryPoint by lazy(LazyThreadSafetyMode.NONE) {
     EntryPointAccessors.fromApplication(
       activity.applicationContext,
       GitCommandExecutorEntryPoint::class.java
     )
-  private val gitSettings = hiltEntryPoint.gitSettings()
-
+  }
   suspend fun execute(): Result<Unit, Throwable> {
+    val gitSettings = hiltEntryPoint.gitSettings()
     val snackbar =
       activity.snackbar(
         message = activity.resources.getString(R.string.git_operation_running),
@@ -126,6 +126,7 @@ class GitCommandExecutor(
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   interface GitCommandExecutorEntryPoint {
+
     fun gitSettings(): GitSettings
   }
 }
