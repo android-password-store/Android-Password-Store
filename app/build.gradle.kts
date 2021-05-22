@@ -47,9 +47,7 @@ android {
     create("free") {}
     create("nonFree") {}
   }
-  testOptions {
-    unitTests.isReturnDefaultValues = true
-  }
+  testOptions { unitTests.isReturnDefaultValues = true }
 }
 
 dependencies {

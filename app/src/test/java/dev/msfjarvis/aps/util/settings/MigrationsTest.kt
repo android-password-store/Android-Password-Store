@@ -10,7 +10,6 @@ package dev.msfjarvis.aps.util.settings
 import android.content.Context
 import androidx.core.content.edit
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
-import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import org.junit.Assert.assertEquals
