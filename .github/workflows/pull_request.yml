@@ -3,10 +3,7 @@ on: [pull_request]
 name: Check pull request
 jobs:
   test-pr:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        api-level: [23, 29]
+    runs-on: ubuntu-latest
     steps:
 
     #- name: Auto-cancel redundant workflow run
@@ -58,15 +55,6 @@ jobs:
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: apiCheck testFreeDebug lintFreeDebug spotlessCheck
-
-    - name: Run instrumentation tests
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@599839e4285455fff52cd8e3614575e02f1b673f
-      with:
-        api-level: ${{ matrix.api-level }}
-        target: default
-        script: |
-          ./gradlew :app:connectedFreeDebugAndroidTest
 
     - name: (Fail-only) upload test report
       if: failure()
