@@ -5,7 +5,6 @@
 
 package dev.msfjarvis.aps.data.passfile
 
-import androidx.annotation.VisibleForTesting
 import com.github.michaelbull.result.mapBoth
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -52,6 +51,12 @@ constructor(
   public val extraContent: Map<String, String>
 
   /**
+   * Direct [String] representation of the extra content of this entry, before any transforms are
+   * applied. Only use this when the extra content is required in a formatting-preserving manner.
+   */
+  public val extraContentString: String
+
+  /**
    * A [StateFlow] providing the current TOTP. It will emit a single empty string on initialization
    * which is replaced with a real TOTP if applicable. Call [hasTotp] to verify whether or not you
    * need to observe this value.
@@ -67,7 +72,6 @@ constructor(
   private val totpSecret: String?
   private val totpPeriod: Long
   private val totpAlgorithm: String
-  @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) internal val extraContentString: String
 
   init {
     val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))

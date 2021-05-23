@@ -2,6 +2,7 @@ public final class dev/msfjarvis/aps/data/passfile/PasswordEntry {
 	public static final field Companion Ldev/msfjarvis/aps/data/passfile/PasswordEntry$Companion;
 	public fun <init> (Ldev/msfjarvis/aps/util/time/UserClock;Ldev/msfjarvis/aps/util/totp/TotpFinder;Lkotlinx/coroutines/CoroutineScope;[B)V
 	public final fun getExtraContent ()Ljava/util/Map;
+	public final fun getExtraContentString ()Ljava/lang/String;
 	public final fun getExtraContentWithoutAuthData ()Ljava/lang/String;
 	public final fun getPassword ()Ljava/lang/String;
 	public final fun getTotp ()Lkotlinx/coroutines/flow/StateFlow;
