@@ -91,21 +91,18 @@
 
       <com.google.android.material.chip.Chip
         android:id="@+id/auth_mode_ssh_key"
-        style="@style/AppTheme.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_ssh_key" />
 
       <com.google.android.material.chip.Chip
         android:id="@+id/auth_mode_password"
-        style="@style/AppTheme.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_basic_authentication" />
 
       <com.google.android.material.chip.Chip
         android:id="@+id/auth_mode_open_keychain"
-        style="@style/AppTheme.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_openkeychain" />

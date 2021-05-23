@@ -28,6 +28,7 @@
     <item name="materialButtonOutlinedStyle">@style/AppTheme.OutlinedButton</item>
     <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
     <item name="textInputStyle">@style/AppTheme.TextInputLayout</item>
+    <item name="chipStyle">@style/AppTheme.Chip.Choice</item>
   </style>
 
   <style name="AppTheme" parent="APSTheme" />

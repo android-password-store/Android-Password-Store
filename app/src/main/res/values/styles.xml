@@ -39,7 +39,7 @@
     <item name="chipSurfaceColor">@color/chip_surface_color</item>
     <item name="android:textColor">@color/chip_text_color</item>
     <item name="shapeAppearanceOverlay">@style/ShapeAppearance.AppTheme.SmallComponent</item>
-    <item name="textAppearanceBody2">@style/TextAppearance.AppTheme.Body2</item>
+    <item name="android:textAppearance">?attr/textAppearanceButton</item>
   </style>
 
   <style name="TextAppearance.AppTheme.Body2" parent="TextAppearance.MaterialComponents.Body2">
