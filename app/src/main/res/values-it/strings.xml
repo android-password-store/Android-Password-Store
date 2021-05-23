@@ -45,7 +45,6 @@
   <string name="clipboard_password_toast_text">Password copiata negli appunti, hai %d secondi per incollarla da qualche parte.</string>
   <string name="clipboard_password_no_clear_toast_text">Password copiata negli appunti</string>
   <string name="clipboard_copied_text">Copiato negli appunti</string>
-  <string name="clipboard_otp_copied_text">Codice OTP copiato negli appunti</string>
   <string name="file_toast_text">Sei pregato di fornire il nome di un file</string>
   <string name="path_toast_text">Sei pregato di fornire il percorso di un file</string>
   <string name="empty_toast_text">Non puoi usare una password vuota o dei contenuti extra vuoti</string>
@@ -65,7 +64,6 @@
   <string name="location_hidden">Nascosto (Preferito)</string>
   <string name="external_repository_dialog_title">Scegli dove memorizzare le password</string>
   <string name="external_repository_dialog_text">Devi selezionare una directory in cui memorizzare le tue password. Se vuoi memorizzare le tue password entro l\'archiviazione nascosta dell\'applicazione, annulla questa finestra di dialogo e disabilita l\'opzione \"Repository Esterna\".</string>
-  <string name="server_name">Server</string>
   <string name="server_url">URL della repository</string>
   <string name="server_branch">Ramo</string>
   <string name="connection_mode">Modalità di Autenticazione</string>
@@ -85,13 +83,10 @@
   <!-- DECRYPT Layout -->
   <string name="action_search">Cerca</string>
   <string name="password">Password</string>
-  <string name="otp">OTP</string>
-  <string name="extra_content">Contenuto extra:</string>
   <string name="username">Nome Utente</string>
   <string name="edit_password">Modifica password</string>
   <string name="copy_password">Copia password</string>
   <string name="share_as_plaintext">Condividi come testo semplice</string>
-  <string name="last_changed">Ultima modifica %s</string>
   <!-- Preferences -->
   <string name="pref_edit_git_server_settings">Modifica impostazioni del server di Git</string>
   <string name="pref_edit_git_config">Configurazione &amp; utilità della configurazione di Git</string>
@@ -189,8 +184,6 @@
   <string name="git_log">Mostra registro di conferma</string>
   <string name="show_password_pref_title">Mostra la password</string>
   <string name="show_password_pref_summary">Controlla la visibilità delle password una volta decrittografate. Questo non disabilita la copia negli appunti.</string>
-  <string name="show_extra_content_pref_title">Mostra contenuti extra</string>
-  <string name="show_extra_content_pref_summary">Controlla la visibilità del contenuto extra una volta decrittografato.</string>
   <string name="pwd_generate_button">Genera</string>
   <string name="refresh_list">Aggiorna elenco</string>
   <string name="send_plaintext_password_to">Invia password come testo semplice usando…</string>

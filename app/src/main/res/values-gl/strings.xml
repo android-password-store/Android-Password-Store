@@ -45,7 +45,6 @@
   <string name="clipboard_password_toast_text">Contrasinal copiado ao portapapeis, tes %d segundos para pegala nalgures.</string>
   <string name="clipboard_password_no_clear_toast_text">Contrasinal copiado ao portapapeis</string>
   <string name="clipboard_copied_text">Copiada ó portapapeis</string>
-  <string name="clipboard_otp_copied_text">Código OTP copiado ó portapapeis</string>
   <string name="file_toast_text">Debes proporcionar un nome de ficheiro</string>
   <string name="path_toast_text">Por favor indica a ruta ao ficheiro</string>
   <string name="empty_toast_text">Non podes deixar baleiro o contrasinal ou o contido extra</string>
@@ -65,7 +64,6 @@
   <string name="location_hidden">Agochado (preferible)</string>
   <string name="external_repository_dialog_title">Escolle onde gardar os contrasinais</string>
   <string name="external_repository_dialog_text">Tes que escoller un directorio para gardar os contrasinais. Se queres gardalos dentro do directorio oculto da aplicación, cancela este diálogo e desactiva a opción \"Repositorio Externo\".</string>
-  <string name="server_name">Servidor</string>
   <string name="server_url">URL do servidor</string>
   <string name="server_branch">Póla</string>
   <string name="connection_mode">Modo de autenticación</string>
@@ -85,13 +83,10 @@
   <!-- DECRYPT Layout -->
   <string name="action_search">Buscar</string>
   <string name="password">Contrasinal</string>
-  <string name="otp">OTP</string>
-  <string name="extra_content">Contido extra:</string>
   <string name="username">Nome de usuaria</string>
   <string name="edit_password">Editar contrasinal</string>
   <string name="copy_password">Copiar contrasinal</string>
   <string name="share_as_plaintext">Compartir como texto plano</string>
-  <string name="last_changed">Último cambio %s</string>
   <!-- Preferences -->
   <string name="pref_category_repository_title">Repositorio</string>
   <string name="pref_edit_git_server_settings">Editar axustes do servidor git</string>
@@ -195,8 +190,6 @@
   <string name="git_log">Mostrar rexistro dos cambios</string>
   <string name="show_password_pref_title">Mostrar contrasinal</string>
   <string name="show_password_pref_summary">Controlar a visibilidade do contrasinal unha vez descifrado, esto non desactiva o copiado do contrasinal</string>
-  <string name="show_extra_content_pref_title">Mostrar contido extra</string>
-  <string name="show_extra_content_pref_summary">Controla a visibilidade do contido extra unha vez descifrado</string>
   <string name="pwd_generate_button">Crear</string>
   <string name="refresh_list">Actualizar lista</string>
   <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando...</string>
