@@ -17,27 +17,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatTextView
-      android:id="@+id/server_label"
-      style="@style/TextAppearance.MaterialComponents.Headline5"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      android:text="@string/server_name"
-      android:textSize="24sp"
-      android:textStyle="bold"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/label_server_url"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
+      android:layout_marginTop="8dp"
       android:hint="@string/server_url"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/server_label">
+      app:layout_constraintTop_toTopOf="parent">
 
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/server_url"
@@ -53,7 +41,7 @@
       android:id="@+id/label_server_branch"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
+      android:layout_marginTop="8dp"
       android:hint="@string/server_branch"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +61,6 @@
       style="@style/TextAppearance.MaterialComponents.Headline6"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
       android:layout_marginTop="16dp"
       android:layout_marginBottom="16dp"
       android:text="@string/connection_mode"
@@ -84,28 +71,24 @@
       android:id="@+id/auth_mode_group"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="8dp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
       app:singleSelection="true">
 
       <com.google.android.material.chip.Chip
         android:id="@+id/auth_mode_ssh_key"
-        style="@style/AppTheme.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_ssh_key" />
 
       <com.google.android.material.chip.Chip
         android:id="@+id/auth_mode_password"
-        style="@style/AppTheme.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_basic_authentication" />
 
       <com.google.android.material.chip.Chip
         android:id="@+id/auth_mode_open_keychain"
-        style="@style/AppTheme.Chip.Choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_openkeychain" />

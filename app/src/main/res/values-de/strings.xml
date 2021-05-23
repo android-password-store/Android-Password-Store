@@ -41,7 +41,6 @@
   <string name="clipboard_password_toast_text">Passwort ist in der Zwischenablage, du hast %d Sekunden, um es einzufügen.</string>
   <string name="clipboard_password_no_clear_toast_text">Passwort wurde in die Zwischenablage kopiert</string>
   <string name="clipboard_copied_text">In die Zwischenablage kopiert</string>
-  <string name="clipboard_otp_copied_text">OTP-Code in die Zwischenablage kopiert</string>
   <string name="file_toast_text">Bitte setze einen Pfad</string>
   <string name="path_toast_text">Bitte setze einen Pfad</string>
   <string name="empty_toast_text">Du kannst kein leeres Passwort setzen oder leere Extra-Angaben</string>
@@ -61,7 +60,6 @@
   <string name="location_hidden">Versteckt (bevorzugt)</string>
   <string name="external_repository_dialog_title">Wählen Sie, wo die Passwörter gespeichert werden sollen</string>
   <string name="external_repository_dialog_text">Sie müssen ein Verzeichnis auswählen, in dem Ihre Passwörter gespeichert werden sollen. Wenn Sie Ihre Passwörter innerhalb des versteckten Speichers der Anwendung speichern möchten, brechen Sie diesen Dialog ab und deaktivieren Sie die Option \"Externe Repository\".</string>
-  <string name="server_name">Server</string>
   <string name="server_url">Repository-URL</string>
   <string name="server_branch">Branch</string>
   <string name="connection_mode">Authentifizierungsmethode</string>
@@ -81,13 +79,10 @@
   <!-- DECRYPT Layout -->
   <string name="action_search">Suche</string>
   <string name="password">Passwort:</string>
-  <string name="otp">OTP:</string>
-  <string name="extra_content">Weiterer Inhalt:</string>
   <string name="username">Benutzername:</string>
   <string name="edit_password">Passwort bearbeiten</string>
   <string name="copy_password">Passwort kopieren</string>
   <string name="share_as_plaintext">Als Klartext teilen</string>
-  <string name="last_changed">Zuletzt geändert %s</string>
   <!-- Preferences -->
   <string name="pref_edit_git_server_settings">Git-Server Einstellungen</string>
   <string name="pref_edit_git_config">Lokale Git Konfiguration &amp; Dienstprogramme</string>
@@ -185,8 +180,6 @@
   <string name="git_log">Commit-Log anzeigen</string>
   <string name="show_password_pref_title">Zeige das Password</string>
   <string name="show_password_pref_summary">Soll das entschlüsselte Passwort sichtbar sein? Dies deaktiviert nicht das Kopieren.</string>
-  <string name="show_extra_content_pref_title">Zeige weiteren Inhalt</string>
-  <string name="show_extra_content_pref_summary">Soll weiterer Inhalt sichtbar sein?</string>
   <string name="pwd_generate_button">Generieren</string>
   <string name="refresh_list">Aktualisieren</string>
   <string name="send_plaintext_password_to">Passwort unverschlüsselt senden an…</string>
