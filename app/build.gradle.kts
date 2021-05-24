@@ -14,6 +14,14 @@ plugins {
   `crowdin-plugin`
 }
 
+repositories {
+  // https://github.com/chrisbanes/tivi/blob/main/build.gradle
+  val composeSnapshot = libs.versions.composeSnapshot.get()
+  if (composeSnapshot.length > 1) {
+    maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/")
+  }
+}
+
 configure<CrowdinExtension> { projectName = "android-password-store" }
 
 android {
@@ -29,6 +37,7 @@ android {
   defaultConfig {
     applicationId = "dev.msfjarvis.aps"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    vectorDrawables { useSupportLibrary = true }
   }
 
   lintOptions {
@@ -45,6 +54,11 @@ android {
     create("nonFree") {}
   }
   testOptions { unitTests.isReturnDefaultValues = true }
+
+  composeOptions {
+    kotlinCompilerVersion = libs.versions.kotlin.get()
+    kotlinCompilerExtensionVersion = libs.versions.compose.get()
+  }
 }
 
 dependencies {
@@ -73,6 +87,14 @@ dependencies {
 
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
+
+  implementation(libs.androidx.activity.compose)
+  implementation(libs.androidx.hilt.compose)
+  implementation(libs.compose.foundation.foundation)
+  implementation(libs.compose.foundation.layout)
+  implementation(libs.compose.material.material)
+  implementation(libs.compose.ui.tooling)
+  implementation(libs.compose.ui.viewbinding)
 
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
