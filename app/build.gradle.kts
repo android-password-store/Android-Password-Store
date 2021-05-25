@@ -14,6 +14,22 @@ plugins {
   `crowdin-plugin`
 }
 
+repositories {
+  val composeSnapshot = libs.versions.composeSnapshot.get()
+  if (composeSnapshot.isNotEmpty()) {
+    maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/") {
+      content {
+        includeGroup("androidx.compose.animation")
+        includeGroup("androidx.compose.compiler")
+        includeGroup("androidx.compose.foundation")
+        includeGroup("androidx.compose.material")
+        includeGroup("androidx.compose.runtime")
+        includeGroup("androidx.compose.ui")
+      }
+    }
+  }
+}
+
 configure<CrowdinExtension> { projectName = "android-password-store" }
 
 android {
@@ -31,12 +47,15 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
+  buildFeatures.compose = true
+
   lintOptions {
     isAbortOnError = true
     isCheckReleaseBuilds = false
     disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
     // https://issuetracker.google.com/issues/187524311
     disable("DialogFragmentCallbacksDetector")
+    disable("CoroutineCreationDuringComposition")
   }
 
   flavorDimensions("free")
@@ -45,6 +64,11 @@ android {
     create("nonFree") {}
   }
   testOptions { unitTests.isReturnDefaultValues = true }
+
+  composeOptions {
+    kotlinCompilerVersion = libs.versions.kotlin.get()
+    kotlinCompilerExtensionVersion = libs.versions.compose.get()
+  }
 }
 
 dependencies {
@@ -73,6 +97,15 @@ dependencies {
 
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
+
+  implementation(libs.androidx.activity.compose)
+  implementation(libs.androidx.hilt.compose)
+  implementation(libs.compose.foundation.core)
+  implementation(libs.compose.foundation.layout)
+  implementation(libs.compose.material)
+  implementation(libs.compose.ui.core)
+  implementation(libs.compose.ui.viewbinding)
+  compileOnly(libs.compose.ui.tooling)
 
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
