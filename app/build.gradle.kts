@@ -15,10 +15,18 @@ plugins {
 }
 
 repositories {
-  // https://github.com/chrisbanes/tivi/blob/main/build.gradle
   val composeSnapshot = libs.versions.composeSnapshot.get()
   if (composeSnapshot.isNotEmpty()) {
-    maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/")
+    maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/") {
+      content {
+        includeGroup("androidx.compose.animation")
+        includeGroup("androidx.compose.compiler")
+        includeGroup("androidx.compose.foundation")
+        includeGroup("androidx.compose.material")
+        includeGroup("androidx.compose.runtime")
+        includeGroup("androidx.compose.ui")
+      }
+    }
   }
 }
 
@@ -37,8 +45,9 @@ android {
   defaultConfig {
     applicationId = "dev.msfjarvis.aps"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    vectorDrawables { useSupportLibrary = true }
   }
+
+  buildFeatures.compose = true
 
   lintOptions {
     isAbortOnError = true
@@ -91,11 +100,12 @@ dependencies {
 
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.hilt.compose)
-  implementation(libs.compose.foundation.foundation)
+  implementation(libs.compose.foundation.core)
   implementation(libs.compose.foundation.layout)
-  implementation(libs.compose.material.material)
-  implementation(libs.compose.ui.tooling)
+  implementation(libs.compose.material)
+  implementation(libs.compose.ui.core)
   implementation(libs.compose.ui.viewbinding)
+  compileOnly(libs.compose.ui.tooling)
 
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)

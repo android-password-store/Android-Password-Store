@@ -5,8 +5,6 @@
 plugins {
   `binary-compatibility-validator`
   `aps-plugin`
-  // Fix for leak in Kotlin Gradle Plugin: https://youtrack.jetbrains.com/issue/KT-46368
-  id("dev.zacsweers.kgp-150-leak-patcher") version "1.1.0"
 }
 
 allprojects { apply(plugin = "com.diffplug.spotless") }

@@ -83,7 +83,6 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
   buildFeatures {
     viewBinding = true
     buildConfig = true
-    compose = true
   }
 
   buildTypes {
