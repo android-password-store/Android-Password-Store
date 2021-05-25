@@ -2,10 +2,10 @@
 [versions]
 androidx_test = "1.4.0-beta01"
 compose = "1.0.0-SNAPSHOT"
-composeSnapshot = "7392605"
+composeSnapshot = "7395546"
 coroutines = "1.5.0"
 hilt = "2.35.1"
-kotlin = "1.5.0"
+kotlin = "1.5.10"
 lifecycle = "2.4.0-alpha01"
 
 [libraries]
