@@ -17,7 +17,7 @@ plugins {
 repositories {
   // https://github.com/chrisbanes/tivi/blob/main/build.gradle
   val composeSnapshot = libs.versions.composeSnapshot.get()
-  if (composeSnapshot.length > 1) {
+  if (composeSnapshot.isNotEmpty()) {
     maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/")
   }
 }
