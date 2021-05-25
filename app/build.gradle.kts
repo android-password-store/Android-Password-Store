@@ -46,6 +46,7 @@ android {
     disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
     // https://issuetracker.google.com/issues/187524311
     disable("DialogFragmentCallbacksDetector")
+    disable("CoroutineCreationDuringComposition")
   }
 
   flavorDimensions("free")
