@@ -38,6 +38,7 @@ class PasswordStorePlugin : Plugin<Project> {
           project.tasks.withType<JavaCompile> {
             options.compilerArgs.add("-Xlint:unchecked")
             options.isDeprecation = true
+            options.isWarnings = true
           }
         }
         is LibraryPlugin -> {
