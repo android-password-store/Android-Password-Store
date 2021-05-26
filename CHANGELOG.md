@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 -   The settings UI has been completely re-done to dramatically improve discoverability and navigation for users
 -   Using the `git://` protocol in the server URL now presents an explicit discouragement rather than a generic error
 -   Encrypted data is no longer ASCII armored, bringing it in line with `pass`
+-   Removed Bromite from supported Autofill browsers, since they [disable Android autofill](https://github.com/bromite/bromite/blob/master/FAQ.md#does-bromite-support-the-android-autofill-framework).
 
 ## [1.13.4] - 2021-03-20
 
