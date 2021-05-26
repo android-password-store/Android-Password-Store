@@ -25,6 +25,7 @@ public class AutocryptPeerUpdate() : Parcelable {
     this.preferEncrypt = preferEncrypt
   }
 
+  @Suppress("UNUSED_PARAMETER")
   private constructor(source: Parcel, version: Int) : this() {
     keyData = source.createByteArray()
     effectiveDate = if (source.readInt() != 0) Date(source.readLong()) else null
@@ -85,7 +86,8 @@ public class AutocryptPeerUpdate() : Parcelable {
   public companion object CREATOR : Creator<AutocryptPeerUpdate> {
 
     private const val PARCELABLE_VERSION = 1
-    override fun createFromParcel(source: Parcel): AutocryptPeerUpdate? {
+
+    override fun createFromParcel(source: Parcel): AutocryptPeerUpdate {
       val version = source.readInt() // parcelableVersion
       val parcelableSize = source.readInt()
       val startPosition = source.dataPosition()
@@ -95,7 +97,7 @@ public class AutocryptPeerUpdate() : Parcelable {
       return vr
     }
 
-    override fun newArray(size: Int): Array<AutocryptPeerUpdate?>? {
+    override fun newArray(size: Int): Array<AutocryptPeerUpdate?> {
       return arrayOfNulls(size)
     }
   }

@@ -23,6 +23,7 @@ public class OpenPgpSignatureResult : Parcelable {
   private val signatureTimestamp: Date?
   private val autocryptPeerentityResult: AutocryptPeerResult?
 
+  @Suppress("UNUSED_PARAMETER")
   private constructor(
     signatureStatus: Int,
     signatureUserId: String?,

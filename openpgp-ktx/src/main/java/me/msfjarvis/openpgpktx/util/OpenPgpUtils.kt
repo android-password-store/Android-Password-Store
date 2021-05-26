@@ -64,7 +64,7 @@ public object OpenPgpUtils {
     if (userId.isNotEmpty()) {
       val matcher = USER_ID_PATTERN.matcher(userId)
       if (matcher.matches()) {
-        var name = if (matcher.group(1).isEmpty()) null else matcher.group(1)
+        var name = if (matcher.group(1)?.isEmpty() == true) null else matcher.group(1)
         val comment = matcher.group(2)
         var email = matcher.group(3)
         if (email != null && name != null) {
