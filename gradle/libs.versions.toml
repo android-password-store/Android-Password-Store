@@ -4,7 +4,7 @@ androidx_test = "1.4.0-beta01"
 compose = "1.0.0-SNAPSHOT"
 composeSnapshot = "7395546"
 coroutines = "1.5.0"
-hilt = "2.35.1"
+hilt = "2.36"
 kotlin = "1.5.10"
 lifecycle = "2.4.0-alpha01"
 
@@ -68,7 +68,7 @@ dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
 
 # Desugaring
-android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.0.10"
+android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 
 # First-party libraries
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
@@ -89,7 +89,7 @@ thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-a
 thirdparty-timber = "com.jakewharton.timber:timber:4.7.1"
 thirdparty-timberkt = "com.github.ajalt:timberkt:1.5.1"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.0"
-thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:17.5.0"
+thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:17.5.1"
 
 # Testing dependencies
 testing-junit = "junit:junit:4.13.2"
