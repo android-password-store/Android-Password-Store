@@ -28,6 +28,7 @@ import dev.msfjarvis.aps.util.extensions.isPermissionGranted
 import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -35,10 +36,8 @@ import java.io.File
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
-  private val settings by lazy(LazyThreadSafetyMode.NONE) {
-    requireActivity().applicationContext.sharedPrefs
-  }
-  private val directorySelectIntent by lazy(LazyThreadSafetyMode.NONE) {
+  private val settings by unsafeLazy { requireActivity().applicationContext.sharedPrefs }
+  private val directorySelectIntent by unsafeLazy {
     Intent(requireContext(), DirectorySelectionActivity::class.java)
   }
   private val binding by viewBinding(FragmentRepoLocationBinding::bind)

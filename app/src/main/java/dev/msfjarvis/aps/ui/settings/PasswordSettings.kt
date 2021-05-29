@@ -23,13 +23,14 @@ import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.pwgenxkpwd.XkpwdDictionary
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 
 class PasswordSettings(private val activity: FragmentActivity) : SettingsProvider {
 
-  private val sharedPrefs by lazy(LazyThreadSafetyMode.NONE) { activity.sharedPrefs }
+  private val sharedPrefs by unsafeLazy { activity.sharedPrefs }
   private val storeCustomXkpwdDictionaryAction =
     activity.registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
       if (uri == null) return@registerForActivityResult

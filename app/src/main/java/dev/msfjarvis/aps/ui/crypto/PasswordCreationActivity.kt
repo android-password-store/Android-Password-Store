@@ -44,6 +44,7 @@ import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.isInsideRepository
 import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayInputStream
@@ -63,24 +64,14 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
 
-  private val suggestedName by lazy(LazyThreadSafetyMode.NONE) {
-    intent.getStringExtra(EXTRA_FILE_NAME)
-  }
-  private val suggestedPass by lazy(LazyThreadSafetyMode.NONE) {
-    intent.getStringExtra(EXTRA_PASSWORD)
-  }
-  private val suggestedExtra by lazy(LazyThreadSafetyMode.NONE) {
-    intent.getStringExtra(EXTRA_EXTRA_CONTENT)
-  }
-  private val shouldGeneratePassword by lazy(LazyThreadSafetyMode.NONE) {
+  private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
+  private val suggestedPass by unsafeLazy { intent.getStringExtra(EXTRA_PASSWORD) }
+  private val suggestedExtra by unsafeLazy { intent.getStringExtra(EXTRA_EXTRA_CONTENT) }
+  private val shouldGeneratePassword by unsafeLazy {
     intent.getBooleanExtra(EXTRA_GENERATE_PASSWORD, false)
   }
-  private val editing by lazy(LazyThreadSafetyMode.NONE) {
-    intent.getBooleanExtra(EXTRA_EDITING, false)
-  }
-  private val oldFileName by lazy(LazyThreadSafetyMode.NONE) {
-    intent.getStringExtra(EXTRA_FILE_NAME)
-  }
+  private val editing by unsafeLazy { intent.getBooleanExtra(EXTRA_EDITING, false) }
+  private val oldFileName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
   private var oldCategory: String? = null
   private var copy: Boolean = false
   private var encryptionIntent: Intent = Intent()

@@ -22,6 +22,7 @@ import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
@@ -44,9 +45,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
 
-  private val relativeParentPath by lazy(LazyThreadSafetyMode.NONE) {
-    getParentPath(fullPath, repoPath)
-  }
+  private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
   private var passwordEntry: PasswordEntry? = null
 
   private val userInteractionRequiredResult =

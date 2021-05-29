@@ -16,6 +16,7 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.git.GitException.PullException
 import dev.msfjarvis.aps.util.git.GitException.PushException
 import dev.msfjarvis.aps.util.git.operation.GitOperation
@@ -34,7 +35,7 @@ class GitCommandExecutor(
   private val operation: GitOperation,
 ) {
 
-  private val hiltEntryPoint by lazy(LazyThreadSafetyMode.NONE) {
+  private val hiltEntryPoint by unsafeLazy {
     EntryPointAccessors.fromApplication(
       activity.applicationContext,
       GitCommandExecutorEntryPoint::class.java

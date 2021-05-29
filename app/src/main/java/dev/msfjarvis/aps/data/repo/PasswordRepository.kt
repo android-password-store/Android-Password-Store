@@ -14,6 +14,7 @@ import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
@@ -55,7 +56,7 @@ object PasswordRepository {
   }
 
   private var repository: Repository? = null
-  private val settings by lazy(LazyThreadSafetyMode.NONE) { Application.instance.sharedPrefs }
+  private val settings by unsafeLazy { Application.instance.sharedPrefs }
   private val filesDir
     get() = Application.instance.filesDir
 

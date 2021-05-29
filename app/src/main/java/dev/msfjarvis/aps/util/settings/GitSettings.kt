@@ -61,7 +61,7 @@ constructor(
   @FilesDirPath private val filesDirPath: String,
 ) {
 
-  private val hostKeyPath by lazy(LazyThreadSafetyMode.NONE) { "$filesDirPath/.host_key" }
+  private val hostKeyPath = "$filesDirPath/.host_key"
   var authMode
     get() = AuthMode.fromString(settings.getString(PreferenceKeys.GIT_REMOTE_AUTH))
     private set(value) {

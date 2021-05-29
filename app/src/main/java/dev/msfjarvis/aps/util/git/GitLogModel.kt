@@ -11,6 +11,7 @@ import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.extensions.hash
 import dev.msfjarvis.aps.util.extensions.time
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.revwalk.RevCommit
 
@@ -39,7 +40,7 @@ class GitLogModel {
   // This is because the commit graph is walked from HEAD to the last commit to obtain.
   // Additionally, tests with 1000 commits in the log have not produced a significant delay in the
   // user experience.
-  private val cache: MutableList<GitCommit> by lazy(LazyThreadSafetyMode.NONE) {
+  private val cache: MutableList<GitCommit> by unsafeLazy {
     commits()
       .map { GitCommit(it.hash, it.shortMessage, it.authorIdent.name, it.time) }
       .toMutableList()

@@ -67,4 +67,4 @@ fun <T : ViewBinding> Fragment.viewBinding(viewBindingFactory: (View) -> T) =
 
 inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
   crossinline bindingInflater: (LayoutInflater) -> T
-) = lazy(LazyThreadSafetyMode.NONE) { bindingInflater.invoke(layoutInflater) }
+) = unsafeLazy { bindingInflater.invoke(layoutInflater) }

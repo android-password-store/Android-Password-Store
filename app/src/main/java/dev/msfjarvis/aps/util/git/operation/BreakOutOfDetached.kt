@@ -6,6 +6,7 @@ package dev.msfjarvis.aps.util.git.operation
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import org.eclipse.jgit.api.RebaseCommand
 import org.eclipse.jgit.api.ResetCommand
@@ -28,7 +29,7 @@ class BreakOutOfDetached(callingActivity: ContinuationContainerActivity) :
       git.checkout().setName(remoteBranch),
     )
 
-  override val commands by lazy(LazyThreadSafetyMode.NONE) {
+  override val commands by unsafeLazy {
     if (merging) {
       // We need to run some non-command operations first
       repository.writeMergeCommitMsg(null)

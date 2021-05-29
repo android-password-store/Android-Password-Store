@@ -18,6 +18,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityProxySelectorBinding
 import dev.msfjarvis.aps.util.extensions.getEncryptedProxyPrefs
 import dev.msfjarvis.aps.util.extensions.getString
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.proxy.ProxyUtils
 import dev.msfjarvis.aps.util.settings.GitSettings
@@ -34,9 +35,7 @@ class ProxySelectorActivity : AppCompatActivity() {
   @Inject lateinit var proxyUtils: ProxyUtils
 
   private val binding by viewBinding(ActivityProxySelectorBinding::inflate)
-  private val proxyPrefs by lazy(LazyThreadSafetyMode.NONE) {
-    applicationContext.getEncryptedProxyPrefs()
-  }
+  private val proxyPrefs by unsafeLazy { applicationContext.getEncryptedProxyPrefs() }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

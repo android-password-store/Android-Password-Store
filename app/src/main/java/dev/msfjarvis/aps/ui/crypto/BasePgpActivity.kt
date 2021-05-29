@@ -30,6 +30,7 @@ import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.services.ClipboardService
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
@@ -42,20 +43,20 @@ import org.openintents.openpgp.OpenPgpError
 open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
   /** Full path to the repository */
-  val repoPath by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("REPO_PATH")!! }
+  val repoPath by unsafeLazy { intent.getStringExtra("REPO_PATH")!! }
 
   /** Full path to the password file being worked on */
-  val fullPath by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("FILE_PATH")!! }
+  val fullPath by unsafeLazy { intent.getStringExtra("FILE_PATH")!! }
 
   /**
    * Name of the password file
    *
    * Converts personal/auth.foo.org/john_doe@example.org.gpg to john_doe.example.org
    */
-  val name: String by lazy(LazyThreadSafetyMode.NONE) { File(fullPath).nameWithoutExtension }
+  val name: String by unsafeLazy { File(fullPath).nameWithoutExtension }
 
   /** [SharedPreferences] instance used by subclasses to persist settings */
-  val settings: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) { sharedPrefs }
+  val settings: SharedPreferences by unsafeLazy { sharedPrefs }
 
   /**
    * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.

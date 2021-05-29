@@ -22,6 +22,7 @@ import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
@@ -32,9 +33,7 @@ import me.msfjarvis.openpgpktx.util.OpenPgpApi
 
 class KeySelectionFragment : Fragment(R.layout.fragment_key_selection) {
 
-  private val settings by lazy(LazyThreadSafetyMode.NONE) {
-    requireActivity().applicationContext.sharedPrefs
-  }
+  private val settings by unsafeLazy { requireActivity().applicationContext.sharedPrefs }
   private val binding by viewBinding(FragmentKeySelectionBinding::bind)
 
   private val gpgKeySelectAction =

@@ -25,6 +25,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import java.io.IOException
@@ -50,7 +51,7 @@ private const val PROVIDER_ANDROID_KEY_STORE = "AndroidKeyStore"
 private const val KEYSTORE_ALIAS = "sshkey"
 private const val ANDROIDX_SECURITY_KEYSET_PREF_NAME = "androidx_sshkey_keyset_prefs"
 
-private val androidKeystore: KeyStore by lazy(LazyThreadSafetyMode.NONE) {
+private val androidKeystore: KeyStore by unsafeLazy {
   KeyStore.getInstance(PROVIDER_ANDROID_KEY_STORE).apply { load(null) }
 }
 
@@ -118,7 +119,7 @@ object SshKey {
     set(value) =
       context.sharedPrefs.edit { putString(PreferenceKeys.GIT_REMOTE_KEY_TYPE, value?.value) }
 
-  private val isStrongBoxSupported by lazy(LazyThreadSafetyMode.NONE) {
+  private val isStrongBoxSupported by unsafeLazy {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
       context.packageManager.hasSystemFeature(PackageManager.FEATURE_STRONGBOX_KEYSTORE)
     else false

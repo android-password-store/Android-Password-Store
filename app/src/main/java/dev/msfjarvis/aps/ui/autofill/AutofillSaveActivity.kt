@@ -24,6 +24,7 @@ import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -89,7 +90,7 @@ class AutofillSaveActivity : AppCompatActivity() {
     }
   }
 
-  private val formOrigin by lazy(LazyThreadSafetyMode.NONE) {
+  private val formOrigin by unsafeLazy {
     val shouldMatchApp: String? = intent.getStringExtra(EXTRA_SHOULD_MATCH_APP)
     val shouldMatchWeb: String? = intent.getStringExtra(EXTRA_SHOULD_MATCH_WEB)
     if (shouldMatchApp != null && shouldMatchWeb == null) {

@@ -29,6 +29,7 @@ import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.sphericalkat.sublimefuzzy.Fuzzy
@@ -120,7 +121,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
   private val root
     get() = PasswordRepository.getRepositoryDirectory()
-  private val settings by lazy(LazyThreadSafetyMode.NONE) { application.sharedPrefs }
+  private val settings by unsafeLazy { application.sharedPrefs }
   private val showHiddenContents
     get() = settings.getBoolean(PreferenceKeys.SHOW_HIDDEN_CONTENTS, false)
   private val defaultSearchMode

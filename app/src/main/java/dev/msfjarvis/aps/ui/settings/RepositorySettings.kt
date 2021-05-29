@@ -37,12 +37,13 @@ import dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
 
-  private val hiltEntryPoint by lazy(LazyThreadSafetyMode.NONE) {
+  private val hiltEntryPoint by unsafeLazy {
     EntryPointAccessors.fromApplication(
       activity.applicationContext,
       RepositorySettingsEntryPoint::class.java,

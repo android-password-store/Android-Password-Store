@@ -17,6 +17,7 @@ import dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity
 import dev.msfjarvis.aps.util.extensions.finish
 import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
@@ -24,9 +25,7 @@ class CloneFragment : Fragment(R.layout.fragment_clone) {
 
   private val binding by viewBinding(FragmentCloneBinding::bind)
 
-  private val settings by lazy(LazyThreadSafetyMode.NONE) {
-    requireActivity().applicationContext.sharedPrefs
-  }
+  private val settings by unsafeLazy { requireActivity().applicationContext.sharedPrefs }
 
   private val cloneAction =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
