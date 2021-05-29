@@ -49,6 +49,7 @@
   <string name="clipboard_password_toast_text">Пароль скопирован в буфер обмена, у вас есть %d секунд чтобы вставить его.</string>
   <string name="clipboard_password_no_clear_toast_text">Пароль скопирован в буфер обмена</string>
   <string name="clipboard_copied_text">Скопировано в буфер обмена</string>
+  <string name="clipboard_otp_copied_text">OTP код скопирован в буфер обмена</string>
   <string name="file_toast_text">Пожалуйста, укажите имя файла</string>
   <string name="path_toast_text">Пожалуйста, задайте путь к файлу</string>
   <string name="empty_toast_text">Вы не можете использовать пустой пароль или пустое поле информации</string>
@@ -68,6 +69,7 @@
   <string name="location_hidden">Скрытый (Предпочтительно)</string>
   <string name="external_repository_dialog_title">Выберете где хранить пароли</string>
   <string name="external_repository_dialog_text">Вы должны выбрать директорию где хранить пароли. Если вы хотите хранить пароли в скрытом хранилище приложения, тогда отмените этот диалог и отключите настройку \"Внешний репозиторий\".</string>
+  <string name="server_name">Сервер</string>
   <string name="server_url">URL репозитория</string>
   <string name="server_branch">Ветка</string>
   <string name="connection_mode">Тип авторизации</string>
@@ -87,10 +89,13 @@
   <!-- DECRYPT Layout -->
   <string name="action_search">Поиск</string>
   <string name="password">Пароль:</string>
+  <string name="otp">OTP:</string>
+  <string name="extra_content">Дополнительная информация:</string>
   <string name="username">Имя пользователя:</string>
   <string name="edit_password">Редактировать пароль</string>
   <string name="copy_password">Скопировать пароль</string>
   <string name="share_as_plaintext">Поделиться в открытом виде</string>
+  <string name="last_changed">Последние изменение %s</string>
   <!-- Preferences -->
   <string name="pref_category_repository_title">Репозиторий</string>
   <string name="pref_edit_git_server_settings">Изменить настройки сервера Git</string>
@@ -189,6 +194,8 @@
   <string name="git_log">Показать журнал изменений</string>
   <string name="show_password_pref_title">Показывать пароли</string>
   <string name="show_password_pref_summary">Видимость расшифрованных паролей, не влияет на копирование в буфер.</string>
+  <string name="show_extra_content_pref_title">Показать дополнительную информацию</string>
+  <string name="show_extra_content_pref_summary">Видимость поля дополнительной информации после расшифрования</string>
   <string name="pwd_generate_button">Сгенерировать</string>
   <string name="refresh_list">Обновить список</string>
   <string name="send_plaintext_password_to">Поделиться паролем в открытом виде с помощью</string>
