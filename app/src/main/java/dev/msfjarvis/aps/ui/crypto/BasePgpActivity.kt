@@ -24,22 +24,25 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
 import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.getString
-import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.services.ClipboardService
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
+import javax.inject.Inject
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
 import org.openintents.openpgp.OpenPgpError
 
 @Suppress("Registered")
+@AndroidEntryPoint
 open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBound {
 
   /** Full path to the repository */
@@ -56,7 +59,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
   val name: String by unsafeLazy { File(fullPath).nameWithoutExtension }
 
   /** [SharedPreferences] instance used by subclasses to persist settings */
-  val settings: SharedPreferences by unsafeLazy { sharedPrefs }
+  @SettingsPreferences @Inject lateinit var settings: SharedPreferences
 
   /**
    * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.
