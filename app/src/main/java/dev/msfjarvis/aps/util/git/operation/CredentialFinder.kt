@@ -6,6 +6,7 @@
 package dev.msfjarvis.aps.util.git.operation
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.core.content.edit
@@ -15,8 +16,12 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
+import dev.msfjarvis.aps.injection.prefs.GitPreferences
 import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import dev.msfjarvis.aps.util.git.sshj.InteractivePasswordFinder
 import dev.msfjarvis.aps.util.settings.AuthMode
@@ -27,8 +32,14 @@ import kotlin.coroutines.resume
 class CredentialFinder(val callingActivity: FragmentActivity, val authMode: AuthMode) :
   InteractivePasswordFinder() {
 
+  private val hiltEntryPoint =
+    EntryPointAccessors.fromApplication(
+      callingActivity.applicationContext,
+      CredentialFinderEntryPoint::class.java,
+    )
+
   override fun askForPassword(cont: Continuation<String?>, isRetry: Boolean) {
-    val gitOperationPrefs = callingActivity.getEncryptedGitPrefs()
+    val gitOperationPrefs = hiltEntryPoint.gitPrefs()
     val credentialPref: String
     @StringRes val messageRes: Int
     @StringRes val hintRes: Int
@@ -95,5 +106,11 @@ class CredentialFinder(val callingActivity: FragmentActivity, val authMode: Auth
     } else {
       cont.resume(storedCredential)
     }
+  }
+
+  @EntryPoint
+  @InstallIn(SingletonComponent::class)
+  interface CredentialFinderEntryPoint {
+    @GitPreferences fun gitPrefs(): SharedPreferences
   }
 }

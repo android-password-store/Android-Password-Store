@@ -4,6 +4,7 @@
  */
 package dev.msfjarvis.aps.ui.git.base
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.github.ajalt.timberkt.d
@@ -14,7 +15,7 @@ import com.github.michaelbull.result.mapError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
+import dev.msfjarvis.aps.injection.prefs.GitPreferences
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.git.ErrorMessages
 import dev.msfjarvis.aps.util.git.operation.BreakOutOfDetached
@@ -52,6 +53,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
   }
 
   @Inject lateinit var gitSettings: GitSettings
+  @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
 
   /**
    * Attempt to launch the requested Git operation.
@@ -85,7 +87,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
   suspend fun promptOnErrorHandler(err: Throwable, onPromptDone: () -> Unit = {}) {
     val error = rootCauseException(err)
     if (!isExplicitlyUserInitiatedError(error)) {
-      getEncryptedGitPrefs().edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
+      gitPrefs.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
       sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
       d(error)
       withContext(Dispatchers.Main) {

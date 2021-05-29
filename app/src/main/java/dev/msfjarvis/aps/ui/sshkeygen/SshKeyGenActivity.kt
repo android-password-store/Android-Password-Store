@@ -4,6 +4,7 @@
  */
 package dev.msfjarvis.aps.ui.sshkeygen
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.security.keystore.UserNotAuthenticatedException
 import android.view.MenuItem
@@ -16,13 +17,15 @@ import androidx.lifecycle.lifecycleScope
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivitySshKeygenBinding
+import dev.msfjarvis.aps.injection.prefs.GitPreferences
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
-import dev.msfjarvis.aps.util.extensions.getEncryptedGitPrefs
 import dev.msfjarvis.aps.util.extensions.keyguardManager
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.git.sshj.SshKey
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
@@ -41,10 +44,12 @@ private enum class KeyGenType(val generateKey: suspend (requireAuthentication: B
   }),
 }
 
+@AndroidEntryPoint
 class SshKeyGenActivity : AppCompatActivity() {
 
   private var keyGenType = KeyGenType.Ecdsa
   private val binding by viewBinding(ActivitySshKeygenBinding::inflate)
+  @GitPreferences @Inject lateinit var gitPrefs: SharedPreferences
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -129,7 +134,7 @@ class SshKeyGenActivity : AppCompatActivity() {
         keyGenType.generateKey(requireAuthentication)
       }
     }
-    getEncryptedGitPrefs().edit { remove("ssh_key_local_passphrase") }
+    gitPrefs.edit { remove("ssh_key_local_passphrase") }
     binding.generate.apply {
       text = getString(R.string.ssh_keygen_generate)
       isEnabled = true
