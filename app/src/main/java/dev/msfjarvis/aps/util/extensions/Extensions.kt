@@ -75,3 +75,6 @@ val RevCommit.time: Date
 fun String.splitLines(): Array<String> {
   return split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 }
+
+/** Alias to [lazy] with thread safety mode always set to [LazyThreadSafetyMode.NONE]. */
+fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE) { initializer.invoke() }
