@@ -149,7 +149,6 @@ constructor(
     }
 
     val items = mutableMapOf<String, String>()
-    // Take extraContentWithoutAuthData and onEach line perform the following tasks
     extraContentWithoutAuthData.lines().forEach { line ->
       // Split the line on ':' and save all the parts into an array
       // "ABC : DEF:GHI" --> ["ABC", "DEF", "GHI"]
