@@ -38,6 +38,7 @@ import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
+import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
@@ -117,7 +118,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
       }
       pref(PreferenceKeys.SSH_SEE_KEY) {
         titleRes = R.string.pref_ssh_see_key_title
-        visible = PasswordRepository.isGitRepo()
+        visible = PasswordRepository.isGitRepo() && SshKey.canShowSshPublicKey
         onClick {
           ShowSshKeyFragment().show(activity.supportFragmentManager, "public_key")
           true
