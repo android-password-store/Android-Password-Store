@@ -87,7 +87,7 @@ constructor(
     if (totpSecret != null) {
       scope.launch {
         updateTotp(clock.millis())
-        val remainingTime = totpPeriod - (System.currentTimeMillis() % totpPeriod)
+        val remainingTime = totpPeriod - (clock.millis() % totpPeriod)
         delay(Duration.seconds(remainingTime))
         repeat(Int.MAX_VALUE) {
           updateTotp(clock.millis())
