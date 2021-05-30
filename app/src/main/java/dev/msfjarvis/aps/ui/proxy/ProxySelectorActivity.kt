@@ -5,6 +5,7 @@
 
 package dev.msfjarvis.aps.ui.proxy
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,9 +17,8 @@ import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityProxySelectorBinding
-import dev.msfjarvis.aps.util.extensions.getEncryptedProxyPrefs
+import dev.msfjarvis.aps.injection.prefs.ProxyPreferences
 import dev.msfjarvis.aps.util.extensions.getString
-import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.proxy.ProxyUtils
 import dev.msfjarvis.aps.util.settings.GitSettings
@@ -32,10 +32,10 @@ private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()
 class ProxySelectorActivity : AppCompatActivity() {
 
   @Inject lateinit var gitSettings: GitSettings
+  @ProxyPreferences @Inject lateinit var proxyPrefs: SharedPreferences
   @Inject lateinit var proxyUtils: ProxyUtils
 
   private val binding by viewBinding(ActivityProxySelectorBinding::inflate)
-  private val proxyPrefs by unsafeLazy { applicationContext.getEncryptedProxyPrefs() }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

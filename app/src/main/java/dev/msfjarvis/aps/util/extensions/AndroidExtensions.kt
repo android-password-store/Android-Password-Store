@@ -63,9 +63,6 @@ val Context.clipboard
 /** Wrapper for [getEncryptedPrefs] to avoid open-coding the file name at each call site */
 fun Context.getEncryptedGitPrefs() = getEncryptedPrefs("git_operation")
 
-/** Wrapper for [getEncryptedPrefs] to get the encrypted preference set for the HTTP proxy. */
-fun Context.getEncryptedProxyPrefs() = getEncryptedPrefs("http_proxy")
-
 /** Get an instance of [EncryptedSharedPreferences] with the given [fileName] */
 private fun Context.getEncryptedPrefs(fileName: String): SharedPreferences {
   val masterKeyAlias =
