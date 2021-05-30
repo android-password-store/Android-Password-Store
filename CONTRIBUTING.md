@@ -23,6 +23,10 @@ In most scenarios, the `app` directory is where you'd be contributing changes to
 
 We bundle a [`ignore-revs-file`](https://git-scm.com/docs/git-blame#Documentation/git-blame.txt---ignore-revs-fileltfilegt) to ensure `git blame` is not affected by noisy changes. To make use of this, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` from inside this repository.
 
+## Source code conventions
+
+- Unless you're absolutely sure what you're doing, always prefer the `unsafeLazy` method over Kotlin's inbuilt `lazy` for lazily evaluated properties.
+
 ## Building the project
 
 ### Building with Gradle
