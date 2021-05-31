@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ShortcutManager
 import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -38,10 +39,16 @@ import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
+import dev.msfjarvis.aps.util.git.sshj.SshKey
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
 class RepositorySettings(private val activity: FragmentActivity) : SettingsProvider {
+
+  private val generateSshKey =
+    activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      showSshKeyPref?.visible = SshKey.canShowSshPublicKey
+    }
 
   private val hiltEntryPoint by unsafeLazy {
     EntryPointAccessors.fromApplication(
@@ -49,6 +56,8 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
       RepositorySettingsEntryPoint::class.java,
     )
   }
+
+  private var showSshKeyPref: Preference? = null
 
   private fun <T : FragmentActivity> launchActivity(clazz: Class<T>) {
     activity.startActivity(Intent(activity, clazz))
@@ -111,18 +120,19 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
       pref(PreferenceKeys.SSH_KEYGEN) {
         titleRes = R.string.pref_ssh_keygen_title
         onClick {
-          launchActivity(SshKeyGenActivity::class.java)
+          generateSshKey.launch(Intent(activity, SshKeyGenActivity::class.java))
           true
         }
       }
-      pref(PreferenceKeys.SSH_SEE_KEY) {
-        titleRes = R.string.pref_ssh_see_key_title
-        visible = PasswordRepository.isGitRepo()
-        onClick {
-          ShowSshKeyFragment().show(activity.supportFragmentManager, "public_key")
-          true
+      showSshKeyPref =
+        pref(PreferenceKeys.SSH_SEE_KEY) {
+          titleRes = R.string.pref_ssh_see_key_title
+          visible = PasswordRepository.isGitRepo() && SshKey.canShowSshPublicKey
+          onClick {
+            ShowSshKeyFragment().show(activity.supportFragmentManager, "public_key")
+            true
+          }
         }
-      }
       pref(PreferenceKeys.CLEAR_SAVED_PASS) {
         fun Preference.updatePref() {
           val sshPass = encryptedPreferences.getString(PreferenceKeys.SSH_KEY_LOCAL_PASSPHRASE)

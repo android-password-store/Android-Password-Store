@@ -64,7 +64,10 @@ class SshKeyGenActivity : AppCompatActivity() {
             setPositiveButton(R.string.ssh_keygen_existing_replace) { _, _ ->
               lifecycleScope.launch { generate() }
             }
-            setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ -> finish() }
+            setNegativeButton(R.string.ssh_keygen_existing_keep) { _, _ ->
+              setResult(RESULT_CANCELED)
+              finish()
+            }
             show()
           }
         } else {
