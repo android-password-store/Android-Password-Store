@@ -7,4 +7,4 @@ plugins {
   `aps-plugin`
 }
 
-allprojects { apply(plugin = "com.diffplug.spotless") }
+allprojects { configureSpotless() }
