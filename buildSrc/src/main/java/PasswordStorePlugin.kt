@@ -18,6 +18,7 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -56,6 +57,9 @@ class PasswordStorePlugin : Plugin<Project> {
         }
         is KotlinPluginWrapper -> {
           project.configureExplicitApi()
+        }
+        is Kapt3GradleSubplugin -> {
+          project.configureKapt()
         }
       }
     }
