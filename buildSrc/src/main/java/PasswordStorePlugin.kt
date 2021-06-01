@@ -7,8 +7,6 @@ import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
-import com.diffplug.gradle.spotless.SpotlessExtension
-import com.diffplug.gradle.spotless.SpotlessPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaLibraryPlugin
@@ -20,6 +18,7 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -53,14 +52,14 @@ class PasswordStorePlugin : Plugin<Project> {
           project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
         }
-        is SpotlessPlugin -> {
-          project.extensions.getByType<SpotlessExtension>().configureSpotless()
-        }
         is SigningPlugin -> {
           project.extensions.getByType<SigningExtension>().configureBuildSigning()
         }
         is KotlinPluginWrapper -> {
           project.configureExplicitApi()
+        }
+        is Kapt3GradleSubplugin -> {
+          project.configureKapt()
         }
       }
     }
