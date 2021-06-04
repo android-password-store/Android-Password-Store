@@ -16,7 +16,7 @@ plugins {
 
 repositories {
   val composeSnapshot = libs.versions.composeSnapshot.get()
-  if (composeSnapshot.isNotEmpty()) {
+  if (composeSnapshot.length > 1) {
     maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/") {
       content {
         includeGroup("androidx.compose.animation")
@@ -78,14 +78,14 @@ dependencies {
   implementation(projects.autofillParser)
   implementation(projects.formatCommon)
   implementation(projects.openpgpKtx)
-  implementation(libs.androidx.activityKtx)
+  implementation(libs.androidx.activity.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.autofill)
   implementation(libs.androidx.biometricKtx)
   implementation(libs.androidx.constraintlayout)
-  implementation(libs.androidx.coreKtx)
+  implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.documentfile)
-  implementation(libs.androidx.fragmentKtx)
+  implementation(libs.androidx.fragment.ktx)
   implementation(libs.bundles.androidxLifecycle)
   implementation(libs.androidx.material)
   implementation(libs.androidx.preference)

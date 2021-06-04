@@ -52,7 +52,7 @@ internal class FormField(
     private val HINTS_OTP =
       listOf(
         HintConstants.AUTOFILL_HINT_SMS_OTP,
-        HintConstants.AUTOFILL_HINT_TFA_APP_OTP,
+        HintConstants.AUTOFILL_HINT_2FA_APP_OTP,
       )
 
     @Suppress("DEPRECATION")
