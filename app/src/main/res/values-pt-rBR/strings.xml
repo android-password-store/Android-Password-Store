@@ -45,6 +45,7 @@
   <string name="clipboard_password_toast_text">Senha copiada para área de transferência, você tem %d segundos para colá-la em algum lugar.</string>
   <string name="clipboard_password_no_clear_toast_text">Senha copiada para área de transferência</string>
   <string name="clipboard_copied_text">Copiado para a área de transferência</string>
+  <string name="clipboard_otp_copied_text">Código OTP copiado para a área de transferência</string>
   <string name="file_toast_text">Por favor, informe um nome de arquivo</string>
   <string name="path_toast_text">Por favor, forneça o caminho do arquivo</string>
   <string name="empty_toast_text">Você não pode usar uma senha vazia ou conteúdo extra vazio</string>
@@ -64,6 +65,7 @@
   <string name="location_hidden">Oculto (preferencial)</string>
   <string name="external_repository_dialog_title">Escolha onde armazenar as senhas</string>
   <string name="external_repository_dialog_text">Você deve selecionar um diretório onde armazenar suas senhas. Se você deseja armazenar suas senhas dentro do armazenamento oculto do aplicativo, cancele esta caixa de diálogo e desative a opção \"Repositório Externo\".</string>
+  <string name="server_name">Servidor</string>
   <string name="server_url">URL do repositório</string>
   <string name="server_branch">Branch</string>
   <string name="connection_mode">Modo de autenticação</string>
@@ -83,10 +85,13 @@
   <!-- DECRYPT Layout -->
   <string name="action_search">Pesquisar</string>
   <string name="password">Senha:</string>
+  <string name="otp">OTP:</string>
+  <string name="extra_content">Conteúdo extra:</string>
   <string name="username">Usuário:</string>
   <string name="edit_password">Editar senha</string>
   <string name="copy_password">Copiar senha</string>
   <string name="share_as_plaintext">Compartilhar como texto</string>
+  <string name="last_changed">Última alteração %s</string>
   <!-- Preferences -->
   <string name="pref_category_repository_title">Repositório</string>
   <string name="pref_edit_git_server_settings">Editar configurações do servidor Git</string>
@@ -190,6 +195,8 @@
   <string name="git_log">Mostrar log de commit</string>
   <string name="show_password_pref_title">Mostrar a senha</string>
   <string name="show_password_pref_summary">Controle a visibilidade das senhas quando descriptografadas. Isso não desativa a cópia para a área de transferência.</string>
+  <string name="show_extra_content_pref_title">Exibir conteúdo extra</string>
+  <string name="show_extra_content_pref_summary">Controlar a visibilidade do conteúdo extra uma vez descriptografado.</string>
   <string name="pwd_generate_button">Gerar</string>
   <string name="refresh_list">Atualizar lista</string>
   <string name="send_plaintext_password_to">Enviar senha como texto simples usando…</string>
