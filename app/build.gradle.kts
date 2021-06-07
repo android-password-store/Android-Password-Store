@@ -125,13 +125,12 @@ dependencies {
   implementation(libs.thirdparty.timberkt)
 
   if (isSnapshot()) {
-    implementation(libs.thirdparty.leakcanary)
     implementation(libs.thirdparty.whatthestack)
   } else {
-    debugImplementation(libs.thirdparty.leakcanary)
     debugImplementation(libs.thirdparty.whatthestack)
   }
 
+  debugImplementation(libs.thirdparty.leakcanary)
   "nonFreeImplementation"(libs.thirdparty.nonfree.googlePlayAuthApiPhone)
 
   androidTestImplementation(libs.bundles.testDependencies)
