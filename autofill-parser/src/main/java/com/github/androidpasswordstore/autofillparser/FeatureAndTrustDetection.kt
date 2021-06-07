@@ -67,6 +67,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
         "u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=",
         "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="
       ),
+    "com.jamal2367.styx" to arrayOf("Lph3oaG1C8WLhLiK5PVxOp5+6wTU9ipJSBYlD2bA3VI="),
     "com.microsoft.emmx" to arrayOf("AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk="),
     "com.opera.mini.native" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),

@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 
 - Removed Bromite from supported Autofill browsers, since they [disable Android autofill](https://github.com/bromite/bromite/blob/master/FAQ.md#does-bromite-support-the-android-autofill-framework).
 
+- Added [Styx](https://github.com/jamal2362/Styx) to supported Autofill browsers.
+
 ### Fixed
 
 - Fix build warning from undeclared unsigned type use.
