@@ -107,6 +107,7 @@ dependencies {
   implementation(libs.compose.ui.viewbinding)
   compileOnly(libs.compose.ui.tooling)
 
+  implementation(libs.aps.gopenpgp)
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
 
