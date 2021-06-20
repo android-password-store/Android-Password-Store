@@ -10,10 +10,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
-import com.proton.Gopenpgp.crypto.Crypto
-import com.proton.Gopenpgp.helper.Helper
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
@@ -36,6 +35,7 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
+  @Inject lateinit var gopenpgpCrypto: GopenpgpCryptoHandler
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
 
   private var passwordEntry: PasswordEntry? = null
@@ -125,13 +125,13 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
   private fun decrypt() =
     lifecycleScope.launch {
       // TODO(msfjarvis): native methods are fallible, add error handling once out of testing
-      val message = withContext(Dispatchers.IO) { Crypto.newPGPMessage(File(fullPath).readBytes()) }
+      val message = withContext(Dispatchers.IO) { File(fullPath).readBytes() }
       val result =
         withContext(Dispatchers.IO) {
-          Helper.decryptBinaryMessageArmored(
+          gopenpgpCrypto.decrypt(
             PRIV_KEY,
             PASS.toByteArray(charset = Charsets.UTF_8),
-            message.armored,
+            message,
           )
         }
       startAutoDismissTimer()

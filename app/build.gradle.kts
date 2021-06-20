@@ -76,6 +76,7 @@ dependencies {
   implementation(libs.androidx.annotation)
   coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.autofillParser)
+  implementation(projects.cryptoPgp)
   implementation(projects.formatCommon)
   implementation(projects.openpgpKtx)
   implementation(libs.androidx.activity.ktx)
@@ -107,7 +108,6 @@ dependencies {
   implementation(libs.compose.ui.viewbinding)
   compileOnly(libs.compose.ui.tooling)
 
-  implementation(libs.aps.gopenpgp)
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
 
