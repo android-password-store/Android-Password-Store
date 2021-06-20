@@ -10,6 +10,8 @@ include(":autofill-parser")
 
 include(":crypto-common")
 
+include(":crypto-pgp")
+
 include(":format-common")
 
 include(":openpgp-ktx")
