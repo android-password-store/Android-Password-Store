@@ -1,0 +1,6 @@
+public final class dev/msfjarvis/aps/data/crypto/GopenpgpCryptoHandler : dev/msfjarvis/aps/data/crypto/CryptoHandler {
+	public fun <init> ()V
+	public fun decrypt (Ljava/lang/String;[B[B)[B
+	public fun encrypt (Ljava/lang/String;[B)Ljava/lang/String;
+}
+
