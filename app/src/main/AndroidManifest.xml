@@ -45,6 +45,10 @@
       android:windowSoftInputMode="adjustResize" />
 
     <activity
+      android:name=".ui.crypto.GopenpgpDecryptActivity"
+      android:exported="true" />
+
+    <activity
       android:name=".ui.main.LaunchActivity"
       android:configChanges="orientation|screenSize"
       android:label="@string/app_name"

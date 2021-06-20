@@ -37,7 +37,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity.Companion.getLongName
-import dev.msfjarvis.aps.ui.crypto.DecryptActivity
+import dev.msfjarvis.aps.ui.crypto.GopenpgpDecryptActivity
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet
 import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
@@ -422,7 +422,7 @@ class PasswordStore : BaseGitActivity() {
     val authDecryptIntent = item.createAuthEnabledIntent(this)
     val decryptIntent =
       (authDecryptIntent.clone() as Intent).setComponent(
-        ComponentName(this, DecryptActivity::class.java)
+        ComponentName(this, GopenpgpDecryptActivity::class.java)
       )
 
     startActivity(decryptIntent)
