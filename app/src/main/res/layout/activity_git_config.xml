@@ -17,7 +17,7 @@
     android:id="@+id/username_input_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:hint="@string/git_user_name_hint"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +35,7 @@
     android:id="@+id/email_input_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:hint="@string/git_user_email"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/username_input_layout">
@@ -52,7 +52,7 @@
     android:id="@+id/save_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:text="@string/crypto_save"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/email_input_layout" />
@@ -62,7 +62,7 @@
     style="@style/TextAppearance.MaterialComponents.Headline5"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:text="@string/git_tools"
     android:textSize="24sp"
     android:textStyle="bold"
@@ -73,7 +73,7 @@
     android:id="@+id/git_head_status"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/git_tools_title"
     tools:text="HEAD status" />
@@ -82,7 +82,7 @@
     android:id="@+id/git_log"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:text="@string/git_log"
     app:layout_constraintTop_toBottomOf="@+id/git_head_status" />
 
@@ -90,7 +90,7 @@
     android:id="@+id/git_abort_rebase"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:text="@string/abort_rebase"
     app:layout_constraintTop_toBottomOf="@+id/git_log" />
 
@@ -98,7 +98,7 @@
     android:id="@+id/git_reset_to_remote"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/normal_margin"
+    android:layout_marginTop="8dp"
     android:text="@string/reset_to_remote"
     app:layout_constraintTop_toBottomOf="@id/git_abort_rebase" />
 
