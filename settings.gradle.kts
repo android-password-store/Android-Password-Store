@@ -8,6 +8,8 @@ include(":app")
 
 include(":autofill-parser")
 
+include(":crypto-common")
+
 include(":format-common")
 
 include(":openpgp-ktx")
