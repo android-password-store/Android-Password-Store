@@ -72,7 +72,7 @@ dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 
 # First-party libraries
-aps-gopenpgp = "com.github.android-password-store:gopenpgp:0.1.0"
+aps-gopenpgp = "com.github.android-password-store:gopenpgp:0.1.1"
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.0"
 
