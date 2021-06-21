@@ -133,6 +133,9 @@
       android:name=".ui.autofill.AutofillDecryptActivity"
       android:theme="@style/NoBackgroundTheme" />
     <activity
+      android:name=".ui.autofill.GopenpgpAutofillDecryptActivity"
+      android:theme="@style/NoBackgroundTheme" />
+    <activity
       android:name=".ui.autofill.AutofillFilterView"
       android:configChanges="orientation|keyboardHidden"
       android:theme="@style/DialogLikeTheme"

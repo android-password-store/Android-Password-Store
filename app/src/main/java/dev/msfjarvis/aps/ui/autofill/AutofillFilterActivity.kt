@@ -220,7 +220,7 @@ class AutofillFilterView : AppCompatActivity() {
       AutofillMatcher.addMatchFor(applicationContext, formOrigin, item.file)
     // intent?.extras? is checked to be non-null in onCreate
     decryptAction.launch(
-      AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
+      GopenpgpAutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
     )
   }
 }

@@ -21,10 +21,10 @@ import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
 import dev.msfjarvis.aps.autofill.oreo.ui.AutofillSmsActivity
-import dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillFilterView
 import dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
+import dev.msfjarvis.aps.ui.autofill.GopenpgpAutofillDecryptActivity
 import java.io.File
 
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
@@ -68,7 +68,7 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
   ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
-    val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
+    val intentSender = GopenpgpAutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
     return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
   }
 

@@ -169,7 +169,7 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
 
   companion object {
     // TODO(msfjarvis): source these from storage and user input
-    private const val PRIV_KEY = ""
-    private const val PASS = ""
+    const val PRIV_KEY = ""
+    const val PASS = ""
   }
 }
