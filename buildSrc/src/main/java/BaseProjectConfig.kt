@@ -33,13 +33,6 @@ internal fun Project.configureForAllProjects() {
   repositories {
     google()
     mavenCentral()
-    @Suppress("DEPRECATION")
-    jcenter {
-      content {
-        // https://github.com/zhanghai/AndroidFastScroll/issues/35
-        includeModule("me.zhanghai.android.fastscroll", "library")
-      }
-    }
     maven("https://jitpack.io") {
       name = "JitPack"
       content {

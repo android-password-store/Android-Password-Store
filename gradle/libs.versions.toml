@@ -1,13 +1,13 @@
 # Centralized versions for dependencies that share versions
 [versions]
-androidx_activity = "1.3.0-beta01"
-androidx_test = "1.4.0-beta02"
-compose = "1.0.0-beta08"
+androidx_activity = "1.3.0-beta02"
+androidx_test = "1.4.0-rc01"
+compose = "1.0.0-beta09"
 composeSnapshot = "-"
 coroutines = "1.5.0"
 hilt = "2.37"
 kotlin = "1.5.10"
-lifecycle = "2.4.0-alpha01"
+lifecycle = "2.4.0-alpha02"
 
 [libraries]
 # buildSrc dependencies
@@ -35,10 +35,10 @@ androidx-autofill = "androidx.autofill:autofill:1.2.0-alpha02"
 androidx-appcompat = "androidx.appcompat:appcompat:1.3.0"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0-beta02"
-androidx-core-ktx = "androidx.core:core-ktx:1.6.0-beta02"
+androidx-core-ktx = "androidx.core:core-ktx:1.6.0-rc01"
 androidx-documentfile = "androidx.documentfile:documentfile:1.0.1"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-alpha02"
-androidx-hilt-compose = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha02"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-alpha03"
+androidx-hilt-compose = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref="lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref="lifecycle" }
 androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref="lifecycle" }
@@ -80,7 +80,7 @@ aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embe
 thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.69"
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
-thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.5"
+thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.7"
 thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
 thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.12"
 thirdparty-leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
