@@ -49,6 +49,6 @@ dependencies {
   implementation("com.vdurmont:semver4j:3.1.0")
   implementation("de.undercouch:gradle-download-task:4.1.1")
   implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.32")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
   implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.5.0")
 }
