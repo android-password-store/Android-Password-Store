@@ -362,4 +362,5 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="otp_import_manual_hint_secret">Segredo</string>
   <string name="otp_import_manual_hint_account">Conta</string>
   <string name="gpg_key_select_mandatory">É preciso elexir unha chave GPG para continuar</string>
+  <string name="place_shortcut_on_home_screen">Crear atallo na pantalla de inicio</string>
 </resources>

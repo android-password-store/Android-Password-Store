@@ -361,4 +361,5 @@
   <string name="otp_import_manual_hint_secret">Segredo</string>
   <string name="otp_import_manual_hint_account">Conta</string>
   <string name="gpg_key_select_mandatory">A seleção de uma chave GPG é necessária para prosseguir</string>
+  <string name="place_shortcut_on_home_screen">Criar atalho na tela inicial</string>
 </resources>
