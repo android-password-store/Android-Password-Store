@@ -20,7 +20,15 @@ public class GopenpgpCryptoHandler @Inject constructor() : CryptoHandler {
     passphrase: ByteArray,
     ciphertext: ByteArray,
   ): ByteArray {
-    val message = Crypto.newPGPMessage(ciphertext)
+    // Decode the incoming cipher into a string and try to guess if it's armored.
+    val cipherString = ciphertext.decodeToString()
+    val isArmor = cipherString.startsWith("-----BEGIN PGP MESSAGE-----")
+    val message =
+      if (isArmor) {
+        Crypto.newPGPMessageFromArmored(cipherString)
+      } else {
+        Crypto.newPGPMessage(ciphertext)
+      }
     return Helper.decryptBinaryMessageArmored(
       privateKey,
       passphrase,
