@@ -23,7 +23,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
-import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
+import dev.msfjarvis.aps.data.crypto.CryptoHandler
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.crypto.GopenpgpDecryptActivity
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
@@ -71,7 +71,7 @@ class GopenpgpAutofillDecryptActivity : AppCompatActivity() {
   }
 
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
-  @Inject lateinit var gopenpgpCrypto: GopenpgpCryptoHandler
+  @Inject lateinit var cryptos: Set<@JvmSuppressWildcards CryptoHandler>
 
   private lateinit var directoryStructure: DirectoryStructure
 
@@ -126,8 +126,9 @@ class GopenpgpAutofillDecryptActivity : AppCompatActivity() {
       }
       .onSuccess { encryptedInput ->
         runCatching {
+          val crypto = cryptos.first { it.canHandle(file.absolutePath) }
           withContext(Dispatchers.IO) {
-            gopenpgpCrypto.decrypt(
+            crypto.decrypt(
               GopenpgpDecryptActivity.PRIV_KEY,
               GopenpgpDecryptActivity.PASS.toByteArray(charset = Charsets.UTF_8),
               encryptedInput.readBytes()

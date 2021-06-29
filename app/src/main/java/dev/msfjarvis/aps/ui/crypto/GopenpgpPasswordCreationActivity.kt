@@ -27,7 +27,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
+import dev.msfjarvis.aps.data.crypto.CryptoHandler
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
@@ -55,7 +55,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
-  @Inject lateinit var gopenpgpCrypto: GopenpgpCryptoHandler
+  @Inject lateinit var cryptos: Set<@JvmSuppressWildcards CryptoHandler>
 
   private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
   private val suggestedPass by unsafeLazy { intent.getStringExtra(EXTRA_PASSWORD) }
@@ -314,10 +314,9 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
 
       lifecycleScope.launch(Dispatchers.Main) {
         runCatching {
+          val crypto = cryptos.first { it.canHandle(path) }
           val result =
-            withContext(Dispatchers.IO) {
-              gopenpgpCrypto.encrypt(PUB_KEY, content.encodeToByteArray())
-            }
+            withContext(Dispatchers.IO) { crypto.encrypt(PUB_KEY, content.encodeToByteArray()) }
           val file = File(path)
           // If we're not editing, this file should not already exist!
           // Additionally, if we were editing and the incoming and outgoing

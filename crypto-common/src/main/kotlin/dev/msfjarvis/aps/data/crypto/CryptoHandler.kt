@@ -19,4 +19,7 @@ public interface CryptoHandler {
    * as a [ByteArray]
    */
   public fun encrypt(publicKey: String, plaintext: ByteArray): ByteArray
+
+  /** Given a [fileName], return whether this instance can handle it. */
+  public fun canHandle(fileName: String): Boolean
 }
