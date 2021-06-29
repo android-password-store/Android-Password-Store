@@ -36,8 +36,8 @@ public class GopenpgpCryptoHandler @Inject constructor() : CryptoHandler {
     )
   }
 
-  override fun encrypt(publicKey: String, plaintext: ByteArray): String {
-    return Helper.encryptBinaryMessageArmored(
+  override fun encrypt(publicKey: String, plaintext: ByteArray): ByteArray {
+    return Helper.encryptBinaryMessage(
       publicKey,
       plaintext,
     )

@@ -16,7 +16,7 @@ public interface CryptoHandler {
 
   /**
    * Encrypt the given [plaintext] to the provided [publicKey], returning the encrypted ciphertext
-   * as a [String]
+   * as a [ByteArray]
    */
-  public fun encrypt(publicKey: String, plaintext: ByteArray): String
+  public fun encrypt(publicKey: String, plaintext: ByteArray): ByteArray
 }
