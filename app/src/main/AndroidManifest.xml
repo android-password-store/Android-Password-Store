@@ -95,6 +95,10 @@
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
+    <activity android:name=".ui.crypto.GopenpgpPasswordCreationActivity"
+      android:label="@string/new_password_title"
+      android:windowSoftInputMode="adjustResize" />
+
     <activity
       android:name=".ui.crypto.DecryptActivity"
       android:windowSoftInputMode="adjustResize" />
