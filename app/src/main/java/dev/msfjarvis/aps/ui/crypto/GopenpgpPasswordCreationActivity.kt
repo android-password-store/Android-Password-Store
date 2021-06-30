@@ -27,8 +27,8 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.data.crypto.CryptoHandler
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
+import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
@@ -55,7 +55,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
-  @Inject lateinit var cryptos: Set<@JvmSuppressWildcards CryptoHandler>
+  @Inject lateinit var cryptos: CryptoSet
 
   private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
   private val suggestedPass by unsafeLazy { intent.getStringExtra(EXTRA_PASSWORD) }

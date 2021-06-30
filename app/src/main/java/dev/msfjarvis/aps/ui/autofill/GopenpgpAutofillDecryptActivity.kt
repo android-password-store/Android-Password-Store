@@ -23,7 +23,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
-import dev.msfjarvis.aps.data.crypto.CryptoHandler
+import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.crypto.GopenpgpDecryptActivity
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
@@ -71,7 +71,7 @@ class GopenpgpAutofillDecryptActivity : AppCompatActivity() {
   }
 
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
-  @Inject lateinit var cryptos: Set<@JvmSuppressWildcards CryptoHandler>
+  @Inject lateinit var cryptos: CryptoSet
 
   private lateinit var directoryStructure: DirectoryStructure
 

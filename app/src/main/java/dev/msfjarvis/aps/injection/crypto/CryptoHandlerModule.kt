@@ -26,3 +26,6 @@ object CryptoHandlerModule {
     return GopenpgpCryptoHandler()
   }
 }
+
+/** Typealias for a [Set] of [CryptoHandler] instances injected by Dagger. */
+typealias CryptoSet = Set<@JvmSuppressWildcards CryptoHandler>
