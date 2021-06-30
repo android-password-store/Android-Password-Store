@@ -122,7 +122,7 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
     )
   }
 
-  private fun decrypt() =
+  private fun decrypt() {
     lifecycleScope.launch {
       // TODO(msfjarvis): native methods are fallible, add error handling once out of testing
       val message = withContext(Dispatchers.IO) { File(fullPath).readBytes() }
@@ -167,6 +167,7 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
       binding.recyclerView.adapter = adapter
       adapter.updateItems(items)
     }
+  }
 
   companion object {
     // TODO(msfjarvis): source these from storage and user input
