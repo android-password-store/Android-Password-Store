@@ -21,9 +21,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  */
 internal fun Project.configureForRootProject() {
   tasks.withType<Wrapper> {
-    gradleVersion = "7.0.2"
+    gradleVersion = "7.1.1"
     distributionType = Wrapper.DistributionType.ALL
-    distributionSha256Sum = "13bf8d3cf8eeeb5770d19741a59bde9bd966dd78d17f1bbad787a05ef19d1c2d"
+    distributionSha256Sum = "9bb8bc05f562f2d42bdf1ba8db62f6b6fa1c3bf6c392228802cc7cb0578fe7e0"
   }
   configureBinaryCompatibilityValidator()
 }
