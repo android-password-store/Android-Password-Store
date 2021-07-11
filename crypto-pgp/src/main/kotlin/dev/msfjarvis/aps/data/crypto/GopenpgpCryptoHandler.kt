@@ -44,7 +44,6 @@ public class GopenpgpCryptoHandler @Inject constructor() : CryptoHandler {
   }
 
   override fun canHandle(fileName: String): Boolean {
-    println("Checking in " + javaClass.simpleName)
     return fileName.split('.').last() == "gpg"
   }
 }

@@ -5,7 +5,7 @@
 
 package dev.msfjarvis.aps.data.crypto
 
-/** Generic interface to implement cryptographic operations on top of. Naming is up for debate. */
+/** Generic interface to implement cryptographic operations on top of. */
 public interface CryptoHandler {
 
   /**
