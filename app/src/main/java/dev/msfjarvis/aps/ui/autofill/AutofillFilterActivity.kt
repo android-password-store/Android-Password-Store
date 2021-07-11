@@ -29,6 +29,7 @@ import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.databinding.ActivityOreoAutofillFilterBinding
+import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
@@ -220,7 +221,11 @@ class AutofillFilterView : AppCompatActivity() {
       AutofillMatcher.addMatchFor(applicationContext, formOrigin, item.file)
     // intent?.extras? is checked to be non-null in onCreate
     decryptAction.launch(
-      AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
+      if (FeatureFlags.ENABLE_GOPENPGP) {
+        GopenpgpAutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
+      } else {
+        AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
+      }
     )
   }
 }

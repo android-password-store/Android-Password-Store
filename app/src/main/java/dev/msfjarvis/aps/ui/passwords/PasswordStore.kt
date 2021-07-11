@@ -38,6 +38,7 @@ import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity.Companion.getLongName
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
+import dev.msfjarvis.aps.ui.crypto.GopenpgpDecryptActivity
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet
 import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
@@ -46,6 +47,7 @@ import dev.msfjarvis.aps.ui.git.base.BaseGitActivity
 import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
 import dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity
 import dev.msfjarvis.aps.ui.settings.SettingsActivity
+import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
@@ -422,7 +424,14 @@ class PasswordStore : BaseGitActivity() {
     val authDecryptIntent = item.createAuthEnabledIntent(this)
     val decryptIntent =
       (authDecryptIntent.clone() as Intent).setComponent(
-        ComponentName(this, DecryptActivity::class.java)
+        ComponentName(
+          this,
+          if (FeatureFlags.ENABLE_GOPENPGP) {
+            GopenpgpDecryptActivity::class.java
+          } else {
+            DecryptActivity::class.java
+          }
+        )
       )
 
     startActivity(decryptIntent)

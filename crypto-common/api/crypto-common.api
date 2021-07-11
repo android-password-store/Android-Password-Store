@@ -1,0 +1,6 @@
+public abstract interface class dev/msfjarvis/aps/data/crypto/CryptoHandler {
+	public abstract fun canHandle (Ljava/lang/String;)Z
+	public abstract fun decrypt (Ljava/lang/String;[B[B)[B
+	public abstract fun encrypt (Ljava/lang/String;[B)[B
+}
+

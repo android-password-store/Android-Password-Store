@@ -25,6 +25,8 @@ import dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillFilterView
 import dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
+import dev.msfjarvis.aps.ui.autofill.GopenpgpAutofillDecryptActivity
+import dev.msfjarvis.aps.util.FeatureFlags
 import java.io.File
 
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
@@ -68,7 +70,12 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
   ): Dataset? {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
-    val intentSender = AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
+    val intentSender =
+      if (FeatureFlags.ENABLE_GOPENPGP) {
+        GopenpgpAutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
+      } else {
+        AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
+      }
     return makeIntentDataset(context, AutofillAction.Match, intentSender, metadata, imeSpec)
   }
 
