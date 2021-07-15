@@ -14,6 +14,7 @@ plugins {
   `crowdin-plugin`
 }
 
+/*
 repositories {
   val composeSnapshot = libs.versions.composeSnapshot.get()
   if (composeSnapshot.length > 1) {
@@ -29,6 +30,7 @@ repositories {
     }
   }
 }
+*/
 
 configure<CrowdinExtension> { projectName = "android-password-store" }
 
@@ -47,7 +49,7 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
-  buildFeatures.compose = true
+  // buildFeatures.compose = true
 
   lintOptions {
     isAbortOnError = true
@@ -99,14 +101,14 @@ dependencies {
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
 
-  implementation(libs.androidx.activity.compose)
-  implementation(libs.androidx.hilt.compose)
-  implementation(libs.compose.foundation.core)
-  implementation(libs.compose.foundation.layout)
-  implementation(libs.compose.material)
-  implementation(libs.compose.ui.core)
-  implementation(libs.compose.ui.viewbinding)
-  compileOnly(libs.compose.ui.tooling)
+  // implementation(libs.androidx.activity.compose)
+  // implementation(libs.androidx.hilt.compose)
+  // implementation(libs.compose.foundation.core)
+  // implementation(libs.compose.foundation.layout)
+  // implementation(libs.compose.material)
+  // implementation(libs.compose.ui.core)
+  // implementation(libs.compose.ui.viewbinding)
+  // compileOnly(libs.compose.ui.tooling)
 
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
