@@ -35,6 +35,10 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
     return getQueryParameter(content, "algorithm") ?: "sha1"
   }
 
+  override fun findIssuer(content: String): String? {
+    return getQueryParameter(content, "issuer") ?: Uri.parse(content).authority
+  }
+
   private fun getQueryParameter(content: String, parameterName: String): String? {
     content.split("\n".toRegex()).forEach { line ->
       val uri = Uri.parse(line)

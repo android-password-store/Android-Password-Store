@@ -20,6 +20,9 @@ public interface TotpFinder {
   /** Get the algorithm for the TOTP secret. */
   public fun findAlgorithm(content: String): String
 
+  /** Get the issuer for the TOTP secret, if any. */
+  public fun findIssuer(content: String): String?
+
   public companion object {
     public val TOTP_FIELDS: Array<String> = arrayOf("otpauth://totp", "totp:")
   }

@@ -21,6 +21,7 @@ public abstract interface class dev/msfjarvis/aps/util/totp/TotpFinder {
 	public static final field Companion Ldev/msfjarvis/aps/util/totp/TotpFinder$Companion;
 	public abstract fun findAlgorithm (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun findDigits (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun findIssuer (Ljava/lang/String;)Ljava/lang/String;
 	public abstract fun findPeriod (Ljava/lang/String;)J
 	public abstract fun findSecret (Ljava/lang/String;)Ljava/lang/String;
 }
