@@ -24,32 +24,25 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
   }
 
   override fun findDigits(content: String): String {
-    content.split("\n".toRegex()).forEach { line ->
-      if (line.startsWith(TOTP_FIELDS[0]) && Uri.parse(line).getQueryParameter("digits") != null) {
-        return Uri.parse(line).getQueryParameter("digits")!!
-      }
-    }
-    return "6"
+    return getQueryParameter(content, "digits") ?: "6"
   }
 
   override fun findPeriod(content: String): Long {
-    content.split("\n".toRegex()).forEach { line ->
-      if (line.startsWith(TOTP_FIELDS[0]) && Uri.parse(line).getQueryParameter("period") != null) {
-        val period = Uri.parse(line).getQueryParameter("period")!!.toLongOrNull()
-        if (period != null && period > 0) return period
-      }
-    }
-    return 30
+    return getQueryParameter(content, "period")?.toLongOrNull() ?: 30
   }
 
   override fun findAlgorithm(content: String): String {
+    return getQueryParameter(content, "algorithm") ?: "sha1"
+  }
+
+  private fun getQueryParameter(content: String, parameterName: String): String? {
     content.split("\n".toRegex()).forEach { line ->
-      if (line.startsWith(TOTP_FIELDS[0]) && Uri.parse(line).getQueryParameter("algorithm") != null
-      ) {
-        return Uri.parse(line).getQueryParameter("algorithm")!!
+      val uri = Uri.parse(line)
+      if (line.startsWith(TOTP_FIELDS[0]) && uri.getQueryParameter(parameterName) != null) {
+        return uri.getQueryParameter(parameterName)
       }
     }
-    return "sha1"
+    return null
   }
 
   companion object {
