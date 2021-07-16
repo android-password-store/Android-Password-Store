@@ -68,10 +68,7 @@ constructor(
    * and usernames stripped.
    */
   public val extraContentWithoutAuthData: String
-  private val digits: String
   private val totpSecret: String?
-  private val totpPeriod: Long
-  private val totpAlgorithm: String
 
   init {
     val (foundPassword, passContent) = findAndStripPassword(content.split("\n".toRegex()))
@@ -80,17 +77,18 @@ constructor(
     extraContentWithoutAuthData = generateExtraContentWithoutAuthData()
     extraContent = generateExtraContentPairs()
     username = findUsername()
-    digits = totpFinder.findDigits(content)
     totpSecret = totpFinder.findSecret(content)
-    totpPeriod = totpFinder.findPeriod(content)
-    totpAlgorithm = totpFinder.findAlgorithm(content)
     if (totpSecret != null) {
       scope.launch {
-        updateTotp(clock.millis())
+        val digits = totpFinder.findDigits(content)
+        val totpPeriod = totpFinder.findPeriod(content)
+        val totpAlgorithm = totpFinder.findAlgorithm(content)
+        val issuer = totpFinder.findIssuer(content)
         val remainingTime = totpPeriod - (clock.millis() % totpPeriod)
+        updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits, issuer)
         delay(Duration.seconds(remainingTime))
         repeat(Int.MAX_VALUE) {
-          updateTotp(clock.millis())
+          updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits, issuer)
           delay(Duration.seconds(totpPeriod))
         }
       }
@@ -186,9 +184,15 @@ constructor(
     return null
   }
 
-  private fun updateTotp(millis: Long) {
+  private fun updateTotp(
+    millis: Long,
+    totpPeriod: Long,
+    totpAlgorithm: String,
+    digits: String,
+    issuer: String?,
+  ) {
     if (totpSecret != null) {
-      Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits)
+      Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
         .mapBoth({ code -> _totp.value = code }, { throwable -> throw throwable })
     }
   }

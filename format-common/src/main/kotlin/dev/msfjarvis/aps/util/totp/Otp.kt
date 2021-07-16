@@ -23,8 +23,13 @@ internal object Otp {
     check(STEAM_ALPHABET.size == 26)
   }
 
-  fun calculateCode(secret: String, counter: Long, algorithm: String, digits: String) =
-      runCatching {
+  fun calculateCode(
+    secret: String,
+    counter: Long,
+    algorithm: String,
+    digits: String,
+    issuer: String?,
+  ) = runCatching {
     val algo = "Hmac${algorithm.uppercase(Locale.ROOT)}"
     val decodedSecret = BASE_32.decode(secret)
     val secretKey = SecretKeySpec(decodedSecret, algo)
@@ -40,8 +45,9 @@ internal object Otp {
     code[0] = (0x7f and code[0].toInt()).toByte()
     val codeInt = ByteBuffer.wrap(code).int
     check(codeInt > 0)
-    if (digits == "s") {
-      // Steam
+    // SteamGuard is a horrible OTP implementation that generates non-standard 5 digit OTPs as well
+    // as uses a custom character set.
+    if (digits == "s" || issuer == "Steam") {
       var remainingCodeInt = codeInt
       buildString {
         repeat(5) {

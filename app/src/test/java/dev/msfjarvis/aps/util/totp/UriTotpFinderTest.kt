@@ -45,6 +45,12 @@ class UriTotpFinderTest {
     assertEquals("SHA256", totpFinder.findAlgorithm(PASS_FILE_CONTENT))
   }
 
+  @Test
+  fun findIssuer() {
+    assertEquals("ACME Co", totpFinder.findIssuer(TOTP_URI))
+    assertEquals("ACME Co", totpFinder.findIssuer(PASS_FILE_CONTENT))
+  }
+
   companion object {
 
     const val TOTP_URI =
