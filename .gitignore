@@ -104,6 +104,7 @@ obj/
 .idea/assetWizardSettings.xml
 .idea/gradle.xml
 .idea/jarRepositories.xml
+.idea/runConfigurations.xml
 
 # OS-specific files
 .DS_Store
