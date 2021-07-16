@@ -83,11 +83,12 @@ constructor(
         val digits = totpFinder.findDigits(content)
         val totpPeriod = totpFinder.findPeriod(content)
         val totpAlgorithm = totpFinder.findAlgorithm(content)
+        val issuer = totpFinder.findIssuer(content)
         val remainingTime = totpPeriod - (clock.millis() % totpPeriod)
-        updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits)
+        updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits, issuer)
         delay(Duration.seconds(remainingTime))
         repeat(Int.MAX_VALUE) {
-          updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits)
+          updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits, issuer)
           delay(Duration.seconds(totpPeriod))
         }
       }
@@ -183,9 +184,15 @@ constructor(
     return null
   }
 
-  private fun updateTotp(millis: Long, totpPeriod: Long, totpAlgorithm: String, digits: String) {
+  private fun updateTotp(
+    millis: Long,
+    totpPeriod: Long,
+    totpAlgorithm: String,
+    digits: String,
+    issuer: String?,
+  ) {
     if (totpSecret != null) {
-      Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits)
+      Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
         .mapBoth({ code -> _totp.value = code }, { throwable -> throw throwable })
     }
   }
