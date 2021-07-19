@@ -13,19 +13,35 @@ import org.junit.Test
 
 internal class OtpTest {
 
+  private fun generateOtp(
+    counter: Long,
+    secret: String = "JBSWY3DPEHPK3PXP",
+    algorithm: String = "SHA1",
+    digits: String = "6",
+    issuer: String? = null,
+  ): String? {
+    return Otp.calculateCode(secret, counter, algorithm, digits, issuer).get()
+  }
+
   @Test
   fun testOtpGeneration6Digits() {
     assertEquals(
       "953550",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333298159 / (1000 * 30), "SHA1", "6").get()
+      generateOtp(
+        counter = 1593333298159 / (1000 * 30),
+      )
     )
     assertEquals(
       "275379",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333571918 / (1000 * 30), "SHA1", "6").get()
+      generateOtp(
+        counter = 1593333571918 / (1000 * 30),
+      )
     )
     assertEquals(
       "867507",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333600517 / (1000 * 57), "SHA1", "6").get()
+      generateOtp(
+        counter = 1593333600517 / (1000 * 57),
+      )
     )
   }
 
@@ -33,36 +49,79 @@ internal class OtpTest {
   fun testOtpGeneration10Digits() {
     assertEquals(
       "0740900914",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333655044 / (1000 * 30), "SHA1", "10").get()
+      generateOtp(
+        counter = 1593333655044 / (1000 * 30),
+        digits = "10",
+      )
     )
     assertEquals(
       "0070632029",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333691405 / (1000 * 30), "SHA1", "10").get()
+      generateOtp(
+        counter = 1593333691405 / (1000 * 30),
+        digits = "10",
+      )
     )
     assertEquals(
       "1017265882",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333728893 / (1000 * 83), "SHA1", "10").get()
+      generateOtp(
+        counter = 1593333728893 / (1000 * 83),
+        digits = "10",
+      )
     )
   }
 
   @Test
   fun testOtpGenerationIllegalInput() {
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA0", "10").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "a").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "5").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "11").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAB", 10000, "SHA1", "6").get())
+    assertNull(
+      generateOtp(
+        counter = 10000,
+        algorithm = "SHA0",
+        digits = "10",
+      )
+    )
+    assertNull(
+      generateOtp(
+        counter = 10000,
+        digits = "a",
+      )
+    )
+    assertNull(
+      generateOtp(
+        counter = 10000,
+        algorithm = "SHA1",
+        digits = "5",
+      )
+    )
+    assertNull(
+      generateOtp(
+        counter = 10000,
+        digits = "11",
+      )
+    )
+    assertNull(
+      generateOtp(
+        counter = 10000,
+        secret = "JBSWY3DPEHPK3PXPAAAAB",
+        digits = "6",
+      )
+    )
   }
 
   @Test
   fun testOtpGenerationUnusualSecrets() {
     assertEquals(
       "127764",
-      Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAAAAA", 1593367111963 / (1000 * 30), "SHA1", "6").get()
+      generateOtp(
+        counter = 1593367111963 / (1000 * 30),
+        secret = "JBSWY3DPEHPK3PXPAAAAAAAA",
+      )
     )
     assertEquals(
       "047515",
-      Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAA", 1593367171420 / (1000 * 30), "SHA1", "6").get()
+      generateOtp(
+        counter = 1593367171420 / (1000 * 30),
+        secret = "JBSWY3DPEHPK3PXPAAAAA",
+      )
     )
   }
 
@@ -72,21 +131,16 @@ internal class OtpTest {
     // We don't care for the resultant OTP's actual value, we just want both the padded and
     // unpadded variant to generate the same one.
     val unpaddedOtp =
-      Otp.calculateCode(
-          "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA",
-          1593367171420 / (1000 * 30),
-          "SHA1",
-          "6"
-        )
-        .get()
+      generateOtp(
+        counter = 1593367171420 / (1000 * 30),
+        secret = "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA",
+      )
     val paddedOtp =
-      Otp.calculateCode(
-          "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA====",
-          1593367171420 / (1000 * 30),
-          "SHA1",
-          "6"
-        )
-        .get()
+      generateOtp(
+        1593367171420 / (1000 * 30),
+        secret = "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA====",
+      )
+
     assertNotNull(unpaddedOtp)
     assertNotNull(paddedOtp)
     assertEquals(unpaddedOtp, paddedOtp)
