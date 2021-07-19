@@ -43,6 +43,7 @@ class PasswordStorePlugin : Plugin<Project> {
         is LibraryPlugin -> {
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
           project.configureExplicitApi()
+          project.configureSlimTests()
         }
         is AppPlugin -> {
           project
@@ -51,6 +52,7 @@ class PasswordStorePlugin : Plugin<Project> {
             .configureAndroidApplicationOptions(project)
           project.extensions.getByType<BaseAppModuleExtension>().configureBuildSigning(project)
           project.extensions.getByType<TestedExtension>().configureCommonAndroidOptions()
+          project.configureSlimTests()
         }
         is SigningPlugin -> {
           project.extensions.getByType<SigningExtension>().configureBuildSigning()
