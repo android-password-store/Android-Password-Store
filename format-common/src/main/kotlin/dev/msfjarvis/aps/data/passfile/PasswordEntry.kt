@@ -122,8 +122,7 @@ constructor(
             foundUsername = true
             false
           }
-          line.startsWith("otpauth://", ignoreCase = true) ||
-            line.startsWith("totp:", ignoreCase = true) -> {
+          TotpFinder.TOTP_FIELDS.any { prefix -> line.startsWith(prefix, ignoreCase = true) } -> {
             false
           }
           else -> {
