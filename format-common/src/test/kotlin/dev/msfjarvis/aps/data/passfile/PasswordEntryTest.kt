@@ -186,6 +186,9 @@ internal class PasswordEntryTest {
         override fun findAlgorithm(content: String): String {
           return "SHA1"
         }
+        override fun findIssuer(content: String): String {
+          return "ACME Co"
+        }
       }
   }
 }

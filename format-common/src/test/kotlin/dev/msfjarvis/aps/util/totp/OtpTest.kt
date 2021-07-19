@@ -17,15 +17,36 @@ internal class OtpTest {
   fun testOtpGeneration6Digits() {
     assertEquals(
       "953550",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333298159 / (1000 * 30), "SHA1", "6").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          1593333298159 / (1000 * 30),
+          "SHA1",
+          "6",
+          null,
+        )
+        .get()
     )
     assertEquals(
       "275379",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333571918 / (1000 * 30), "SHA1", "6").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          1593333571918 / (1000 * 30),
+          "SHA1",
+          "6",
+          null,
+        )
+        .get()
     )
     assertEquals(
       "867507",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333600517 / (1000 * 57), "SHA1", "6").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          1593333600517 / (1000 * 57),
+          "SHA1",
+          "6",
+          null,
+        )
+        .get()
     )
   }
 
@@ -33,36 +54,116 @@ internal class OtpTest {
   fun testOtpGeneration10Digits() {
     assertEquals(
       "0740900914",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333655044 / (1000 * 30), "SHA1", "10").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          1593333655044 / (1000 * 30),
+          "SHA1",
+          "10",
+          null,
+        )
+        .get()
     )
     assertEquals(
       "0070632029",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333691405 / (1000 * 30), "SHA1", "10").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          1593333691405 / (1000 * 30),
+          "SHA1",
+          "10",
+          null,
+        )
+        .get()
     )
     assertEquals(
       "1017265882",
-      Otp.calculateCode("JBSWY3DPEHPK3PXP", 1593333728893 / (1000 * 83), "SHA1", "10").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          1593333728893 / (1000 * 83),
+          "SHA1",
+          "10",
+          null,
+        )
+        .get()
     )
   }
 
   @Test
   fun testOtpGenerationIllegalInput() {
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA0", "10").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "a").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "5").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXP", 10000, "SHA1", "11").get())
-    assertNull(Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAB", 10000, "SHA1", "6").get())
+    assertNull(
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          10000,
+          "SHA0",
+          "10",
+          null,
+        )
+        .get()
+    )
+    assertNull(
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          10000,
+          "SHA1",
+          "a",
+          null,
+        )
+        .get()
+    )
+    assertNull(
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          10000,
+          "SHA1",
+          "5",
+          null,
+        )
+        .get()
+    )
+    assertNull(
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXP",
+          10000,
+          "SHA1",
+          "11",
+          null,
+        )
+        .get()
+    )
+    assertNull(
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXPAAAAB",
+          10000,
+          "SHA1",
+          "6",
+          null,
+        )
+        .get()
+    )
   }
 
   @Test
   fun testOtpGenerationUnusualSecrets() {
     assertEquals(
       "127764",
-      Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAAAAA", 1593367111963 / (1000 * 30), "SHA1", "6").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXPAAAAAAAA",
+          1593367111963 / (1000 * 30),
+          "SHA1",
+          "6",
+          null,
+        )
+        .get()
     )
     assertEquals(
       "047515",
-      Otp.calculateCode("JBSWY3DPEHPK3PXPAAAAA", 1593367171420 / (1000 * 30), "SHA1", "6").get()
+      Otp.calculateCode(
+          "JBSWY3DPEHPK3PXPAAAAA",
+          1593367171420 / (1000 * 30),
+          "SHA1",
+          "6",
+          null,
+        )
+        .get()
     )
   }
 
@@ -76,7 +177,8 @@ internal class OtpTest {
           "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA",
           1593367171420 / (1000 * 30),
           "SHA1",
-          "6"
+          "6",
+          null,
         )
         .get()
     val paddedOtp =
@@ -84,7 +186,8 @@ internal class OtpTest {
           "ON2HE2LOM4QHO2LUNAQHG33NMUQHAYLEMRUW4ZZANZSWKZDFMQFA====",
           1593367171420 / (1000 * 30),
           "SHA1",
-          "6"
+          "6",
+          null,
         )
         .get()
     assertNotNull(unpaddedOtp)
