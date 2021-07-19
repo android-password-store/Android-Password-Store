@@ -13,10 +13,10 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
 
   override fun findSecret(content: String): String? {
     content.split("\n".toRegex()).forEach { line ->
-      if (line.startsWith(TOTP_FIELDS[0])) {
+      if (line.startsWith(TotpFinder.TOTP_FIELDS[0])) {
         return Uri.parse(line).getQueryParameter("secret")
       }
-      if (line.startsWith(TOTP_FIELDS[1], ignoreCase = true)) {
+      if (line.startsWith(TotpFinder.TOTP_FIELDS[1], ignoreCase = true)) {
         return line.split(": *".toRegex(), 2).toTypedArray()[1]
       }
     }
@@ -42,15 +42,11 @@ class UriTotpFinder @Inject constructor() : TotpFinder {
   private fun getQueryParameter(content: String, parameterName: String): String? {
     content.split("\n".toRegex()).forEach { line ->
       val uri = Uri.parse(line)
-      if (line.startsWith(TOTP_FIELDS[0]) && uri.getQueryParameter(parameterName) != null) {
+      if (line.startsWith(TotpFinder.TOTP_FIELDS[0]) && uri.getQueryParameter(parameterName) != null
+      ) {
         return uri.getQueryParameter(parameterName)
       }
     }
     return null
-  }
-
-  companion object {
-
-    val TOTP_FIELDS = arrayOf("otpauth://totp", "totp:")
   }
 }
