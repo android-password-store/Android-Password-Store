@@ -51,9 +51,10 @@ internal fun Project.configureForAllProjects() {
       languageVersion = "1.5"
     }
   }
-  tasks.withType<Test> {
+  tasks.withType<Test>().configureEach {
     maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
     testLogging { events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED) }
+    outputs.upToDateWhen { false }
   }
 }
 
