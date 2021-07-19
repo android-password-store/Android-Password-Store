@@ -13,6 +13,7 @@ import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType
+import org.gradle.language.nativeplatform.internal.BuildType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
@@ -79,13 +80,19 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
     buildConfig = true
   }
 
+  flavorDimensions(FlavorDimensions.FREE)
+  productFlavors {
+    create(ProductFlavors.FREE) {}
+    create(ProductFlavors.NON_FREE) {}
+  }
+
   buildTypes {
-    named("release") {
+    named(BuildType.RELEASE.name) {
       isMinifyEnabled = !minifySwitch.isPresent
       setProguardFiles(listOf("proguard-android-optimize.txt", "proguard-rules.pro"))
       buildConfigField("boolean", "ENABLE_DEBUG_FEATURES", "${project.isSnapshot()}")
     }
-    named("debug") {
+    named(BuildType.DEBUG.name) {
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-debug"
       isMinifyEnabled = false
@@ -121,5 +128,8 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
     targetCompatibility = JavaVersion.VERSION_1_8
   }
 
-  testOptions.animationsDisabled = true
+  testOptions {
+    animationsDisabled = true
+    unitTests.isReturnDefaultValues = true
+  }
 }

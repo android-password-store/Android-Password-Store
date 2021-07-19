@@ -60,17 +60,10 @@ android {
     disable("CoroutineCreationDuringComposition")
   }
 
-  flavorDimensions("free")
-  productFlavors {
-    create("free") {}
-    create("nonFree") {}
-  }
-  testOptions { unitTests.isReturnDefaultValues = true }
-
-  composeOptions {
-    kotlinCompilerVersion = libs.versions.kotlin.get()
-    kotlinCompilerExtensionVersion = libs.versions.compose.get()
-  }
+  //  composeOptions {
+  //    kotlinCompilerVersion = libs.versions.kotlin.get()
+  //    kotlinCompilerExtensionVersion = libs.versions.compose.get()
+  //  }
 }
 
 dependencies {
