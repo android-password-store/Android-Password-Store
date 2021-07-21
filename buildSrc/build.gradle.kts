@@ -41,14 +41,14 @@ gradlePlugin {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:4.2.1")
-  implementation("com.diffplug.spotless:spotless-plugin-gradle:5.12.4")
-  implementation("com.google.dagger:hilt-android-gradle-plugin:2.37")
+  implementation("com.android.tools.build:gradle:4.2.2")
+  implementation("com.diffplug.spotless:spotless-plugin-gradle:5.14.2")
+  implementation("com.google.dagger:hilt-android-gradle-plugin:2.38")
   implementation("com.squareup.okhttp3:okhttp:4.9.0")
-  implementation("com.vanniktech:gradle-maven-publish-plugin:0.15.1")
+  implementation("com.vanniktech:gradle-maven-publish-plugin:0.17.0")
   implementation("com.vdurmont:semver4j:3.1.0")
-  implementation("de.undercouch:gradle-download-task:4.1.1")
-  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.32")
+  implementation("de.undercouch:gradle-download-task:4.1.2")
+  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
-  implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.5.0")
+  implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0")
 }
