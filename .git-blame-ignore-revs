@@ -1,3 +1,4 @@
 5e66d99c852ea67a88b650c03b0e8d55e83eccde # Package name restructure
 774fda83ac276a635e3402034b1eedbd10be916f # Tree-wide reformat
 7e2eb2425e7b9b6ccb37b7b89f19de3fa7a20c44 # Another tree-wide reformat to address a Spotless misconfiguration
+91fce4dce78da73fe551fa90bb4975a8c250e0f5 # XML reformat to 2 space indent
