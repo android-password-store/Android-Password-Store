@@ -97,7 +97,7 @@ internal class FormField(
             (HTML_INPUT_FIELD_TYPES_USERNAME + HTML_INPUT_FIELD_TYPES_PASSWORD + HTML_INPUT_FIELD_TYPES_OTP).toSet().toList()
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private fun isSupportedHint(hint: String) = hint in HINTS_FILLABLE
+        private fun isSupportedHint(hint: String?) = hint in HINTS_FILLABLE
 
         private val EXCLUDED_TERMS = listOf(
             "url_bar", // Chrome/Edge/Firefox address bar
