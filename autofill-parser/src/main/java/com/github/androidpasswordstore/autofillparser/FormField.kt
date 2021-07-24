@@ -115,7 +115,7 @@ internal class FormField(
         .toList()
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun isSupportedHint(hint: String) = hint in HINTS_FILLABLE
+    private fun isSupportedHint(hint: String?) = hint in HINTS_FILLABLE
     private val EXCLUDED_TERMS =
       listOf(
         "url_bar", // Chrome/Edge/Firefox address bar
