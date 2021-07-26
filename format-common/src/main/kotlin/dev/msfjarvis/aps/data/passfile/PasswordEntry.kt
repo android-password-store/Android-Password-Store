@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /** Represents a single entry in the password store. */
@@ -192,7 +193,7 @@ constructor(
   ) {
     if (totpSecret != null) {
       Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
-        .mapBoth({ code -> _totp.value = code }, { throwable -> throw throwable })
+        .mapBoth({ code -> _totp.update { code } }, { throwable -> throw throwable })
     }
   }
 
