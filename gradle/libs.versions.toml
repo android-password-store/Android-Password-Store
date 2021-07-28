@@ -5,7 +5,7 @@ androidx_test = "1.4.0"
 compose = "1.0.0-rc02"
 composeSnapshot = "-"
 coroutines = "1.5.1"
-hilt = "2.38"
+hilt = "2.38.1"
 kotlin = "1.5.21"
 lifecycle = "2.4.0-alpha02"
 
@@ -30,13 +30,13 @@ kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx_activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity" }
 androidx-annotation = "androidx.annotation:annotation:1.2.0"
-androidx-autofill = "androidx.autofill:autofill:1.2.0-alpha02"
+androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.0-alpha03"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
-androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0-beta02"
+androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0-rc01"
 androidx-core-ktx = "androidx.core:core-ktx:1.7.0-alpha01"
 androidx-documentfile = "androidx.documentfile:documentfile:1.0.1"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-alpha04"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-alpha05"
 androidx-hilt-compose = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref="lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref="lifecycle" }
@@ -74,7 +74,7 @@ android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 # First-party libraries
 aps-gopenpgp = "com.github.android-password-store:gopenpgp:0.1.5"
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
-aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.0"
+aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 
 # Third-party dependencies
 thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.69"
