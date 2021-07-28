@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.13.5] - 2021-07-28
+
 ### Fixed
 
 -   When prompted to select a GPG key during onboarding, the app would crash if the user did not make a selection in OpenKeychain
+-   Certain apps had incorrect Autofill hints which would crash the app
 
 ## [1.13.4] - 2021-03-20
 
@@ -424,7 +427,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.4...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.5...release-1.13
+
+[1.13.5]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.4...v1.13.5
 
 [1.13.4]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...v1.13.4
 
