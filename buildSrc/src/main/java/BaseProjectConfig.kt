@@ -90,7 +90,13 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
   buildTypes {
     named(BuildType.RELEASE.name) {
       isMinifyEnabled = !minifySwitch.isPresent
-      setProguardFiles(listOf("proguard-android-optimize.txt", "proguard-rules.pro"))
+      setProguardFiles(
+        listOf(
+          "proguard-android-optimize.txt",
+          "proguard-rules.pro",
+          "proguard-rules-missing-classes.pro",
+        )
+      )
       buildConfigField("boolean", "ENABLE_DEBUG_FEATURES", "${project.isSnapshot()}")
     }
     named(BuildType.DEBUG.name) {
