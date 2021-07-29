@@ -8,9 +8,13 @@ plugins {
   id("com.vanniktech.maven.publish")
   kotlin("android")
   `aps-plugin`
+  `psl-plugin`
 }
 
-android { defaultConfig { consumerProguardFiles("consumer-rules.pro") } }
+android {
+  defaultConfig { consumerProguardFiles("consumer-rules.pro") }
+  sourceSets { getByName("test") { resources.srcDir("src/main/assets") } }
+}
 
 dependencies {
   implementation(libs.androidx.annotation)
@@ -18,4 +22,5 @@ dependencies {
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
   implementation(libs.thirdparty.timberkt)
+  testImplementation(libs.bundles.testDependencies)
 }

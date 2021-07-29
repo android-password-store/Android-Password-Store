@@ -11,10 +11,18 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Download new publicsuffix data
-        run: curl -L https://github.com/mozilla-mobile/android-components/raw/master/components/lib/publicsuffixlist/src/main/assets/publicsuffixes -o autofill-parser/src/main/assets/publicsuffixes
+        uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+        with:
+          arguments: updatePSL
 
       - name: Compare list changes
         run: if [[ $(git diff --binary --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
+
+      - name: Verify update publicsuffixes file
+        uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+        if: env.UPDATED == 'true'
+        with:
+          arguments: :autofill-parser:test
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@01f7dd1d28f5131231ba3ede0f1c8cb413584a1d
