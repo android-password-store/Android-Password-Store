@@ -10,18 +10,6 @@ kotlin = "1.5.21"
 lifecycle = "2.4.0-alpha02"
 
 [libraries]
-# buildSrc dependencies
-androidGradlePlugin = "com.android.tools.build:gradle:4.2.2"
-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0"
-dokkaPlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
-downloadTaskPlugin = "de.undercouch:gradle-download-task:4.1.2"
-hiltGradlePlugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
-kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-mavenPublishPlugin = "com.vanniktech:gradle-maven-publish-plugin:0.17.0"
-okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
-semver4j = "com.vdurmont:semver4j:3.1.0"
-spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:5.14.2"
-
 # Kotlin dependencies
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

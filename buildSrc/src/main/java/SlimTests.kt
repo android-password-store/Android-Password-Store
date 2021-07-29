@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-import com.android.build.api.extension.ApplicationAndroidComponentsExtension
-import com.android.build.api.extension.LibraryAndroidComponentsExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.language.nativeplatform.internal.BuildType
@@ -21,15 +21,15 @@ internal fun Project.configureSlimTests() {
   if (providers.gradleProperty(SLIM_TESTS_PROPERTY).forUseAtConfigurationTime().isPresent) {
     // disable unit test tasks on the release build type for Android Library projects
     extensions.findByType<LibraryAndroidComponentsExtension>()?.run {
-      beforeUnitTests(selector().withBuildType(BuildType.RELEASE.name)) { it.enabled = false }
+      beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) { it.enableUnitTest = false }
     }
 
     // disable unit test tasks on the release build type and free flavor for Android Application
     // projects.
     extensions.findByType<ApplicationAndroidComponentsExtension>()?.run {
-      beforeUnitTests(selector().withBuildType(BuildType.RELEASE.name)) { it.enabled = false }
-      beforeUnitTests(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
-        it.enabled = false
+      beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) { it.enableUnitTest = false }
+      beforeVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
+        it.enableUnitTest = false
       }
     }
   }
