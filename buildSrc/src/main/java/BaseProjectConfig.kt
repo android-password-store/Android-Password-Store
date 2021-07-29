@@ -81,10 +81,10 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
     buildConfig = true
   }
 
-  flavorDimensions(FlavorDimensions.FREE)
+  flavorDimensions.add(FlavorDimensions.FREE)
   productFlavors {
-    create(ProductFlavors.FREE) {}
-    create(ProductFlavors.NON_FREE) {}
+    register(ProductFlavors.FREE) {}
+    register(ProductFlavors.NON_FREE) {}
   }
 
   buildTypes {
@@ -105,11 +105,11 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
 /** Apply baseline configurations for all Android projects (Application and Library). */
 @Suppress("UnstableApiUsage")
 internal fun TestedExtension.configureCommonAndroidOptions() {
-  compileSdkVersion(30)
+  setCompileSdkVersion(30)
 
   defaultConfig {
-    minSdkVersion(23)
-    targetSdkVersion(29)
+    minSdk = 23
+    targetSdk = 29
   }
 
   sourceSets {
@@ -118,10 +118,10 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
   }
 
   packagingOptions {
-    exclude("**/*.version")
-    exclude("**/*.txt")
-    exclude("**/*.kotlin_module")
-    exclude("**/plugin.properties")
+    resources.excludes.add("**/*.version")
+    resources.excludes.add("**/*.txt")
+    resources.excludes.add("**/*.kotlin_module")
+    resources.excludes.add("**/plugin.properties")
   }
 
   compileOptions {

@@ -41,7 +41,7 @@ gradlePlugin {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:4.2.2")
+  implementation("com.android.tools.build:gradle:7.0.0")
   implementation("com.diffplug.spotless:spotless-plugin-gradle:5.14.2")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.38.1")
   implementation("com.squareup.okhttp3:okhttp:4.9.0")

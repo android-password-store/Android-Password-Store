@@ -10,13 +10,7 @@ plugins {
   `aps-plugin`
 }
 
-android {
-  defaultConfig {
-    versionCode = 2
-    versionName = "2.0"
-    consumerProguardFiles("consumer-rules.pro")
-  }
-}
+android { defaultConfig { consumerProguardFiles("consumer-rules.pro") } }
 
 dependencies {
   implementation(libs.androidx.annotation)
