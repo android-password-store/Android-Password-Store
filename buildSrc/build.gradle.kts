@@ -37,6 +37,10 @@ gradlePlugin {
       id = "versioning-plugin"
       implementationClass = "VersioningPlugin"
     }
+    register("psl") {
+      id = "psl-plugin"
+      implementationClass = "PublicSuffixListPlugin"
+    }
   }
 }
 

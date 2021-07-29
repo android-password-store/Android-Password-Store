@@ -8,6 +8,7 @@ plugins {
   id("com.vanniktech.maven.publish")
   kotlin("android")
   `aps-plugin`
+  `psl-plugin`
 }
 
 android { defaultConfig { consumerProguardFiles("consumer-rules.pro") } }
