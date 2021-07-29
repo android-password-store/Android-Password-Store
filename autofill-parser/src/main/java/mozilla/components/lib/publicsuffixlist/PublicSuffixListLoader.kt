@@ -16,8 +16,8 @@ private const val PUBLIC_SUFFIX_LIST_FILE = "publicsuffixes"
 
 internal object PublicSuffixListLoader {
 
-  fun load(context: Context): PublicSuffixListData =
-    context.assets.open(PUBLIC_SUFFIX_LIST_FILE).buffered().use { stream ->
+  fun load(inputStream: BufferedInputStream): PublicSuffixListData =
+    inputStream.use { stream ->
       val publicSuffixSize = stream.readInt()
       val publicSuffixBytes = stream.readFully(publicSuffixSize)
 
@@ -26,6 +26,9 @@ internal object PublicSuffixListLoader {
 
       PublicSuffixListData(publicSuffixBytes, exceptionBytes)
     }
+
+  fun load(context: Context): PublicSuffixListData =
+    load(context.assets.open(PUBLIC_SUFFIX_LIST_FILE).buffered())
 }
 
 @Suppress("MagicNumber")
