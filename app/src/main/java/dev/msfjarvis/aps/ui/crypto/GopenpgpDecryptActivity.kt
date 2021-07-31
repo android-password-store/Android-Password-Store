@@ -10,10 +10,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
-import com.github.michaelbull.result.unwrap
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.crypto.CryptoHandler
+import dev.msfjarvis.aps.data.crypto.KeyManager
+import dev.msfjarvis.aps.data.crypto.KeyPair
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
@@ -23,7 +28,10 @@ import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.injection.crypto.KeyManagerSet
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
+import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
+import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.extensions.findTillRoot
+import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import java.io.File
@@ -59,7 +67,15 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
       }
     }
 
-    showPassphraseDialog()
+    lifecycleScope.launch {
+      val crypto = cryptos.first { it.canHandle(fullPath) }
+      val keyManager = keyManagers.first { it.canHandle(fullPath) }
+      val keyIds = getKeyIds(fullPath)
+
+      if (checkKeys(keyManager, keyIds)) {
+        showPassphraseDialog(crypto, keyManager, keyIds)
+      }
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -87,7 +103,11 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
     return true
   }
 
-  private fun showPassphraseDialog() {
+  private fun showPassphraseDialog(
+    crypto: CryptoHandler,
+    keyManager: KeyManager<KeyPair>,
+    keyIds: List<String>
+  ) {
     val view = layoutInflater.inflate(R.layout.dialog_passphrase_input, binding.root, false)
     val dialogBinding = DialogPassphraseInputBinding.bind(view)
 
@@ -96,7 +116,7 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
       .setPositiveButton("Unlock") { dialog, _ ->
         dialog.dismiss()
         val passphrase = dialogBinding.input.text.toString().toByteArray()
-        decrypt(passphrase)
+        decrypt(crypto, keyManager, keyIds, passphrase)
       }
       .setNegativeButton("Cancel") { dialog, _ ->
         dialog.dismiss()
@@ -123,7 +143,12 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
    * result triggers they can be repopulated with new data.
    */
   private fun editPassword() {
-    val intent = Intent(this, PasswordCreationActivity::class.java)
+    val intent =
+      Intent(
+        this,
+        if (FeatureFlags.ENABLE_GOPENPGP) GopenpgpPasswordCreationActivity::class.java
+        else PasswordCreationActivity::class.java
+      )
     intent.putExtra("FILE_PATH", relativeParentPath)
     intent.putExtra("REPO_PATH", repoPath)
     intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
@@ -147,56 +172,86 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
     )
   }
 
-  private fun decrypt(passphrase: ByteArray) {
+  private suspend fun checkKeys(keyManager: KeyManager<KeyPair>, keyIds: List<String>): Boolean {
+    if (keyIds.isEmpty()) {
+      // This probably means the store is not set correctly, it shouldn't happen but we will still
+      // show a snackbar
+      withContext(Dispatchers.Main) { snackbar(message = getString(R.string.gpg_id_not_found)) }
+      return false
+    }
+
+    if (keyManager.getKeyById(keyIds[0]) is Err) {
+      snackbar(
+        message = getString(R.string.snackbar_key_not_found),
+        actionText = getString(R.string.import_action_text)
+      ) {
+        startActivity(OnboardingActivity.createKeyImportIntent(this@GopenpgpDecryptActivity))
+        finish()
+      }
+      return false
+    }
+
+    return true
+  }
+
+  private fun decrypt(
+    crypto: CryptoHandler,
+    keyManager: KeyManager<KeyPair>,
+    keyIds: List<String>,
+    passphrase: ByteArray
+  ) {
+    // TODO: Binary GPG files do not work for now, need to fix that
     lifecycleScope.launch {
       // TODO(msfjarvis): native methods are fallible, add error handling once out of testing
       val message = withContext(Dispatchers.IO) { File(fullPath).readBytes() }
-      val crypto = cryptos.first { it.canHandle(fullPath) }
-      val keyManager = keyManagers.first { it.canHandle(fullPath) }
-      val keyIds = getKeyIds(fullPath)
-      if (keyIds.isEmpty()) {
-        // TODO: Show option to import gpg key here
-        return@launch
-      }
-      val result =
-        withContext(Dispatchers.IO) {
-          val privateKey =
-            keyManager.getKeyById(keyIds[0]).unwrap().getPrivateKey().decodeToString()
 
-          // TODO: this throws an error if passphrase is incorrect
-          crypto.decrypt(
-            privateKey,
-            passphrase,
-            message,
-          )
-        }
-      startAutoDismissTimer()
-      val entry = passwordEntryFactory.create(lifecycleScope, result)
-      passwordEntry = entry
-      invalidateOptionsMenu()
-      val items = arrayListOf<FieldItem>()
-      val adapter = FieldItemAdapter(emptyList(), true) { text -> copyTextToClipboard(text) }
-      if (!entry.password.isNullOrBlank()) {
-        items.add(FieldItem.createPasswordField(entry.password!!))
-      }
-
-      if (entry.hasTotp()) {
-        lifecycleScope.launch {
-          items.add(FieldItem.createOtpField(entry.totp.value))
-          entry.totp.collect { code ->
-            withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
+      withContext(Dispatchers.IO) {
+        keyManager
+          .getKeyById(keyIds[0])
+          .onSuccess { keyPair ->
+            val privateKey = keyPair.getPrivateKey().decodeToString()
+            val result = crypto.decrypt(privateKey, passphrase, message)
+            showPassword(result)
           }
-        }
+          .onFailure {
+            snackbar(
+              message = getString(R.string.snackbar_key_not_found),
+              actionText = getString(R.string.import_action_text)
+            ) {
+              startActivity(OnboardingActivity.createKeyImportIntent(this@GopenpgpDecryptActivity))
+            }
+          }
       }
+    }
+  }
 
-      if (!entry.username.isNullOrBlank()) {
-        items.add(FieldItem.createUsernameField(entry.username!!))
+  private suspend fun showPassword(password: ByteArray) {
+    startAutoDismissTimer()
+    val entry = passwordEntryFactory.create(lifecycleScope, password)
+    passwordEntry = entry
+    invalidateOptionsMenu()
+    val items = arrayListOf<FieldItem>()
+    val adapter = FieldItemAdapter(emptyList(), true) { text -> copyTextToClipboard(text) }
+    if (!entry.password.isNullOrBlank()) {
+      items.add(FieldItem.createPasswordField(entry.password!!))
+    }
+
+    if (entry.hasTotp()) {
+      lifecycleScope.launch {
+        items.add(FieldItem.createOtpField(entry.totp.value))
+        entry.totp.collect { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
       }
+    }
 
-      entry.extraContent.forEach { (key, value) ->
-        items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
-      }
+    if (!entry.username.isNullOrBlank()) {
+      items.add(FieldItem.createUsernameField(entry.username!!))
+    }
 
+    entry.extraContent.forEach { (key, value) ->
+      items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
+    }
+
+    withContext(Dispatchers.Main) {
       binding.recyclerView.adapter = adapter
       adapter.updateItems(items)
     }

@@ -141,6 +141,24 @@ fun FragmentActivity.snackbar(
   return snackbar
 }
 
+/**
+ * Show a [Snackbar] with action in a [FragmentActivity] and correctly anchor it to a
+ * [com.google.android.material.floatingactionbutton.FloatingActionButton] if one exists in the
+ * [view]
+ */
+fun FragmentActivity.snackbar(
+  view: View = findViewById(android.R.id.content),
+  message: String,
+  length: Int = Snackbar.LENGTH_SHORT,
+  actionText: String,
+  onClickListener: View.OnClickListener,
+): Snackbar {
+  val snackbar = Snackbar.make(view, message, length).setAction(actionText, onClickListener)
+  snackbar.anchorView = findViewById(R.id.fab)
+  snackbar.show()
+  return snackbar
+}
+
 /** Simplifies the common `getString(key, null) ?: defaultValue` case slightly */
 fun SharedPreferences.getString(key: String): String? = getString(key, null)
 

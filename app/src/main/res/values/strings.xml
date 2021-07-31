@@ -3,7 +3,7 @@
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <plurals name="delete_title">
     <item quantity="one">%d item selected</item>
@@ -405,5 +405,8 @@
   <!-- Gopenpgp Decrypt activity -->
   <string name="passphrase_input_title">Enter Key Passphrase</string>
   <string name="passphrase_input_hint">Passphrase</string>
+  <string name="snackbar_key_not_found">Cannot find a GPG key associated to this file, do you wanna import one now?</string>
+  <string name="gpg_id_not_found">No key ids were found, check your .gpg-id and make sure it contains the key id</string>
+  <string name="import_action_text">Import</string>
 
 </resources>
