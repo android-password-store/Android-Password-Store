@@ -56,10 +56,7 @@ android {
     disable("CoroutineCreationDuringComposition")
   }
 
-  composeOptions {
-    kotlinCompilerVersion = libs.versions.kotlin.get()
-    kotlinCompilerExtensionVersion = libs.versions.compose.get()
-  }
+  composeOptions { kotlinCompilerExtensionVersion = libs.versions.compose.get() }
 }
 
 dependencies {
