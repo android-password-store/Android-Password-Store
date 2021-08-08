@@ -31,9 +31,14 @@ All notable changes to this project will be documented in this file.
 -   Encrypted data is no longer ASCII armored, bringing it in line with `pass`
 -   Removed Bromite from supported Autofill browsers, since they [disable Android autofill](https://github.com/bromite/bromite/blob/master/FAQ.md#does-bromite-support-the-android-autofill-framework).
 
-## [1.13.4] - 2021-03-20
+## [1.13.5] - 2021-07-28
 
 ### Fixed
+
+-   When prompted to select a GPG key during onboarding, the app would crash if the user did not make a selection in OpenKeychain
+-   Certain apps had incorrect Autofill hints which would crash the app
+
+## [1.13.4] - 2021-03-20
 
 -  Fix support for ECDSA SSH keys and support AES-GCM
 -  Fix a couple issues with Autofill
@@ -448,7 +453,9 @@ All notable changes to this project will be documented in this file.
 
 -   Fix elements overlapping.
 
-[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.4...HEAD
+[Unreleased]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.5...release-1.13
+
+[1.13.5]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.4...v1.13.5
 
 [1.13.4]: https://github.com/android-password-store/Android-Password-Store/compare/v1.13.3...v1.13.4
 
