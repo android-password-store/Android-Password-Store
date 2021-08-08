@@ -103,7 +103,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
   private fun makeAndSetPassword(binding: FragmentXkpwgenBinding) {
     PasswordBuilder(requireContext())
-      .setNumberOfWords(Integer.valueOf(binding.xkNumWords.text.toString()))
+      .setNumberOfWords(binding.xkNumWords.text.toString().ifBlank { "0" }.toInt())
       .setMinimumWordLength(DEFAULT_MIN_WORD_LENGTH)
       .setMaximumWordLength(DEFAULT_MAX_WORD_LENGTH)
       .setSeparator(binding.xkSeparator.text.toString())
