@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,7 +29,14 @@ import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.generate
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.setPrefs
 import dev.msfjarvis.aps.util.pwgen.PasswordOption
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.afterTextChanges
+import reactivecircus.flowbinding.android.widget.checkedChanges
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PasswordGeneratorDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,9 +57,21 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     binding.lowercase.isChecked = !prefs.getBoolean(PasswordOption.NoLowercaseLetters.key, false)
     binding.ambiguous.isChecked = !prefs.getBoolean(PasswordOption.NoAmbiguousCharacters.key, false)
     binding.pronounceable.isChecked = !prefs.getBoolean(PasswordOption.FullyRandom.key, true)
-
     binding.lengthNumber.setText(prefs.getInt(PreferenceKeys.LENGTH, 20).toString())
     binding.passwordText.typeface = monoTypeface
+
+    merge(
+        binding.numerals.checkedChanges().skipInitialValue(),
+        binding.symbols.checkedChanges().skipInitialValue(),
+        binding.uppercase.checkedChanges().skipInitialValue(),
+        binding.lowercase.checkedChanges().skipInitialValue(),
+        binding.ambiguous.checkedChanges().skipInitialValue(),
+        binding.pronounceable.checkedChanges().skipInitialValue(),
+        binding.lengthNumber.afterTextChanges().skipInitialValue(),
+      )
+      .onEach { generate(binding.passwordText) }
+      .launchIn(lifecycleScope)
+
     return builder
       .run {
         setTitle(R.string.pwgen_title)
