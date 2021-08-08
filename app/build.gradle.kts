@@ -102,6 +102,7 @@ dependencies {
   implementation(libs.thirdparty.bouncycastle)
   implementation(libs.thirdparty.eddsa)
   implementation(libs.thirdparty.fastscroll)
+  implementation(libs.thirdparty.flowbinding.android)
   implementation(libs.thirdparty.jgit) {
     exclude(group = "org.apache.httpcomponents", module = "httpclient")
   }
