@@ -15,6 +15,7 @@ import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import com.github.ajalt.timberkt.Timber.tag
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOr
@@ -26,8 +27,14 @@ import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.pwgenxkpwd.CapsType
 import dev.msfjarvis.aps.util.pwgenxkpwd.PasswordBuilder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.afterTextChanges
+import reactivecircus.flowbinding.android.widget.selectionEvents
 
-/** A placeholder fragment containing a simple view. */
+@OptIn(ExperimentalCoroutinesApi::class)
 class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -69,16 +76,29 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
 
     val dialog = builder.setTitle(this.resources.getString(R.string.xkpwgen_title)).create()
 
+    // make parameter changes reactive and automatically update passwords
+    merge(
+        binding.xkSeparator.afterTextChanges().skipInitialValue(),
+        binding.xkCapType.selectionEvents().skipInitialValue(),
+        binding.xkNumWords.afterTextChanges().skipInitialValue(),
+        binding.xkNumberSymbolMask.afterTextChanges().skipInitialValue(),
+      )
+      .onEach { updatePassword(binding, prefs) }
+      .launchIn(lifecycleScope)
+
     dialog.setOnShowListener {
-      setPreferences(binding, prefs)
-      makeAndSetPassword(binding)
+      updatePassword(binding, prefs)
 
       dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
-        setPreferences(binding, prefs)
-        makeAndSetPassword(binding)
+        updatePassword(binding, prefs)
       }
     }
     return dialog
+  }
+
+  private fun updatePassword(binding: FragmentXkpwgenBinding, prefs: SharedPreferences) {
+    setPreferences(binding, prefs)
+    makeAndSetPassword(binding)
   }
 
   private fun makeAndSetPassword(binding: FragmentXkpwgenBinding) {
