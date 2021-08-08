@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 -   Using the `git://` protocol in the server URL now presents an explicit discouragement rather than a generic error
 -   Encrypted data is no longer ASCII armored, bringing it in line with `pass`
 -   Removed Bromite from supported Autofill browsers, since they [disable Android autofill](https://github.com/bromite/bromite/blob/master/FAQ.md#does-bromite-support-the-android-autofill-framework).
+-   Changing password generator parameters now automatically updates the password without needing to press the 'Generate' button again
 
 ## [1.13.5] - 2021-07-28
 
