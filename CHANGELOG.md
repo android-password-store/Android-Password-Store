@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+-  Improve low-density support for onboarding and git server config screens.
+
 ## [1.13.5] - 2021-07-28
 
 ### Fixed
