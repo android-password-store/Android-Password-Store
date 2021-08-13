@@ -11,7 +11,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import org.junit.Test
 
-internal class OtpTest {
+class OtpTest {
 
   private fun generateOtp(
     counter: Long,

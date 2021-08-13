@@ -13,7 +13,7 @@ import java.time.ZoneOffset.UTC
 /**
  * Implementation of [UserClock] that is fixed to [Instant.EPOCH] for deterministic time-based tests
  */
-internal class TestUserClock(instant: Instant) : UserClock() {
+class TestUserClock(instant: Instant) : UserClock() {
 
   constructor() : this(Instant.EPOCH)
 

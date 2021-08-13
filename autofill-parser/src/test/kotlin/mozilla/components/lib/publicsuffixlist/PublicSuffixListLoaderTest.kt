@@ -7,7 +7,7 @@ package mozilla.components.lib.publicsuffixlist
 
 import org.junit.Test
 
-internal class PublicSuffixListLoaderTest {
+class PublicSuffixListLoaderTest {
   @Test
   fun testLoadingBundledPublicSuffixList() {
     requireNotNull(javaClass.classLoader).getResourceAsStream("publicsuffixes").buffered().use {
