@@ -18,7 +18,7 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
-internal class PasswordEntryTest {
+class PasswordEntryTest {
 
   private fun makeEntry(content: String) =
     PasswordEntry(fakeClock, testFinder, testScope, content.encodeToByteArray())
