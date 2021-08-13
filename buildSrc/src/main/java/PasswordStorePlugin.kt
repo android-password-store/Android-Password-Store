@@ -68,9 +68,12 @@ class PasswordStorePlugin : Plugin<Project> {
   }
 
   private fun Project.configureExplicitApi() {
-    configure<KotlinProjectExtension> { explicitApi() }
+    val project = this
     tasks.withType<KotlinCompile> {
-      kotlinOptions { freeCompilerArgs = freeCompilerArgs + listOf("-Xexplicit-api=strict") }
+      if (!name.contains("test", ignoreCase = true)) {
+        project.configure<KotlinProjectExtension> { explicitApi() }
+        kotlinOptions { freeCompilerArgs += listOf("-Xexplicit-api=strict") }
+      }
     }
   }
 }
