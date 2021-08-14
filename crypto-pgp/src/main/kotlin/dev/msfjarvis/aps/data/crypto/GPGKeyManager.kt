@@ -5,22 +5,24 @@
 
 package dev.msfjarvis.aps.data.crypto
 
+import androidx.annotation.VisibleForTesting
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
-import com.proton.Gopenpgp.crypto.Key
+import com.proton.Gopenpgp.crypto.Crypto
 import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-public class GPGKeyManager(private val filesDir: String, private val dispatcher: CoroutineDispatcher) : KeyManager<GPGKeyPair> {
+public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDispatcher) : KeyManager<GPGKeyPair> {
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
-
   override suspend fun addKey(key: GPGKeyPair): Result<String, Throwable> = withContext(dispatcher) {
     runCatching {
       if (!keyDirExists()) error("Key directory does not exist")
       val keyFile = File(keyDir, "${key.getKeyId()}.$KEY_EXTENSION")
-      if (keyFile.exists()) keyFile.delete()
+      if (keyFile.exists()) {
+        if (!keyFile.delete()) error("Couldn't delete existing key file with the same name")
+      }
 
       keyFile.writeBytes(key.getPrivateKey())
 
@@ -47,7 +49,7 @@ public class GPGKeyManager(private val filesDir: String, private val dispatcher:
       if (keys.isNullOrEmpty()) error("No keys were found")
 
       for (keyFile in keys) {
-        val keyPair = GPGKeyPair(Key(keyFile.readBytes()))
+        val keyPair = GPGKeyPair(Crypto.newKeyFromArmored(keyFile.readText()))
         if (keyPair.getKeyId() == id) return@runCatching keyPair
       }
 
@@ -61,7 +63,7 @@ public class GPGKeyManager(private val filesDir: String, private val dispatcher:
       val keys = keyDir.listFiles()
       if (keys.isNullOrEmpty()) return@runCatching listOf()
 
-      keys.map { GPGKeyPair(Key(it.readBytes())) }.toList()
+      keys.map { GPGKeyPair(Crypto.newKeyFromArmored(it.readText())) }.toList()
     }
   }
 
@@ -73,9 +75,8 @@ public class GPGKeyManager(private val filesDir: String, private val dispatcher:
     return keyDir.exists() || keyDir.mkdirs()
   }
 
-  private companion object {
-
-    const val KEY_DIR_NAME = "keys"
-    const val KEY_EXTENSION = "key"
+  public companion object {
+    @VisibleForTesting public const val KEY_DIR_NAME: String = "keys"
+    @VisibleForTesting public const val KEY_EXTENSION: String = "key"
   }
 }
