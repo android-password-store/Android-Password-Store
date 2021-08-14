@@ -7,6 +7,4 @@ plugins {
   `aps-plugin`
 }
 
-dependencies {
-  implementation(libs.thirdparty.kotlinResult)
-}
+dependencies { implementation(libs.thirdparty.kotlinResult) }

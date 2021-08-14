@@ -10,9 +10,7 @@ import dev.msfjarvis.aps.data.crypto.GPGKeyManager
 import dev.msfjarvis.aps.data.crypto.GPGKeyPair
 import java.io.File
 import java.lang.IllegalStateException
-import kotlin.test.AfterTest
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -142,11 +140,12 @@ public class GPGKeyManagerTest {
 
     fun getFilesDir(): File = InstrumentationRegistry.getInstrumentation().context.filesDir
 
-    fun getKey(): String = InstrumentationRegistry.getInstrumentation()
-      .context
-      .resources
-      .openRawResource(R.raw.private_key)
-      .readBytes()
-      .decodeToString()
+    fun getKey(): String =
+      InstrumentationRegistry.getInstrumentation()
+        .context
+        .resources
+        .openRawResource(R.raw.private_key)
+        .readBytes()
+        .decodeToString()
   }
 }

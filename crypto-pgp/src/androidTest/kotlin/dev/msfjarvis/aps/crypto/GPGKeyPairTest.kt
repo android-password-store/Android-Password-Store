@@ -40,11 +40,12 @@ public class GPGKeyPairTest {
 
   private companion object {
 
-    fun getKey(): String = InstrumentationRegistry.getInstrumentation()
-      .context
-      .resources
-      .openRawResource(R.raw.private_key)
-      .readBytes()
-      .decodeToString()
+    fun getKey(): String =
+      InstrumentationRegistry.getInstrumentation()
+        .context
+        .resources
+        .openRawResource(R.raw.private_key)
+        .readBytes()
+        .decodeToString()
   }
 }
