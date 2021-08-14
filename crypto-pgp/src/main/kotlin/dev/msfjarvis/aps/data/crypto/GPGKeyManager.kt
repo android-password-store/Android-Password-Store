@@ -80,8 +80,8 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
     return keyDir.exists() || keyDir.mkdirs()
   }
 
-  public companion object {
-    @VisibleForTesting public const val KEY_DIR_NAME: String = "keys"
-    @VisibleForTesting public const val KEY_EXTENSION: String = "key"
+  internal companion object {
+    @VisibleForTesting internal const val KEY_DIR_NAME: String = "keys"
+    @VisibleForTesting internal const val KEY_EXTENSION: String = "key"
   }
 }
