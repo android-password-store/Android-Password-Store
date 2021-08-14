@@ -20,6 +20,8 @@ dependencies {
   api(projects.cryptoCommon)
   implementation(libs.aps.gopenpgp)
   implementation(libs.dagger.hilt.core)
+  implementation(libs.kotlin.coroutines.core)
+  implementation(libs.thirdparty.kotlinResult)
   androidTestImplementation(libs.bundles.testDependencies)
   androidTestImplementation(libs.bundles.androidTestDependencies)
 }
