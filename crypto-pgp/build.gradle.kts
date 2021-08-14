@@ -18,10 +18,12 @@ android {
 
 dependencies {
   api(projects.cryptoCommon)
+  implementation(libs.androidx.annotation)
   implementation(libs.aps.gopenpgp)
   implementation(libs.dagger.hilt.core)
   implementation(libs.kotlin.coroutines.core)
   implementation(libs.thirdparty.kotlinResult)
   androidTestImplementation(libs.bundles.testDependencies)
+  androidTestImplementation(libs.kotlin.coroutines.test)
   androidTestImplementation(libs.bundles.androidTestDependencies)
 }
