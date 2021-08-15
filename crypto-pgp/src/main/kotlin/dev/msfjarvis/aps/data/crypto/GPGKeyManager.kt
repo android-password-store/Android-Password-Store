@@ -17,12 +17,16 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
   KeyManager<GPGKeyPair> {
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
-  override suspend fun addKey(key: GPGKeyPair): Result<String, Throwable> =
+
+  override suspend fun addKey(key: GPGKeyPair, replace: Boolean): Result<String, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) error("Key directory does not exist")
         val keyFile = File(keyDir, "${key.getKeyId()}.$KEY_EXTENSION")
         if (keyFile.exists()) {
+          // Check for replace flag first and if it is false, throw an error
+          if (!replace)
+            error("Pre-existing key was found for ${key.getKeyId()} but 'replace' is set to false")
           if (!keyFile.delete()) error("Couldn't delete existing key file with the same name")
         }
 

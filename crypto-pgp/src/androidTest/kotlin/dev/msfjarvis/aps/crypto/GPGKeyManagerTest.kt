@@ -3,6 +3,7 @@ package dev.msfjarvis.aps.crypto
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.michaelbull.result.getError
 import com.github.michaelbull.result.unwrap
+import com.github.michaelbull.result.unwrapError
 import com.proton.Gopenpgp.crypto.Key
 import dev.msfjarvis.aps.crypto.utils.CryptoConstants
 import dev.msfjarvis.aps.cryptopgp.test.R
@@ -58,6 +59,28 @@ public class GPGKeyManagerTest {
   }
 
   @Test
+  public fun testAddingKeyWithoutReplaceFlag() {
+    runBlockingTest {
+      // Check adding the keys twice
+      gpgKeyManager.addKey(key, false).unwrap()
+      val error = gpgKeyManager.addKey(key, false).unwrapError()
+
+      assertIs<IllegalStateException>(error)
+    }
+  }
+
+  @Test
+  public fun testAddingKeyWithReplaceFlag() {
+    runBlockingTest {
+      // Check adding the keys twice
+      gpgKeyManager.addKey(key, true).unwrap()
+      val keyId = gpgKeyManager.addKey(key, true).unwrap()
+
+      assertEquals(CryptoConstants.KEY_ID, keyId)
+    }
+  }
+
+  @Test
   public fun testRemovingKey() {
     runBlockingTest {
       // Add key using KeyManager
@@ -95,7 +118,7 @@ public class GPGKeyManagerTest {
       val randomKeyId = "0x123456789"
 
       // Check returned key
-      val error = gpgKeyManager.getKeyById(randomKeyId).getError()
+      val error = gpgKeyManager.getKeyById(randomKeyId).unwrapError()
       assertIs<IllegalStateException>(error)
       assertEquals("No key found with id: $randomKeyId", error.message)
     }
@@ -105,7 +128,7 @@ public class GPGKeyManagerTest {
   public fun testFindKeysWithoutAdding() {
     runBlockingTest {
       // Check returned key
-      val error = gpgKeyManager.getKeyById("0x123456789").getError()
+      val error = gpgKeyManager.getKeyById("0x123456789").unwrapError()
       assertIs<IllegalStateException>(error)
       assertEquals("No keys were found", error.message)
     }

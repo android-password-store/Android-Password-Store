@@ -5,11 +5,15 @@ public abstract interface class dev/msfjarvis/aps/data/crypto/CryptoHandler {
 }
 
 public abstract interface class dev/msfjarvis/aps/data/crypto/KeyManager {
-	public abstract fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun canHandle (Ljava/lang/String;)Z
 	public abstract fun getAllKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun removeKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManager$DefaultImpls {
+	public static synthetic fun addKey$default (Ldev/msfjarvis/aps/data/crypto/KeyManager;Ldev/msfjarvis/aps/data/crypto/KeyPair;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class dev/msfjarvis/aps/data/crypto/KeyPair {
