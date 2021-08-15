@@ -16,12 +16,21 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 public class GPGKeyManagerTest {
 
   private val testCoroutineDispatcher = TestCoroutineDispatcher()
+  private lateinit var gpgKeyManager: GPGKeyManager
+  private lateinit var key: GPGKeyPair
+
+  @Before
+  public fun setup() {
+    gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
+    key = GPGKeyPair(Key(getKey()))
+  }
 
   @After
   public fun tearDown() {
@@ -34,9 +43,6 @@ public class GPGKeyManagerTest {
   @Test
   public fun testAddingKey() {
     runBlockingTest {
-      val gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
-      val key = GPGKeyPair(Key(getKey()))
-
       // Check if the key id returned is correct
       val keyId = gpgKeyManager.addKey(key).unwrap()
       assertEquals(CryptoConstants.KEY_ID, keyId)
@@ -54,11 +60,8 @@ public class GPGKeyManagerTest {
   @Test
   public fun testRemovingKey() {
     runBlockingTest {
-      val gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
-      val key = GPGKeyPair(Key(getKey()))
-
       // Add key using KeyManager
-      gpgKeyManager.addKey(key)
+      gpgKeyManager.addKey(key).unwrap()
 
       // Check if the key id returned is correct
       val keyId = gpgKeyManager.removeKey(key).unwrap()
@@ -73,11 +76,8 @@ public class GPGKeyManagerTest {
   @Test
   public fun testFindingKeyWhenKeyIsAvailable() {
     runBlockingTest {
-      val gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
-      val key = GPGKeyPair(Key(getKey()))
-
       // Add key using KeyManager
-      gpgKeyManager.addKey(key)
+      gpgKeyManager.addKey(key).unwrap()
 
       // Check returned key id matches the expected id and the created key id
       val returnedKeyPair = gpgKeyManager.getKeyById(key.getKeyId()).unwrap()
@@ -87,13 +87,10 @@ public class GPGKeyManagerTest {
   }
 
   @Test
-  public fun testFindingKeyWhenKeyIsNotAvailable() {
+  public fun testGetNonExistentKey() {
     runBlockingTest {
-      val gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
-      val key = GPGKeyPair(Key(getKey()))
-
       // Add key using KeyManager
-      gpgKeyManager.addKey(key)
+      gpgKeyManager.addKey(key).unwrap()
 
       val randomKeyId = "0x123456789"
 
@@ -105,10 +102,8 @@ public class GPGKeyManagerTest {
   }
 
   @Test
-  public fun testFindingKeyWhenNoKeysAreAvailable() {
+  public fun testFindKeysWithoutAdding() {
     runBlockingTest {
-      val gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
-
       // Check returned key
       val error = gpgKeyManager.getKeyById("0x123456789").getError()
       assertIs<IllegalStateException>(error)
@@ -119,16 +114,13 @@ public class GPGKeyManagerTest {
   @Test
   public fun testGettingAllKeys() {
     runBlockingTest {
-      val gpgKeyManager = GPGKeyManager(getFilesDir().absolutePath, testCoroutineDispatcher)
-      val key = GPGKeyPair(Key(getKey()))
-
       // TODO: Should we check for more than 1 keys?
       // Check if KeyManager returns no key
       val noKeyList = gpgKeyManager.getAllKeys().unwrap()
       assertEquals(0, noKeyList.size)
 
       // Add key using KeyManager
-      gpgKeyManager.addKey(key)
+      gpgKeyManager.addKey(key).unwrap()
 
       // Check if KeyManager returns one key
       val singleKeyList = gpgKeyManager.getAllKeys().unwrap()

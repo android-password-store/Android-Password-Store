@@ -28,7 +28,6 @@ public class GPGKeyPairTest {
   @Test
   public fun testBuildingKeyPairWithoutPrivateKey() {
     assertFailsWith<IllegalStateException>("GPGKeyPair does not have a private sub key") {
-      // TODO: Have a separate public key for this one?
       // Get public key object from private key
       val gpgKey = Key(getKey()).toPublic()
       // Try creating a KeyPair from public key

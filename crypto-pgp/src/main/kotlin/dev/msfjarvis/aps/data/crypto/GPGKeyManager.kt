@@ -73,6 +73,8 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
     }
 
   override fun canHandle(fileName: String): Boolean {
+    // TODO: This is a temp hack for now and in future it should check that the GPGKeyManager can
+    // decrypt the file
     return fileName.endsWith(KEY_EXTENSION)
   }
 
@@ -81,7 +83,10 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
   }
 
   internal companion object {
-    @VisibleForTesting internal const val KEY_DIR_NAME: String = "keys"
-    @VisibleForTesting internal const val KEY_EXTENSION: String = "key"
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal const val KEY_DIR_NAME: String = "keys"
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal const val KEY_EXTENSION: String = "key"
   }
 }
