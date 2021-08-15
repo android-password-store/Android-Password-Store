@@ -1,7 +1,6 @@
 package dev.msfjarvis.aps.crypto
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.michaelbull.result.getError
 import com.github.michaelbull.result.unwrap
 import com.github.michaelbull.result.unwrapError
 import com.proton.Gopenpgp.crypto.Key
@@ -45,7 +44,7 @@ public class GPGKeyManagerTest {
   public fun testAddingKey() {
     runBlockingTest {
       // Check if the key id returned is correct
-      val keyId = gpgKeyManager.addKey(key).unwrap()
+      val keyId = gpgKeyManager.addKey(key).unwrap().getKeyId()
       assertEquals(CryptoConstants.KEY_ID, keyId)
 
       // Check if the keys directory have one file
@@ -74,7 +73,7 @@ public class GPGKeyManagerTest {
     runBlockingTest {
       // Check adding the keys twice
       gpgKeyManager.addKey(key, true).unwrap()
-      val keyId = gpgKeyManager.addKey(key, true).unwrap()
+      val keyId = gpgKeyManager.addKey(key, true).unwrap().getKeyId()
 
       assertEquals(CryptoConstants.KEY_ID, keyId)
     }
@@ -87,7 +86,7 @@ public class GPGKeyManagerTest {
       gpgKeyManager.addKey(key).unwrap()
 
       // Check if the key id returned is correct
-      val keyId = gpgKeyManager.removeKey(key).unwrap()
+      val keyId = gpgKeyManager.removeKey(key).unwrap().getKeyId()
       assertEquals(CryptoConstants.KEY_ID, keyId)
 
       // Check if the keys directory have 0 files

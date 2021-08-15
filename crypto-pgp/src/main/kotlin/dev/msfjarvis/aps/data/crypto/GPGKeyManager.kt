@@ -18,7 +18,7 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
 
-  override suspend fun addKey(key: GPGKeyPair, replace: Boolean): Result<String, Throwable> =
+  override suspend fun addKey(key: GPGKeyPair, replace: Boolean): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) error("Key directory does not exist")
@@ -32,11 +32,11 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
 
         keyFile.writeBytes(key.getPrivateKey())
 
-        key.getKeyId()
+        key
       }
     }
 
-  override suspend fun removeKey(key: GPGKeyPair): Result<String, Throwable> =
+  override suspend fun removeKey(key: GPGKeyPair): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) error("Key directory does not exist")
@@ -45,7 +45,7 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
           if (!keyFile.delete()) error("Couldn't delete key file")
         }
 
-        key.getKeyId()
+        key
       }
     }
 

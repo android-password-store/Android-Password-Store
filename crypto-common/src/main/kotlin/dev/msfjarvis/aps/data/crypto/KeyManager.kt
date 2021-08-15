@@ -9,8 +9,8 @@ import com.github.michaelbull.result.Result
 
 public interface KeyManager<T : KeyPair> {
 
-  public suspend fun addKey(key: T, replace: Boolean = false): Result<String, Throwable>
-  public suspend fun removeKey(key: T): Result<String, Throwable>
+  public suspend fun addKey(key: T, replace: Boolean = false): Result<T, Throwable>
+  public suspend fun removeKey(key: T): Result<T, Throwable>
   public suspend fun getKeyById(id: String): Result<T, Throwable>
   public suspend fun getAllKeys(): Result<List<T>, Throwable>
 
