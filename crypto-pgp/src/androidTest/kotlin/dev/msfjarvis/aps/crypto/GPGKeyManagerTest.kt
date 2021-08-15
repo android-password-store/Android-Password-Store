@@ -74,7 +74,7 @@ public class GPGKeyManagerTest {
   }
 
   @Test
-  public fun testFindingKeyWhenKeyIsAvailable() {
+  public fun testGetExistingKey() {
     runBlockingTest {
       // Add key using KeyManager
       gpgKeyManager.addKey(key).unwrap()
