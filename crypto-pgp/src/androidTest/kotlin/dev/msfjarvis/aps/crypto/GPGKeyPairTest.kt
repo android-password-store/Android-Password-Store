@@ -10,7 +10,7 @@ import com.proton.Gopenpgp.crypto.Key
 import dev.msfjarvis.aps.crypto.utils.CryptoConstants
 import dev.msfjarvis.aps.cryptopgp.test.R
 import dev.msfjarvis.aps.data.crypto.GPGKeyPair
-import java.lang.IllegalStateException
+import dev.msfjarvis.aps.data.crypto.KeyPairException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import org.junit.Test
@@ -27,7 +27,9 @@ public class GPGKeyPairTest {
 
   @Test
   public fun testBuildingKeyPairWithoutPrivateKey() {
-    assertFailsWith<IllegalStateException>("GPGKeyPair does not have a private sub key") {
+    assertFailsWith<KeyPairException.PrivateKeyUnavailableException>(
+      "GPGKeyPair does not have a private sub key"
+    ) {
       // Get public key object from private key
       val gpgKey = Key(getKey()).toPublic()
       // Try creating a KeyPair from public key

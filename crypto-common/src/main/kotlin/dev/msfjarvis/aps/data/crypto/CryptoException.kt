@@ -8,7 +8,7 @@ public sealed class KeyPairException(message: String? = null) : CryptoException(
 }
 
 public sealed class KeyManagerException(message: String? = null) : CryptoException(message) {
-  public object NoKeysAvailableException : KeyManagerException()
+  public object NoKeysAvailableException : KeyManagerException("No keys were found")
   public object KeyDirectoryUnavailableException :
     KeyManagerException("Key directory does not exist")
   public object KeyDeletionFailedException : KeyManagerException("Couldn't delete the key file")

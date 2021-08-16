@@ -8,8 +8,8 @@ import dev.msfjarvis.aps.crypto.utils.CryptoConstants
 import dev.msfjarvis.aps.cryptopgp.test.R
 import dev.msfjarvis.aps.data.crypto.GPGKeyManager
 import dev.msfjarvis.aps.data.crypto.GPGKeyPair
+import dev.msfjarvis.aps.data.crypto.KeyManagerException
 import java.io.File
-import java.lang.IllegalStateException
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -64,7 +64,7 @@ public class GPGKeyManagerTest {
       gpgKeyManager.addKey(key, false).unwrap()
       val error = gpgKeyManager.addKey(key, false).unwrapError()
 
-      assertIs<IllegalStateException>(error)
+      assertIs<KeyManagerException.KeyAlreadyExistsException>(error)
     }
   }
 
@@ -118,7 +118,7 @@ public class GPGKeyManagerTest {
 
       // Check returned key
       val error = gpgKeyManager.getKeyById(randomKeyId).unwrapError()
-      assertIs<IllegalStateException>(error)
+      assertIs<KeyManagerException.KeyNotFoundException>(error)
       assertEquals("No key found with id: $randomKeyId", error.message)
     }
   }
@@ -128,7 +128,7 @@ public class GPGKeyManagerTest {
     runBlockingTest {
       // Check returned key
       val error = gpgKeyManager.getKeyById("0x123456789").unwrapError()
-      assertIs<IllegalStateException>(error)
+      assertIs<KeyManagerException.NoKeysAvailableException>(error)
       assertEquals("No keys were found", error.message)
     }
   }
