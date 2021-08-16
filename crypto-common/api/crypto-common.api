@@ -1,6 +1,63 @@
+public abstract class dev/msfjarvis/aps/data/crypto/CryptoException : java/lang/Exception {
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
 public abstract interface class dev/msfjarvis/aps/data/crypto/CryptoHandler {
 	public abstract fun canHandle (Ljava/lang/String;)Z
 	public abstract fun decrypt (Ljava/lang/String;[B[B)[B
 	public abstract fun encrypt (Ljava/lang/String;[B)[B
+}
+
+public abstract interface class dev/msfjarvis/aps/data/crypto/KeyManager {
+	public abstract fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun canHandle (Ljava/lang/String;)Z
+	public abstract fun getAllKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun removeKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManager$DefaultImpls {
+	public static synthetic fun addKey$default (Ldev/msfjarvis/aps/data/crypto/KeyManager;Ldev/msfjarvis/aps/data/crypto/KeyPair;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract class dev/msfjarvis/aps/data/crypto/KeyManagerException : dev/msfjarvis/aps/data/crypto/CryptoException {
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManagerException$KeyAlreadyExistsException : dev/msfjarvis/aps/data/crypto/KeyManagerException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManagerException$KeyDeletionFailedException : dev/msfjarvis/aps/data/crypto/KeyManagerException {
+	public static final field INSTANCE Ldev/msfjarvis/aps/data/crypto/KeyManagerException$KeyDeletionFailedException;
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManagerException$KeyDirectoryUnavailableException : dev/msfjarvis/aps/data/crypto/KeyManagerException {
+	public static final field INSTANCE Ldev/msfjarvis/aps/data/crypto/KeyManagerException$KeyDirectoryUnavailableException;
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManagerException$KeyNotFoundException : dev/msfjarvis/aps/data/crypto/KeyManagerException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyManagerException$NoKeysAvailableException : dev/msfjarvis/aps/data/crypto/KeyManagerException {
+	public static final field INSTANCE Ldev/msfjarvis/aps/data/crypto/KeyManagerException$NoKeysAvailableException;
+}
+
+public abstract interface class dev/msfjarvis/aps/data/crypto/KeyPair {
+	public abstract fun getKeyId ()Ljava/lang/String;
+	public abstract fun getPrivateKey ()[B
+	public abstract fun getPublicKey ()[B
+}
+
+public abstract class dev/msfjarvis/aps/data/crypto/KeyPairException : dev/msfjarvis/aps/data/crypto/CryptoException {
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class dev/msfjarvis/aps/data/crypto/KeyPairException$PrivateKeyUnavailableException : dev/msfjarvis/aps/data/crypto/KeyPairException {
+	public static final field INSTANCE Ldev/msfjarvis/aps/data/crypto/KeyPairException$PrivateKeyUnavailableException;
 }
 

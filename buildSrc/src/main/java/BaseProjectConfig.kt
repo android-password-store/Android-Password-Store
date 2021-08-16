@@ -121,6 +121,7 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
   sourceSets {
     named("main") { java.srcDirs("src/main/kotlin") }
     named("test") { java.srcDirs("src/test/kotlin") }
+    named("androidTest") { java.srcDirs("src/androidTest/kotlin") }
   }
 
   packagingOptions {
@@ -128,6 +129,8 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
     resources.excludes.add("**/*.txt")
     resources.excludes.add("**/*.kotlin_module")
     resources.excludes.add("**/plugin.properties")
+    resources.excludes.add("**/META-INF/AL2.0")
+    resources.excludes.add("**/META-INF/LGPL2.1")
   }
 
   compileOptions {
