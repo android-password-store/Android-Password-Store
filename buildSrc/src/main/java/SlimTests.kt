@@ -21,7 +21,10 @@ internal fun Project.configureSlimTests() {
   if (providers.gradleProperty(SLIM_TESTS_PROPERTY).forUseAtConfigurationTime().isPresent) {
     // disable unit test tasks on the release build type for Android Library projects
     extensions.findByType<LibraryAndroidComponentsExtension>()?.run {
-      beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) { it.enableUnitTest = false }
+      beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) {
+        it.enableUnitTest = false
+        it.enableAndroidTest = false
+      }
     }
 
     // disable unit test tasks on the release build type and free flavor for Android Application
@@ -30,6 +33,7 @@ internal fun Project.configureSlimTests() {
       beforeVariants(selector().withBuildType(BuildType.RELEASE.name)) { it.enableUnitTest = false }
       beforeVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) {
         it.enableUnitTest = false
+        it.enableAndroidTest = false
       }
     }
   }
