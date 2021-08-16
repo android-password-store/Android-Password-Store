@@ -2,13 +2,9 @@ on: [pull_request]
 
 name: Check pull request
 jobs:
-  test-pr:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
-
-    #- name: Auto-cancel redundant workflow run
-    #  uses: technote-space/auto-cancel-redundant-workflow@f9dfa1c127a520e4d71b92892850f861fb861206
-
     - name: Check if relevant files have changed
       uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
       id: service-changed
@@ -43,8 +39,6 @@ jobs:
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
       with:
         fetch-depth: 0
-      #with:
-      #  ref: refs/pull/${{ github.event.pull_request.number }}/merge
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
@@ -55,6 +49,84 @@ jobs:
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
         arguments: apiCheck test lintFreeDebug spotlessCheck -PslimTests
+
+    - name: (Fail-only) upload test report
+      if: failure()
+      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      with:
+          name: Test report
+          path: app/build/reports
+
+  run-screenshot-tests:
+    runs-on: macOS-latest
+    steps:
+    - name: Check if relevant files have changed
+      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const result = await github.pulls.listFiles({
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            pull_number: context.payload.number,
+            per_page: 100
+          })
+          const files = result.data.filter(file =>
+            // We wanna run this if the PR workflow is modified
+            (file.filename.endsWith(".yml") && !file.filename.endsWith("pull_request.yml")) ||
+            // Changes in Markdown files don't need tests
+            file.filename.endsWith(".md") ||
+            // Changes to fastlane metadata aren't covered by tests
+            file.filename.startsWith("fastlane/")
+          )
+          // If filtered file count and source file count is equal, it means all files
+          // in this PR are skip-worthy.
+          return files.length != result.data.length
+
+    - uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      id: avd-cache
+      with:
+        path: |
+          ~/.android/avd/*
+          ~/.android/adb*
+        key: avd-23
+
+    - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      with:
+        java-version: '11'
+
+    - name: Checkout repository
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      with:
+        fetch-depth: 0
+
+    - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Create AVD and generate snapshot for caching
+      uses: reactivecircus/android-emulator-runner@5de26e4bd23bf523e8a4b7f077df8bfb8e52b50e
+      if: ${{ steps.avd-cache.outputs.cache-hit != 'true' }}
+      with:
+        api-level: 23
+        force-avd-creation: false
+        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: false
+        script: echo "Generated AVD snapshot for caching"
+
+    - name: Run screenshot tests
+      uses: reactivecircus/android-emulator-runner@5de26e4bd23bf523e8a4b7f077df8bfb8e52b50e
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      with:
+        api-level: 23
+        force-avd-creation: false
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        disable-animations: true
+        script: ./gradlew connectedCheck -PslimTests
 
     - name: (Fail-only) upload test report
       if: failure()
