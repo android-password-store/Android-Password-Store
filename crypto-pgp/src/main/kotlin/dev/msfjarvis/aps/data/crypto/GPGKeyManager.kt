@@ -21,13 +21,12 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
   override suspend fun addKey(key: GPGKeyPair, replace: Boolean): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       runCatching {
-        if (!keyDirExists()) error("Key directory does not exist")
+        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keyFile = File(keyDir, "${key.getKeyId()}.$KEY_EXTENSION")
         if (keyFile.exists()) {
           // Check for replace flag first and if it is false, throw an error
-          if (!replace)
-            error("Pre-existing key was found for ${key.getKeyId()} but 'replace' is set to false")
-          if (!keyFile.delete()) error("Couldn't delete existing key file with the same name")
+          if (!replace) throw KeyManagerException.KeyAlreadyExistsException(key.getKeyId())
+          if (!keyFile.delete()) throw KeyManagerException.KeyDeletionFailedException
         }
 
         keyFile.writeBytes(key.getPrivateKey())
@@ -39,10 +38,10 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
   override suspend fun removeKey(key: GPGKeyPair): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       runCatching {
-        if (!keyDirExists()) error("Key directory does not exist")
+        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keyFile = File(keyDir, "${key.getKeyId()}.$KEY_EXTENSION")
         if (keyFile.exists()) {
-          if (!keyFile.delete()) error("Couldn't delete key file")
+          if (!keyFile.delete()) throw KeyManagerException.KeyDeletionFailedException
         }
 
         key
@@ -52,23 +51,23 @@ public class GPGKeyManager(filesDir: String, private val dispatcher: CoroutineDi
   override suspend fun getKeyById(id: String): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       runCatching {
-        if (!keyDirExists()) error("Key directory does not exist")
+        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keys = keyDir.listFiles()
-        if (keys.isNullOrEmpty()) error("No keys were found")
+        if (keys.isNullOrEmpty()) throw KeyManagerException.NoKeysAvailableException
 
         for (keyFile in keys) {
           val keyPair = GPGKeyPair(Crypto.newKeyFromArmored(keyFile.readText()))
           if (keyPair.getKeyId() == id) return@runCatching keyPair
         }
 
-        error("No key found with id: $id")
+        throw KeyManagerException.KeyNotFoundException(id)
       }
     }
 
   override suspend fun getAllKeys(): Result<List<GPGKeyPair>, Throwable> =
     withContext(dispatcher) {
       runCatching {
-        if (!keyDirExists()) error("Key directory does not exist")
+        if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keys = keyDir.listFiles()
         if (keys.isNullOrEmpty()) return@runCatching listOf()
 

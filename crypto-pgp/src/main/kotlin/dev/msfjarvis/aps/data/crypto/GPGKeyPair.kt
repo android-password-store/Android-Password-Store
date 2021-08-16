@@ -11,7 +11,7 @@ import com.proton.Gopenpgp.crypto.Key
 public class GPGKeyPair(private val key: Key) : KeyPair {
 
   init {
-    if (!key.isPrivate) error("GPGKeyPair does not have a private sub-key")
+    if (!key.isPrivate) throw KeyPairException.PrivateKeyUnavailableException
   }
 
   override fun getPrivateKey(): ByteArray {
