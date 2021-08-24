@@ -6,6 +6,8 @@
 package dev.msfjarvis.aps.ui.proxy
 
 import android.content.SharedPreferences
+import android.net.InetAddresses
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,7 +27,6 @@ import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import javax.inject.Inject
 
-private val IP_ADDRESS_REGEX = Patterns.IP_ADDRESS.toRegex()
 private val WEB_ADDRESS_REGEX = Patterns.WEB_URL.toRegex()
 
 @AndroidEntryPoint
@@ -34,9 +35,7 @@ class ProxySelectorActivity : AppCompatActivity() {
   @Inject lateinit var gitSettings: GitSettings
   @ProxyPreferences @Inject lateinit var proxyPrefs: SharedPreferences
   @Inject lateinit var proxyUtils: ProxyUtils
-
   private val binding by viewBinding(ActivityProxySelectorBinding::inflate)
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
@@ -51,13 +50,21 @@ class ProxySelectorActivity : AppCompatActivity() {
       proxyHost.doOnTextChanged { text, _, _, _ ->
         if (text != null) {
           proxyHost.error =
-            if (text.matches(IP_ADDRESS_REGEX) || text.matches(WEB_ADDRESS_REGEX)) {
+            if (isNumericAddress(text) || text.matches(WEB_ADDRESS_REGEX)) {
               null
             } else {
               getString(R.string.invalid_proxy_url)
             }
         }
       }
+    }
+  }
+
+  private fun isNumericAddress(text: CharSequence): Boolean {
+    return if (Build.VERSION.SDK_INT >= 29) {
+      InetAddresses.isNumericAddress(text as String)
+    } else {
+      @Suppress("DEPRECATION") Patterns.IP_ADDRESS.matcher(text).matches()
     }
   }
 
