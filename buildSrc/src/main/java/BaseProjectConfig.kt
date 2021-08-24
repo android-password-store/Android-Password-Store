@@ -38,14 +38,13 @@ internal fun Project.configureForAllProjects() {
       content {
         includeModule("com.github.haroldadmin", "WhatTheStack")
         includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
-        includeModule("com.github.IvanShafran", "shared-preferences-mock")
       }
     }
   }
   tasks.withType<KotlinCompile> {
     kotlinOptions {
       allWarningsAsErrors = true
-      jvmTarget = JavaVersion.VERSION_1_8.toString()
+      jvmTarget = JavaVersion.VERSION_11.toString()
       freeCompilerArgs = freeCompilerArgs + additionalCompilerArgs
       languageVersion = "1.5"
     }
@@ -110,7 +109,7 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
 /** Apply baseline configurations for all Android projects (Application and Library). */
 @Suppress("UnstableApiUsage")
 internal fun TestedExtension.configureCommonAndroidOptions() {
-  setCompileSdkVersion(30)
+  setCompileSdkVersion(31)
 
   defaultConfig {
     minSdk = 23
@@ -133,8 +132,8 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
   }
 
   testOptions {
