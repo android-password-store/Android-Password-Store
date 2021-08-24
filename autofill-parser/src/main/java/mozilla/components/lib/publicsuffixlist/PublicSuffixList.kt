@@ -38,7 +38,7 @@ internal class PublicSuffixList(
   }
 
   /** Prefetch the public suffix list from disk so that it is available in memory. */
-  fun prefetch(): Deferred<Unit> = scope.async { data.run { Unit } }
+  fun prefetchAsync(): Deferred<Unit> = scope.async { data.run {} }
 
   /**
    * Returns the public suffix and one more level; known as the registrable domain. Returns `null`
@@ -55,7 +55,7 @@ internal class PublicSuffixList(
    * unexpected values are passed (e.g., a full URL, a domain with a trailing '/', etc) this may
    * return an incorrect result.
    */
-  fun getPublicSuffixPlusOne(domain: String): Deferred<String?> =
+  fun getPublicSuffixPlusOneAsync(domain: String): Deferred<String?> =
     scope.async {
       when (val offset = data.getPublicSuffixOffset(domain)) {
         is PublicSuffixOffset.Offset ->

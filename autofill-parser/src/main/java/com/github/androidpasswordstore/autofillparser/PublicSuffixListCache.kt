@@ -19,7 +19,7 @@ private object PublicSuffixListCache {
     if (!::publicSuffixList.isInitialized) {
       publicSuffixList = PublicSuffixList(context)
       // Trigger loading the actual public suffix list, but don't block.
-      @Suppress("DeferredResultUnused") publicSuffixList.prefetch()
+      @Suppress("DeferredResultUnused") publicSuffixList.prefetchAsync()
     }
     return publicSuffixList
   }
@@ -80,7 +80,8 @@ private suspend fun getCanonicalSuffix(
   customSuffixes: Sequence<String>
 ): String {
   val publicSuffixList = PublicSuffixListCache.getOrCachePublicSuffixList(context)
-  val publicSuffixPlusOne = publicSuffixList.getPublicSuffixPlusOne(domain).await() ?: return domain
+  val publicSuffixPlusOne =
+    publicSuffixList.getPublicSuffixPlusOneAsync(domain).await() ?: return domain
   var longestSuffix = publicSuffixPlusOne
   for (customSuffix in customSuffixes) {
     val suffixPlusUpToOne = getSuffixPlusUpToOne(domain, customSuffix) ?: continue
