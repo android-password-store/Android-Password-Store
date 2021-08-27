@@ -24,7 +24,6 @@ import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
 import dev.msfjarvis.aps.ui.crypto.GetKeyIdsActivity
 import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.extensions.commitChange
-import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import java.io.File
 import kotlinx.coroutines.launch
 import me.msfjarvis.openpgpktx.util.OpenPgpApi

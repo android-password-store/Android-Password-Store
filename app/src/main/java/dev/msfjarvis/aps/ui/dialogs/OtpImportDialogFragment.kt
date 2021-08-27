@@ -13,11 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
-import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentManualOtpEntryBinding
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
-import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 
 class OtpImportDialogFragment : DialogFragment() {
 

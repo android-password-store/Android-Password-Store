@@ -23,7 +23,6 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.injection.prefs.GitPreferences
-import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import dev.msfjarvis.aps.util.git.sshj.InteractivePasswordFinder
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
