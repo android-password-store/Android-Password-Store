@@ -14,6 +14,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuItem.OnActionExpandListener
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
@@ -56,7 +57,6 @@ import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.isInsideRepository
 import dev.msfjarvis.aps.util.extensions.isPermissionGranted
 import dev.msfjarvis.aps.util.extensions.listFilesRecursively
-import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -583,7 +583,7 @@ class PasswordStore : BaseGitActivity() {
         .setNegativeButton(R.string.dialog_skip, null)
         .create()
 
-    dialog.requestInputFocusOnView<TextInputEditText>(R.id.folder_name_text)
+    dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     dialog.show()
   }
 

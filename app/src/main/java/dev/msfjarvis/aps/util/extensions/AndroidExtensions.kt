@@ -15,10 +15,7 @@ import android.util.Base64
 import android.util.TypedValue
 import android.view.View
 import android.view.autofill.AutofillManager
-import android.view.inputmethod.InputMethodManager
-import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -32,25 +29,6 @@ import dev.msfjarvis.aps.BuildConfig
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.git.operation.GitOperation
-
-/**
- * Extension function for [AlertDialog] that requests focus for the view whose id is [id]. Solution
- * based on a StackOverflow answer: https://stackoverflow.com/a/13056259/297261
- */
-fun <T : View> AlertDialog.requestInputFocusOnView(@IdRes id: Int) {
-  setOnShowListener {
-    findViewById<T>(id)?.apply {
-      setOnFocusChangeListener { v, _ ->
-        v.post {
-          context
-            .getSystemService<InputMethodManager>()
-            ?.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
-        }
-      }
-      requestFocus()
-    }
-  }
-}
 
 /** Get an instance of [AutofillManager]. Only available on Android Oreo and above */
 val Context.autofillManager: AutofillManager?

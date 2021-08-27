@@ -8,6 +8,7 @@ package dev.msfjarvis.aps.util.git.operation
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.view.LayoutInflater
+import android.view.WindowManager
 import androidx.annotation.StringRes
 import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
@@ -22,7 +23,6 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.injection.prefs.GitPreferences
-import dev.msfjarvis.aps.util.extensions.requestInputFocusOnView
 import dev.msfjarvis.aps.util.git.sshj.InteractivePasswordFinder
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -100,7 +100,7 @@ class CredentialFinder(val callingActivity: FragmentActivity, val authMode: Auth
           create()
         }
         .run {
-          requestInputFocusOnView<TextInputEditText>(R.id.git_auth_credential)
+          window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
           show()
         }
     } else {

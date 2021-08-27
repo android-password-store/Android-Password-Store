@@ -25,6 +25,8 @@
       android:layout_height="wrap_content"
       android:inputType="textNoSuggestions|textVisiblePassword" />
 
+    <requestFocus />
+
   </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.checkbox.MaterialCheckBox
