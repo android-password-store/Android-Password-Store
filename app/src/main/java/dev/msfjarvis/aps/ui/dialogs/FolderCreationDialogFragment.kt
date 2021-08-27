@@ -7,6 +7,7 @@ package dev.msfjarvis.aps.ui.dialogs
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -67,7 +68,7 @@ class FolderCreationDialogFragment : DialogFragment() {
     alertDialogBuilder.setPositiveButton(getString(R.string.button_create), null)
     alertDialogBuilder.setNegativeButton(getString(android.R.string.cancel)) { _, _ -> dismiss() }
     val dialog = alertDialogBuilder.create()
-    dialog.requestInputFocusOnView<TextInputEditText>(R.id.folder_name_text)
+    dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     dialog.setOnShowListener {
       dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
         createDirectory(requireArguments().getString(CURRENT_DIR_EXTRA)!!)
