@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Download new publicsuffix data
         uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
@@ -22,18 +25,18 @@ jobs:
         uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
         if: env.UPDATED == 'true'
         with:
-          arguments: :autofill-parser:test
+          arguments: :autofill-parser:test -PslimTests
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@01f7dd1d28f5131231ba3ede0f1c8cb413584a1d
+      - name: Commit changes
+        if: env.UPDATED == 'true'
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "noreply@github.com"
+          git commit -am "autofill-parser: update publicsuffixes file"
+
+      - name: Push to develop
+        uses: ad-m/github-push-action@40bf560936a8022e68a3c00e7d2abefaf01305a6
         if: env.UPDATED == 'true'
         with:
-          assignees: msfjarvis
-          author: GitHub Actions <noreply@github.com>
-          base: develop
-          body: This is an automated pull request to update the publicsuffixes file to the latest copy from Mozilla
-          branch: bot/update-psl
-          commit-message: "autofill-parser: update publicsuffixes file"
-          labels: PSL
-          title: Update Public Suffix List data
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PSL_UPDATE_TOKEN }}
+          branch: develop
