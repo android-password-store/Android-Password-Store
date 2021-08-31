@@ -12,6 +12,8 @@ include(":crypto-common")
 
 include(":crypto-pgp")
 
+include(":crypto-pgpainless")
+
 include(":format-common")
 
 include(":openpgp-ktx")
