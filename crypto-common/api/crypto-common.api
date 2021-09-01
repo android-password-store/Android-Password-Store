@@ -5,8 +5,8 @@ public abstract class dev/msfjarvis/aps/data/crypto/CryptoException : java/lang/
 
 public abstract interface class dev/msfjarvis/aps/data/crypto/CryptoHandler {
 	public abstract fun canHandle (Ljava/lang/String;)Z
-	public abstract fun decrypt (Ljava/lang/String;[B[B)[B
-	public abstract fun encrypt (Ljava/lang/String;[B)[B
+	public abstract fun decrypt (Ljava/lang/String;Ljava/lang/String;Ljava/io/InputStream;Ljava/io/OutputStream;)V
+	public abstract fun encrypt (Ljava/util/List;Ljava/io/InputStream;Ljava/io/OutputStream;)V
 }
 
 public abstract interface class dev/msfjarvis/aps/data/crypto/KeyManager {

@@ -1,0 +1,7 @@
+public final class dev/msfjarvis/aps/crypto/PGPainlessCryptoHandler : dev/msfjarvis/aps/data/crypto/CryptoHandler {
+	public fun <init> ()V
+	public fun canHandle (Ljava/lang/String;)Z
+	public fun decrypt (Ljava/lang/String;Ljava/lang/String;Ljava/io/InputStream;Ljava/io/OutputStream;)V
+	public fun encrypt (Ljava/util/List;Ljava/io/InputStream;Ljava/io/OutputStream;)V
+}
+

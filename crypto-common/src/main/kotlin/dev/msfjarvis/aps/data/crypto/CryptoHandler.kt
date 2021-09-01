@@ -5,20 +5,32 @@
 
 package dev.msfjarvis.aps.data.crypto
 
+import java.io.InputStream
+import java.io.OutputStream
+
 /** Generic interface to implement cryptographic operations on top of. */
 public interface CryptoHandler {
 
   /**
-   * Decrypt the given [ciphertext] using a [privateKey] and [passphrase], returning a [ByteArray]
-   * corresponding to the decrypted plaintext.
+   * Decrypt the given [ciphertextStream] using a [privateKey] and [password], and writes the
+   * resultant plaintext to [outputStream].
    */
-  public fun decrypt(privateKey: String, passphrase: ByteArray, ciphertext: ByteArray): ByteArray
+  public fun decrypt(
+    privateKey: String,
+    password: String,
+    ciphertextStream: InputStream,
+    outputStream: OutputStream,
+  )
 
   /**
-   * Encrypt the given [plaintext] to the provided [publicKey], returning the encrypted ciphertext
-   * as a [ByteArray]
+   * Encrypt the given [plaintextStream] to the provided [pubKeys], and writes the encrypted
+   * ciphertext to [outputStream].
    */
-  public fun encrypt(publicKey: String, plaintext: ByteArray): ByteArray
+  public fun encrypt(
+    pubKeys: List<String>,
+    plaintextStream: InputStream,
+    outputStream: OutputStream,
+  )
 
   /** Given a [fileName], return whether this instance can handle it. */
   public fun canHandle(fileName: String): Boolean
