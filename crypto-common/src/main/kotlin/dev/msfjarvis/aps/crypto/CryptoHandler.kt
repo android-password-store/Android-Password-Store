@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package dev.msfjarvis.aps.data.crypto
+package dev.msfjarvis.aps.crypto
 
 import java.io.InputStream
 import java.io.OutputStream

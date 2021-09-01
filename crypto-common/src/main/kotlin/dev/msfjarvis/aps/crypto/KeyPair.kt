@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package dev.msfjarvis.aps.data.crypto
+package dev.msfjarvis.aps.crypto
 
 /** Defines expectations for a keypair used in public key cryptography. */
 public interface KeyPair {

@@ -10,8 +10,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
+import dev.msfjarvis.aps.crypto.CryptoHandler
 import dev.msfjarvis.aps.crypto.PGPainlessCryptoHandler
-import dev.msfjarvis.aps.data.crypto.CryptoHandler
 
 /**
  * This module adds all [CryptoHandler] implementations into a Set which makes it easier to build
