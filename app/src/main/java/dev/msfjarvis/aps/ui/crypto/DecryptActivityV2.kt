@@ -20,6 +20,7 @@ import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -126,19 +127,22 @@ class DecryptActivityV2 : BasePgpActivity() {
   private fun decrypt() {
     lifecycleScope.launch {
       // TODO(msfjarvis): native methods are fallible, add error handling once out of testing
-      val message = withContext(Dispatchers.IO) { File(fullPath).readBytes() }
+      val message = withContext(Dispatchers.IO) { File(fullPath).inputStream() }
       val result =
         withContext(Dispatchers.IO) {
           val crypto = cryptos.first { it.canHandle(fullPath) }
+          val outputStream = ByteArrayOutputStream()
           crypto.decrypt(
             PRIV_KEY,
-            PASS.toByteArray(charset = Charsets.UTF_8),
+            PASS,
             message,
+            outputStream,
           )
+          outputStream
         }
       startAutoDismissTimer()
 
-      val entry = passwordEntryFactory.create(lifecycleScope, result)
+      val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
       passwordEntry = entry
       invalidateOptionsMenu()
 
