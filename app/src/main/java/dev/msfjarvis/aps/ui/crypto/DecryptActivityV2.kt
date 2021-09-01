@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class GopenpgpDecryptActivity : BasePgpActivity() {
+class DecryptActivityV2 : BasePgpActivity() {
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory

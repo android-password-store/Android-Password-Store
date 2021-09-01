@@ -45,7 +45,7 @@
       android:windowSoftInputMode="adjustResize" />
 
     <activity
-      android:name=".ui.crypto.GopenpgpDecryptActivity"
+      android:name=".ui.crypto.DecryptActivityV2"
       android:exported="true" />
 
     <activity
@@ -95,7 +95,7 @@
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
-    <activity android:name=".ui.crypto.GopenpgpPasswordCreationActivity"
+    <activity android:name=".ui.crypto.PasswordCreationActivityV2"
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
@@ -137,7 +137,7 @@
       android:name=".ui.autofill.AutofillDecryptActivity"
       android:theme="@style/NoBackgroundTheme" />
     <activity
-      android:name=".ui.autofill.GopenpgpAutofillDecryptActivity"
+      android:name=".ui.autofill.AutofillDecryptActivityV2"
       android:theme="@style/NoBackgroundTheme" />
     <activity
       android:name=".ui.autofill.AutofillFilterView"
