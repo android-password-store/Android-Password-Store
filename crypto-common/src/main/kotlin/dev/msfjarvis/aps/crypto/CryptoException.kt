@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.data.crypto
+package dev.msfjarvis.aps.crypto
 
 public sealed class CryptoException(message: String? = null) : Exception(message)
 
