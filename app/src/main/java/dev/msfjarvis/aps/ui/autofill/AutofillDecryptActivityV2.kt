@@ -28,6 +28,7 @@ import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.asLog
+import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -130,11 +131,14 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
         runCatching {
           val crypto = cryptos.first { it.canHandle(file.absolutePath) }
           withContext(Dispatchers.IO) {
+            val outputStream = ByteArrayOutputStream()
             crypto.decrypt(
               DecryptActivityV2.PRIV_KEY,
-              DecryptActivityV2.PASS.toByteArray(charset = Charsets.UTF_8),
-              encryptedInput.readBytes()
+              DecryptActivityV2.PASS,
+              encryptedInput,
+              outputStream,
             )
+            outputStream
           }
         }
           .onFailure { e ->
@@ -143,7 +147,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
           }
           .onSuccess { result ->
             return runCatching {
-              val entry = passwordEntryFactory.create(lifecycleScope, result)
+              val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
               AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
             }
               .getOrElse { e ->

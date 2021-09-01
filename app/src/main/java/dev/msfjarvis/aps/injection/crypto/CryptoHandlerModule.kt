@@ -10,8 +10,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
+import dev.msfjarvis.aps.crypto.PGPainlessCryptoHandler
 import dev.msfjarvis.aps.data.crypto.CryptoHandler
-import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
 
 /**
  * This module adds all [CryptoHandler] implementations into a Set which makes it easier to build
@@ -23,7 +23,7 @@ object CryptoHandlerModule {
   @Provides
   @IntoSet
   fun providePgpCryptoHandler(): CryptoHandler {
-    return GopenpgpCryptoHandler()
+    return PGPainlessCryptoHandler()
   }
 }
 

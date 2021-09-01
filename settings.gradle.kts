@@ -10,8 +10,6 @@ include(":autofill-parser")
 
 include(":crypto-common")
 
-include(":crypto-pgp")
-
 include(":crypto-pgpainless")
 
 include(":format-common")
