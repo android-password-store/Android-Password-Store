@@ -241,7 +241,7 @@ class PasswordStore : BaseGitActivity() {
     }
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
     val menuRes =
       when {
         gitSettings.authMode == AuthMode.None -> R.menu.main_menu_no_auth

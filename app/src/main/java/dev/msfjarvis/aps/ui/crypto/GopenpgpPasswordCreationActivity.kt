@@ -207,7 +207,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
     updateViewState()
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.pgp_handler_new_password, menu)
     return true
   }

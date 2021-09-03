@@ -81,15 +81,13 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
     }
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.pgp_handler, menu)
     passwordEntry?.let { entry ->
-      if (menu != null) {
-        menu.findItem(R.id.edit_password).isVisible = true
-        if (!entry.password.isNullOrBlank()) {
-          menu.findItem(R.id.share_password_as_plaintext).isVisible = true
-          menu.findItem(R.id.copy_password).isVisible = true
-        }
+      menu.findItem(R.id.edit_password).isVisible = true
+      if (!entry.password.isNullOrBlank()) {
+        menu.findItem(R.id.share_password_as_plaintext).isVisible = true
+        menu.findItem(R.id.copy_password).isVisible = true
       }
     }
     return true
