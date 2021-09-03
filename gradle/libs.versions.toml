@@ -1,13 +1,13 @@
 # Centralized versions for dependencies that share versions
 [versions]
-androidx_activity = "1.3.1"
+androidx_activity = "1.4.0-alpha01"
 androidx_test = "1.4.1-alpha01"
-compose = "1.0.1"
+compose = "1.1.0-alpha03"
 composeSnapshot = "-"
 coroutines = "1.5.1"
 flowbinding = "1.2.0"
 hilt = "2.38.1"
-kotlin = "1.5.21"
+kotlin = "1.5.30"
 lifecycle = "2.4.0-alpha03"
 
 [libraries]
@@ -23,9 +23,9 @@ androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.0-alpha03"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0"
-androidx-core-ktx = "androidx.core:core-ktx:1.7.0-alpha01"
+androidx-core-ktx = "androidx.core:core-ktx:1.7.0-alpha02"
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-alpha07"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-alpha08"
 androidx-hilt-compose = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
 androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref="lifecycle" }
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref="lifecycle" }
