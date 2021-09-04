@@ -228,8 +228,8 @@
   <string name="ssh_key_does_not_exist">Невозможно открыть приватный ключ ssh, пожалуйста проверьте, что файл существует</string>
   <string name="new_password_title">Новый пароль</string>
   <string name="clear_saved_passphrase_ssh">Очистить сохраненную кодовую фразу для локального SSH ключа</string>
-  <string name="clear_saved_passphrase_https">Очистить сохраненный пароль HTTPS</string>
-  <string name="git_operation_remember_passphrase">Заполнить парольную фразу в конфигурации приложнеия (небезопасно)</string>
+  <string name="clear_saved_passphrase_https">Удалить сохраненный пароль HTTPS</string>
+  <string name="git_operation_remember_passphrase">Запомнить кодовую фразу</string>
   <string name="git_tools">Утилиты</string>
   <string name="abort_rebase">Прервать перебазирование и записать изменения в новую ветку</string>
   <string name="reset_to_remote">Полный сброс до состояния удаленной ветки</string>
@@ -332,21 +332,30 @@
   <string name="repository_n_location">Расположение \nрепозитория</string>
   <string name="let_s_go">Поехали</string>
   <string name="select_n_repository_type">Выберите \nтип репозитория</string>
-  <string name="select_repo_type_text">Создать локальное хранилище, или клонировать существующее.</string>
+  <string name="select_repo_type_text">Создать локальное хранилище, или клонировать удаленный репозиторий.</string>
   <string name="clone_remote_repo">Клонировать удаленный репозиторий</string>
   <string name="create_local_repo">Создать локальное хранилище</string>
+  <string name="select_gpg_key_title">Выберите\nGPG ключ</string>
   <string name="select_gpg_key_message">Выберите GPG ключ для инициализации хранилища</string>
-  <string name="gpg_key_select">Выберите ключ:</string>
+  <string name="gpg_key_select">Выберите ключ</string>
   <!-- SSH port validation -->
   <string name="ssh_scheme_needed_title">Потенциально неправильный URL</string>
   <string name="ssh_scheme_needed_message">Указание порта в URL будет работать только при использовании SSH (ssh://), иначе порт будет расцениваться как часть URL. Исправить URL?</string>
   <string name="https_scheme_with_port_title">URL HTTPS с произвольным портом</string>
   <string name="https_scheme_with_port_message">Похоже, что вы используете URL HTTPS с произвольным портом. Это не поддерживается, и вызовет проблемы в дальнейшем. Нажмите ОК, чтобы удалить порт из URL.</string>
+  <string name="git_scheme_disallowed_title">Использование протокола git нежелательно</string>
+  <string name="git_scheme_disallowed_message">Протокол git, предоставляемый демоном, не обеспечивает транспортного шифрования и не подходит для безопасных операций.</string>
   <!-- Proxy configuration activity -->
   <string name="proxy_hostname">Хост прокси</string>
   <string name="port">Порт</string>
+  <string name="pref_edit_proxy_settings">Настройки HTTP(S) прокси</string>
   <string name="invalid_proxy_url">Недопустимый URL-адрес</string>
-  <string name="oreo_autofill_password_fill_and_conditional_save_support">Автозаполнение и созранение паролей (сохранение требует отсутствия специальных средств доступности)</string>
+  <string name="oreo_autofill_password_fill_and_conditional_save_support">Автозаполнение и сохранение паролей (сохранение требует отключения специальных средств доступности)</string>
   <string name="clear_saved_host_key">Очистить сохраненный ключ хоста</string>
-  <string name="clear_saved_host_key_success">Сохраненный ключ хоста успешно очищен!</string>
+  <string name="clear_saved_host_key_success">Сохраненный ключ хоста был успешно удален!</string>
+  <string name="otp_import_qr_code">Отсканировать QR-код</string>
+  <string name="otp_import_manual_entry">Ввести вручную</string>
+  <string name="otp_import_manual_hint_account">Учетная запись</string>
+  <string name="gpg_key_select_mandatory">Для продолжения необходимо выбрать GPG-ключ</string>
+  <string name="place_shortcut_on_home_screen">Разместить ярлык на рабочем столе</string>
 </resources>

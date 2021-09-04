@@ -33,7 +33,7 @@
   <!-- git commits -->
   <string name="git_commit_add_text">Füge generiertes Passwort für %1$s mittels Android Passwort Store hinzu.</string>
   <string name="git_commit_edit_text">Bearbeite das Passwort für %1$s mittels Android Password Store.</string>
-  <string name="git_commit_remove_text">%1$s aus dem Speicher entfernen.</string>
+  <string name="git_commit_remove_text">%1$s aus dem Store entfernen.</string>
   <string name="git_commit_move_text">Benenne %1$s in %2$s um.</string>
   <string name="git_commit_move_multiple_text">Verschiebe mehrere Passwörter nach %1$s.</string>
   <string name="git_commit_gpg_id">Initialisiere GPG-IDs in %1$s.</string>
@@ -84,6 +84,7 @@
   <string name="copy_password">Passwort kopieren</string>
   <string name="share_as_plaintext">Als Klartext teilen</string>
   <!-- Preferences -->
+  <string name="pref_category_repository_title">Repository</string>
   <string name="pref_edit_git_server_settings">Git-Server Einstellungen</string>
   <string name="pref_edit_git_config">Lokale Git Konfiguration &amp; Dienstprogramme</string>
   <string name="pref_import_ssh_key_title">Importiere SSH-Key</string>
@@ -111,6 +112,8 @@
   <string name="pref_category_autofill_title">Automatisch ausfüllen</string>
   <string name="pref_autofill_enable_title">Autofill aktivieren</string>
   <string name="pref_category_misc_title">Verschiedenes</string>
+  <string name="pref_clear_clipboard_title">Zwischenablagenverlauf umgehen</string>
+  <string name="pref_clear_clipboard_summary">Zwischenablage mit aufeinanderfolgenden Zahlen überschwemmen, um ggf. bestehende Passwörter zu leeren</string>
   <string name="pref_git_delete_repo_summary">Lösche das lokale (versteckte) Repository</string>
   <string name="pref_external_repository_title">Externes Repository</string>
   <string name="pref_external_repository_summary">Nutze ein externes Repository</string>
@@ -118,6 +121,9 @@
   <string name="pref_select_external_repository_summary_no_repo_selected">Kein externes Repository ausgewählt</string>
   <string name="prefs_export_passwords_title">Passwörter exportieren</string>
   <string name="prefs_export_passwords_summary">Exportiert die verschlüsselten Passwörter in ein externes Verzeichnis</string>
+  <string name="pref_rebase_on_pull_title">Rebase beim Pullen</string>
+  <string name="pref_rebase_on_pull_summary">Ein Merge-Commit mit Upstream-Änderungen beim Pullen oder Synchronisieren erstellen</string>
+  <string name="pref_rebase_on_pull_summary_on">Beim Pullen oder Synchronisieren, Commits rebasen, die nicht im Remote-Repository vorhanden sind</string>
   <!-- PasswordGenerator fragment -->
   <string name="pwgen_title">Passwort generieren</string>
   <string name="pwgen_generate">Generieren</string>
@@ -185,11 +191,12 @@
   <string name="send_plaintext_password_to">Passwort unverschlüsselt senden an…</string>
   <string name="app_icon_hint">App Icon</string>
   <!-- Oreo Autofill -->
+  <string name="oreo_autofill_select_and_fill_into">Eintrag zum Ausfüllen auswählen</string>
   <string name="oreo_autofill_strict_domain_search">Phishing-resistente Suche</string>
   <string name="oreo_autofill_match_with">Übereinstimmung mit %1$s</string>
   <string name="oreo_autofill_matches_clear_existing">Bestehende Übereinstimmungen löschen</string>
   <string name="oreo_autofill_filter_no_results">Keine Ergebnisse.</string>
-  <string name="oreo_autofill_search_in_store">Suche im Speicher…</string>
+  <string name="oreo_autofill_search_in_store">Eintrag suchen</string>
   <string name="oreo_autofill_save_internal_error">Speichern aufgrund eines internen Fehlers fehlgeschlagen</string>
   <string name="oreo_autofill_save_app_not_supported">Diese App wird derzeit nicht unterstützt</string>
   <string name="oreo_autofill_save_passwords_dont_match">Die Passwörter stimmen nicht überein</string>
@@ -220,9 +227,15 @@
   <string name="clear_saved_passphrase_ssh">Gespeicherte Passphrase für lokalen SSH-Schlüssel löschen</string>
   <string name="clear_saved_passphrase_https">Gespeichertes HTTPS-Passwort löschen</string>
   <string name="git_operation_remember_passphrase">Schlüsselpasswort merken</string>
+  <string name="git_tools">Hilfsmittel</string>
+  <string name="abort_rebase">Rebase abbrechen und neuen Branch pushen</string>
+  <string name="reset_to_remote">Hard Reset auf Remote-Branch</string>
+  <string name="git_head_on_branch">Auf Branch %1$s</string>
+  <string name="git_head_detached">HEAD abgelöst bei %1$s</string>
   <string name="git_head_missing">Kann HEAD nicht lokalisieren</string>
   <string name="sdcard_root_warning_title">Wurzelverzeichnis der SD-Karte ausgewählt</string>
   <string name="sdcard_root_warning_message">Sie haben das Wurzelverzeichnis der SD-Karte als Speicherort gewählt. Das ist sehr gefährlich, da der Inhalt letztendlich gelöscht wird</string>
+  <string name="sdcard_root_warning_remove_everything">Alles löschen</string>
   <string name="git_abort_and_push_title">Abbrechen und hochladen</string>
   <string name="biometric_prompt_title">Biometrische Abfrage</string>
   <string name="biometric_auth_error">Authentifizierungsfehler</string>
@@ -263,6 +276,7 @@
   <string name="git_operation_wrong_password">Falsches Passwort</string>
   <string name="bottom_sheet_create_new_folder">Neuen Ordner erstellen</string>
   <string name="bottom_sheet_create_new_password">Neues Passwort erstellen</string>
+  <string name="snackbar_action_grant">Zulassen</string>
   <string name="pref_debug_logging_summary">Debug logging aktivieren (Erfordert Neustart der App)</string>
   <string name="pref_debug_logging_title">Debug logging</string>
   <string name="preference_default_username_summary">Wenn Autofill den Benutzernamen nicht aus der Passwortdatei oder dem Ordner herleiten kann, wird der hier festgelegte Wert verwendet</string>
@@ -270,6 +284,7 @@
   <string name="git_operation_remember_password">Passwort merken</string>
   <string name="git_operation_hint_password">Passwort</string>
   <string name="preference_custom_public_suffixes_title">Benutzerdefinierte Domains</string>
+  <string name="preference_custom_public_suffixes_summary">Autofill wird Subdomains dieser Domains unterscheiden</string>
   <string name="preference_custom_public_suffixes_hint">company.com\npersonal.com</string>
   <!-- OpenKeychain errors -->
   <string name="openpgp_error_wrong_passphrase">Falsches Passwort</string>
@@ -286,11 +301,18 @@
   <string name="exporting_passwords">Exportiere Passwörter…</string>
   <string name="invalid_gpg_id">.gpg-id gefunden, enthält aber eine ungültige Schlüssel-ID, Fingerabdruck oder Benutzer-ID</string>
   <string name="short_key_ids_unsupported">Eine Schlüssel-ID in .gpg-id ist zu kurz, bitte verwenden Sie entweder lange Schlüssel-IDs (16 Zeichen) oder Fingerabdrücke (40 Zeichen)</string>
+  <string name="invalid_filename_text">Dateiname darf nicht \'/\' enthalten, Verzeichnis oben setzen</string>
   <string name="directory_hint">Ordner</string>
   <string name="new_folder_set_gpg_key">GPG Schlüssel für Ordner festlegen</string>
   <!-- GitException messages -->
   <string name="git_unknown_error">Unbekannter Fehler</string>
+  <string name="git_pull_rebase_fail_error">Pull fehlgeschlagen. Du befindest dich in einem abgelösten Head. Speichere die Änderungen in \"Einstellungen &gt; Git-Werkzeuge\" auf das Remote-Repository in einem neuen Branch und löse den Konflikt auf deinem Computer auf.</string>
+  <string name="git_pull_merge_fail_error">Merge fehlgeschlagen, du bist in einem Konflikt. TODO: Wiederherstellungsmethode hinzufügen.</string>
+  <string name="git_push_nff_error">Push wurde vom Remote abgelehnt. Führe den Pull vor dem Push aus. Du kannst \"Synchronisieren\" statt Pull/Push nutzen, da es beides implementiert</string>
+  <string name="git_push_generic_error">Push wurde von Remote abgelehnt, Grund: %1$s</string>
+  <string name="git_push_other_error">Remote hat den Push abgelehnt. Prüfe die Variable receive.denyNonFastForwards in der Konfigurationsdatei des Ziel-Projektarchivs.</string>
   <string name="git_unknown_host">Unbekannter Host: %1$s</string>
+  <string name="git_operation_running">Git-Operation wird ausgeführt…</string>
   <!-- OpenKeychain not installed -->
   <string name="openkeychain_not_installed_title">OpenKeychain nicht installiert</string>
   <string name="openkeychain_not_installed_message">OpenKeychain wird für Password Store benötigt, bitte installieren Sie es von einem der unten aufgeführten Stores</string>
