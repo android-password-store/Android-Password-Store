@@ -10,8 +10,11 @@ plugins {
 
 dependencies {
   api(projects.cryptoCommon)
+  implementation(libs.androidx.annotation)
   implementation(libs.dagger.hilt.core)
   implementation(libs.kotlin.coroutines.core)
   implementation(libs.thirdparty.kotlinResult)
   implementation(libs.thirdparty.pgpainless)
+  testImplementation(libs.bundles.testDependencies)
+  testImplementation(libs.kotlin.coroutines.test)
 }
