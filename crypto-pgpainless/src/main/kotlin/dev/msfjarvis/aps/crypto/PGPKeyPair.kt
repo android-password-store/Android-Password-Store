@@ -20,6 +20,6 @@ public class PGPKeyPair(private val secretKey: PGPSecretKey) : KeyPair {
     return secretKey.publicKey.encoded
   }
   override fun getKeyId(): String {
-    return secretKey.keyID.toString()
+    return secretKey.keyID.toString(radix = 16)
   }
 }
