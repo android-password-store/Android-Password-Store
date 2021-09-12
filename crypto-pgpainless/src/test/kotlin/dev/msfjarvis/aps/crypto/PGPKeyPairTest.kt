@@ -5,10 +5,9 @@
 
 package dev.msfjarvis.aps.crypto
 
-import dev.msfjarvis.aps.crypto.utils.CryptoConstants
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import org.junit.Test
 import org.pgpainless.PGPainless
 
 public class GPGKeyPairTest {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-package dev.msfjarvis.aps.crypto.utils
+package dev.msfjarvis.aps.crypto
 
 internal object CryptoConstants {
   internal const val KEY_PASSPHRASE = "hunter2"
