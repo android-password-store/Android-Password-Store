@@ -1,3 +1,21 @@
+public final class dev/msfjarvis/aps/crypto/PGPKeyManager : dev/msfjarvis/aps/crypto/KeyManager {
+	public fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;)V
+	public synthetic fun addKey (Ldev/msfjarvis/aps/crypto/KeyPair;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun addKey (Ldev/msfjarvis/aps/crypto/PGPKeyPair;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun canHandle (Ljava/lang/String;)Z
+	public fun getAllKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun removeKey (Ldev/msfjarvis/aps/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun removeKey (Ldev/msfjarvis/aps/crypto/PGPKeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/msfjarvis/aps/crypto/PGPKeyPair : dev/msfjarvis/aps/crypto/KeyPair {
+	public fun <init> (Lorg/bouncycastle/openpgp/PGPSecretKey;)V
+	public fun getKeyId ()Ljava/lang/String;
+	public fun getPrivateKey ()[B
+	public fun getPublicKey ()[B
+}
+
 public final class dev/msfjarvis/aps/crypto/PGPainlessCryptoHandler : dev/msfjarvis/aps/crypto/CryptoHandler {
 	public fun <init> ()V
 	public fun canHandle (Ljava/lang/String;)Z
