@@ -426,7 +426,7 @@ class PasswordStore : BaseGitActivity() {
       (authDecryptIntent.clone() as Intent).setComponent(
         ComponentName(
           this,
-          if (FeatureFlags.ENABLE_GOPENPGP) {
+          if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
             DecryptActivityV2::class.java
           } else {
             DecryptActivity::class.java

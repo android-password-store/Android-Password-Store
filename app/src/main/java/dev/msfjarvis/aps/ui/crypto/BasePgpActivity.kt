@@ -127,7 +127,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
   /** Method for subclasses to initiate binding with [OpenPgpServiceConnection]. */
   fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
-    if (FeatureFlags.ENABLE_GOPENPGP) return
+    if (FeatureFlags.ENABLE_PGP_V2_BACKEND) return
     val installed =
       runCatching {
           packageManager.getPackageInfo(OPENPGP_PROVIDER, 0)

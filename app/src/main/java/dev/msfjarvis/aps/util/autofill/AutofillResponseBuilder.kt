@@ -59,7 +59,7 @@ class AutofillResponseBuilder(form: FillableForm) {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
     val intentSender =
-      if (FeatureFlags.ENABLE_GOPENPGP) {
+      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
         AutofillDecryptActivityV2.makeDecryptFileIntentSender(file, context)
       } else {
         AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
