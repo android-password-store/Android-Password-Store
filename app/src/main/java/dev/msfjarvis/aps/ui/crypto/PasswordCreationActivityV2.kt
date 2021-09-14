@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class GopenpgpPasswordCreationActivity : BasePgpActivity() {
+class PasswordCreationActivityV2 : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
@@ -96,7 +96,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
       otpImportButton.setOnClickListener {
         supportFragmentManager.setFragmentResultListener(
           OTP_RESULT_REQUEST_KEY,
-          this@GopenpgpPasswordCreationActivity
+          this@PasswordCreationActivityV2
         ) { requestKey, bundle ->
           if (requestKey == OTP_RESULT_REQUEST_KEY) {
             val contents = bundle.getString(RESULT)
@@ -113,12 +113,12 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
               getString(R.string.otp_import_qr_code),
               getString(R.string.otp_import_manual_entry)
             )
-          MaterialAlertDialogBuilder(this@GopenpgpPasswordCreationActivity)
+          MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
             .setItems(items) { _, index ->
               when (index) {
                 0 ->
                   otpImportAction.launch(
-                    IntentIntegrator(this@GopenpgpPasswordCreationActivity)
+                    IntentIntegrator(this@PasswordCreationActivityV2)
                       .setOrientationLocked(false)
                       .setBeepEnabled(false)
                       .setDesiredBarcodeFormats(QR_CODE)
@@ -156,7 +156,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
       // in the encrypted extras. This only makes sense if the directory structure is
       // FileBased.
       if (suggestedName == null &&
-          AutofillPreferences.directoryStructure(this@GopenpgpPasswordCreationActivity) ==
+          AutofillPreferences.directoryStructure(this@PasswordCreationActivityV2) ==
             DirectoryStructure.FileBased
       ) {
         encryptUsername.apply {
@@ -367,7 +367,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
             val oldFile = File("$repoPath/${oldCategory?.trim('/')}/$oldFileName.gpg")
             if (oldFile.path != file.path && !oldFile.delete()) {
               setResult(RESULT_CANCELED)
-              MaterialAlertDialogBuilder(this@GopenpgpPasswordCreationActivity)
+              MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
                 .setTitle(R.string.password_creation_file_fail_title)
                 .setMessage(
                   getString(R.string.password_creation_file_delete_fail_message, oldFileName)
@@ -395,7 +395,7 @@ class GopenpgpPasswordCreationActivity : BasePgpActivity() {
             if (e is IOException) {
               e(e) { "Failed to write password file" }
               setResult(RESULT_CANCELED)
-              MaterialAlertDialogBuilder(this@GopenpgpPasswordCreationActivity)
+              MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
                 .setTitle(getString(R.string.password_creation_file_fail_title))
                 .setMessage(getString(R.string.password_creation_file_write_fail_message))
                 .setCancelable(false)

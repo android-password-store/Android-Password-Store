@@ -39,7 +39,7 @@ import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity.Companion.getLongName
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
-import dev.msfjarvis.aps.ui.crypto.GopenpgpDecryptActivity
+import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet
 import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
@@ -426,8 +426,8 @@ class PasswordStore : BaseGitActivity() {
       (authDecryptIntent.clone() as Intent).setComponent(
         ComponentName(
           this,
-          if (FeatureFlags.ENABLE_GOPENPGP) {
-            GopenpgpDecryptActivity::class.java
+          if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
+            DecryptActivityV2::class.java
           } else {
             DecryptActivity::class.java
           }

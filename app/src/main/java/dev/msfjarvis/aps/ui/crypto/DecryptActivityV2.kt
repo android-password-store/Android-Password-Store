@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class GopenpgpDecryptActivity : BasePgpActivity() {
+class DecryptActivityV2 : BasePgpActivity() {
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
@@ -96,13 +96,16 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
    * result triggers they can be repopulated with new data.
    */
   private fun editPassword() {
-    val intent = Intent(this, PasswordCreationActivity::class.java)
+    val intent = Intent(this, PasswordCreationActivityV2::class.java)
     intent.putExtra("FILE_PATH", relativeParentPath)
     intent.putExtra("REPO_PATH", repoPath)
-    intent.putExtra(PasswordCreationActivity.EXTRA_FILE_NAME, name)
-    intent.putExtra(PasswordCreationActivity.EXTRA_PASSWORD, passwordEntry?.password)
-    intent.putExtra(PasswordCreationActivity.EXTRA_EXTRA_CONTENT, passwordEntry?.extraContentString)
-    intent.putExtra(PasswordCreationActivity.EXTRA_EDITING, true)
+    intent.putExtra(PasswordCreationActivityV2.EXTRA_FILE_NAME, name)
+    intent.putExtra(PasswordCreationActivityV2.EXTRA_PASSWORD, passwordEntry?.password)
+    intent.putExtra(
+      PasswordCreationActivityV2.EXTRA_EXTRA_CONTENT,
+      passwordEntry?.extraContentString
+    )
+    intent.putExtra(PasswordCreationActivityV2.EXTRA_EDITING, true)
     startActivity(intent)
     finish()
   }

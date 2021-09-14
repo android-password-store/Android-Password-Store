@@ -22,10 +22,10 @@ import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
 import dev.msfjarvis.aps.autofill.oreo.ui.AutofillSmsActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivity
+import dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivityV2
 import dev.msfjarvis.aps.ui.autofill.AutofillFilterView
 import dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
-import dev.msfjarvis.aps.ui.autofill.GopenpgpAutofillDecryptActivity
 import dev.msfjarvis.aps.util.FeatureFlags
 import java.io.File
 
@@ -59,8 +59,8 @@ class AutofillResponseBuilder(form: FillableForm) {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
     val intentSender =
-      if (FeatureFlags.ENABLE_GOPENPGP) {
-        GopenpgpAutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
+      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
+        AutofillDecryptActivityV2.makeDecryptFileIntentSender(file, context)
       } else {
         AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
       }
