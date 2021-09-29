@@ -1,6 +1,11 @@
 on: [pull_request]
 
 name: Check pull request
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
