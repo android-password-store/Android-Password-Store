@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <resources>
-    <string-array name="app_theme_options">
-        <item>@string/theme_light</item>
-        <item>@string/theme_dark</item>
-        <item>@string/theme_follow_system</item>
-    </string-array>
-    <string-array name="app_theme_values">
-        <item>light</item>
-        <item>dark</item>
-        <item>follow_system</item>
-    </string-array>
+  <string-array name="app_theme_options">
+    <item>@string/pref_app_theme_value_light</item>
+    <item>@string/pref_app_theme_value_dark</item>
+    <item>@string/pref_app_theme_value_follow_system</item>
+  </string-array>
+  <string-array name="app_theme_values">
+    <item>light</item>
+    <item>dark</item>
+    <item>follow_system</item>
+  </string-array>
 </resources>

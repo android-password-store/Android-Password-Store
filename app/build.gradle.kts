@@ -1,146 +1,137 @@
 /*
- * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+ * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    `aps-plugin`
+  id("com.android.application")
+  kotlin("android")
+  kotlin("kapt")
+  id("dagger.hilt.android.plugin")
+  `versioning-plugin`
+  `aps-plugin`
+  `crowdin-plugin`
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-
-fun isSnapshot(): Boolean {
-    return System.getenv("GITHUB_WORKFLOW") != null && System.getenv("SNAPSHOT") != null
+/*
+repositories {
+  val composeSnapshot = libs.versions.composeSnapshot.get()
+  if (composeSnapshot.length > 1) {
+    maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/") {
+      content {
+        includeGroup("androidx.compose.animation")
+        includeGroup("androidx.compose.compiler")
+        includeGroup("androidx.compose.foundation")
+        includeGroup("androidx.compose.material")
+        includeGroup("androidx.compose.runtime")
+        includeGroup("androidx.compose.ui")
+      }
+    }
+  }
 }
+*/
+
+configure<CrowdinExtension> { projectName = "android-password-store" }
 
 android {
-    if (isSnapshot()) {
-        applicationVariants.all {
-            outputs.all {
-                (this as BaseVariantOutputImpl).outputFileName = "aps-${flavorName}_$versionName.apk"
-            }
-        }
+  if (isSnapshot()) {
+    applicationVariants.all {
+      outputs.all {
+        (this as BaseVariantOutputImpl).outputFileName = "aps-${flavorName}_$versionName.apk"
+      }
     }
+  }
+  compileOptions { isCoreLibraryDesugaringEnabled = true }
 
-    adbOptions.installOptions("--user 0")
+  defaultConfig {
+    applicationId = "dev.msfjarvis.aps"
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+  }
 
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
-    }
+  // buildFeatures.compose = true
 
-    defaultConfig {
-        applicationId = "dev.msfjarvis.aps"
-        versionCode = 11310
-        versionName = "1.13.1"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
+  lintOptions {
+    isAbortOnError = true
+    isCheckReleaseBuilds = false
+    disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
+    // https://issuetracker.google.com/issues/187524311
+    disable("DialogFragmentCallbacksDetector")
+    disable("CoroutineCreationDuringComposition")
+  }
 
-    lintOptions {
-        isAbortOnError = true
-        isCheckReleaseBuilds = false
-        disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
-    }
-
-    buildTypes {
-        named("release") {
-            isMinifyEnabled = true
-            setProguardFiles(listOf("proguard-android-optimize.txt", "proguard-rules.pro"))
-            buildConfigField("boolean", "ENABLE_DEBUG_FEATURES", if (isSnapshot()) "true" else "false")
-        }
-        named("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
-            isMinifyEnabled = false
-            buildConfigField("boolean", "ENABLE_DEBUG_FEATURES", "true")
-        }
-    }
-
-    if (keystorePropertiesFile.exists()) {
-        val keystoreProperties = Properties()
-        keystoreProperties.load(keystorePropertiesFile.inputStream())
-        signingConfigs {
-            register("release") {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-            }
-        }
-        listOf("release", "debug").map {
-            buildTypes.getByName(it).signingConfig = signingConfigs.getByName(it)
-        }
-    }
-
-    flavorDimensions("free")
-    productFlavors {
-        create("free") {
-        }
-        create("nonFree") {
-        }
-    }
+  //  composeOptions {
+  //    kotlinCompilerVersion = libs.versions.kotlin.get()
+  //    kotlinCompilerExtensionVersion = libs.versions.compose.get()
+  //  }
 }
 
 dependencies {
-    compileOnly(Dependencies.AndroidX.annotation)
-    implementation(Dependencies.AndroidX.activity_ktx)
-    implementation(Dependencies.AndroidX.appcompat)
-    implementation(Dependencies.AndroidX.biometric)
-    implementation(Dependencies.AndroidX.constraint_layout)
-    implementation(Dependencies.AndroidX.core_ktx)
-    implementation(Dependencies.AndroidX.documentfile)
-    implementation(Dependencies.AndroidX.fragment_ktx)
-    implementation(Dependencies.AndroidX.lifecycle_common)
-    implementation(Dependencies.AndroidX.lifecycle_livedata_ktx)
-    implementation(Dependencies.AndroidX.lifecycle_viewmodel_ktx)
-    implementation(Dependencies.AndroidX.material)
-    implementation(Dependencies.AndroidX.preference)
-    implementation(Dependencies.AndroidX.recycler_view)
-    implementation(Dependencies.AndroidX.recycler_view_selection)
-    implementation(Dependencies.AndroidX.security)
-    implementation(Dependencies.AndroidX.swiperefreshlayout)
+  kapt(libs.dagger.hilt.compiler)
+  implementation(libs.androidx.annotation)
+  coreLibraryDesugaring(libs.android.desugarJdkLibs)
+  implementation(projects.autofillParser)
+  implementation(projects.cryptoPgp)
+  implementation(projects.formatCommon)
+  implementation(projects.openpgpKtx)
+  implementation(libs.androidx.activity.ktx)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.androidx.autofill)
+  implementation(libs.androidx.biometricKtx)
+  implementation(libs.androidx.constraintlayout)
+  implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.documentfile)
+  implementation(libs.androidx.fragment.ktx)
+  implementation(libs.bundles.androidxLifecycle)
+  implementation(libs.androidx.material)
+  implementation(libs.androidx.preference)
+  implementation(libs.androidx.recyclerview)
+  implementation(libs.androidx.recyclerviewSelection)
+  implementation(libs.androidx.security)
+  implementation(libs.androidx.swiperefreshlayout)
+  implementation(libs.dagger.hilt.android)
 
-    implementation(Dependencies.Kotlin.Coroutines.android)
-    implementation(Dependencies.Kotlin.Coroutines.core)
+  implementation(libs.kotlin.coroutines.android)
+  implementation(libs.kotlin.coroutines.core)
 
-    implementation(project(Dependencies.FirstParty.autofill_parser))
-    implementation(Dependencies.FirstParty.openpgp_ktx)
-    implementation(Dependencies.FirstParty.zxing_android_embedded)
+  // implementation(libs.androidx.activity.compose)
+  // implementation(libs.androidx.hilt.compose)
+  // implementation(libs.compose.foundation.core)
+  // implementation(libs.compose.foundation.layout)
+  // implementation(libs.compose.material)
+  // implementation(libs.compose.ui.core)
+  // implementation(libs.compose.ui.viewbinding)
+  // compileOnly(libs.compose.ui.tooling)
 
-    implementation(Dependencies.ThirdParty.commons_codec)
-    implementation(Dependencies.ThirdParty.eddsa)
-    implementation(Dependencies.ThirdParty.fastscroll)
-    implementation(Dependencies.ThirdParty.jgit) {
-        exclude(group = "org.apache.httpcomponents", module = "httpclient")
-    }
-    implementation(Dependencies.ThirdParty.kotlin_result)
-    implementation(Dependencies.ThirdParty.sshj)
-    implementation(Dependencies.ThirdParty.bouncycastle)
-    implementation(Dependencies.ThirdParty.plumber)
-    implementation(Dependencies.ThirdParty.ssh_auth)
-    implementation(Dependencies.ThirdParty.timber)
-    implementation(Dependencies.ThirdParty.timberkt)
+  implementation(libs.aps.sublimeFuzzy)
+  implementation(libs.aps.zxingAndroidEmbedded)
 
-    if (isSnapshot()) {
-        implementation(Dependencies.ThirdParty.leakcanary)
-        implementation(Dependencies.ThirdParty.whatthestack)
-    } else {
-        debugImplementation(Dependencies.ThirdParty.leakcanary)
-        debugImplementation(Dependencies.ThirdParty.whatthestack)
-    }
+  implementation(libs.thirdparty.bouncycastle)
+  implementation(libs.thirdparty.eddsa)
+  implementation(libs.thirdparty.fastscroll)
+  implementation(libs.thirdparty.jgit) {
+    exclude(group = "org.apache.httpcomponents", module = "httpclient")
+  }
+  implementation(libs.thirdparty.kotlinResult)
+  implementation(libs.thirdparty.modernAndroidPrefs)
+  implementation(libs.thirdparty.plumber)
+  implementation(libs.thirdparty.sshauth)
+  implementation(libs.thirdparty.sshj)
+  implementation(libs.thirdparty.timber)
+  implementation(libs.thirdparty.timberkt)
 
-    "nonFreeImplementation"(Dependencies.NonFree.google_play_auth_api_phone)
+  if (isSnapshot()) {
+    implementation(libs.thirdparty.whatthestack)
+  } else {
+    debugImplementation(libs.thirdparty.whatthestack)
+  }
 
-    // Testing-only dependencies
-    androidTestImplementation(Dependencies.Testing.junit)
-    androidTestImplementation(Dependencies.Testing.kotlin_test_junit)
-    androidTestImplementation(Dependencies.Testing.AndroidX.runner)
-    androidTestImplementation(Dependencies.Testing.AndroidX.rules)
+  debugImplementation(libs.thirdparty.leakcanary)
+  add("nonFreeImplementation", libs.thirdparty.nonfree.googlePlayAuthApiPhone)
 
-    testImplementation(Dependencies.Testing.junit)
-    testImplementation(Dependencies.Testing.kotlin_test_junit)
+  androidTestImplementation(libs.bundles.testDependencies)
+  androidTestImplementation(libs.bundles.androidTestDependencies)
+  testImplementation(libs.testing.robolectric)
+  testImplementation(libs.testing.sharedPrefsMock)
+  testImplementation(libs.bundles.testDependencies)
 }

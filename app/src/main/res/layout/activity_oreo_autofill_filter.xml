@@ -1,120 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:elevation="2dp"
+  tools:context="dev.msfjarvis.aps.ui.autofill.AutofillFilterView">
+
+  <ImageView
+    android:id="@+id/cover"
+    android:layout_width="0dp"
+    android:layout_height="60dp"
+    android:background="@color/primary_color"
+    android:contentDescription="@string/app_name"
+    android:src="@mipmap/ic_launcher_foreground"
+    app:layout_constraintBottom_toTopOf="@id/origin"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0" />
+
+  <TextView
+    android:id="@+id/origin"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:elevation="2dp"
-    tools:context="com.zeapo.pwdstore.autofill.oreo.ui.AutofillFilterView">
+    android:layout_height="wrap_content"
+    android:singleLine="false"
+    android:textAlignment="center"
+    app:layout_constraintBottom_toTopOf="@id/searchLayout"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/cover"
+    app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/cover"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="@color/primary_color"
-        android:contentDescription="@string/app_name"
-        android:src="@mipmap/ic_launcher_foreground"
-        app:layout_constraintBottom_toTopOf="@id/searchLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/searchLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    app:endIconMode="clear_text"
+    app:layout_constraintBottom_toTopOf="@id/rvPasswordSwitcher"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/origin">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@id/rvPasswordSwitcher"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cover">
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/search"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/action_search"
+      android:imeOptions="actionDone"
+      android:inputType="text"
+      tools:text="example.com" />
+  </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/action_search"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            tools:text="example.com" />
-    </com.google.android.material.textfield.TextInputLayout>
+  <ViewSwitcher
+    android:id="@+id/rvPasswordSwitcher"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    app:layout_constraintBottom_toTopOf="@id/strictDomainSearch"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/searchLayout">
 
-    <ViewSwitcher
-        android:id="@+id/rvPasswordSwitcher"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        app:layout_constraintBottom_toTopOf="@id/strictDomainSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchLayout">
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rvPassword"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:scrollbars="vertical"
+      tools:itemCount="5"
+      tools:listitem="@layout/password_row_layout" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPassword"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            tools:itemCount="5"
-            tools:listitem="@layout/password_row_layout" />
+    <TextView
+      android:id="@+id/rvPasswordEmpty"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+      android:text="@string/oreo_autofill_filter_no_results"
+      android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/rvPasswordEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/oreo_autofill_filter_no_results"
-            android:textSize="18sp" />
+  </ViewSwitcher>
 
-    </ViewSwitcher>
+  <com.google.android.material.switchmaterial.SwitchMaterial
+    android:id="@+id/strictDomainSearch"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:text="@string/oreo_autofill_strict_domain_search"
+    app:layout_constraintBottom_toTopOf="@id/shouldMatch"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/rvPasswordSwitcher"
+    app:layout_constraintVertical_bias="1.0"
+    tools:text="Phishing-resistant search" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/strictDomainSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@string/oreo_autofill_strict_domain_search"
-        app:layout_constraintBottom_toTopOf="@id/shouldMatch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvPasswordSwitcher"
-        app:layout_constraintVertical_bias="1.0"
-        tools:text="Phishing-resistant search" />
+  <com.google.android.material.switchmaterial.SwitchMaterial
+    android:id="@+id/shouldMatch"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:checked="true"
+    app:layout_constraintBottom_toTopOf="@id/shouldClear"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/strictDomainSearch"
+    app:layout_constraintVertical_bias="1.0"
+    tools:text="Match with example.org" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/shouldMatch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:checked="true"
-        app:layout_constraintBottom_toTopOf="@id/shouldClear"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/strictDomainSearch"
-        app:layout_constraintVertical_bias="1.0"
-        tools:text="Match with example.org" />
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/shouldClear"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:text="@string/oreo_autofill_matches_clear_existing"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shouldMatch"
-        app:layout_constraintVertical_bias="1.0" />
+  <com.google.android.material.switchmaterial.SwitchMaterial
+    android:id="@+id/shouldClear"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:text="@string/oreo_autofill_matches_clear_existing"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/shouldMatch"
+    app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

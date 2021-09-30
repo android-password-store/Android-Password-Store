@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<resources>
+
+  <style name="AppTheme" parent="APSTheme">
+    <item name="android:windowLightNavigationBar">@bool/light_status_bar</item>
+  </style>
+</resources>

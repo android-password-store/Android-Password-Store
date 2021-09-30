@@ -1,28 +1,28 @@
 <!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:pwstore="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.zeapo.pwdstore.crypto.PgpActivity">
-    <item
-        android:id="@+id/share_password_as_plaintext"
-        android:icon="@drawable/ic_share_24dp"
-        android:title="@string/share_as_plaintext"
-        android:visible="false"
-        pwstore:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/copy_password"
-        android:icon="@drawable/ic_content_copy"
-        android:title="@string/copy_password"
-        android:visible="false"
-        pwstore:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/edit_password"
-        android:icon="@drawable/ic_edit_24dp"
-        android:title="@string/edit_password"
-        android:visible="false"
-        pwstore:showAsAction="ifRoom" />
+  xmlns:pwstore="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".ui.crypto.PgpActivity">
+  <item
+    android:id="@+id/share_password_as_plaintext"
+    android:icon="@drawable/ic_share_24dp"
+    android:title="@string/share_as_plaintext"
+    android:visible="false"
+    pwstore:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/copy_password"
+    android:icon="@drawable/ic_content_copy"
+    android:title="@string/copy_password"
+    android:visible="false"
+    pwstore:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/edit_password"
+    android:icon="@drawable/ic_edit_24dp"
+    android:title="@string/edit_password"
+    android:visible="false"
+    pwstore:showAsAction="ifRoom" />
 </menu>

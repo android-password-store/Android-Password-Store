@@ -1,86 +1,98 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?attr/colorPrimary">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/app_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
-        android:contentDescription="@string/app_icon_hint"
-        android:src="@mipmap/ic_launcher"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+      android:id="@+id/app_icon"
+      android:layout_width="64dp"
+      android:layout_height="64dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="@dimen/onboarding_icon_margin_top"
+      android:contentDescription="@string/app_icon_hint"
+      android:src="@mipmap/ic_launcher"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/app_icon"
-        app:layout_constraintStart_toEndOf="@id/app_icon"
-        app:layout_constraintTop_toTopOf="@+id/app_icon" />
+      android:id="@+id/app_name"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_marginStart="@dimen/fab_compat_margin"
+      android:layout_marginEnd="@dimen/fab_compat_margin"
+      android:text="@string/app_name"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+      android:textColor="@color/color_control_normal"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toBottomOf="@id/app_icon"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/app_icon"
+      app:layout_constraintTop_toTopOf="@+id/app_icon" />
 
     <TextView
-        android:id="@+id/repo_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/repository_n_location"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/app_icon"
-        app:layout_constraintTop_toBottomOf="@id/app_icon" />
+      android:id="@+id/repo_location"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="48dp"
+      android:layout_marginEnd="@dimen/fab_compat_margin"
+      android:text="@string/repository_n_location"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+      android:textColor="@color/color_control_normal"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@id/app_icon"
+      app:layout_constraintTop_toBottomOf="@id/app_icon" />
 
     <TextView
-        android:id="@+id/repo_location_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/location_dialog_create_text"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/repo_location"
-        app:layout_constraintTop_toBottomOf="@id/repo_location" />
+      android:id="@+id/repo_location_text"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/onboarding_desc_margin_top"
+      android:layout_marginEnd="16dp"
+      android:text="@string/location_dialog_create_text"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+      android:textColor="@color/color_control_normal"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@id/repo_location"
+      app:layout_constraintTop_toBottomOf="@id/repo_location" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/hidden"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:maxWidth="300dp"
-        android:minWidth="100dp"
-        android:text="@string/location_hidden"
-        app:layout_constraintBottom_toTopOf="@id/sdcard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+      android:id="@+id/hidden"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="@dimen/onboarding_button_margin_top"
+      android:layout_marginEnd="16dp"
+      android:maxWidth="300dp"
+      android:minWidth="100dp"
+      android:text="@string/location_hidden"
+      app:layout_constraintBottom_toTopOf="@id/sdcard"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/repo_location_text" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/sdcard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="128dp"
-        android:maxWidth="300dp"
-        android:minWidth="100dp"
-        android:text="@string/location_sdcard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/hidden"
-        app:layout_constraintStart_toStartOf="@id/hidden" />
+      android:id="@+id/sdcard"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="128dp"
+      android:maxWidth="300dp"
+      android:minWidth="100dp"
+      android:text="@string/location_sdcard"
+      app:layout_constraintEnd_toEndOf="@id/hidden"
+      app:layout_constraintStart_toStartOf="@id/hidden"
+      app:layout_constraintTop_toBottomOf="@id/hidden" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

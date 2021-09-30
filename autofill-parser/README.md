@@ -1,37 +1,11 @@
-# autofill-parser
+# autofill-parser [![Maven Central](https://img.shields.io/maven-central/v/com.github.android-password-store/autofill-parser.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.android-password-store%22%20AND%20a:%22autofill-parser%22)
 
 Android library to enable efficient usage of the Autofill capabilities introduced in Android 8.0.
 
 # Usage
 
-<details><summary>Gradle Kotlin DSL</summary>
-
 ```kotlin
-repositories {
-  maven {
-    setUrl("https://maven.msfjarvis.dev/android-password-store/autofill-parser")
-  }
-}
-
 dependencies {
-  implementation("com.github.androidpasswordstore:autofill-parser:1.0.0")
+    implementation("com.github.android-password-store:autofill-parser:<latest-version>")
 }
 ```
-
-</details>
-
-<details><summary>Groovy DSL</summary>
-
-```gradle
-repositories {
-  maven {
-    url 'https://maven.msfjarvis.dev/android-password-store/autofill-parser'
-  }
-}
-
-dependencies {
-  implementation 'com.github.androidpasswordstore:autofill-parser:1.0.0'
-}
-```
-
-</details>

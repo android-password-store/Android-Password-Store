@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:pwstore="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.zeapo.pwdstore.SelectFolderActivity">
-    <item
-        android:id="@+id/crypto_select"
-        android:icon="@drawable/ic_done_24dp"
-        android:title="@string/crypto_select"
-        pwstore:showAsAction="ifRoom" />
+  xmlns:pwstore="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context="dev.msfjarvis.aps.SelectFolderActivity">
+  <item
+    android:id="@+id/crypto_select"
+    android:icon="@drawable/ic_done_24dp"
+    android:title="@string/crypto_select"
+    pwstore:showAsAction="ifRoom" />
 </menu>

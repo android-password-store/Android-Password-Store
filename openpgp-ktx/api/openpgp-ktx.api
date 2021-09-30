@@ -1,0 +1,271 @@
+public final class me/msfjarvis/openpgpktx/AutocryptPeerUpdate : android/os/Parcelable {
+	public static final field CREATOR Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate$CREATOR;
+	public fun <init> ()V
+	public synthetic fun <init> (Landroid/os/Parcel;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun createAutocryptPeerUpdate ([BLjava/util/Date;)Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate;
+	public fun describeContents ()I
+	public final fun getEffectiveDate ()Ljava/util/Date;
+	public final fun getKeyData ()[B
+	public final fun getPreferEncrypt ()Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate$PreferEncrypt;
+	public final fun hasKeyData ()Z
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class me/msfjarvis/openpgpktx/AutocryptPeerUpdate$CREATOR : android/os/Parcelable$Creator {
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public fun createFromParcel (Landroid/os/Parcel;)Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+	public fun newArray (I)[Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate;
+}
+
+public final class me/msfjarvis/openpgpktx/AutocryptPeerUpdate$PreferEncrypt : java/lang/Enum {
+	public static final field MUTUAL Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate$PreferEncrypt;
+	public static final field NOPREFERENCE Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate$PreferEncrypt;
+	public static fun valueOf (Ljava/lang/String;)Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate$PreferEncrypt;
+	public static fun values ()[Lme/msfjarvis/openpgpktx/AutocryptPeerUpdate$PreferEncrypt;
+}
+
+public final class me/msfjarvis/openpgpktx/util/OpenPgpApi {
+	public static final field ACTION_BACKUP Ljava/lang/String;
+	public static final field ACTION_CHECK_PERMISSION Ljava/lang/String;
+	public static final field ACTION_CLEARTEXT_SIGN Ljava/lang/String;
+	public static final field ACTION_DECRYPT_METADATA Ljava/lang/String;
+	public static final field ACTION_DECRYPT_VERIFY Ljava/lang/String;
+	public static final field ACTION_DETACHED_SIGN Ljava/lang/String;
+	public static final field ACTION_ENCRYPT Ljava/lang/String;
+	public static final field ACTION_GET_KEY Ljava/lang/String;
+	public static final field ACTION_GET_KEY_IDS Ljava/lang/String;
+	public static final field ACTION_GET_SIGN_KEY_ID Ljava/lang/String;
+	public static final field ACTION_QUERY_AUTOCRYPT_STATUS Ljava/lang/String;
+	public static final field ACTION_SIGN_AND_ENCRYPT Ljava/lang/String;
+	public static final field ACTION_UPDATE_AUTOCRYPT_PEER Ljava/lang/String;
+	public static final field API_VERSION I
+	public static final field AUTOCRYPT_STATUS_AVAILABLE I
+	public static final field AUTOCRYPT_STATUS_DISCOURAGE I
+	public static final field AUTOCRYPT_STATUS_MUTUAL I
+	public static final field AUTOCRYPT_STATUS_UNAVAILABLE I
+	public static final field Companion Lme/msfjarvis/openpgpktx/util/OpenPgpApi$Companion;
+	public static final field EXTRA_API_VERSION Ljava/lang/String;
+	public static final field EXTRA_AUTOCRYPT_PEER_GOSSIP_UPDATES Ljava/lang/String;
+	public static final field EXTRA_AUTOCRYPT_PEER_ID Ljava/lang/String;
+	public static final field EXTRA_AUTOCRYPT_PEER_UPDATE Ljava/lang/String;
+	public static final field EXTRA_BACKUP_SECRET Ljava/lang/String;
+	public static final field EXTRA_DATA_LENGTH Ljava/lang/String;
+	public static final field EXTRA_DECRYPTION_RESULT Ljava/lang/String;
+	public static final field EXTRA_DETACHED_SIGNATURE Ljava/lang/String;
+	public static final field EXTRA_ENABLE_COMPRESSION Ljava/lang/String;
+	public static final field EXTRA_KEY_ID Ljava/lang/String;
+	public static final field EXTRA_KEY_IDS Ljava/lang/String;
+	public static final field EXTRA_KEY_IDS_SELECTED Ljava/lang/String;
+	public static final field EXTRA_MINIMIZE Ljava/lang/String;
+	public static final field EXTRA_MINIMIZE_USER_ID Ljava/lang/String;
+	public static final field EXTRA_OPPORTUNISTIC_ENCRYPTION Ljava/lang/String;
+	public static final field EXTRA_ORIGINAL_FILENAME Ljava/lang/String;
+	public static final field EXTRA_PASSPHRASE Ljava/lang/String;
+	public static final field EXTRA_PROGRESS_MESSENGER Ljava/lang/String;
+	public static final field EXTRA_REQUEST_ASCII_ARMOR Ljava/lang/String;
+	public static final field EXTRA_SENDER_ADDRESS Ljava/lang/String;
+	public static final field EXTRA_SIGN_KEY_ID Ljava/lang/String;
+	public static final field EXTRA_SUPPORT_OVERRIDE_CRYPTO_WARNING Ljava/lang/String;
+	public static final field EXTRA_USER_ID Ljava/lang/String;
+	public static final field EXTRA_USER_IDS Ljava/lang/String;
+	public static final field RESULT_AUTOCRYPT_STATUS Ljava/lang/String;
+	public static final field RESULT_CHARSET Ljava/lang/String;
+	public static final field RESULT_CODE Ljava/lang/String;
+	public static final field RESULT_CODE_ERROR I
+	public static final field RESULT_CODE_SUCCESS I
+	public static final field RESULT_CODE_USER_INTERACTION_REQUIRED I
+	public static final field RESULT_DECRYPTION Ljava/lang/String;
+	public static final field RESULT_DETACHED_SIGNATURE Ljava/lang/String;
+	public static final field RESULT_ERROR Ljava/lang/String;
+	public static final field RESULT_INSECURE_DETAIL_INTENT Ljava/lang/String;
+	public static final field RESULT_INTENT Ljava/lang/String;
+	public static final field RESULT_KEYS_CONFIRMED Ljava/lang/String;
+	public static final field RESULT_KEY_IDS Ljava/lang/String;
+	public static final field RESULT_METADATA Ljava/lang/String;
+	public static final field RESULT_OVERRIDE_CRYPTO_WARNING Ljava/lang/String;
+	public static final field RESULT_SIGNATURE Ljava/lang/String;
+	public static final field RESULT_SIGNATURE_MICALG Ljava/lang/String;
+	public static final field SERVICE_INTENT_2 Ljava/lang/String;
+	public fun <init> (Landroid/content/Context;Lorg/openintents/openpgp/IOpenPgpService2;)V
+	public final fun executeApi (Landroid/content/Intent;Ljava/io/InputStream;Ljava/io/OutputStream;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class me/msfjarvis/openpgpktx/util/OpenPgpApi$Companion {
+}
+
+public final class me/msfjarvis/openpgpktx/util/OpenPgpServiceConnection {
+	public fun <init> (Landroid/content/Context;Ljava/lang/String;)V
+	public fun <init> (Landroid/content/Context;Ljava/lang/String;Lme/msfjarvis/openpgpktx/util/OpenPgpServiceConnection$OnBound;)V
+	public final fun bindToService ()V
+	public final fun getService ()Lorg/openintents/openpgp/IOpenPgpService2;
+	public final fun isBound ()Z
+	public final fun unbindFromService ()V
+}
+
+public abstract interface class me/msfjarvis/openpgpktx/util/OpenPgpServiceConnection$OnBound {
+	public abstract fun onBound (Lorg/openintents/openpgp/IOpenPgpService2;)V
+	public abstract fun onError (Ljava/lang/Exception;)V
+}
+
+public final class me/msfjarvis/openpgpktx/util/OpenPgpUtils {
+	public static final field INSTANCE Lme/msfjarvis/openpgpktx/util/OpenPgpUtils;
+	public static final field PARSE_RESULT_MESSAGE I
+	public static final field PARSE_RESULT_NO_PGP I
+	public static final field PARSE_RESULT_SIGNED_MESSAGE I
+	public final fun convertKeyIdToHex (J)Ljava/lang/String;
+	public final fun createUserId (Lme/msfjarvis/openpgpktx/util/OpenPgpUtils$UserId;)Ljava/lang/String;
+	public final fun isAvailable (Landroid/content/Context;)Z
+	public final fun parseMessage (Ljava/lang/String;)I
+	public final fun splitUserId (Ljava/lang/String;)Lme/msfjarvis/openpgpktx/util/OpenPgpUtils$UserId;
+}
+
+public final class me/msfjarvis/openpgpktx/util/OpenPgpUtils$UserId : java/io/Serializable {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getComment ()Ljava/lang/String;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+}
+
+public abstract interface class org/openintents/openpgp/IOpenPgpService2 : android/os/IInterface {
+	public abstract fun createOutputPipe (I)Landroid/os/ParcelFileDescriptor;
+	public abstract fun execute (Landroid/content/Intent;Landroid/os/ParcelFileDescriptor;I)Landroid/content/Intent;
+}
+
+public class org/openintents/openpgp/IOpenPgpService2$Default : org/openintents/openpgp/IOpenPgpService2 {
+	public fun <init> ()V
+	public fun asBinder ()Landroid/os/IBinder;
+	public fun createOutputPipe (I)Landroid/os/ParcelFileDescriptor;
+	public fun execute (Landroid/content/Intent;Landroid/os/ParcelFileDescriptor;I)Landroid/content/Intent;
+}
+
+public abstract class org/openintents/openpgp/IOpenPgpService2$Stub : android/os/Binder, org/openintents/openpgp/IOpenPgpService2 {
+	public fun <init> ()V
+	public fun asBinder ()Landroid/os/IBinder;
+	public static fun asInterface (Landroid/os/IBinder;)Lorg/openintents/openpgp/IOpenPgpService2;
+	public static fun getDefaultImpl ()Lorg/openintents/openpgp/IOpenPgpService2;
+	public fun onTransact (ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
+	public static fun setDefaultImpl (Lorg/openintents/openpgp/IOpenPgpService2;)Z
+}
+
+public final class org/openintents/openpgp/OpenPgpDecryptionResult : android/os/Parcelable {
+	public static final field CREATOR Lorg/openintents/openpgp/OpenPgpDecryptionResult$CREATOR;
+	public static final field RESULT_ENCRYPTED I
+	public static final field RESULT_INSECURE I
+	public static final field RESULT_NOT_ENCRYPTED I
+	public fun <init> ()V
+	public synthetic fun <init> (I[B[BLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun describeContents ()I
+	public final fun getDecryptedSessionKey ()[B
+	public final fun getResult ()I
+	public final fun getSessionKey ()[B
+	public final fun hasDecryptedSessionKey ()Z
+	public fun toString ()Ljava/lang/String;
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class org/openintents/openpgp/OpenPgpDecryptionResult$CREATOR : android/os/Parcelable$Creator {
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public fun createFromParcel (Landroid/os/Parcel;)Lorg/openintents/openpgp/OpenPgpDecryptionResult;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+	public fun newArray (I)[Lorg/openintents/openpgp/OpenPgpDecryptionResult;
+}
+
+public final class org/openintents/openpgp/OpenPgpError : android/os/Parcelable {
+	public static final field CLIENT_SIDE_ERROR I
+	public static final field CREATOR Lorg/openintents/openpgp/OpenPgpError$CREATOR;
+	public static final field GENERIC_ERROR I
+	public static final field INCOMPATIBLE_API_VERSIONS I
+	public static final field NO_OR_WRONG_PASSPHRASE I
+	public static final field NO_USER_IDS I
+	public static final field OPPORTUNISTIC_MISSING_KEYS I
+	public fun <init> ()V
+	public fun describeContents ()I
+	public final fun getErrorId ()I
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun setErrorId (I)V
+	public final fun setMessage (Ljava/lang/String;)V
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class org/openintents/openpgp/OpenPgpError$CREATOR : android/os/Parcelable$Creator {
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public fun createFromParcel (Landroid/os/Parcel;)Lorg/openintents/openpgp/OpenPgpError;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+	public fun newArray (I)[Lorg/openintents/openpgp/OpenPgpError;
+}
+
+public final class org/openintents/openpgp/OpenPgpMetadata : android/os/Parcelable {
+	public static final field CREATOR Lorg/openintents/openpgp/OpenPgpMetadata$CREATOR;
+	public fun <init> ()V
+	public fun describeContents ()I
+	public final fun getCharset ()Ljava/lang/String;
+	public final fun getFilename ()Ljava/lang/String;
+	public final fun getMimeType ()Ljava/lang/String;
+	public final fun getModificationTime ()J
+	public final fun getOriginalSize ()J
+	public final fun setCharset (Ljava/lang/String;)V
+	public final fun setFilename (Ljava/lang/String;)V
+	public final fun setMimeType (Ljava/lang/String;)V
+	public final fun setModificationTime (J)V
+	public final fun setOriginalSize (J)V
+	public fun toString ()Ljava/lang/String;
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class org/openintents/openpgp/OpenPgpMetadata$CREATOR : android/os/Parcelable$Creator {
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public fun createFromParcel (Landroid/os/Parcel;)Lorg/openintents/openpgp/OpenPgpMetadata;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+	public fun newArray (I)[Lorg/openintents/openpgp/OpenPgpMetadata;
+}
+
+public final class org/openintents/openpgp/OpenPgpSignatureResult : android/os/Parcelable {
+	public static final field CREATOR Lorg/openintents/openpgp/OpenPgpSignatureResult$CREATOR;
+	public static final field RESULT_INVALID_KEY_EXPIRED I
+	public static final field RESULT_INVALID_KEY_INSECURE I
+	public static final field RESULT_INVALID_KEY_REVOKED I
+	public static final field RESULT_INVALID_SIGNATURE I
+	public static final field RESULT_KEY_MISSING I
+	public static final field RESULT_NO_SIGNATURE I
+	public static final field RESULT_VALID_KEY_CONFIRMED I
+	public static final field RESULT_VALID_KEY_UNCONFIRMED I
+	public synthetic fun <init> (ILjava/lang/String;JLjava/util/ArrayList;Ljava/util/ArrayList;Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;Ljava/lang/Boolean;Ljava/util/Date;Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Landroid/os/Parcel;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun describeContents ()I
+	public final fun getConfirmedUserIds ()Ljava/util/List;
+	public final fun getUserIds ()Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+	public final fun withAutocryptPeerResult (Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;)Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public final fun withSignatureOnlyFlag (Z)Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class org/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult : java/lang/Enum {
+	public static final field MISMATCH Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;
+	public static final field NEW Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;
+	public static final field OK Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;
+	public static fun valueOf (Ljava/lang/String;)Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;
+	public static fun values ()[Lorg/openintents/openpgp/OpenPgpSignatureResult$AutocryptPeerResult;
+}
+
+public final class org/openintents/openpgp/OpenPgpSignatureResult$CREATOR : android/os/Parcelable$Creator {
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public fun createFromParcel (Landroid/os/Parcel;)Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public final fun createWithInvalidSignature ()Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public final fun createWithKeyMissing (JLjava/util/Date;)Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public final fun createWithNoSignature ()Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public final fun createWithValidSignature (ILjava/lang/String;JLjava/util/ArrayList;Ljava/util/ArrayList;Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;Ljava/util/Date;)Lorg/openintents/openpgp/OpenPgpSignatureResult;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+	public fun newArray (I)[Lorg/openintents/openpgp/OpenPgpSignatureResult;
+}
+
+public final class org/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult : java/lang/Enum {
+	public static final field UNKNOWN Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;
+	public static final field USER_ID_CONFIRMED Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;
+	public static final field USER_ID_MISSING Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;
+	public static final field USER_ID_UNCONFIRMED Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;
+	public static fun valueOf (Ljava/lang/String;)Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;
+	public static fun values ()[Lorg/openintents/openpgp/OpenPgpSignatureResult$SenderStatusResult;
+}
+

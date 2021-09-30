@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+      android:id="@+id/key_type_group"
+      style="@style/TextAppearance.MaterialComponents.Headline1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:selectionRequired="true"
+      app:singleSelection="true">
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/key_type_rsa"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:text="@string/ssh_keygen_label_rsa" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/key_type_group"
-            style="@style/TextAppearance.MaterialComponents.Headline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:selectionRequired="true"
-            app:singleSelection="true">
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/key_type_ecdsa"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ssh_keygen_label_ecdsa" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/key_type_rsa"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ssh_keygen_label_rsa" />
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/key_type_ed25519"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ssh_keygen_label_ed25519" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/key_type_ecdsa"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ssh_keygen_label_ecdsa" />
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/key_type_explanation"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="8dp" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/key_type_ed25519"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ssh_keygen_label_ed25519" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+    <com.google.android.material.checkbox.MaterialCheckBox
+      android:id="@+id/key_require_authentication"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/ssh_keygen_require_authentication" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/key_type_explanation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp" />
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/key_require_authentication"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ssh_keygen_require_authentication" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/generate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:text="@string/ssh_keygen_generate" />
-    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/generate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:layout_marginTop="8dp"
+      android:text="@string/ssh_keygen_generate" />
+  </LinearLayout>
 </ScrollView>

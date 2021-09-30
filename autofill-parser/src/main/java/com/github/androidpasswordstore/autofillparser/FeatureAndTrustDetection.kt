@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+ * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: LGPL-3.0-only WITH LGPL-3.0-linking-exception
  */
 package com.github.androidpasswordstore.autofillparser
@@ -9,44 +9,45 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
+import android.service.autofill.SaveInfo
 import androidx.annotation.RequiresApi
 
 /*
-    In order to add a new browser, do the following:
+   In order to add a new browser, do the following:
 
-    1. Obtain the .apk from a trusted source. For example, download it from the Play Store on your
-    phone and use adb pull to get it onto your computer. We will assume that it is called
-    browser.apk.
+   1. Obtain the .apk from a trusted source. For example, download it from the Play Store on your
+   phone and use adb pull to get it onto your computer. We will assume that it is called
+   browser.apk.
 
-    2. Run
+   2. Run
 
-    aapt dump badging browser.apk | grep package: | grep -Eo " name='[a-zA-Z0-9_\.]*" | cut -c8-
+   aapt dump badging browser.apk | grep package: | grep -Eo " name='[a-zA-Z0-9_\.]*" | cut -c8-
 
-    to obtain the package name (actually, the application ID) of the app in the .apk.
+   to obtain the package name (actually, the application ID) of the app in the .apk.
 
-    3. Run
+   3. Run
 
-    apksigner verify --print-certs browser.apk | grep "#1 certificate SHA-256" | grep -Eo "[a-f0-9]{64}" | tr -d '\n' | xxd -r -p | base64
+   apksigner verify --print-certs browser.apk | grep "#1 certificate SHA-256" | grep -Eo "[a-f0-9]{64}" | tr -d '\n' | xxd -r -p | base64
 
-    to calculate the hash of browser.apk's first signing certificate.
-    Note: This will only work if the apk has a single signing certificate. Apps with multiple
-    signers are very rare, so there is probably no need to add them.
-    Refer to computeCertificatesHash to learn how the hash would be computed in this case.
+   to calculate the hash of browser.apk's first signing certificate.
+   Note: This will only work if the apk has a single signing certificate. Apps with multiple
+   signers are very rare, so there is probably no need to add them.
+   Refer to computeCertificatesHash to learn how the hash would be computed in this case.
 
-    4. Verify the package name and the hash, for example by asking other people to repeat the steps
-    above.
+   4. Verify the package name and the hash, for example by asking other people to repeat the steps
+   above.
 
-    5. Add an entry with the browser apps's package name and the hash to
-    TRUSTED_BROWSER_CERTIFICATE_HASH.
+   5. Add an entry with the browser apps's package name and the hash to
+   TRUSTED_BROWSER_CERTIFICATE_HASH.
 
-    6. Optionally, try adding the browser's package name to BROWSERS_WITH_SAVE_SUPPORT and check
-    whether a save request to Password Store is triggered when you submit a registration form.
+   6. Optionally, try adding the browser's package name to BROWSERS_WITH_SAVE_SUPPORT and check
+   whether a save request to Password Store is triggered when you submit a registration form.
 
-    7. Optionally, try adding the browser's package name to BROWSERS_WITH_MULTI_ORIGIN_SUPPORT and
-    check whether it correctly distinguishes web origins even if iframes are present on the page.
-    You can use https://fabianhenneke.github.io/Android-Password-Store/ as a test form.
- */
-
+   7. Optionally, try adding the browser's package name to BROWSERS_WITH_MULTI_ORIGIN_SUPPORT and
+   check whether it correctly distinguishes web origins even if iframes are present on the page.
+   You can use https://fabianhenneke.github.io/Android-Password-Store/ as a test form.
+*/
 /*
  * **Security assumption**: Browsers on this list correctly report the web origin of the top-level
  * window as part of their AssistStructure.
@@ -54,18 +55,23 @@ import androidx.annotation.RequiresApi
  * Note: Browsers can be on this list even if they don't report the correct web origins of all
  * fields on the page, e.g. of those in iframes.
  */
-private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
+private val TRUSTED_BROWSER_CERTIFICATE_HASH =
+  mapOf(
     "com.android.chrome" to arrayOf("8P1sW0EPJcslw7UzRsiXL64w+O50Ed+RBICtay1g24M="),
     "com.brave.browser" to arrayOf("nC23BRNRX9v7vFhbPt89cSPU3GfJT/0wY2HB15u/GKw="),
     "com.chrome.beta" to arrayOf("2mM9NLaeY64hA7SdU84FL8X388U6q5T9wqIIvf0UJJw="),
     "com.chrome.canary" to arrayOf("IBnfofsj779wxbzRRDxb6rBPPy/0Nm6aweNFdjmiTPw="),
     "com.chrome.dev" to arrayOf("kETuX+5LvF4h3URmVDHE6x8fcaMnFqC8knvLs5Izyr8="),
-    "com.duckduckgo.mobile.android" to arrayOf("u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=", "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="),
+    "com.duckduckgo.mobile.android" to
+      arrayOf(
+        "u3uzHFc8RqHaf8XFKKas9DIQhFb+7FCBDH8zaU6z0tQ=",
+        "8HB9AhwL8+b43MEbo/VwBCXVl9yjAaMeIQVWk067Gwo="
+      ),
+    "com.jamal2367.styx" to arrayOf("Lph3oaG1C8WLhLiK5PVxOp5+6wTU9ipJSBYlD2bA3VI="),
     "com.microsoft.emmx" to arrayOf("AeGZlxCoLCdJtNUMRF3IXWcLYTYInQp2anOCfIKh6sk="),
     "com.opera.mini.native" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.touch" to arrayOf("qtjiBNJNF3k0yc0MY8xqo4779CxKaVcJfiIQ9X+qZ6o="),
-    "org.bromite.bromite" to arrayOf("4e5c0HbXsNyEyytF+3i4bfLrOaO2xWuj3CkqXgw7lQQ="),
     "org.gnu.icecat" to arrayOf("wi2iuVvK/WYZUzd2g0Qzn9ef3kAisQURZ8U1WSMTkcM="),
     "org.mozilla.fenix" to arrayOf("UAR3kIjn+YjVvFzF+HmP6/T4zQhKGypG79TI7krq8hE="),
     "org.mozilla.fenix.nightly" to arrayOf("d+rEzu02r++6dheZMd1MwZWrDNVLrzVdIV57vdKOQCo="),
@@ -77,18 +83,21 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH = mapOf(
     "org.mozilla.klar" to arrayOf("YgOkc7421k7jf4f6UA7bx56rkwYQq5ufpMp9XB8bT/w="),
     "org.torproject.torbrowser" to arrayOf("IAYfBF5zfGc3XBd5TP7bQ2oDzsa6y3y5+WZCIFyizsg="),
     "org.ungoogled.chromium.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
-    "org.ungoogled.chromium.extensions.stable" to arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
+    "org.ungoogled.chromium.extensions.stable" to
+      arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
     "com.kiwibrowser.browser" to arrayOf("wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig="),
-)
+  )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
-    val expectedCertificateHashes = TRUSTED_BROWSER_CERTIFICATE_HASH[appPackage] ?: return false
-    val certificateHash = computeCertificatesHash(context, appPackage)
-    return certificateHash in expectedCertificateHashes
+  val expectedCertificateHashes = TRUSTED_BROWSER_CERTIFICATE_HASH[appPackage] ?: return false
+  val certificateHash = computeCertificatesHash(context, appPackage)
+  return certificateHash in expectedCertificateHashes
 }
 
-enum class BrowserMultiOriginMethod {
-    None, WebView, Field
+internal enum class BrowserMultiOriginMethod {
+  None,
+  WebView,
+  Field
 }
 
 /**
@@ -98,11 +107,12 @@ enum class BrowserMultiOriginMethod {
  *
  * There are two methods used by browsers:
  * - Browsers based on Android's WebView report web domains on each WebView view node, which then
- *   needs to be propagated to the child nodes ([BrowserMultiOriginMethod.WebView]).
+ * needs to be propagated to the child nodes ( [BrowserMultiOriginMethod.WebView]).
  * - Browsers with custom Autofill implementations report web domains on each input field (
- *   [BrowserMultiOriginMethod.Field]).
+ * [BrowserMultiOriginMethod.Field]).
  */
-private val BROWSER_MULTI_ORIGIN_METHOD = mapOf(
+private val BROWSER_MULTI_ORIGIN_METHOD =
+  mapOf(
     "com.duckduckgo.mobile.android" to BrowserMultiOriginMethod.WebView,
     "com.opera.mini.native" to BrowserMultiOriginMethod.WebView,
     "com.opera.mini.native.beta" to BrowserMultiOriginMethod.WebView,
@@ -117,10 +127,10 @@ private val BROWSER_MULTI_ORIGIN_METHOD = mapOf(
     "org.mozilla.focus" to BrowserMultiOriginMethod.Field,
     "org.mozilla.klar" to BrowserMultiOriginMethod.Field,
     "org.torproject.torbrowser" to BrowserMultiOriginMethod.WebView,
-)
+  )
 
 private fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginMethod =
-    BROWSER_MULTI_ORIGIN_METHOD[appPackage] ?: BrowserMultiOriginMethod.None
+  BROWSER_MULTI_ORIGIN_METHOD[appPackage] ?: BrowserMultiOriginMethod.None
 
 /**
  * Browsers on this list issue Autofill save requests and provide unmasked passwords as
@@ -130,7 +140,8 @@ private fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginM
  * `FLAG_SAVE_ON_ALL_VIEW_INVISIBLE` to be set.
  */
 @RequiresApi(Build.VERSION_CODES.O)
-private val BROWSER_SAVE_FLAG = mapOf(
+private val BROWSER_SAVE_FLAG =
+  mapOf(
     "com.duckduckgo.mobile.android" to 0,
     "org.mozilla.klar" to 0,
     "org.mozilla.focus" to 0,
@@ -140,74 +151,105 @@ private val BROWSER_SAVE_FLAG = mapOf(
     "com.opera.mini.native" to 0,
     "com.opera.mini.native.beta" to 0,
     "com.opera.touch" to 0,
-)
+  )
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun getBrowserSaveFlag(appPackage: String): Int? = BROWSER_SAVE_FLAG[appPackage]
+private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY =
+  mapOf(
+    "com.android.chrome" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "com.chrome.beta" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "com.chrome.canary" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "com.chrome.dev" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "org.ungoogled.chromium.stable" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+  )
 
-data class BrowserAutofillSupportInfo(
-    val multiOriginMethod: BrowserMultiOriginMethod,
-    val saveFlags: Int?
-)
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun getBrowserAutofillSupportInfoIfTrusted(
-    context: Context,
-    appPackage: String
-): BrowserAutofillSupportInfo? {
-    if (!isTrustedBrowser(context, appPackage)) return null
-    return BrowserAutofillSupportInfo(
-        multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
-        saveFlags = getBrowserSaveFlag(appPackage)
+private fun isNoAccessibilityServiceEnabled(context: Context): Boolean {
+  // See https://chromium.googlesource.com/chromium/src/+/447a31e977a65e2eb78804e4a09633699b4ede33
+  return Settings.Secure.getString(
+      context.contentResolver,
+      Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
     )
+    .isNullOrEmpty()
 }
 
-private val FLAKY_BROWSERS = listOf(
-    "com.android.chrome",
-    "com.chrome.beta",
-    "com.chrome.canary",
-    "com.chrome.dev",
-    "org.bromite.bromite",
-    "org.ungoogled.chromium.stable",
-    "com.kiwibrowser.browser",
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getBrowserSaveFlag(context: Context, appPackage: String): Int? =
+  BROWSER_SAVE_FLAG[appPackage]
+    ?: BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY[appPackage]?.takeIf {
+      isNoAccessibilityServiceEnabled(context)
+    }
+
+internal data class BrowserAutofillSupportInfo(
+  val multiOriginMethod: BrowserMultiOriginMethod,
+  val saveFlags: Int?
 )
 
-enum class BrowserAutofillSupportLevel {
-    None,
-    FlakyFill,
-    PasswordFill,
-    GeneralFill,
-    GeneralFillAndSave,
+@RequiresApi(Build.VERSION_CODES.O)
+internal fun getBrowserAutofillSupportInfoIfTrusted(
+  context: Context,
+  appPackage: String
+): BrowserAutofillSupportInfo? {
+  if (!isTrustedBrowser(context, appPackage)) return null
+  return BrowserAutofillSupportInfo(
+    multiOriginMethod = getBrowserMultiOriginMethod(appPackage),
+    saveFlags = getBrowserSaveFlag(context, appPackage)
+  )
+}
+
+private val FLAKY_BROWSERS =
+  listOf(
+    "com.kiwibrowser.browser",
+  )
+
+public enum class BrowserAutofillSupportLevel {
+  None,
+  FlakyFill,
+  PasswordFill,
+  PasswordFillAndSaveIfNoAccessibility,
+  GeneralFill,
+  GeneralFillAndSave,
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun getBrowserAutofillSupportLevel(
-    context: Context,
-    appPackage: String
+  context: Context,
+  appPackage: String
 ): BrowserAutofillSupportLevel {
-    val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
-    return when {
-        browserInfo == null -> BrowserAutofillSupportLevel.None
-        appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
-        browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None -> BrowserAutofillSupportLevel.PasswordFill
-        browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
-        else -> BrowserAutofillSupportLevel.GeneralFillAndSave
-    }
+  val browserInfo = getBrowserAutofillSupportInfoIfTrusted(context, appPackage)
+  return when {
+    browserInfo == null -> BrowserAutofillSupportLevel.None
+    appPackage in FLAKY_BROWSERS -> BrowserAutofillSupportLevel.FlakyFill
+    appPackage in BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY ->
+      BrowserAutofillSupportLevel.PasswordFillAndSaveIfNoAccessibility
+    browserInfo.multiOriginMethod == BrowserMultiOriginMethod.None ->
+      BrowserAutofillSupportLevel.PasswordFill
+    browserInfo.saveFlags == null -> BrowserAutofillSupportLevel.GeneralFill
+    else -> BrowserAutofillSupportLevel.GeneralFillAndSave
+  }.takeUnless { supportLevel ->
+    // On Android Oreo, only browsers with native Autofill support can be used with Password Store
+    // (compatibility mode is only available on Android Pie and higher). Since all known browsers
+    // with native Autofill support offer full save support as well, we reuse the list of those
+    // browsers here.
+    supportLevel != BrowserAutofillSupportLevel.GeneralFillAndSave &&
+      Build.VERSION.SDK_INT < Build.VERSION_CODES.P
+  }
+    ?: BrowserAutofillSupportLevel.None
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getInstalledBrowsersWithAutofillSupportLevel(context: Context): List<Pair<String, BrowserAutofillSupportLevel>> {
-    val testWebIntent = Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse("http://example.org")
-    }
-    val installedBrowsers = context.packageManager.queryIntentActivities(
-        testWebIntent,
-        PackageManager.MATCH_ALL
-    )
-    return installedBrowsers.map {
-        it to getBrowserAutofillSupportLevel(context, it.activityInfo.packageName)
-    }.filter { it.first.isDefault || it.second != BrowserAutofillSupportLevel.None }.map {
-        context.packageManager.getApplicationLabel(it.first.activityInfo.applicationInfo)
-            .toString() to it.second
+public fun getInstalledBrowsersWithAutofillSupportLevel(
+  context: Context
+): List<Pair<String, BrowserAutofillSupportLevel>> {
+  val testWebIntent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse("http://example.org") }
+  val installedBrowsers =
+    context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
+  return installedBrowsers
+    .map { it to getBrowserAutofillSupportLevel(context, it.activityInfo.packageName) }
+    .filter { it.first.isDefault || it.second != BrowserAutofillSupportLevel.None }
+    .map {
+      context
+        .packageManager
+        .getApplicationLabel(it.first.activityInfo.applicationInfo)
+        .toString() to it.second
     }
 }

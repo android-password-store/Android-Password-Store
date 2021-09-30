@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <resources>
-    <!-- Base palette -->
-    <color name="primary_color">#ff111111</color>
-    <color name="primary_light_color">#ff373737</color>
-    <color name="secondary_color">#ff3b6888</color>
-    <color name="primary_text_color">#ffffffff</color>
+  <!-- Base palette -->
+  <color name="primary_color">#ff111111</color>
+  <color name="primary_light_color">#ff373737</color>
+  <color name="secondary_color">#ff3b6888</color>
+  <color name="secondary_light_color">#ff6b96b8</color>
+  <color name="primary_text_color">#ffffffff</color>
 
-    <!-- Theme variables -->
-    <color name="list_multiselect_background">#66eeeeee</color>
-    <color name="ripple_color">#aa3b6888</color>
-    <color name="button_color">#443b6888</color>
+  <!-- Theme variables -->
+  <color name="list_multiselect_background">#66eeeeee</color>
+  <color name="ripple_color">#aa3b6888</color>
+  <color name="button_color">#443b6888</color>
 </resources>

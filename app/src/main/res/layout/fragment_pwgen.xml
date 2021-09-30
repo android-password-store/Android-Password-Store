@@ -1,113 +1,113 @@
 <!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingTop="20dp"
+    android:paddingRight="24dp"
+    android:paddingBottom="20dp"
+    tools:context=".MainActivityFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/passwordText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textIsSelectable="true" />
 
     <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:baselineAligned="false"
+      android:orientation="horizontal"
+      android:weightSum="2">
+
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingTop="20dp"
-        android:paddingRight="24dp"
-        android:paddingBottom="20dp"
-        tools:context=".MainActivityFragment">
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/passwordText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true" />
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="8dp"
+          android:text="@string/pwgen_include"
+          android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/pwgen_include"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <CheckBox
-                    android:id="@+id/numerals"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pwgen_numerals" />
+        <CheckBox
+          android:id="@+id/numerals"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/pwgen_numerals" />
 
 
-                <CheckBox
-                    android:id="@+id/symbols"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pwgen_symbols" />
+        <CheckBox
+          android:id="@+id/symbols"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/pwgen_symbols" />
 
-                <CheckBox
-                    android:id="@+id/uppercase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pwgen_uppercase" />
+        <CheckBox
+          android:id="@+id/uppercase"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/pwgen_uppercase" />
 
-                <CheckBox
-                    android:id="@+id/lowercase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pwgen_lowercase" />
+        <CheckBox
+          android:id="@+id/lowercase"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/pwgen_lowercase" />
 
-            </LinearLayout>
+      </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/length"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/pwgen_length"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/length"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="8dp"
+          android:text="@string/pwgen_length"
+          android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                <EditText
-                    android:id="@+id/lengthNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:ems="10"
-                    android:inputType="number" />
+        <EditText
+          android:id="@+id/lengthNumber"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="8dp"
+          android:ems="10"
+          android:inputType="number" />
 
-                <CheckBox
-                    android:id="@+id/pronounceable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pwgen_pronounceable" />
+        <CheckBox
+          android:id="@+id/pronounceable"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/pwgen_pronounceable" />
 
-                <CheckBox
-                    android:id="@+id/ambiguous"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pwgen_ambiguous" />
+        <CheckBox
+          android:id="@+id/ambiguous"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/pwgen_ambiguous" />
 
-            </LinearLayout>
-        </LinearLayout>
+      </LinearLayout>
     </LinearLayout>
+  </LinearLayout>
 </ScrollView>

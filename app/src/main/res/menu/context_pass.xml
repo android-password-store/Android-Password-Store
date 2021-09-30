@@ -1,28 +1,34 @@
 <!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".pwdstore">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".pwdstore">
 
-    <item
-        android:id="@+id/menu_move_password"
-        android:icon="@drawable/ic_move_folder_24dp"
-        android:title="@string/move"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_move_password"
+    android:icon="@drawable/ic_move_folder_24dp"
+    android:title="@string/move"
+    app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/menu_delete_password"
-        android:icon="@drawable/ic_delete_24dp"
-        android:title="@string/delete"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_delete_password"
+    android:icon="@drawable/ic_delete_24dp"
+    android:title="@string/delete"
+    app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/menu_edit_password"
-        android:icon="@drawable/ic_edit_24dp"
-        android:title="@string/edit"
-        app:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_edit_password"
+    android:icon="@drawable/ic_edit_24dp"
+    android:title="@string/edit"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/menu_pin_password"
+    android:icon="@drawable/ic_push_pin_24dp"
+    android:title="@string/place_shortcut_on_home_screen"
+    app:showAsAction="ifRoom" />
 </menu>

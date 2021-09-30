@@ -3,14 +3,14 @@ on: [pull_request]
 name: Check pull request
 jobs:
   test-pr:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        api-level: [23, 29]
+    runs-on: ubuntu-latest
     steps:
 
+    #- name: Auto-cancel redundant workflow run
+    #  uses: technote-space/auto-cancel-redundant-workflow@f9dfa1c127a520e4d71b92892850f861fb861206
+
     - name: Check if relevant files have changed
-      uses: actions/github-script@0.9.0
+      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
       id: service-changed
       with:
         result-encoding: string
@@ -21,13 +21,30 @@ jobs:
             pull_number: context.payload.number,
             per_page: 100
           })
-          const shouldRun = result.data.filter(f => !f.filename.endsWith(".md") || !f.filename.endsWith(".txt") || !f.filename.startsWith("contrib/") || !f.filename.endsWith(".yml")).length > 0
-          console.log(shouldRun)
-          return shouldRun
+          const files = result.data.filter(file =>
+            // We wanna run this if the PR workflow is modified
+            (file.filename.endsWith(".yml") && !file.filename.endsWith("pull_request.yml")) ||
+            // Changes in Markdown files don't need tests
+            file.filename.endsWith(".md") ||
+            // Changes to fastlane metadata aren't covered by tests
+            file.filename.startsWith("fastlane/")
+          )
+          // If filtered file count and source file count is equal, it means all files
+          // in this PR are skip-worthy.
+          return files.length != result.data.length
+
+    - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      with:
+        java-version: '11'
 
     - name: Checkout repository
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/checkout@v2
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      with:
+        fetch-depth: 0
+      #with:
+      #  ref: refs/pull/${{ github.event.pull_request.number }}/merge
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
@@ -35,25 +52,13 @@ jobs:
 
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: burrunan/gradle-cache-action@v1
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
       with:
-        arguments: apiCheck testFreeDebug lintFreeDebug
-
-    - name: Run instrumentation tests
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: reactivecircus/android-emulator-runner@v2.11.0
-      with:
-        api-level: ${{ matrix.api-level }}
-        target: default
-        script: |
-          adb shell settings put global animator_duration_scale 0
-          adb shell settings put global transition_animation_scale 0
-          adb shell settings put global window_animation_scale 0
-          ./gradlew :app:connectedFreeDebugAndroidTest
+        arguments: apiCheck test lintFreeDebug spotlessCheck -PslimTests
 
     - name: (Fail-only) upload test report
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
       with:
           name: Test report
           path: app/build/reports

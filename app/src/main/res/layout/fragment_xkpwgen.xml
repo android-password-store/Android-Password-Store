@@ -1,102 +1,102 @@
 <!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="24dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="20dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/xkPasswordText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingBottom="8dp"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textIsSelectable="true"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="horisticia.tockmendprost" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/total_words"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:hint="@string/xkpwgen_length"
+      android:labelFor="@id/xk_num_words"
+      app:layout_constraintEnd_toStartOf="@id/separator"
+      app:layout_constraintHorizontal_weight="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/xkPasswordText">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/xk_num_words"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="24dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="20dp">
+        android:inputType="number"
+        android:maxLength="2" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/xkPasswordText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="horisticia.tockmendprost" />
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/separator"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:hint="@string/xkpwgen_separator"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_weight="0.5"
+      app:layout_constraintStart_toEndOf="@id/total_words"
+      app:layout_constraintTop_toTopOf="@id/total_words">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/total_words"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/xkpwgen_length"
-            android:labelFor="@id/xk_num_words"
-            app:layout_constraintEnd_toStartOf="@id/separator"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/xkPasswordText">
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/xk_separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/xk_num_words"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLength="2" />
-        </com.google.android.material.textfield.TextInputLayout>
+    <Spinner
+      android:id="@+id/xkCapType"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:entries="@array/capitalization_type_values"
+      android:entryValues="@array/capitalization_type_values"
+      android:spinnerMode="dropdown"
+      app:layout_constraintEnd_toEndOf="@id/total_words"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/total_words" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/separator"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:hint="@string/xkpwgen_separator"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintStart_toEndOf="@id/total_words"
-            app:layout_constraintTop_toTopOf="@id/total_words">
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/xk_numbers_symbols_label"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:hint="@string/xkpwgen_extrachars_label"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@id/separator"
+      app:layout_constraintTop_toBottomOf="@id/separator"
+      app:layout_constraintTop_toTopOf="@id/xkCapType">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/xk_separator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/xk_number_symbol_mask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:inputType="text"
+        android:text="@string/xk_numbers_symbols_append_default" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/xkCapType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:entries="@array/capitalization_type_values"
-            android:entryValues="@array/capitalization_type_values"
-            android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="@id/total_words"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/total_words" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/xk_numbers_symbols_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/xkpwgen_extrachars_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/separator"
-            app:layout_constraintTop_toBottomOf="@id/separator"
-            app:layout_constraintTop_toTopOf="@id/xkCapType">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/xk_number_symbol_mask"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:inputType="text"
-                android:text="@string/xk_numbers_symbols_append_default" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

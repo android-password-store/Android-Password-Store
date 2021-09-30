@@ -2,9 +2,7 @@
 name: Feature request
 about: Suggest a new feature to be included in the app
 title: "[FEATURE]"
-labels: feature, 'triage: needed'
-assignees: 'msfjarvis'
-
+labels: 'C-feature, S-awaiting-triage'
 ---
 
 <!--

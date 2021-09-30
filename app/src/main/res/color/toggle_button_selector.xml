@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#00FFFFFF" android:state_checked="false" />
-    <item android:color="@color/button_color" />
+  <item android:color="#00FFFFFF" android:state_checked="false" />
+  <item android:color="@color/button_color" />
 </selector>

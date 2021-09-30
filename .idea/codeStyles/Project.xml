@@ -4,7 +4,7 @@
     <option name="LINE_SEPARATOR" value="&#10;" />
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true" />
     <option name="FORMATTER_TAGS_ENABLED" value="true" />
-    <option name="SOFT_MARGINS" value="100" />
+    <option name="SOFT_MARGINS" value="120" />
     <option name="DO_NOT_FORMAT">
       <list>
         <fileSet type="namedScope" name="third_party" pattern="src[Android-Password-Store.app]:mozilla.components.lib.publicsuffixlist..*" />
@@ -20,17 +20,6 @@
       <option name="PACKAGES_IMPORT_LAYOUT">
         <value>
           <package name="" alias="false" withSubpackages="true" />
-          <package name="android" alias="false" withSubpackages="true" />
-          <package name="androidx" alias="false" withSubpackages="true" />
-          <package name="com" alias="false" withSubpackages="true" />
-          <package name="java" alias="false" withSubpackages="true" />
-          <package name="javax" alias="false" withSubpackages="true" />
-          <package name="kotlin" alias="false" withSubpackages="true" />
-          <package name="kotlinx" alias="false" withSubpackages="true" />
-          <package name="me" alias="false" withSubpackages="true" />
-          <package name="mozilla" alias="false" withSubpackages="true" />
-          <package name="net" alias="false" withSubpackages="true" />
-          <package name="org" alias="false" withSubpackages="true" />
           <package name="" alias="true" withSubpackages="true" />
         </value>
       </option>
@@ -47,6 +36,9 @@
       <option name="IF_RPAREN_ON_NEW_LINE" value="false" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
+    <editorconfig>
+      <option name="ENABLED" value="false" />
+    </editorconfig>
     <codeStyleSettings language="JAVA">
       <option name="METHOD_ANNOTATION_WRAP" value="0" />
       <option name="FIELD_ANNOTATION_WRAP" value="0" />
@@ -57,7 +49,9 @@
     <codeStyleSettings language="XML">
       <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
       </indentOptions>
       <arrangement>
         <rules>
@@ -169,7 +163,10 @@
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <option name="RIGHT_MARGIN" value="100" />
+      <option name="RIGHT_MARGIN" value="120" />
+      <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="0" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="0" />
+      <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
       <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
       <option name="CALL_PARAMETERS_WRAP" value="0" />
       <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="false" />
@@ -184,7 +181,9 @@
       <option name="FIELD_ANNOTATION_WRAP" value="0" />
       <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
   </code_scheme>

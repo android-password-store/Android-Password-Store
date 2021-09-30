@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <resources>
-    <string-array name="sort_order_entries">
-        <item>@string/pref_folder_first_sort_order</item>
-        <item>@string/pref_file_first_sort_order</item>
-        <item>@string/pref_type_independent_sort_order</item>
-        <item>@string/pref_recently_used_sort_order</item>
-    </string-array>
-    <string-array name="sort_order_values">
-        <item>FOLDER_FIRST</item>
-        <item>FILE_FIRST</item>
-        <item>INDEPENDENT</item>
-        <item>RECENTLY_USED</item>
-    </string-array>
-    <string-array name="capitalization_type_values">
-        <item>lowercase</item>
-        <item>UPPERCASE</item>
-        <item>TitleCase</item>
-        <item>Sentence</item>
-    </string-array>
-    <string-array name="pwgen_provider_labels">
-        <item>Classic</item>
-        <item>XKPasswd</item>
-    </string-array>
-    <string-array name="pwgen_provider_values">
-        <item>classic</item>
-        <item>xkpasswd</item>
-    </string-array>
-    <string-array name="oreo_autofill_directory_structure_entries">
-        <item>work/example.org(.gpg)</item>
-        <item>work/example.org/john@doe.org(.gpg)</item>
-        <item>work/example.org/john@doe.org/password(.gpg)</item>
-    </string-array>
-    <string-array name="oreo_autofill_directory_structure_values">
-        <item>encrypted_username</item>
-        <item>file</item>
-        <item>directory</item>
-    </string-array>
-    <string-array name="app_theme_options">
-        <item>@string/theme_light</item>
-        <item>@string/theme_dark</item>
-        <item>@string/theme_battery_saver</item>
-    </string-array>
-    <string-array name="app_theme_values">
-        <item>light</item>
-        <item>dark</item>
-        <item>battery_saver</item>
-    </string-array>
+  <string-array name="sort_order_entries">
+    <item>@string/pref_folder_first_sort_order</item>
+    <item>@string/pref_file_first_sort_order</item>
+    <item>@string/pref_type_independent_sort_order</item>
+    <item>@string/pref_recently_used_sort_order</item>
+  </string-array>
+  <string-array name="sort_order_values">
+    <item>FOLDER_FIRST</item>
+    <item>FILE_FIRST</item>
+    <item>INDEPENDENT</item>
+    <item>RECENTLY_USED</item>
+  </string-array>
+  <string-array name="capitalization_type_values">
+    <item>lowercase</item>
+    <item>UPPERCASE</item>
+    <item>TitleCase</item>
+    <item>Sentence</item>
+  </string-array>
+  <string-array name="pwgen_provider_labels">
+    <item>Classic</item>
+    <item>XKPasswd</item>
+  </string-array>
+  <string-array name="pwgen_provider_values">
+    <item>classic</item>
+    <item>xkpasswd</item>
+  </string-array>
+  <string-array name="oreo_autofill_directory_structure_entries">
+    <item>work/example.org(.gpg)</item>
+    <item>work/example.org/john@doe.org(.gpg)</item>
+    <item>work/example.org/john@doe.org/password(.gpg)</item>
+  </string-array>
+  <string-array name="oreo_autofill_directory_structure_values">
+    <item>encrypted_username</item>
+    <item>file</item>
+    <item>directory</item>
+  </string-array>
+  <string-array name="app_theme_options">
+    <item>@string/pref_app_theme_value_light</item>
+    <item>@string/pref_app_theme_value_dark</item>
+    <item>@string/pref_app_theme_value_battery_saver</item>
+  </string-array>
+  <string-array name="app_theme_values">
+    <item>light</item>
+    <item>dark</item>
+    <item>battery_saver</item>
+  </string-array>
 
 </resources>

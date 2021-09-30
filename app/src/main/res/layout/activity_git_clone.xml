@@ -1,124 +1,117 @@
 <!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?android:attr/windowBackground"
+  android:padding="@dimen/activity_horizontal_margin"
+  tools:background="@color/white"
+  tools:context="dev.msfjarvis.aps.ui.git.config.GitServerConfigActivity">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
-    android:padding="@dimen/activity_horizontal_margin"
-    tools:background="@color/white"
-    tools:context="com.zeapo.pwdstore.git.GitServerConfigActivity">
+    android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/label_server_url"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:hint="@string/server_url"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/server_url"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="textWebEmailAddress"
+        android:nextFocusForward="@id/server_branch" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/server_label"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/server_name"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/label_server_url"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/server_url"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/server_label">
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/label_server_branch"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:hint="@string/server_branch"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/label_server_url">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/server_url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="textWebEmailAddress"
-                android:nextFocusForward="@id/server_branch" />
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/server_branch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/label_server_branch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/server_branch"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_server_url">
+    <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/label_auth_mode"
+      style="@style/TextAppearance.MaterialComponents.Headline6"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
+      android:text="@string/connection_mode"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/server_branch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textNoSuggestions" />
+    <com.google.android.material.chip.ChipGroup
+      android:id="@+id/auth_mode_group"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
+      app:singleSelection="true">
 
-        </com.google.android.material.textfield.TextInputLayout>
+      <com.google.android.material.chip.Chip
+        android:id="@+id/auth_mode_ssh_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connection_mode_ssh_key" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/label_auth_mode"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/connection_mode"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
+      <com.google.android.material.chip.Chip
+        android:id="@+id/auth_mode_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connection_mode_basic_authentication" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/auth_mode_group"
-            style="@style/TextAppearance.MaterialComponents.Headline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
-            app:singleSelection="true">
+      <com.google.android.material.chip.Chip
+        android:id="@+id/auth_mode_open_keychain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connection_mode_openkeychain" />
+    </com.google.android.material.chip.ChipGroup>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/auth_mode_ssh_key"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/connection_mode_ssh_key" />
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/save_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="@string/crypto_save"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/auth_mode_group" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/auth_mode_password"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/connection_mode_basic_authentication" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/auth_mode_open_keychain"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/connection_mode_openkeychain" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/crypto_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/auth_mode_group" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/clear_host_key_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="@string/clear_saved_host_key"
+      android:visibility="gone"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/auth_mode_group"
+      tools:visibility="visible" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

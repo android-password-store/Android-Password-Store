@@ -1,81 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2020 The Android Password Store Authors. All Rights Reserved.
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
   ~ SPDX-License-Identifier: GPL-3.0-only
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?attr/colorPrimary"
+  android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/app_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
-        android:contentDescription="@string/app_icon_hint"
-        android:src="@mipmap/ic_launcher"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/app_icon"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_marginStart="32dp"
+    android:layout_marginTop="@dimen/onboarding_icon_margin_top"
+    android:contentDescription="@string/app_icon_hint"
+    android:src="@mipmap/ic_launcher"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/app_icon"
-        app:layout_constraintStart_toEndOf="@id/app_icon"
-        app:layout_constraintTop_toTopOf="@+id/app_icon" />
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/app_name"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginStart="@dimen/fab_compat_margin"
+    android:layout_marginEnd="@dimen/fab_compat_margin"
+    android:text="@string/app_name"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+    android:textColor="@color/color_control_normal"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="@id/app_icon"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/app_icon"
+    app:layout_constraintTop_toTopOf="@+id/app_icon" />
 
-    <TextView
-        android:id="@+id/gpg_key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/select_gpg_key_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/app_icon"
-        app:layout_constraintTop_toBottomOf="@id/app_icon" />
+  <TextView
+    android:id="@+id/gpg_key"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="48dp"
+    android:layout_marginEnd="@dimen/fab_compat_margin"
+    android:text="@string/select_gpg_key_title"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+    android:textColor="@color/color_control_normal"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0"
+    app:layout_constraintStart_toStartOf="@id/app_icon"
+    app:layout_constraintTop_toBottomOf="@id/app_icon" />
 
-    <TextView
-        android:id="@+id/gpg_key_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/select_gpg_key_message"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textColor="@color/color_control_normal"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/gpg_key"
-        app:layout_constraintTop_toBottomOf="@id/gpg_key" />
+  <TextView
+    android:id="@+id/gpg_key_text"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/onboarding_desc_margin_top"
+    android:layout_marginEnd="16dp"
+    android:text="@string/select_gpg_key_message"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+    android:textColor="@color/color_control_normal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@id/gpg_key"
+    app:layout_constraintTop_toBottomOf="@id/gpg_key" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/select_key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
-        android:maxWidth="300dp"
-        android:minWidth="100dp"
-        android:text="@string/gpg_key_select"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gpg_key_text" />
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/select_key"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="48dp"
+    android:layout_marginEnd="16dp"
+    android:maxWidth="300dp"
+    android:minWidth="100dp"
+    android:text="@string/gpg_key_select"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/gpg_key_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
