@@ -14,8 +14,6 @@ import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.getOrElse
@@ -34,6 +32,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
@@ -80,21 +81,21 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
     val filePath =
       intent?.getStringExtra(EXTRA_FILE_PATH)
         ?: run {
-          e { "AutofillDecryptActivityV2 started without EXTRA_FILE_PATH" }
+          logcat(ERROR) { "AutofillDecryptActivityV2 started without EXTRA_FILE_PATH" }
           finish()
           return
         }
     val clientState =
       intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE)
         ?: run {
-          e { "AutofillDecryptActivityV2 started without EXTRA_CLIENT_STATE" }
+          logcat(ERROR) { "AutofillDecryptActivityV2 started without EXTRA_CLIENT_STATE" }
           finish()
           return
         }
     val isSearchAction = intent?.getBooleanExtra(EXTRA_SEARCH_ACTION, true)!!
     val action = if (isSearchAction) AutofillAction.Search else AutofillAction.Match
     directoryStructure = AutofillPreferences.directoryStructure(this)
-    d { action.toString() }
+    logcat { action.toString() }
     lifecycleScope.launch {
       val credentials = decryptCredential(File(filePath))
       if (credentials == null) {
@@ -121,7 +122,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
   private suspend fun decryptCredential(file: File): Credentials? {
     runCatching { file.inputStream() }
       .onFailure { e ->
-        e(e) { "File to decrypt not found" }
+        logcat(ERROR) { "File to decrypt not found\n${e.asLog()}" }
         return null
       }
       .onSuccess { encryptedInput ->
@@ -136,7 +137,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
           }
         }
           .onFailure { e ->
-            e(e) { "Decryption failed" }
+            logcat(ERROR) { "Decryption failed\n${e.asLog()}" }
             return null
           }
           .onSuccess { result ->
@@ -145,7 +146,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
               AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
             }
               .getOrElse { e ->
-                e(e) { "Failed to parse password entry" }
+                logcat(ERROR) { "Failed to parse password entry\n${e.asLog()}" }
                 return null
               }
           }

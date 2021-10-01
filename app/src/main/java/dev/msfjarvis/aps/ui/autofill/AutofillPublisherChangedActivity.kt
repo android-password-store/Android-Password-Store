@@ -17,7 +17,6 @@ import android.text.format.DateUtils
 import android.view.View
 import android.view.autofill.AutofillManager
 import androidx.appcompat.app.AppCompatActivity
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
 import com.github.michaelbull.result.onFailure
@@ -27,6 +26,9 @@ import dev.msfjarvis.aps.databinding.ActivityOreoAutofillPublisherChangedBinding
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPublisherChangedException
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillPublisherChangedActivity : AppCompatActivity() {
@@ -69,7 +71,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
     appPackage =
       intent.getStringExtra(EXTRA_APP_PACKAGE)
         ?: run {
-          e { "AutofillPublisherChangedActivity started without EXTRA_PACKAGE_NAME" }
+          logcat(ERROR) { "AutofillPublisherChangedActivity started without EXTRA_PACKAGE_NAME" }
           finish()
           return
         }
@@ -117,7 +119,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
       }
     }
       .onFailure { e ->
-        e(e) { "Failed to retrieve package info for $appPackage" }
+        logcat(ERROR) { "Failed to retrieve package info for $appPackage\n${e.asLog()}" }
         finish()
       }
   }

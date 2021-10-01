@@ -17,9 +17,6 @@ import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.github.ajalt.timberkt.Timber.tag
-import com.github.ajalt.timberkt.e
-import com.github.ajalt.timberkt.i
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,6 +34,10 @@ import dev.msfjarvis.aps.util.services.ClipboardService
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import javax.inject.Inject
+import logcat.LogPriority.ERROR
+import logcat.LogPriority.INFO
+import logcat.asLog
+import logcat.logcat
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
@@ -82,7 +83,6 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-    tag(TAG)
   }
 
   /**
@@ -121,7 +121,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
    * super.
    */
   override fun onError(e: Exception) {
-    e(e) { "Callers must handle their own exceptions" }
+    logcat(ERROR) { "Callers must handle their own exceptions\n${e.asLog()}" }
     throw e
   }
 
@@ -176,7 +176,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
    * @param result The intent returned by OpenKeychain
    */
   fun getUserInteractionRequestIntent(result: Intent): IntentSender {
-    i { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
+    logcat(INFO) { "RESULT_CODE_USER_INTERACTION_REQUIRED" }
     return result.getParcelableExtra<PendingIntent>(OpenPgpApi.RESULT_INTENT)!!.intentSender
   }
 
@@ -196,8 +196,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
         }
         else -> {
           snackbar(message = getString(R.string.openpgp_error_unknown, error.message))
-          e { "onError getErrorId: ${error.errorId}" }
-          e { "onError getMessage: ${error.message}" }
+          logcat(ERROR) { "onError getErrorId: ${error.errorId}" }
+          logcat(ERROR) { "onError getMessage: ${error.message}" }
         }
       }
     }

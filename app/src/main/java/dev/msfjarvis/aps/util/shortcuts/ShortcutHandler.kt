@@ -13,12 +13,12 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
-import com.github.ajalt.timberkt.d
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import javax.inject.Inject
+import logcat.logcat
 
 @Reusable
 class ShortcutHandler
@@ -70,7 +70,7 @@ constructor(
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
     val shortcutManager: ShortcutManager = context.getSystemService() ?: return
     if (!shortcutManager.isRequestPinShortcutSupported) {
-      d { "addPinnedShortcut: pin shortcuts unsupported" }
+      logcat { "addPinnedShortcut: pin shortcuts unsupported" }
       return
     }
     val shortcut = buildShortcut(item, intent)

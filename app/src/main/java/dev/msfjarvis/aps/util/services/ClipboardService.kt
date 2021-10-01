@@ -16,7 +16,6 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
@@ -29,6 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.logcat
 
 class ClipboardService : Service() {
 
@@ -82,7 +82,7 @@ class ClipboardService : Service() {
 
     if (clipboard != null) {
       scope.launch {
-        d { "Clearing the clipboard" }
+        logcat { "Clearing the clipboard" }
         val clip = ClipData.newPlainText("pgp_handler_result_pm", "")
         clipboard.setPrimaryClip(clip)
         if (deepClear) {
@@ -95,7 +95,7 @@ class ClipboardService : Service() {
         }
       }
     } else {
-      d { "Cannot get clipboard manager service" }
+      logcat { "Cannot get clipboard manager service" }
     }
   }
 
@@ -169,7 +169,7 @@ class ClipboardService : Service() {
       if (manager != null) {
         manager.createNotificationChannel(serviceChannel)
       } else {
-        d { "Failed to create notification channel" }
+        logcat { "Failed to create notification channel" }
       }
     }
   }

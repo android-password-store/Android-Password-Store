@@ -5,8 +5,6 @@
 package dev.msfjarvis.aps.util.git.sshj
 
 import android.util.Base64
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.w
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.util.git.operation.CredentialFinder
@@ -20,6 +18,8 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import logcat.LogPriority.WARN
+import logcat.logcat
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.Buffer.PlainBuffer
 import net.schmizz.sshj.common.DisconnectReason
@@ -76,7 +76,7 @@ class SshjSessionFactory(private val authMethod: SshAuthMethod, private val host
   ): RemoteSession {
     return currentSession
       ?: SshjSession(uri, uri.user, authMethod, hostKeyFile).connect().also {
-        d { "New SSH connection created" }
+        logcat { "New SSH connection created" }
         currentSession = it
       }
   }
@@ -96,13 +96,15 @@ private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
       digest.update(PlainBuffer().putPublicKey(key).compactData)
       val digestData = digest.digest()
       val hostKeyEntry = "SHA256:${Base64.encodeToString(digestData, Base64.NO_WRAP)}"
-      d { "Trusting host key on first use: $hostKeyEntry" }
+      logcat(SshjSessionFactory::class.java.simpleName) {
+        "Trusting host key on first use: $hostKeyEntry"
+      }
       hostKeyFile.writeText(hostKeyEntry)
       true
     }
   } else {
     val hostKeyEntry = hostKeyFile.readText()
-    d { "Pinned host key: $hostKeyEntry" }
+    logcat(SshjSessionFactory::class.java.simpleName) { "Pinned host key: $hostKeyEntry" }
     return FingerprintVerifier.getInstance(hostKeyEntry)
   }
 }
@@ -122,12 +124,12 @@ private class SshjSession(
       // URIish's String constructor cannot handle '@' in the user part of the URI and the URL
       // constructor can't be used since Java's URL does not recognize the ssh scheme. We thus
       // need to patch everything up ourselves.
-      d { "Before fixup: user=${uri.user}, host=${uri.host}" }
+      logcat { "Before fixup: user=${uri.user}, host=${uri.host}" }
       val userPlusHost = "${uri.user}@${uri.host}"
       val realUser = userPlusHost.substringBeforeLast('@')
       val realHost = userPlusHost.substringAfterLast('@')
       uri.setUser(realUser).setHost(realHost).also {
-        d { "After fixup: user=${it.user}, host=${it.host}" }
+        logcat { "After fixup: user=${it.user}, host=${it.host}" }
       }
     } else {
       uri
@@ -162,7 +164,7 @@ private class SshjSession(
 
   override fun exec(commandName: String?, timeout: Int): Process {
     if (currentCommand != null) {
-      w { "Killing old command" }
+      logcat(WARN) { "Killing old command" }
       disconnect()
     }
     val session = ssh.startSession()

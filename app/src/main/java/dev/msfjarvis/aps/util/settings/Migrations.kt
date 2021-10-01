@@ -8,14 +8,17 @@ package dev.msfjarvis.aps.util.settings
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.github.ajalt.timberkt.e
-import com.github.ajalt.timberkt.i
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.git.sshj.SshKey
 import java.io.File
 import java.net.URI
+import logcat.LogPriority.ERROR
+import logcat.LogPriority.INFO
+import logcat.logcat
+
+private const val TAG = "Migrations"
 
 fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
   migrateToGitUrlBasedConfig(sharedPrefs, gitSettings)
@@ -26,7 +29,7 @@ fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSetti
 
 private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
   val serverHostname = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_SERVER) ?: return
-  i { "Migrating to URL-based Git config" }
+  logcat(TAG, INFO) { "Migrating to URL-based Git config" }
   val serverPort = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_PORT) ?: ""
   val serverUser = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_USERNAME) ?: ""
   val serverPath = sharedPrefs.getString(PreferenceKeys.GIT_REMOTE_LOCATION) ?: ""
@@ -79,7 +82,7 @@ private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettin
         newBranch = gitSettings.branch
       ) != GitSettings.UpdateConnectionSettingsResult.Valid
   ) {
-    e { "Failed to migrate to URL-based Git config, generated URL is invalid" }
+    logcat(TAG, ERROR) { "Failed to migrate to URL-based Git config, generated URL is invalid" }
   }
 }
 

@@ -13,7 +13,6 @@ import android.service.autofill.FillCallback
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.AutofillScenario
 import com.github.androidpasswordstore.autofillparser.Credentials
@@ -28,6 +27,9 @@ import dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
 import dev.msfjarvis.aps.util.FeatureFlags
 import java.io.File
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillResponseBuilder(form: FillableForm) {
@@ -180,7 +182,7 @@ class AutofillResponseBuilder(form: FillableForm) {
       .fold(
         success = { matchedFiles -> callback.onSuccess(makeFillResponse(context, matchedFiles)) },
         failure = { e ->
-          e(e)
+          logcat(ERROR) { e.asLog() }
           callback.onSuccess(makePublisherChangedResponse(context, e))
         }
       )
@@ -209,7 +211,7 @@ class AutofillResponseBuilder(form: FillableForm) {
         }
       return builder.run {
         if (scenario != null) fillWith(scenario, action, credentials)
-        else e { "Failed to recover scenario from client state" }
+        else logcat(ERROR) { "Failed to recover scenario from client state" }
         build()
       }
     }

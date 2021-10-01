@@ -18,7 +18,6 @@ import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
@@ -49,6 +48,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 @AndroidEntryPoint
 class PasswordCreationActivityV2 : BasePgpActivity() {
@@ -393,7 +395,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
         }
           .onFailure { e ->
             if (e is IOException) {
-              e(e) { "Failed to write password file" }
+              logcat(ERROR) { "Failed to write password file\n${e.asLog()}" }
               setResult(RESULT_CANCELED)
               MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
                 .setTitle(getString(R.string.password_creation_file_fail_title))
@@ -402,7 +404,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
                 .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
                 .show()
             } else {
-              e(e)
+              logcat(ERROR) { e.asLog() }
             }
           }
       }

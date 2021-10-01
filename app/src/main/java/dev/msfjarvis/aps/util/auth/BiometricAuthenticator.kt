@@ -12,9 +12,8 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
-import com.github.ajalt.timberkt.Timber.tag
-import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.R
+import logcat.logcat
 
 object BiometricAuthenticator {
 
@@ -43,7 +42,7 @@ object BiometricAuthenticator {
       object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
           super.onAuthenticationError(errorCode, errString)
-          tag(TAG).d { "BiometricAuthentication error: errorCode=$errorCode, msg=$errString" }
+          logcat(TAG) { "BiometricAuthentication error: errorCode=$errorCode, msg=$errString" }
           callback(
             when (errorCode) {
               BiometricPrompt.ERROR_CANCELED,

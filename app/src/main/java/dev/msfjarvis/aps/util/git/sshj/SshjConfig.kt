@@ -4,8 +4,6 @@
  */
 package dev.msfjarvis.aps.util.git.sshj
 
-import com.github.ajalt.timberkt.Timber
-import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.runCatching
 import com.hierynomus.sshj.key.KeyAlgorithms
 import com.hierynomus.sshj.transport.cipher.BlockCiphers
@@ -14,6 +12,12 @@ import com.hierynomus.sshj.transport.kex.ExtInfoClientFactory
 import com.hierynomus.sshj.transport.mac.Macs
 import com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile
 import java.security.Security
+import logcat.LogPriority.ERROR
+import logcat.LogPriority.INFO
+import logcat.LogPriority.VERBOSE
+import logcat.LogPriority.WARN
+import logcat.asLog
+import logcat.logcat
 import net.schmizz.keepalive.KeepAliveProvider
 import net.schmizz.sshj.ConfigImpl
 import net.schmizz.sshj.common.LoggerFactory
@@ -49,7 +53,9 @@ fun setUpBouncyCastleForSshj() {
     runCatching { Class.forName("sun.security.jca.Providers") }
     Security.insertProviderAt(BouncyCastleProvider(), bcIndex + 1)
   }
-  d { "JCE providers: ${Security.getProviders().joinToString { "${it.name} (${it.version})" }}" }
+  logcat("setUpBouncyCastleForSshj") {
+    "JCE providers: ${Security.getProviders().joinToString { "${it.name} (${it.version})" }}"
+  }
   // Prevent sshj from forwarding all cryptographic operations to BC.
   SecurityUtils.setRegisterBouncyCastle(false)
   SecurityUtils.setSecurityProvider(null)
@@ -147,10 +153,9 @@ private abstract class AbstractLogger(private val name: String) : Logger {
   override fun error(marker: Marker?, msg: String, t: Throwable?) = error(msg, t)
 }
 
-object TimberLoggerFactory : LoggerFactory {
-  private class TimberLogger(name: String) : AbstractLogger(name) {
+object LogcatLoggerFactory : LoggerFactory {
+  private class LogcatLogger(name: String) : AbstractLogger(name) {
 
-    // We defer the log level checks to Timber.
     override fun isTraceEnabled() = true
     override fun isDebugEnabled() = true
     override fun isInfoEnabled() = true
@@ -163,39 +168,39 @@ object TimberLoggerFactory : LoggerFactory {
     private fun String.fix() = replace("""(?!<\\)\{\}""".toRegex(), "%s")
 
     override fun t(message: String, t: Throwable?, vararg args: Any?) {
-      Timber.tag(name).v(t, message.fix(), *args)
+      logcat(name, VERBOSE) { message.fix().format(*args) + t?.asLog() }
     }
 
     override fun d(message: String, t: Throwable?, vararg args: Any?) {
-      Timber.tag(name).d(t, message.fix(), *args)
+      logcat(name) { message.fix().format(*args) + t?.asLog() }
     }
 
     override fun i(message: String, t: Throwable?, vararg args: Any?) {
-      Timber.tag(name).i(t, message.fix(), *args)
+      logcat(name, INFO) { message.fix().format(*args) + t?.asLog() }
     }
 
     override fun w(message: String, t: Throwable?, vararg args: Any?) {
-      Timber.tag(name).w(t, message.fix(), *args)
+      logcat(name, WARN) { message.fix().format(*args) + t?.asLog() }
     }
 
     override fun e(message: String, t: Throwable?, vararg args: Any?) {
-      Timber.tag(name).e(t, message.fix(), *args)
+      logcat(name, ERROR) { message.fix().format(*args) + t?.asLog() }
     }
   }
 
   override fun getLogger(name: String): Logger {
-    return TimberLogger(name)
+    return LogcatLogger(name)
   }
 
   override fun getLogger(clazz: Class<*>): Logger {
-    return TimberLogger(clazz.name)
+    return LogcatLogger(clazz.name)
   }
 }
 
 class SshjConfig : ConfigImpl() {
 
   init {
-    loggerFactory = TimberLoggerFactory
+    loggerFactory = LogcatLoggerFactory
     keepAliveProvider = KeepAliveProvider.HEARTBEAT
     version = "OpenSSH_8.2p1 Ubuntu-4ubuntu0.1"
 

@@ -24,7 +24,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
@@ -39,6 +38,8 @@ import dev.msfjarvis.aps.util.viewmodel.ListMode
 import dev.msfjarvis.aps.util.viewmodel.SearchMode
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryAdapter
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel
+import logcat.LogPriority.ERROR
+import logcat.logcat
 
 @TargetApi(Build.VERSION_CODES.O)
 class AutofillFilterView : AppCompatActivity() {
@@ -102,7 +103,7 @@ class AutofillFilterView : AppCompatActivity() {
     window.attributes = params
 
     if (intent?.hasExtra(AutofillManager.EXTRA_CLIENT_STATE) != true) {
-      e { "AutofillFilterActivity started without EXTRA_CLIENT_STATE" }
+      logcat(ERROR) { "AutofillFilterActivity started without EXTRA_CLIENT_STATE" }
       finish()
       return
     }
@@ -115,7 +116,7 @@ class AutofillFilterView : AppCompatActivity() {
           FormOrigin.App(intent!!.getStringExtra(EXTRA_FORM_ORIGIN_APP)!!)
         }
         else -> {
-          e {
+          logcat(ERROR) {
             "AutofillFilterActivity started without EXTRA_FORM_ORIGIN_WEB or EXTRA_FORM_ORIGIN_APP"
           }
           finish()

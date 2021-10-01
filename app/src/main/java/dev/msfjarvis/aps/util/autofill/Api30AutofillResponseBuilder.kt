@@ -15,7 +15,6 @@ import android.service.autofill.SaveInfo
 import android.view.inputmethod.InlineSuggestionsRequest
 import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
@@ -28,6 +27,9 @@ import dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
 import dev.msfjarvis.aps.util.FeatureFlags
 import java.io.File
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 /** Implements [AutofillResponseBuilder]'s methods for API 30 and above */
 @RequiresApi(Build.VERSION_CODES.R)
@@ -213,7 +215,7 @@ class Api30AutofillResponseBuilder(form: FillableForm) {
           callback.onSuccess(makeFillResponse(context, inlineSuggestionsRequest, matchedFiles))
         },
         failure = { e ->
-          e(e)
+          logcat(ERROR) { e.asLog() }
           callback.onSuccess(makePublisherChangedResponse(context, inlineSuggestionsRequest, e))
         }
       )

@@ -8,12 +8,13 @@ package dev.msfjarvis.aps.ui.git.log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.github.ajalt.timberkt.e
 import dev.msfjarvis.aps.databinding.GitLogRowLayoutBinding
 import dev.msfjarvis.aps.util.git.GitCommit
 import dev.msfjarvis.aps.util.git.GitLogModel
 import java.text.DateFormat
 import java.util.Date
+import logcat.LogPriority.ERROR
+import logcat.logcat
 
 private fun shortHash(hash: String): String {
   return hash.substring(0 until 8)
@@ -37,7 +38,7 @@ class GitLogAdapter : RecyclerView.Adapter<GitLogAdapter.ViewHolder>() {
   override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
     val commit = model.get(position)
     if (commit == null) {
-      e { "There is no git commit for view holder at position $position." }
+      logcat(ERROR) { "There is no git commit for view holder at position $position." }
       return
     }
     viewHolder.bind(commit)

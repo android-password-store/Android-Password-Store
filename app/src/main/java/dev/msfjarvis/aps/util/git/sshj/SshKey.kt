@@ -16,8 +16,6 @@ import android.util.Base64
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKey
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.Application
@@ -39,6 +37,8 @@ import javax.crypto.SecretKeyFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import logcat.asLog
+import logcat.logcat
 import net.i2p.crypto.eddsa.EdDSAPrivateKey
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec
@@ -101,7 +101,7 @@ object SshKey {
           // It is fine to swallow the exception here since it will reappear when the key
           // is
           // used for SSH authentication and can then be shown in the UI.
-          d(error)
+          logcat { error.asLog() }
           false
         }
     }
@@ -317,13 +317,13 @@ object SshKey {
 
     override fun getPublic(): PublicKey =
       runCatching { androidKeystore.sshPublicKey!! }.getOrElse { error ->
-        e(error)
+        logcat { error.asLog() }
         throw IOException("Failed to get public key '$KEYSTORE_ALIAS' from Android Keystore", error)
       }
 
     override fun getPrivate(): PrivateKey =
       runCatching { androidKeystore.sshPrivateKey!! }.getOrElse { error ->
-        e(error)
+        logcat { error.asLog() }
         throw IOException(
           "Failed to access private key '$KEYSTORE_ALIAS' from Android Keystore",
           error
@@ -337,7 +337,7 @@ object SshKey {
 
     override fun getPublic(): PublicKey =
       runCatching { parseSshPublicKey(sshPublicKey!!)!! }.getOrElse { error ->
-        e(error)
+        logcat { error.asLog() }
         throw IOException("Failed to get the public key for wrapped ed25519 key", error)
       }
 
@@ -353,7 +353,7 @@ object SshKey {
         )
       }
         .getOrElse { error ->
-          e(error)
+          logcat { error.asLog() }
           throw IOException("Failed to unwrap wrapped ed25519 key", error)
         }
 

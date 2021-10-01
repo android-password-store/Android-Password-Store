@@ -12,11 +12,11 @@ import android.provider.DocumentsContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import com.github.ajalt.timberkt.d
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import logcat.logcat
 
 class DirectorySelectionActivity : AppCompatActivity() {
 
@@ -25,7 +25,7 @@ class DirectorySelectionActivity : AppCompatActivity() {
     registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
       if (uri == null) return@registerForActivityResult
 
-      d { "Selected repository URI is $uri" }
+      logcat { "Selected repository URI is $uri" }
       // TODO: This is fragile. Workaround until PasswordItem is backed by DocumentFile
       val docId = DocumentsContract.getTreeDocumentId(uri)
       val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -33,7 +33,7 @@ class DirectorySelectionActivity : AppCompatActivity() {
       val repoPath = "${Environment.getExternalStorageDirectory()}/$path"
       val prefs = sharedPrefs
 
-      d { "Selected repository path is $repoPath" }
+      logcat { "Selected repository path is $repoPath" }
 
       if (Environment.getExternalStorageDirectory().path == repoPath) {
         MaterialAlertDialogBuilder(this)

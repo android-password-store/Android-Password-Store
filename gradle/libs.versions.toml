@@ -74,12 +74,11 @@ thirdparty-flowbinding-android = { module = "io.github.reactivecircus.flowbindin
 thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
 thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.12"
 thirdparty-leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
+thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.1.0"
 thirdparty-plumber = "com.squareup.leakcanary:plumber-android:2.7"
 thirdparty-sshj = "com.hierynomus:sshj:0.31.0"
 thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
-thirdparty-timber = "com.jakewharton.timber:timber:5.0.1"
-thirdparty-timberkt = "com.github.ajalt:timberkt:1.5.1"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.1"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:17.5.1"
 

@@ -13,8 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,6 +31,9 @@ import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
 
@@ -160,9 +161,9 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
       parentFragmentManager.performTransactionWithBackStack(KeySelectionFragment.newInstance())
     }
       .onFailure { e ->
-        e(e)
+        logcat(ERROR) { e.asLog() }
         if (!localDir.delete()) {
-          d { "Failed to delete local repository: $localDir" }
+          logcat { "Failed to delete local repository: $localDir" }
         }
         finish()
       }

@@ -11,7 +11,9 @@ import android.service.autofill.Dataset
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.e
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 public enum class AutofillAction {
   Match,
@@ -68,7 +70,7 @@ public sealed class AutofillScenario<out T : Any> {
           }
           .build()
       } catch (e: Throwable) {
-        e(e)
+        logcat(ERROR) { e.asLog() }
         null
       }
     }
