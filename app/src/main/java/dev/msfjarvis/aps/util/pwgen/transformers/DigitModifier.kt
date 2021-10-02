@@ -6,6 +6,7 @@
 package dev.msfjarvis.aps.util.pwgen.transformers
 
 import dev.msfjarvis.aps.util.pwgen.secureRandomCharacter
+import dev.msfjarvis.aps.util.pwgen.transformers.CharacterSources.DIGITS
 
 /** Transforms the password tokens to add [count] distinct tokens of individual digits. */
 class DigitModifier(private val count: Int) : PasswordModifier {
@@ -15,9 +16,5 @@ class DigitModifier(private val count: Int) : PasswordModifier {
     val items = input.toMutableList()
     repeat(count) { items.add(DIGITS.secureRandomCharacter().toString()) }
     return items.toTypedArray()
-  }
-
-  private companion object {
-    private const val DIGITS = "0123456789"
   }
 }
