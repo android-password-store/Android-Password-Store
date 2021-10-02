@@ -15,7 +15,13 @@ class DigitModifierTest {
     modifier.check(arrayOf("Android", "Password", "Store"), 13)
   }
 
-  private fun DigitModifier.check(input: Array<String>, expectedSize: Int) {
-    assertEquals(expectedSize, transform(input).size)
+  @Test
+  fun `all added entries are digits`() {
+    val modifier = DigitModifier(10)
+    modifier.check(emptyArray()) { entry ->
+      // Check all characters are digits
+      val results = entry.toCharArray().map { it.isDigit() }
+      false !in results
+    }
   }
 }

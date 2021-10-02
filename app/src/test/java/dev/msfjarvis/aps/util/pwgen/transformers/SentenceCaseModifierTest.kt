@@ -14,22 +14,18 @@ class SentenceCaseModifierTest {
   @Test
   fun `capitalizes an array of words`() {
     val input = arrayOf("android", "password", "store")
-    check(input, expected = arrayOf("Android", "Password", "Store"))
+    modifier.check(input, expected = arrayOf("Android", "Password", "Store"))
   }
 
   @Test
   fun `array of numbers is not modified`() {
     val input = arrayOf("1", "2", "3")
-    check(input, expected = input)
+    modifier.check(input, expected = input)
   }
 
   @Test
   fun `already capitalized items are not modified`() {
     val input = arrayOf("Android", "password", "Store")
-    check(input, expected = arrayOf("Android", "Password", "Store"))
-  }
-
-  private fun check(input: Array<String>, expected: Array<String>) {
-    assertContentEquals(expected, modifier.transform(input))
+    modifier.check(input, expected = arrayOf("Android", "Password", "Store"))
   }
 }
