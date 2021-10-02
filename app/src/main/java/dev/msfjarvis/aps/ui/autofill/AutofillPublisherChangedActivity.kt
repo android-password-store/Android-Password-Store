@@ -25,9 +25,9 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivityOreoAutofillPublisherChangedBinding
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPublisherChangedException
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import logcat.LogPriority.ERROR
-import logcat.asLog
 import logcat.logcat
 
 @TargetApi(Build.VERSION_CODES.O)
@@ -119,7 +119,7 @@ class AutofillPublisherChangedActivity : AppCompatActivity() {
       }
     }
       .onFailure { e ->
-        logcat(ERROR) { "Failed to retrieve package info for $appPackage\n${e.asLog()}" }
+        logcat(ERROR) { e.asLog("Failed to retrieve package info for $appPackage") }
         finish()
       }
   }

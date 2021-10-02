@@ -8,11 +8,11 @@ package dev.msfjarvis.aps.util.git
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.hash
 import dev.msfjarvis.aps.util.extensions.time
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import logcat.LogPriority.ERROR
-import logcat.asLog
 import logcat.logcat
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.revwalk.RevCommit
@@ -26,7 +26,7 @@ private fun commits(): Iterable<RevCommit> {
     return listOf()
   }
   return runCatching { Git(repo).log().call() }.getOrElse { e ->
-    logcat(TAG, ERROR) { "Failed to obtain git commits\n${e.asLog()}" }
+    logcat(TAG, ERROR) { e.asLog("Failed to obtain git commits") }
     listOf()
   }
 }

@@ -168,23 +168,23 @@ object LogcatLoggerFactory : LoggerFactory {
     private fun String.fix() = replace("""(?!<\\)\{\}""".toRegex(), "%s")
 
     override fun t(message: String, t: Throwable?, vararg args: Any?) {
-      logcat(name, VERBOSE) { message.fix().format(*args) + t?.asLog() }
+      logcat(name, VERBOSE) { message.fix().format(*args) + (t?.asLog() ?: "") }
     }
 
     override fun d(message: String, t: Throwable?, vararg args: Any?) {
-      logcat(name) { message.fix().format(*args) + t?.asLog() }
+      logcat(name) { message.fix().format(*args) + (t?.asLog() ?: "") }
     }
 
     override fun i(message: String, t: Throwable?, vararg args: Any?) {
-      logcat(name, INFO) { message.fix().format(*args) + t?.asLog() }
+      logcat(name, INFO) { message.fix().format(*args) + (t?.asLog() ?: "") }
     }
 
     override fun w(message: String, t: Throwable?, vararg args: Any?) {
-      logcat(name, WARN) { message.fix().format(*args) + t?.asLog() }
+      logcat(name, WARN) { message.fix().format(*args) + (t?.asLog() ?: "") }
     }
 
     override fun e(message: String, t: Throwable?, vararg args: Any?) {
-      logcat(name, ERROR) { message.fix().format(*args) + t?.asLog() }
+      logcat(name, ERROR) { message.fix().format(*args) + (t?.asLog() ?: "") }
     }
   }
 

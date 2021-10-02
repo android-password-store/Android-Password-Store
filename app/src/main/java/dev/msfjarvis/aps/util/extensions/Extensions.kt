@@ -9,6 +9,7 @@ import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import java.io.File
 import java.util.Date
+import logcat.asLog
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 
@@ -78,3 +79,6 @@ fun String.splitLines(): Array<String> {
 
 /** Alias to [lazy] with thread safety mode always set to [LazyThreadSafetyMode.NONE]. */
 fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE) { initializer.invoke() }
+
+/** A convenience extension to turn a [Throwable] with a message into a loggable string. */
+fun Throwable.asLog(message: String): String = "$message\n${asLog()}"

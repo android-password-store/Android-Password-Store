@@ -27,6 +27,7 @@ import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
+import dev.msfjarvis.aps.util.extensions.asLog
 import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -122,7 +123,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
   private suspend fun decryptCredential(file: File): Credentials? {
     runCatching { file.inputStream() }
       .onFailure { e ->
-        logcat(ERROR) { "File to decrypt not found\n${e.asLog()}" }
+        logcat(ERROR) { e.asLog("File to decrypt not found") }
         return null
       }
       .onSuccess { encryptedInput ->
@@ -137,7 +138,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
           }
         }
           .onFailure { e ->
-            logcat(ERROR) { "Decryption failed\n${e.asLog()}" }
+            logcat(ERROR) { e.asLog("Decryption failed") }
             return null
           }
           .onSuccess { result ->
@@ -146,7 +147,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
               AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
             }
               .getOrElse { e ->
-                logcat(ERROR) { "Failed to parse password entry\n${e.asLog()}" }
+                logcat(ERROR) { e.asLog("Failed to parse password entry") }
                 return null
               }
           }

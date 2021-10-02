@@ -26,6 +26,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
 import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.snackbar
@@ -36,7 +37,6 @@ import java.io.File
 import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.LogPriority.INFO
-import logcat.asLog
 import logcat.logcat
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
@@ -121,7 +121,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
    * super.
    */
   override fun onError(e: Exception) {
-    logcat(ERROR) { "Callers must handle their own exceptions\n${e.asLog()}" }
+    logcat(ERROR) { e.asLog("Callers must handle their own exceptions") }
     throw e
   }
 

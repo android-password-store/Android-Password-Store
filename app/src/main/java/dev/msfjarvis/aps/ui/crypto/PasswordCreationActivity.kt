@@ -38,6 +38,7 @@ import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.crypto.GpgIdentifier
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.getString
@@ -522,7 +523,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             }
               .onFailure { e ->
                 if (e is IOException) {
-                  logcat(ERROR) { "Failed to write password file\n${e.asLog()}" }
+                  logcat(ERROR) { e.asLog("Failed to write password file") }
                   setResult(RESULT_CANCELED)
                   MaterialAlertDialogBuilder(this@PasswordCreationActivity)
                     .setTitle(getString(R.string.password_creation_file_fail_title))

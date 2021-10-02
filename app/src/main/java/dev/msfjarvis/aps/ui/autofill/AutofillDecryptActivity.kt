@@ -29,6 +29,7 @@ import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
+import dev.msfjarvis.aps.util.extensions.asLog
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
@@ -184,14 +185,14 @@ class AutofillDecryptActivity : AppCompatActivity() {
     val command = resumeIntent ?: Intent().apply { action = OpenPgpApi.ACTION_DECRYPT_VERIFY }
     runCatching { file.inputStream() }
       .onFailure { e ->
-        logcat(ERROR) { "File to decrypt not found\n${e.asLog()}" }
+        logcat(ERROR) { e.asLog("File to decrypt not found") }
         return null
       }
       .onSuccess { encryptedInput ->
         val decryptedOutput = ByteArrayOutputStream()
         runCatching { executeOpenPgpApi(command, encryptedInput, decryptedOutput) }
           .onFailure { e ->
-            logcat(ERROR) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed\n${e.asLog()}" }
+            logcat(ERROR) { e.asLog("OpenPgpApi ACTION_DECRYPT_VERIFY failed") }
             return null
           }
           .onSuccess { result ->
@@ -213,7 +214,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
                   )
                 }
                   .getOrElse { e ->
-                    logcat(ERROR) { "Failed to parse password entry\n${e.asLog()}" }
+                    logcat(ERROR) { e.asLog("Failed to parse password entry") }
                     return null
                   }
               }
@@ -234,7 +235,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
                 }
                   .getOrElse { e ->
                     logcat(ERROR) {
-                      "OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction\n${e.asLog()}"
+                      e.asLog("OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction")
                     }
                     return null
                   }
