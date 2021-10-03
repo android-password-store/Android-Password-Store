@@ -15,9 +15,9 @@ import android.util.Base64
 import android.view.autofill.AutofillId
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.Timber.tag
-import com.github.ajalt.timberkt.e
 import java.security.MessageDigest
+import logcat.LogPriority.ERROR
+import logcat.logcat
 
 private fun ByteArray.sha256(): ByteArray {
   return MessageDigest.getInstance("SHA-256").run {
@@ -59,7 +59,7 @@ public fun computeCertificatesHash(context: Context, appPackage: String): String
       info.signingInfo.signingCertificateHistory ?: info.signingInfo.apkContentsSigners
     val stableHashNew = stableHash(signaturesNew.map { it.toByteArray() })
     if (stableHashNew != stableHashOld)
-      tag("CertificatesHash").e {
+      logcat("CertificatesHash", ERROR) {
         "Mismatch between old and new hash: $stableHashNew != $stableHashOld"
       }
   }

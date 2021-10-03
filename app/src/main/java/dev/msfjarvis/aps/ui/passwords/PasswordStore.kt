@@ -25,9 +25,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
-import com.github.ajalt.timberkt.i
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
@@ -68,6 +65,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.LogPriority.INFO
+import logcat.logcat
 
 const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
 
@@ -108,18 +108,18 @@ class PasswordStore : BaseGitActivity() {
       val target = File(requireNotNull(intentData.getStringExtra("SELECTED_FOLDER_PATH")))
       val repositoryPath = PasswordRepository.getRepositoryDirectory().absolutePath
       if (!target.isDirectory) {
-        e { "Tried moving passwords to a non-existing folder." }
+        logcat(ERROR) { "Tried moving passwords to a non-existing folder." }
         return@registerForActivityResult
       }
 
-      d { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
-      d { filesToMove.joinToString(", ") }
+      logcat { "Moving passwords to ${intentData.getStringExtra("SELECTED_FOLDER_PATH")}" }
+      logcat { filesToMove.joinToString(", ") }
 
       lifecycleScope.launch(Dispatchers.IO) {
         for (file in filesToMove) {
           val source = File(file)
           if (!source.exists()) {
-            e { "Tried moving something that appears non-existent." }
+            logcat(ERROR) { "Tried moving something that appears non-existent." }
             continue
           }
           val destinationFile = File(target.absolutePath + "/" + source.name)
@@ -127,7 +127,7 @@ class PasswordStore : BaseGitActivity() {
           val sourceLongName = getLongName(requireNotNull(source.parent), repositoryPath, basename)
           val destinationLongName = getLongName(target.absolutePath, repositoryPath, basename)
           if (destinationFile.exists()) {
-            e { "Trying to move a file that already exists." }
+            logcat(ERROR) { "Trying to move a file that already exists." }
             withContext(Dispatchers.Main) {
               MaterialAlertDialogBuilder(this@PasswordStore)
                 .setTitle(resources.getString(R.string.password_exists_title))
@@ -389,7 +389,7 @@ class PasswordStore : BaseGitActivity() {
 
   private fun checkLocalRepository(localDir: File?) {
     if (localDir != null && settings.getBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)) {
-      d { "Check, dir: ${localDir.absolutePath}" }
+      logcat { "Check, dir: ${localDir.absolutePath}" }
       // do not push the fragment if we already have it
       if (getPasswordFragment() == null || settings.getBoolean(PreferenceKeys.REPO_CHANGED, false)
       ) {
@@ -454,7 +454,7 @@ class PasswordStore : BaseGitActivity() {
   fun createPassword() {
     if (!validateState()) return
     val currentDir = currentDir
-    i { "Adding file to : ${currentDir.absolutePath}" }
+    logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
     val intent = Intent(this, PasswordCreationActivity::class.java)
     intent.putExtra("FILE_PATH", currentDir.absolutePath)
     intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
@@ -632,7 +632,7 @@ class PasswordStore : BaseGitActivity() {
         mapOf(source to destinationFile)
       }
     if (!source.renameTo(destinationFile)) {
-      e { "Something went wrong while moving $source to $destinationFile." }
+      logcat(ERROR) { "Something went wrong while moving $source to $destinationFile." }
       withContext(Dispatchers.Main) {
         MaterialAlertDialogBuilder(this@PasswordStore)
           .setTitle(R.string.password_move_error_title)

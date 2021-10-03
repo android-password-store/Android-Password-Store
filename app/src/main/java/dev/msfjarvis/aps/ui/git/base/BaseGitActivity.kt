@@ -7,7 +7,6 @@ package dev.msfjarvis.aps.ui.git.base
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
@@ -30,6 +29,8 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import logcat.asLog
+import logcat.logcat
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.transport.TransportException
@@ -89,7 +90,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
     if (!isExplicitlyUserInitiatedError(error)) {
       gitPrefs.edit { remove(PreferenceKeys.HTTPS_PASSWORD) }
       sharedPrefs.edit { remove(PreferenceKeys.SSH_OPENKEYSTORE_KEYID) }
-      d(error)
+      logcat { error.asLog() }
       withContext(Dispatchers.Main) {
         MaterialAlertDialogBuilder(this@BaseGitActivity).run {
           setTitle(resources.getString(R.string.jgit_error_dialog_title))

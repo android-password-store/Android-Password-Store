@@ -7,7 +7,6 @@ package dev.msfjarvis.aps.util.git.operation
 import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
@@ -34,6 +33,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.SSHException
 import net.schmizz.sshj.userauth.password.PasswordFinder
@@ -110,7 +112,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
         }
       callingActivity.startActivity(intent)
     }
-      .onFailure { e -> e(e) }
+      .onFailure { e -> logcat(ERROR) { e.asLog() } }
   }
 
   private fun registerAuthProviders(

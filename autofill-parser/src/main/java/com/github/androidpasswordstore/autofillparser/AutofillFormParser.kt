@@ -12,7 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.autofill.AutofillId
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.d
+import logcat.logcat
 
 /**
  * A unique identifier for either an Android app (package name) or a website (origin minus port).
@@ -84,7 +84,7 @@ private class AutofillFormParser(
   private val webOrigins = mutableSetOf<String>()
 
   init {
-    d { "Request from $appPackage (${computeCertificatesHash(context, appPackage)})" }
+    logcat { "Request from $appPackage (${computeCertificatesHash(context, appPackage)})" }
     parseStructure(structure)
   }
 
@@ -92,7 +92,7 @@ private class AutofillFormParser(
   val formOrigin = determineFormOrigin(context)
 
   init {
-    d { "Origin: $formOrigin" }
+    logcat { "Origin: $formOrigin" }
   }
 
   private fun parseStructure(structure: AssistStructure) {
@@ -111,11 +111,11 @@ private class AutofillFormParser(
         FormField(node, fieldIndex, false)
       }
     if (field.relevantField) {
-      d { "Relevant: $field" }
+      logcat { "Relevant: $field" }
       relevantFields.add(field)
       fieldIndex++
     } else {
-      d { "Ignored : $field" }
+      logcat { "Ignored : $field" }
       ignoredIds.add(field.autofillId)
     }
     for (i in 0 until node.childCount) {
@@ -134,7 +134,7 @@ private class AutofillFormParser(
     if (trustedBrowserInfo == null) return
     node.webOrigin?.let {
       if (it !in webOrigins) {
-        d { "Origin encountered: $it" }
+        logcat { "Origin encountered: $it" }
         webOrigins.add(it)
       }
     }

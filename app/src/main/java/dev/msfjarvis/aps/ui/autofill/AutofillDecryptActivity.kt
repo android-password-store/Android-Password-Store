@@ -17,8 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartIntentSend
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.getOrElse
@@ -31,6 +29,7 @@ import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
+import dev.msfjarvis.aps.util.extensions.asLog
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
@@ -43,6 +42,9 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
@@ -108,21 +110,21 @@ class AutofillDecryptActivity : AppCompatActivity() {
     val filePath =
       intent?.getStringExtra(EXTRA_FILE_PATH)
         ?: run {
-          e { "AutofillDecryptActivity started without EXTRA_FILE_PATH" }
+          logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_FILE_PATH" }
           finish()
           return
         }
     val clientState =
       intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE)
         ?: run {
-          e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
+          logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
           finish()
           return
         }
     val isSearchAction = intent?.getBooleanExtra(EXTRA_SEARCH_ACTION, true)!!
     val action = if (isSearchAction) AutofillAction.Search else AutofillAction.Match
     directoryStructure = AutofillPreferences.directoryStructure(this)
-    d { action.toString() }
+    logcat { action.toString() }
     lifecycleScope.launch {
       val credentials = decryptCredential(File(filePath))
       if (credentials == null) {
@@ -183,14 +185,14 @@ class AutofillDecryptActivity : AppCompatActivity() {
     val command = resumeIntent ?: Intent().apply { action = OpenPgpApi.ACTION_DECRYPT_VERIFY }
     runCatching { file.inputStream() }
       .onFailure { e ->
-        e(e) { "File to decrypt not found" }
+        logcat(ERROR) { e.asLog("File to decrypt not found") }
         return null
       }
       .onSuccess { encryptedInput ->
         val decryptedOutput = ByteArrayOutputStream()
         runCatching { executeOpenPgpApi(command, encryptedInput, decryptedOutput) }
           .onFailure { e ->
-            e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed" }
+            logcat(ERROR) { e.asLog("OpenPgpApi ACTION_DECRYPT_VERIFY failed") }
             return null
           }
           .onSuccess { result ->
@@ -212,7 +214,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
                   )
                 }
                   .getOrElse { e ->
-                    e(e) { "Failed to parse password entry" }
+                    logcat(ERROR) { e.asLog("Failed to parse password entry") }
                     return null
                   }
               }
@@ -232,7 +234,9 @@ class AutofillDecryptActivity : AppCompatActivity() {
                   decryptCredential(file, intentToResume)
                 }
                   .getOrElse { e ->
-                    e(e) { "OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction" }
+                    logcat(ERROR) {
+                      e.asLog("OpenPgpApi ACTION_DECRYPT_VERIFY failed with user interaction")
+                    }
                     return null
                   }
               }
@@ -247,14 +251,14 @@ class AutofillDecryptActivity : AppCompatActivity() {
                       )
                       .show()
                   }
-                  e {
+                  logcat(ERROR) {
                     "OpenPgpApi ACTION_DECRYPT_VERIFY failed (${error.errorId}): ${error.message}"
                   }
                 }
                 null
               }
               else -> {
-                e { "Unrecognized OpenPgpApi result: $resultCode" }
+                logcat(ERROR) { "Unrecognized OpenPgpApi result: $resultCode" }
                 null
               }
             }

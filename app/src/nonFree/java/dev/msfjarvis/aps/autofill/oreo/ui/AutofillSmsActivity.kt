@@ -17,8 +17,6 @@ import android.view.autofill.AutofillManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
-import com.github.ajalt.timberkt.w
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.michaelbull.result.onFailure
@@ -39,6 +37,8 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.WARN
+import logcat.logcat
 
 suspend fun <T> Task<T>.suspendableAwait() =
   suspendCoroutine<T> { cont ->
@@ -62,14 +62,14 @@ class AutofillSmsActivity : AppCompatActivity() {
       val googleApiAvailabilityInstance = GoogleApiAvailability.getInstance()
       val googleApiStatus = googleApiAvailabilityInstance.isGooglePlayServicesAvailable(context)
       if (googleApiStatus != ConnectionResult.SUCCESS) {
-        w {
+        logcat(WARN) {
           "Google Play Services unavailable or not updated: ${googleApiAvailabilityInstance.getErrorString(googleApiStatus)}"
         }
         return false
       }
       // https://developer.android.com/guide/topics/text/autofill-services#sms-autofill
       if (googleApiAvailabilityInstance.getApkVersion(context) < 190056000) {
-        w { "Google Play Service 19.0.56 or higher required for SMS OTP Autofill" }
+        logcat(WARN) { "Google Play Service 19.0.56 or higher required for SMS OTP Autofill" }
         return false
       }
       return true
@@ -103,7 +103,7 @@ class AutofillSmsActivity : AppCompatActivity() {
     clientState =
       intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE)
         ?: run {
-          e { "AutofillSmsActivity started without EXTRA_CLIENT_STATE" }
+          logcat(WARN) { "AutofillSmsActivity started without EXTRA_CLIENT_STATE" }
           finish()
           return
         }

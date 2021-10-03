@@ -5,24 +5,28 @@
 
 package dev.msfjarvis.aps.util.git
 
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.hash
 import dev.msfjarvis.aps.util.extensions.time
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
+import logcat.LogPriority.ERROR
+import logcat.logcat
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.revwalk.RevCommit
+
+private val TAG = GitLogModel::class.java.simpleName
 
 private fun commits(): Iterable<RevCommit> {
   val repo = PasswordRepository.getRepository(null)
   if (repo == null) {
-    e { "Could not access git repository" }
+    logcat(TAG, ERROR) { "Could not access git repository" }
     return listOf()
   }
   return runCatching { Git(repo).log().call() }.getOrElse { e ->
-    e(e) { "Failed to obtain git commits" }
+    logcat(TAG, ERROR) { e.asLog("Failed to obtain git commits") }
     listOf()
   }
 }
@@ -48,7 +52,8 @@ class GitLogModel {
   val size = cache.size
 
   fun get(index: Int): GitCommit? {
-    if (index >= size) e { "Cannot get git commit with index $index. There are only $size." }
+    if (index >= size)
+      logcat(ERROR) { "Cannot get git commit with index $index. There are only $size." }
     return cache.getOrNull(index)
   }
 }

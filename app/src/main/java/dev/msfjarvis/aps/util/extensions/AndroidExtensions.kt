@@ -21,7 +21,6 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.github.ajalt.timberkt.d
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +28,7 @@ import dev.msfjarvis.aps.BuildConfig
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.git.operation.GitOperation
+import logcat.logcat
 
 /** Get an instance of [AutofillManager]. Only available on Android Oreo and above */
 val Context.autofillManager: AutofillManager?
@@ -91,7 +91,7 @@ suspend fun FragmentActivity.commitChange(
         )
 
       override fun preExecute(): Boolean {
-        d { "Committing with message: '$message'" }
+        logcat { "Committing with message: '$message'" }
         return true
       }
     }

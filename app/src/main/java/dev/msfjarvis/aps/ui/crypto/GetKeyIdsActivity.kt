@@ -10,12 +10,14 @@ import android.os.Bundle
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpUtils
 import org.openintents.openpgp.IOpenPgpService2
@@ -43,7 +45,7 @@ class GetKeyIdsActivity : BasePgpActivity() {
   }
 
   override fun onError(e: Exception) {
-    e(e)
+    logcat(ERROR) { e.asLog() }
   }
 
   /** Get the Key ids from OpenKeychain */
@@ -63,7 +65,7 @@ class GetKeyIdsActivity : BasePgpActivity() {
             setResult(RESULT_OK, keyResult)
             finish()
           }
-            .onFailure { e -> e(e) }
+            .onFailure { e -> logcat(ERROR) { e.asLog() } }
         }
         OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
           val sender = getUserInteractionRequestIntent(result)

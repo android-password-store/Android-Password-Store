@@ -21,6 +21,6 @@ dependencies {
   implementation(libs.androidx.autofill)
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
-  implementation(libs.thirdparty.timberkt)
+  implementation(libs.thirdparty.logcat)
   testImplementation(libs.bundles.testDependencies)
 }

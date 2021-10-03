@@ -15,7 +15,6 @@ import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
@@ -34,6 +33,9 @@ import dev.msfjarvis.aps.util.settings.Protocol
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 /**
  * Activity that encompasses both the initial clone as well as editing the server config for future
@@ -269,7 +271,7 @@ class GitServerConfigActivity : BaseGitActivity() {
         }
       }
         .onFailure { e ->
-          e(e)
+          logcat(ERROR) { e.asLog() }
           MaterialAlertDialogBuilder(this).setMessage(e.message).show()
         }
       lifecycleScope.launch {

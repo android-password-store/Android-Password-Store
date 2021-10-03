@@ -8,9 +8,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.core.content.edit
-import com.github.ajalt.timberkt.Timber.e
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.w
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import com.github.androidpasswordstore.autofillparser.computeCertificatesHash
 import com.github.michaelbull.result.Err
@@ -18,6 +15,9 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import dev.msfjarvis.aps.R
 import java.io.File
+import logcat.LogPriority.ERROR
+import logcat.LogPriority.WARN
+import logcat.logcat
 
 private const val PREFERENCES_AUTOFILL_APP_MATCHES = "oreo_autofill_app_matches"
 private val Context.autofillAppMatches
@@ -69,7 +69,7 @@ class AutofillMatcher {
             context.autofillAppMatches.getString(tokenKey(formOrigin), null) ?: return false
           val hashHasChanged = certificatesHash != storedCertificatesHash
           if (hashHasChanged) {
-            e { "$packageName: stored=$storedCertificatesHash, new=$certificatesHash" }
+            logcat(ERROR) { "$packageName: stored=$storedCertificatesHash, new=$certificatesHash" }
             true
           } else {
             false
@@ -134,7 +134,7 @@ class AutofillMatcher {
       if (hasFormOriginHashChanged(context, formOrigin)) {
         // This should never happen since we already verified the publisher in
         // getMatchesFor.
-        e { "App publisher changed between getMatchesFor and addMatchFor" }
+        logcat(ERROR) { "App publisher changed between getMatchesFor and addMatchFor" }
         throw AutofillPublisherChangedException(formOrigin)
       }
       val matchPreferences = context.matchPreferences(formOrigin)
@@ -154,7 +154,7 @@ class AutofillMatcher {
         putStringSet(matchesKey(formOrigin), newFiles.map { it.absolutePath }.toSet())
       }
       storeFormOriginHash(context, formOrigin)
-      d { "Stored match for $formOrigin" }
+      logcat { "Stored match for $formOrigin" }
     }
 
     /**
@@ -176,7 +176,7 @@ class AutofillMatcher {
           // created with `putStringSet`.
           @Suppress("UNCHECKED_CAST") val oldMatches = value as? Set<String>
           if (oldMatches == null) {
-            w { "Failed to read matches for $key" }
+            logcat(WARN) { "Failed to read matches for $key" }
             continue
           }
           // Delete all matches for file locations that are going to be overwritten, then
@@ -188,7 +188,7 @@ class AutofillMatcher {
               .minus(oldNewPathMap.values)
               .map { match ->
                 val newPath = oldNewPathMap[match] ?: return@map match
-                d { "Updating match for $key: $match --> $newPath" }
+                logcat { "Updating match for $key: $match --> $newPath" }
                 newPath
               }
               .toSet()

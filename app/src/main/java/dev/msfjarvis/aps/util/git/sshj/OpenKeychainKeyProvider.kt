@@ -9,7 +9,6 @@ import android.content.Intent
 import androidx.activity.result.IntentSenderRequest
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -21,6 +20,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.logcat
 import net.schmizz.sshj.common.DisconnectReason
 import net.schmizz.sshj.common.KeyType
 import net.schmizz.sshj.userauth.UserAuthException
@@ -81,7 +81,7 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
         sshServiceConnection.connect(
           object : SshAuthenticationConnection.OnBound {
             override fun onBound(sshAgent: ISshAuthenticationService) {
-              d { "Bound to SshAuthenticationApi: $OPENPGP_PROVIDER" }
+              logcat { "Bound to SshAuthenticationApi: $OPENPGP_PROVIDER" }
               cont.resume(SshAuthenticationApi(context, sshAgent))
             }
 
@@ -134,7 +134,7 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
     request: Request,
     resultOfUserInteraction: Intent? = null
   ): ApiResponse {
-    d { "executeRequest($request) called" }
+    logcat { "executeRequest($request) called" }
     val result =
       withContext(Dispatchers.Main) {
         // If the request required user interaction, the data returned from the
@@ -142,7 +142,7 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
         // is used as the real request.
         sshServiceApi.executeApi(resultOfUserInteraction ?: request.toIntent())!!
       }
-    return parseResult(request, result).also { d { "executeRequest($request): $it" } }
+    return parseResult(request, result).also { logcat { "executeRequest($request): $it" } }
   }
 
   private suspend fun parseResult(request: Request, result: Intent): ApiResponse {

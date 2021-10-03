@@ -15,13 +15,13 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.documentfile.provider.DocumentFile
-import com.github.ajalt.timberkt.d
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.TimeZone
+import logcat.logcat
 
 class PasswordExportService : Service() {
 
@@ -62,7 +62,7 @@ class PasswordExportService : Service() {
     val repositoryDirectory = requireNotNull(PasswordRepository.getRepositoryDirectory())
     val sourcePassDir = DocumentFile.fromFile(repositoryDirectory)
 
-    d { "Copying ${repositoryDirectory.path} to $targetDirectory" }
+    logcat { "Copying ${repositoryDirectory.path} to $targetDirectory" }
 
     val dateString =
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -146,7 +146,7 @@ class PasswordExportService : Service() {
       if (manager != null) {
         manager.createNotificationChannel(serviceChannel)
       } else {
-        d { "Failed to create notification channel" }
+        logcat { "Failed to create notification channel" }
       }
     }
   }

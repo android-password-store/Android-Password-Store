@@ -12,7 +12,6 @@ import android.util.Patterns
 import android.view.MenuItem
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
@@ -26,6 +25,8 @@ import dev.msfjarvis.aps.ui.git.base.BaseGitActivity
 import dev.msfjarvis.aps.ui.git.log.GitLogActivity
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import kotlinx.coroutines.launch
+import logcat.LogPriority.ERROR
+import logcat.logcat
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.lib.RepositoryState
@@ -88,7 +89,7 @@ class GitConfigActivity : BaseGitActivity() {
     }
     binding.gitLog.setOnClickListener {
       runCatching { startActivity(Intent(this, GitLogActivity::class.java)) }.onFailure { ex ->
-        e(ex) { "Failed to start GitLogActivity" }
+        logcat(ERROR) { "Failed to start GitLogActivity\n${ex}" }
       }
     }
     binding.gitAbortRebase.setOnClickListener {
@@ -143,7 +144,7 @@ class GitConfigActivity : BaseGitActivity() {
       }
     }
       .getOrElse { ex ->
-        e(ex) { "Error getting HEAD reference" }
+        logcat(ERROR) { "Error getting HEAD reference\n${ex}" }
         getString(R.string.git_head_missing)
       }
   }

@@ -6,8 +6,8 @@ package com.github.androidpasswordstore.autofillparser
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.w
+import logcat.LogPriority.WARN
+import logcat.logcat
 
 @DslMarker internal annotation class AutofillDsl
 
@@ -116,16 +116,16 @@ internal class SingleFieldMatcher(
         val new = current.filter { tieBreaker(it, alreadyMatched) }
         // skipping those tie breakers that are not satisfied for any remaining field...
         if (new.isEmpty()) {
-          d { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
+          logcat { "Tie breaker #${i + 1}: Didn't match any field; skipping" }
           continue
         }
         // and return if the available options have been narrowed to a single field.
         if (new.size == 1) {
-          d { "Tie breaker #${i + 1}: Success" }
+          logcat { "Tie breaker #${i + 1}: Success" }
           current = new
           break
         }
-        d { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
+        logcat { "Tie breaker #${i + 1}: Matched ${new.size} fields; continuing" }
         current = new
       }
       listOf(current.singleOrNull() ?: return null)
@@ -154,16 +154,16 @@ private class PairOfFieldsMatcher(
         for ((i, tieBreaker) in tieBreakers.withIndex()) {
           val new = current.filter { tieBreaker(it, alreadyMatched) }
           if (new.isEmpty()) {
-            d { "Tie breaker #${i + 1}: Didn't match any pair of fields; skipping" }
+            logcat { "Tie breaker #${i + 1}: Didn't match any pair of fields; skipping" }
             continue
           }
           // and return if the available options have been narrowed to a single field.
           if (new.size == 1) {
-            d { "Tie breaker #${i + 1}: Success" }
+            logcat { "Tie breaker #${i + 1}: Success" }
             current = new
             break
           }
-          d { "Tie breaker #${i + 1}: Matched ${new.size} pairs of fields; continuing" }
+          logcat { "Tie breaker #${i + 1}: Matched ${new.size} pairs of fields; continuing" }
           current = new
         }
         current.singleOrNull()?.toList()
@@ -323,14 +323,14 @@ private constructor(
     isManualRequest: Boolean
   ): AutofillScenario<FormField>? {
     if (singleOriginMode && !applyInSingleOriginMode) {
-      d { "$name: Skipped in single origin mode" }
+      logcat { "$name: Skipped in single origin mode" }
       return null
     }
     if (!isManualRequest && applyOnManualRequestOnly) {
-      d { "$name: Skipped since not a manual request" }
+      logcat { "$name: Skipped since not a manual request" }
       return null
     }
-    d { "$name: Applying..." }
+    logcat { "$name: Applying..." }
     val scenarioBuilder = AutofillScenario.Builder<FormField>()
     val alreadyMatched = mutableListOf<FormField>()
     for ((type, matcher, optional, matchHidden) in matchers) {
@@ -343,13 +343,13 @@ private constructor(
       val matchResult =
         matcher.match(fieldsToMatchOn, alreadyMatched)
           ?: if (optional) {
-            d { "$name: Skipping optional $type matcher" }
+            logcat { "$name: Skipping optional $type matcher" }
             continue
           } else {
-            d { "$name: Required $type matcher didn't match; passing to next rule" }
+            logcat { "$name: Required $type matcher didn't match; passing to next rule" }
             return null
           }
-      d { "$name: Matched $type" }
+      logcat { "$name: Matched $type" }
       when (type) {
         FillableFieldType.Username -> {
           check(matchResult.size == 1 && scenarioBuilder.username == null)
@@ -370,9 +370,9 @@ private constructor(
     return scenarioBuilder.build().takeIf { scenario ->
       scenario.passesOriginCheck(singleOriginMode = singleOriginMode).also { passed ->
         if (passed) {
-          d { "$name: Detected scenario:\n$scenario" }
+          logcat { "$name: Detected scenario:\n$scenario" }
         } else {
-          w { "$name: Scenario failed origin check:\n$scenario" }
+          logcat(WARN) { "$name: Scenario failed origin check:\n$scenario" }
         }
       }
     }
@@ -411,13 +411,13 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
     isManualRequest: Boolean
   ): AutofillScenario<FormField>? {
     val possiblePasswordFields = fields.filter { it.passwordCertainty >= CertaintyLevel.Possible }
-    d { "Possible password fields: ${possiblePasswordFields.size}" }
+    logcat { "Possible password fields: ${possiblePasswordFields.size}" }
     val possibleUsernameFields = fields.filter { it.usernameCertainty >= CertaintyLevel.Possible }
-    d { "Possible username fields: ${possibleUsernameFields.size}" }
+    logcat { "Possible username fields: ${possibleUsernameFields.size}" }
     val possibleOtpFields = fields.filter { it.otpCertainty >= CertaintyLevel.Possible }
-    d { "Possible otp fields: ${possibleOtpFields.size}" }
+    logcat { "Possible otp fields: ${possibleOtpFields.size}" }
     // Return the result of the first rule that matches
-    d { "Rules: ${rules.size}" }
+    logcat { "Rules: ${rules.size}" }
     for (rule in rules) {
       return rule.match(
         possiblePasswordFields,

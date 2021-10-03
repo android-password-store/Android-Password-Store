@@ -15,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FormOrigin
@@ -26,6 +25,8 @@ import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import java.io.File
+import logcat.LogPriority.ERROR
+import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
 class AutofillSaveActivity : AppCompatActivity() {
@@ -131,7 +132,7 @@ class AutofillSaveActivity : AppCompatActivity() {
               val clientState =
                 intent?.getBundleExtra(AutofillManager.EXTRA_CLIENT_STATE)
                   ?: run {
-                    e { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
+                    logcat(ERROR) { "AutofillDecryptActivity started without EXTRA_CLIENT_STATE" }
                     finish()
                     return@registerForActivityResult
                   }

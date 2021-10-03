@@ -16,7 +16,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.Timber.tag
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
@@ -24,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentXkpwgenBinding
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.pwgenxkpwd.CapsType
 import dev.msfjarvis.aps.util.pwgenxkpwd.PasswordBuilder
@@ -31,6 +31,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import logcat.LogPriority.ERROR
+import logcat.logcat
 import reactivecircus.flowbinding.android.widget.afterTextChanges
 import reactivecircus.flowbinding.android.widget.selectionEvents
 
@@ -119,7 +121,7 @@ class XkPasswordGeneratorDialogFragment : DialogFragment() {
         success = { binding.xkPasswordText.text = it },
         failure = { e ->
           Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
-          tag("xkpw").e(e, "failure generating xkpasswd")
+          logcat("xkpw", ERROR) { e.asLog("failure generating xkpasswd") }
           binding.xkPasswordText.text = FALLBACK_ERROR_PASS
         },
       )

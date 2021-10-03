@@ -107,12 +107,11 @@ dependencies {
     exclude(group = "org.apache.httpcomponents", module = "httpclient")
   }
   implementation(libs.thirdparty.kotlinResult)
+  implementation(libs.thirdparty.logcat)
   implementation(libs.thirdparty.modernAndroidPrefs)
   implementation(libs.thirdparty.plumber)
   implementation(libs.thirdparty.sshauth)
   implementation(libs.thirdparty.sshj)
-  implementation(libs.thirdparty.timber)
-  implementation(libs.thirdparty.timberkt)
 
   if (isSnapshot()) {
     implementation(libs.thirdparty.whatthestack)

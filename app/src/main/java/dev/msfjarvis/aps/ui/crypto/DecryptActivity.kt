@@ -12,7 +12,6 @@ import android.view.MenuItem
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +34,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
 import org.openintents.openpgp.IOpenPgpService2
@@ -110,7 +112,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
   }
 
   override fun onError(e: Exception) {
-    e(e)
+    logcat(ERROR) { e.asLog() }
   }
 
   /**
@@ -212,7 +214,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             binding.recyclerView.adapter = adapter
             adapter.updateItems(items)
           }
-            .onFailure { e -> e(e) }
+            .onFailure { e -> logcat(ERROR) { e.asLog() } }
         }
         OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED -> {
           val sender = getUserInteractionRequestIntent(result)

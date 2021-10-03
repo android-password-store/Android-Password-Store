@@ -14,8 +14,6 @@ import android.service.autofill.FillResponse
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import androidx.annotation.RequiresApi
-import com.github.ajalt.timberkt.d
-import com.github.ajalt.timberkt.e
 import com.github.androidpasswordstore.autofillparser.AutofillScenario
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FillableForm
@@ -34,6 +32,8 @@ import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.hasFlag
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import logcat.LogPriority.ERROR
+import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
 class OreoAutofillService : AutofillService() {
@@ -92,7 +92,7 @@ class OreoAutofillService : AutofillService() {
         getCustomSuffixes(),
       )
         ?: run {
-          d { "Form cannot be filled" }
+          logcat { "Form cannot be filled" }
           callback.onSuccess(null)
           return
         }
@@ -117,21 +117,21 @@ class OreoAutofillService : AutofillService() {
     val clientState =
       request.clientState
         ?: run {
-          e { "Received save request without client state" }
+          logcat(ERROR) { "Received save request without client state" }
           callback.onFailure(getString(R.string.oreo_autofill_save_internal_error))
           return
         }
     val scenario =
       AutofillScenario.fromClientState(clientState)?.recoverNodes(structure)
         ?: run {
-          e { "Failed to recover client state or nodes from client state" }
+          logcat(ERROR) { "Failed to recover client state or nodes from client state" }
           callback.onFailure(getString(R.string.oreo_autofill_save_internal_error))
           return
         }
     val formOrigin =
       FormOrigin.fromBundle(clientState)
         ?: run {
-          e { "Failed to recover form origin from client state" }
+          logcat(ERROR) { "Failed to recover form origin from client state" }
           callback.onFailure(getString(R.string.oreo_autofill_save_internal_error))
           return
         }

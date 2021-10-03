@@ -18,7 +18,6 @@ import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
-import com.github.ajalt.timberkt.e
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
@@ -35,6 +34,7 @@ import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
+import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
 import dev.msfjarvis.aps.util.extensions.getString
@@ -49,6 +49,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
+import logcat.asLog
+import logcat.logcat
 
 @AndroidEntryPoint
 class PasswordCreationActivityV2 : BasePgpActivity() {
@@ -393,7 +396,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
         }
           .onFailure { e ->
             if (e is IOException) {
-              e(e) { "Failed to write password file" }
+              logcat(ERROR) { e.asLog("Failed to write password file") }
               setResult(RESULT_CANCELED)
               MaterialAlertDialogBuilder(this@PasswordCreationActivityV2)
                 .setTitle(getString(R.string.password_creation_file_fail_title))
@@ -402,7 +405,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
                 .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
                 .show()
             } else {
-              e(e)
+              logcat(ERROR) { e.asLog() }
             }
           }
       }

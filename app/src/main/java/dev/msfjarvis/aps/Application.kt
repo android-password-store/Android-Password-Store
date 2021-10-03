@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import com.github.ajalt.timberkt.Timber.DebugTree
-import com.github.ajalt.timberkt.Timber.plant
 import dagger.hilt.android.HiltAndroidApp
 import dev.msfjarvis.aps.injection.context.FilesDirPath
 import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
@@ -25,6 +23,7 @@ import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.settings.runMigrations
 import javax.inject.Inject
+import logcat.AndroidLogcatLogger
 
 @Suppress("Unused")
 @HiltAndroidApp
@@ -41,7 +40,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     if (BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
-      plant(DebugTree())
+      AndroidLogcatLogger.installOnDebuggableApp(this)
       StrictMode.setVmPolicy(VmPolicy.Builder().detectAll().penaltyLog().build())
       StrictMode.setThreadPolicy(ThreadPolicy.Builder().detectAll().penaltyLog().build())
     }
