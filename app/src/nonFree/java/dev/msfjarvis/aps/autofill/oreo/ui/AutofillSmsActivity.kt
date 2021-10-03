@@ -37,7 +37,9 @@ import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.LogPriority.ERROR
 import logcat.LogPriority.WARN
+import logcat.asLog
 import logcat.logcat
 
 suspend fun <T> Task<T>.suspendableAwait() =
@@ -134,7 +136,7 @@ class AutofillSmsActivity : AppCompatActivity() {
         if (e is ResolvableApiException) {
           e.startResolutionForResult(this@AutofillSmsActivity, 1)
         } else {
-          e(e)
+          logcat(ERROR) { e.asLog() }
           withContext(Dispatchers.Main) { finish() }
         }
       }
