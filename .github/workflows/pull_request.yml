@@ -10,40 +10,24 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      with:
+        fetch-depth: 0
+
     - name: Check if relevant files have changed
       uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
       id: service-changed
       with:
         result-encoding: string
         script: |
-          const result = await github.pulls.listFiles({
-            owner: context.payload.repository.owner.login,
-            repo: context.payload.repository.name,
-            pull_number: context.payload.number,
-            per_page: 100
-          })
-          const files = result.data.filter(file =>
-            // We wanna run this if the PR workflow is modified
-            (file.filename.endsWith(".yml") && !file.filename.endsWith("pull_request.yml")) ||
-            // Changes in Markdown files don't need tests
-            file.filename.endsWith(".md") ||
-            // Changes to fastlane metadata aren't covered by tests
-            file.filename.startsWith("fastlane/")
-          )
-          // If filtered file count and source file count is equal, it means all files
-          // in this PR are skip-worthy.
-          return files.length != result.data.length
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
 
     - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       with:
         java-version: '11'
-
-    - name: Checkout repository
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-      with:
-        fetch-depth: 0
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
@@ -71,29 +55,19 @@ jobs:
   instrumentation-tests:
     runs-on: macos-11
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      with:
+        fetch-depth: 0
+
     - name: Check if relevant files have changed
       uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
       id: service-changed
       with:
         result-encoding: string
         script: |
-          const result = await github.pulls.listFiles({
-            owner: context.payload.repository.owner.login,
-            repo: context.payload.repository.name,
-            pull_number: context.payload.number,
-            per_page: 100
-          })
-          const files = result.data.filter(file =>
-            // We wanna run this if the PR workflow is modified
-            (file.filename.endsWith(".yml") && !file.filename.endsWith("pull_request.yml")) ||
-            // Changes in Markdown files don't need tests
-            file.filename.endsWith(".md") ||
-            // Changes to fastlane metadata aren't covered by tests
-            file.filename.startsWith("fastlane/")
-          )
-          // If filtered file count and source file count is equal, it means all files
-          // in this PR are skip-worthy.
-          return files.length != result.data.length
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
 
     - uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353
       if: ${{ steps.service-changed.outputs.result == 'true' }}
@@ -108,12 +82,6 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       with:
         java-version: '11'
-
-    - name: Checkout repository
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-      with:
-        fetch-depth: 0
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}
