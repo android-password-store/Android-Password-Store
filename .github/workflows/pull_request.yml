@@ -62,8 +62,8 @@ jobs:
           name: Test report
           path: app/build/reports
 
-  run-screenshot-tests:
-    runs-on: macOS-latest
+  instrumentation-tests:
+    runs-on: macos-11
     steps:
     - name: Check if relevant files have changed
       uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
