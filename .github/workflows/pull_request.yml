@@ -49,6 +49,12 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
+    - name: Build debug APKs
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+      with:
+        arguments: assembleFreeDebug assembleNonFreeDebug
+
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
