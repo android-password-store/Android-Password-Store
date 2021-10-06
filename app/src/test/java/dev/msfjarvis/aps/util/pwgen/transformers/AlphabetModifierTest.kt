@@ -6,6 +6,8 @@
 package dev.msfjarvis.aps.util.pwgen.transformers
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class AlphabetModifierTest {
 
@@ -23,5 +25,29 @@ class AlphabetModifierTest {
       val results = entry.toCharArray().map { it.isLetter() }
       false !in results
     }
+  }
+
+  @Test
+  fun `using both nouppercase and nolowercase in options throws`() {
+    assertFailsWith<IllegalStateException> {
+      AlphabetModifier(
+        10,
+        arrayOf(AlphabetModifier.Options.NoLowercase, AlphabetModifier.Options.NoUppercase),
+      )
+    }
+  }
+
+  @Test
+  fun `NoUppercase option generates lowercase characters only`() {
+    val modifier = AlphabetModifier(10, options = arrayOf(AlphabetModifier.Options.NoUppercase))
+    val result = modifier.transform(emptyArray()).joinToString("")
+    assertEquals(result.lowercase(), result)
+  }
+
+  @Test
+  fun `NoLowercase option generates uppercase characters only`() {
+    val modifier = AlphabetModifier(10, options = arrayOf(AlphabetModifier.Options.NoLowercase))
+    val result = modifier.transform(emptyArray()).joinToString("")
+    assertEquals(result.uppercase(), result)
   }
 }
