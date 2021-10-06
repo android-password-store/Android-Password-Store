@@ -18,7 +18,7 @@ class TransformingPasswordGeneratorTest {
 
   @Test
   fun `chaining uppercase modifier with alphabet modifier generates uppercase passwords`() {
-    val modifiers = listOf(AlphabetModifier(count = 10, options = emptyArray()), AllCapsModifier())
+    val modifiers = listOf(AlphabetModifier(count = 10), AllCapsModifier())
     val password = TransformingPasswordGenerator.generate(modifiers)
     assertEquals(password.uppercase(), password)
     assertNotEquals(password.lowercase(), password)
@@ -27,7 +27,7 @@ class TransformingPasswordGeneratorTest {
 
   @Test
   fun `placing uppercase modifier before alphabet modifier does not generate uppercase password`() {
-    val modifiers = listOf(AllCapsModifier(), AlphabetModifier(count = 10, options = emptyArray()))
+    val modifiers = listOf(AllCapsModifier(), AlphabetModifier(count = 10))
     val password = TransformingPasswordGenerator.generate(modifiers)
     assertNotEquals(password.uppercase(), password)
     assertEquals(10, password.length)
@@ -35,8 +35,7 @@ class TransformingPasswordGeneratorTest {
 
   @Test
   fun `combining alphabet and digit modifier gives an alphanumeric password`() {
-    val modifiers =
-      listOf(AlphabetModifier(count = 10, options = emptyArray()), DigitModifier(count = 10))
+    val modifiers = listOf(AlphabetModifier(count = 10), DigitModifier(count = 10))
     val password = TransformingPasswordGenerator.generate(modifiers)
     val passwordChars = password.toCharArray()
     assertEquals(20, password.length)

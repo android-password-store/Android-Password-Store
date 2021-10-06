@@ -11,13 +11,13 @@ class AlphabetModifierTest {
 
   @Test
   fun `adds specified number of alphabets`() {
-    val modifier = AlphabetModifier(10, emptyArray())
+    val modifier = AlphabetModifier(10)
     modifier.check(emptyArray(), 10)
   }
 
   @Test
   fun `all added entries are alphabets`() {
-    val modifier = AlphabetModifier(10, emptyArray())
+    val modifier = AlphabetModifier(10)
     modifier.check(emptyArray()) { entry ->
       // Check all characters are letters
       val results = entry.toCharArray().map { it.isLetter() }

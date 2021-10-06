@@ -15,7 +15,7 @@ import dev.msfjarvis.aps.util.pwgen.transformers.CharacterSources.AMBIGUOUS_STR
  */
 class AlphabetModifier(
   private val count: Int,
-  private val options: Array<Options>,
+  private val options: Array<Options> = emptyArray(),
 ) : PasswordModifier {
 
   override fun transform(input: Array<String>): Array<String> {
