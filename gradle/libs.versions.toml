@@ -7,7 +7,7 @@ composeSnapshot = "-"
 coroutines = "1.5.2"
 flowbinding = "1.2.0"
 hilt = "2.39.1"
-kotlin = "1.5.30"
+kotlin = "1.5.31"
 lifecycle = "2.4.0-rc01"
 
 [libraries]
