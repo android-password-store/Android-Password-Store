@@ -6,21 +6,9 @@
 plugins { `kotlin-dsl` }
 
 repositories {
-  google()
-  gradlePluginPortal()
   mavenCentral()
-  // Dokka's transitive kotlinx-html dependency is only published to their Space repo
-  // https://github.com/Kotlin/dokka/releases/tag/v1.4.32
-  maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") {
-    name = "KotlinX HTML Maven"
-    content {
-      includeModule("org.jetbrains.kotlinx", "kotlinx-html")
-      includeModule("org.jetbrains.kotlinx", "kotlinx-html-assembly")
-      includeModule("org.jetbrains.kotlinx", "kotlinx-html-common")
-      includeModule("org.jetbrains.kotlinx", "kotlinx-html-js")
-      includeModule("org.jetbrains.kotlinx", "kotlinx-html-jvm")
-    }
-  }
+  gradlePluginPortal()
+  google()
 }
 
 gradlePlugin {
@@ -46,13 +34,13 @@ gradlePlugin {
 
 dependencies {
   implementation("com.android.tools.build:gradle:7.0.2")
-  implementation("com.diffplug.spotless:spotless-plugin-gradle:5.14.2")
+  implementation("com.diffplug.spotless:spotless-plugin-gradle:5.16.0")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.39.1")
   implementation("com.squareup.okhttp3:okhttp:4.9.0")
-  implementation("com.vanniktech:gradle-maven-publish-plugin:0.17.0")
+  implementation("com.vanniktech:gradle-maven-publish-plugin:0.18.0")
   implementation("com.vdurmont:semver4j:3.1.0")
   implementation("de.undercouch:gradle-download-task:4.1.2")
-  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
+  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
   implementation("org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0")
 }
