@@ -42,6 +42,10 @@ The app comes in two 'flavors', a FOSS-only **free** variant and a **nonFree** v
 
 You can find the generated APK at `app/build/outputs/apk/<variant>/debug/app-<variant>-debug.apk`.
 
+## Pre-push checks
+
+The project enforces codestyle conventions and library API stability by virtue of a carefully curated Gradle build. To setup a Git pre-push hook to run them automatically, run `./gradlew installGitHooks`.
+
 # Things to do before you start writing code
 
 If you're trying to fix a bug that already has an open issue, it's a good idea to drop a comment mentioning that you're working on a fix. If no open issue exists, ensure that you explain the bug you're fixing in some detail in the pull request body. This helps us as maintainers get a better sense of why you're making specific changes, and we might have insight into better ways of fixing the problem.

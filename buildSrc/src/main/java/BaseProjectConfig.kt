@@ -11,6 +11,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.maven
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.nativeplatform.internal.BuildType
@@ -26,6 +27,11 @@ internal fun Project.configureForRootProject() {
     distributionSha256Sum = "f581709a9c35e9cb92e16f585d2c4bc99b2b1a5f85d2badbd3dc6bff59e1e6dd"
   }
   configureBinaryCompatibilityValidator()
+  tasks.register<GitHooks>("installGitHooks") {
+    val projectDirectory = layout.projectDirectory
+    hookScript.set(projectDirectory.file("scripts/pre-push-hook.sh").asFile.readText())
+    hookOutput.set(projectDirectory.file(".git/hooks/pre-push").asFile)
+  }
 }
 
 /** Configure all projects including the root project */
