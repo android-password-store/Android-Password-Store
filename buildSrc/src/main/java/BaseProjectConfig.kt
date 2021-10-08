@@ -10,9 +10,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.api.tasks.wrapper.Wrapper
-import org.gradle.kotlin.dsl.maven
 import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.repositories
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.nativeplatform.internal.BuildType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -36,18 +34,7 @@ internal fun Project.configureForRootProject() {
 
 /** Configure all projects including the root project */
 internal fun Project.configureForAllProjects() {
-  repositories {
-    google()
-    mavenCentral()
-    maven("https://jitpack.io") {
-      name = "JitPack"
-      content {
-        includeModule("com.github.haroldadmin", "WhatTheStack")
-        includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
-      }
-    }
-  }
-  tasks.withType<KotlinCompile> {
+  tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
       allWarningsAsErrors = true
       jvmTarget = JavaVersion.VERSION_11.toString()
