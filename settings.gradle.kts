@@ -24,16 +24,16 @@ enableFeaturePreview("VERSION_CATALOGS")
 // Plugin repositories
 pluginManagement {
   repositories {
-    gradlePluginPortal()
     mavenCentral()
+    gradlePluginPortal()
   }
 }
 
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-    google()
     mavenCentral()
+    google()
     maven("https://jitpack.io") {
       name = "JitPack"
       content {
