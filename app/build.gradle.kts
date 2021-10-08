@@ -49,7 +49,7 @@ android {
 
   buildFeatures.compose = true
 
-  lintOptions {
+  lint {
     isAbortOnError = true
     isCheckReleaseBuilds = false
     disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
