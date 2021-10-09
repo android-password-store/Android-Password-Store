@@ -7,6 +7,7 @@ plugins {
   id("com.android.library")
   id("com.vanniktech.maven.publish")
   kotlin("android")
+  id("org.jetbrains.dokka")
   `aps-plugin`
   `psl-plugin`
 }

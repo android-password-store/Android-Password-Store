@@ -24,7 +24,22 @@ enableFeaturePreview("VERSION_CATALOGS")
 // Plugin repositories
 pluginManagement {
   repositories {
-    gradlePluginPortal()
     mavenCentral()
+    gradlePluginPortal()
+  }
+}
+
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    mavenCentral()
+    google()
+    maven("https://jitpack.io") {
+      name = "JitPack"
+      content {
+        includeModule("com.github.haroldadmin", "WhatTheStack")
+        includeModule("com.github.open-keychain.open-keychain", "sshauthentication-api")
+      }
+    }
   }
 }
