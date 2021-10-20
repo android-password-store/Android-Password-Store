@@ -20,6 +20,12 @@ public class PGPKeyPair(private val secretKey: PGPSecretKey) : KeyPair {
     return secretKey.publicKey.encoded
   }
   override fun getKeyId(): String {
-    return secretKey.keyID.toString(radix = 16)
+    var keyId = secretKey.keyID.toString(radix = 16)
+    if (keyId.length < KEY_ID_LENGTH) keyId = "0$keyId"
+    return keyId
+  }
+
+  private companion object {
+    private const val KEY_ID_LENGTH = 16
   }
 }
