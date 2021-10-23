@@ -43,6 +43,7 @@ import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -319,7 +320,15 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
         runCatching {
           val crypto = cryptos.first { it.canHandle(path) }
           val result =
-            withContext(Dispatchers.IO) { crypto.encrypt(PUB_KEY, content.encodeToByteArray()) }
+            withContext(Dispatchers.IO) {
+              val outputStream = ByteArrayOutputStream()
+              crypto.encrypt(
+                listOf(PUB_KEY),
+                content.byteInputStream(),
+                outputStream,
+              )
+              outputStream
+            }
           val file = File(path)
           // If we're not editing, this file should not already exist!
           // Additionally, if we were editing and the incoming and outgoing
@@ -336,7 +345,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
             return@runCatching
           }
 
-          withContext(Dispatchers.IO) { file.outputStream().use { it.write(result) } }
+          withContext(Dispatchers.IO) { file.writeBytes(result.toByteArray()) }
 
           // associate the new password name with the last name's timestamp in
           // history

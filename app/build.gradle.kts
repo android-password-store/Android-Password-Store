@@ -64,7 +64,7 @@ dependencies {
   implementation(libs.androidx.annotation)
   coreLibraryDesugaring(libs.android.desugarJdkLibs)
   implementation(projects.autofillParser)
-  implementation(projects.cryptoPgp)
+  implementation(projects.cryptoPgpainless)
   implementation(projects.formatCommon)
   implementation(projects.openpgpKtx)
   implementation(libs.androidx.activity.ktx)
