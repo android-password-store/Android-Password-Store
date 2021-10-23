@@ -1,12 +1,18 @@
 public final class dev/msfjarvis/aps/crypto/PGPKeyManager : dev/msfjarvis/aps/crypto/KeyManager {
+	public static final field Companion Ldev/msfjarvis/aps/crypto/PGPKeyManager$Companion;
 	public fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;)V
 	public synthetic fun addKey (Ldev/msfjarvis/aps/crypto/KeyPair;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun addKey (Ldev/msfjarvis/aps/crypto/PGPKeyPair;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun canHandle (Ljava/lang/String;)Z
 	public fun getAllKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun makeKey (Ljava/lang/String;)Ldev/msfjarvis/aps/crypto/PGPKeyPair;
 	public synthetic fun removeKey (Ldev/msfjarvis/aps/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun removeKey (Ldev/msfjarvis/aps/crypto/PGPKeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class dev/msfjarvis/aps/crypto/PGPKeyManager$Companion {
+	public final fun makeKey (Ljava/lang/String;)Ldev/msfjarvis/aps/crypto/PGPKeyPair;
 }
 
 public final class dev/msfjarvis/aps/crypto/PGPKeyPair : dev/msfjarvis/aps/crypto/KeyPair {

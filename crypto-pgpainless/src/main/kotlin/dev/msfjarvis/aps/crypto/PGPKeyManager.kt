@@ -96,11 +96,17 @@ public class PGPKeyManager(
     return keyDir.exists() || keyDir.mkdirs()
   }
 
-  internal companion object {
+  public companion object {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal const val KEY_DIR_NAME: String = "keys"
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal const val KEY_EXTENSION: String = "key"
+
+    @JvmStatic
+    public fun makeKey(armoredKey: String): PGPKeyPair {
+      val secretKey = PGPainless.readKeyRing().secretKeyRing(armoredKey).secretKey
+      return PGPKeyPair(secretKey)
+    }
   }
 }
