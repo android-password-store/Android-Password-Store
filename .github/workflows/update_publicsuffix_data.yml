@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0
 
       - name: Download new publicsuffix data
-        uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+        uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
         with:
           arguments: updatePSL
 
