@@ -13,6 +13,8 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.security.PublicKey
+import java.util.Collections
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
@@ -88,19 +90,25 @@ class SshjSessionFactory(private val authMethod: SshAuthMethod, private val host
 
 private fun makeTofuHostKeyVerifier(hostKeyFile: File): HostKeyVerifier {
   if (!hostKeyFile.exists()) {
-    return HostKeyVerifier { _, _, key ->
-      val digest =
-        runCatching { SecurityUtils.getMessageDigest("SHA-256") }.getOrElse { e ->
-          throw SSHRuntimeException(e)
+    return object : HostKeyVerifier {
+      override fun verify(hostname: String?, port: Int, key: PublicKey?): Boolean {
+        val digest =
+          runCatching { SecurityUtils.getMessageDigest("SHA-256") }.getOrElse { e ->
+            throw SSHRuntimeException(e)
+          }
+        digest.update(PlainBuffer().putPublicKey(key).compactData)
+        val digestData = digest.digest()
+        val hostKeyEntry = "SHA256:${Base64.encodeToString(digestData, Base64.NO_WRAP)}"
+        logcat(SshjSessionFactory::class.java.simpleName) {
+          "Trusting host key on first use: $hostKeyEntry"
         }
-      digest.update(PlainBuffer().putPublicKey(key).compactData)
-      val digestData = digest.digest()
-      val hostKeyEntry = "SHA256:${Base64.encodeToString(digestData, Base64.NO_WRAP)}"
-      logcat(SshjSessionFactory::class.java.simpleName) {
-        "Trusting host key on first use: $hostKeyEntry"
+        hostKeyFile.writeText(hostKeyEntry)
+        return true
       }
-      hostKeyFile.writeText(hostKeyEntry)
-      true
+
+      override fun findExistingAlgorithms(hostname: String?, port: Int): MutableList<String> {
+        return Collections.emptyList()
+      }
     }
   } else {
     val hostKeyEntry = hostKeyFile.readText()
