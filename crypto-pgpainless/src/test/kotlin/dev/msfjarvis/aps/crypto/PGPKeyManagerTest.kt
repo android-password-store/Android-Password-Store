@@ -13,9 +13,9 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
 @OptIn(ExperimentalCoroutinesApi::class)
-public class PGPKeyManagerTest {
+class PGPKeyManagerTest {
 
-  @get:Rule public val temporaryFolder: TemporaryFolder = TemporaryFolder()
+  @get:Rule val temporaryFolder: TemporaryFolder = TemporaryFolder()
   private val filesDir by lazy(LazyThreadSafetyMode.NONE) { temporaryFolder.root }
   private val keysDir by lazy(LazyThreadSafetyMode.NONE) {
     File(filesDir, PGPKeyManager.KEY_DIR_NAME)
@@ -24,10 +24,10 @@ public class PGPKeyManagerTest {
   private val keyManager by lazy(LazyThreadSafetyMode.NONE) {
     PGPKeyManager(filesDir.absolutePath, testCoroutineDispatcher)
   }
-  private val key = PGPKeyManager.makeKey(getArmoredKey())
+  private val key = PGPKeyManager.makeKey(TestUtils.getArmoredPrivateKey())
 
   @Test
-  public fun testAddingKey() {
+  fun testAddingKey() {
     runBlockingTest {
       // Check if the key id returned is correct
       val keyId = keyManager.addKey(key).unwrap().getKeyId()
@@ -43,7 +43,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testAddingKeyWithoutReplaceFlag() {
+  fun testAddingKeyWithoutReplaceFlag() {
     runBlockingTest {
       // Check adding the keys twice
       keyManager.addKey(key, false).unwrap()
@@ -54,7 +54,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testAddingKeyWithReplaceFlag() {
+  fun testAddingKeyWithReplaceFlag() {
     runBlockingTest {
       // Check adding the keys twice
       keyManager.addKey(key, true).unwrap()
@@ -65,7 +65,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testRemovingKey() {
+  fun testRemovingKey() {
     runBlockingTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
@@ -81,7 +81,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testGetExistingKey() {
+  fun testGetExistingKey() {
     runBlockingTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
@@ -94,7 +94,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testGetNonExistentKey() {
+  fun testGetNonExistentKey() {
     runBlockingTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
@@ -109,7 +109,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testFindKeysWithoutAdding() {
+  fun testFindKeysWithoutAdding() {
     runBlockingTest {
       // Check returned key
       val error = keyManager.getKeyById("0x123456789").unwrapError()
@@ -119,7 +119,7 @@ public class PGPKeyManagerTest {
   }
 
   @Test
-  public fun testGettingAllKeys() {
+  fun testGettingAllKeys() {
     runBlockingTest {
       // TODO: Should we check for more than 1 keys?
       // Check if KeyManager returns no key
@@ -134,6 +134,4 @@ public class PGPKeyManagerTest {
       assertEquals(1, singleKeyList.size)
     }
   }
-
-  private fun getArmoredKey() = this::class.java.classLoader.getResource("private_key").readText()
 }

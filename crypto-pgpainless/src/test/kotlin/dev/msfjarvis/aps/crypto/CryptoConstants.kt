@@ -5,10 +5,10 @@
 
 package dev.msfjarvis.aps.crypto
 
-internal object CryptoConstants {
-  internal const val KEY_PASSPHRASE = "hunter2"
-  internal const val PLAIN_TEXT = "encryption worthy content"
-  internal const val KEY_NAME = "John Doe"
-  internal const val KEY_EMAIL = "john.doe@example.com"
-  internal const val KEY_ID = "08edf7567183ce27"
+object CryptoConstants {
+  const val KEY_PASSPHRASE = "hunter2"
+  const val PLAIN_TEXT = "encryption worthy content"
+  const val KEY_NAME = "John Doe"
+  const val KEY_EMAIL = "john.doe@example.com"
+  const val KEY_ID = "08edf7567183ce27"
 }

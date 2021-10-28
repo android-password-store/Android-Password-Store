@@ -9,15 +9,14 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.pgpainless.PGPainless
 
-public class PGPKeyPairTest {
+class PGPKeyPairTest {
 
   @Test
-  public fun testIfKeyIdIsCorrect() {
-    val secretKey = PGPainless.readKeyRing().secretKeyRing(getKey()).secretKey
+  fun testIfKeyIdIsCorrect() {
+    val secretKey =
+      PGPainless.readKeyRing().secretKeyRing(TestUtils.getArmoredPrivateKey()).secretKey
     val keyPair = PGPKeyPair(secretKey)
 
     assertEquals(CryptoConstants.KEY_ID, keyPair.getKeyId())
   }
-
-  private fun getKey(): String = this::class.java.classLoader.getResource("private_key").readText()
 }
