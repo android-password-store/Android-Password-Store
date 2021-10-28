@@ -13,11 +13,10 @@ class PGPKeyPairTest {
 
   @Test
   fun testIfKeyIdIsCorrect() {
-    val secretKey = PGPainless.readKeyRing().secretKeyRing(getKey()).secretKey
+    val secretKey =
+      PGPainless.readKeyRing().secretKeyRing(TestUtils.getArmoredPrivateKey()).secretKey
     val keyPair = PGPKeyPair(secretKey)
 
     assertEquals(CryptoConstants.KEY_ID, keyPair.getKeyId())
   }
-
-  private fun getKey(): String = this::class.java.classLoader.getResource("private_key").readText()
 }

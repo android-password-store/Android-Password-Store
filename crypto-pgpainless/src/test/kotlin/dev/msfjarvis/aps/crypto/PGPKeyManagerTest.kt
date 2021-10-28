@@ -24,7 +24,7 @@ class PGPKeyManagerTest {
   private val keyManager by lazy(LazyThreadSafetyMode.NONE) {
     PGPKeyManager(filesDir.absolutePath, testCoroutineDispatcher)
   }
-  private val key = PGPKeyManager.makeKey(getArmoredKey())
+  private val key = PGPKeyManager.makeKey(TestUtils.getArmoredPrivateKey())
 
   @Test
   fun testAddingKey() {
@@ -134,6 +134,4 @@ class PGPKeyManagerTest {
       assertEquals(1, singleKeyList.size)
     }
   }
-
-  private fun getArmoredKey() = this::class.java.classLoader.getResource("private_key").readText()
 }
