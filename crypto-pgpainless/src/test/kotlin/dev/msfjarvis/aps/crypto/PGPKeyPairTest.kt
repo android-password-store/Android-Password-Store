@@ -9,10 +9,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.pgpainless.PGPainless
 
-public class PGPKeyPairTest {
+class PGPKeyPairTest {
 
   @Test
-  public fun testIfKeyIdIsCorrect() {
+  fun testIfKeyIdIsCorrect() {
     val secretKey = PGPainless.readKeyRing().secretKeyRing(getKey()).secretKey
     val keyPair = PGPKeyPair(secretKey)
 
