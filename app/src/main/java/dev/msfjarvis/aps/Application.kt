@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import dev.msfjarvis.aps.injection.context.FilesDirPath
 import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
@@ -49,6 +50,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     setUpBouncyCastleForSshj()
     runMigrations(filesDirPath, prefs, gitSettings)
     proxyUtils.setDefaultProxy()
+    DynamicColors.applyToActivitiesIfAvailable(this)
   }
 
   override fun onTerminate() {
