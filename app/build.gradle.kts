@@ -92,6 +92,7 @@ dependencies {
   implementation(libs.compose.foundation.core)
   implementation(libs.compose.foundation.layout)
   implementation(libs.compose.material)
+  implementation(libs.compose.material3)
   implementation(libs.compose.ui.core)
   implementation(libs.compose.ui.viewbinding)
   compileOnly(libs.compose.ui.tooling)

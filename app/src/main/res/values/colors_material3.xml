@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<resources>
+  <color name="md_theme_light_primary">#006591</color>
+  <color name="md_theme_light_onPrimary">#FFFFFF</color>
+  <color name="md_theme_light_primaryContainer">#C7E6FF</color>
+  <color name="md_theme_light_onPrimaryContainer">#001E30</color>
+  <color name="md_theme_light_secondary">#4F606E</color>
+  <color name="md_theme_light_onSecondary">#FFFFFF</color>
+  <color name="md_theme_light_secondaryContainer">#D3E5F5</color>
+  <color name="md_theme_light_onSecondaryContainer">#0B1D29</color>
+  <color name="md_theme_light_tertiary">#006494</color>
+  <color name="md_theme_light_onTertiary">#FFFFFF</color>
+  <color name="md_theme_light_tertiaryContainer">#C8E6FF</color>
+  <color name="md_theme_light_onTertiaryContainer">#001E31</color>
+  <color name="md_theme_light_error">#BA1B1B</color>
+  <color name="md_theme_light_errorContainer">#FFDAD4</color>
+  <color name="md_theme_light_onError">#FFFFFF</color>
+  <color name="md_theme_light_onErrorContainer">#410001</color>
+  <color name="md_theme_light_background">#FCFCFF</color>
+  <color name="md_theme_light_onBackground">#1A1C1E</color>
+  <color name="md_theme_light_surface">#FCFCFF</color>
+  <color name="md_theme_light_onSurface">#1A1C1E</color>
+  <color name="md_theme_light_surfaceVariant">#DDE3EA</color>
+  <color name="md_theme_light_onSurfaceVariant">#41474D</color>
+  <color name="md_theme_light_outline">#72787E</color>
+  <color name="md_theme_light_inverseOnSurface">#F0F0F3</color>
+  <color name="md_theme_light_inverseSurface">#2E3133</color>
+  <color name="md_theme_light_primaryInverse">#85CEFF</color>
+  <color name="md_theme_dark_primary">#85CEFF</color>
+  <color name="md_theme_dark_onPrimary">#00344E</color>
+  <color name="md_theme_dark_primaryContainer">#004C6F</color>
+  <color name="md_theme_dark_onPrimaryContainer">#C7E6FF</color>
+  <color name="md_theme_dark_secondary">#B7C9D9</color>
+  <color name="md_theme_dark_onSecondary">#21323E</color>
+  <color name="md_theme_dark_secondaryContainer">#384956</color>
+  <color name="md_theme_dark_onSecondaryContainer">#D3E5F5</color>
+  <color name="md_theme_dark_tertiary">#8ACEFF</color>
+  <color name="md_theme_dark_onTertiary">#003450</color>
+  <color name="md_theme_dark_tertiaryContainer">#004B70</color>
+  <color name="md_theme_dark_onTertiaryContainer">#C8E6FF</color>
+  <color name="md_theme_dark_error">#FFB4A9</color>
+  <color name="md_theme_dark_errorContainer">#930006</color>
+  <color name="md_theme_dark_onError">#680003</color>
+  <color name="md_theme_dark_onErrorContainer">#FFDAD4</color>
+  <color name="md_theme_dark_background">#1A1C1E</color>
+  <color name="md_theme_dark_onBackground">#E1E2E5</color>
+  <color name="md_theme_dark_surface">#1A1C1E</color>
+  <color name="md_theme_dark_onSurface">#E1E2E5</color>
+  <color name="md_theme_dark_surfaceVariant">#41474D</color>
+  <color name="md_theme_dark_onSurfaceVariant">#C1C7CE</color>
+  <color name="md_theme_dark_outline">#8B9197</color>
+  <color name="md_theme_dark_inverseOnSurface">#1A1C1E</color>
+  <color name="md_theme_dark_inverseSurface">#E1E2E5</color>
+  <color name="md_theme_dark_primaryInverse">#006591</color>
+  <color name="seed">#003E5B</color>
+  <color name="error">#BA1B1B</color>
+</resources>

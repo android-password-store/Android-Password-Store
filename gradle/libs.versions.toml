@@ -44,6 +44,7 @@ compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref 
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.0.0-alpha01" }
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 compose-ui-core = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
