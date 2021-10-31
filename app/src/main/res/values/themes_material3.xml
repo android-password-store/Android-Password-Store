@@ -32,5 +32,6 @@
     <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
     <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
     <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
+    <item name="fontFamily">@font/manrope</item>
   </style>
 </resources>

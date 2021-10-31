@@ -2,18 +2,29 @@ package dev.msfjarvis.aps.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import dev.msfjarvis.aps.R
 
 // Replace with your font locations
-val Roboto = FontFamily.Default
+val Manrope =
+  FontFamily(
+    Font(R.font.manrope_bold, FontWeight.Bold),
+    Font(R.font.manrope_extrabold, FontWeight.ExtraBold),
+    Font(R.font.manrope_extralight, FontWeight.ExtraLight),
+    Font(R.font.manrope_light, FontWeight.Light),
+    Font(R.font.manrope_medium, FontWeight.Medium),
+    Font(R.font.manrope_regular, FontWeight.Normal),
+    Font(R.font.manrope_semibold, FontWeight.SemiBold),
+  )
 
 val AppTypography =
   Typography(
     displayLarge =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 57.sp,
         lineHeight = 64.sp,
@@ -21,7 +32,7 @@ val AppTypography =
       ),
     displayMedium =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 45.sp,
         lineHeight = 52.sp,
@@ -29,7 +40,7 @@ val AppTypography =
       ),
     displaySmall =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 36.sp,
         lineHeight = 44.sp,
@@ -37,7 +48,7 @@ val AppTypography =
       ),
     headlineLarge =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 32.sp,
         lineHeight = 40.sp,
@@ -45,7 +56,7 @@ val AppTypography =
       ),
     headlineMedium =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 28.sp,
         lineHeight = 36.sp,
@@ -53,7 +64,7 @@ val AppTypography =
       ),
     headlineSmall =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 24.sp,
         lineHeight = 32.sp,
@@ -61,7 +72,7 @@ val AppTypography =
       ),
     titleLarge =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 22.sp,
         lineHeight = 28.sp,
@@ -69,7 +80,7 @@ val AppTypography =
       ),
     titleMedium =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 24.sp,
@@ -77,7 +88,7 @@ val AppTypography =
       ),
     titleSmall =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
@@ -85,7 +96,7 @@ val AppTypography =
       ),
     labelLarge =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
@@ -93,7 +104,7 @@ val AppTypography =
       ),
     bodyLarge =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 16.sp,
         lineHeight = 24.sp,
@@ -101,7 +112,7 @@ val AppTypography =
       ),
     bodyMedium =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 14.sp,
         lineHeight = 20.sp,
@@ -109,7 +120,7 @@ val AppTypography =
       ),
     bodySmall =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.W400,
         fontSize = 12.sp,
         lineHeight = 16.sp,
@@ -117,7 +128,7 @@ val AppTypography =
       ),
     labelMedium =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 16.sp,
@@ -125,7 +136,7 @@ val AppTypography =
       ),
     labelSmall =
       TextStyle(
-        fontFamily = Roboto,
+        fontFamily = Manrope,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,

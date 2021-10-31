@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+  <font
+    app:font="@font/manrope_extralight"
+    app:fontWeight="200" />
+  <font
+    app:font="@font/manrope_light"
+    app:fontWeight="300" />
+  <font
+    app:font="@font/manrope_regular"
+    app:fontWeight="400" />
+  <font
+    app:font="@font/manrope_medium"
+    app:fontWeight="500" />
+  <font
+    app:font="@font/manrope_semibold"
+    app:fontWeight="600" />
+  <font
+    app:font="@font/manrope_bold"
+    app:fontWeight="700" />
+  <font
+    app:font="@font/manrope_extrabold"
+    app:fontWeight="800" />
+</font-family>
