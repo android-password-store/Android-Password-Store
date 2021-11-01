@@ -216,7 +216,7 @@ class PasswordStore : BaseGitActivity() {
 
     model.currentDir.observe(this) { dir ->
       val basePath = PasswordRepository.getRepositoryDirectory().absoluteFile
-      supportActionBar!!.apply {
+      supportActionBar?.apply {
         if (dir != basePath) title = dir.name else setTitle(R.string.app_name)
       }
     }
@@ -611,7 +611,7 @@ class PasswordStore : BaseGitActivity() {
       model.forceRefresh()
     } else {
       model.reset()
-      supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+      supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
   }
 
