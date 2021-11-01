@@ -6,9 +6,10 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
   android:width="24dp"
   android:height="24dp"
+  android:tint="?attr/colorControlNormal"
   android:viewportWidth="24"
   android:viewportHeight="24">
   <path
-    android:fillColor="?attr/colorOnPrimary"
+    android:fillColor="#FFFFFF"
     android:pathData="M19,5L7,5A2,2 0,0 0,5 7L5,21a2,2 0,0 0,2 2L21,23a2,2 0,0 0,2 -2L23,9ZM21,21L7,21L7,7L18.17,7L21,9.83ZM14,14a3,3 0,1 0,3 3A3,3 0,0 0,14 14ZM8,8h9v4L8,12ZM15,1L3,1A2,2 0,0 0,1 3L1,17L3,17L3,3L15,3Z" />
 </vector>
