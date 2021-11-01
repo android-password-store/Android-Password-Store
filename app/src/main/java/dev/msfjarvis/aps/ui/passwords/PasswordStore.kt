@@ -34,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
+import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity.Companion.getLongName
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
 import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
@@ -456,8 +457,11 @@ class PasswordStore : BaseGitActivity() {
     val currentDir = currentDir
     logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
     val intent = Intent(this, PasswordCreationActivity::class.java)
-    intent.putExtra("FILE_PATH", currentDir.absolutePath)
-    intent.putExtra("REPO_PATH", PasswordRepository.getRepositoryDirectory().absolutePath)
+    intent.putExtra(BasePgpActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
+    intent.putExtra(
+      BasePgpActivity.EXTRA_REPO_PATH,
+      PasswordRepository.getRepositoryDirectory().absolutePath
+    )
     listRefreshAction.launch(intent)
   }
 

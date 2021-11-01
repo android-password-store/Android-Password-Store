@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
 import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
@@ -45,10 +46,14 @@ class LaunchActivity : AppCompatActivity() {
     val intentToStart =
       if (intent.action == ACTION_DECRYPT_PASS)
         Intent(this, DecryptActivity::class.java).apply {
-          putExtra("NAME", intent.getStringExtra("NAME"))
-          putExtra("FILE_PATH", intent.getStringExtra("FILE_PATH"))
-          putExtra("REPO_PATH", intent.getStringExtra("REPO_PATH"))
-          putExtra("LAST_CHANGED_TIMESTAMP", intent.getLongExtra("LAST_CHANGED_TIMESTAMP", 0L))
+          putExtra(
+            BasePgpActivity.EXTRA_FILE_PATH,
+            intent.getStringExtra(BasePgpActivity.EXTRA_FILE_PATH)
+          )
+          putExtra(
+            BasePgpActivity.EXTRA_REPO_PATH,
+            intent.getStringExtra(BasePgpActivity.EXTRA_REPO_PATH)
+          )
         }
       else Intent(this, PasswordStore::class.java)
     startActivity(intentToStart)
