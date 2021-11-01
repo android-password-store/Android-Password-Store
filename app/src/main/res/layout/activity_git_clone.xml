@@ -67,7 +67,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/label_server_branch" />
 
-    <com.google.android.material.chip.ChipGroup
+    <com.google.android.material.button.MaterialButtonToggleGroup
       android:id="@+id/auth_mode_group"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -75,24 +75,27 @@
       app:layout_constraintTop_toBottomOf="@id/label_auth_mode"
       app:singleSelection="true">
 
-      <com.google.android.material.chip.Chip
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/auth_mode_ssh_key"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_ssh_key" />
 
-      <com.google.android.material.chip.Chip
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/auth_mode_password"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_basic_authentication" />
 
-      <com.google.android.material.chip.Chip
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/auth_mode_open_keychain"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/connection_mode_openkeychain" />
-    </com.google.android.material.chip.ChipGroup>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/save_button"
