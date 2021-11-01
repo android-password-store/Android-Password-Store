@@ -18,7 +18,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:layout_marginStart="16dp"
-    android:textColor="?android:attr/textColor"
     android:textIsSelectable="false"
     android:textSize="18sp"
     app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +36,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/password_category"
     tools:text="PASSWORD FILE NAME HERE" />
-
 
   <androidx.appcompat.widget.AppCompatImageView
     android:id="@+id/divider"
