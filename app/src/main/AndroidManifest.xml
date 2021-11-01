@@ -28,13 +28,12 @@
     android:label="@string/app_name"
     android:requestLegacyExternalStorage="true"
     android:supportsRtl="true"
-    android:theme="@style/AppTheme"
+    android:theme="@style/APSThemeM3"
     tools:ignore="GoogleAppIndexingWarning">
 
     <activity
       android:name=".ui.passwords.PasswordStore"
-      android:configChanges="orientation|screenSize"
-      android:label="@string/app_name" />
+      android:configChanges="orientation|screenSize" />
 
     <activity
       android:name=".ui.onboarding.activity.OnboardingActivity"
@@ -51,7 +50,7 @@
     <activity
       android:name=".ui.main.LaunchActivity"
       android:configChanges="orientation|screenSize"
-      android:label="@string/app_name"
+      android:exported="true"
       android:theme="@style/NoBackgroundTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -95,7 +94,8 @@
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
-    <activity android:name=".ui.crypto.PasswordCreationActivityV2"
+    <activity
+      android:name=".ui.crypto.PasswordCreationActivityV2"
       android:label="@string/new_password_title"
       android:windowSoftInputMode="adjustResize" />
 
@@ -115,6 +115,7 @@
       android:process=":password_export_service_process" />
     <service
       android:name=".util.services.OreoAutofillService"
+      android:exported="true"
       android:permission="android.permission.BIND_AUTOFILL_SERVICE">
       <intent-filter>
         <action android:name="android.service.autofill.AutofillService" />
