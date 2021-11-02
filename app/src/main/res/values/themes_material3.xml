@@ -33,5 +33,8 @@
     <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
     <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
     <item name="fontFamily">@font/manrope</item>
+    <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
+    <item name="android:statusBarColor">?android:colorBackground</item>
+    <item name="android:navigationBarColor">?android:colorBackground</item>
   </style>
 </resources>
