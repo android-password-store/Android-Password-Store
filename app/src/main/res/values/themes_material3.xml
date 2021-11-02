@@ -36,5 +36,10 @@
     <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
     <item name="android:statusBarColor">?android:colorBackground</item>
     <item name="android:navigationBarColor">?android:colorBackground</item>
+    <item name="toolbarStyle">@style/APSThemeM3.Toolbar</item>
+  </style>
+
+  <style name="APSThemeM3.Toolbar" parent="Widget.Material3.Toolbar">
+    <item name="android:background">?android:colorBackground</item>
   </style>
 </resources>
