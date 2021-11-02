@@ -7,7 +7,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="?attr/colorPrimary"
+  android:background="?android:attr/colorBackground"
   android:orientation="vertical">
 
   <com.google.android.material.button.MaterialButton
@@ -19,7 +19,7 @@
     android:layout_alignParentEnd="true"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:text="@string/action_settings"
-    android:textColor="?attr/colorOnPrimary"
+    android:textColor="?attr/colorOnBackground"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
