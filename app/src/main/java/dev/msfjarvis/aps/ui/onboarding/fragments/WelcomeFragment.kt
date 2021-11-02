@@ -17,7 +17,6 @@ import dev.msfjarvis.aps.util.extensions.performTransactionWithBackStack
 import dev.msfjarvis.aps.util.extensions.viewBinding
 
 @Keep
-@Suppress("unused")
 class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
   private val binding by viewBinding(FragmentWelcomeBinding::bind)
