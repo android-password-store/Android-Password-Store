@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 -   Removed Bromite from supported Autofill browsers, since they [disable Android autofill](https://github.com/bromite/bromite/blob/master/FAQ.md#does-bromite-support-the-android-autofill-framework).
 -   Changing password generator parameters now automatically updates the password without needing to press the 'Generate' button again
 -   The app UI was reskinned to match Google's Material You guidelines
+-   Using HTTPS without authentication is now fully supported, and no longer asks for a username
 
 ## [1.13.5] - 2021-07-28
 
