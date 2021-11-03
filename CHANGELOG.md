@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 -   Encrypted data is no longer ASCII armored, bringing it in line with `pass`
 -   Removed Bromite from supported Autofill browsers, since they [disable Android autofill](https://github.com/bromite/bromite/blob/master/FAQ.md#does-bromite-support-the-android-autofill-framework).
 -   Changing password generator parameters now automatically updates the password without needing to press the 'Generate' button again
+-   The app UI was reskinned to match Google's Material You guidelines
 
 ## [1.13.5] - 2021-07-28
 
