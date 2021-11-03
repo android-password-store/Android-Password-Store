@@ -18,7 +18,7 @@
     android:id="@+id/cover"
     android:layout_width="60dp"
     android:layout_height="60dp"
-    android:background="@color/primary_color"
+    android:background="@android:color/transparent"
     android:contentDescription="@string/app_name"
     android:src="@mipmap/ic_launcher_foreground"
     app:layout_constraintBottom_toTopOf="@id/warningSign"
@@ -107,7 +107,7 @@
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/okButton"
-    style="@style/AppTheme.OutlinedButton"
+    style="?attr/materialButtonOutlinedStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -122,7 +122,7 @@
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/advancedButton"
-    style="@style/AppTheme.OutlinedButton"
+    style="?attr/materialButtonOutlinedStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -137,14 +137,13 @@
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/resetButton"
-    style="@style/AppTheme.OutlinedButton"
+    style="?attr/materialButtonOutlinedStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:minWidth="240dp"
     android:text="@string/oreo_autofill_warning_publisher_reenable_button"
-    android:textColor="?attr/colorOnSurface"
     android:textSize="12sp"
     android:visibility="gone"
     app:layout_constraintEnd_toEndOf="parent"
