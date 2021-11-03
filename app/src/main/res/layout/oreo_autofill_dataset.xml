@@ -25,7 +25,7 @@
     android:adjustViewBounds="true"
     android:maxWidth="20dp"
     android:maxHeight="20dp"
-    android:tint="@color/secondary_color"
+    android:tint="@color/md_theme_light_primary"
     tools:ignore="UseAppTint"
     tools:src="@mipmap/ic_launcher" />
 
