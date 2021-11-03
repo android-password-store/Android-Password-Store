@@ -4,7 +4,6 @@
  */
 package dev.msfjarvis.aps.ui.dialogs
 
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +20,6 @@ import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ACTION_FOLDER
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ACTION_KEY
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ACTION_PASSWORD
 import dev.msfjarvis.aps.ui.passwords.PasswordFragment.Companion.ITEM_CREATION_REQUEST_KEY
-import dev.msfjarvis.aps.util.extensions.resolveAttribute
 
 class ItemCreationBottomSheet : BottomSheetDialogFragment() {
 
@@ -70,11 +68,6 @@ class ItemCreationBottomSheet : BottomSheetDialogFragment() {
         }
       }
     )
-    val gradientDrawable =
-      GradientDrawable().apply {
-        setColor(requireContext().resolveAttribute(android.R.attr.windowBackground))
-      }
-    view.background = gradientDrawable
   }
 
   override fun dismiss() {

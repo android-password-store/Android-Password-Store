@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<resources>
+
+  <style name="APSThemeM3.Toolbar" parent="Widget.Material3.Toolbar">
+    <item name="android:background">?android:colorBackground</item>
+  </style>
+
+</resources>

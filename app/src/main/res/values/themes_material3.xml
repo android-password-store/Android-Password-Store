@@ -5,6 +5,44 @@
 
 <resources>
 
+  <style name="AppThemeM3" parent="APSThemeM3">
+    <item name="fontFamily">@font/manrope</item>
+    <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
+    <item name="android:statusBarColor">?android:colorBackground</item>
+    <item name="android:navigationBarColor">?android:colorBackground</item>
+    <item name="toolbarStyle">@style/APSThemeM3.Toolbar</item>
+    <item name="bottomSheetDialogTheme">@style/APSThemeM3.BottomSheetDialog</item>
+  </style>
+
+  <style name="NoBackgroundThemeM3" parent="@style/AppThemeM3">
+    <item name="android:background">@android:color/transparent</item>
+    <item name="android:backgroundDimEnabled">true</item>
+    <item name="android:navigationBarColor">@android:color/transparent</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowActionBar">false</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+    <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    <item name="colorPrimaryDark">@android:color/transparent</item>
+    <item name="windowNoTitle">true</item>
+  </style>
+
+  <style name="DialogLikeThemeM3" parent="AppThemeM3">
+    <item name="android:windowActionBar">false</item>
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:backgroundDimEnabled">true</item>
+    <!-- Needs to be set without android: prefix as per https://stackoverflow.com/a/33417456 -->
+    <item name="windowNoTitle">true</item>
+  </style>
+
+  <style name="APSThemeM3.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:navigationBarColor">@android:color/transparent</item>
+  </style>
+
   <style name="APSThemeM3" parent="Theme.Material3.DayNight">
     <item name="colorPrimary">@color/md_theme_light_primary</item>
     <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
@@ -32,14 +70,5 @@
     <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
     <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
     <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
-    <item name="fontFamily">@font/manrope</item>
-    <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
-    <item name="android:statusBarColor">?android:colorBackground</item>
-    <item name="android:navigationBarColor">?android:colorBackground</item>
-    <item name="toolbarStyle">@style/APSThemeM3.Toolbar</item>
-  </style>
-
-  <style name="APSThemeM3.Toolbar" parent="Widget.Material3.Toolbar">
-    <item name="android:background">?android:colorBackground</item>
   </style>
 </resources>

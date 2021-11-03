@@ -28,7 +28,7 @@
     android:label="@string/app_name"
     android:requestLegacyExternalStorage="true"
     android:supportsRtl="true"
-    android:theme="@style/APSThemeM3"
+    android:theme="@style/AppThemeM3"
     tools:ignore="GoogleAppIndexingWarning">
 
     <activity
@@ -51,7 +51,7 @@
       android:name=".ui.main.LaunchActivity"
       android:configChanges="orientation|screenSize"
       android:exported="true"
-      android:theme="@style/NoBackgroundTheme">
+      android:theme="@style/NoBackgroundThemeM3">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -87,7 +87,7 @@
 
     <activity
       android:name=".ui.settings.DirectorySelectionActivity"
-      android:theme="@style/NoBackgroundTheme" />
+      android:theme="@style/NoBackgroundThemeM3" />
 
     <activity
       android:name=".ui.crypto.PasswordCreationActivity"
@@ -105,7 +105,7 @@
 
     <activity
       android:name=".ui.crypto.GetKeyIdsActivity"
-      android:theme="@style/NoBackgroundTheme" />
+      android:theme="@style/NoBackgroundThemeM3" />
 
     <service
       android:name=".util.services.ClipboardService"
@@ -128,7 +128,7 @@
     <activity android:name=".ui.folderselect.SelectFolderActivity" />
     <activity
       android:name=".ui.sshkeygen.SshKeyImportActivity"
-      android:theme="@style/NoBackgroundTheme"
+      android:theme="@style/NoBackgroundThemeM3"
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.sshkeygen.SshKeyGenActivity"
@@ -136,27 +136,27 @@
       android:windowSoftInputMode="adjustResize" />
     <activity
       android:name=".ui.autofill.AutofillDecryptActivity"
-      android:theme="@style/NoBackgroundTheme" />
+      android:theme="@style/NoBackgroundThemeM3" />
     <activity
       android:name=".ui.autofill.AutofillDecryptActivityV2"
-      android:theme="@style/NoBackgroundTheme" />
+      android:theme="@style/NoBackgroundThemeM3" />
     <activity
       android:name=".ui.autofill.AutofillFilterView"
       android:configChanges="orientation|keyboardHidden"
-      android:theme="@style/DialogLikeTheme"
+      android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
     <activity
       android:name=".ui.autofill.AutofillSaveActivity"
-      android:theme="@style/NoBackgroundTheme" />
+      android:theme="@style/NoBackgroundThemeM3" />
     <activity
       android:name=".autofill.oreo.ui.AutofillSmsActivity"
       android:configChanges="orientation"
-      android:theme="@style/DialogLikeTheme"
+      android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
     <activity
       android:name=".ui.autofill.AutofillPublisherChangedActivity"
       android:configChanges="orientation|keyboardHidden"
-      android:theme="@style/DialogLikeTheme"
+      android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
   </application>
 
