@@ -12,7 +12,7 @@
 
   <com.google.android.material.textview.MaterialTextView
     android:id="@+id/bottom_sheet_title"
-    style="@style/TextAppearance.MaterialComponents.Headline6"
+    style="?attr/textAppearanceTitleLarge"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -24,7 +24,7 @@
 
   <com.google.android.material.textview.MaterialTextView
     android:id="@+id/bottom_sheet_message"
-    style="@style/TextAppearance.MaterialComponents.Body1"
+    style="?attr/textAppearanceBodyLarge"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -35,7 +35,7 @@
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/bottom_sheet_cancel_button"
-    style="@style/AppTheme.OutlinedButton"
+    style="?attr/materialButtonOutlinedStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
@@ -48,7 +48,7 @@
 
   <com.google.android.material.button.MaterialButton
     android:id="@+id/bottom_sheet_ok_button"
-    style="@style/AppTheme.OutlinedButton"
+    style="?attr/materialButtonOutlinedStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
