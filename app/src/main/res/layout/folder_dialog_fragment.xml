@@ -12,7 +12,6 @@
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/folder_name_container"
-    style="@style/AppTheme.TextInputLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/crypto_name_hint"
@@ -24,9 +23,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:inputType="textNoSuggestions|textVisiblePassword" />
-
     <requestFocus />
-
   </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.checkbox.MaterialCheckBox
