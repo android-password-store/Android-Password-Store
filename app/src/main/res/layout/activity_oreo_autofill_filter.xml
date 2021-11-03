@@ -15,7 +15,7 @@
     android:id="@+id/cover"
     android:layout_width="0dp"
     android:layout_height="60dp"
-    android:background="@color/primary_color"
+    android:background="@android:color/transparent"
     android:contentDescription="@string/app_name"
     android:src="@mipmap/ic_launcher_foreground"
     app:layout_constraintBottom_toTopOf="@id/origin"
@@ -75,7 +75,7 @@
       android:layout_height="match_parent"
       android:scrollbars="vertical"
       tools:itemCount="5"
-      tools:listitem="@layout/password_row_layout" />
+      tools:listitem="@layout/oreo_autofill_filter_row" />
 
     <TextView
       android:id="@+id/rvPasswordEmpty"
