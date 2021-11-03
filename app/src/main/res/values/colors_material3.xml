@@ -58,4 +58,7 @@
   <color name="md_theme_dark_primaryInverse">#006591</color>
   <color name="seed">#003E5B</color>
   <color name="error">#BA1B1B</color>
+
+  <!-- Multiselect color -->
+  <color name="list_multiselect_background">#668eacbb</color>
 </resources>

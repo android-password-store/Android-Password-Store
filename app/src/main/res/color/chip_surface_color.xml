@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
-  ~ SPDX-License-Identifier: GPL-3.0-only
-  -->
-
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:color="@color/secondary_light_color" android:state_checked="true" />
-  <item android:color="?attr/colorSecondary" />
-</selector>

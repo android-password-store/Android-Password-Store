@@ -4,8 +4,5 @@
   -->
 
 <resources>
-
-  <style name="AppTheme" parent="APSTheme">
-    <item name="android:windowLightNavigationBar">@bool/light_status_bar</item>
-  </style>
+  <color name="list_multiselect_background">#66eeeeee</color>
 </resources>
