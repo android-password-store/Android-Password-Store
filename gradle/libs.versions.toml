@@ -6,7 +6,7 @@ compose = "1.1.0-beta01"
 composeSnapshot = "-"
 coroutines = "1.5.2"
 flowbinding = "1.2.0"
-hilt = "2.40"
+hilt = "2.39.1"
 kotlin = "1.5.31"
 lifecycle = "2.4.0"
 
