@@ -149,7 +149,9 @@ constructor(
         in listOf("ssh", null) -> Protocol.Ssh
         else -> return UpdateConnectionSettingsResult.FailedToParseUrl
       }
-    if (newAuthMode != AuthMode.None && parsedUrl.user.isNullOrBlank())
+    if ((newAuthMode != AuthMode.None && newProtocol != Protocol.Https) &&
+        parsedUrl.user.isNullOrBlank()
+    )
       return UpdateConnectionSettingsResult.MissingUsername(newProtocol)
     val validHttpsAuth = listOf(AuthMode.None, AuthMode.Password)
     val validSshAuth = listOf(AuthMode.OpenKeychain, AuthMode.Password, AuthMode.SshKey)
