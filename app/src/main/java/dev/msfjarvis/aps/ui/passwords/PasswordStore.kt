@@ -39,6 +39,7 @@ import dev.msfjarvis.aps.ui.crypto.BasePgpActivity.Companion.getLongName
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
 import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
+import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivityV2
 import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet
 import dev.msfjarvis.aps.ui.dialogs.FolderCreationDialogFragment
 import dev.msfjarvis.aps.ui.folderselect.SelectFolderActivity
@@ -456,7 +457,10 @@ class PasswordStore : BaseGitActivity() {
     if (!validateState()) return
     val currentDir = currentDir
     logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
-    val intent = Intent(this, PasswordCreationActivity::class.java)
+    val creationActivity =
+      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) PasswordCreationActivityV2::class.java
+      else PasswordCreationActivity::class.java
+    val intent = Intent(this, creationActivity)
     intent.putExtra(BasePgpActivity.EXTRA_FILE_PATH, currentDir.absolutePath)
     intent.putExtra(
       BasePgpActivity.EXTRA_REPO_PATH,
