@@ -20,6 +20,8 @@ import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FormOrigin
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
+import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivityV2
+import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
@@ -85,7 +87,7 @@ class AutofillSaveActivity : AppCompatActivity() {
           context,
           saveRequestCode++,
           intent,
-          PendingIntent.FLAG_CANCEL_CURRENT
+          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         .intentSender
     }
@@ -106,8 +108,11 @@ class AutofillSaveActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val repo = PasswordRepository.getRepositoryDirectory()
+    val creationActivity =
+      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) PasswordCreationActivityV2::class.java
+      else PasswordCreationActivity::class.java
     val saveIntent =
-      Intent(this, PasswordCreationActivity::class.java).apply {
+      Intent(this, creationActivity).apply {
         putExtras(
           bundleOf(
             "REPO_PATH" to repo.absolutePath,

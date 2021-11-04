@@ -250,6 +250,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
   companion object {
 
     private const val TAG = "APS/BasePgpActivity"
+    const val EXTRA_FILE_PATH = "FILE_PATH"
+    const val EXTRA_REPO_PATH = "REPO_PATH"
 
     /** Gets the relative path to the repository */
     fun getRelativePath(fullPath: String, repositoryPath: String): String =
