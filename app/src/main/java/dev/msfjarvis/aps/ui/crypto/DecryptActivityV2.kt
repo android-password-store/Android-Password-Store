@@ -20,6 +20,7 @@ import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
@@ -142,23 +143,18 @@ class DecryptActivityV2 : BasePgpActivity() {
         }
       startAutoDismissTimer()
 
+      val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
       val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
       passwordEntry = entry
       invalidateOptionsMenu()
 
       val items = arrayListOf<FieldItem>()
-      val adapter = FieldItemAdapter(emptyList(), true) { text -> copyTextToClipboard(text) }
       if (!entry.password.isNullOrBlank()) {
         items.add(FieldItem.createPasswordField(entry.password!!))
       }
 
       if (entry.hasTotp()) {
-        lifecycleScope.launch {
-          items.add(FieldItem.createOtpField(entry.totp.value))
-          entry.totp.collect { code ->
-            withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
-          }
-        }
+        items.add(FieldItem.createOtpField(entry.totp.value))
       }
 
       if (!entry.username.isNullOrBlank()) {
@@ -169,8 +165,16 @@ class DecryptActivityV2 : BasePgpActivity() {
         items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
       }
 
+      val adapter = FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
       binding.recyclerView.adapter = adapter
-      adapter.updateItems(items)
+
+      if (entry.hasTotp()) {
+        lifecycleScope.launch {
+          entry.totp.collect { code ->
+            withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
+          }
+        }
+      }
     }
   }
 
