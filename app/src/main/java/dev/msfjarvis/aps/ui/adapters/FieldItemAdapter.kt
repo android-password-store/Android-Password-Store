@@ -19,7 +19,7 @@ import dev.msfjarvis.aps.databinding.ItemFieldBinding
 class FieldItemAdapter(
   private var fieldItemList: List<FieldItem>,
   private val showPassword: Boolean,
-  private val copyTextToClipBoard: (text: String?) -> Unit,
+  private val copyTextToClipboard: (text: String?) -> Unit,
 ) : RecyclerView.Adapter<FieldItemAdapter.FieldItemViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FieldItemViewHolder {
@@ -28,7 +28,7 @@ class FieldItemAdapter(
   }
 
   override fun onBindViewHolder(holder: FieldItemViewHolder, position: Int) {
-    holder.bind(fieldItemList[position], showPassword, copyTextToClipBoard)
+    holder.bind(fieldItemList[position], showPassword, copyTextToClipboard)
   }
 
   override fun getItemCount(): Int {
@@ -58,7 +58,7 @@ class FieldItemAdapter(
   class FieldItemViewHolder(itemView: View, val binding: ItemFieldBinding) :
     RecyclerView.ViewHolder(itemView) {
 
-    fun bind(fieldItem: FieldItem, showPassword: Boolean, copyTextToClipBoard: (String?) -> Unit) {
+    fun bind(fieldItem: FieldItem, showPassword: Boolean, copyTextToClipboard: (String?) -> Unit) {
       with(binding) {
         itemText.hint = fieldItem.key
         itemTextContainer.hint = fieldItem.key
@@ -70,19 +70,19 @@ class FieldItemAdapter(
               endIconDrawable =
                 ContextCompat.getDrawable(itemView.context, R.drawable.ic_content_copy)
               endIconMode = TextInputLayout.END_ICON_CUSTOM
-              setEndIconOnClickListener { copyTextToClipBoard(itemText.text.toString()) }
+              setEndIconOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
           }
           FieldItem.ActionType.HIDE -> {
             itemTextContainer.apply {
               endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
-              setOnClickListener { copyTextToClipBoard(itemText.text.toString()) }
+              setOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
             itemText.apply {
               if (!showPassword) {
                 transformationMethod = PasswordTransformationMethod.getInstance()
               }
-              setOnClickListener { copyTextToClipBoard(itemText.text.toString()) }
+              setOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
           }
         }
