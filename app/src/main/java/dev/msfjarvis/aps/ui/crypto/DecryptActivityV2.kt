@@ -147,18 +147,12 @@ class DecryptActivityV2 : BasePgpActivity() {
       invalidateOptionsMenu()
 
       val items = arrayListOf<FieldItem>()
-      val adapter = FieldItemAdapter(emptyList(), true) { text -> copyTextToClipboard(text) }
       if (!entry.password.isNullOrBlank()) {
         items.add(FieldItem.createPasswordField(entry.password!!))
       }
 
       if (entry.hasTotp()) {
-        lifecycleScope.launch {
-          items.add(FieldItem.createOtpField(entry.totp.value))
-          entry.totp.collect { code ->
-            withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
-          }
-        }
+        items.add(FieldItem.createOtpField(entry.totp.value))
       }
 
       if (!entry.username.isNullOrBlank()) {
@@ -169,8 +163,16 @@ class DecryptActivityV2 : BasePgpActivity() {
         items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
       }
 
+      val adapter = FieldItemAdapter(items, true) { text -> copyTextToClipboard(text) }
       binding.recyclerView.adapter = adapter
-      adapter.updateItems(items)
+
+      if (entry.hasTotp()) {
+        lifecycleScope.launch {
+          entry.totp.collect { code ->
+            withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
+          }
+        }
+      }
     }
   }
 

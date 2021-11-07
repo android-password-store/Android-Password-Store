@@ -50,11 +50,6 @@ class FieldItemAdapter(
     notifyItemChanged(otpItemPosition)
   }
 
-  fun updateItems(itemList: List<FieldItem>) {
-    fieldItemList = itemList
-    notifyDataSetChanged()
-  }
-
   class FieldItemViewHolder(itemView: View, val binding: ItemFieldBinding) :
     RecyclerView.ViewHolder(itemView) {
 

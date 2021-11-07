@@ -179,9 +179,6 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
           runCatching {
             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
             val entry = passwordEntryFactory.create(lifecycleScope, outputStream.toByteArray())
-            val items = arrayListOf<FieldItem>()
-            val adapter =
-              FieldItemAdapter(emptyList(), showPassword) { text -> copyTextToClipboard(text) }
 
             if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
               copyPasswordToClipboard(entry.password)
@@ -190,17 +187,13 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             passwordEntry = entry
             invalidateOptionsMenu()
 
+            val items = arrayListOf<FieldItem>()
             if (!entry.password.isNullOrBlank()) {
               items.add(FieldItem.createPasswordField(entry.password!!))
             }
 
             if (entry.hasTotp()) {
-              launch {
-                items.add(FieldItem.createOtpField(entry.totp.value))
-                entry.totp.collect { code ->
-                  withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
-                }
-              }
+              items.add(FieldItem.createOtpField(entry.totp.value))
             }
 
             if (!entry.username.isNullOrBlank()) {
@@ -211,8 +204,17 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
               items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
             }
 
+            val adapter =
+              FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
             binding.recyclerView.adapter = adapter
-            adapter.updateItems(items)
+
+            if (entry.hasTotp()) {
+              lifecycleScope.launch {
+                entry.totp.collect { code ->
+                  withContext(Dispatchers.Main) { adapter.updateOTPCode(code) }
+                }
+              }
+            }
           }
             .onFailure { e -> logcat(ERROR) { e.asLog() } }
         }
