@@ -72,6 +72,7 @@ class FieldItemAdapter(
               endIconMode = TextInputLayout.END_ICON_CUSTOM
               setEndIconOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
+            itemText.transformationMethod = null
           }
           FieldItem.ActionType.HIDE -> {
             itemTextContainer.apply {
@@ -79,9 +80,12 @@ class FieldItemAdapter(
               setOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
             itemText.apply {
-              if (!showPassword) {
-                transformationMethod = PasswordTransformationMethod.getInstance()
-              }
+              transformationMethod =
+                if (!showPassword) {
+                  PasswordTransformationMethod.getInstance()
+                } else {
+                  null
+                }
               setOnClickListener { copyTextToClipboard(itemText.text.toString()) }
             }
           }
