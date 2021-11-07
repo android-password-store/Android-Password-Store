@@ -6,7 +6,6 @@
 package dev.msfjarvis.aps.ui.dialogs
 
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +19,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.BasicBottomSheetBinding
-import dev.msfjarvis.aps.ui.dialogs.BasicBottomSheet.Builder
-import dev.msfjarvis.aps.util.extensions.resolveAttribute
 import dev.msfjarvis.aps.util.extensions.viewBinding
 
 /**
  * [BottomSheetDialogFragment] that exposes a simple [androidx.appcompat.app.AlertDialog] like API
- * through [Builder] to create a similar UI, just at the bottom of the screen.
+ * through [BasicBottomSheet.Builder] to create a similar UI, just at the bottom of the screen.
  */
 class BasicBottomSheet
 private constructor(
@@ -100,11 +97,6 @@ private constructor(
         }
       }
     )
-    val gradientDrawable =
-      GradientDrawable().apply {
-        setColor(requireContext().resolveAttribute(android.R.attr.windowBackground))
-      }
-    view.background = gradientDrawable
   }
 
   override fun dismiss() {
