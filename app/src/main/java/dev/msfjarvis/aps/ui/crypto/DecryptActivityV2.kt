@@ -20,6 +20,7 @@ import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
@@ -142,6 +143,7 @@ class DecryptActivityV2 : BasePgpActivity() {
         }
       startAutoDismissTimer()
 
+      val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
       val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
       passwordEntry = entry
       invalidateOptionsMenu()
@@ -163,7 +165,7 @@ class DecryptActivityV2 : BasePgpActivity() {
         items.add(FieldItem(key, value, FieldItem.ActionType.COPY))
       }
 
-      val adapter = FieldItemAdapter(items, true) { text -> copyTextToClipboard(text) }
+      val adapter = FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
       binding.recyclerView.adapter = adapter
 
       if (entry.hasTotp()) {
