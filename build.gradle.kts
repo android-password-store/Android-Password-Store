@@ -5,6 +5,5 @@
 plugins {
   `binary-compatibility-validator`
   `aps-plugin`
+  id("com.github.android-password-store.spotless")
 }
-
-allprojects { configureSpotless() }

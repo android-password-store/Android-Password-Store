@@ -34,7 +34,6 @@ gradlePlugin {
 
 dependencies {
   implementation("com.android.tools.build:gradle:7.0.3")
-  implementation("com.diffplug.spotless:spotless-plugin-gradle:5.16.0")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.40.1")
   implementation("com.squareup.okhttp3:okhttp:4.9.0")
   implementation("com.vanniktech:gradle-maven-publish-plugin:0.18.0")

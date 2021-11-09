@@ -11,6 +11,9 @@ kotlin = "1.5.31"
 lifecycle = "2.4.0"
 
 [libraries]
+# Plugins and other build tooling
+build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:5.16.0"
+
 # Kotlin dependencies
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
