@@ -1,5 +1,6 @@
 name: Update Publix Suffix List data
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 6'
 
@@ -22,9 +23,10 @@ jobs:
         uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
         if: env.UPDATED == 'true'
         with:
-          arguments: :autofill-parser:test
+          arguments: :autofill-parser:test -PslimTests
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@01f7dd1d28f5131231ba3ede0f1c8cb413584a1d
         if: env.UPDATED == 'true'
         with:
@@ -37,3 +39,18 @@ jobs:
           labels: PSL
           title: Update Public Suffix List data
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto approve
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: juliangruber/approve-pull-request-action@36e19d8a79c9c62bf85a0565cb2799a3cf395343
+        with:
+          github-token: ${{ secrets.PSL_UPDATE_TOKEN }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
+
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@d2ede5636b3febc92809259995e643565e675aab
+        with:
+          token: ${{ secrets.PSL_UPDATE_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
