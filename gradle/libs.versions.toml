@@ -12,6 +12,15 @@ lifecycle = "2.4.0"
 
 [libraries]
 # Plugins and other build tooling
+build-agp = "com.android.tools.build:gradle:7.0.3"
+build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0"
+build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
+build-download = "de.undercouch:gradle-download-task:4.1.2"
+build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.39.1"
+build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
+build-okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
+build-semver = "com.vdurmont:semver4j:3.1.0"
 build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:5.16.0"
 
 # Kotlin dependencies
