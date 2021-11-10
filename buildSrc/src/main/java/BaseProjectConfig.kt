@@ -21,8 +21,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  */
 internal fun Project.configureForRootProject() {
   tasks.withType<Wrapper> {
-    gradleVersion = "7.2"
-    distributionSha256Sum = "f581709a9c35e9cb92e16f585d2c4bc99b2b1a5f85d2badbd3dc6bff59e1e6dd"
+    gradleVersion = "7.3"
+    distributionSha256Sum = "de8f52ad49bdc759164f72439a3bf56ddb1589c4cde802d3cec7d6ad0e0ee410"
   }
   configureBinaryCompatibilityValidator()
   tasks.register<GitHooks>("installGitHooks") {
