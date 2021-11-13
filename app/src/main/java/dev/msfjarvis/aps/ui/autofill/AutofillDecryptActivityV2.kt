@@ -21,8 +21,8 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
+import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.injection.crypto.CryptoSet
-import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
@@ -72,7 +72,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
     }
   }
 
-  @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
+  @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var cryptos: CryptoSet
 
   private lateinit var directoryStructure: DirectoryStructure

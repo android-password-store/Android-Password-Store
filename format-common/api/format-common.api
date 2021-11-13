@@ -9,6 +9,10 @@ public final class dev/msfjarvis/aps/data/passfile/PasswordEntry {
 	public final fun hasTotp ()Z
 }
 
+public abstract interface class dev/msfjarvis/aps/data/passfile/PasswordEntry$Factory {
+	public abstract fun create (Lkotlinx/coroutines/CoroutineScope;[B)Ldev/msfjarvis/aps/data/passfile/PasswordEntry;
+}
+
 public class dev/msfjarvis/aps/util/time/UserClock : java/time/Clock {
 	public fun <init> ()V
 	public fun getZone ()Ljava/time/ZoneId;

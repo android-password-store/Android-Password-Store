@@ -24,7 +24,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
-import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
+import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
@@ -85,7 +85,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
     }
   }
 
-  @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
+  @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
 
   private val decryptInteractionRequiredAction =
     registerForActivityResult(StartIntentSenderForResult()) { result ->

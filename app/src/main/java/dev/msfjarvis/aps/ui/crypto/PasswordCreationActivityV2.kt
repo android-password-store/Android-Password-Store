@@ -26,9 +26,9 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
 import dev.msfjarvis.aps.injection.crypto.CryptoSet
-import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
@@ -58,7 +58,7 @@ import logcat.logcat
 class PasswordCreationActivityV2 : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
-  @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
+  @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
   @Inject lateinit var cryptos: CryptoSet
 
   private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
