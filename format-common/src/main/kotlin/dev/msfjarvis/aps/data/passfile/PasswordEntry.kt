@@ -7,6 +7,7 @@ package dev.msfjarvis.aps.data.passfile
 
 import com.github.michaelbull.result.mapBoth
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.Otp
@@ -195,6 +196,11 @@ constructor(
       Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
         .mapBoth({ code -> _totp.update { code } }, { throwable -> throw throwable })
     }
+  }
+
+  @AssistedFactory
+  public interface Factory {
+    public fun create(scope: CoroutineScope, bytes: ByteArray): PasswordEntry
   }
 
   internal companion object {
