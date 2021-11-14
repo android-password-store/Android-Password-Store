@@ -13,6 +13,7 @@ spotless {
   kotlinGradle {
     ktfmt().googleStyle()
     target("**/*.kts")
+    targetExclude("**/build/")
   }
   format("xml") {
     target("**/*.xml")
