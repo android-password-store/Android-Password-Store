@@ -4,7 +4,7 @@
  */
 plugins {
   kotlin("jvm")
-  `aps-plugin`
+  id("com.github.android-password-store.kotlin-common")
 }
 
 dependencies { implementation(libs.thirdparty.kotlinResult) }

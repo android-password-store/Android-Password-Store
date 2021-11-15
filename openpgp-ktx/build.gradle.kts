@@ -8,6 +8,7 @@ plugins {
   id("com.vanniktech.maven.publish")
   kotlin("android")
   id("org.jetbrains.dokka")
+  id("com.github.android-password-store.kotlin-common")
   `aps-plugin`
 }
 

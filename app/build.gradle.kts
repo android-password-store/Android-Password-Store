@@ -9,6 +9,7 @@ plugins {
   kotlin("android")
   kotlin("kapt")
   id("dagger.hilt.android.plugin")
+  id("com.github.android-password-store.kotlin-common")
   `versioning-plugin`
   `aps-plugin`
   `crowdin-plugin`
