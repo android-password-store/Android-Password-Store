@@ -17,13 +17,13 @@ class PGPKeyManagerTest {
 
   @get:Rule val temporaryFolder: TemporaryFolder = TemporaryFolder()
   private val filesDir by lazy(LazyThreadSafetyMode.NONE) { temporaryFolder.root }
-  private val keysDir by lazy(LazyThreadSafetyMode.NONE) {
-    File(filesDir, PGPKeyManager.KEY_DIR_NAME)
-  }
+  private val keysDir by
+    lazy(LazyThreadSafetyMode.NONE) { File(filesDir, PGPKeyManager.KEY_DIR_NAME) }
   private val testCoroutineDispatcher = TestCoroutineDispatcher()
-  private val keyManager by lazy(LazyThreadSafetyMode.NONE) {
-    PGPKeyManager(filesDir.absolutePath, testCoroutineDispatcher)
-  }
+  private val keyManager by
+    lazy(LazyThreadSafetyMode.NONE) {
+      PGPKeyManager(filesDir.absolutePath, testCoroutineDispatcher)
+    }
   private val key = PGPKeyManager.makeKey(TestUtils.getArmoredPrivateKey())
 
   @Test

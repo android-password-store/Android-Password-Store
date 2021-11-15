@@ -33,9 +33,8 @@ internal class PublicSuffixList(
   private val scope: CoroutineScope = CoroutineScope(dispatcher)
 ) {
 
-  private val data: PublicSuffixListData by lazy(LazyThreadSafetyMode.PUBLICATION) {
-    PublicSuffixListLoader.load(context)
-  }
+  private val data: PublicSuffixListData by
+    lazy(LazyThreadSafetyMode.PUBLICATION) { PublicSuffixListLoader.load(context) }
 
   /** Prefetch the public suffix list from disk so that it is available in memory. */
   fun prefetchAsync(): Deferred<Unit> = scope.async { data.run {} }
