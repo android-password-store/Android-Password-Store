@@ -7,47 +7,8 @@ import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.withType
 import org.gradle.language.nativeplatform.internal.BuildType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-/**
- * Configure root project. Note that classpath dependencies still need to be defined in the
- * `buildscript` block in the top-level build.gradle.kts file.
- */
-internal fun Project.configureForRootProject() {
-  tasks.withType<Wrapper> {
-    gradleVersion = "7.3"
-    distributionSha256Sum = "de8f52ad49bdc759164f72439a3bf56ddb1589c4cde802d3cec7d6ad0e0ee410"
-  }
-  configureBinaryCompatibilityValidator()
-  tasks.register<GitHooks>("installGitHooks") {
-    val projectDirectory = layout.projectDirectory
-    hookScript.set(projectDirectory.file("scripts/pre-push-hook.sh").asFile.readText())
-    hookOutput.set(projectDirectory.file(".git/hooks/pre-push").asFile)
-  }
-}
-
-/** Configure all projects including the root project */
-internal fun Project.configureForAllProjects() {
-  tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-      allWarningsAsErrors = true
-      jvmTarget = JavaVersion.VERSION_11.toString()
-      freeCompilerArgs = freeCompilerArgs + additionalCompilerArgs
-      languageVersion = "1.5"
-    }
-  }
-  tasks.withType<Test>().configureEach {
-    maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
-    testLogging { events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED) }
-    outputs.upToDateWhen { false }
-  }
-}
 
 /** Checks if we're building a snapshot */
 @Suppress("UnstableApiUsage")

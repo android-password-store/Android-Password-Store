@@ -25,12 +25,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 class PasswordStorePlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
-    project.configureForAllProjects()
-
-    if (project.isRoot) {
-      project.configureForRootProject()
-    }
-
     project.plugins.all {
       when (this) {
         is JavaPlugin, is JavaLibraryPlugin -> {
@@ -77,6 +71,3 @@ class PasswordStorePlugin : Plugin<Project> {
     }
   }
 }
-
-private val Project.isRoot
-  get() = this == this.rootProject
