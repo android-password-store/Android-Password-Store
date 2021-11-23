@@ -25,6 +25,8 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.settings.runMigrations
 import javax.inject.Inject
 import logcat.AndroidLogcatLogger
+import logcat.LogPriority.DEBUG
+import logcat.LogcatLogger
 
 @Suppress("Unused")
 @HiltAndroidApp
@@ -41,7 +43,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     if (BuildConfig.ENABLE_DEBUG_FEATURES ||
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
-      AndroidLogcatLogger.installOnDebuggableApp(this)
+      LogcatLogger.install(AndroidLogcatLogger(DEBUG))
       StrictMode.setVmPolicy(VmPolicy.Builder().detectAll().penaltyLog().build())
       StrictMode.setThreadPolicy(ThreadPolicy.Builder().detectAll().penaltyLog().build())
     }
