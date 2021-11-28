@@ -5,14 +5,12 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 
 plugins {
-  id("com.android.application")
-  kotlin("android")
-  kotlin("kapt")
+  id("com.github.android-password-store.android-application")
+  id("com.github.android-password-store.crowdin-plugin")
+  id("com.github.android-password-store.kotlin-android")
+  id("com.github.android-password-store.kotlin-kapt")
+  id("com.github.android-password-store.versioning-plugin")
   id("dagger.hilt.android.plugin")
-  id("com.github.android-password-store.kotlin-common")
-  `versioning-plugin`
-  `aps-plugin`
-  `crowdin-plugin`
 }
 
 repositories {
@@ -31,7 +29,18 @@ repositories {
   }
 }
 
-configure<CrowdinExtension> { projectName = "android-password-store" }
+configure<crowdin.CrowdinExtension> {
+  projectName = "android-password-store"
+  skipCleanup = false
+}
+
+fun isSnapshot(): Boolean {
+  with(project.providers) {
+    val workflow = environmentVariable("GITHUB_WORKFLOW").forUseAtConfigurationTime()
+    val snapshot = environmentVariable("SNAPSHOT").forUseAtConfigurationTime()
+    return workflow.isPresent || snapshot.isPresent
+  }
+}
 
 android {
   if (isSnapshot()) {
