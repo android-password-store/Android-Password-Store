@@ -4,10 +4,20 @@
  */
 
 import flavors.configureSlimTests
+import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.plugins.signing.SigningExtension
 
 plugins {
   id("com.android.library")
   id("com.github.android-password-store.android-common")
 }
 
-project.configureSlimTests()
+afterEvaluate {
+  project.configureSlimTests()
+
+  extensions.configure<SigningExtension> {
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
+  }
+}

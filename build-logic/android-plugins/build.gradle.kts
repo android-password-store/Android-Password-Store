@@ -8,4 +8,16 @@ plugins {
   `kotlin-dsl-precompiled-script-plugins`
 }
 
-dependencies { implementation(libs.build.agp) }
+gradlePlugin {
+  plugins {
+    register("versioning") {
+      id = "com.github.android-password-store.versioning-plugin"
+      implementationClass = "versioning.VersioningPlugin"
+    }
+  }
+}
+
+dependencies {
+  implementation(libs.build.agp)
+  implementation(libs.build.semver)
+}

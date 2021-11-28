@@ -8,6 +8,7 @@ import flavors.FlavorDimensions
 import flavors.ProductFlavors
 import flavors.configureSlimTests
 import org.gradle.kotlin.dsl.configure
+import signing.configureBuildSigning
 
 plugins {
   id("com.android.application")
@@ -60,4 +61,5 @@ extensions.configure<BaseAppModuleExtension> {
   }
 
   project.configureSlimTests()
+  project.configureBuildSigning()
 }
