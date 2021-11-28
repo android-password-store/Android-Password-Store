@@ -3,33 +3,14 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-// Modules
-include(":app")
-
-include(":autofill-parser")
-
-include(":crypto-common")
-
-include(":crypto-pgpainless")
-
-include(":format-common")
-
-include(":openpgp-ktx")
-
-include(":dependency-sync")
-
-// Experimental features
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-enableFeaturePreview("VERSION_CATALOGS")
-
 // Plugin repositories
 pluginManagement {
   repositories {
+    includeBuild("build-logic")
+    google()
     mavenCentral()
     gradlePluginPortal()
   }
-  includeBuild("build-logic")
 }
 
 dependencyResolutionManagement {
@@ -46,3 +27,23 @@ dependencyResolutionManagement {
     }
   }
 }
+
+// Experimental features
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+enableFeaturePreview("VERSION_CATALOGS")
+
+// Modules
+include("app")
+
+include("autofill-parser")
+
+include("crypto-common")
+
+include("crypto-pgpainless")
+
+include("format-common")
+
+include("openpgp-ktx")
+
+include(":dependency-sync")
