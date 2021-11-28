@@ -11,6 +11,13 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
   }
+  resolutionStrategy {
+    eachPlugin {
+      if (requested.id.id == "dagger.hilt.android.plugin") {
+        useModule("com.google.dagger:hilt-android-gradle-plugin:2.40.3")
+      }
+    }
+  }
   plugins {
     id("com.vanniktech.maven.publish") version "0.18.0" apply false
     id("org.jetbrains.dokka") version "1.6.0" apply false
