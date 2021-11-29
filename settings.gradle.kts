@@ -11,6 +11,10 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
   }
+  plugins {
+    id("com.vanniktech.maven.publish") version "0.18.0" apply false
+    id("org.jetbrains.dokka") version "1.6.0" apply false
+  }
 }
 
 dependencyResolutionManagement {
