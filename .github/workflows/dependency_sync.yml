@@ -1,0 +1,53 @@
+name: DependencySync
+
+on:
+  workflow_dispatch:
+  pull_request_target:
+    branches:
+      - develop
+
+jobs:
+  cancel-other-jobs:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # cancel previous jobs
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        env:
+          access_token: '${{ secrets.PSL_UPDATE_TOKEN }}'
+
+  dependency-sync:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PSL_UPDATE_TOKEN }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: gradle/wrapper-validation-action@v1
+
+      - name: Set up JDK
+        uses : actions/setup-java@v2
+        with :
+          distribution : 'adopt'
+          java-version : '11'
+          cache: 'gradle'
+
+      - uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+        name: run dependencySync
+        with:
+          arguments: |
+            dependencySync
+
+      # If the copy generated changes, commit and push those changes.
+      - name: commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: sync dependency definitions
+          commit_options: '--no-verify --signoff'
