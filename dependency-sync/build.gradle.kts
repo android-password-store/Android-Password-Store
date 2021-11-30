@@ -23,7 +23,7 @@ dependencies {
   dependencySync("com.google.dagger:hilt-android-gradle-plugin:$hilt")
   dependencySync("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin")
   dependencySync("com.vanniktech:gradle-maven-publish-plugin:0.18.0")
-  dependencySync("com.squareup.okhttp3:okhttp:4.9.0")
+  dependencySync("com.squareup.okhttp3:okhttp:4.9.3")
   dependencySync("com.vdurmont:semver4j:3.1.0")
   dependencySync("com.diffplug.spotless:spotless-plugin-gradle:6.0.0")
 
