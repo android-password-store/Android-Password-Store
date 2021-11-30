@@ -80,7 +80,7 @@ testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", 
 
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 
-build-okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
+build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 
 build-semver = "com.vdurmont:semver4j:3.1.0"
 
