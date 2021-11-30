@@ -11,100 +11,133 @@ kotlin = "1.5.31"
 lifecycle = "2.4.0"
 
 [libraries]
-# Plugins and other build tooling
-build-agp = "com.android.tools.build:gradle:7.0.3"
-build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0"
-build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
-build-download = "de.undercouch:gradle-download-task:4.1.2"
-build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.39.1"
-build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
-build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
-build-okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
-build-semver = "com.vdurmont:semver4j:3.1.0"
-build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.0.0"
+android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 
-# Kotlin dependencies
-kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-
-# AndroidX dependencies
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx_activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx_activity" }
+
 androidx-annotation = "androidx.annotation:annotation:1.3.0"
-androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
+
 androidx-appcompat = "androidx.appcompat:appcompat:1.4.0-rc01"
+
+androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
+
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha03"
+
+androidx-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha01"
+
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.1"
+
 androidx-core-ktx = "androidx.core:core-ktx:1.7.0"
+
 androidx-documentfile = "androidx.documentfile:documentfile:1.1.0-alpha01"
+
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.4.0-rc01"
+
 androidx-hilt-compose = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
-androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref="lifecycle" }
-androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref="lifecycle" }
-androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref="lifecycle" }
+
+androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
+androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+
 androidx-material = "com.google.android.material:material:1.5.0-beta01"
+
 androidx-preference = "androidx.preference:preference:1.2.0-alpha02"
+
 androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.0-alpha01"
 androidx-recyclerviewSelection = "androidx.recyclerview:recyclerview-selection:1.2.0-alpha01"
+
 androidx-security = "androidx.security:security-crypto:1.1.0-alpha03"
+
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
 
-# Compose dependencies
+androidx-testing-rules = { module = "androidx.test:rules", version.ref = "androidx_test" }
+androidx-testing-runner = { module = "androidx.test:runner", version.ref = "androidx_test" }
+
+aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
+aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
+testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
+
+build-agp = "com.android.tools.build:gradle:7.0.3"
+
+build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0"
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
+
+build-download = "de.undercouch:gradle-download-task:4.1.2"
+
+build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.1"
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
+
+build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+
+build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
+
+build-okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
+
+build-semver = "com.vdurmont:semver4j:3.1.0"
+
+build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.0.0"
+
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
+
 compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
+
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose" }
+
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.0.0-alpha01" }
+
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
+
 compose-ui-core = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
 compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", version.ref = "compose" }
 
+testing-junit = "junit:junit:4.13.2"
 
-# Dagger/Hilt dependencies
-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
+testing-robolectric = "org.robolectric:robolectric:4.7"
 
-# Desugaring
-android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
-
-# First-party libraries
-aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:1.0.0"
-aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
-
-# Third-party dependencies
 thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.69"
+
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
+
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
+
 thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.7"
+
 thirdparty-flowbinding-android = { module = "io.github.reactivecircus.flowbinding:flowbinding-android", version.ref = "flowbinding" }
+
 thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
+
 thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.13"
+
 thirdparty-leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
-thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
-thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.2.1"
-thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.0.0-rc1"
 thirdparty-plumber = "com.squareup.leakcanary:plumber-android:2.7"
-thirdparty-sshj = "com.hierynomus:sshj:0.32.0"
-thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
-thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.1"
+
+thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
+
+thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.2.1"
+
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:17.5.1"
 
-# Testing dependencies
-testing-junit = "junit:junit:4.13.2"
-testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-testing-robolectric = "org.robolectric:robolectric:4.7"
-testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
-androidx-testing-rules = { module = "androidx.test:rules", version.ref="androidx_test" }
-androidx-testing-runner = { module = "androidx.test:runner", version.ref="androidx_test" }
-kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.0.0-rc1"
 
-# Bundles of dependencies usually used together so they can be included in one go
+thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
+
+thirdparty-sshj = "com.hierynomus:sshj:0.32.0"
+
+thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.1"
+
 [bundles]
 androidxLifecycle = ["androidx-lifecycle-common", "androidx-lifecycle-livedataKtx", "androidx-lifecycle-viewmodelKtx"]
 testDependencies = ["testing-junit", "testing-kotlintest-junit"]

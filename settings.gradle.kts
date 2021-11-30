@@ -16,6 +16,8 @@ include(":format-common")
 
 include(":openpgp-ktx")
 
+include(":dependency-sync")
+
 // Experimental features
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
