@@ -66,7 +66,7 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
+build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.6.0"
 
 build-download = "de.undercouch:gradle-download-task:4.1.2"
 
@@ -75,7 +75,7 @@ dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref =
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
 
-build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
 testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
