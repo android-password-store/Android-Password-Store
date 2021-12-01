@@ -6,7 +6,7 @@ compose = "1.1.0-beta02"
 composeSnapshot = "-"
 coroutines = "1.5.2"
 flowbinding = "1.2.0"
-hilt = "2.40.1"
+hilt = "2.40.3"
 kotlin = "1.5.31"
 lifecycle = "2.4.0"
 
@@ -70,7 +70,7 @@ build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.31"
 
 build-download = "de.undercouch:gradle-download-task:4.1.2"
 
-build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.1"
+build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.3"
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
