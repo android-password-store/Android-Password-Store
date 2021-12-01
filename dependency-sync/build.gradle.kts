@@ -86,7 +86,7 @@ dependencies {
   dependencySync("net.i2p.crypto:eddsa:0.3.0")
   dependencySync("me.zhanghai.android.fastscroll:library:1.1.7")
   dependencySync("io.github.reactivecircus.flowbinding:flowbinding-android:$flowbinding")
-  dependencySync("org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r")
+  dependencySync("org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r")
   dependencySync("com.michael-bull.kotlin-result:kotlin-result:1.1.13")
   dependencySync("com.squareup.leakcanary:leakcanary-android:2.7")
   dependencySync("com.squareup.logcat:logcat:0.1")
