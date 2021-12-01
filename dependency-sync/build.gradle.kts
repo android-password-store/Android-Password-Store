@@ -17,7 +17,7 @@ dependencies {
   val lifecycle = "2.4.0"
 
   dependencySync("com.android.tools.build:gradle:7.0.3")
-  dependencySync("org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0")
+  dependencySync("org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0")
   dependencySync("org.jetbrains.dokka:dokka-gradle-plugin:$kotlin")
   dependencySync("de.undercouch:gradle-download-task:4.1.2")
   dependencySync("com.google.dagger:hilt-android-gradle-plugin:$hilt")
