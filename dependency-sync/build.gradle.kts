@@ -81,7 +81,7 @@ dependencies {
   dependencySync("com.github.android-password-store:zxing-android-embedded:4.2.1")
 
   // Third-party dependencies
-  dependencySync("org.bouncycastle:bcprov-jdk15on:1.69")
+  dependencySync("org.bouncycastle:bcprov-jdk15on:1.70")
   dependencySync("commons-codec:commons-codec:1.14")
   dependencySync("net.i2p.crypto:eddsa:0.3.0")
   dependencySync("me.zhanghai.android.fastscroll:library:1.1.7")

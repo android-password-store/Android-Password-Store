@@ -107,7 +107,7 @@ testing-junit = "junit:junit:4.13.2"
 
 testing-robolectric = "org.robolectric:robolectric:4.7.2"
 
-thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.69"
+thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.70"
 
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
 
