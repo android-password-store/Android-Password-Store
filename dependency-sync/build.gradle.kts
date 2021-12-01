@@ -103,7 +103,7 @@ dependencies {
   dependencySync("org.jetbrains.kotlin:kotlin-test-junit")
   dependencySync("org.robolectric:robolectric:4.7.2")
   dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-  dependencySync("org.jetbrains.kotlin:kotlin-test-junit:1.5.31")
+  dependencySync("org.jetbrains.kotlin:kotlin-test-junit:1.6.0")
   dependencySync("com.github.android-password-store:shared-preferences-fake:2.0.0")
   dependencySync("androidx.test:rules:$androidx_test")
   dependencySync("androidx.test:runner:$androidx_test")
