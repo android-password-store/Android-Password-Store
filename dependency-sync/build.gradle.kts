@@ -13,7 +13,7 @@ dependencies {
   val coroutines = "1.5.2"
   val flowbinding = "1.2.0"
   val hilt = "2.40.1"
-  val kotlin = "1.5.31"
+  val kotlin = "1.6.0"
   val lifecycle = "2.4.0"
 
   dependencySync("com.android.tools.build:gradle:7.0.3")
