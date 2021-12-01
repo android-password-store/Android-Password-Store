@@ -17,7 +17,7 @@ dependencies {
   val lifecycle = "2.4.0"
 
   dependencySync("com.android.tools.build:gradle:7.0.3")
-  dependencySync("org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0")
+  dependencySync("org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0")
   dependencySync("org.jetbrains.dokka:dokka-gradle-plugin:$kotlin")
   dependencySync("de.undercouch:gradle-download-task:4.1.2")
   dependencySync("com.google.dagger:hilt-android-gradle-plugin:$hilt")
@@ -101,7 +101,7 @@ dependencies {
   // Testing dependencies
   dependencySync("junit:junit:4.13.2")
   dependencySync("org.jetbrains.kotlin:kotlin-test-junit")
-  dependencySync("org.robolectric:robolectric:4.7")
+  dependencySync("org.robolectric:robolectric:4.7.2")
   dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
   dependencySync("org.jetbrains.kotlin:kotlin-test-junit:1.5.31")
   dependencySync("com.github.android-password-store:shared-preferences-fake:2.0.0")

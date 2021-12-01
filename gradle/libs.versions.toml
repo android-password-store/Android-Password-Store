@@ -61,7 +61,7 @@ testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-
 
 build-agp = "com.android.tools.build:gradle:7.0.3"
 
-build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.6.0"
+build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0"
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -105,7 +105,7 @@ compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding", versio
 
 testing-junit = "junit:junit:4.13.2"
 
-testing-robolectric = "org.robolectric:robolectric:4.7"
+testing-robolectric = "org.robolectric:robolectric:4.7.2"
 
 thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.69"
 
