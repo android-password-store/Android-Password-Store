@@ -117,7 +117,7 @@ thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.7"
 
 thirdparty-flowbinding-android = { module = "io.github.reactivecircus.flowbinding:flowbinding-android", version.ref = "flowbinding" }
 
-thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r"
+thirdparty-jgit = "org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r"
 
 thirdparty-kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.13"
 
