@@ -34,11 +34,11 @@ gradlePlugin {
 
 dependencies {
   implementation("com.android.tools.build:gradle:7.0.3")
-  implementation("com.google.dagger:hilt-android-gradle-plugin:2.40.1")
+  implementation("com.google.dagger:hilt-android-gradle-plugin:2.40.3")
   implementation("com.squareup.okhttp3:okhttp:4.9.0")
   implementation("com.vanniktech:gradle-maven-publish-plugin:0.18.0")
   implementation("com.vdurmont:semver4j:3.1.0")
   implementation("de.undercouch:gradle-download-task:4.1.2")
-  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.31")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
+  implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.6.0")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
 }
