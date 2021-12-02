@@ -11,12 +11,12 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import dev.msfjarvis.aps.util.extensions.getString
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Before
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
 class MigrationsTest {
@@ -29,7 +29,7 @@ class MigrationsTest {
   private lateinit var encryptedSharedPreferences: SharedPreferences
   private lateinit var proxySharedPreferences: SharedPreferences
 
-  @Before
+  @BeforeTest
   fun setup() {
     context = SPMockBuilder().createContext()
     filesDir = tempFolder.root.path

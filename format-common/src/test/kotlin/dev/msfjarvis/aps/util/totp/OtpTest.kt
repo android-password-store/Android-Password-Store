@@ -6,10 +6,10 @@
 package dev.msfjarvis.aps.util.totp
 
 import com.github.michaelbull.result.get
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import org.junit.Test
 
 class OtpTest {
 

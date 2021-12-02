@@ -5,7 +5,7 @@
 
 package mozilla.components.lib.publicsuffixlist
 
-import org.junit.Test
+import kotlin.test.Test
 
 class PublicSuffixListLoaderTest {
   @Test
