@@ -5,8 +5,8 @@
 
 package dev.msfjarvis.aps.util.totp
 
+import kotlin.test.Test
 import kotlin.test.assertEquals
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
