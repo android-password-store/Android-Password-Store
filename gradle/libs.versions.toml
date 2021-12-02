@@ -6,7 +6,7 @@ compose = "1.1.0-beta04"
 composeSnapshot = "-"
 coroutines = "1.6.0-RC"
 flowbinding = "1.2.0"
-hilt = "2.40.3"
+hilt = "2.40.4"
 kotlin = "1.6.0"
 lifecycle = "2.4.0"
 
@@ -68,7 +68,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 
 build-download = "de.undercouch:gradle-download-task:4.1.2"
 
-build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.3"
+build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.4"
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }

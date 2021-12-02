@@ -10,7 +10,7 @@ dependencies {
   dependencySync("com.android.tools.build:gradle:7.0.3")
   dependencySync("org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0")
   dependencySync("de.undercouch:gradle-download-task:4.1.2")
-  dependencySync("com.google.dagger:hilt-android-gradle-plugin:2.40.3")
+  dependencySync("com.google.dagger:hilt-android-gradle-plugin:2.40.4")
   dependencySync("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
   dependencySync("com.squareup.okhttp3:okhttp:4.9.3")
   dependencySync("com.vdurmont:semver4j:3.1.0")
@@ -58,9 +58,9 @@ dependencies {
   dependencySync("androidx.compose.ui:ui-viewbinding:1.1.0-beta04")
 
   // Dagger/Hilt dependencies
-  dependencySync("com.google.dagger:hilt-android:2.40.3")
-  dependencySync("com.google.dagger:hilt-compiler:2.40.3")
-  dependencySync("com.google.dagger:hilt-core:2.40.3")
+  dependencySync("com.google.dagger:hilt-android:2.40.4")
+  dependencySync("com.google.dagger:hilt-compiler:2.40.4")
+  dependencySync("com.google.dagger:hilt-core:2.40.4")
 
   // Desugaring
   dependencySync("com.android.tools:desugar_jdk_libs:1.1.5")
