@@ -7,6 +7,6 @@ import org.gradle.api.tasks.wrapper.Wrapper
 import org.gradle.kotlin.dsl.withType
 
 tasks.withType<Wrapper> {
-  gradleVersion = "7.3"
-  distributionSha256Sum = "de8f52ad49bdc759164f72439a3bf56ddb1589c4cde802d3cec7d6ad0e0ee410"
+  gradleVersion = "7.3.1"
+  distributionSha256Sum = "9afb3ca688fc12c761a0e9e4321e4d24e977a4a8916c8a768b1fe05ddb4d6b66"
 }
