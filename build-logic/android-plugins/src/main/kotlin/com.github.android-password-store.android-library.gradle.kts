@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-import flavors.configureSlimTests
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.plugins.signing.SigningExtension
 
@@ -13,8 +12,6 @@ plugins {
 }
 
 afterEvaluate {
-  project.configureSlimTests()
-
   extensions.configure<SigningExtension> {
     val signingKey: String? by project
     val signingPassword: String? by project

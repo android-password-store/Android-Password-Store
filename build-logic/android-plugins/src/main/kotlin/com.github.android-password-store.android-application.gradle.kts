@@ -6,7 +6,6 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import flavors.FlavorDimensions
 import flavors.ProductFlavors
-import flavors.configureSlimTests
 import org.gradle.kotlin.dsl.configure
 import signing.configureBuildSigning
 
@@ -60,6 +59,5 @@ extensions.configure<BaseAppModuleExtension> {
     register(ProductFlavors.NON_FREE) {}
   }
 
-  project.configureSlimTests()
   project.configureBuildSigning()
 }
