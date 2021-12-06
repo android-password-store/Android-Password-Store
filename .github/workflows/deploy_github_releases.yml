@@ -9,12 +9,15 @@ jobs:
     name: Build release binaries
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
-      with:
-        java-version: '11'
+    - name: Set up JDK
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
 
     - name: Checkout repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@v2.4.0
 
     - name: Decrypt secrets
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
@@ -25,24 +28,24 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Build release binaries
-      uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+      uses: gradle/gradle-build-action@v2.0.1
       with:
         arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease :app:bundleNonFreeRelease
 
     - name: Upload non-free release APK
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: APS Non-Free Release APK
         path: app/build/outputs/apk/nonFree/release/app-nonFree-release.apk
 
     - name: Upload non-free release Bundle
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: APS Non-Free Release Bundle
         path: app/build/outputs/bundle/nonFreeRelease/app-nonFree-release.aab
 
     - name: Upload free release APK
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: APS Free Release APK
         path: app/build/outputs/apk/free/release/app-free-release.apk
@@ -57,36 +60,36 @@ jobs:
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@v2.4.0
 
       - name: Get Non-Free Release APK
-        uses: actions/download-artifact@4a7a711286f30c025902c28b541c10e147a9b843
+        uses: actions/download-artifact@v2.0.10
         with:
           name: APS Non-Free Release APK
           path: artifacts/nonFree
 
       - name: Get Non-Free Bundle
-        uses: actions/download-artifact@4a7a711286f30c025902c28b541c10e147a9b843
+        uses: actions/download-artifact@v2.0.10
         with:
           name: APS Non-Free Release Bundle
           path: artifacts/nonFree
 
       - name: Get Free Release APK
-        uses: actions/download-artifact@4a7a711286f30c025902c28b541c10e147a9b843
+        uses: actions/download-artifact@v2.0.10
         with:
           name: APS Free Release APK
           path: artifacts/free
 
       - name: Get Changelog Entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@e1a36842bddbd512340f882735802de843998e1f
+        uses: mindsers/changelog-reader-action@v2.0.0
         with:
           version: ${{ github.ref }}
           path: ./CHANGELOG.md
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -101,7 +104,7 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Upload Non-Free Release Apk
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -111,7 +114,7 @@ jobs:
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload Non-Free Release Bundle
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -121,7 +124,7 @@ jobs:
           asset_content_type: application/octet-stream
 
       - name: Upload Free Release Apk
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

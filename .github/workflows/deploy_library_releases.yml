@@ -9,12 +9,15 @@ jobs:
   publish-release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
-      with:
-        java-version: '11'
+    - name: Set up JDK
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
 
     - name: Checkout repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@v2.4.0
 
     - name: Determine publishing task
       id: task-select
@@ -28,7 +31,7 @@ jobs:
         fi
 
     - name: Upload binaries
-      uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+      uses: gradle/gradle-build-action@v2.0.1
       with:
         arguments: :${{ steps.task-select.outputs.PROJECT }}:publishAllPublicationsToMavenCentralRepository
       env:
@@ -38,7 +41,7 @@ jobs:
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
 
     - name: Close and release repository
-      uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+      uses: gradle/gradle-build-action@v2.0.1
       with:
         arguments: closeAndReleaseRepository
       env:
