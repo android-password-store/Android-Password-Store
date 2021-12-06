@@ -16,7 +16,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@v5.0.0
+      uses: actions/github-script@v4.0.0
       id: service-changed
       with:
         result-encoding: string
