@@ -9,13 +9,6 @@ jobs:
     name: "Draft a new release"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up JDK
-        uses : actions/setup-java@v2.4.0
-        with :
-          distribution : 'zulu'
-          java-version : '11'
-          cache: 'gradle'
-
       - name: Extract version from milestone
         run: |
           VERSION="${{ github.event.milestone.title }}"
@@ -41,6 +34,13 @@ jobs:
       - uses: actions/checkout@v2.4.0
         with:
           ref: ${{ env.CHECKOUT_REF }}
+
+      - name: Set up JDK
+        uses : actions/setup-java@v2.4.0
+        with :
+          distribution : 'zulu'
+          java-version : '11'
+          cache: 'gradle'
 
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@1.3.0
