@@ -24,7 +24,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.4.0
         with:
           token: ${{ secrets.PSL_UPDATE_TOKEN }}
           ref: ${{ github.event.pull_request.head.ref }}
