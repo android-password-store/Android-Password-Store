@@ -39,7 +39,7 @@ jobs:
           java-version : '11'
           cache: 'gradle'
 
-      - uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+      - uses: gradle/gradle-build-action@v2.0.1
         name: run dependencySync
         with:
           arguments: |

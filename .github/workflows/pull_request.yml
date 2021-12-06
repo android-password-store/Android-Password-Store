@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0
 
     - name: Check if relevant files have changed
-      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
+      uses: actions/github-script@v5.0.0
       id: service-changed
       with:
         result-encoding: string
@@ -24,7 +24,7 @@ jobs:
           const script = require('.github/check-changed-files.js')
           return await script({github, context})
 
-    - uses: actions/setup-java@d202f5dbf7256730fb690ec59f6381650114feb2
+    - uses: actions/setup-java@v2.4.0
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       with:
         java-version: '11'
@@ -35,19 +35,19 @@ jobs:
 
     - name: Build debug APKs
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+      uses: gradle/gradle-build-action@v2.0.1
       with:
         arguments: assembleFreeDebug assembleNonFreeDebug
 
     - name: Run unit tests
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: gradle/gradle-build-action@cba1833ddecbbee649950c284416981928631008
+      uses: gradle/gradle-build-action@v2.0.1
       with:
         arguments: apiCheck test lintFreeDebug spotlessCheck -PslimTests
 
     - name: (Fail-only) upload test report
       if: failure()
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@v2.2.4
       with:
           name: Test report
           path: app/build/reports
