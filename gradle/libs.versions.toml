@@ -80,7 +80,7 @@ build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 
 build-semver = "com.vdurmont:semver4j:3.1.0"
 
-build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.0.1"
+build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.0.2"
 
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 
