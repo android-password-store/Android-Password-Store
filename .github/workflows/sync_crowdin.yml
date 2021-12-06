@@ -10,9 +10,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - uses: actions/setup-java@v2.4.0
-        with:
-          java-version: '11'
+      - name: Set up JDK
+        uses : actions/setup-java@v2.4.0
+        with :
+          distribution : 'zulu'
+          java-version : '11'
+          cache: 'gradle'
 
       - name: Download new translations from Crowdin
         run: ./gradlew crowdin

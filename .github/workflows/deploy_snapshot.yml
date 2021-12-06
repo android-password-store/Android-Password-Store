@@ -9,9 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/setup-java@v2.4.0
-      with:
-        java-version: '11'
+    - name: Set up JDK
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
 
     - name: Checkout repository
       uses: actions/checkout@v2.4.0

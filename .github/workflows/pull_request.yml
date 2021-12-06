@@ -24,10 +24,13 @@ jobs:
           const script = require('.github/check-changed-files.js')
           return await script({github, context})
 
-    - uses: actions/setup-java@v2.4.0
+    - name: Set up JDK
       if: ${{ steps.service-changed.outputs.result == 'true' }}
-      with:
-        java-version: '11'
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
 
     - name: Copy CI gradle.properties
       if: ${{ steps.service-changed.outputs.result == 'true' }}

@@ -11,6 +11,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
+      - name: Set up JDK
+        uses : actions/setup-java@v2.4.0
+        with :
+          distribution : 'zulu'
+          java-version : '11'
+          cache: 'gradle'
+
       - name: Download new publicsuffix data
         uses: gradle/gradle-build-action@v2.0.1
         with:
