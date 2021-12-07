@@ -8,25 +8,35 @@ package dev.msfjarvis.aps.ui.crypto
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.LuminanceSource
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
+import com.google.zxing.qrcode.QRCodeReader
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
@@ -112,6 +122,39 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
       }
     }
 
+  private val imageImportAction =
+    registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
+      if (imageUri == null) {
+        snackbar(message = getString(R.string.otp_import_failure))
+        return@registerForActivityResult
+      }
+      val bitmap =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+          ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, imageUri))
+            .copy(Bitmap.Config.ARGB_8888, true)
+        } else {
+          @Suppress("DEPRECATION") MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        }
+      val intArray = IntArray(bitmap.width * bitmap.height)
+      // copy pixel data from the Bitmap into the 'intArray' array
+      bitmap.getPixels(intArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+      val source: LuminanceSource = RGBLuminanceSource(bitmap.width, bitmap.height, intArray)
+      val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
+
+      val reader = QRCodeReader()
+      runCatching {
+        val result = reader.decode(binaryBitmap)
+        val text = result.text
+        val currentExtras = binding.extraContent.text.toString()
+        if (currentExtras.isNotEmpty() && currentExtras.last() != '\n')
+          binding.extraContent.append("\n$text")
+        else binding.extraContent.append(text)
+        snackbar(message = getString(R.string.otp_import_success))
+        binding.otpImportButton.isVisible = false
+      }
+        .onFailure { snackbar(message = getString(R.string.otp_import_failure)) }
+    }
+
   private val gpgKeySelectAction =
     registerForActivityResult(StartActivityForResult()) { result ->
       if (result.resultCode == RESULT_OK) {
@@ -185,7 +228,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
           val items =
             arrayOf(
               getString(R.string.otp_import_qr_code),
-              getString(R.string.otp_import_manual_entry)
+              getString(R.string.otp_import_from_file),
+              getString(R.string.otp_import_manual_entry),
             )
           MaterialAlertDialogBuilder(this@PasswordCreationActivity)
             .setItems(items) { _, index ->
@@ -198,7 +242,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                       .setDesiredBarcodeFormats(QR_CODE)
                       .createScanIntent()
                   )
-                1 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
+                1 -> imageImportAction.launch("image/*")
+                2 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
               }
             }
             .show()
@@ -264,9 +309,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             }
           }
         }
-        listOf(filename, extraContent).forEach {
-          it.doOnTextChanged { _, _, _, _ -> updateViewState() }
-        }
       }
       suggestedPass?.let {
         password.setText(it)
@@ -277,6 +319,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         generatePassword()
         password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
       }
+    }
+    listOf(binding.filename, binding.extraContent).forEach {
+      it.doAfterTextChanged { updateViewState() }
     }
     updateViewState()
   }
