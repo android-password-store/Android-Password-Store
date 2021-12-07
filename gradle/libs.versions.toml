@@ -68,7 +68,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 
 build-download = "de.undercouch:gradle-download-task:4.1.2"
 
-build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.4"
+build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.40.5"
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
