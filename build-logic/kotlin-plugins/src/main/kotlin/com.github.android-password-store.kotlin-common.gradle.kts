@@ -4,12 +4,18 @@
  */
 
 import org.gradle.api.JavaVersion
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val additionalCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+
+tasks.withType<JavaCompile>().configureEach {
+  sourceCompatibility = JavaVersion.VERSION_11.toString()
+  targetCompatibility = JavaVersion.VERSION_11.toString()
+}
 
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
