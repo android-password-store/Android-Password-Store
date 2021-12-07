@@ -188,3 +188,63 @@ jobs:
       uses: gradle/gradle-build-action@v2.0.1
       with:
         arguments: lintDebug
+
+  code-coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+
+    - name: Check if relevant files have changed
+      uses: actions/github-script@v4.0.0
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
+
+    - name: Set up JDK
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
+
+    - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Generate coverage reports with kotlinx-kover
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: gradle/gradle-build-action@v2.0.1
+      with:
+        arguments: koverXmlReport
+
+    - name: Collect coverage reports
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: gradle/gradle-build-action@v2.0.1
+      with:
+        arguments: koverCollectReports
+
+    - name: Export coverage XMLs
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      id: coverage-export
+      shell: bash
+      run: |
+        REPORTS="$(find ./build/coverage-reports/ -maxdepth 1 -type f -printf "${GITHUB_WORKSPACE}/%p," -name "*.xml")"
+        REPORTS="${REPORTS::${#REPORTS}-1}"
+        echo ::set-output name=REPORT_PATHS::${REPORTS}
+
+    - name: Publish JaCoCo report to PR
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: madrapps/jacoco-report@v1.2
+      with:
+        paths: ${{ steps.coverage-export.outputs.REPORT_PATHS }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 0
+        min-coverage-changed-files: 40
+        title: Code Coverage
