@@ -118,7 +118,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
       val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
 
       val reader = QRCodeReader()
-      try {
+      runCatching {
         val result = reader.decode(binaryBitmap)
         val text = result.text
         val currentExtras = binding.extraContent.text.toString()
@@ -127,9 +127,8 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
         else binding.extraContent.append(text)
         snackbar(message = getString(R.string.otp_import_success))
         binding.otpImportButton.isVisible = false
-      } catch (e: Exception) {
-        snackbar(message = getString(R.string.otp_import_failure))
       }
+        .onFailure { snackbar(message = getString(R.string.otp_import_failure)) }
     }
 
   override fun onCreate(savedInstanceState: Bundle?) {
