@@ -36,7 +36,7 @@ jobs:
         uses : actions/setup-java@v2.4.0
         with :
           distribution : 'zulu'
-          java-version : '11'
+          java-version : '17'
           cache: 'gradle'
 
       - uses: gradle/gradle-build-action@v2.0.1
