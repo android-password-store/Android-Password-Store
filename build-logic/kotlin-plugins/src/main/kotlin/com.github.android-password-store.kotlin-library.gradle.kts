@@ -6,7 +6,10 @@
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins { id("com.github.android-password-store.kotlin-common") }
+plugins {
+  id("com.github.android-password-store.kotlin-common")
+  id("org.jetbrains.kotlinx.kover")
+}
 
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
@@ -14,4 +17,8 @@ tasks.withType<KotlinCompile>().configureEach {
       freeCompilerArgs += listOf("-Xexplicit-api=strict")
     }
   }
+}
+
+tasks.koverCollectReports {
+  outputDir.set(rootProject.layout.buildDirectory.dir("coverage-reports"))
 }
