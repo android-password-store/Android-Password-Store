@@ -14,7 +14,7 @@ dependencies {
   dependencySync("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
   dependencySync("com.squareup.okhttp3:okhttp:4.9.3")
   dependencySync("com.vdurmont:semver4j:3.1.0")
-  dependencySync("com.diffplug.spotless:spotless-plugin-gradle:6.0.2")
+  dependencySync("com.diffplug.spotless:spotless-plugin-gradle:6.0.4")
 
   // Kotlin dependencies
   dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC")
