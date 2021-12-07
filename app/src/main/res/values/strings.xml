@@ -394,6 +394,7 @@
   <string name="clear_saved_host_key">Clear saved host key</string>
   <string name="clear_saved_host_key_success">Successfully cleared saved host key!</string>
   <string name="otp_import_qr_code">Scan QR code</string>
+  <string name="otp_import_from_file">Choose an image</string>
   <string name="otp_import_manual_entry">Enter manually</string>
   <string name="otp_import_manual_hint_secret">Secret</string>
   <string name="otp_import_manual_hint_account">Account</string>
