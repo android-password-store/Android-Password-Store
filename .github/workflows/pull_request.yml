@@ -240,7 +240,7 @@ jobs:
         echo ::set-output name=REPORT_PATHS::${REPORTS}
 
     - name: Publish JaCoCo report to PR
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      if: false
       uses: madrapps/jacoco-report@v1.2
       with:
         paths: ${{ steps.coverage-export.outputs.REPORT_PATHS }}
