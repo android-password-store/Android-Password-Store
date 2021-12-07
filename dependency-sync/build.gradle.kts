@@ -58,9 +58,9 @@ dependencies {
   dependencySync("androidx.compose.ui:ui-viewbinding:1.1.0-beta04")
 
   // Dagger/Hilt dependencies
-  dependencySync("com.google.dagger:hilt-android:2.40.4")
-  dependencySync("com.google.dagger:hilt-compiler:2.40.4")
-  dependencySync("com.google.dagger:hilt-core:2.40.4")
+  dependencySync("com.google.dagger:hilt-android:2.40.5")
+  dependencySync("com.google.dagger:hilt-compiler:2.40.5")
+  dependencySync("com.google.dagger:hilt-core:2.40.5")
 
   // Desugaring
   dependencySync("com.android.tools:desugar_jdk_libs:1.1.5")
