@@ -7,7 +7,84 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check-codestyle:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+
+    - name: Check if relevant files have changed
+      uses: actions/github-script@v4.0.0
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
+
+    - name: Set up JDK
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
+
+    - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Check codestyle
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: gradle/gradle-build-action@v2.0.1
+      with:
+        arguments: spotlessCheck
+
   unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+
+    - name: Check if relevant files have changed
+      uses: actions/github-script@v4.0.0
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
+
+    - name: Set up JDK
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
+
+    - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Run unit tests
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: gradle/gradle-build-action@v2.0.1
+      with:
+        arguments: test -PslimTests
+
+    - name: (Fail-only) Upload test report
+      if: failure()
+      uses: actions/upload-artifact@v2.2.4
+      with:
+          name: Test report
+          path: app/build/reports
+
+  build-apks:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -42,15 +119,72 @@ jobs:
       with:
         arguments: assembleFreeDebug assembleNonFreeDebug
 
-    - name: Run unit tests
+  check-api:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+
+    - name: Check if relevant files have changed
+      uses: actions/github-script@v4.0.0
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
+
+    - name: Set up JDK
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
+
+    - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Check library API
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: gradle/gradle-build-action@v2.0.1
       with:
-        arguments: apiCheck test lintFreeDebug spotlessCheck -PslimTests
+        arguments: apiCheck
 
-    - name: (Fail-only) upload test report
-      if: failure()
-      uses: actions/upload-artifact@v2.2.4
+  lint-debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.4.0
       with:
-          name: Test report
-          path: app/build/reports
+        fetch-depth: 0
+
+    - name: Check if relevant files have changed
+      uses: actions/github-script@v4.0.0
+      id: service-changed
+      with:
+        result-encoding: string
+        script: |
+          const script = require('.github/check-changed-files.js')
+          return await script({github, context})
+
+    - name: Set up JDK
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses : actions/setup-java@v2.4.0
+      with :
+        distribution : 'zulu'
+        java-version : '11'
+        cache: 'gradle'
+
+    - name: Copy CI gradle.properties
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Run Lint on debug variants
+      if: ${{ steps.service-changed.outputs.result == 'true' }}
+      uses: gradle/gradle-build-action@v2.0.1
+      with:
+        arguments: lintDebug
