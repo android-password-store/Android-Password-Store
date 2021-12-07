@@ -229,8 +229,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
           val items =
             arrayOf(
               getString(R.string.otp_import_qr_code),
+              getString(R.string.otp_import_from_file),
               getString(R.string.otp_import_manual_entry),
-              getString(R.string.otp_import_from_file)
             )
           MaterialAlertDialogBuilder(this@PasswordCreationActivity)
             .setItems(items) { _, index ->
@@ -243,8 +243,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                       .setDesiredBarcodeFormats(QR_CODE)
                       .createScanIntent()
                   )
-                1 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
-                2 -> imageImportAction.launch("image/*")
+                1 -> imageImportAction.launch("image/*")
+                2 -> OtpImportDialogFragment().show(supportFragmentManager, "OtpImport")
               }
             }
             .show()
