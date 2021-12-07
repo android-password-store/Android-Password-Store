@@ -23,7 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
@@ -309,9 +309,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
             }
           }
         }
-        listOf(filename, extraContent).forEach {
-          it.doOnTextChanged { _, _, _, _ -> updateViewState() }
-        }
       }
       suggestedPass?.let {
         password.setText(it)
@@ -322,6 +319,9 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         generatePassword()
         password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
       }
+    }
+    listOf(binding.filename, binding.extraContent).forEach {
+      it.doAfterTextChanged { updateViewState() }
     }
     updateViewState()
   }
