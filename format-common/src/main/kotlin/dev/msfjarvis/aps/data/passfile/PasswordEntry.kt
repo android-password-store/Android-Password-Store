@@ -9,6 +9,7 @@ import com.github.michaelbull.result.mapBoth
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dev.msfjarvis.aps.util.coroutines.DispatcherProvider
 import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
@@ -32,6 +33,8 @@ constructor(
   clock: UserClock,
   /** [TotpFinder] implementation to extract data from a TOTP URI */
   totpFinder: TotpFinder,
+  /** Instance of [DispatcherProvider] to select an IO dispatcher for emitting TOTP values. */
+  dispatcherProvider: DispatcherProvider,
   /**
    * A cancellable [CoroutineScope] inside which we constantly emit new TOTP values as time elapses
    */
@@ -81,7 +84,7 @@ constructor(
     username = findUsername()
     totpSecret = totpFinder.findSecret(content)
     if (totpSecret != null) {
-      scope.launch {
+      scope.launch(dispatcherProvider.io()) {
         val digits = totpFinder.findDigits(content)
         val totpPeriod = totpFinder.findPeriod(content)
         val totpAlgorithm = totpFinder.findAlgorithm(content)

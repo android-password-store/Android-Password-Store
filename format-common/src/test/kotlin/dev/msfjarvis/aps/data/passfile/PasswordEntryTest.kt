@@ -5,6 +5,7 @@
 
 package dev.msfjarvis.aps.data.passfile
 
+import dev.msfjarvis.aps.test.CoroutineTestRule
 import dev.msfjarvis.aps.util.time.TestUserClock
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import java.util.Locale
@@ -16,15 +17,22 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 class PasswordEntryTest {
 
+  @get:Rule val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
   private fun makeEntry(content: String) =
-    PasswordEntry(fakeClock, testFinder, scope, content.encodeToByteArray())
+    PasswordEntry(
+      fakeClock,
+      testFinder,
+      coroutineTestRule.testDispatcherProvider,
+      TestScope(coroutineTestRule.testDispatcher),
+      content.encodeToByteArray(),
+    )
 
   @Test
   fun testGetPassword() {
@@ -125,19 +133,20 @@ class PasswordEntryTest {
 
   @Test
   @Ignore("Timing with runTest seems hard to implement right now")
-  fun testGeneratesOtpFromTotpUri() =
-    scope.runTest {
+  fun testGeneratesOtpFromTotpUri() {
+    runTest {
       val entry = makeEntry("secret\nextra\n$TOTP_URI")
       assertTrue(entry.hasTotp())
       val code = entry.totp.value
       assertNotNull(code) { "Generated OTP cannot be null" }
       assertEquals("818800", code)
     }
+  }
 
   @Test
   @Ignore("Timing with runTest seems hard to implement right now")
-  fun testGeneratesOtpWithOnlyUriInFile() =
-    scope.runTest {
+  fun testGeneratesOtpWithOnlyUriInFile() {
+    runTest {
       val entry = makeEntry(TOTP_URI)
       assertNull(entry.password)
       assertTrue(entry.hasTotp())
@@ -145,6 +154,7 @@ class PasswordEntryTest {
       assertNotNull(code) { "Generated OTP cannot be null" }
       assertEquals("818800", code)
     }
+  }
 
   @Test
   fun testOnlyLooksForUriInFirstLine() {
@@ -170,9 +180,6 @@ class PasswordEntryTest {
 
     const val TOTP_URI =
       "otpauth://totp/ACME%20Co:john@example.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30"
-
-    val dispatcher = StandardTestDispatcher()
-    val scope = TestScope(dispatcher)
 
     val fakeClock = TestUserClock()
 
