@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 -   Changing password generator parameters now automatically updates the password without needing to press the 'Generate' button again
 -   The app UI was reskinned to match Google's Material You guidelines
 -   Using HTTPS without authentication is now fully supported, and no longer asks for a username
+-   Enabling 'Show hidden files and folders' no longer shows Git-related files and folders
 
 ## [1.13.5] - 2021-07-28
 
