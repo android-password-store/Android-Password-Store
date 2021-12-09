@@ -242,7 +242,9 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
 
   private fun shouldTake(file: File) =
     with(file) {
-      if (showHiddenContents) return true
+      if (showHiddenContents) {
+        return !file.name.startsWith(".git")
+      }
       if (isDirectory) {
         !isHidden
       } else {
@@ -251,7 +253,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
     }
 
   private fun listFiles(dir: File): Flow<File> {
-    return dir.listFiles { file -> shouldTake(file) }?.asFlow() ?: emptyFlow()
+    return dir.listFiles(::shouldTake)?.asFlow() ?: emptyFlow()
   }
 
   private fun listFilesRecursively(dir: File): Flow<File> {
@@ -266,7 +268,7 @@ class SearchableRepositoryViewModel(application: Application) : AndroidViewModel
         yield()
         it
       }
-      .filter { file -> shouldTake(file) }
+      .filter(::shouldTake)
   }
 
   private val _currentDir = MutableLiveData(root)
