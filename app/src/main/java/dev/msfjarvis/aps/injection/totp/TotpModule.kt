@@ -15,5 +15,5 @@ import dev.msfjarvis.aps.util.totp.UriTotpFinder
 @Module
 @InstallIn(ActivityComponent::class)
 interface TotpModule {
-  @Binds abstract fun bindTotpFinder(totpFinder: UriTotpFinder): TotpFinder
+  @Binds fun UriTotpFinder.bind(): TotpFinder
 }
