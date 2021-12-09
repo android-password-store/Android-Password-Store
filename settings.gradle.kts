@@ -52,4 +52,6 @@ include("format-common")
 
 include("openpgp-ktx")
 
+include("passgen:diceware")
+
 include("dependency-sync")
