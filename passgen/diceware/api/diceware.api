@@ -1,0 +1,10 @@
+public final class dev/msfjarvis/aps/passgen/diceware/Die {
+	public fun <init> (ILdev/msfjarvis/aps/passgen/diceware/RandomIntGenerator;)V
+	public final fun roll ()I
+	public final fun rollMultiple (I)I
+}
+
+public abstract interface class dev/msfjarvis/aps/passgen/diceware/RandomIntGenerator {
+	public abstract fun get (Lkotlin/ranges/IntRange;)I
+}
+
