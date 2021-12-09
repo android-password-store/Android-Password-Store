@@ -42,6 +42,8 @@ include("app")
 
 include("autofill-parser")
 
+include("coroutine-utils")
+
 include("crypto-common")
 
 include("crypto-pgpainless")
@@ -50,4 +52,4 @@ include("format-common")
 
 include("openpgp-ktx")
 
-include(":dependency-sync")
+include("dependency-sync")
