@@ -18,8 +18,8 @@ dependencies {
   dependencySync("org.jetbrains.kotlinx:kover:0.4.4")
 
   // Kotlin dependencies
-  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC")
-  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC")
+  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC2")
+  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC2")
 
   // AndroidX dependencies
   dependencySync("androidx.activity:activity-ktx:1.4.0")
@@ -97,5 +97,5 @@ dependencies {
   dependencySync("com.github.android-password-store:shared-preferences-fake:2.0.0")
   dependencySync("androidx.test:rules:1.4.1-alpha03")
   dependencySync("androidx.test:runner:1.4.1-alpha03")
-  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-RC")
+  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-RC2")
 }
