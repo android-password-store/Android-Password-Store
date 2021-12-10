@@ -9,9 +9,11 @@ dependencies {
   // Build tooling
   dependencySync("com.android.tools.build:gradle:7.0.3")
   dependencySync("org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0")
+  dependencySync("org.jetbrains.dokka:dokka-gradle-plugin:1.6.0")
   dependencySync("de.undercouch:gradle-download-task:4.1.2")
   dependencySync("com.google.dagger:hilt-android-gradle-plugin:2.40.5")
   dependencySync("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
+  dependencySync("com.vanniktech:gradle-maven-publish-plugin:0.18.0")
   dependencySync("com.squareup.okhttp3:okhttp:4.9.3")
   dependencySync("com.vdurmont:semver4j:3.1.0")
   dependencySync("com.diffplug.spotless:spotless-plugin-gradle:6.0.4")
