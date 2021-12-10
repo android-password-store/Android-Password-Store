@@ -138,19 +138,9 @@
   <string name="pwgen_no_chars_error">Keine Zeichen hinzugefügt</string>
   <string name="pwgen_length_too_short_error">Länge zu kurz für ausgewählte Kriterien</string>
   <string name="pwgen_max_iterations_exceeded">Fehler beim Generieren eines Passworts, das die Einschränkungen erfüllt. Versuchen Sie, die Länge zu erhöhen.</string>
-  <!-- XKPWD password generator -->
-  <string name="xkpwgen_title">Xkpasswd Generator</string>
-  <string name="xkpwgen_length">Wörter insgesamt</string>
-  <string name="xkpwgen_separator">Trennzeichen</string>
-  <string name="xkpwgen_custom_dict_imported">Eigene Wortliste: %1$s</string>
-  <string name="xkpwgen_builder_error">Das ausgewählte Wörterbuch enthält nicht genügend Wörter der angegebenen Länge %1$d..%2$d</string>
-  <!-- XKPWD prefs -->
+  <string name="pwgen_separator">Trennzeichen</string>
+  <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Passwortgenerator</string>
-  <string name="pref_xkpwgen_custom_wordlist_enabled_title">Eigene Wortliste</string>
-  <string name="pref_xkpwgen_custom_dict_summary_on">Eigene Wordlist-Datei verwenden</string>
-  <string name="pref_xkpwgen_custom_dict_summary_off">Integrierte Wortliste verwenden</string>
-  <string name="pref_xkpwgen_custom_dict_picker_title">Eigene Wortliste</string>
-  <string name="pref_xkpwgen_custom_dict_picker_summary">Tippen Sie, um eine benutzerdefinierte Wordlist-Datei mit einem Wort pro Zeile auszuwählen</string>
   <!-- ssh keygen fragment -->
   <string name="ssh_keygen_passphrase">Passwort</string>
   <string name="ssh_keygen_generate">Generieren</string>

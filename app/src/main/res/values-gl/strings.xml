@@ -142,19 +142,9 @@
   <string name="pwgen_no_chars_error">Sen caracteres incluídos</string>
   <string name="pwgen_length_too_short_error">Lonxitude demasiado curta para o criterio</string>
   <string name="pwgen_max_iterations_exceeded">Fallou a creación do contrasinal satisfacendo os requerimentos. Intenta aumentar a lonxitude.</string>
-  <!-- XKPWD password generator -->
-  <string name="xkpwgen_title">Xkpasswd Generator</string>
-  <string name="xkpwgen_length">Total de palabras</string>
-  <string name="xkpwgen_separator">Separador</string>
-  <string name="xkpwgen_custom_dict_imported">Lista persoal de palabras: %1$s</string>
-  <string name="xkpwgen_builder_error">O dicionario non contén palabras suficientes da lonxitude dada %1$d .. %2$d</string>
-  <!-- XKPWD prefs -->
+  <string name="pwgen_separator">Separador</string>
+  <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Tipo de creador de contrasinais</string>
-  <string name="pref_xkpwgen_custom_wordlist_enabled_title">Lista persoal de palabras</string>
-  <string name="pref_xkpwgen_custom_dict_summary_on">Usar ficheiro con palabras personalizadas</string>
-  <string name="pref_xkpwgen_custom_dict_summary_off">Usar lista de palabras incluída</string>
-  <string name="pref_xkpwgen_custom_dict_picker_title">Ficheiro persoal de palabras</string>
-  <string name="pref_xkpwgen_custom_dict_picker_summary">Toca para escoller un ficheiro persoal con palabras que conteña unha palabra por liña</string>
   <!-- ssh keygen fragment -->
   <string name="ssh_keygen_passphrase">Frase de paso</string>
   <string name="ssh_keygen_generate">Crear</string>

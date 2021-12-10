@@ -44,7 +44,6 @@ import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
-import dev.msfjarvis.aps.ui.dialogs.XkPasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.crypto.GpgIdentifier
@@ -361,8 +360,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) ?: KEY_PWGEN_TYPE_CLASSIC) {
       KEY_PWGEN_TYPE_CLASSIC ->
         PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
-      KEY_PWGEN_TYPE_XKPASSWD ->
-        XkPasswordGeneratorDialogFragment().show(supportFragmentManager, "xkpwgenerator")
     }
   }
 
@@ -594,7 +591,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
   companion object {
 
     private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
-    private const val KEY_PWGEN_TYPE_XKPASSWD = "xkpasswd"
     const val PASSWORD_RESULT_REQUEST_KEY = "PASSWORD_GENERATOR"
     const val OTP_RESULT_REQUEST_KEY = "OTP_IMPORT"
     const val RESULT = "RESULT"
