@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
+rootProject.name = "APS"
+
 // Plugin repositories
 pluginManagement {
   repositories {
