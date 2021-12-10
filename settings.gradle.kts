@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
+rootProject.name = "APS"
+
 // Plugin repositories
 pluginManagement {
   repositories {
@@ -10,10 +12,6 @@ pluginManagement {
     google()
     mavenCentral()
     gradlePluginPortal()
-  }
-  plugins {
-    id("com.vanniktech.maven.publish") version "0.18.0" apply false
-    id("org.jetbrains.dokka") version "1.6.0" apply false
   }
 }
 

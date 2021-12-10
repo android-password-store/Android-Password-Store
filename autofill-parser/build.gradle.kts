@@ -4,11 +4,9 @@
  */
 
 plugins {
-  id("com.github.android-password-store.android-library")
+  id("com.github.android-password-store.published-android-library")
   id("com.github.android-password-store.kotlin-android")
   id("com.github.android-password-store.kotlin-library")
-  id("com.vanniktech.maven.publish")
-  id("org.jetbrains.dokka")
   id("com.github.android-password-store.psl-plugin")
 }
 

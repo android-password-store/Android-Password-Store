@@ -224,12 +224,6 @@ jobs:
       with:
         arguments: koverXmlReport
 
-    - name: Collect coverage reports
-      if: ${{ steps.service-changed.outputs.result == 'true' }}
-      uses: gradle/gradle-build-action@v2.0.1
-      with:
-        arguments: koverCollectReports
-
     - name: Export coverage XMLs
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       id: coverage-export
