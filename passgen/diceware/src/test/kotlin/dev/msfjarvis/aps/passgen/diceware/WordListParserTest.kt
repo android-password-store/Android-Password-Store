@@ -30,9 +30,8 @@ class WordListParserTest {
 
   companion object {
     fun getDefaultWordList(): InputStream {
-      return requireNotNull(
-        this::class.java.classLoader.getResourceAsStream("diceware_wordlist.txt")
-      )
+      return requireNotNull(this::class.java.classLoader)
+        .getResourceAsStream("diceware_wordlist.txt")
     }
   }
 }
