@@ -10,7 +10,12 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val additionalCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+val additionalCompilerArgs =
+  listOf(
+    "-Xopt-in=kotlin.RequiresOptIn",
+    "-P",
+    "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
+  )
 
 tasks.withType<JavaCompile>().configureEach {
   sourceCompatibility = JavaVersion.VERSION_11.toString()
