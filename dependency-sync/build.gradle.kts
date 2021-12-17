@@ -16,7 +16,7 @@ dependencies {
   dependencySync("com.vanniktech:gradle-maven-publish-plugin:0.18.0")
   dependencySync("com.squareup.okhttp3:okhttp:4.9.3")
   dependencySync("com.vdurmont:semver4j:3.1.0")
-  dependencySync("com.diffplug.spotless:spotless-plugin-gradle:6.0.4")
+  dependencySync("com.diffplug.spotless:spotless-plugin-gradle:6.0.5")
   dependencySync("org.jetbrains.kotlinx:kover:0.4.4")
 
   // Kotlin dependencies
