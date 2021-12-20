@@ -32,6 +32,11 @@ class PreferenceModule {
     )
   }
 
+  @[Provides PasswordGeneratorPreferences Reusable]
+  fun providePwgenPreferences(@ApplicationContext context: Context): SharedPreferences {
+    return provideBaseEncryptedPreferences(context, "pwgen_preferences")
+  }
+
   @Provides
   @SettingsPreferences
   @Reusable

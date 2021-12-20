@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
+  ~ SPDX-License-Identifier: GPL-3.0-only
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:paddingLeft="24dp"
+  android:paddingTop="20dp"
+  android:paddingRight="24dp"
+  android:paddingBottom="20dp">
+
+  <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/password_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/password_length"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="4dp"
+    android:hint="@string/pwgen_length"
+    android:labelFor="@id/password_length_text"
+    app:hintAnimationEnabled="true"
+    app:hintEnabled="true"
+    app:layout_constraintEnd_toStartOf="@id/password_separator"
+    app:layout_constraintHorizontal_weight="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/password_text">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/password_length_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="number"
+      android:maxLength="2" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/password_separator"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="8dp"
+    android:hint="@string/pwgen_separator"
+    android:labelFor="@id/password_separator_text"
+    app:hintAnimationEnabled="true"
+    app:hintEnabled="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_weight="0.5"
+    app:layout_constraintStart_toEndOf="@id/password_length"
+    app:layout_constraintTop_toBottomOf="@id/password_text">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/password_separator_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:autofillHints=""
+      android:importantForAutofill="no"
+      android:inputType="text"
+      android:maxLength="1" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
