@@ -155,4 +155,32 @@ class MigrationsTest {
     assertEquals(true, sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_HISTORY, false))
     assertFalse(sharedPrefs.contains(PreferenceKeys.CLEAR_CLIPBOARD_20X))
   }
+
+  @Test
+  fun verifyClassicPasswordGeneratorMigration() {
+    sharedPrefs.edit {
+      clear()
+      putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "classic")
+    }
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
+    )
+    assertEquals("classic", sharedPrefs.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE))
+  }
+
+  @Test
+  fun verifyXkPasswdPasswordGeneratorMigration() {
+    sharedPrefs.edit {
+      clear()
+      putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "xkpasswd")
+    }
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
+    )
+    assertEquals("diceware", sharedPrefs.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE))
+  }
 }

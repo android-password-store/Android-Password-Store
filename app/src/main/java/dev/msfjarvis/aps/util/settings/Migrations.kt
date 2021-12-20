@@ -25,6 +25,7 @@ fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSetti
   migrateToHideAll(sharedPrefs)
   migrateToSshKey(filesDirPath, sharedPrefs)
   migrateToClipboardHistory(sharedPrefs)
+  migrateToDiceware(sharedPrefs)
 }
 
 private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
@@ -118,6 +119,16 @@ private fun migrateToClipboardHistory(sharedPrefs: SharedPreferences) {
         sharedPrefs.getBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, false)
       )
       remove(PreferenceKeys.CLEAR_CLIPBOARD_20X)
+    }
+  }
+}
+
+private fun migrateToDiceware(sharedPrefs: SharedPreferences) {
+  if (sharedPrefs.contains(PreferenceKeys.PREF_KEY_PWGEN_TYPE)) {
+    sharedPrefs.edit {
+      if (sharedPrefs.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) == "xkpasswd") {
+        putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "diceware")
+      }
     }
   }
 }
