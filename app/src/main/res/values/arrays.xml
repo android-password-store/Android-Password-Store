@@ -24,9 +24,11 @@
   </string-array>
   <string-array name="pwgen_provider_labels">
     <item>Classic</item>
+    <item>Diceware</item>
   </string-array>
   <string-array name="pwgen_provider_values">
     <item>classic</item>
+    <item>diceware</item>
   </string-array>
   <string-array name="oreo_autofill_directory_structure_entries">
     <item>work/example.org(.gpg)</item>

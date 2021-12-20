@@ -42,6 +42,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
+import dev.msfjarvis.aps.ui.dialogs.DicewarePasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
@@ -360,6 +361,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
     when (settings.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) ?: KEY_PWGEN_TYPE_CLASSIC) {
       KEY_PWGEN_TYPE_CLASSIC ->
         PasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
+      KEY_PWGEN_TYPE_DICEWARE ->
+        DicewarePasswordGeneratorDialogFragment().show(supportFragmentManager, "generator")
     }
   }
 
@@ -591,6 +594,7 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
   companion object {
 
     private const val KEY_PWGEN_TYPE_CLASSIC = "classic"
+    private const val KEY_PWGEN_TYPE_DICEWARE = "diceware"
     const val PASSWORD_RESULT_REQUEST_KEY = "PASSWORD_GENERATOR"
     const val OTP_RESULT_REQUEST_KEY = "OTP_IMPORT"
     const val RESULT = "RESULT"
