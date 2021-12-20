@@ -83,7 +83,7 @@ dependencies {
   dependencySync("com.squareup.leakcanary:leakcanary-android:2.7")
   dependencySync("com.squareup.logcat:logcat:0.1")
   dependencySync("de.maxr1998:modernandroidpreferences:2.2.1")
-  dependencySync("org.pgpainless:pgpainless-core:1.0.0-rc6")
+  dependencySync("org.pgpainless:pgpainless-core:1.0.0-rc7")
   dependencySync("com.squareup.leakcanary:plumber-android:2.7")
   dependencySync("com.hierynomus:sshj:0.32.0")
   dependencySync("com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5")
