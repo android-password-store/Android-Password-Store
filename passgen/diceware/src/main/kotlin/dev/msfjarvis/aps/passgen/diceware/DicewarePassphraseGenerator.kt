@@ -23,15 +23,12 @@ constructor(
 
   /** Generates a passphrase with [wordCount] words. */
   public fun generatePassphrase(wordCount: Int, separator: Char): String {
-    return StringBuilder()
-      .apply {
-        repeat(wordCount) { idx ->
-          append(wordMap[die.rollMultiple(DIGITS)])
-          if (idx < wordCount - 1) append(separator)
-        }
+    return buildString {
+      repeat(wordCount) { idx ->
+        append(wordMap[die.rollMultiple(DIGITS)])
+        if (idx < wordCount - 1) append(separator)
       }
-      .toString()
-      .trimEnd()
+    }
   }
 
   private companion object {
