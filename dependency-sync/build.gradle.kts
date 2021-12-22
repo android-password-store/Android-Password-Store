@@ -21,7 +21,7 @@ dependencies {
 
   // Kotlin dependencies
   dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC3")
-  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC3")
+  dependencySync("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
   // AndroidX dependencies
   dependencySync("androidx.activity:activity-ktx:1.4.0")
