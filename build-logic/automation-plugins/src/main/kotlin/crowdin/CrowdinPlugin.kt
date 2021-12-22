@@ -7,6 +7,7 @@ package crowdin
 
 import de.undercouch.gradle.tasks.download.Download
 import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.xml.parsers.DocumentBuilderFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -45,7 +46,13 @@ class CrowdinDownloadPlugin : Plugin<Project> {
             if (!key.isPresent) {
               throw GradleException("CROWDIN_PROJECT_KEY environment variable must be set")
             }
-            val client = OkHttpClient()
+            val client =
+              OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .callTimeout(10, TimeUnit.SECONDS)
+                .build()
             val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
             val request = Request.Builder().url(url).get().build()
             client.newCall(request).execute()
