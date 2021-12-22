@@ -35,32 +35,33 @@ class CrowdinDownloadPlugin : Plugin<Project> {
         if (projectName.isEmpty()) {
           throw GradleException(EXCEPTION_MESSAGE)
         }
-        tasks.register("buildOnApi") {
-          doLast {
-            val login = providers.environmentVariable("CROWDIN_LOGIN").forUseAtConfigurationTime()
-            val key =
-              providers.environmentVariable("CROWDIN_PROJECT_KEY").forUseAtConfigurationTime()
-            if (!login.isPresent) {
-              throw GradleException("CROWDIN_LOGIN environment variable must be set")
+        val buildOnApi =
+          tasks.register("buildOnApi") {
+            doLast {
+              val login = providers.environmentVariable("CROWDIN_LOGIN").forUseAtConfigurationTime()
+              val key =
+                providers.environmentVariable("CROWDIN_PROJECT_KEY").forUseAtConfigurationTime()
+              if (!login.isPresent) {
+                throw GradleException("CROWDIN_LOGIN environment variable must be set")
+              }
+              if (!key.isPresent) {
+                throw GradleException("CROWDIN_PROJECT_KEY environment variable must be set")
+              }
+              val client =
+                OkHttpClient.Builder()
+                  .connectTimeout(5, TimeUnit.SECONDS)
+                  .writeTimeout(5, TimeUnit.SECONDS)
+                  .readTimeout(5, TimeUnit.SECONDS)
+                  .callTimeout(10, TimeUnit.SECONDS)
+                  .build()
+              val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
+              val request = Request.Builder().url(url).get().build()
+              client.newCall(request).execute()
             }
-            if (!key.isPresent) {
-              throw GradleException("CROWDIN_PROJECT_KEY environment variable must be set")
-            }
-            val client =
-              OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
-                .callTimeout(10, TimeUnit.SECONDS)
-                .build()
-            val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
-            val request = Request.Builder().url(url).get().build()
-            client.newCall(request).execute()
           }
-        }
         val downloadCrowdin =
           tasks.register<Download>("downloadCrowdin") {
-            dependsOn("buildOnApi")
+            dependsOn(buildOnApi)
             src("https://crowdin.com/backend/download/project/$projectName.zip")
             dest("$buildDirectory/translations.zip")
             overwrite(true)
