@@ -72,7 +72,7 @@ kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.70"
-thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
+thirdparty-commons_codec = "commons-codec:commons-codec:1.15"
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
 thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.7"
 thirdparty-flowbinding-android = { module = "io.github.reactivecircus.flowbinding:flowbinding-android", version.ref = "flowbinding" }
