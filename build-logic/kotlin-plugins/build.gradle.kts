@@ -13,13 +13,15 @@ plugins {
   `kotlin-dsl-precompiled-script-plugins`
 }
 
-tasks.withType<JavaCompile>().configureEach {
-  sourceCompatibility = JavaVersion.VERSION_11.toString()
-  targetCompatibility = JavaVersion.VERSION_11.toString()
-}
+afterEvaluate {
+  tasks.withType<JavaCompile>().configureEach {
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
+  }
 
-tasks.withType<KotlinCompile>().configureEach {
-  kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
+  tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
+  }
 }
 
 dependencies {
