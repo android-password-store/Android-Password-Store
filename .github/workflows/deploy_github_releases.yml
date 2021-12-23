@@ -63,19 +63,19 @@ jobs:
         uses: actions/checkout@v2.4.0
 
       - name: Get Non-Free Release APK
-        uses: actions/download-artifact@v2.0.10
+        uses: actions/download-artifact@v2.1.0
         with:
           name: APS Non-Free Release APK
           path: artifacts/nonFree
 
       - name: Get Non-Free Bundle
-        uses: actions/download-artifact@v2.0.10
+        uses: actions/download-artifact@v2.1.0
         with:
           name: APS Non-Free Release Bundle
           path: artifacts/nonFree
 
       - name: Get Free Release APK
-        uses: actions/download-artifact@v2.0.10
+        uses: actions/download-artifact@v2.1.0
         with:
           name: APS Free Release APK
           path: artifacts/free
