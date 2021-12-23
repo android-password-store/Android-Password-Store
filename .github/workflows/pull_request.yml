@@ -79,7 +79,7 @@ jobs:
 
     - name: (Fail-only) Upload test report
       if: failure()
-      uses: actions/upload-artifact@v2.2.4
+      uses: actions/upload-artifact@v2.3.1
       with:
           name: Test report
           path: app/build/reports
