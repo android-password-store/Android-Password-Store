@@ -27,7 +27,7 @@ jobs:
         run: if [[ $(git diff --binary --stat) != '' ]]; then echo "UPDATED=true" >> $GITHUB_ENV; fi
 
       - name: Verify update publicsuffixes file
-        uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+        uses: gradle/gradle-build-action@v2.0.1
         if: env.UPDATED == 'true'
         with:
           arguments: :autofill-parser:test -PslimTests
