@@ -2,7 +2,7 @@
 [versions]
 androidx_activity = "1.4.0"
 androidx_test = "1.4.1-alpha03"
-compose = "1.1.0-rc02"
+compose = "1.1.0-rc01"
 composeSnapshot = "-"
 coroutines = "1.6.0"
 flowbinding = "1.2.0"
@@ -56,7 +56,7 @@ dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref
 dagger-hilt-core = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
 
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose" }
+compose-compiler = "androidx.compose.compiler:compiler:1.1.0-rc02"
 compose-foundation-core = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
