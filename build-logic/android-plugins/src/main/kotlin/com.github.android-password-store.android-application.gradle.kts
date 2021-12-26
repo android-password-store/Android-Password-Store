@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import flavors.FlavorDimensions
 import flavors.ProductFlavors
-import org.gradle.kotlin.dsl.configure
 import signing.configureBuildSigning
 
 plugins {
@@ -22,7 +20,7 @@ fun Project.isSnapshot(): Boolean {
   }
 }
 
-extensions.configure<BaseAppModuleExtension> {
+android {
   val minifySwitch =
     project.providers.environmentVariable("DISABLE_MINIFY").forUseAtConfigurationTime()
 
