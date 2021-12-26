@@ -5,4 +5,15 @@
 
 plugins { id("org.jetbrains.kotlinx.binary-compatibility-validator") }
 
-apiValidation { ignoredProjects = mutableSetOf("app") }
+apiValidation {
+  ignoredProjects =
+    mutableSetOf(
+      "app",
+      "coroutine-utils",
+      "coroutine-utils-testing",
+      "crypto-common",
+      "crypto-pgpainless",
+      "format-common",
+      "diceware",
+    )
+}
