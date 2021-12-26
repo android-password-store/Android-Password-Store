@@ -1,8 +1,0 @@
-public final class dev/msfjarvis/aps/test/CoroutineTestRule : org/junit/rules/TestWatcher {
-	public fun <init> ()V
-	public fun <init> (Lkotlinx/coroutines/test/TestDispatcher;)V
-	public synthetic fun <init> (Lkotlinx/coroutines/test/TestDispatcher;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getTestDispatcher ()Lkotlinx/coroutines/test/TestDispatcher;
-	public final fun getTestDispatcherProvider ()Ldev/msfjarvis/aps/util/coroutines/DispatcherProvider;
-}
-

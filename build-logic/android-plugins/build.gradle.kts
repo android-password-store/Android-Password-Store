@@ -8,10 +8,7 @@ import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins {
-  `kotlin-dsl`
-  `kotlin-dsl-precompiled-script-plugins`
-}
+plugins { `kotlin-dsl` }
 
 afterEvaluate {
   tasks.withType<JavaCompile>().configureEach {

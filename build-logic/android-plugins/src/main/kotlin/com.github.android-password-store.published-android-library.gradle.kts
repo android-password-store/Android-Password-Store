@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.plugins.signing.SigningExtension
 
 plugins {
   id("com.github.android-password-store.android-library")
@@ -14,7 +12,7 @@ plugins {
 }
 
 afterEvaluate {
-  extensions.configure<SigningExtension> {
+  signing {
     val signingKey: String? by project
     val signingPassword: String? by project
     useInMemoryPgpKeys(signingKey, signingPassword)
