@@ -119,6 +119,7 @@ class PasswordEntryTest {
     assertEquals("foo@example.com", makeEntry("\nemail: foo@example.com").username)
     assertEquals("username", makeEntry("\nidentity: username\nlogin: another_username").username)
     assertEquals("username", makeEntry("\nLOGiN:username").username)
+    assertEquals("foo@example.com", makeEntry("pass\nmail:    foo@example.com").username)
     assertNull(makeEntry("secret\nextra\ncontent\n").username)
   }
 

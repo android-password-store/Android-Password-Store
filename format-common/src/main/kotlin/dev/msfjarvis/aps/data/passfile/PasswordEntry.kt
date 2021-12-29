@@ -216,6 +216,7 @@ constructor(
         "user:",
         "account:",
         "email:",
+        "mail:",
         "name:",
         "handle:",
         "id:",
