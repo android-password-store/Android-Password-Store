@@ -17,6 +17,7 @@ import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
+import dev.msfjarvis.aps.util.auth.BiometricAuthenticator.Result
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
@@ -73,11 +74,12 @@ class GeneralSettings(private val activity: FragmentActivity) : SettingsProvider
           activity.sharedPrefs.edit {
             BiometricAuthenticator.authenticate(activity) { result ->
               when (result) {
-                is BiometricAuthenticator.Result.Success -> {
+                is Result.Success -> {
                   // Apply the changes
                   putBoolean(PreferenceKeys.BIOMETRIC_AUTH, checked)
                   enabled = true
                 }
+                is Result.Retry -> {}
                 else -> {
                   // If any error occurs, revert back to the previous
                   // state. This

@@ -14,6 +14,7 @@ import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
 import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
+import dev.msfjarvis.aps.util.auth.BiometricAuthenticator.Result
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 
@@ -23,18 +24,19 @@ class LaunchActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     val prefs = sharedPrefs
     if (prefs.getBoolean(PreferenceKeys.BIOMETRIC_AUTH, false)) {
-      BiometricAuthenticator.authenticate(this) {
-        when (it) {
-          is BiometricAuthenticator.Result.Success -> {
+      BiometricAuthenticator.authenticate(this) { result ->
+        when (result) {
+          is Result.Success -> {
             startTargetActivity(false)
           }
-          is BiometricAuthenticator.Result.HardwareUnavailableOrDisabled -> {
+          is Result.HardwareUnavailableOrDisabled -> {
             prefs.edit { remove(PreferenceKeys.BIOMETRIC_AUTH) }
             startTargetActivity(false)
           }
-          is BiometricAuthenticator.Result.Failure, BiometricAuthenticator.Result.Cancelled -> {
+          is Result.Failure, Result.Cancelled -> {
             finish()
           }
+          is Result.Retry -> {}
         }
       }
     } else {
