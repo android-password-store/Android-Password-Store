@@ -63,7 +63,6 @@ object BiometricAuthenticator {
           logcat(TAG) { "BiometricAuthentication error: errorCode=$errorCode, msg=$errString" }
           callback(
             when (errorCode) {
-              BiometricPrompt.ERROR_UNABLE_TO_PROCESS,
               BiometricPrompt.ERROR_CANCELED,
               BiometricPrompt.ERROR_USER_CANCELED,
               BiometricPrompt.ERROR_NEGATIVE_BUTTON -> {
@@ -84,6 +83,9 @@ object BiometricAuthenticator {
                   errorCode,
                   activity.getString(R.string.biometric_auth_error_reason, errString)
                 )
+              }
+              BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> {
+                Result.Retry
               }
               // We cover all guaranteed values above, but [errorCode] is still an Int at the end of
               // the day so a
