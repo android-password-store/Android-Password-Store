@@ -63,6 +63,7 @@ object BiometricAuthenticator {
           logcat(TAG) { "BiometricAuthentication error: errorCode=$errorCode, msg=$errString" }
           callback(
             when (errorCode) {
+              BiometricPrompt.ERROR_UNABLE_TO_PROCESS,
               BiometricPrompt.ERROR_CANCELED,
               BiometricPrompt.ERROR_USER_CANCELED,
               BiometricPrompt.ERROR_NEGATIVE_BUTTON -> {
@@ -74,18 +75,32 @@ object BiometricAuthenticator {
               BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
                 Result.HardwareUnavailableOrDisabled
               }
-              else ->
+              BiometricPrompt.ERROR_LOCKOUT,
+              BiometricPrompt.ERROR_LOCKOUT_PERMANENT,
+              BiometricPrompt.ERROR_NO_SPACE,
+              BiometricPrompt.ERROR_TIMEOUT,
+              BiometricPrompt.ERROR_VENDOR -> {
                 Result.Failure(
                   errorCode,
                   activity.getString(R.string.biometric_auth_error_reason, errString)
                 )
+              }
+              // We cover all guaranteed values above, but [errorCode] is still an Int at the end of
+              // the day so a
+              // catch-all else will always be required.
+              else -> {
+                Result.Failure(
+                  errorCode,
+                  activity.getString(R.string.biometric_auth_error_reason, errString)
+                )
+              }
             }
           )
         }
 
         override fun onAuthenticationFailed() {
           super.onAuthenticationFailed()
-          callback(Result.Failure(null, activity.getString(R.string.biometric_auth_error)))
+          callback(Result.Retry)
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
