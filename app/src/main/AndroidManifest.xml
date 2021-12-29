@@ -158,6 +158,8 @@
       android:configChanges="orientation|keyboardHidden"
       android:theme="@style/DialogLikeThemeM3"
       android:windowSoftInputMode="adjustNothing" />
+    <activity android:name=".ui.pgp.PGPKeyImportActivity"
+      android:theme="@style/NoBackgroundThemeM3" />
   </application>
 
 </manifest>

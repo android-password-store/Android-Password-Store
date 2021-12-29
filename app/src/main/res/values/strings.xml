@@ -390,5 +390,8 @@
   <string name="gpg_key_select_mandatory">Selecting a GPG key is necessary to proceed</string>
   <string name="place_shortcut_on_home_screen">Place shortcut on home screen</string>
   <string name="password_list_fab_content_description">Create new password or folder</string>
+  <string name="pgp_key_import_failed">Failed to import PGP key</string>
+  <string name="pgp_key_import_succeeded">Successfully imported PGP key</string>
+  <string name="pgp_key_import_succeeded_message">The internal representation of the imported key is given below, please review it for correctness:\n%1$s</string>
 
 </resources>
