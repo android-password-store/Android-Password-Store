@@ -21,10 +21,28 @@ object BiometricAuthenticator {
   private const val validAuthenticators =
     Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
 
+  /**
+   * Sealed class to wrap [BiometricPrompt]'s [Int]-based return codes into more easily-interpreted
+   * types.
+   */
   sealed class Result {
+
+    /** Biometric authentication was a success. */
     data class Success(val cryptoObject: BiometricPrompt.CryptoObject?) : Result()
+
+    /** Biometric authentication has irreversibly failed. */
     data class Failure(val code: Int?, val message: CharSequence) : Result()
+
+    /**
+     * An incorrect biometric was entered, but the prompt UI is offering the option to retry the
+     * operation.
+     */
+    object Retry : Result()
+
+    /** The biometric hardware is unavailable or disabled on a software or hardware level. */
     object HardwareUnavailableOrDisabled : Result()
+
+    /** The prompt was dismissed. */
     object Cancelled : Result()
   }
 
