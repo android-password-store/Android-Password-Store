@@ -22,6 +22,7 @@ import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity
 import dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
+import dev.msfjarvis.aps.util.auth.BiometricAuthenticator.Result.*
 import dev.msfjarvis.aps.util.git.GitCommandExecutor
 import dev.msfjarvis.aps.util.git.sshj.ContinuationContainerActivity
 import dev.msfjarvis.aps.util.git.sshj.SshAuthMethod
@@ -172,17 +173,17 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
                   BiometricAuthenticator.authenticate(
                     callingActivity,
                     R.string.biometric_prompt_title_ssh_auth
-                  ) { if (it !is BiometricAuthenticator.Result.Failure) cont.resume(it) }
+                  ) { result -> if (result !is Failure) cont.resume(result) }
                 }
               }
             when (result) {
-              is BiometricAuthenticator.Result.Success -> {
+              is Success -> {
                 registerAuthProviders(SshAuthMethod.SshKey(authActivity))
               }
-              is BiometricAuthenticator.Result.Cancelled -> {
+              is Cancelled -> {
                 return Err(SSHException(DisconnectReason.AUTH_CANCELLED_BY_USER))
               }
-              is BiometricAuthenticator.Result.Failure -> {
+              is Failure -> {
                 throw IllegalStateException("Biometric authentication failures should be ignored")
               }
               else -> {

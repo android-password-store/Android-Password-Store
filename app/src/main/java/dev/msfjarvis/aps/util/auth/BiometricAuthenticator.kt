@@ -21,10 +21,28 @@ object BiometricAuthenticator {
   private const val validAuthenticators =
     Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
 
+  /**
+   * Sealed class to wrap [BiometricPrompt]'s [Int]-based return codes into more easily-interpreted
+   * types.
+   */
   sealed class Result {
+
+    /** Biometric authentication was a success. */
     data class Success(val cryptoObject: BiometricPrompt.CryptoObject?) : Result()
+
+    /** Biometric authentication has irreversibly failed. */
     data class Failure(val code: Int?, val message: CharSequence) : Result()
+
+    /**
+     * An incorrect biometric was entered, but the prompt UI is offering the option to retry the
+     * operation.
+     */
+    object Retry : Result()
+
+    /** The biometric hardware is unavailable or disabled on a software or hardware level. */
     object HardwareUnavailableOrDisabled : Result()
+
+    /** The prompt was dismissed. */
     object Cancelled : Result()
   }
 
@@ -56,18 +74,35 @@ object BiometricAuthenticator {
               BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL -> {
                 Result.HardwareUnavailableOrDisabled
               }
-              else ->
+              BiometricPrompt.ERROR_LOCKOUT,
+              BiometricPrompt.ERROR_LOCKOUT_PERMANENT,
+              BiometricPrompt.ERROR_NO_SPACE,
+              BiometricPrompt.ERROR_TIMEOUT,
+              BiometricPrompt.ERROR_VENDOR -> {
                 Result.Failure(
                   errorCode,
                   activity.getString(R.string.biometric_auth_error_reason, errString)
                 )
+              }
+              BiometricPrompt.ERROR_UNABLE_TO_PROCESS -> {
+                Result.Retry
+              }
+              // We cover all guaranteed values above, but [errorCode] is still an Int at the end of
+              // the day so a
+              // catch-all else will always be required.
+              else -> {
+                Result.Failure(
+                  errorCode,
+                  activity.getString(R.string.biometric_auth_error_reason, errString)
+                )
+              }
             }
           )
         }
 
         override fun onAuthenticationFailed() {
           super.onAuthenticationFailed()
-          callback(Result.Failure(null, activity.getString(R.string.biometric_auth_error)))
+          callback(Result.Retry)
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

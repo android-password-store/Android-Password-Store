@@ -22,6 +22,7 @@ import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.ActivitySshKeygenBinding
 import dev.msfjarvis.aps.injection.prefs.GitPreferences
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
+import dev.msfjarvis.aps.util.auth.BiometricAuthenticator.Result
 import dev.msfjarvis.aps.util.extensions.keyguardManager
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.git.sshj.SshKey
@@ -121,17 +122,17 @@ class SshKeyGenActivity : AppCompatActivity() {
         if (requireAuthentication) {
           val result =
             withContext(Dispatchers.Main) {
-              suspendCoroutine<BiometricAuthenticator.Result> { cont ->
+              suspendCoroutine<Result> { cont ->
                 BiometricAuthenticator.authenticate(
                   this@SshKeyGenActivity,
                   R.string.biometric_prompt_title_ssh_keygen
-                ) {
+                ) { result ->
                   // Do not cancel on failed attempts as these are handled by the authenticator UI.
-                  if (it !is BiometricAuthenticator.Result.Failure) cont.resume(it)
+                  if (result !is Result.Retry) cont.resume(result)
                 }
               }
             }
-          if (result !is BiometricAuthenticator.Result.Success)
+          if (result !is Result.Success)
             throw UserNotAuthenticatedException(getString(R.string.biometric_auth_generic_failure))
         }
         keyGenType.generateKey(requireAuthentication)
