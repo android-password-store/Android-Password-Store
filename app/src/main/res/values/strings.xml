@@ -392,6 +392,7 @@
   <string name="password_list_fab_content_description">Create new password or folder</string>
   <string name="pgp_key_import_failed">Failed to import PGP key</string>
   <string name="pgp_key_import_succeeded">Successfully imported PGP key</string>
-  <string name="pgp_key_import_succeeded_message">The internal representation of the imported key is given below, please review it for correctness:\n%1$s</string>
+  <string name="pgp_key_import_succeeded_message">The key ID of the imported key is given below, please review it for correctness:\n%1$s</string>
+  <string name="pref_category_pgp_title">PGP settings</string>
 
 </resources>
