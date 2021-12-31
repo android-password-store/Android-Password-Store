@@ -15,6 +15,7 @@
   <compatibility-package android:name="com.microsoft.emmx" />
   <compatibility-package android:name="com.opera.mini.native" />
   <compatibility-package android:name="com.opera.mini.native.beta" />
+  <compatibility-package android:name="org.bromite.bromite" />
   <compatibility-package
     android:name="org.mozilla.fennec_fdroid"
     android:maxLongVersionCode="679999" />
