@@ -8,11 +8,15 @@ All notable changes to this project will be documented in this file.
 
 - Changed the support level for Chrome Beta/Canary/Dev/Stable, Bromite and Ungoogled Chromium to `PasswordFillAndSaveIfNoAccessibility`.
 
-- Updated `androidx.annotation` to 1.1.0 and `androidx.autofill` to `1.2.0-alpha01`.
+- Updated `androidx.annotation` to 1.3.0 and `androidx.autofill` to `1.2.0-beta01`.
 
-- The library now requires Kotlin 1.5.0 configured with `kotlinOptions.languageVersion = "1.5"`.
+- The library now uses Kotlin 1.6.10 and Coroutines 1.6.0.
 
 - Added [Styx](https://github.com/jamal2362/Styx) to supported Autofill browsers.
+
+- The dependency on [timberkt](https://github.com/ajalt/timberkt) has been replaced with [logcat](https://github.com/square/logcat).
+
+- Updated `publicsuffixes` list to the latest version as of Dec 18 2021.
 
 ### Fixed
 
