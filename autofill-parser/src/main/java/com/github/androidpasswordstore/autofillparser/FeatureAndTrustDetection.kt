@@ -72,6 +72,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "com.opera.mini.native" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.mini.native.beta" to arrayOf("V6y8Ul8bLr0ZGWzW8BQ5fMkQ/RiEHgroUP68Ph5ZP/I="),
     "com.opera.touch" to arrayOf("qtjiBNJNF3k0yc0MY8xqo4779CxKaVcJfiIQ9X+qZ6o="),
+    "org.bromite.bromite" to arrayOf("4e5c0HbXsNyEyytF+3i4bfLrOaO2xWuj3CkqXgw7lQQ="),
     "org.gnu.icecat" to arrayOf("wi2iuVvK/WYZUzd2g0Qzn9ef3kAisQURZ8U1WSMTkcM="),
     "org.mozilla.fenix" to arrayOf("UAR3kIjn+YjVvFzF+HmP6/T4zQhKGypG79TI7krq8hE="),
     "org.mozilla.fenix.nightly" to arrayOf("d+rEzu02r++6dheZMd1MwZWrDNVLrzVdIV57vdKOQCo="),
@@ -160,6 +161,7 @@ private val BROWSER_SAVE_FLAG_IF_NO_ACCESSIBILITY =
     "com.chrome.beta" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "com.chrome.canary" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "com.chrome.dev" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
+    "org.bromite.bromite" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
     "org.ungoogled.chromium.stable" to SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE,
   )
 
