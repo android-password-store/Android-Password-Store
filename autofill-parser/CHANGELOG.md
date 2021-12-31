@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [1.1.0]
+
 ### Changed
 
 - Changed the support level for Chrome Beta/Canary/Dev/Stable, Bromite and Ungoogled Chromium to `PasswordFillAndSaveIfNoAccessibility`.
@@ -35,3 +37,5 @@ All notable changes to this project will be documented in this file.
 - Initial release
 
 [1.0.0]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.0.0/autofill-parser
+
+[1.1.0]: https://github.com/android-password-store/Android-Password-Store/commits/autofill-parser-v1.1.0/autofill-parser
