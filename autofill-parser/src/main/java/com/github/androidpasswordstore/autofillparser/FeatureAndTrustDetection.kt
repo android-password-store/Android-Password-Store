@@ -87,6 +87,7 @@ private val TRUSTED_BROWSER_CERTIFICATE_HASH =
     "org.ungoogled.chromium.extensions.stable" to
       arrayOf("29UOO5cXoxO/e/hH3hOu6bbtg1My4tK6Eik2Ym5Krtk="),
     "com.kiwibrowser.browser" to arrayOf("wGnqlmMy6R4KDDzFd+b1Cf49ndr3AVrQxcXvj9o/hig="),
+    "us.spotco.fennec_dos" to arrayOf("/4H1vlY5ZZTu5w/vKDIlbhUhQSLiupzt0mAF/9S8qqg="),
   )
 
 private fun isTrustedBrowser(context: Context, appPackage: String): Boolean {
@@ -128,6 +129,7 @@ private val BROWSER_MULTI_ORIGIN_METHOD =
     "org.mozilla.focus" to BrowserMultiOriginMethod.Field,
     "org.mozilla.klar" to BrowserMultiOriginMethod.Field,
     "org.torproject.torbrowser" to BrowserMultiOriginMethod.WebView,
+    "us.spotco.fennec_dos" to BrowserMultiOriginMethod.Field,
   )
 
 private fun getBrowserMultiOriginMethod(appPackage: String): BrowserMultiOriginMethod =
