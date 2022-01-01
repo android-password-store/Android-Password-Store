@@ -141,7 +141,6 @@
   <string name="pwgen_no_chars_error">Не включать символы</string>
   <string name="pwgen_length_too_short_error">Длина не соответствует выбранным критериям</string>
   <string name="pwgen_max_iterations_exceeded">Не удалось создать пароль, удовлетворяющий ограничениям. Попробуйте увеличить длину.</string>
-  <string name="pwgen_separator">Разделитель</string>
   <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Тип генератора паролей</string>
   <!-- ssh keygen fragment -->

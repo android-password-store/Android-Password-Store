@@ -142,7 +142,6 @@
   <string name="pwgen_no_chars_error">Aucun critère sélectionné</string>
   <string name="pwgen_length_too_short_error">Longueur trop faible pour les critères sélectionnés</string>
   <string name="pwgen_max_iterations_exceeded">Impossible de générer un mot de passe satisfaisant les critères. Essayez d\'augmenter la longueur.</string>
-  <string name="pwgen_separator">Séparateur</string>
   <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Type de générateur de mot de passe</string>
   <!-- ssh keygen fragment -->
