@@ -347,9 +347,11 @@
   <string name="clear_saved_host_key">Limpar chave de host salva</string>
   <string name="clear_saved_host_key_success">Chave de host limpa com sucesso!</string>
   <string name="otp_import_qr_code">Escanear QR code</string>
+  <string name="otp_import_from_file">Selecione uma imagem</string>
   <string name="otp_import_manual_entry">Inserir manualmente</string>
   <string name="otp_import_manual_hint_secret">Segredo</string>
   <string name="otp_import_manual_hint_account">Conta</string>
   <string name="gpg_key_select_mandatory">A seleção de uma chave GPG é necessária para prosseguir</string>
   <string name="place_shortcut_on_home_screen">Criar atalho na tela inicial</string>
+  <string name="password_list_fab_content_description">Criar nova senha ou pasta</string>
 </resources>

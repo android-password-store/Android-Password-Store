@@ -88,6 +88,7 @@
   <string name="copy_password">Copia password</string>
   <string name="share_as_plaintext">Condividi come testo semplice</string>
   <!-- Preferences -->
+  <string name="pref_category_repository_title">Repository</string>
   <string name="pref_edit_git_server_settings">Modifica impostazioni del server di Git</string>
   <string name="pref_edit_git_config">Configurazione &amp; utilità della configurazione di Git</string>
   <string name="pref_import_ssh_key_title">Importa chiave SSH</string>
@@ -336,4 +337,6 @@
   <string name="oreo_autofill_password_fill_and_conditional_save_support">Compila e salva le password (il salvataggio necessita che nessun servizio di accessibilità sia abilitato)</string>
   <string name="clear_saved_host_key">Cancella la chiave host salvata</string>
   <string name="clear_saved_host_key_success">Chiave host cancellata con successo!</string>
+  <string name="otp_import_from_file">Scegli un\'immagine</string>
+  <string name="password_list_fab_content_description">Crea nuova password o cartella</string>
 </resources>

@@ -138,7 +138,6 @@
   <string name="pwgen_no_chars_error">Keine Zeichen hinzugefügt</string>
   <string name="pwgen_length_too_short_error">Länge zu kurz für ausgewählte Kriterien</string>
   <string name="pwgen_max_iterations_exceeded">Fehler beim Generieren eines Passworts, das die Einschränkungen erfüllt. Versuchen Sie, die Länge zu erhöhen.</string>
-  <string name="pwgen_separator">Trennzeichen</string>
   <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Passwortgenerator</string>
   <!-- ssh keygen fragment -->
