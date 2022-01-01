@@ -28,9 +28,11 @@ import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import logcat.logcat
 
 @AndroidEntryPoint
 class DecryptActivityV2 : BasePgpActivity() {
@@ -126,13 +128,26 @@ class DecryptActivityV2 : BasePgpActivity() {
   }
 
   private fun decrypt() {
+    val dialog = PasswordDialog()
+    lifecycleScope.launch(Dispatchers.Main) {
+      dialog.password.collectLatest { value ->
+        if (value != null) {
+          logcat { value }
+          decrypt(value)
+        }
+      }
+    }
+    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
+  }
+
+  private fun decrypt(password: String) {
     lifecycleScope.launch {
       val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
       val result =
         withContext(Dispatchers.IO) {
           val outputStream = ByteArrayOutputStream()
           repository.decrypt(
-            PASS,
+            password,
             message,
             outputStream,
           )
