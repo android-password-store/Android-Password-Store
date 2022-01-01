@@ -36,10 +36,9 @@ import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import com.google.zxing.qrcode.QRCodeReader
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.crypto.Key
+import dev.msfjarvis.aps.data.crypto.CryptoRepository
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
-import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.ui.dialogs.DicewarePasswordGeneratorDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.OtpImportDialogFragment
 import dev.msfjarvis.aps.ui.dialogs.PasswordGeneratorDialogFragment
@@ -70,7 +69,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
 
   private val binding by viewBinding(PasswordCreationActivityBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var cryptos: CryptoSet
+  @Inject lateinit var repository: CryptoRepository
 
   private val suggestedName by unsafeLazy { intent.getStringExtra(EXTRA_FILE_NAME) }
   private val suggestedPass by unsafeLazy { intent.getStringExtra(EXTRA_PASSWORD) }
@@ -364,15 +363,10 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
 
       lifecycleScope.launch(Dispatchers.Main) {
         runCatching {
-          val crypto = cryptos.first { it.canHandle(path) }
           val result =
             withContext(Dispatchers.IO) {
               val outputStream = ByteArrayOutputStream()
-              crypto.encrypt(
-                listOf(Key(PUB_KEY.encodeToByteArray())),
-                content.byteInputStream(),
-                outputStream,
-              )
+              repository.encrypt(content.byteInputStream(), outputStream)
               outputStream
             }
           val file = File(path)
@@ -484,7 +478,5 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
     const val EXTRA_EXTRA_CONTENT = "EXTRA_CONTENT"
     const val EXTRA_GENERATE_PASSWORD = "GENERATE_PASSWORD"
     const val EXTRA_EDITING = "EDITING"
-    // TODO(msfjarvis): source this from storage
-    const val PUB_KEY = ""
   }
 }

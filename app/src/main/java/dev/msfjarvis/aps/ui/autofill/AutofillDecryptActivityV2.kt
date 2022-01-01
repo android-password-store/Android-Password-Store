@@ -21,9 +21,8 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
-import dev.msfjarvis.aps.crypto.Key
+import dev.msfjarvis.aps.data.crypto.CryptoRepository
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
-import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
@@ -74,7 +73,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
   }
 
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var cryptos: CryptoSet
+  @Inject lateinit var repository: CryptoRepository
 
   private lateinit var directoryStructure: DirectoryStructure
 
@@ -122,18 +121,16 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
   }
 
   private suspend fun decryptCredential(file: File): Credentials? {
-    runCatching { file.inputStream() }
+    runCatching { file.readBytes().inputStream() }
       .onFailure { e ->
         logcat(ERROR) { e.asLog("File to decrypt not found") }
         return null
       }
       .onSuccess { encryptedInput ->
         runCatching {
-          val crypto = cryptos.first { it.canHandle(file.absolutePath) }
           withContext(Dispatchers.IO) {
             val outputStream = ByteArrayOutputStream()
-            crypto.decrypt(
-              Key(DecryptActivityV2.PRIV_KEY.encodeToByteArray()),
+            repository.decrypt(
               DecryptActivityV2.PASS,
               encryptedInput,
               outputStream,
