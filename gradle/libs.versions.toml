@@ -8,7 +8,7 @@ coroutines = "1.6.0"
 flowbinding = "1.2.0"
 hilt = "2.40.5"
 kotlin = "1.6.10"
-leakcanary = "2.7"
+leakcanary = "2.8"
 lifecycle = "2.4.0"
 
 [libraries]
