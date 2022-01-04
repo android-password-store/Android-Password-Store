@@ -23,7 +23,7 @@ import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.data.crypto.CryptoRepository
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
-import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
+import dev.msfjarvis.aps.ui.crypto.PasswordDialog
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
@@ -97,30 +98,48 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
     val action = if (isSearchAction) AutofillAction.Search else AutofillAction.Match
     directoryStructure = AutofillPreferences.directoryStructure(this)
     logcat { action.toString() }
+    val dialog = PasswordDialog()
     lifecycleScope.launch {
-      val credentials = decryptCredential(File(filePath))
-      if (credentials == null) {
-        setResult(RESULT_CANCELED)
-      } else {
-        val fillInDataset =
-          AutofillResponseBuilder.makeFillInDataset(
-            this@AutofillDecryptActivityV2,
-            credentials,
-            clientState,
-            action
-          )
-        withContext(Dispatchers.Main) {
-          setResult(
-            RESULT_OK,
-            Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
-          )
+      withContext(Dispatchers.Main) {
+        dialog.password.collectLatest { value ->
+          if (value != null) {
+            logcat { value }
+            decrypt(File(filePath), clientState, action, value)
+          }
         }
       }
-      withContext(Dispatchers.Main) { finish() }
     }
+    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
-  private suspend fun decryptCredential(file: File): Credentials? {
+  private suspend fun decrypt(
+    filePath: File,
+    clientState: Bundle,
+    action: AutofillAction,
+    password: String,
+  ) {
+    val credentials = decryptCredential(filePath, password)
+    if (credentials == null) {
+      setResult(RESULT_CANCELED)
+    } else {
+      val fillInDataset =
+        AutofillResponseBuilder.makeFillInDataset(
+          this@AutofillDecryptActivityV2,
+          credentials,
+          clientState,
+          action
+        )
+      withContext(Dispatchers.Main) {
+        setResult(
+          RESULT_OK,
+          Intent().apply { putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, fillInDataset) }
+        )
+      }
+    }
+    withContext(Dispatchers.Main) { finish() }
+  }
+
+  private suspend fun decryptCredential(file: File, password: String): Credentials? {
     runCatching { file.readBytes().inputStream() }
       .onFailure { e ->
         logcat(ERROR) { e.asLog("File to decrypt not found") }
@@ -131,7 +150,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
           withContext(Dispatchers.IO) {
             val outputStream = ByteArrayOutputStream()
             repository.decrypt(
-              DecryptActivityV2.PASS,
+              password,
               encryptedInput,
               outputStream,
             )

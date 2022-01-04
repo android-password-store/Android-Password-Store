@@ -190,8 +190,4 @@ class DecryptActivityV2 : BasePgpActivity() {
       }
     }
   }
-
-  companion object {
-    const val PASS = ""
-  }
 }
