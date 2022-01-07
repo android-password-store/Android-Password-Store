@@ -49,7 +49,7 @@ build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 build-semver = "com.vdurmont:semver4j:3.1.0"
-build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.1.1"
+build-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.1.2"
 
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
