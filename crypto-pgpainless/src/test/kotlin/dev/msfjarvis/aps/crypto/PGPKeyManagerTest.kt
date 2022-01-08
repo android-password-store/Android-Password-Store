@@ -8,6 +8,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -27,7 +28,7 @@ class PGPKeyManagerTest {
   private val dispatcher = StandardTestDispatcher()
   private val scope = TestScope(dispatcher)
   private val keyManager by unsafeLazy { PGPKeyManager(filesDir.absolutePath, dispatcher) }
-  private val key = PGPKeyManager.makeKey(TestUtils.getArmoredPrivateKey())
+  private val key = Key(TestUtils.getArmoredPrivateKey().encodeToByteArray())
 
   private fun <T> unsafeLazy(initializer: () -> T) =
     lazy(LazyThreadSafetyMode.NONE) { initializer.invoke() }
@@ -46,7 +47,7 @@ class PGPKeyManagerTest {
   fun testAddingKey() =
     scope.runTest {
       // Check if the key id returned is correct
-      val keyId = keyManager.addKey(key).unwrap().getKeyId()
+      val keyId = keyManager.getKeyId(keyManager.addKey(key).unwrap())
       assertEquals(CryptoConstants.KEY_ID, keyId)
 
       // Check if the keys directory have one file
@@ -72,7 +73,7 @@ class PGPKeyManagerTest {
     scope.runTest {
       // Check adding the keys twice
       keyManager.addKey(key, true).unwrap()
-      val keyId = keyManager.addKey(key, true).unwrap().getKeyId()
+      val keyId = keyManager.getKeyId(keyManager.addKey(key, true).unwrap())
 
       assertEquals(CryptoConstants.KEY_ID, keyId)
     }
@@ -84,7 +85,7 @@ class PGPKeyManagerTest {
       keyManager.addKey(key).unwrap()
 
       // Check if the key id returned is correct
-      val keyId = keyManager.removeKey(key).unwrap().getKeyId()
+      val keyId = keyManager.getKeyId(keyManager.removeKey(key).unwrap())
       assertEquals(CryptoConstants.KEY_ID, keyId)
 
       // Check if the keys directory have 0 files
@@ -93,15 +94,38 @@ class PGPKeyManagerTest {
     }
 
   @Test
-  fun testGetExistingKey() =
+  fun testGetExistingKeyById() =
     scope.runTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
 
+      val keyId = keyManager.getKeyId(key)
+      assertNotNull(keyId)
+      assertEquals(CryptoConstants.KEY_ID, keyManager.getKeyId(key))
+
       // Check returned key id matches the expected id and the created key id
-      val returnedKeyPair = keyManager.getKeyById(key.getKeyId()).unwrap()
-      assertEquals(CryptoConstants.KEY_ID, key.getKeyId())
-      assertEquals(key.getKeyId(), returnedKeyPair.getKeyId())
+      val returnedKey = keyManager.getKeyById(keyId).unwrap()
+      assertEquals(keyManager.getKeyId(key), keyManager.getKeyId(returnedKey))
+    }
+
+  @Test
+  fun testGetExistingKeyByFullUserId() =
+    scope.runTest {
+      keyManager.addKey(key).unwrap()
+
+      val keyId = "${CryptoConstants.KEY_NAME} <${CryptoConstants.KEY_EMAIL}>"
+      val returnedKey = keyManager.getKeyById(keyId).unwrap()
+      assertEquals(keyManager.getKeyId(key), keyManager.getKeyId(returnedKey))
+    }
+
+  @Test
+  fun testGetExistingKeyByEmailUserId() =
+    scope.runTest {
+      keyManager.addKey(key).unwrap()
+
+      val keyId = CryptoConstants.KEY_EMAIL
+      val returnedKey = keyManager.getKeyById(keyId).unwrap()
+      assertEquals(keyManager.getKeyId(key), keyManager.getKeyId(returnedKey))
     }
 
   @Test
