@@ -432,5 +432,6 @@ internal class AutofillStrategy private constructor(private val rules: List<Auto
   }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 internal fun strategy(block: AutofillStrategy.Builder.() -> Unit) =
   AutofillStrategy.Builder().apply(block).build()

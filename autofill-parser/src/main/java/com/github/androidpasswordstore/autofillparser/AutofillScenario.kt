@@ -204,6 +204,7 @@ internal data class GenericAutofillScenario<T : Any>(
     get() = genericPassword
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 internal fun AutofillScenario<FormField>.passesOriginCheck(singleOriginMode: Boolean): Boolean {
   return if (singleOriginMode) {
     // In single origin mode, only the browsers URL bar (which is never filled) should have
@@ -235,6 +236,7 @@ public fun Dataset.Builder.fillWith(
   }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 internal inline fun <T : Any, S : Any> AutofillScenario<T>.map(
   transform: (T) -> S
 ): AutofillScenario<S> {
