@@ -52,7 +52,12 @@ fun makeInlinePresentation(
   if (UiVersions.INLINE_UI_VERSION_1 !in UiVersions.getVersions(imeSpec.style)) return null
 
   val launchIntent =
-    PendingIntent.getActivity(context, 0, Intent(context, PasswordStore::class.java), 0)
+    PendingIntent.getActivity(
+      context,
+      0,
+      Intent(context, PasswordStore::class.java),
+      PendingIntent.FLAG_IMMUTABLE
+    )
   val slice =
     InlineSuggestionUi.newContentBuilder(launchIntent).run {
       setTitle(metadata.title)

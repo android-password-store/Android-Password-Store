@@ -231,7 +231,6 @@
   <string name="sdcard_root_warning_remove_everything">Tout supprimer</string>
   <string name="git_abort_and_push_title">Abandonner et pousser</string>
   <string name="biometric_prompt_title">Identification biométrique</string>
-  <string name="biometric_auth_error">Échec de l\'authentification</string>
   <string name="biometric_auth_error_reason">Échec de l\'authentification : %s</string>
   <string name="pref_biometric_auth_title">Activer l\'authentification biométrique</string>
   <string name="pref_biometric_auth_summary">Lorsque cette option est activée, Password Store vous demandera votre empreinte digitale au lancement</string>
@@ -318,7 +317,6 @@
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Un fichier portant ce nom existe déjà</string>
   <string name="folder_creation_err_folder_exists">Un dossier portant ce nom existe déjà</string>
-  <string name="xkpwgen_extrachars_label">Chiffres(d)/Symboles(s)</string>
   <!-- Onboarding flow -->
   <string name="repository_n_location">Emplacement du dépôt \n</string>
   <string name="let_s_go">Allons-y</string>
