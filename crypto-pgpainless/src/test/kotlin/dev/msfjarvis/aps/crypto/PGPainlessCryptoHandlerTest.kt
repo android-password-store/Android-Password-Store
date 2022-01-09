@@ -14,19 +14,20 @@ import kotlin.test.assertTrue
 class PGPainlessCryptoHandlerTest {
 
   private val cryptoHandler = PGPainlessCryptoHandler()
+  private val privateKey = Key(TestUtils.getArmoredPrivateKey())
+  private val publicKey = Key(TestUtils.getArmoredPublicKey())
 
   @Test
   fun encryptAndDecrypt() {
-    val key = Key(TestUtils.getArmoredPrivateKey())
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
-      listOf(key),
+      listOf(publicKey),
       CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
       ciphertextStream,
     )
     val plaintextStream = ByteArrayOutputStream()
     cryptoHandler.decrypt(
-      key,
+      privateKey,
       CryptoConstants.KEY_PASSPHRASE,
       ciphertextStream.toByteArray().inputStream(),
       plaintextStream,
