@@ -36,6 +36,7 @@ import com.google.zxing.integration.android.IntentIntegrator.QR_CODE
 import com.google.zxing.qrcode.QRCodeReader
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.crypto.Key
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.databinding.PasswordCreationActivityBinding
 import dev.msfjarvis.aps.injection.crypto.CryptoSet
@@ -368,7 +369,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
             withContext(Dispatchers.IO) {
               val outputStream = ByteArrayOutputStream()
               crypto.encrypt(
-                listOf(PUB_KEY),
+                listOf(Key(PUB_KEY.encodeToByteArray())),
                 content.byteInputStream(),
                 outputStream,
               )

@@ -12,6 +12,7 @@ import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.crypto.Key
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
@@ -134,7 +135,7 @@ class DecryptActivityV2 : BasePgpActivity() {
           val crypto = cryptos.first { it.canHandle(fullPath) }
           val outputStream = ByteArrayOutputStream()
           crypto.decrypt(
-            PRIV_KEY,
+            Key(PRIV_KEY.encodeToByteArray()),
             PASS,
             message,
             outputStream,

@@ -6,5 +6,6 @@
 package dev.msfjarvis.aps.crypto
 
 object TestUtils {
-  fun getArmoredPrivateKey() = this::class.java.classLoader.getResource("private_key").readText()
+  fun getArmoredPrivateKey() = this::class.java.classLoader.getResource("private_key").readBytes()
+  fun getArmoredPublicKey() = this::class.java.classLoader.getResource("public_key").readBytes()
 }

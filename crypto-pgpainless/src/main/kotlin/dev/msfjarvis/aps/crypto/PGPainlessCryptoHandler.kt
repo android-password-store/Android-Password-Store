@@ -21,34 +21,35 @@ import org.pgpainless.util.Passphrase
 public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler {
 
   public override fun decrypt(
-    privateKey: String,
-    password: String,
+    privateKey: Key,
+    passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
   ) {
-    val pgpSecretKeyRing = PGPainless.readKeyRing().secretKeyRing(privateKey)
+    val pgpSecretKeyRing = PGPainless.readKeyRing().secretKeyRing(privateKey.contents)
     val keyringCollection = PGPSecretKeyRingCollection(listOf(pgpSecretKeyRing))
     val protector =
       PasswordBasedSecretKeyRingProtector.forKey(
         pgpSecretKeyRing,
-        Passphrase.fromPassword(password)
+        Passphrase.fromPassword(passphrase)
       )
     PGPainless.decryptAndOrVerify()
       .onInputStream(ciphertextStream)
       .withOptions(
         ConsumerOptions()
           .addDecryptionKeys(keyringCollection, protector)
-          .addDecryptionPassphrase(Passphrase.fromPassword(password))
+          .addDecryptionPassphrase(Passphrase.fromPassword(passphrase))
       )
       .use { decryptionStream -> decryptionStream.copyTo(outputStream) }
   }
 
   public override fun encrypt(
-    pubKeys: List<String>,
+    keys: List<Key>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
   ) {
-    val pubKeysStream = ByteArrayInputStream(pubKeys.joinToString("\n").toByteArray())
+    val armoredKeys = keys.map { key -> key.contents.decodeToString() }
+    val pubKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
     val publicKeyRingCollection =
       pubKeysStream.use {
         ArmoredInputStream(it).use { armoredInputStream ->

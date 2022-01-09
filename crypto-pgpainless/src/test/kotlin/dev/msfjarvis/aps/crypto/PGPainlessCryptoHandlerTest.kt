@@ -14,19 +14,20 @@ import kotlin.test.assertTrue
 class PGPainlessCryptoHandlerTest {
 
   private val cryptoHandler = PGPainlessCryptoHandler()
+  private val privateKey = Key(TestUtils.getArmoredPrivateKey())
+  private val publicKey = Key(TestUtils.getArmoredPublicKey())
 
   @Test
-  fun encrypt_and_decrypt() {
-    val key = TestUtils.getArmoredPrivateKey()
+  fun encryptAndDecrypt() {
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
-      listOf(key),
+      listOf(publicKey),
       CryptoConstants.PLAIN_TEXT.byteInputStream(Charsets.UTF_8),
       ciphertextStream,
     )
     val plaintextStream = ByteArrayOutputStream()
     cryptoHandler.decrypt(
-      key,
+      privateKey,
       CryptoConstants.KEY_PASSPHRASE,
       ciphertextStream.toByteArray().inputStream(),
       plaintextStream,
@@ -35,7 +36,7 @@ class PGPainlessCryptoHandlerTest {
   }
 
   @Test
-  fun can_handle_filters_formats() {
+  fun canHandleFiltersFormats() {
     assertFalse { cryptoHandler.canHandle("example.com") }
     assertTrue { cryptoHandler.canHandle("example.com.gpg") }
     assertFalse { cryptoHandler.canHandle("example.com.asc") }
