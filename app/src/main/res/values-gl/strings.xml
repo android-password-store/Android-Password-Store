@@ -182,7 +182,7 @@
   <string name="show_password_pref_summary">Controlar a visibilidade do contrasinal unha vez descifrado, esto non desactiva o copiado do contrasinal</string>
   <string name="pwd_generate_button">Crear</string>
   <string name="refresh_list">Actualizar lista</string>
-  <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando...</string>
+  <string name="send_plaintext_password_to">Enviar contrasinal como texto plano usando…</string>
   <string name="app_icon_hint">Icona da app</string>
   <!-- Oreo Autofill -->
   <string name="oreo_autofill_select_and_fill_into">Elixe o elemento a completar</string>
@@ -233,7 +233,6 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="sdcard_root_warning_remove_everything">Eliminar todo</string>
   <string name="git_abort_and_push_title">Abortar e Push</string>
   <string name="biometric_prompt_title">Petición biométrica</string>
-  <string name="biometric_auth_error">Fallo de autenticación</string>
   <string name="biometric_auth_error_reason">Fallou a autenticación: %s</string>
   <string name="pref_biometric_auth_title">Activar autenticación biométrica</string>
   <string name="pref_biometric_auth_summary">Ao activala, Password Store vaiche pedir a túa pegada dactilar ao iniciar a app</string>
@@ -304,7 +303,7 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="git_pull_rebase_fail_error">Fallou a acción pull, estás nun head diferente. Utiliza \"axustes &gt; utilidades git\", garda os cambios no remoto nunha nova rama e resolve o conflicto nun ordenador.</string>
   <string name="git_pull_merge_fail_error">Fallou o merge, hai un conflito nos datos. TAREFA: engadir método de recuperación.</string>
   <string name="git_push_nff_error">O push foi rexeitado polo remoto, executa pull antes de voltar a subilos de novo. Podes usar Sincronizar mellor que push/pull xa que inclú ambos.</string>
-  <string name="git_push_generic_error">O push foi rexeitado polo remoto, razón:</string>
+  <string name="git_push_generic_error">O push foi rexeitado polo remoto, razón: %1$s</string>
   <string name="git_push_other_error">O remoto rexeitou o push non-fast-forward. Comproba a variable receive.denyNonFastForwards no ficheiro de configuración do repositorio de destino.</string>
   <string name="git_unknown_host">Host descoñecido: %1$s</string>
   <string name="git_operation_running">Realizando operación git…</string>
@@ -320,8 +319,6 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <!-- GPG key selection in folder creation -->
   <string name="folder_creation_err_file_exists">Xa existe un ficheiro con ese nome</string>
   <string name="folder_creation_err_folder_exists">Xa existe un cartafol con ese nome</string>
-  <string name="xkpwgen_extrachars_label">Díxitos/Símbolos (d/s)</string>
-  <string name="xk_numbers_symbols_append_default">ds</string>
   <!-- Onboarding flow -->
   <string name="repository_n_location">Repositorio \nLocalización</string>
   <string name="let_s_go">Imos alá</string>
