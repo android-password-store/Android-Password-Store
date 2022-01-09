@@ -25,23 +25,27 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.androidpasswordstore.autofillparser.FormOrigin
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.databinding.ActivityOreoAutofillFilterBinding
-import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.extensions.viewBinding
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import dev.msfjarvis.aps.util.viewmodel.FilterMode
 import dev.msfjarvis.aps.util.viewmodel.ListMode
 import dev.msfjarvis.aps.util.viewmodel.SearchMode
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryAdapter
 import dev.msfjarvis.aps.util.viewmodel.SearchableRepositoryViewModel
+import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
 @TargetApi(Build.VERSION_CODES.O)
+@AndroidEntryPoint
 class AutofillFilterView : AppCompatActivity() {
 
   companion object {
@@ -76,6 +80,7 @@ class AutofillFilterView : AppCompatActivity() {
     }
   }
 
+  @Inject lateinit var features: Features
   private lateinit var formOrigin: FormOrigin
   private lateinit var directoryStructure: DirectoryStructure
   private val binding by viewBinding(ActivityOreoAutofillFilterBinding::inflate)
@@ -222,7 +227,7 @@ class AutofillFilterView : AppCompatActivity() {
       AutofillMatcher.addMatchFor(applicationContext, formOrigin, item.file)
     // intent?.extras? is checked to be non-null in onCreate
     decryptAction.launch(
-      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
+      if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
         AutofillDecryptActivityV2.makeDecryptFileIntent(item.file, intent!!.extras!!, this)
       } else {
         AutofillDecryptActivity.makeDecryptFileIntent(item.file, intent!!.extras!!, this)

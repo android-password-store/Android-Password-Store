@@ -23,6 +23,7 @@ import com.github.androidpasswordstore.autofillparser.cachePublicSuffixList
 import com.github.androidpasswordstore.autofillparser.passwordValue
 import com.github.androidpasswordstore.autofillparser.recoverNodes
 import com.github.androidpasswordstore.autofillparser.usernameValue
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.BuildConfig
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
@@ -32,10 +33,12 @@ import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.hasFlag
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
+@AndroidEntryPoint
 class OreoAutofillService : AutofillService() {
 
   companion object {
@@ -54,6 +57,9 @@ class OreoAutofillService : AutofillService() {
 
     private const val DISABLE_AUTOFILL_DURATION_MS = 1000 * 60 * 60 * 24L
   }
+
+  @Inject lateinit var api30ResponseBuilderFactory: Api30AutofillResponseBuilder.Factory
+  @Inject lateinit var responseBuilderFactory: AutofillResponseBuilder.Factory
 
   override fun onCreate() {
     super.onCreate()
@@ -97,10 +103,11 @@ class OreoAutofillService : AutofillService() {
           return
         }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      Api30AutofillResponseBuilder(formToFill)
+      api30ResponseBuilderFactory
+        .create(formToFill)
         .fillCredentials(this, request.inlineSuggestionsRequest, callback)
     } else {
-      AutofillResponseBuilder(formToFill).fillCredentials(this, callback)
+      responseBuilderFactory.create(formToFill).fillCredentials(this, callback)
     }
   }
 

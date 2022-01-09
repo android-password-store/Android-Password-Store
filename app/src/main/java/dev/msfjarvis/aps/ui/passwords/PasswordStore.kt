@@ -47,7 +47,6 @@ import dev.msfjarvis.aps.ui.git.base.BaseGitActivity
 import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
 import dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity
 import dev.msfjarvis.aps.ui.settings.SettingsActivity
-import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
@@ -57,6 +56,8 @@ import dev.msfjarvis.aps.util.extensions.isInsideRepository
 import dev.msfjarvis.aps.util.extensions.isPermissionGranted
 import dev.msfjarvis.aps.util.extensions.listFilesRecursively
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import dev.msfjarvis.aps.util.settings.AuthMode
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.shortcuts.ShortcutHandler
@@ -76,6 +77,7 @@ const val PASSWORD_FRAGMENT_TAG = "PasswordsList"
 @AndroidEntryPoint
 class PasswordStore : BaseGitActivity() {
 
+  @Inject lateinit var features: Features
   @Inject lateinit var shortcutHandler: ShortcutHandler
   private lateinit var searchItem: MenuItem
   private val settings by lazy { sharedPrefs }
@@ -428,7 +430,7 @@ class PasswordStore : BaseGitActivity() {
       (authDecryptIntent.clone() as Intent).setComponent(
         ComponentName(
           this,
-          if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
+          if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
             DecryptActivityV2::class.java
           } else {
             DecryptActivity::class.java
@@ -458,7 +460,8 @@ class PasswordStore : BaseGitActivity() {
     val currentDir = currentDir
     logcat(INFO) { "Adding file to : ${currentDir.absolutePath}" }
     val creationActivity =
-      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) PasswordCreationActivityV2::class.java
+      if (features.isEnabled(Feature.EnablePGPainlessBackend))
+        PasswordCreationActivityV2::class.java
       else PasswordCreationActivity::class.java
     val intent = Intent(this, creationActivity)
     intent.putExtra(BasePgpActivity.EXTRA_FILE_PATH, currentDir.absolutePath)

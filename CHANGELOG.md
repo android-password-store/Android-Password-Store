@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 -   Allow pinning shortcuts directly to the launcher home screen
 -   Another workaround for SteamGuard's non-standard OTP format
 -   Allow importing QR code from images
+-   Introduce a new opt-in PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) that does not require OpenKeychain
 
 ### Fixed
 

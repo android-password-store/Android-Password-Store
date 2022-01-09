@@ -19,20 +19,34 @@ import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FillableForm
 import com.github.androidpasswordstore.autofillparser.fillWith
 import com.github.michaelbull.result.fold
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dev.msfjarvis.aps.autofill.oreo.ui.AutofillSmsActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillDecryptActivityV2
 import dev.msfjarvis.aps.ui.autofill.AutofillFilterView
 import dev.msfjarvis.aps.ui.autofill.AutofillPublisherChangedActivity
 import dev.msfjarvis.aps.ui.autofill.AutofillSaveActivity
-import dev.msfjarvis.aps.util.FeatureFlags
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import java.io.File
 import logcat.LogPriority.ERROR
 import logcat.asLog
 import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AutofillResponseBuilder(form: FillableForm) {
+class AutofillResponseBuilder
+@AssistedInject
+constructor(
+  @Assisted form: FillableForm,
+  private val features: Features,
+) {
+
+  @AssistedFactory
+  interface Factory {
+    fun create(form: FillableForm): AutofillResponseBuilder
+  }
 
   private val formOrigin = form.formOrigin
   private val scenario = form.scenario
@@ -61,7 +75,7 @@ class AutofillResponseBuilder(form: FillableForm) {
     if (!scenario.hasFieldsToFillOn(AutofillAction.Match)) return null
     val metadata = makeFillMatchMetadata(context, file)
     val intentSender =
-      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) {
+      if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
         AutofillDecryptActivityV2.makeDecryptFileIntentSender(file, context)
       } else {
         AutofillDecryptActivity.makeDecryptFileIntentSender(file, context)
