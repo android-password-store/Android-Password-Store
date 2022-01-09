@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import logcat.logcat
 
 @AndroidEntryPoint
 class DecryptActivityV2 : BasePgpActivity() {
@@ -132,7 +131,6 @@ class DecryptActivityV2 : BasePgpActivity() {
     lifecycleScope.launch(Dispatchers.Main) {
       dialog.password.collectLatest { value ->
         if (value != null) {
-          logcat { value }
           decrypt(value)
         }
       }

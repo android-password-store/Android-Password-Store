@@ -103,7 +103,6 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
       withContext(Dispatchers.Main) {
         dialog.password.collectLatest { value ->
           if (value != null) {
-            logcat { value }
             decrypt(File(filePath), clientState, action, value)
           }
         }
