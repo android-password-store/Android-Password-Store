@@ -44,11 +44,11 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler {
   }
 
   public override fun encrypt(
-    publicKeys: List<Key>,
+    keys: List<Key>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
   ) {
-    val armoredKeys = publicKeys.map { key -> key.contents.decodeToString() }
+    val armoredKeys = keys.map { key -> key.contents.decodeToString() }
     val pubKeysStream = ByteArrayInputStream(armoredKeys.joinToString("\n").toByteArray())
     val publicKeyRingCollection =
       pubKeysStream.use {

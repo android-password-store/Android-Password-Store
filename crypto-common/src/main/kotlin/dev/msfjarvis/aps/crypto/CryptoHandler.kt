@@ -23,11 +23,11 @@ public interface CryptoHandler {
   )
 
   /**
-   * Encrypt the given [plaintextStream] to the provided [publicKeys], and writes the encrypted
-   * ciphertext to [outputStream].
+   * Encrypt the given [plaintextStream] to the provided [keys], and writes the encrypted ciphertext
+   * to [outputStream].
    */
   public fun encrypt(
-    publicKeys: List<Key>,
+    keys: List<Key>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
   )
