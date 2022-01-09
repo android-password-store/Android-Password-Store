@@ -115,7 +115,12 @@ class ClipboardService : Service() {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         PendingIntent.getForegroundService(this, 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT)
       } else {
-        PendingIntent.getService(this, 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        PendingIntent.getService(
+          this,
+          0,
+          clearIntent,
+          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
       }
     val notification =
       if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
