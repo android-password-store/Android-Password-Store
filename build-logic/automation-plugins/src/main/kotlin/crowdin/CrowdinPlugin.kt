@@ -49,10 +49,10 @@ class CrowdinDownloadPlugin : Plugin<Project> {
               }
               val client =
                 OkHttpClient.Builder()
-                  .connectTimeout(5, TimeUnit.SECONDS)
-                  .writeTimeout(5, TimeUnit.SECONDS)
-                  .readTimeout(5, TimeUnit.SECONDS)
-                  .callTimeout(10, TimeUnit.SECONDS)
+                  .connectTimeout(5, TimeUnit.MINUTES)
+                  .writeTimeout(5, TimeUnit.MINUTES)
+                  .readTimeout(5, TimeUnit.MINUTES)
+                  .callTimeout(10, TimeUnit.MINUTES)
                   .build()
               val url = CROWDIN_BUILD_API_URL.format(projectName, login.get(), key.get())
               val request = Request.Builder().url(url).get().build()
