@@ -12,11 +12,10 @@ import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.crypto.Key
+import dev.msfjarvis.aps.data.crypto.CryptoRepository
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
-import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
@@ -29,6 +28,7 @@ import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,7 +38,7 @@ class DecryptActivityV2 : BasePgpActivity() {
 
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntry.Factory
-  @Inject lateinit var cryptos: CryptoSet
+  @Inject lateinit var repository: CryptoRepository
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
 
   private var passwordEntry: PasswordEntry? = null
@@ -127,16 +127,25 @@ class DecryptActivityV2 : BasePgpActivity() {
   }
 
   private fun decrypt() {
+    val dialog = PasswordDialog()
+    lifecycleScope.launch(Dispatchers.Main) {
+      dialog.password.collectLatest { value ->
+        if (value != null) {
+          decrypt(value)
+        }
+      }
+    }
+    dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
+  }
+
+  private fun decrypt(password: String) {
     lifecycleScope.launch {
-      // TODO(msfjarvis): native methods are fallible, add error handling once out of testing
-      val message = withContext(Dispatchers.IO) { File(fullPath).inputStream() }
+      val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
       val result =
         withContext(Dispatchers.IO) {
-          val crypto = cryptos.first { it.canHandle(fullPath) }
           val outputStream = ByteArrayOutputStream()
-          crypto.decrypt(
-            Key(PRIV_KEY.encodeToByteArray()),
-            PASS,
+          repository.decrypt(
+            password,
             message,
             outputStream,
           )
@@ -178,11 +187,5 @@ class DecryptActivityV2 : BasePgpActivity() {
         }
       }
     }
-  }
-
-  companion object {
-    // TODO(msfjarvis): source these from storage and user input
-    const val PRIV_KEY = ""
-    const val PASS = ""
   }
 }

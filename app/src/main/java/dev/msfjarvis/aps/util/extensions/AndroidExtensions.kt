@@ -8,6 +8,7 @@ package dev.msfjarvis.aps.util.extensions
 import android.app.KeyguardManager
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
@@ -117,6 +118,11 @@ fun FragmentActivity.snackbar(
   snackbar.anchorView = findViewById(R.id.fab)
   snackbar.show()
   return snackbar
+}
+
+/** Launch an activity denoted by [clazz]. */
+fun <T : FragmentActivity> FragmentActivity.launchActivity(clazz: Class<T>) {
+  startActivity(Intent(this, clazz))
 }
 
 /** Simplifies the common `getString(key, null) ?: defaultValue` case slightly */

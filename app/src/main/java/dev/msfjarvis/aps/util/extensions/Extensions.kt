@@ -4,6 +4,9 @@
  */
 package dev.msfjarvis.aps.util.extensions
 
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.data.repo.PasswordRepository
@@ -82,3 +85,13 @@ fun <T> unsafeLazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE) { ini
 
 /** A convenience extension to turn a [Throwable] with a message into a loggable string. */
 fun Throwable.asLog(message: String): String = "$message\n${asLog()}"
+
+/** Extension on [Result] that returns if the type is [Ok] */
+fun <V, E> Result<V, E>.isOk(): Boolean {
+  return this is Ok<V>
+}
+
+/** Extension on [Result] that returns if the type is [Err] */
+fun <V, E> Result<V, E>.isErr(): Boolean {
+  return this is Err<E>
+}

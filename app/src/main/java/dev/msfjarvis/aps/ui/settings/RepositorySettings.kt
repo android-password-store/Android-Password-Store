@@ -36,6 +36,7 @@ import dev.msfjarvis.aps.ui.sshkeygen.ShowSshKeyFragment
 import dev.msfjarvis.aps.ui.sshkeygen.SshKeyGenActivity
 import dev.msfjarvis.aps.ui.sshkeygen.SshKeyImportActivity
 import dev.msfjarvis.aps.util.extensions.getString
+import dev.msfjarvis.aps.util.extensions.launchActivity
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
@@ -59,16 +60,12 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
 
   private var showSshKeyPref: Preference? = null
 
-  private fun <T : FragmentActivity> launchActivity(clazz: Class<T>) {
-    activity.startActivity(Intent(activity, clazz))
-  }
-
   private fun selectExternalGitRepository() {
     MaterialAlertDialogBuilder(activity)
       .setTitle(activity.resources.getString(R.string.external_repository_dialog_title))
       .setMessage(activity.resources.getString(R.string.external_repository_dialog_text))
       .setPositiveButton(R.string.dialog_ok) { _, _ ->
-        launchActivity(DirectorySelectionActivity::class.java)
+        activity.launchActivity(DirectorySelectionActivity::class.java)
       }
       .setNegativeButton(R.string.dialog_cancel, null)
       .show()
@@ -89,7 +86,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
         titleRes = R.string.pref_edit_git_server_settings
         visible = PasswordRepository.isGitRepo()
         onClick {
-          launchActivity(GitServerConfigActivity::class.java)
+          activity.launchActivity(GitServerConfigActivity::class.java)
           true
         }
       }
@@ -97,7 +94,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
         titleRes = R.string.pref_edit_proxy_settings
         visible = gitSettings.url?.startsWith("https") == true && PasswordRepository.isGitRepo()
         onClick {
-          launchActivity(ProxySelectorActivity::class.java)
+          activity.launchActivity(ProxySelectorActivity::class.java)
           true
         }
       }
@@ -105,7 +102,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
         titleRes = R.string.pref_edit_git_config
         visible = PasswordRepository.isGitRepo()
         onClick {
-          launchActivity(GitConfigActivity::class.java)
+          activity.launchActivity(GitConfigActivity::class.java)
           true
         }
       }
@@ -113,7 +110,7 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
         titleRes = R.string.pref_import_ssh_key_title
         visible = PasswordRepository.isGitRepo()
         onClick {
-          launchActivity(SshKeyImportActivity::class.java)
+          activity.launchActivity(SshKeyImportActivity::class.java)
           true
         }
       }

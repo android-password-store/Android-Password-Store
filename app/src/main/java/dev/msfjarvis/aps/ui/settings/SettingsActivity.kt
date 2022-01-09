@@ -24,6 +24,7 @@ class SettingsActivity : AppCompatActivity() {
   private val passwordSettings = PasswordSettings(this)
   private val repositorySettings = RepositorySettings(this)
   private val generalSettings = GeneralSettings(this)
+  private val pgpSettings = PGPSettings(this)
 
   private val binding by viewBinding(ActivityPreferenceRecyclerviewBinding::inflate)
   private val preferencesAdapter: PreferencesAdapter
@@ -47,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         subScreen {
           titleRes = R.string.pref_category_passwords_title
-          iconRes = R.drawable.ic_lock_open_24px
+          iconRes = R.drawable.ic_password_24px
           passwordSettings.provideSettings(this)
         }
         subScreen {
@@ -59,6 +60,11 @@ class SettingsActivity : AppCompatActivity() {
           titleRes = R.string.pref_category_misc_title
           iconRes = R.drawable.ic_miscellaneous_services_24px
           miscSettings.provideSettings(this)
+        }
+        subScreen {
+          titleRes = R.string.pref_category_pgp_title
+          iconRes = R.drawable.ic_lock_open_24px
+          pgpSettings.provideSettings(this)
         }
       }
     val adapter = PreferencesAdapter(screen)
