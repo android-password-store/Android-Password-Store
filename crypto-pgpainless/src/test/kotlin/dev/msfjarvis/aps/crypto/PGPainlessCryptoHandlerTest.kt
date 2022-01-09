@@ -16,8 +16,8 @@ class PGPainlessCryptoHandlerTest {
   private val cryptoHandler = PGPainlessCryptoHandler()
 
   @Test
-  fun encrypt_and_decrypt() {
-    val key = TestUtils.getArmoredPrivateKey()
+  fun encryptAndDecrypt() {
+    val key = Key(TestUtils.getArmoredPrivateKey())
     val ciphertextStream = ByteArrayOutputStream()
     cryptoHandler.encrypt(
       listOf(key),
@@ -35,7 +35,7 @@ class PGPainlessCryptoHandlerTest {
   }
 
   @Test
-  fun can_handle_filters_formats() {
+  fun canHandleFiltersFormats() {
     assertFalse { cryptoHandler.canHandle("example.com") }
     assertTrue { cryptoHandler.canHandle("example.com.gpg") }
     assertFalse { cryptoHandler.canHandle("example.com.asc") }

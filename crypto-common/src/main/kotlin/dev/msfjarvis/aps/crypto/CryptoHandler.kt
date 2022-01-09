@@ -12,22 +12,22 @@ import java.io.OutputStream
 public interface CryptoHandler {
 
   /**
-   * Decrypt the given [ciphertextStream] using a [privateKey] and [password], and writes the
+   * Decrypt the given [ciphertextStream] using a [privateKey] and [passphrase], and writes the
    * resultant plaintext to [outputStream].
    */
   public fun decrypt(
-    privateKey: String,
-    password: String,
+    privateKey: Key,
+    passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
   )
 
   /**
-   * Encrypt the given [plaintextStream] to the provided [pubKeys], and writes the encrypted
+   * Encrypt the given [plaintextStream] to the provided [publicKeys], and writes the encrypted
    * ciphertext to [outputStream].
    */
   public fun encrypt(
-    pubKeys: List<String>,
+    publicKeys: List<Key>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
   )

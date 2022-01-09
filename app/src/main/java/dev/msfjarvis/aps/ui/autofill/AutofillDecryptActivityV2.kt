@@ -21,6 +21,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
+import dev.msfjarvis.aps.crypto.Key
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.injection.crypto.CryptoSet
 import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
@@ -132,7 +133,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
           withContext(Dispatchers.IO) {
             val outputStream = ByteArrayOutputStream()
             crypto.decrypt(
-              DecryptActivityV2.PRIV_KEY,
+              Key(DecryptActivityV2.PRIV_KEY.encodeToByteArray()),
               DecryptActivityV2.PASS,
               encryptedInput,
               outputStream,
