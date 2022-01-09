@@ -18,19 +18,23 @@ import androidx.core.os.bundleOf
 import com.github.androidpasswordstore.autofillparser.AutofillAction
 import com.github.androidpasswordstore.autofillparser.Credentials
 import com.github.androidpasswordstore.autofillparser.FormOrigin
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivityV2
-import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.autofill.AutofillMatcher
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
 import dev.msfjarvis.aps.util.autofill.AutofillResponseBuilder
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import java.io.File
+import javax.inject.Inject
 import logcat.LogPriority.ERROR
 import logcat.logcat
 
 @RequiresApi(Build.VERSION_CODES.O)
+@AndroidEntryPoint
 class AutofillSaveActivity : AppCompatActivity() {
 
   companion object {
@@ -105,11 +109,14 @@ class AutofillSaveActivity : AppCompatActivity() {
     }
   }
 
+  @Inject lateinit var features: Features
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val repo = PasswordRepository.getRepositoryDirectory()
     val creationActivity =
-      if (FeatureFlags.ENABLE_PGP_V2_BACKEND) PasswordCreationActivityV2::class.java
+      if (features.isEnabled(Feature.EnablePGPainlessBackend))
+        PasswordCreationActivityV2::class.java
       else PasswordCreationActivity::class.java
     val saveIntent =
       Intent(this, creationActivity).apply {

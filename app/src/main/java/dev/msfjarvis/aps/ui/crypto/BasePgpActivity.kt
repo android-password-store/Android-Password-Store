@@ -24,13 +24,14 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
-import dev.msfjarvis.aps.util.FeatureFlags
 import dev.msfjarvis.aps.util.extensions.OPENPGP_PROVIDER
 import dev.msfjarvis.aps.util.extensions.asLog
 import dev.msfjarvis.aps.util.extensions.clipboard
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.snackbar
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import dev.msfjarvis.aps.util.services.ClipboardService
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
@@ -62,6 +63,8 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
   /** [SharedPreferences] instance used by subclasses to persist settings */
   @SettingsPreferences @Inject lateinit var settings: SharedPreferences
+
+  @Inject lateinit var features: Features
 
   /**
    * Handle to the [OpenPgpApi] instance that is used by subclasses to interface with OpenKeychain.
@@ -127,7 +130,7 @@ open class BasePgpActivity : AppCompatActivity(), OpenPgpServiceConnection.OnBou
 
   /** Method for subclasses to initiate binding with [OpenPgpServiceConnection]. */
   fun bindToOpenKeychain(onBoundListener: OpenPgpServiceConnection.OnBound) {
-    if (FeatureFlags.ENABLE_PGP_V2_BACKEND) return
+    if (features.isEnabled(Feature.EnablePGPainlessBackend)) return
     val installed =
       runCatching {
           packageManager.getPackageInfo(OPENPGP_PROVIDER, 0)
