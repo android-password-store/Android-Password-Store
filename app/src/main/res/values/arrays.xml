@@ -16,12 +16,6 @@
     <item>INDEPENDENT</item>
     <item>RECENTLY_USED</item>
   </string-array>
-  <string-array name="capitalization_type_values">
-    <item>lowercase</item>
-    <item>UPPERCASE</item>
-    <item>TitleCase</item>
-    <item>Sentence</item>
-  </string-array>
   <string-array name="pwgen_provider_labels">
     <item>Classic</item>
     <item>Diceware</item>
