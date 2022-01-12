@@ -24,6 +24,7 @@ import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.github.androidpasswordstore.sublimefuzzy.Fuzzy
 import dev.msfjarvis.aps.data.password.PasswordItem
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.util.autofill.AutofillPreferences
@@ -32,7 +33,6 @@ import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
-import dev.sphericalkat.sublimefuzzy.Fuzzy
 import java.io.File
 import java.text.Collator
 import java.util.Locale
