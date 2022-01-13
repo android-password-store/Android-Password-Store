@@ -2,11 +2,11 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package dev.msfjarvis.aps.util.pwgen
+package dev.msfjarvis.aps.passgen.random
 
-import dev.msfjarvis.aps.util.extensions.hasFlag
+import dev.msfjarvis.aps.passgen.random.util.hasFlag
 
-object RandomPasswordGenerator {
+internal object RandomPasswordGenerator {
 
   /**
    * Generates a random password of length [targetLength], taking the following flags in [pwFlags]

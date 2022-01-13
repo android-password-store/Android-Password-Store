@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -23,11 +24,12 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentPwgenBinding
+import dev.msfjarvis.aps.passgen.random.MaxIterationsExceededException
+import dev.msfjarvis.aps.passgen.random.NoCharactersIncludedException
+import dev.msfjarvis.aps.passgen.random.PasswordGenerator
+import dev.msfjarvis.aps.passgen.random.PasswordLengthTooShortException
+import dev.msfjarvis.aps.passgen.random.PasswordOption
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
-import dev.msfjarvis.aps.util.pwgen.PasswordGenerator
-import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.generate
-import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.setPrefs
-import dev.msfjarvis.aps.util.pwgen.PasswordOption
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -96,10 +98,23 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
   }
 
   private fun generate(passwordField: AppCompatTextView) {
-    setPreferences()
+    val passwordOptions = getSelectedOptions()
+    val passwordLength = getLength()
+    setPrefs(requireContext(), passwordOptions, passwordLength)
     passwordField.text =
-      runCatching { generate(requireContext().applicationContext) }.getOrElse { e ->
-        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+      runCatching { PasswordGenerator.generate(passwordOptions, passwordLength) }.getOrElse {
+        exception ->
+        val errorText =
+          when (exception) {
+            is MaxIterationsExceededException ->
+              requireContext().getString(R.string.pwgen_max_iterations_exceeded)
+            is NoCharactersIncludedException ->
+              requireContext().getString(R.string.pwgen_no_chars_error)
+            is PasswordLengthTooShortException ->
+              requireContext().getString(R.string.pwgen_length_too_short_error)
+            else -> requireContext().getString(R.string.pwgen_some_error_occurred)
+          }
+        Toast.makeText(requireActivity(), errorText, Toast.LENGTH_SHORT).show()
         ""
       }
   }
@@ -108,18 +123,34 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     return requireDialog().findViewById<CheckBox>(id).isChecked
   }
 
-  private fun setPreferences() {
-    val preferences =
-      listOfNotNull(
-        PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
-        PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
-        PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
-        PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
-        PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
-        PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
-      )
+  private fun getSelectedOptions(): List<PasswordOption> {
+    return listOfNotNull(
+      PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
+      PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
+      PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
+      PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
+      PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
+      PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
+    )
+  }
+
+  private fun getLength(): Int {
     val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
-    val length = lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
-    setPrefs(requireActivity().applicationContext, preferences, length)
+    return lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
+  }
+
+  /**
+   * Enables the [PasswordOption]s in [options] and sets [targetLength] as the length for generated
+   * passwords.
+   */
+  private fun setPrefs(ctx: Context, options: List<PasswordOption>, targetLength: Int): Boolean {
+    ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE).edit {
+      for (possibleOption in PasswordOption.values()) putBoolean(
+        possibleOption.key,
+        possibleOption in options
+      )
+      putInt("length", targetLength)
+    }
+    return true
   }
 }

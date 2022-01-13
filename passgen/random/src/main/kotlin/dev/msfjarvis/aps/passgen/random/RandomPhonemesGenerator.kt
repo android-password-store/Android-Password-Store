@@ -2,12 +2,12 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-package dev.msfjarvis.aps.util.pwgen
+package dev.msfjarvis.aps.passgen.random
 
-import dev.msfjarvis.aps.util.extensions.hasFlag
+import dev.msfjarvis.aps.passgen.random.util.hasFlag
 import java.util.Locale
 
-object RandomPhonemesGenerator {
+internal object RandomPhonemesGenerator {
 
   private const val CONSONANT = 0x0001
   private const val VOWEL = 0x0002
