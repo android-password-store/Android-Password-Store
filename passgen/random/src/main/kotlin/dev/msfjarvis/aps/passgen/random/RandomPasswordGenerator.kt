@@ -4,7 +4,7 @@
  */
 package dev.msfjarvis.aps.passgen.random
 
-import hasFlag
+import dev.msfjarvis.aps.passgen.random.util.hasFlag
 
 internal object RandomPasswordGenerator {
 

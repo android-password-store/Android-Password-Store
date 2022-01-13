@@ -4,13 +4,12 @@
  */
 package dev.msfjarvis.aps.passgen.random
 
-import clearFlag
-import dev.msfjarvis.aps.util.pwgen.RandomPhonemesGenerator
-import hasFlag
+import dev.msfjarvis.aps.passgen.random.util.clearFlag
+import dev.msfjarvis.aps.passgen.random.util.hasFlag
 
 public object PasswordGenerator {
 
-  private const val DEFAULT_LENGTH = 16
+  public const val DEFAULT_LENGTH: Int = 16
 
   internal const val DIGITS = 0x0001
   internal const val UPPERS = 0x0002
