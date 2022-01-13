@@ -27,7 +27,6 @@ import dev.msfjarvis.aps.databinding.FragmentPwgenBinding
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator
 import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.generate
-import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.setPrefs
 import dev.msfjarvis.aps.util.pwgen.PasswordOption
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -62,14 +61,14 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     binding.passwordText.typeface = monoTypeface
 
     merge(
-        binding.numerals.checkedChanges().skipInitialValue(),
-        binding.symbols.checkedChanges().skipInitialValue(),
-        binding.uppercase.checkedChanges().skipInitialValue(),
-        binding.lowercase.checkedChanges().skipInitialValue(),
-        binding.ambiguous.checkedChanges().skipInitialValue(),
-        binding.pronounceable.checkedChanges().skipInitialValue(),
-        binding.lengthNumber.afterTextChanges().skipInitialValue(),
-      )
+      binding.numerals.checkedChanges().skipInitialValue(),
+      binding.symbols.checkedChanges().skipInitialValue(),
+      binding.uppercase.checkedChanges().skipInitialValue(),
+      binding.lowercase.checkedChanges().skipInitialValue(),
+      binding.ambiguous.checkedChanges().skipInitialValue(),
+      binding.pronounceable.checkedChanges().skipInitialValue(),
+      binding.lengthNumber.afterTextChanges().skipInitialValue(),
+    )
       .onEach { generate(binding.passwordText) }
       .launchIn(lifecycleScope)
 
@@ -97,7 +96,9 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
   }
 
   private fun generate(passwordField: AppCompatTextView) {
-    val (options, length) = setPreferences()
+    val passwordOptions = getSelectedOptions()
+    val passwordLength = getLength()
+    setPrefs(requireContext(), passwordOptions, passwordLength)
     passwordField.text =
       runCatching { generate(requireContext().applicationContext) }.getOrElse { e ->
         Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
@@ -109,20 +110,19 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     return requireDialog().findViewById<CheckBox>(id).isChecked
   }
 
-  private fun setPreferences(): Pair<List<PasswordOption>, Int> {
-    val preferences =
-      listOfNotNull(
-        PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
-        PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
-        PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
-        PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
-        PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
-        PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
-      )
+  private fun getSelectedOptions(): List<PasswordOption> {
+    return listOfNotNull(
+      PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
+      PasswordOption.AtLeastOneSymbol.takeIf { isChecked(R.id.symbols) },
+      PasswordOption.NoUppercaseLetters.takeIf { !isChecked(R.id.uppercase) },
+      PasswordOption.NoAmbiguousCharacters.takeIf { !isChecked(R.id.ambiguous) },
+      PasswordOption.FullyRandom.takeIf { !isChecked(R.id.pronounceable) },
+      PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
+    )
+  }
+  private fun getLength(): Int {
     val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
-    val length = lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
-    setPrefs(requireActivity().applicationContext, preferences, length)
-    return Pair(preferences, length)
+    return lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
   }
 
   /**
