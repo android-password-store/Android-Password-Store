@@ -1,4 +1,4 @@
-enum class PasswordOption(val key: String) {
+public enum class PasswordOption(public val key: String) {
   NoDigits("0"),
   NoUppercaseLetters("A"),
   NoAmbiguousCharacters("B"),
