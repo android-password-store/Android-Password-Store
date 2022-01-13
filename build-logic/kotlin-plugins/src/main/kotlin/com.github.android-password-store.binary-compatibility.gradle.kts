@@ -15,6 +15,6 @@ apiValidation {
       "crypto-pgpainless",
       "format-common",
       "diceware",
-      "random"
+      "random",
     )
 }
