@@ -4,46 +4,27 @@
  */
 package dev.msfjarvis.aps.passgen.random
 
-import android.content.Context
-import androidx.core.content.edit
-import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.util.extensions.clearFlag
-import dev.msfjarvis.aps.util.extensions.hasFlag
+import clearFlag
 import dev.msfjarvis.aps.util.pwgen.RandomPhonemesGenerator
-import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import hasFlag
 
 public object PasswordGenerator {
 
-  const val DEFAULT_LENGTH = 16
+  private const val DEFAULT_LENGTH = 16
 
-  const val DIGITS = 0x0001
-  const val UPPERS = 0x0002
-  const val SYMBOLS = 0x0004
-  const val NO_AMBIGUOUS = 0x0008
-  const val LOWERS = 0x0020
+  internal const val DIGITS = 0x0001
+  internal const val UPPERS = 0x0002
+  internal const val SYMBOLS = 0x0004
+  internal const val NO_AMBIGUOUS = 0x0008
+  internal const val LOWERS = 0x0020
 
-  const val DIGITS_STR = "0123456789"
-  const val UPPERS_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  const val LOWERS_STR = "abcdefghijklmnopqrstuvwxyz"
-  const val SYMBOLS_STR = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
-  const val AMBIGUOUS_STR = "B8G6I1l0OQDS5Z2"
+  internal const val DIGITS_STR = "0123456789"
+  internal const val UPPERS_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  internal const val LOWERS_STR = "abcdefghijklmnopqrstuvwxyz"
+  internal const val SYMBOLS_STR = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+  internal const val AMBIGUOUS_STR = "B8G6I1l0OQDS5Z2"
 
-  /**
-   * Enables the [PasswordOption] s in [options] and sets [targetLength] as the length for generated
-   * passwords.
-   */
-  fun setPrefs(ctx: Context, options: List<PasswordOption>, targetLength: Int): Boolean {
-    ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE).edit {
-      for (possibleOption in PasswordOption.values()) putBoolean(
-        possibleOption.key,
-        possibleOption in options
-      )
-      putInt("length", targetLength)
-    }
-    return true
-  }
-
-  fun isValidPassword(password: String, pwFlags: Int): Boolean {
+  internal fun isValidPassword(password: String, pwFlags: Int): Boolean {
     if (pwFlags hasFlag DIGITS && password.none { it in DIGITS_STR }) return false
     if (pwFlags hasFlag UPPERS && password.none { it in UPPERS_STR }) return false
     if (pwFlags hasFlag LOWERS && password.none { it in LOWERS_STR }) return false
@@ -52,17 +33,15 @@ public object PasswordGenerator {
     return true
   }
 
-  /** Generates a password using the preferences set by [setPrefs]. */
+  /** Generates a password using the given [passwordOptions] and [length]. */
   @Throws(PasswordGeneratorException::class)
-  fun generate(ctx: Context): String {
-    val prefs = ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE)
+  public fun generate(passwordOptions: List<PasswordOption>, length: Int = DEFAULT_LENGTH): String {
     var numCharacterCategories = 0
-
     var phonemes = true
     var pwgenFlags = DIGITS or UPPERS or LOWERS
 
     for (option in PasswordOption.values()) {
-      if (prefs.getBoolean(option.key, false)) {
+      if (option in passwordOptions) {
         when (option) {
           PasswordOption.NoDigits -> pwgenFlags = pwgenFlags.clearFlag(DIGITS)
           PasswordOption.NoUppercaseLetters -> pwgenFlags = pwgenFlags.clearFlag(UPPERS)
@@ -90,15 +69,10 @@ public object PasswordGenerator {
       }
     }
 
-    val length = prefs.getInt(PreferenceKeys.LENGTH, DEFAULT_LENGTH)
     if (pwgenFlags.clearFlag(NO_AMBIGUOUS) == 0) {
-      throw PasswordGeneratorException(ctx.resources.getString(R.string.pwgen_no_chars_error))
+      throw NoCharactersIncludedException()
     }
-    if (length < numCharacterCategories) {
-      throw PasswordGeneratorException(
-        ctx.resources.getString(R.string.pwgen_length_too_short_error)
-      )
-    }
+    if (length < numCharacterCategories) { throw PasswordLengthTooShortException() }
     if (!(pwgenFlags hasFlag UPPERS) && !(pwgenFlags hasFlag LOWERS)) {
       phonemes = false
       pwgenFlags = pwgenFlags.clearFlag(NO_AMBIGUOUS)
@@ -113,9 +87,7 @@ public object PasswordGenerator {
     var iterations = 0
     do {
       if (iterations++ > 1000)
-        throw PasswordGeneratorException(
-          ctx.resources.getString(R.string.pwgen_max_iterations_exceeded)
-        )
+        throw MaxIterationsExceededException()
       password =
         if (phonemes) {
           RandomPhonemesGenerator.generate(length, pwgenFlags)
@@ -125,6 +97,4 @@ public object PasswordGenerator {
     } while (password == null)
     return password
   }
-
-  class PasswordGeneratorException(string: String) : Exception(string)
 }

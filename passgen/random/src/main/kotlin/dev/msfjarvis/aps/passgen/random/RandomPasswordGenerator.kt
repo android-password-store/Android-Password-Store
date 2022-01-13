@@ -4,9 +4,9 @@
  */
 package dev.msfjarvis.aps.passgen.random
 
-import dev.msfjarvis.aps.util.extensions.hasFlag
+import hasFlag
 
-object RandomPasswordGenerator {
+internal object RandomPasswordGenerator {
 
   /**
    * Generates a random password of length [targetLength], taking the following flags in [pwFlags]

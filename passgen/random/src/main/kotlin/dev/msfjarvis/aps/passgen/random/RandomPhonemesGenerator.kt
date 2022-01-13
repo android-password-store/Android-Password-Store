@@ -4,7 +4,7 @@
  */
 package dev.msfjarvis.aps.util.pwgen
 
-import dev.msfjarvis.aps.passgen.random.PasswordGenerator
+import dev.msfjarvis.aps.passgen.random.`PasswordGenerator.kt`
 import dev.msfjarvis.aps.passgen.random.secureRandomBiasedBoolean
 import dev.msfjarvis.aps.passgen.random.secureRandomBoolean
 import dev.msfjarvis.aps.passgen.random.secureRandomCharacter
@@ -69,7 +69,7 @@ object RandomPhonemesGenerator {
     val upperCase = str.uppercase(Locale.ROOT)
     val lowerCase = str.lowercase(Locale.ROOT)
     val length = str.length
-    val isAmbiguous = str.any { it in PasswordGenerator.AMBIGUOUS_STR }
+    val isAmbiguous = str.any { it in `PasswordGenerator.kt`.AMBIGUOUS_STR }
   }
 
   /**
