@@ -79,6 +79,7 @@ dependencies {
   implementation(projects.formatCommon)
   implementation(projects.openpgpKtx)
   implementation(projects.passgen.diceware)
+  implementation(projects.passgen.random)
   implementation(libs.androidx.activity.ktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.autofill)
