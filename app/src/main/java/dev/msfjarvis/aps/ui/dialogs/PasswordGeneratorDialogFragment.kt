@@ -24,10 +24,12 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.databinding.FragmentPwgenBinding
+import dev.msfjarvis.aps.passgen.random.MaxIterationsExceededException
+import dev.msfjarvis.aps.passgen.random.NoCharactersIncludedException
+import dev.msfjarvis.aps.passgen.random.PasswordGenerator
+import dev.msfjarvis.aps.passgen.random.PasswordLengthTooShortException
+import dev.msfjarvis.aps.passgen.random.PasswordOption
 import dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity
-import dev.msfjarvis.aps.util.pwgen.PasswordGenerator
-import dev.msfjarvis.aps.util.pwgen.PasswordGenerator.generate
-import dev.msfjarvis.aps.util.pwgen.PasswordOption
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -100,8 +102,19 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     val passwordLength = getLength()
     setPrefs(requireContext(), passwordOptions, passwordLength)
     passwordField.text =
-      runCatching { generate(requireContext().applicationContext) }.getOrElse { e ->
-        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
+      runCatching { PasswordGenerator.generate(passwordOptions, passwordLength) }.getOrElse {
+        exception ->
+        val errorText =
+          when (exception) {
+            is MaxIterationsExceededException ->
+              requireContext().getString(R.string.pwgen_max_iterations_exceeded)
+            is NoCharactersIncludedException ->
+              requireContext().getString(R.string.pwgen_no_chars_error)
+            is PasswordLengthTooShortException ->
+              requireContext().getString(R.string.pwgen_length_too_short_error)
+            else -> requireContext().getString(R.string.pwgen_some_error_occurred)
+          }
+        Toast.makeText(requireActivity(), errorText, Toast.LENGTH_SHORT).show()
         ""
       }
   }
