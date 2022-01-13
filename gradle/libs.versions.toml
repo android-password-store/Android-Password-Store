@@ -16,7 +16,7 @@ android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx_activity" }
 androidx-annotation = "androidx.annotation:annotation:1.3.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-autofill = "androidx.autofill:autofill:1.2.0-beta01"
 androidx-biometricKtx = "androidx.biometric:biometric-ktx:1.2.0-alpha04"
 androidx-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha03"
