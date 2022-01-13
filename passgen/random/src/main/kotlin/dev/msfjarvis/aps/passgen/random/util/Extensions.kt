@@ -1,4 +1,3 @@
-
 /** Clears the given [flag] from the value of this [Int] */
 internal fun Int.clearFlag(flag: Int): Int {
   return this and flag.inv()

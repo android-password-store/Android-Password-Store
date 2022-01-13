@@ -72,7 +72,9 @@ public object PasswordGenerator {
     if (pwgenFlags.clearFlag(NO_AMBIGUOUS) == 0) {
       throw NoCharactersIncludedException()
     }
-    if (length < numCharacterCategories) { throw PasswordLengthTooShortException() }
+    if (length < numCharacterCategories) {
+      throw PasswordLengthTooShortException()
+    }
     if (!(pwgenFlags hasFlag UPPERS) && !(pwgenFlags hasFlag LOWERS)) {
       phonemes = false
       pwgenFlags = pwgenFlags.clearFlag(NO_AMBIGUOUS)
@@ -86,8 +88,7 @@ public object PasswordGenerator {
     var password: String?
     var iterations = 0
     do {
-      if (iterations++ > 1000)
-        throw MaxIterationsExceededException()
+      if (iterations++ > 1000) throw MaxIterationsExceededException()
       password =
         if (phonemes) {
           RandomPhonemesGenerator.generate(length, pwgenFlags)

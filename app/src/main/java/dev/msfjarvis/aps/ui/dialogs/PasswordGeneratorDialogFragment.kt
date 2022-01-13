@@ -61,14 +61,14 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     binding.passwordText.typeface = monoTypeface
 
     merge(
-      binding.numerals.checkedChanges().skipInitialValue(),
-      binding.symbols.checkedChanges().skipInitialValue(),
-      binding.uppercase.checkedChanges().skipInitialValue(),
-      binding.lowercase.checkedChanges().skipInitialValue(),
-      binding.ambiguous.checkedChanges().skipInitialValue(),
-      binding.pronounceable.checkedChanges().skipInitialValue(),
-      binding.lengthNumber.afterTextChanges().skipInitialValue(),
-    )
+        binding.numerals.checkedChanges().skipInitialValue(),
+        binding.symbols.checkedChanges().skipInitialValue(),
+        binding.uppercase.checkedChanges().skipInitialValue(),
+        binding.lowercase.checkedChanges().skipInitialValue(),
+        binding.ambiguous.checkedChanges().skipInitialValue(),
+        binding.pronounceable.checkedChanges().skipInitialValue(),
+        binding.lengthNumber.afterTextChanges().skipInitialValue(),
+      )
       .onEach { generate(binding.passwordText) }
       .launchIn(lifecycleScope)
 
@@ -120,6 +120,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
       PasswordOption.NoLowercaseLetters.takeIf { !isChecked(R.id.lowercase) }
     )
   }
+
   private fun getLength(): Int {
     val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
     return lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
