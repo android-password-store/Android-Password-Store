@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -96,7 +97,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
   }
 
   private fun generate(passwordField: AppCompatTextView) {
-    setPreferences()
+    val (options, length) = setPreferences()
     passwordField.text =
       runCatching { generate(requireContext().applicationContext) }.getOrElse { e ->
         Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT).show()
@@ -108,7 +109,7 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     return requireDialog().findViewById<CheckBox>(id).isChecked
   }
 
-  private fun setPreferences() {
+  private fun setPreferences(): Pair<List<PasswordOption>, Int> {
     val preferences =
       listOfNotNull(
         PasswordOption.NoDigits.takeIf { !isChecked(R.id.numerals) },
@@ -121,5 +122,21 @@ class PasswordGeneratorDialogFragment : DialogFragment() {
     val lengthText = requireDialog().findViewById<EditText>(R.id.lengthNumber).text.toString()
     val length = lengthText.toIntOrNull()?.takeIf { it >= 0 } ?: PasswordGenerator.DEFAULT_LENGTH
     setPrefs(requireActivity().applicationContext, preferences, length)
+    return Pair(preferences, length)
+  }
+
+  /**
+   * Enables the [PasswordOption]s in [options] and sets [targetLength] as the length for generated
+   * passwords.
+   */
+  private fun setPrefs(ctx: Context, options: List<PasswordOption>, targetLength: Int): Boolean {
+    ctx.getSharedPreferences("PasswordGenerator", Context.MODE_PRIVATE).edit {
+      for (possibleOption in PasswordOption.values()) putBoolean(
+        possibleOption.key,
+        possibleOption in options
+      )
+      putInt("length", targetLength)
+    }
+    return true
   }
 }
