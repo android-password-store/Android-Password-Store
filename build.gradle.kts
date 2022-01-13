@@ -14,4 +14,5 @@ plugins {
   id("com.github.android-password-store.git-hooks")
   id("com.github.android-password-store.gradle")
   id("com.github.android-password-store.spotless")
+  id("org.jetbrains.kotlin.jvm") version "1.6.0" apply false
 }
