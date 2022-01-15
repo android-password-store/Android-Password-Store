@@ -8,6 +8,7 @@ package dev.msfjarvis.aps.ui.crypto
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.msfjarvis.aps.R
@@ -28,15 +29,27 @@ class PasswordDialog : DialogFragment() {
     val builder = MaterialAlertDialogBuilder(requireContext())
     builder.setView(binding.root)
     builder.setTitle(R.string.password)
-    builder.setPositiveButton(android.R.string.ok) { _, _ ->
-      do {} while (!_password.tryEmit(binding.passwordEditText.text.toString()))
-      dismiss()
+    builder.setPositiveButton(android.R.string.ok) { _, _ -> tryEmitPassword() }
+    val dialog = builder.create()
+    dialog.setOnShowListener {
+      binding.passwordEditText.setOnKeyListener { _, keyCode, _ ->
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+          tryEmitPassword()
+          return@setOnKeyListener true
+        }
+        false
+      }
     }
-    return builder.create()
+    return dialog
   }
 
   override fun onCancel(dialog: DialogInterface) {
     super.onCancel(dialog)
     finish()
+  }
+
+  @Suppress("ControlFlowWithEmptyBody")
+  private fun tryEmitPassword() {
+    do {} while (!_password.tryEmit(binding.passwordEditText.text.toString()))
   }
 }
