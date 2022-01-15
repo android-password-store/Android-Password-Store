@@ -2,6 +2,8 @@ package dev.msfjarvis.aps.crypto
 
 import com.github.michaelbull.result.unwrap
 import com.github.michaelbull.result.unwrapError
+import dev.msfjarvis.aps.crypto.GpgIdentifier.KeyId
+import dev.msfjarvis.aps.crypto.GpgIdentifier.UserId
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -48,7 +50,7 @@ class PGPKeyManagerTest {
     scope.runTest {
       // Check if the key id returned is correct
       val keyId = keyManager.getKeyId(keyManager.addKey(key).unwrap())
-      assertEquals(CryptoConstants.KEY_ID, keyId)
+      assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
 
       // Check if the keys directory have one file
       assertEquals(1, filesDir.list()?.size)
@@ -75,7 +77,7 @@ class PGPKeyManagerTest {
       keyManager.addKey(key, true).unwrap()
       val keyId = keyManager.getKeyId(keyManager.addKey(key, true).unwrap())
 
-      assertEquals(CryptoConstants.KEY_ID, keyId)
+      assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
     }
 
   @Test
@@ -86,7 +88,7 @@ class PGPKeyManagerTest {
 
       // Check if the key id returned is correct
       val keyId = keyManager.getKeyId(keyManager.removeKey(key).unwrap())
-      assertEquals(CryptoConstants.KEY_ID, keyId)
+      assertEquals(KeyId(CryptoConstants.KEY_ID), keyId)
 
       // Check if the keys directory have 0 files
       val keysDir = File(filesDir, PGPKeyManager.KEY_DIR_NAME)
@@ -101,7 +103,7 @@ class PGPKeyManagerTest {
 
       val keyId = keyManager.getKeyId(key)
       assertNotNull(keyId)
-      assertEquals(CryptoConstants.KEY_ID, keyManager.getKeyId(key))
+      assertEquals(KeyId(CryptoConstants.KEY_ID), keyManager.getKeyId(key))
 
       // Check returned key id matches the expected id and the created key id
       val returnedKey = keyManager.getKeyById(keyId).unwrap()
@@ -114,7 +116,7 @@ class PGPKeyManagerTest {
       keyManager.addKey(key).unwrap()
 
       val keyId = "${CryptoConstants.KEY_NAME} <${CryptoConstants.KEY_EMAIL}>"
-      val returnedKey = keyManager.getKeyById(keyId).unwrap()
+      val returnedKey = keyManager.getKeyById(UserId(keyId)).unwrap()
       assertEquals(keyManager.getKeyId(key), keyManager.getKeyId(returnedKey))
     }
 
@@ -124,7 +126,7 @@ class PGPKeyManagerTest {
       keyManager.addKey(key).unwrap()
 
       val keyId = CryptoConstants.KEY_EMAIL
-      val returnedKey = keyManager.getKeyById(keyId).unwrap()
+      val returnedKey = keyManager.getKeyById(UserId(keyId)).unwrap()
       assertEquals(keyManager.getKeyId(key), keyManager.getKeyId(returnedKey))
     }
 
@@ -134,19 +136,19 @@ class PGPKeyManagerTest {
       // Add key using KeyManager
       keyManager.addKey(key).unwrap()
 
-      val randomKeyId = "0x123456789"
+      val keyId = KeyId(0x08edf7567183ce44)
 
       // Check returned key
-      val error = keyManager.getKeyById(randomKeyId).unwrapError()
+      val error = keyManager.getKeyById(keyId).unwrapError()
       assertIs<KeyManagerException.KeyNotFoundException>(error)
-      assertEquals("No key found with id: $randomKeyId", error.message)
+      assertEquals("No key found with id: $keyId", error.message)
     }
 
   @Test
   fun testFindKeysWithoutAdding() =
     scope.runTest {
       // Check returned key
-      val error = keyManager.getKeyById("0x123456789").unwrapError()
+      val error = keyManager.getKeyById(KeyId(0x08edf7567183ce44)).unwrapError()
       assertIs<KeyManagerException.NoKeysAvailableException>(error)
       assertEquals("No keys were found", error.message)
     }
