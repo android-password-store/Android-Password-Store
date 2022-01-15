@@ -15,7 +15,7 @@ public sealed class KeyManagerException(message: String? = null) : CryptoExcepti
   /** Failed to delete given key. */
   public object KeyDeletionFailedException : KeyManagerException("Couldn't delete the key file")
 
-  /** Failed to parse a [Key] as a known type. */
+  /** Failed to parse the key as a known type. */
   public object InvalidKeyException :
     KeyManagerException("Given key cannot be parsed as a known key type")
 

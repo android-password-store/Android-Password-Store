@@ -11,13 +11,13 @@ import java.util.Locale
 import org.bouncycastle.openpgp.PGPKeyRing
 import org.pgpainless.PGPainless
 
-/** Utility methods to deal with PGP [Key]s. */
+/** Utility methods to deal with [PGPKey]s. */
 public object KeyUtils {
   /**
    * Attempts to parse a [PGPKeyRing] from a given [key]. The key is first tried as a secret key and
    * then as a public one before the method gives up and returns null.
    */
-  public fun tryParseKeyring(key: Key): PGPKeyRing? {
+  public fun tryParseKeyring(key: PGPKey): PGPKeyRing? {
     val secKeyRing = runCatching { PGPainless.readKeyRing().secretKeyRing(key.contents) }.get()
     if (secKeyRing != null) {
       return secKeyRing
@@ -30,7 +30,7 @@ public object KeyUtils {
   }
 
   /** Parses a [PGPKeyRing] from the given [key] and returns its hex-formatted key ID. */
-  public fun tryGetId(key: Key): String? {
+  public fun tryGetId(key: PGPKey): String? {
     val keyRing = tryParseKeyring(key) ?: return null
     return convertKeyIdToHex(keyRing.publicKey.keyID)
   }

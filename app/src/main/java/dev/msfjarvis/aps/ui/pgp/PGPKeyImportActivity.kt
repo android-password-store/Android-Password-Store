@@ -14,7 +14,7 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.crypto.Key
+import dev.msfjarvis.aps.crypto.PGPKey
 import dev.msfjarvis.aps.crypto.KeyUtils.tryGetId
 import dev.msfjarvis.aps.crypto.PGPKeyManager
 import javax.inject.Inject
@@ -35,7 +35,7 @@ class PGPKeyImportActivity : AppCompatActivity() {
             contentResolver.openInputStream(uri)
               ?: throw IllegalStateException("Failed to open selected file")
           val bytes = keyInputStream.readBytes()
-          val (key, error) = runBlocking { keyManager.addKey(Key(bytes)) }
+          val (key, error) = runBlocking { keyManager.addKey(PGPKey(bytes)) }
           if (error != null) throw error
           key
         }

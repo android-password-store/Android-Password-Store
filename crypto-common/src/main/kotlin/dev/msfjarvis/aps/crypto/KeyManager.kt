@@ -12,7 +12,7 @@ import com.github.michaelbull.result.Result
  * used by an implementation of [CryptoHandler] to obtain eligible public or private keys as
  * required.
  */
-public interface KeyManager {
+public interface KeyManager<Key> {
 
   /**
    * Inserts a [key] into the store. If the key already exists, this method will return

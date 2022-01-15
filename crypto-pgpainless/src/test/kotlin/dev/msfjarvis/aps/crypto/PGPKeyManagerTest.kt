@@ -28,7 +28,7 @@ class PGPKeyManagerTest {
   private val dispatcher = StandardTestDispatcher()
   private val scope = TestScope(dispatcher)
   private val keyManager by unsafeLazy { PGPKeyManager(filesDir.absolutePath, dispatcher) }
-  private val key = Key(TestUtils.getArmoredPrivateKey())
+  private val key = PGPKey(TestUtils.getArmoredPrivateKey())
 
   private fun <T> unsafeLazy(initializer: () -> T) =
     lazy(LazyThreadSafetyMode.NONE) { initializer.invoke() }
