@@ -14,8 +14,8 @@ import com.github.michaelbull.result.runCatching
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
-import dev.msfjarvis.aps.crypto.PGPKey
 import dev.msfjarvis.aps.crypto.KeyUtils.tryGetId
+import dev.msfjarvis.aps.crypto.PGPKey
 import dev.msfjarvis.aps.crypto.PGPKeyManager
 import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
