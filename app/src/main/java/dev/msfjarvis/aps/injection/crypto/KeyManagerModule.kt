@@ -12,8 +12,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.crypto.PGPKeyManager
+import dev.msfjarvis.aps.util.coroutines.DispatcherProvider
 import javax.inject.Qualifier
-import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,10 +21,11 @@ object KeyManagerModule {
   @Provides
   fun providePGPKeyManager(
     @PGPKeyDir keyDir: String,
+    dispatcherProvider: DispatcherProvider,
   ): PGPKeyManager {
     return PGPKeyManager(
       keyDir,
-      Dispatchers.IO,
+      dispatcherProvider.io(),
     )
   }
 
