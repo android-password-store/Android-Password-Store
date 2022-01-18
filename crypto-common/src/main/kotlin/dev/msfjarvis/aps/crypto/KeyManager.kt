@@ -12,7 +12,7 @@ import com.github.michaelbull.result.Result
  * used by an implementation of [CryptoHandler] to obtain eligible public or private keys as
  * required.
  */
-public interface KeyManager {
+public interface KeyManager<Key, KeyIdentifier> {
 
   /**
    * Inserts a [key] into the store. If the key already exists, this method will return
@@ -28,7 +28,7 @@ public interface KeyManager {
    * implementations to figure out for themselves. For example, in GPG this can be a full
    * hexadecimal key ID, an email, a short hex key ID, and probably a few more things.
    */
-  public suspend fun getKeyById(id: String): Result<Key, Throwable>
+  public suspend fun getKeyById(id: KeyIdentifier): Result<Key, Throwable>
 
   /** Returns all keys currently in the store as a [List]. */
   public suspend fun getAllKeys(): Result<List<Key>, Throwable>
@@ -37,7 +37,7 @@ public interface KeyManager {
    * Get a stable identifier for the given [key]. The returned key ID should be suitable to be used
    * as an identifier for the cryptographic identity tied to this key.
    */
-  public suspend fun getKeyId(key: Key): String?
+  public suspend fun getKeyId(key: Key): KeyIdentifier?
 
   /** Given a [fileName], return whether this instance can handle it. */
   public fun canHandle(fileName: String): Boolean

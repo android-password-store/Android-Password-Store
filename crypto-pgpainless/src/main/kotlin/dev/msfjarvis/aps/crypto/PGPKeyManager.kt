@@ -22,11 +22,11 @@ public class PGPKeyManager
 constructor(
   filesDir: String,
   private val dispatcher: CoroutineDispatcher,
-) : KeyManager {
+) : KeyManager<PGPKey, GpgIdentifier> {
 
   private val keyDir = File(filesDir, KEY_DIR_NAME)
 
-  override suspend fun addKey(key: Key, replace: Boolean): Result<Key, Throwable> =
+  override suspend fun addKey(key: PGPKey, replace: Boolean): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
@@ -36,7 +36,7 @@ constructor(
           // Check for replace flag first and if it is false, throw an error
           if (!replace)
             throw KeyManagerException.KeyAlreadyExistsException(
-              tryGetId(key) ?: "Failed to retrieve key ID"
+              tryGetId(key)?.toString() ?: "Failed to retrieve key ID"
             )
           if (!keyFile.delete()) throw KeyManagerException.KeyDeletionFailedException
         }
@@ -47,7 +47,7 @@ constructor(
       }
     }
 
-  override suspend fun removeKey(key: Key): Result<Key, Throwable> =
+  override suspend fun removeKey(key: PGPKey): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
@@ -61,49 +61,52 @@ constructor(
       }
     }
 
-  override suspend fun getKeyById(id: String): Result<Key, Throwable> =
+  override suspend fun getKeyById(id: GpgIdentifier): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keyFiles = keyDir.listFiles()
         if (keyFiles.isNullOrEmpty()) throw KeyManagerException.NoKeysAvailableException
+        val keys = keyFiles.map { file -> PGPKey(file.readBytes()) }
 
-        val keys = keyFiles.map { file -> Key(file.readBytes()) }
-        // Try to parse the key ID as an email
-        val selector = SelectUserId.byEmail(id)
-        val userIdMatch =
-          keys.map { key -> key to tryParseKeyring(key) }.firstOrNull { (_, keyRing) ->
-            selector.firstMatch(keyRing) != null
+        val matchResult =
+          when (id) {
+            is GpgIdentifier.KeyId -> {
+              val keyIdMatch =
+                keys.map { key -> key to tryGetId(key) }.firstOrNull { (_, keyId) ->
+                  keyId?.id == id.id
+                }
+              keyIdMatch?.first
+            }
+            is GpgIdentifier.UserId -> {
+              val selector = SelectUserId.byEmail(id.email)
+              val userIdMatch =
+                keys.map { key -> key to tryParseKeyring(key) }.firstOrNull { (_, keyRing) ->
+                  selector.firstMatch(keyRing) != null
+                }
+              userIdMatch?.first
+            }
           }
 
-        if (userIdMatch != null) {
-          return@runCatching userIdMatch.first
+        if (matchResult != null) {
+          return@runCatching matchResult
         }
 
-        val keyIdMatch =
-          keys.map { key -> key to tryGetId(key) }.firstOrNull { (_, keyId) ->
-            keyId == id || keyId == "0x$id"
-          }
-
-        if (keyIdMatch != null) {
-          return@runCatching keyIdMatch.first
-        }
-
-        throw KeyManagerException.KeyNotFoundException(id)
+        throw KeyManagerException.KeyNotFoundException("$id")
       }
     }
 
-  override suspend fun getAllKeys(): Result<List<Key>, Throwable> =
+  override suspend fun getAllKeys(): Result<List<PGPKey>, Throwable> =
     withContext(dispatcher) {
       runCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keyFiles = keyDir.listFiles()
         if (keyFiles.isNullOrEmpty()) return@runCatching emptyList()
-        keyFiles.map { keyFile -> Key(keyFile.readBytes()) }.toList()
+        keyFiles.map { keyFile -> PGPKey(keyFile.readBytes()) }.toList()
       }
     }
 
-  override suspend fun getKeyId(key: Key): String? = tryGetId(key)
+  override suspend fun getKeyId(key: PGPKey): GpgIdentifier? = tryGetId(key)
 
   // TODO: This is a temp hack for now and in future it should check that the GPGKeyManager can
   // decrypt the file.

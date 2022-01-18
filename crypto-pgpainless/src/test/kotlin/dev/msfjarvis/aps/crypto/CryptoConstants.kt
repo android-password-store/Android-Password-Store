@@ -10,5 +10,5 @@ object CryptoConstants {
   const val PLAIN_TEXT = "encryption worthy content"
   const val KEY_NAME = "John Doe"
   const val KEY_EMAIL = "john.doe@example.com"
-  const val KEY_ID = "0x08edf7567183ce27"
+  const val KEY_ID = 0x08edf7567183ce27
 }

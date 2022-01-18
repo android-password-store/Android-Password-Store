@@ -14,8 +14,8 @@ import kotlin.test.assertTrue
 class PGPainlessCryptoHandlerTest {
 
   private val cryptoHandler = PGPainlessCryptoHandler()
-  private val privateKey = Key(TestUtils.getArmoredPrivateKey())
-  private val publicKey = Key(TestUtils.getArmoredPublicKey())
+  private val privateKey = PGPKey(TestUtils.getArmoredPrivateKey())
+  private val publicKey = PGPKey(TestUtils.getArmoredPublicKey())
 
   @Test
   fun encryptAndDecrypt() {

@@ -9,23 +9,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
-import dev.msfjarvis.aps.crypto.CryptoHandler
 import dev.msfjarvis.aps.crypto.PGPainlessCryptoHandler
 
-/**
- * This module adds all [CryptoHandler] implementations into a Set which makes it easier to build
- * generic UIs which are not tied to a specific implementation because of injection.
- */
 @Module
 @InstallIn(SingletonComponent::class)
 object CryptoHandlerModule {
-  @Provides
-  @IntoSet
-  fun providePgpCryptoHandler(): CryptoHandler {
-    return PGPainlessCryptoHandler()
-  }
+  @Provides fun providePgpCryptoHandler() = PGPainlessCryptoHandler()
 }
-
-/** Typealias for a [Set] of [CryptoHandler] instances injected by Dagger. */
-typealias CryptoSet = Set<@JvmSuppressWildcards CryptoHandler>

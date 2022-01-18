@@ -9,7 +9,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /** Generic interface to implement cryptographic operations on top of. */
-public interface CryptoHandler {
+public interface CryptoHandler<Key> {
 
   /**
    * Decrypt the given [ciphertextStream] using a [privateKey] and [passphrase], and writes the

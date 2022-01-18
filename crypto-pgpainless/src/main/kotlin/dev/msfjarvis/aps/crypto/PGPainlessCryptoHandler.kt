@@ -18,10 +18,10 @@ import org.pgpainless.encryption_signing.ProducerOptions
 import org.pgpainless.key.protection.PasswordBasedSecretKeyRingProtector
 import org.pgpainless.util.Passphrase
 
-public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler {
+public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler<PGPKey> {
 
   public override fun decrypt(
-    privateKey: Key,
+    privateKey: PGPKey,
     passphrase: String,
     ciphertextStream: InputStream,
     outputStream: OutputStream,
@@ -44,7 +44,7 @@ public class PGPainlessCryptoHandler @Inject constructor() : CryptoHandler {
   }
 
   public override fun encrypt(
-    keys: List<Key>,
+    keys: List<PGPKey>,
     plaintextStream: InputStream,
     outputStream: OutputStream,
   ) {
