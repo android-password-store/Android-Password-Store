@@ -42,7 +42,7 @@ constructor(
   ) {
     val keys = pgpKeyManager.getAllKeys().unwrap()
     // Iterates through the keys until the first successful decryption, then returns.
-    keys.first { key ->
+    keys.firstOrNull { key ->
       runCatching { pgpCryptoHandler.decrypt(key, password, message, out) }.isOk()
     }
   }
