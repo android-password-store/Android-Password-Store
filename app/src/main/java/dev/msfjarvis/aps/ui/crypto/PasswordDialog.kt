@@ -9,6 +9,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.WindowManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,6 +34,7 @@ class PasswordDialog : DialogFragment() {
     builder.setTitle(R.string.password)
     builder.setPositiveButton(android.R.string.ok) { _, _ -> tryEmitPassword() }
     val dialog = builder.create()
+    dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     dialog.setOnShowListener {
       if (isError) {
         binding.passwordField.error = getString(R.string.git_operation_wrong_password)
