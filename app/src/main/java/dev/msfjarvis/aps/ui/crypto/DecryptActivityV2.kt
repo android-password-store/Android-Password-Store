@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
+import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.crypto.CryptoRepository
@@ -17,6 +18,7 @@ import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
+import dev.msfjarvis.aps.util.extensions.isErr
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -42,6 +44,7 @@ class DecryptActivityV2 : BasePgpActivity() {
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
 
   private var passwordEntry: PasswordEntry? = null
+  private var retries = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,7 +59,7 @@ class DecryptActivityV2 : BasePgpActivity() {
         true
       }
     }
-    decrypt()
+    decrypt(isError = false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -126,36 +129,51 @@ class DecryptActivityV2 : BasePgpActivity() {
     )
   }
 
-  private fun decrypt() {
+  private fun decrypt(isError: Boolean) {
+    if (retries < MAX_RETRIES) {
+      retries += 1
+    } else {
+      finish()
+    }
     val dialog = PasswordDialog()
+    if (isError) {
+      dialog.setError()
+    }
     lifecycleScope.launch(Dispatchers.Main) {
       dialog.password.collectLatest { value ->
         if (value != null) {
-          decrypt(value)
+          if (runCatching { decrypt(value) }.isErr()) {
+            decrypt(isError = true)
+          }
         }
       }
     }
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
-  private fun decrypt(password: String) {
-    lifecycleScope.launch {
-      val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
-      val result =
-        withContext(Dispatchers.IO) {
-          val outputStream = ByteArrayOutputStream()
-          repository.decrypt(
-            password,
-            message,
-            outputStream,
-          )
-          outputStream
-        }
-      startAutoDismissTimer()
+  private suspend fun decrypt(password: String) {
+    val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
+    val result =
+      withContext(Dispatchers.IO) {
+        val outputStream = ByteArrayOutputStream()
+        repository.decrypt(
+          password,
+          message,
+          outputStream,
+        )
+        outputStream
+      }
+    require(result.size() != 0) { "Incorrect password" }
+    startAutoDismissTimer()
 
+    val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
+    passwordEntry = entry
+    createPasswordUi(entry)
+  }
+
+  private suspend fun createPasswordUi(entry: PasswordEntry) =
+    withContext(Dispatchers.Main) {
       val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-      val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
-      passwordEntry = entry
       invalidateOptionsMenu()
 
       val items = arrayListOf<FieldItem>()
@@ -187,5 +205,8 @@ class DecryptActivityV2 : BasePgpActivity() {
         }
       }
     }
+
+  private companion object {
+    private const val MAX_RETRIES = 3
   }
 }
