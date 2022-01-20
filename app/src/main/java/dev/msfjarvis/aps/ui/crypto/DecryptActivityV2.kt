@@ -44,6 +44,7 @@ class DecryptActivityV2 : BasePgpActivity() {
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
 
   private var passwordEntry: PasswordEntry? = null
+  private var retries = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -129,6 +130,11 @@ class DecryptActivityV2 : BasePgpActivity() {
   }
 
   private fun decrypt(isError: Boolean) {
+    if (retries < MAX_RETRIES) {
+      retries += 1
+    } else {
+      finish()
+    }
     val dialog = PasswordDialog()
     if (isError) {
       dialog.setError()
@@ -199,4 +205,8 @@ class DecryptActivityV2 : BasePgpActivity() {
         }
       }
     }
+
+  private companion object {
+    private const val MAX_RETRIES = 3
+  }
 }
