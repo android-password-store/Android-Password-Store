@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
+import com.github.michaelbull.result.runCatching
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.crypto.CryptoRepository
@@ -17,6 +18,7 @@ import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
+import dev.msfjarvis.aps.util.extensions.isErr
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
@@ -56,7 +58,7 @@ class DecryptActivityV2 : BasePgpActivity() {
         true
       }
     }
-    decrypt()
+    decrypt(isError = false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -126,12 +128,17 @@ class DecryptActivityV2 : BasePgpActivity() {
     )
   }
 
-  private fun decrypt() {
+  private fun decrypt(isError: Boolean) {
     val dialog = PasswordDialog()
+    if (isError) {
+      dialog.setError()
+    }
     lifecycleScope.launch(Dispatchers.Main) {
       dialog.password.collectLatest { value ->
         if (value != null) {
-          decrypt(value)
+          if (runCatching { decrypt(value) }.isErr()) {
+            decrypt(isError = true)
+          }
         }
       }
     }
@@ -150,6 +157,7 @@ class DecryptActivityV2 : BasePgpActivity() {
         )
         outputStream
       }
+    require(result.size() != 0) { "Incorrect password" }
     startAutoDismissTimer()
 
     val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
