@@ -138,24 +138,28 @@ class DecryptActivityV2 : BasePgpActivity() {
     dialog.show(supportFragmentManager, "PASSWORD_DIALOG")
   }
 
-  private fun decrypt(password: String) {
-    lifecycleScope.launch {
-      val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
-      val result =
-        withContext(Dispatchers.IO) {
-          val outputStream = ByteArrayOutputStream()
-          repository.decrypt(
-            password,
-            message,
-            outputStream,
-          )
-          outputStream
-        }
-      startAutoDismissTimer()
+  private suspend fun decrypt(password: String) {
+    val message = withContext(Dispatchers.IO) { File(fullPath).readBytes().inputStream() }
+    val result =
+      withContext(Dispatchers.IO) {
+        val outputStream = ByteArrayOutputStream()
+        repository.decrypt(
+          password,
+          message,
+          outputStream,
+        )
+        outputStream
+      }
+    startAutoDismissTimer()
 
+    val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
+    passwordEntry = entry
+    createPasswordUi(entry)
+  }
+
+  private suspend fun createPasswordUi(entry: PasswordEntry) =
+    withContext(Dispatchers.Main) {
       val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-      val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
-      passwordEntry = entry
       invalidateOptionsMenu()
 
       val items = arrayListOf<FieldItem>()
@@ -187,5 +191,4 @@ class DecryptActivityV2 : BasePgpActivity() {
         }
       }
     }
-  }
 }
