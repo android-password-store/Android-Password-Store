@@ -352,4 +352,8 @@ a app desde unha fonte de confianza, como a Play Store, Amazon Appstore, F-Droid
   <string name="gpg_key_select_mandatory">É preciso elexir unha chave GPG para continuar</string>
   <string name="place_shortcut_on_home_screen">Crear atallo na pantalla de inicio</string>
   <string name="password_list_fab_content_description">Crear novo contrasinal ou cartafol</string>
+  <string name="pgp_key_import_failed">Fallou a importación da chave PGP</string>
+  <string name="pgp_key_import_succeeded">Chave PGP importada correctamente</string>
+  <string name="pgp_key_import_succeeded_message">Aquí abaixo está o ID da chave importada, comproba que é correcto:\n%1$s</string>
+  <string name="pref_category_pgp_title">Axustes PGP</string>
 </resources>
