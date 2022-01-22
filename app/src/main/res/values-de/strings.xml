@@ -138,6 +138,7 @@
   <string name="pwgen_no_chars_error">Keine Zeichen hinzugefügt</string>
   <string name="pwgen_length_too_short_error">Länge zu kurz für ausgewählte Kriterien</string>
   <string name="pwgen_max_iterations_exceeded">Fehler beim Generieren eines Passworts, das die Einschränkungen erfüllt. Versuchen Sie, die Länge zu erhöhen.</string>
+  <string name="pwgen_separator">Trennzeichen</string>
   <!-- Password generator prefs -->
   <string name="pref_password_generator_type_title">Passwortgenerator</string>
   <!-- ssh keygen fragment -->
@@ -301,6 +302,8 @@
   <string name="git_push_other_error">Remote hat den Push abgelehnt. Prüfe die Variable receive.denyNonFastForwards in der Konfigurationsdatei des Ziel-Projektarchivs.</string>
   <string name="git_unknown_host">Unbekannter Host: %1$s</string>
   <string name="git_operation_running">Git-Operation wird ausgeführt…</string>
+  <string name="git_break_out_of_detached_success">Es gab einen Klonflikt während des rebase-Prozesses. Dein lokaler %1$s branch wurde auf einen anderen Branch namens %2$s gepusht.\nNutze diesen Branch um Konflikte auf deinem Computer zu beheben</string>
+  <string name="git_break_out_of_detached_unneeded">Das Repository befindet sich nicht im Rebase-Prozess, es ist nicht nötig, den Zustand auf einen weiteren Branch zu pushen</string>
   <!-- OpenKeychain not installed -->
   <string name="openkeychain_not_installed_title">OpenKeychain nicht installiert</string>
   <string name="openkeychain_not_installed_message">OpenKeychain wird für Password Store benötigt, bitte installieren Sie es von einem der unten aufgeführten Stores</string>
@@ -318,14 +321,32 @@
   <string name="clone_remote_repo">Remote Repository klonen</string>
   <string name="create_local_repo">Lokales Repository anlegen</string>
   <string name="select_gpg_key_title">Wähle\nGPG Key</string>
+  <string name="select_gpg_key_message">Wähle einen GPG-Key, mit dem du den Store initialisieren willst</string>
   <string name="gpg_key_select">Schlüssel auswählen</string>
   <!-- SSH port validation -->
   <string name="ssh_scheme_needed_title">Möglicherweise inkorrekte URL</string>
   <string name="ssh_scheme_needed_message">Es sieht so aus, als ob Sie einen benutzerdefinierten Port in Ihrer URL angegeben haben, aber nicht in dem ssh://-Schema.\nDas kann dazu führen, dass Ihr Port als Teil des Pfades betrachtet wird. Drücken Sie hier auf OK um die URL zu korrigieren.</string>
+  <string name="https_scheme_with_port_title">HTTPS URL mit nutzerdefiniertem Port</string>
+  <string name="https_scheme_with_port_message">Es sieht aus, als nutzt du eine HTTPS-URL mit nutzerdefiniertem Port. Das ist nicht unterstützt und wird auf lange Sicht zu Problemen führen. Drücke OK, um den Port aus der URL zu entfernen.</string>
+  <string name="git_scheme_disallowed_title">Es wird davon abgeraten, das git://-Protokoll zu nutzen</string>
+  <string name="git_scheme_disallowed_message">Das git-Protokoll des git-Daemons untersützt keine verschlüsselten Verbindungen und ist für einen sicheren Betrieb nicht geeignet.</string>
   <!-- Proxy configuration activity -->
+  <string name="proxy_hostname">Proxy Hostname</string>
   <string name="port">Port</string>
+  <string name="pref_edit_proxy_settings">HTTP(S) Proxy Einstellungen</string>
+  <string name="invalid_proxy_url">Ungültige URL</string>
+  <string name="clear_saved_host_key">Gespeicherten Host-Key löschen</string>
+  <string name="clear_saved_host_key_success">Host-Key erfolgreich gelöscht!</string>
   <string name="otp_import_qr_code">QR-Code scannen</string>
+  <string name="otp_import_from_file">Wähle ein Bild</string>
   <string name="otp_import_manual_entry">Manuell eingeben</string>
   <string name="otp_import_manual_hint_secret">Schlüssel</string>
+  <string name="otp_import_manual_hint_account">Account</string>
   <string name="gpg_key_select_mandatory">Die Auswahl eines GPG-Schlüssels ist notwendig, um fortzufahren</string>
+  <string name="place_shortcut_on_home_screen">Verknüpfung auf dem Home-Screen erstellen</string>
+  <string name="password_list_fab_content_description">Neues Passwort oder neuen Ordner erstellen</string>
+  <string name="pgp_key_import_failed">Fehler beim Import des PGP-Keys</string>
+  <string name="pgp_key_import_succeeded">PGP-Key erfolgreich importiert</string>
+  <string name="pgp_key_import_succeeded_message">Die Schlüssel-ID des importierten Schlüssels ist unten angegeben. Bitte überprüfe sie auf Korrektheit:\n%1$s</string>
+  <string name="pref_category_pgp_title">PGP Einstellungen</string>
 </resources>
