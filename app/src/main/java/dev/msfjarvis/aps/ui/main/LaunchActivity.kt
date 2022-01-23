@@ -10,15 +10,23 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.ui.crypto.BasePgpActivity
 import dev.msfjarvis.aps.ui.crypto.DecryptActivity
+import dev.msfjarvis.aps.ui.crypto.DecryptActivityV2
 import dev.msfjarvis.aps.ui.passwords.PasswordStore
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator
 import dev.msfjarvis.aps.util.auth.BiometricAuthenticator.Result
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LaunchActivity : AppCompatActivity() {
+
+  @Inject lateinit var features: Features
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -44,10 +52,18 @@ class LaunchActivity : AppCompatActivity() {
     }
   }
 
+  private fun getDecryptIntent(): Intent {
+    return if (features.isEnabled(Feature.EnablePGPainlessBackend)) {
+      Intent(this, DecryptActivityV2::class.java)
+    } else {
+      Intent(this, DecryptActivity::class.java)
+    }
+  }
+
   private fun startTargetActivity(noAuth: Boolean) {
     val intentToStart =
       if (intent.action == ACTION_DECRYPT_PASS)
-        Intent(this, DecryptActivity::class.java).apply {
+        getDecryptIntent().apply {
           putExtra(
             BasePgpActivity.EXTRA_FILE_PATH,
             intent.getStringExtra(BasePgpActivity.EXTRA_FILE_PATH)
