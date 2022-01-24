@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 -   Another workaround for SteamGuard's non-standard OTP format
 -   Allow importing QR code from images
 -   Introduce a new opt-in PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) that does not require OpenKeychain
+-   Add the ability to run garbage collection on the internal Git repository
 
 ### Fixed
 
