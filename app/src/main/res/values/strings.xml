@@ -392,5 +392,6 @@
   <string name="pgp_key_import_succeeded_message">The key ID of the imported key is given below, please review it for correctness:\n%1$s</string>
   <string name="pref_category_pgp_title">PGP settings</string>
   <string name="pwgen_some_error_occurred">Some error occurred</string>
+  <string name="git_run_gc_job">Run garbage collection job</string>
 
 </resources>

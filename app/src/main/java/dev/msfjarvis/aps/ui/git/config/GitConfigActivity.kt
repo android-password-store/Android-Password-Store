@@ -124,6 +124,15 @@ class GitConfigActivity : BaseGitActivity() {
           )
       }
     }
+    binding.gitGc.setOnClickListener {
+      lifecycleScope.launch {
+        launchGitOperation(GitOp.GC)
+          .fold(
+            success = ::finishOnSuccessHandler,
+            failure = { err -> promptOnErrorHandler(err) { finish() } },
+          )
+      }
+    }
   }
 
   /**
