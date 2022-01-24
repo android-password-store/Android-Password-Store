@@ -78,7 +78,12 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
         GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
         GitOp.RESET -> ResetToRemoteOperation(this)
       }
-    return op.executeAfterAuthentication(gitSettings.authMode).mapError(::transformGitError)
+    return (if (op.requiresAuth) {
+        op.executeAfterAuthentication(gitSettings.authMode)
+      } else {
+        op.execute()
+      })
+      .mapError(::transformGitError)
   }
 
   fun finishOnSuccessHandler(@Suppress("UNUSED_PARAMETER") nothing: Unit) {

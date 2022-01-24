@@ -57,7 +57,11 @@ import org.eclipse.jgit.transport.URIish
  */
 abstract class GitOperation(protected val callingActivity: FragmentActivity) {
 
+  /** List of [GitCommand]s that are executed by an operation. */
   abstract val commands: Array<GitCommand<out Any>>
+
+  /** Whether the operation requires authentication or not. */
+  open val requiresAuth: Boolean = true
   private val hostKeyFile = callingActivity.filesDir.resolve(".host_key")
   private var sshSessionFactory: SshjSessionFactory? = null
   private val hiltEntryPoint =
