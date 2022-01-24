@@ -60,10 +60,11 @@ android {
   buildFeatures.compose = true
 
   lint {
-    isAbortOnError = true
-    isCheckReleaseBuilds = false
-    disable("MissingTranslation", "PluralsCandidate", "ImpliedQuantity")
-    disable("CoroutineCreationDuringComposition")
+    abortOnError = true
+    checkReleaseBuilds = false
+    disable.add("MissingTranslation")
+    disable.add("PluralsCandidate")
+    disable.add("ImpliedQuantity")
   }
 
   composeOptions { kotlinCompilerExtensionVersion = libs.versions.compose.get() }
