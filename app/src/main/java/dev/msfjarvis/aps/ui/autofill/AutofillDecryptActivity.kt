@@ -79,7 +79,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
           context,
           decryptFileRequestCode++,
           intent,
-          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+          PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
         .intentSender
     }

@@ -56,7 +56,7 @@ fun makeInlinePresentation(
       context,
       0,
       Intent(context, PasswordStore::class.java),
-      PendingIntent.FLAG_IMMUTABLE
+      PendingIntent.FLAG_MUTABLE
     )
   val slice =
     InlineSuggestionUi.newContentBuilder(launchIntent).run {
