@@ -19,6 +19,7 @@ import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.git.ErrorMessages
 import dev.msfjarvis.aps.util.git.operation.BreakOutOfDetached
 import dev.msfjarvis.aps.util.git.operation.CloneOperation
+import dev.msfjarvis.aps.util.git.operation.GcOperation
 import dev.msfjarvis.aps.util.git.operation.PullOperation
 import dev.msfjarvis.aps.util.git.operation.PushOperation
 import dev.msfjarvis.aps.util.git.operation.ResetToRemoteOperation
@@ -51,6 +52,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
     PUSH,
     RESET,
     SYNC,
+    GC,
   }
 
   @Inject lateinit var gitSettings: GitSettings
@@ -77,6 +79,7 @@ abstract class BaseGitActivity : ContinuationContainerActivity() {
         GitOp.SYNC -> SyncOperation(this, gitSettings.rebaseOnPull)
         GitOp.BREAK_OUT_OF_DETACHED -> BreakOutOfDetached(this)
         GitOp.RESET -> ResetToRemoteOperation(this)
+        GitOp.GC -> GcOperation(this)
       }
     return (if (op.requiresAuth) {
         op.executeAfterAuthentication(gitSettings.authMode)
