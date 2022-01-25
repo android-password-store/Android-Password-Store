@@ -10,6 +10,11 @@ android {
 }
 
 dependencies {
+  implementation(libs.androidx.core.ktx)
+  implementation(libs.kotlin.coroutines.android)
+  implementation(libs.kotlin.coroutines.core)
   implementation(libs.thirdparty.sshauth)
   implementation(libs.thirdparty.sshj)
+  implementation(libs.androidx.security)
+  implementation(libs.thirdparty.eddsa)
 }
