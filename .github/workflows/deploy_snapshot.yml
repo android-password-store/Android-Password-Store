@@ -28,7 +28,7 @@ jobs:
       run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
     - name: Build release app
-      uses: gradle/gradle-build-action@v2.1.0
+      uses: gradle/gradle-build-action@v2.1.1
       env:
         SNAPSHOT: "true"
       with:
