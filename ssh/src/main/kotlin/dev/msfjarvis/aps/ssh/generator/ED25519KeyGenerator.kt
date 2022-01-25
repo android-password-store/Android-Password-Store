@@ -5,7 +5,7 @@ import net.i2p.crypto.eddsa.KeyPairGenerator
 
 class ED25519KeyGenerator : SSHKeyGenerator {
 
-  override fun generateKey(requiresAuthentication: Boolean): KeyPair {
+  override suspend fun generateKey(requiresAuthentication: Boolean): KeyPair {
     // Generate the ed25519 key pair and encrypt the private key.
     return KeyPairGenerator().generateKeyPair()
   }

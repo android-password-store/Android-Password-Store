@@ -10,7 +10,7 @@ import java.security.KeyPairGenerator
 
 class RSAKeyGenerator : SSHKeyGenerator {
 
-  override fun generateKey(requiresAuthentication: Boolean): KeyPair {
+  override suspend fun generateKey(requiresAuthentication: Boolean): KeyPair {
     val algorithm = KeyProperties.KEY_ALGORITHM_RSA
     // Generate Keystore-backed private key.
     val parameterSpec =

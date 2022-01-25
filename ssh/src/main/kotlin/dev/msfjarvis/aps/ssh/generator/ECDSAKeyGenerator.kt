@@ -10,7 +10,7 @@ import java.security.KeyPairGenerator
 
 class ECDSAKeyGenerator(private val isStrongBoxSupported: Boolean) : SSHKeyGenerator {
 
-  override fun generateKey(requiresAuthentication: Boolean): KeyPair {
+  override suspend fun generateKey(requiresAuthentication: Boolean): KeyPair {
     val algorithm = KeyProperties.KEY_ALGORITHM_EC
 
     val parameterSpec =
