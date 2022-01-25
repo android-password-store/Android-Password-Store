@@ -186,3 +186,5 @@ include("passgen:random")
 include("sentry-stub")
 
 include("ui-compose")
+
+include("ssh")
