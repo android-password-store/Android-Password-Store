@@ -102,4 +102,12 @@
     android:text="@string/reset_to_remote"
     app:layout_constraintTop_toBottomOf="@id/git_abort_rebase" />
 
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/git_gc"
+    android:layout_marginTop="8dp"
+    android:text="@string/git_run_gc_job"
+    app:layout_constraintTop_toBottomOf="@id/git_reset_to_remote"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
