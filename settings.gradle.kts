@@ -54,4 +54,6 @@ include("openpgp-ktx")
 
 include("passgen:diceware")
 
-include(":passgen:random")
+include("passgen:random")
+
+include("ui-compose")
