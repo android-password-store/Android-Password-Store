@@ -25,34 +25,10 @@ import org.eclipse.jgit.transport.URIish
 
 object PasswordRepository {
 
-  private var repository: Repository? = null
+  var repository: Repository? = null
   private val settings by unsafeLazy { Application.instance.sharedPrefs }
   private val filesDir
     get() = Application.instance.filesDir
-
-  /**
-   * Returns the git repository
-   *
-   * @param localDir needed only on the creation
-   * @return the git repository
-   */
-  fun getRepository(localDir: File?): Repository? {
-    if (repository == null && localDir != null) {
-      val builder = FileRepositoryBuilder()
-      repository =
-        runCatching {
-          builder
-            .setGitDir(localDir)
-            .build()
-        }
-          .getOrElse { e ->
-            e.printStackTrace()
-            null
-          }
-    }
-    return repository
-  }
-
   val isInitialized: Boolean
     get() = repository != null
 
@@ -60,11 +36,23 @@ object PasswordRepository {
     return repository?.objectDatabase?.exists() ?: false
   }
 
-  fun createRepository(localDir: File) {
-    localDir.delete()
+  /**
+   * Takes in a [repositoryDir] to initialize a Git repository with, and assigns it to [repository]
+   * as static state.
+   */
+  private fun initializeRepository(repositoryDir: File) {
+    val builder = FileRepositoryBuilder()
+    repository =
+      runCatching { builder.setGitDir(repositoryDir).build() }.getOrElse { e ->
+        e.printStackTrace()
+        null
+      }
+  }
 
-    Git.init().setDirectory(localDir).call()
-    getRepository(localDir)
+  fun createRepository(repositoryDir: File) {
+    repositoryDir.delete()
+    Git.init().setDirectory(repositoryDir).call()
+    initializeRepository(repositoryDir)
   }
 
   // TODO add multiple remotes support for pull/push
@@ -128,7 +116,7 @@ object PasswordRepository {
 
   fun initialize(): Repository? {
     val dir = getRepositoryDirectory()
-    // uninitialize the repo if the dir does not exist or is absolutely empty
+    // Un-initialize the repo if the dir does not exist or is absolutely empty
     settings.edit {
       if (!dir.exists() || !dir.isDirectory || requireNotNull(dir.listFiles()).isEmpty()) {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
@@ -136,9 +124,10 @@ object PasswordRepository {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)
       }
     }
+    // Create the repository static variable in PasswordRepository
+    initializeRepository(dir.resolve(".git"))
 
-    // create the repository static variable in PasswordRepository
-    return getRepository(File(dir.absolutePath + "/.git"))
+    return repository
   }
 
   /**

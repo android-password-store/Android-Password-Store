@@ -78,7 +78,7 @@ class GitConfigActivity : BaseGitActivity() {
 
   /** Sets up the UI components of the tools section. */
   private fun setupTools() {
-    val repo = PasswordRepository.getRepository(null)
+    val repo = PasswordRepository.repository
     if (repo != null) {
       binding.gitHeadStatus.text = headStatusMsg(repo)
       // enable the abort button only if we're rebasing or merging
