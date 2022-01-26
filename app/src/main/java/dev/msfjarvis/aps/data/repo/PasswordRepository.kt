@@ -4,8 +4,6 @@
  */
 package dev.msfjarvis.aps.data.repo
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
@@ -18,42 +16,14 @@ import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.LinkOption
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
-import org.eclipse.jgit.util.FS
-import org.eclipse.jgit.util.FS_POSIX_Java6
 
 object PasswordRepository {
-
-  @RequiresApi(Build.VERSION_CODES.O)
-  private class FS_POSIX_Java6_with_optional_symlinks : FS_POSIX_Java6() {
-
-    override fun supportsSymlinks() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-    override fun isSymLink(file: File) = Files.isSymbolicLink(file.toPath())
-
-    override fun readSymLink(file: File) = Files.readSymbolicLink(file.toPath()).toString()
-
-    override fun createSymLink(source: File, target: String) {
-      val sourcePath = source.toPath()
-      if (Files.exists(sourcePath, LinkOption.NOFOLLOW_LINKS)) Files.delete(sourcePath)
-      Files.createSymbolicLink(sourcePath, File(target).toPath())
-    }
-  }
-
-  @RequiresApi(Build.VERSION_CODES.O)
-  private class Java7FSFactory : FS.FSFactory() {
-
-    override fun detect(cygwinUsed: Boolean?): FS {
-      return FS_POSIX_Java6_with_optional_symlinks()
-    }
-  }
 
   private var repository: Repository? = null
   private val settings by unsafeLazy { Application.instance.sharedPrefs }
@@ -72,13 +42,7 @@ object PasswordRepository {
       repository =
         runCatching {
           builder
-            .run {
-              gitDir = localDir
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                fs = Java7FSFactory().detect(null)
-              }
-              readEnvironment()
-            }
+            .setGitDir(localDir)
             .build()
         }
           .getOrElse { e ->
