@@ -3,7 +3,6 @@
 androidx_activity = "1.4.0"
 androidx_test = "1.4.1-alpha03"
 compose = "1.2.0-alpha01"
-composeSnapshot = "-"
 coroutines = "1.6.0"
 flowbinding = "1.2.0"
 hilt = "2.40.5"

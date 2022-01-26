@@ -16,5 +16,6 @@ apiValidation {
       "format-common",
       "diceware",
       "random",
+      "ui-compose",
     )
 }

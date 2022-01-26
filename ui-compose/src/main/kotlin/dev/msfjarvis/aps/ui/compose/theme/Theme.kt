@@ -1,4 +1,4 @@
-package dev.msfjarvis.aps.ui.theme
+package dev.msfjarvis.aps.ui.compose.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -64,7 +64,10 @@ private val DarkThemeColors =
   )
 
 @Composable
-fun APSTheme(useDarkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+public fun APSTheme(
+  useDarkTheme: Boolean = isSystemInDarkTheme(),
+  content: @Composable () -> Unit,
+) {
   val colors =
     if (!useDarkTheme) {
       LightThemeColors

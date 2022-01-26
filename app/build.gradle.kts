@@ -13,23 +13,7 @@ plugins {
   id("dagger.hilt.android.plugin")
 }
 
-repositories {
-  val composeSnapshot = libs.versions.composeSnapshot.get()
-  if (composeSnapshot.length > 1) {
-    maven("https://androidx.dev/snapshots/builds/$composeSnapshot/artifacts/repository/") {
-      content {
-        includeGroup("androidx.compose.animation")
-        includeGroup("androidx.compose.compiler")
-        includeGroup("androidx.compose.foundation")
-        includeGroup("androidx.compose.material")
-        includeGroup("androidx.compose.runtime")
-        includeGroup("androidx.compose.ui")
-      }
-    }
-  }
-}
-
-configure<crowdin.CrowdinExtension> {
+crowdin {
   projectName = "android-password-store"
   skipCleanup = false
 }
@@ -57,8 +41,6 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
-  buildFeatures.compose = true
-
   lint {
     abortOnError = true
     checkReleaseBuilds = false
@@ -66,8 +48,6 @@ android {
     disable.add("PluralsCandidate")
     disable.add("ImpliedQuantity")
   }
-
-  composeOptions { kotlinCompilerExtensionVersion = libs.versions.compose.get() }
 }
 
 dependencies {
@@ -100,16 +80,6 @@ dependencies {
 
   implementation(libs.kotlin.coroutines.android)
   implementation(libs.kotlin.coroutines.core)
-
-  implementation(libs.androidx.activity.compose)
-  implementation(libs.androidx.hilt.compose)
-  implementation(libs.compose.foundation.core)
-  implementation(libs.compose.foundation.layout)
-  implementation(libs.compose.material)
-  implementation(libs.androidx.compose.material3)
-  implementation(libs.compose.ui.core)
-  implementation(libs.compose.ui.viewbinding)
-  compileOnly(libs.compose.ui.tooling)
 
   implementation(libs.aps.sublimeFuzzy)
   implementation(libs.aps.zxingAndroidEmbedded)
