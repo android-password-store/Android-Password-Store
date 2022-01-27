@@ -70,7 +70,7 @@ abstract class GitOperation(protected val callingActivity: FragmentActivity) {
       GitOperationEntryPoint::class.java
     )
 
-  protected val repository = PasswordRepository.getRepository(null)!!
+  protected val repository = PasswordRepository.repository!!
   protected val git = Git(repository)
   protected val remoteBranch = hiltEntryPoint.gitSettings().branch
   private val authActivity

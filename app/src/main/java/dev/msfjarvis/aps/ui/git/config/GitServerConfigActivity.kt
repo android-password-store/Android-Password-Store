@@ -174,8 +174,7 @@ class GitServerConfigActivity : BaseGitActivity() {
           }
         }
         GitSettings.UpdateConnectionSettingsResult.Valid -> {
-          if (isClone && PasswordRepository.getRepository(null) == null)
-            PasswordRepository.initialize()
+          if (isClone && PasswordRepository.repository == null) PasswordRepository.initialize()
           if (!isClone) {
             Snackbar.make(
                 binding.root,

@@ -20,7 +20,7 @@ import org.eclipse.jgit.revwalk.RevCommit
 private val TAG = GitLogModel::class.java.simpleName
 
 private fun commits(): Iterable<RevCommit> {
-  val repo = PasswordRepository.getRepository(null)
+  val repo = PasswordRepository.repository
   if (repo == null) {
     logcat(TAG, ERROR) { "Could not access git repository" }
     return listOf()

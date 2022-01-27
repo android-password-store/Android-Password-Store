@@ -4,8 +4,6 @@
  */
 package dev.msfjarvis.aps.data.repo
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
@@ -18,77 +16,19 @@ import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.LinkOption
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.transport.RefSpec
 import org.eclipse.jgit.transport.RemoteConfig
 import org.eclipse.jgit.transport.URIish
-import org.eclipse.jgit.util.FS
-import org.eclipse.jgit.util.FS_POSIX_Java6
 
 object PasswordRepository {
 
-  @RequiresApi(Build.VERSION_CODES.O)
-  private class FS_POSIX_Java6_with_optional_symlinks : FS_POSIX_Java6() {
-
-    override fun supportsSymlinks() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-    override fun isSymLink(file: File) = Files.isSymbolicLink(file.toPath())
-
-    override fun readSymLink(file: File) = Files.readSymbolicLink(file.toPath()).toString()
-
-    override fun createSymLink(source: File, target: String) {
-      val sourcePath = source.toPath()
-      if (Files.exists(sourcePath, LinkOption.NOFOLLOW_LINKS)) Files.delete(sourcePath)
-      Files.createSymbolicLink(sourcePath, File(target).toPath())
-    }
-  }
-
-  @RequiresApi(Build.VERSION_CODES.O)
-  private class Java7FSFactory : FS.FSFactory() {
-
-    override fun detect(cygwinUsed: Boolean?): FS {
-      return FS_POSIX_Java6_with_optional_symlinks()
-    }
-  }
-
-  private var repository: Repository? = null
+  var repository: Repository? = null
   private val settings by unsafeLazy { Application.instance.sharedPrefs }
   private val filesDir
     get() = Application.instance.filesDir
-
-  /**
-   * Returns the git repository
-   *
-   * @param localDir needed only on the creation
-   * @return the git repository
-   */
-  fun getRepository(localDir: File?): Repository? {
-    if (repository == null && localDir != null) {
-      val builder = FileRepositoryBuilder()
-      repository =
-        runCatching {
-          builder
-            .run {
-              gitDir = localDir
-              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                fs = Java7FSFactory().detect(null)
-              }
-              readEnvironment()
-            }
-            .build()
-        }
-          .getOrElse { e ->
-            e.printStackTrace()
-            null
-          }
-    }
-    return repository
-  }
-
   val isInitialized: Boolean
     get() = repository != null
 
@@ -96,11 +36,23 @@ object PasswordRepository {
     return repository?.objectDatabase?.exists() ?: false
   }
 
-  fun createRepository(localDir: File) {
-    localDir.delete()
+  /**
+   * Takes in a [repositoryDir] to initialize a Git repository with, and assigns it to [repository]
+   * as static state.
+   */
+  private fun initializeRepository(repositoryDir: File) {
+    val builder = FileRepositoryBuilder()
+    repository =
+      runCatching { builder.setGitDir(repositoryDir).build() }.getOrElse { e ->
+        e.printStackTrace()
+        null
+      }
+  }
 
-    Git.init().setDirectory(localDir).call()
-    getRepository(localDir)
+  fun createRepository(repositoryDir: File) {
+    repositoryDir.delete()
+    Git.init().setDirectory(repositoryDir).call()
+    initializeRepository(repositoryDir)
   }
 
   // TODO add multiple remotes support for pull/push
@@ -164,7 +116,7 @@ object PasswordRepository {
 
   fun initialize(): Repository? {
     val dir = getRepositoryDirectory()
-    // uninitialize the repo if the dir does not exist or is absolutely empty
+    // Un-initialize the repo if the dir does not exist or is absolutely empty
     settings.edit {
       if (!dir.exists() || !dir.isDirectory || requireNotNull(dir.listFiles()).isEmpty()) {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
@@ -172,9 +124,10 @@ object PasswordRepository {
         putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, true)
       }
     }
+    // Create the repository static variable in PasswordRepository
+    initializeRepository(dir.resolve(".git"))
 
-    // create the repository static variable in PasswordRepository
-    return getRepository(File(dir.absolutePath + "/.git"))
+    return repository
   }
 
   /**

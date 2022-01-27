@@ -38,8 +38,7 @@ class FolderCreationDialogFragment : DialogFragment() {
         result.data?.getStringArrayExtra(OpenPgpApi.EXTRA_KEY_IDS)?.let { keyIds ->
           val gpgIdentifierFile = File(newFolder, ".gpg-id")
           gpgIdentifierFile.writeText(keyIds.joinToString("\n"))
-          val repo = PasswordRepository.getRepository(null)
-          if (repo != null) {
+          if (PasswordRepository.repository != null) {
             lifecycleScope.launch {
               val repoPath = PasswordRepository.getRepositoryDirectory().absolutePath
               requireActivity()
