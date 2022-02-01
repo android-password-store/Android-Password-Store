@@ -43,7 +43,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority.ERROR
-import logcat.asLog
 import logcat.logcat
 import me.msfjarvis.openpgpktx.util.OpenPgpApi
 import me.msfjarvis.openpgpktx.util.OpenPgpServiceConnection
@@ -204,7 +203,7 @@ class AutofillDecryptActivity : AppCompatActivity() {
                   val entry =
                     withContext(Dispatchers.IO) {
                       @Suppress("BlockingMethodInNonBlockingContext")
-                      passwordEntryFactory.create(lifecycleScope, decryptedOutput.toByteArray())
+                      passwordEntryFactory.create(decryptedOutput.toByteArray())
                     }
                   AutofillPreferences.credentialsFromStoreEntry(
                     this,

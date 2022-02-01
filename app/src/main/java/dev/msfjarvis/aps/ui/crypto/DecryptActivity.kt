@@ -31,6 +31,7 @@ import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -178,7 +179,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
           startAutoDismissTimer()
           runCatching {
             val showPassword = settings.getBoolean(PreferenceKeys.SHOW_PASSWORD, true)
-            val entry = passwordEntryFactory.create(lifecycleScope, outputStream.toByteArray())
+            val entry = passwordEntryFactory.create(outputStream.toByteArray())
 
             if (settings.getBoolean(PreferenceKeys.COPY_ON_DECRYPT, false)) {
               copyPasswordToClipboard(entry.password)
@@ -193,7 +194,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             }
 
             if (entry.hasTotp()) {
-              items.add(FieldItem.createOtpField(entry.totp.value))
+              items.add(FieldItem.createOtpField(entry.totp.first()))
             }
 
             if (!entry.username.isNullOrBlank()) {
