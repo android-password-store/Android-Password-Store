@@ -15,6 +15,8 @@ import dev.msfjarvis.aps.util.services.getDefaultUsername
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.File
 import java.nio.file.Paths
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 enum class DirectoryStructure(val value: String) {
   EncryptedUsername("encrypted_username"),
@@ -141,6 +143,6 @@ object AutofillPreferences {
     // Always give priority to a username stored in the encrypted extras
     val username =
       entry.username ?: directoryStructure.getUsernameFor(file) ?: context.getDefaultUsername()
-    return Credentials(username, entry.password, entry.totp.value)
+    return Credentials(username, entry.password, runBlocking { entry.totp.first() })
   }
 }

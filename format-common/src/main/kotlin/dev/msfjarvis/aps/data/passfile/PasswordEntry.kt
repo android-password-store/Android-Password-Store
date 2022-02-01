@@ -9,20 +9,15 @@ import com.github.michaelbull.result.mapBoth
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dev.msfjarvis.aps.util.coroutines.DispatcherProvider
 import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import kotlin.collections.set
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 /** Represents a single entry in the password store. */
 @OptIn(ExperimentalTime::class)
@@ -30,20 +25,13 @@ public class PasswordEntry
 @AssistedInject
 constructor(
   /** A time source used to calculate the TOTP */
-  clock: UserClock,
+  private val clock: UserClock,
   /** [TotpFinder] implementation to extract data from a TOTP URI */
-  totpFinder: TotpFinder,
-  /** Instance of [DispatcherProvider] to select an IO dispatcher for emitting TOTP values. */
-  dispatcherProvider: DispatcherProvider,
-  /**
-   * A cancellable [CoroutineScope] inside which we constantly emit new TOTP values as time elapses
-   */
-  @Assisted scope: CoroutineScope,
+  private val totpFinder: TotpFinder,
   /** The content of this entry, as an array of bytes. */
   @Assisted bytes: ByteArray,
 ) {
 
-  private val _totp = MutableStateFlow("")
   private val content = bytes.decodeToString()
 
   /** The password text for this entry. Can be null. */
@@ -62,11 +50,21 @@ constructor(
   public val extraContentString: String
 
   /**
-   * A [StateFlow] providing the current TOTP. It will emit a single empty string on initialization
-   * which is replaced with a real TOTP if applicable. Call [hasTotp] to verify whether or not you
-   * need to observe this value.
+   * A [Flow] providing the current TOTP. It will start emitting only when collected. If this entry
+   * does not have a TOTP secret, the flow will never emit. Users should call [hasTotp] before
+   * collection to check if it is valid to collect this [Flow].
    */
-  public val totp: StateFlow<String> = _totp.asStateFlow()
+  public val totp: Flow<String> = flow {
+    if (totpSecret != null) {
+      repeat(Int.MAX_VALUE) {
+        val (otp, remainingTime) = calculateTotp()
+        emit(otp)
+        delay(remainingTime)
+      }
+    } else {
+      awaitCancellation()
+    }
+  }
 
   /**
    * String representation of [extraContent] but with authentication related data such as TOTP URIs
@@ -83,21 +81,6 @@ constructor(
     extraContent = generateExtraContentPairs()
     username = findUsername()
     totpSecret = totpFinder.findSecret(content)
-    if (totpSecret != null) {
-      scope.launch(dispatcherProvider.io()) {
-        val digits = totpFinder.findDigits(content)
-        val totpPeriod = totpFinder.findPeriod(content)
-        val totpAlgorithm = totpFinder.findAlgorithm(content)
-        val issuer = totpFinder.findIssuer(content)
-        val remainingTime = totpPeriod - (clock.millis() % totpPeriod)
-        updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits, issuer)
-        delay(Duration.seconds(remainingTime))
-        repeat(Int.MAX_VALUE) {
-          updateTotp(clock.millis(), totpPeriod, totpAlgorithm, digits, issuer)
-          delay(Duration.seconds(totpPeriod))
-        }
-      }
-    }
   }
 
   public fun hasTotp(): Boolean {
@@ -188,22 +171,25 @@ constructor(
     return null
   }
 
-  private fun updateTotp(
-    millis: Long,
-    totpPeriod: Long,
-    totpAlgorithm: String,
-    digits: String,
-    issuer: String?,
-  ) {
-    if (totpSecret != null) {
-      Otp.calculateCode(totpSecret, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
-        .mapBoth({ code -> _totp.update { code } }, { throwable -> throw throwable })
-    }
+  private fun calculateTotp(): Pair<String, Long> {
+    val digits = totpFinder.findDigits(content)
+    val totpPeriod = totpFinder.findPeriod(content)
+    val totpAlgorithm = totpFinder.findAlgorithm(content)
+    val issuer = totpFinder.findIssuer(content)
+    val millis = clock.millis()
+    val remainingTime = totpPeriod - (millis % totpPeriod)
+    Otp.calculateCode(totpSecret!!, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
+      .mapBoth(
+        { code ->
+          return code to remainingTime
+        },
+        { throwable -> throw throwable }
+      )
   }
 
   @AssistedFactory
   public interface Factory {
-    public fun create(scope: CoroutineScope, bytes: ByteArray): PasswordEntry
+    public fun create(bytes: ByteArray): PasswordEntry
   }
 
   internal companion object {

@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -166,7 +167,7 @@ class DecryptActivityV2 : BasePgpActivity() {
     require(result.size() != 0) { "Incorrect password" }
     startAutoDismissTimer()
 
-    val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
+    val entry = passwordEntryFactory.create(result.toByteArray())
     passwordEntry = entry
     createPasswordUi(entry)
   }
@@ -182,7 +183,7 @@ class DecryptActivityV2 : BasePgpActivity() {
       }
 
       if (entry.hasTotp()) {
-        items.add(FieldItem.createOtpField(entry.totp.value))
+        items.add(FieldItem.createOtpField(entry.totp.first()))
       }
 
       if (!entry.username.isNullOrBlank()) {

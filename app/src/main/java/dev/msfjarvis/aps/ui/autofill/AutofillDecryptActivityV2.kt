@@ -162,7 +162,7 @@ class AutofillDecryptActivityV2 : AppCompatActivity() {
           }
           .onSuccess { result ->
             return runCatching {
-              val entry = passwordEntryFactory.create(lifecycleScope, result.toByteArray())
+              val entry = passwordEntryFactory.create(result.toByteArray())
               AutofillPreferences.credentialsFromStoreEntry(this, file, entry, directoryStructure)
             }
               .getOrElse { e ->

@@ -223,10 +223,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
               // User wants to disable username encryption, so we extract the
               // username from the encrypted extras and use it as the filename.
               val entry =
-                passwordEntryFactory.create(
-                  lifecycleScope,
-                  "PASSWORD\n${extraContent.text}".encodeToByteArray()
-                )
+                passwordEntryFactory.create("PASSWORD\n${extraContent.text}".encodeToByteArray())
               val username = entry.username
 
               // username should not be null here by the logic in
@@ -300,10 +297,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
     with(binding) {
       // Use PasswordEntry to parse extras for username
       val entry =
-        passwordEntryFactory.create(
-          lifecycleScope,
-          "PLACEHOLDER\n${extraContent.text}".encodeToByteArray()
-        )
+        passwordEntryFactory.create("PLACEHOLDER\n${extraContent.text}".encodeToByteArray())
       encryptUsername.apply {
         if (visibility != View.VISIBLE) return@apply
         val hasUsernameInFileName = filename.text.toString().isNotBlank()
@@ -406,7 +400,7 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
 
           if (shouldGeneratePassword) {
             val directoryStructure = AutofillPreferences.directoryStructure(applicationContext)
-            val entry = passwordEntryFactory.create(lifecycleScope, content.encodeToByteArray())
+            val entry = passwordEntryFactory.create(content.encodeToByteArray())
             returnIntent.putExtra(RETURN_EXTRA_PASSWORD, entry.password)
             val username = entry.username ?: directoryStructure.getUsernameFor(file)
             returnIntent.putExtra(RETURN_EXTRA_USERNAME, username)
