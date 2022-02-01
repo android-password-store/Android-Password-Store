@@ -6,10 +6,10 @@
 package dev.msfjarvis.aps.data.passfile
 
 import dev.msfjarvis.aps.test.CoroutineTestRule
+import dev.msfjarvis.aps.test.test2
 import dev.msfjarvis.aps.util.time.TestUserClock
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import java.util.Locale
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -17,7 +17,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 
@@ -29,8 +28,6 @@ class PasswordEntryTest {
     PasswordEntry(
       fakeClock,
       testFinder,
-      coroutineTestRule.testDispatcherProvider,
-      TestScope(coroutineTestRule.testDispatcher),
       content.encodeToByteArray(),
     )
 
@@ -133,27 +130,22 @@ class PasswordEntryTest {
   }
 
   @Test
-  @Ignore("Timing with runTest seems hard to implement right now")
-  fun testGeneratesOtpFromTotpUri() {
-    runTest {
-      val entry = makeEntry("secret\nextra\n$TOTP_URI")
-      assertTrue(entry.hasTotp())
-      val code = entry.totp.value
-      assertNotNull(code) { "Generated OTP cannot be null" }
-      assertEquals("818800", code)
+  fun testGeneratesOtpFromTotpUri() = runTest {
+    val entry = makeEntry("secret\nextra\n$TOTP_URI")
+    assertTrue(entry.hasTotp())
+    entry.totp.test2 {
+      assertEquals("818800", expectMostRecentItem())
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
   @Test
-  @Ignore("Timing with runTest seems hard to implement right now")
-  fun testGeneratesOtpWithOnlyUriInFile() {
-    runTest {
-      val entry = makeEntry(TOTP_URI)
-      assertNull(entry.password)
-      assertTrue(entry.hasTotp())
-      val code = entry.totp.value
-      assertNotNull(code) { "Generated OTP cannot be null" }
-      assertEquals("818800", code)
+  fun testGeneratesOtpWithOnlyUriInFile() = runTest {
+    val entry = makeEntry(TOTP_URI)
+    assertNull(entry.password)
+    entry.totp.test2 {
+      assertEquals("818800", expectMostRecentItem())
+      cancelAndIgnoreRemainingEvents()
     }
   }
 
