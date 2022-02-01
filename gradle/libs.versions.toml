@@ -93,6 +93,7 @@ testing-junit = "junit:junit:4.13.2"
 testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 testing-robolectric = "org.robolectric:robolectric:4.7.3"
 testing-sharedPrefsMock = "com.github.android-password-store:shared-preferences-fake:2.0.0"
+testing-turbine = "app.cash.turbine:turbine:0.7.0"
 
 [bundles]
 androidxLifecycle = ["androidx-lifecycle-common", "androidx-lifecycle-livedataKtx", "androidx-lifecycle-viewmodelKtx"]
