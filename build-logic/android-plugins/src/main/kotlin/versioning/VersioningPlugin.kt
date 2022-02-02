@@ -53,7 +53,7 @@ class VersioningPlugin : Plugin<Project> {
       require(propFile.asFile.exists()) {
         "A 'version.properties' file must exist in the project subdirectory to use this plugin"
       }
-      val contents = providers.fileContents(propFile).asText.forUseAtConfigurationTime()
+      val contents = providers.fileContents(propFile).asText
       val versionProps = Properties().also { it.load(contents.get().byteInputStream()) }
       val versionName =
         requireNotNull(versionProps.getProperty(VERSIONING_PROP_VERSION_NAME)) {
