@@ -31,7 +31,7 @@ jobs:
         fi
 
     - name: Upload binaries
-      uses: gradle/gradle-build-action@v2.1.2
+      uses: gradle/gradle-build-action@v2.1.3
       with:
         arguments: :${{ steps.task-select.outputs.PROJECT }}:publishAllPublicationsToMavenCentralRepository
       env:
@@ -41,7 +41,7 @@ jobs:
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
 
     - name: Close and release repository
-      uses: gradle/gradle-build-action@v2.1.2
+      uses: gradle/gradle-build-action@v2.1.3
       with:
         arguments: closeAndReleaseRepository
       env:
