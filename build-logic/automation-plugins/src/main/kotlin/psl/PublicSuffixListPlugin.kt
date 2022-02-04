@@ -4,16 +4,15 @@
 
 package psl
 
-import java.io.File
+import java.io.Serializable
 import java.util.TreeSet
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.ByteString
 import okio.ByteString.Companion.encodeUtf8
-import okio.buffer
-import okio.sink
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.register
 
 /**
  * Gradle plugin to update the public suffix list used by the `lib-publicsuffixlist` component.
@@ -23,34 +22,10 @@ import org.gradle.api.Project
  */
 class PublicSuffixListPlugin : Plugin<Project> {
   override fun apply(project: Project) {
-    project.tasks.register("updatePSL") {
-      doLast {
-        val filename = project.projectDir.absolutePath + "/src/main/assets/publicsuffixes"
-        updatePublicSuffixList(filename)
-      }
-    }
-  }
-
-  private fun updatePublicSuffixList(destination: String) {
-    val list = fetchPublicSuffixList()
-    writeListToDisk(destination, list)
-  }
-
-  private fun writeListToDisk(destination: String, data: PublicSuffixListData) {
-    val fileSink = File(destination).sink()
-
-    fileSink.buffer().use { sink ->
-      sink.writeInt(data.totalRuleBytes)
-
-      for (domain in data.sortedRules) {
-        sink.write(domain).writeByte('\n'.toInt())
-      }
-
-      sink.writeInt(data.totalExceptionRuleBytes)
-
-      for (domain in data.sortedExceptionRules) {
-        sink.write(domain).writeByte('\n'.toInt())
-      }
+    project.tasks.register<PSLUpdateTask>("updatePSL") {
+      val list = fetchPublicSuffixList()
+      pslData.set(list)
+      outputFile.set(project.layout.projectDirectory.file("src/main/assets/publicsuffixes"))
     }
   }
 
@@ -119,4 +94,4 @@ data class PublicSuffixListData(
   var totalExceptionRuleBytes: Int = 0,
   val sortedRules: TreeSet<ByteString> = TreeSet(),
   val sortedExceptionRules: TreeSet<ByteString> = TreeSet()
-)
+) : Serializable
