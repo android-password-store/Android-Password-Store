@@ -25,6 +25,11 @@ android {
 
   adbOptions.installOptions("--user 0")
 
+  dependenciesInfo {
+    includeInBundle = false
+    includeInApk = false
+  }
+
   buildFeatures {
     viewBinding = true
     buildConfig = true
