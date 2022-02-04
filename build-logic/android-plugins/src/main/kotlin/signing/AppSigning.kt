@@ -19,7 +19,7 @@ internal fun Project.configureBuildSigning() {
   val keystoreConfigFile = rootProject.layout.projectDirectory.file(KEYSTORE_CONFIG_PATH)
   if (keystoreConfigFile.asFile.exists()) {
     extensions.configure<BaseAppModuleExtension> {
-      val contents = providers.fileContents(keystoreConfigFile).asText.forUseAtConfigurationTime()
+      val contents = providers.fileContents(keystoreConfigFile).asText
       val keystoreProperties = Properties()
       keystoreProperties.load(contents.get().byteInputStream())
       signingConfigs {

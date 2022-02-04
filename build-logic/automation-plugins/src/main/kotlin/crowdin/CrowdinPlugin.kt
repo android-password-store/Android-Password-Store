@@ -28,7 +28,7 @@ class CrowdinDownloadPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     with(project) {
-      val buildDirectory = layout.buildDirectory.asFile.forUseAtConfigurationTime().get()
+      val buildDirectory = layout.buildDirectory.asFile
       val extension = extensions.create<CrowdinExtension>("crowdin")
       afterEvaluate {
         val projectName = extension.projectName
@@ -38,9 +38,8 @@ class CrowdinDownloadPlugin : Plugin<Project> {
         val buildOnApi =
           tasks.register("buildOnApi") {
             doLast {
-              val login = providers.environmentVariable("CROWDIN_LOGIN").forUseAtConfigurationTime()
-              val key =
-                providers.environmentVariable("CROWDIN_PROJECT_KEY").forUseAtConfigurationTime()
+              val login = providers.environmentVariable("CROWDIN_LOGIN")
+              val key = providers.environmentVariable("CROWDIN_PROJECT_KEY")
               if (!login.isPresent) {
                 throw GradleException("CROWDIN_LOGIN environment variable must be set")
               }
