@@ -38,7 +38,7 @@ androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.
 aps-sublimeFuzzy = "com.github.android-password-store:sublime-fuzzy:2.0.0"
 aps-zxingAndroidEmbedded = "com.github.android-password-store:zxing-android-embedded:4.2.1"
 
-build-agp = "com.android.tools.build:gradle:7.1.0"
+build-agp = "com.android.tools.build:gradle:7.1.1"
 build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0"
 build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.6.10"
 build-download = "de.undercouch:gradle-download-task:5.0.1"
