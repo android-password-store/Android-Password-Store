@@ -40,7 +40,7 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: gradle/gradle-build-action@v2.1.3
       with:
-        arguments: spotlessCheck
+        arguments: --stacktrace spotlessCheck
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -75,7 +75,7 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: gradle/gradle-build-action@v2.1.3
       with:
-        arguments: test -PslimTests
+        arguments: --stacktrace test -PslimTests
 
     - name: (Fail-only) Upload test report
       if: failure()
@@ -117,7 +117,7 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: gradle/gradle-build-action@v2.1.3
       with:
-        arguments: assembleFreeDebug assembleNonFreeDebug
+        arguments: --stacktrace assembleFreeDebug assembleNonFreeDebug
 
   check-api:
     runs-on: ubuntu-latest
@@ -152,7 +152,7 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: gradle/gradle-build-action@v2.1.3
       with:
-        arguments: apiCheck
+        arguments: --stacktrace apiCheck
 
   lint-debug:
     runs-on: ubuntu-latest
@@ -187,4 +187,4 @@ jobs:
       if: ${{ steps.service-changed.outputs.result == 'true' }}
       uses: gradle/gradle-build-action@v2.1.3
       with:
-        arguments: lintDebug
+        arguments: --stacktrace lintDebug
