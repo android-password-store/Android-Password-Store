@@ -81,7 +81,7 @@ thirdparty-plumber = { module = "com.squareup.leakcanary:plumber-android", versi
 thirdparty-logcat = "com.squareup.logcat:logcat:0.1"
 thirdparty-modernAndroidPrefs = "de.maxr1998:modernandroidpreferences:2.3.0"
 thirdparty-nonfree-googlePlayAuthApiPhone = "com.google.android.gms:play-services-auth-api-phone:18.0.1"
-thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.0.1"
+thirdparty-pgpainless = "org.pgpainless:pgpainless-core:1.0.2"
 thirdparty-sshauth = "com.github.open-keychain.open-keychain:sshauthentication-api:5.7.5"
 thirdparty-sshj = "com.hierynomus:sshj:0.32.0"
 thirdparty-whatthestack = "com.github.haroldadmin:WhatTheStack:0.3.1"
