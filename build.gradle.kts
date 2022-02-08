@@ -12,6 +12,5 @@ plugins {
   id("com.github.android-password-store.kotlin-common")
   id("com.github.android-password-store.binary-compatibility")
   id("com.github.android-password-store.git-hooks")
-  id("com.github.android-password-store.gradle")
   id("com.github.android-password-store.spotless")
 }
