@@ -5,8 +5,6 @@
 
 rootProject.name = "build-logic"
 
-enableFeaturePreview("VERSION_CATALOGS")
-
 dependencyResolutionManagement {
   repositories {
     google()
