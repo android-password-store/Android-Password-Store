@@ -165,15 +165,15 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
               gpgIdentifierFile.writeText((keyIds + "").joinToString("\n"))
             }
             commitChange(
-              getString(
-                R.string.git_commit_gpg_id,
-                getLongName(
-                  gpgIdentifierFile.parentFile!!.absolutePath,
-                  repoPath,
-                  gpgIdentifierFile.name
+                getString(
+                  R.string.git_commit_gpg_id,
+                  getLongName(
+                    gpgIdentifierFile.parentFile!!.absolutePath,
+                    repoPath,
+                    gpgIdentifierFile.name
+                  )
                 )
               )
-            )
               .onSuccess { encrypt(encryptionIntent) }
           }
         }
@@ -552,8 +552,8 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
                 if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
               lifecycleScope.launch {
                 commitChange(
-                  resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
-                )
+                    resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
+                  )
                   .onSuccess {
                     setResult(RESULT_OK, returnIntent)
                     finish()

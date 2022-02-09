@@ -429,8 +429,8 @@ class PasswordCreationActivityV2 : BasePgpActivity() {
             if (editing) R.string.git_commit_edit_text else R.string.git_commit_add_text
           lifecycleScope.launch {
             commitChange(
-              resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
-            )
+                resources.getString(commitMessageRes, getLongName(fullPath, repoPath, editName))
+              )
               .onSuccess {
                 setResult(RESULT_OK, returnIntent)
                 finish()
