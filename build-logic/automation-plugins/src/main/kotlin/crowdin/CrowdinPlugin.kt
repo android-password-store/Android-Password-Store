@@ -28,7 +28,7 @@ class CrowdinDownloadPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     with(project) {
-      val buildDirectory = layout.buildDirectory.asFile
+      val buildDirectory = layout.buildDirectory.asFile.get()
       val extension = extensions.create<CrowdinExtension>("crowdin")
       afterEvaluate {
         val projectName = extension.projectName
