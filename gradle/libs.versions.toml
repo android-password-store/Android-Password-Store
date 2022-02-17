@@ -10,6 +10,9 @@ kotlin = "1.6.10"
 leakcanary = "2.8.1"
 lifecycle = "2.4.1"
 
+[plugins]
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
 [libraries]
 android-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx_activity" }
@@ -42,7 +45,6 @@ build-agp = "com.android.tools.build:gradle:7.1.1"
 build-binarycompat = "org.jetbrains.kotlinx:binary-compatibility-validator:0.8.0"
 build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.6.10"
 build-download = "de.undercouch:gradle-download-task:5.0.1"
-build-hilt = "com.google.dagger:hilt-android-gradle-plugin:2.41"
 build-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
 build-mavenpublish = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 build-okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
