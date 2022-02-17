@@ -13,11 +13,11 @@ jobs:
       uses: actions/checkout@v2.4.0
 
     - name: Set up JDK
-      uses : actions/setup-java@v2.4.0
-      with :
-        distribution : 'zulu'
-        java-version : '17'
-        cache: 'gradle'
+      uses: actions/setup-java@v2.4.0
+      with:
+        distribution: zulu
+        java-version: 17
+        cache: gradle
 
     - name: Decrypt secrets
       run: scripts/signing-setup.sh "$ENCRYPT_KEY"
@@ -32,7 +32,7 @@ jobs:
       env:
         SNAPSHOT: "true"
       with:
-        arguments: :app:assembleFreeRelease :app:assembleNonFreeRelease
+        arguments: --no-configuration-cache :app:assembleFreeRelease :app:assembleNonFreeRelease
 
     - name: Clean secrets
       run: scripts/signing-cleanup.sh
