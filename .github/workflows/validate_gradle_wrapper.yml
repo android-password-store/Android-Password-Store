@@ -1,16 +1,19 @@
-name: "Validate Gradle Wrapper"
+name: Validate Gradle Wrapper
 on:
   pull_request:
     paths:
-      - '.github/workflows/validate_gradle_wrapper.yml'
-      - 'gradle/**'
-      - 'gradlew'
-      - 'gradlew.bat'
+      - ".github/workflows/validate_gradle_wrapper.yml"
+      - "gradle/**"
+      - "gradlew"
+      - "gradlew.bat"
 
 jobs:
   validation:
-    name: "Wrapper validation"
+    name: Wrapper validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: gradle/wrapper-validation-action@v1.0.4
+      - name: Checkout repository
+        uses: actions/checkout@v2.4.0
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1.0.4
