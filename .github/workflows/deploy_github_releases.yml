@@ -51,7 +51,7 @@ jobs:
         path: app/build/outputs/apk/free/release/app-free-release.apk
 
     - name: Clean secrets
-      if: always()
+      if: "${{ always() }}"
       run: scripts/signing-cleanup.sh
 
   create_github_release:

@@ -32,7 +32,7 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3.12.1
-        if: env.UPDATED == 'true'
+        if: "env.UPDATED == 'true'"
         with:
           assignees: msfjarvis
           author: GitHub Actions <noreply@github.com>

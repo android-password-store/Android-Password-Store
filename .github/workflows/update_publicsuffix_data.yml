@@ -28,14 +28,14 @@ jobs:
 
       - name: Verify update publicsuffixes file
         uses: gradle/gradle-build-action@v2.1.3
-        if: env.UPDATED == "true"
+        if: "${{ env.UPDATED == 'true' }}"
         with:
           arguments: --no-configuration-cache :autofill-parser:test -PslimTests
 
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3.12.1
-        if: env.UPDATED == "true"
+        if: "${{ env.UPDATED == 'true' }}"
         with:
           assignees: msfjarvis
           author: GitHub Actions <noreply@github.com>
@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Close, re-open and enable squash merge for PR
-        if: steps.cpr.outputs.pull-request-operation == "created"
+        if: "${{ steps.cpr.outputs.pull-request-operation == 'created' }}"
         shell: bash
         run: |
           gh pr close "${PR_URL}"
