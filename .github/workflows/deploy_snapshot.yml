@@ -33,6 +33,8 @@ jobs:
         SNAPSHOT: "true"
       with:
         arguments: --no-configuration-cache :app:assembleFreeRelease :app:assembleNonFreeRelease
+      env:
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
     - name: Clean secrets
       run: scripts/signing-cleanup.sh
