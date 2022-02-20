@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 -   Allow importing QR code from images
 -   Introduce a new opt-in PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) that does not require OpenKeychain
 -   Add the ability to run garbage collection on the internal Git repository
+-   Introduce crash reporting backed by Sentry
 
 ### Fixed
 
