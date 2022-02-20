@@ -10,6 +10,7 @@ plugins {
   id("com.github.android-password-store.kotlin-android")
   id("com.github.android-password-store.kotlin-kapt")
   id("com.github.android-password-store.versioning-plugin")
+  id("com.github.android-password-store.sentry")
   id("dagger.hilt.android.plugin")
 }
 
@@ -106,6 +107,7 @@ dependencies {
 
   debugImplementation(libs.thirdparty.leakcanary)
   add("nonFreeImplementation", libs.thirdparty.nonfree.googlePlayAuthApiPhone)
+  add("nonFreeImplementation", libs.thirdparty.nonfree.sentry)
 
   androidTestImplementation(libs.bundles.testDependencies)
   androidTestImplementation(libs.bundles.androidTestDependencies)

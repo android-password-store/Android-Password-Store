@@ -31,6 +31,7 @@ jobs:
       uses: gradle/gradle-build-action@v2.1.3
       env:
         SNAPSHOT: "true"
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       with:
         arguments: --no-configuration-cache :app:assembleFreeRelease :app:assembleNonFreeRelease
 
