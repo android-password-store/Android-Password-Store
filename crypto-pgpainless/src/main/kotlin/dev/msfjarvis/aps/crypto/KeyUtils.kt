@@ -8,7 +8,6 @@ package dev.msfjarvis.aps.crypto
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.crypto.GpgIdentifier.KeyId
-import java.util.Locale
 import org.bouncycastle.openpgp.PGPKeyRing
 import org.pgpainless.PGPainless
 
@@ -33,23 +32,6 @@ public object KeyUtils {
   /** Parses a [PGPKeyRing] from the given [key] and calculates its long key ID */
   public fun tryGetId(key: PGPKey): KeyId? {
     val keyRing = tryParseKeyring(key) ?: return null
-    return KeyId(convertKeyIdToHex(keyRing.publicKey.keyID).toLong(radix = 16))
-  }
-
-  /** Convert a [Long] key ID to a formatted string. */
-  private fun convertKeyIdToHex(keyId: Long): String {
-    return convertKeyIdToHex32bit(keyId shr 32) + convertKeyIdToHex32bit(keyId)
-  }
-
-  /**
-   * Converts [keyId] to an unsigned [Long] then uses [java.lang.Long.toHexString] to convert it to
-   * a lowercase hex ID.
-   */
-  private fun convertKeyIdToHex32bit(keyId: Long): String {
-    var hexString = java.lang.Long.toHexString(keyId and 0xffffffffL).lowercase(Locale.ENGLISH)
-    while (hexString.length < 8) {
-      hexString = "0$hexString"
-    }
-    return hexString
+    return KeyId(keyRing.publicKey.keyID)
   }
 }
