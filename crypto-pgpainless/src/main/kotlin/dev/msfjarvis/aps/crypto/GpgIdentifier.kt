@@ -5,12 +5,30 @@
 
 package dev.msfjarvis.aps.crypto
 
+import java.util.Locale
 import java.util.regex.Pattern
 
 public sealed class GpgIdentifier {
   public data class KeyId(val id: Long) : GpgIdentifier() {
     override fun toString(): String {
-      return java.lang.Long.toHexString(id)
+      return convertKeyIdToHex(id)
+    }
+
+    /** Convert a [Long] key ID to a formatted string. */
+    private fun convertKeyIdToHex(keyId: Long): String {
+      return convertKeyIdToHex32bit(keyId shr 32) + convertKeyIdToHex32bit(keyId)
+    }
+
+    /**
+     * Converts [keyId] to an unsigned [Long] then uses [java.lang.Long.toHexString] to convert it
+     * to a lowercase hex ID.
+     */
+    private fun convertKeyIdToHex32bit(keyId: Long): String {
+      var hexString = java.lang.Long.toHexString(keyId and 0xffffffffL).lowercase(Locale.ENGLISH)
+      while (hexString.length < 8) {
+        hexString = "0$hexString"
+      }
+      return hexString
     }
   }
   public data class UserId(val email: String) : GpgIdentifier() {
