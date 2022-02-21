@@ -1,4 +1,4 @@
--keepattributes SourceFile,LineNumberTable,EnclosingMethod
+-keepattributes SourceFile,LineNumberTable,EnclosingMethod,InnerClasses
 -dontobfuscate
 
 -keep class com.jcraft.jsch.**
