@@ -11,11 +11,7 @@ val INVOKED_FROM_IDE_PROPERTY = "android.injected.invoked.from.ide"
 android {
   androidComponents {
     onVariants(selector().withFlavor(FlavorDimensions.FREE to ProductFlavors.NON_FREE)) { variant ->
-      val sentryDsn =
-        project
-          .providers
-          .environmentVariable(SENTRY_DSN_PROPERTY)
-          .orElse("https://public_key@example.com/project_id")
+      val sentryDsn = project.providers.environmentVariable(SENTRY_DSN_PROPERTY)
       if (sentryDsn.isPresent) {
         variant.manifestPlaceholders.put("sentryDsn", sentryDsn.get())
       } else if (project.providers.gradleProperty(INVOKED_FROM_IDE_PROPERTY).orNull != "true") {
