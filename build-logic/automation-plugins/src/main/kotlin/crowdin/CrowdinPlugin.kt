@@ -24,6 +24,7 @@ private const val EXCEPTION_MESSAGE =
 private const val CROWDIN_BUILD_API_URL =
   "https://api.crowdin.com/api/project/%s/export?login=%s&account-key=%s"
 
+@Suppress("Unused")
 class CrowdinDownloadPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
