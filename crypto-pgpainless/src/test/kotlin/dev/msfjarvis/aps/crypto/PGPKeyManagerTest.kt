@@ -4,10 +4,12 @@ import com.github.michaelbull.result.unwrap
 import com.github.michaelbull.result.unwrapError
 import dev.msfjarvis.aps.crypto.GpgIdentifier.KeyId
 import dev.msfjarvis.aps.crypto.GpgIdentifier.UserId
+import dev.msfjarvis.aps.crypto.TestUtils.getArmoredPrivateKeyWithMultipleIdentities
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
@@ -168,4 +170,17 @@ class PGPKeyManagerTest {
       val singleKeyList = keyManager.getAllKeys().unwrap()
       assertEquals(1, singleKeyList.size)
     }
+
+  @Test
+  fun testGettingMultipleIdentityKeyWithBothUserIDs() {
+    scope.runTest {
+      val key = PGPKey(getArmoredPrivateKeyWithMultipleIdentities())
+      keyManager.addKey(key).unwrap()
+
+      val johnKey = keyManager.getKeyById(UserId("john@doe.org")).unwrap()
+      val janeKey = keyManager.getKeyById(UserId("jane@doe.org")).unwrap()
+
+      assertContentEquals(johnKey.contents, janeKey.contents)
+    }
+  }
 }
