@@ -20,6 +20,7 @@ import org.gradle.kotlin.dsl.register
  * Base on PublicSuffixListGenerator from OkHttp:
  * https://github.com/square/okhttp/blob/master/okhttp/src/test/java/okhttp3/internal/publicsuffix/PublicSuffixListGenerator.java
  */
+@Suppress("Unused")
 class PublicSuffixListPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     project.tasks.register<PSLUpdateTask>("updatePSL") {
