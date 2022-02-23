@@ -2,7 +2,6 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 
 plugins {
   id("com.github.android-password-store.android-application")
@@ -11,6 +10,7 @@ plugins {
   id("com.github.android-password-store.kotlin-kapt")
   id("com.github.android-password-store.versioning-plugin")
   id("com.github.android-password-store.sentry")
+  id("com.github.android-password-store.rename-artifacts")
   id("dagger.hilt.android.plugin")
 }
 
@@ -28,13 +28,6 @@ fun isSnapshot(): Boolean {
 }
 
 android {
-  if (isSnapshot()) {
-    applicationVariants.all {
-      outputs.all {
-        (this as BaseVariantOutputImpl).outputFileName = "aps-${flavorName}_$versionName.apk"
-      }
-    }
-  }
   compileOptions { isCoreLibraryDesugaringEnabled = true }
 
   defaultConfig {
