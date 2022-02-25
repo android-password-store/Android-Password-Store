@@ -76,21 +76,20 @@ class OpenKeychainKeyProvider private constructor(val activity: ContinuationCont
   }
 
   private suspend fun prepare() {
-    sshServiceApi =
-      suspendCoroutine { cont ->
-        sshServiceConnection.connect(
-          object : SshAuthenticationConnection.OnBound {
-            override fun onBound(sshAgent: ISshAuthenticationService) {
-              logcat { "Bound to SshAuthenticationApi: $OPENPGP_PROVIDER" }
-              cont.resume(SshAuthenticationApi(context, sshAgent))
-            }
-
-            override fun onError() {
-              throw UserAuthException(DisconnectReason.UNKNOWN, "OpenKeychain service unavailable")
-            }
+    sshServiceApi = suspendCoroutine { cont ->
+      sshServiceConnection.connect(
+        object : SshAuthenticationConnection.OnBound {
+          override fun onBound(sshAgent: ISshAuthenticationService) {
+            logcat { "Bound to SshAuthenticationApi: $OPENPGP_PROVIDER" }
+            cont.resume(SshAuthenticationApi(context, sshAgent))
           }
-        )
-      }
+
+          override fun onError() {
+            throw UserAuthException(DisconnectReason.UNKNOWN, "OpenKeychain service unavailable")
+          }
+        }
+      )
+    }
 
     if (keyId == null) {
       selectKey()

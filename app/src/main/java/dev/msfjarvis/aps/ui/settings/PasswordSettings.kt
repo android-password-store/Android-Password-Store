@@ -33,10 +33,9 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
       }
       editText(PreferenceKeys.GENERAL_SHOW_TIME) {
         titleRes = R.string.pref_clipboard_timeout_title
-        summaryProvider =
-          { timeout ->
-            activity.getString(R.string.pref_clipboard_timeout_summary, timeout ?: "45")
-          }
+        summaryProvider = { timeout ->
+          activity.getString(R.string.pref_clipboard_timeout_summary, timeout ?: "45")
+        }
         textInputType = InputType.TYPE_CLASS_NUMBER
       }
       checkBox(PreferenceKeys.SHOW_PASSWORD) {
