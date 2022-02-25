@@ -5,14 +5,16 @@
 
 plugins { id("com.diffplug.spotless") }
 
+val KTFMT_VERSION = "0.33"
+
 spotless {
   kotlin {
-    ktfmt().googleStyle()
+    ktfmt(KTFMT_VERSION).googleStyle()
     target("**/*.kt")
     targetExclude("**/build/")
   }
   kotlinGradle {
-    ktfmt().googleStyle()
+    ktfmt(KTFMT_VERSION).googleStyle()
     target("**/*.kts")
     targetExclude("**/build/")
   }
