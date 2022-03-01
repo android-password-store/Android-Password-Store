@@ -32,7 +32,7 @@ jobs:
           echo "PR_BASE=release-${BRANCH_VERSION}" >> $GITHUB_ENV
           echo "PR_HEAD=release-prep" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3.0.0
         with:
           ref: ${{ env.CHECKOUT_REF }}
 
