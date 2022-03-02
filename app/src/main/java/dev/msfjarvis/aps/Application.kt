@@ -5,9 +5,6 @@
 package dev.msfjarvis.aps
 
 import android.content.SharedPreferences
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
-import android.os.StrictMode.VmPolicy
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
@@ -44,8 +41,6 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
         prefs.getBoolean(PreferenceKeys.ENABLE_DEBUG_LOGGING, false)
     ) {
       LogcatLogger.install(AndroidLogcatLogger(DEBUG))
-      StrictMode.setVmPolicy(VmPolicy.Builder().detectAll().penaltyLog().build())
-      StrictMode.setThreadPolicy(ThreadPolicy.Builder().detectAll().penaltyLog().build())
     }
     prefs.registerOnSharedPreferenceChangeListener(this)
     setNightMode()
