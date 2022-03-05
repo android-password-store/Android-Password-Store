@@ -19,7 +19,6 @@ private const val BITMASK = 0xff.toByte()
  * https://github.com/square/okhttp/blob/1977136/okhttp/src/main/kotlin/okhttp3/internal/publicsuffix/PublicSuffixDatabase.kt
  */
 @Suppress("ComplexMethod", "NestedBlockDepth")
-@OptIn(ExperimentalUnsignedTypes::class)
 internal fun ByteArray.binarySearch(labels: List<ByteArray>, labelIndex: Int): String? {
   var low = 0
   var high = size

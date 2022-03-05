@@ -19,10 +19,6 @@ internal object Otp {
   private val BASE_32 = Base32()
   private val STEAM_ALPHABET = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
 
-  init {
-    check(STEAM_ALPHABET.size == 26)
-  }
-
   fun calculateCode(
     secret: String,
     counter: Long,
@@ -51,7 +47,7 @@ internal object Otp {
       var remainingCodeInt = codeInt
       buildString {
         repeat(5) {
-          append(STEAM_ALPHABET[remainingCodeInt % 26])
+          append(STEAM_ALPHABET[remainingCodeInt % STEAM_ALPHABET.size])
           remainingCodeInt /= 26
         }
       }

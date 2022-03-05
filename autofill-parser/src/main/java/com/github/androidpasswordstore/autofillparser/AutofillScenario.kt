@@ -181,7 +181,7 @@ internal data class ClassifiedAutofillScenario<T : Any>(
   override val passwordFieldsToFillOnGenerate
     get() = newPassword
   override val passwordFieldsToSave
-    get() = if (newPassword.isNotEmpty()) newPassword else currentPassword
+    get() = newPassword.ifEmpty { currentPassword }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

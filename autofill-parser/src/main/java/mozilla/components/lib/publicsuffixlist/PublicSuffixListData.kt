@@ -39,16 +39,16 @@ internal class PublicSuffixListData(
 
     val rule = findMatchingRule(domainLabels)
 
-    if (domainLabels.size == rule.size && rule[0][0] != PublicSuffixListData.EXCEPTION_MARKER) {
+    if (domainLabels.size == rule.size && rule[0][0] != EXCEPTION_MARKER) {
       // The domain is a public suffix.
-      return if (rule == PublicSuffixListData.PREVAILING_RULE) {
+      return if (rule == PREVAILING_RULE) {
         PublicSuffixOffset.PrevailingRule
       } else {
         PublicSuffixOffset.PublicSuffix
       }
     }
 
-    return if (rule[0][0] == PublicSuffixListData.EXCEPTION_MARKER) {
+    return if (rule[0][0] == EXCEPTION_MARKER) {
       // Exception rules hold the effective TLD plus one.
       PublicSuffixOffset.Offset(domainLabels.size - rule.size)
     } else {
@@ -72,15 +72,15 @@ internal class PublicSuffixListData(
     val exceptionMatch = findExceptionMatch(domainLabelsBytes, wildcardMatch)
 
     if (exceptionMatch != null) {
-      return ("${PublicSuffixListData.EXCEPTION_MARKER}$exceptionMatch").split('.')
+      return ("$EXCEPTION_MARKER$exceptionMatch").split('.')
     }
 
     if (exactMatch == null && wildcardMatch == null) {
-      return PublicSuffixListData.PREVAILING_RULE
+      return PREVAILING_RULE
     }
 
-    val exactRuleLabels = exactMatch?.split('.') ?: PublicSuffixListData.EMPTY_RULE
-    val wildcardRuleLabels = wildcardMatch?.split('.') ?: PublicSuffixListData.EMPTY_RULE
+    val exactRuleLabels = exactMatch?.split('.') ?: EMPTY_RULE
+    val wildcardRuleLabels = wildcardMatch?.split('.') ?: EMPTY_RULE
 
     return if (exactRuleLabels.size > wildcardRuleLabels.size) {
       exactRuleLabels
@@ -95,7 +95,7 @@ internal class PublicSuffixListData(
     // foo.bar.com
     // will look like: [foo, bar, com], [bar, com], [com]. The longest matching rule wins.
 
-    for (i in 0 until labels.size) {
+    for (i in labels.indices) {
       val rule = binarySearchRules(labels, i)
 
       if (rule != null) {
@@ -118,7 +118,7 @@ internal class PublicSuffixListData(
     if (labels.size > 1) {
       val labelsWithWildcard = labels.toMutableList()
       for (labelIndex in 0 until labelsWithWildcard.size) {
-        labelsWithWildcard[labelIndex] = PublicSuffixListData.WILDCARD_LABEL
+        labelsWithWildcard[labelIndex] = WILDCARD_LABEL
         val rule = binarySearchRules(labelsWithWildcard, labelIndex)
         if (rule != null) {
           return rule
@@ -135,7 +135,7 @@ internal class PublicSuffixListData(
       return null
     }
 
-    for (labelIndex in 0 until labels.size) {
+    for (labelIndex in labels.indices) {
       val rule = binarySearchExceptions(labels, labelIndex)
       if (rule != null) {
         return rule

@@ -13,14 +13,12 @@ import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import kotlin.collections.set
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 /** Represents a single entry in the password store. */
-@OptIn(ExperimentalTime::class)
 public class PasswordEntry
 @AssistedInject
 constructor(
