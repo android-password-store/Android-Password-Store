@@ -8,7 +8,7 @@ set -ex
 
 LATEST_TAG="latest"
 CURRENT_REV="$(git rev-parse --short HEAD)"
-ASSET_DIRECTORY="${GITHUB_WORKSPACE}/app/outputs"
+ASSET_DIRECTORY="${GITHUB_WORKSPACE:?}/app/outputs"
 
 function overwrite_local_tag() {
   git tag -f "${LATEST_TAG}"
