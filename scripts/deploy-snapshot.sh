@@ -19,7 +19,7 @@ function overwrite_remote_tag() {
 }
 
 function has_release() {
-  gh release view "${LATEST_TAG}"
+  gh release view "${LATEST_TAG}" &>/dev/null
   echo "$?"
 }
 
