@@ -42,3 +42,5 @@ jobs:
 
     - name: Deploy snapshot
       run: scripts/deploy-snapshot.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
