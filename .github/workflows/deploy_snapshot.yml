@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.0.0
+      with:
+        fetch-depth: 0
 
     - name: Set up JDK
       uses: actions/setup-java@v3.0.0
@@ -40,9 +42,3 @@ jobs:
 
     - name: Deploy snapshot
       run: scripts/deploy-snapshot.sh
-      env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-        SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
-        SERVER_DESTINATION: ${{ secrets.SERVER_DESTINATION }}
-        SSH_PORT: ${{ secrets.SSH_PORT }}
