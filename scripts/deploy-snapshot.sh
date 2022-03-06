@@ -38,7 +38,7 @@ function create_release() {
   CHANGELOG_FILE="$(mktemp)"
   echo "Latest release for APS from revision ${CURRENT_REV}" | tee "${CHANGELOG_FILE}"
   pushd "${ASSET_DIRECTORY}" || return
-  gh release create --title "Latest snapshot build" -F "${CHANGELOG_FILE}" "${LATEST_TAG}" ./*
+  gh release create --prerelease --title "Latest snapshot build" --notes-file "${CHANGELOG_FILE}" "${LATEST_TAG}" ./*
   popd || return
 }
 
