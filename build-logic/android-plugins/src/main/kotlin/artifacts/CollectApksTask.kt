@@ -1,7 +1,9 @@
 package artifacts
 
 import com.android.build.api.variant.BuiltArtifactsLoader
-import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
@@ -32,8 +34,11 @@ abstract class CollectApksTask : DefaultTask() {
     val builtArtifacts =
       builtArtifactsLoader.get().load(apkFolder.get()) ?: throw RuntimeException("Cannot load APKs")
     builtArtifacts.elements.forEach { artifact ->
-      File(artifact.outputFile)
-        .renameTo(outputDir.resolve("APS-${variantName.get()}-${artifact.versionName}.apk"))
+      Files.copy(
+        Paths.get(artifact.outputFile),
+        outputDir.resolve("APS-${variantName.get()}-${artifact.versionName}.apk").toPath(),
+        StandardCopyOption.REPLACE_EXISTING,
+      )
     }
   }
 }
