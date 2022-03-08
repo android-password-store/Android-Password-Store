@@ -1,5 +1,7 @@
 package artifacts
 
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -22,9 +24,10 @@ abstract class CollectBundleTask : DefaultTask() {
   fun taskAction() {
     val outputDir = outputDirectory.asFile.get()
     outputDir.mkdirs()
-    bundleFile
-      .get()
-      .asFile
-      .renameTo(outputDir.resolve("APS-${variantName.get()}-${versionName.get()}.aab"))
+    Files.copy(
+      bundleFile.get().asFile.toPath(),
+      outputDir.resolve("APS-${variantName.get()}-${versionName.get()}.aab").toPath(),
+      StandardCopyOption.REPLACE_EXISTING,
+    )
   }
 }
