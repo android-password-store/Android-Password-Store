@@ -40,7 +40,7 @@ class FieldItemAdapter(
     var otpItemPosition = -1
     fieldItemList =
       fieldItemList.mapIndexed { position, item ->
-        if (item.key.startsWith("OTP", true)) {
+        if (item.key.startsWith(FieldItem.ItemType.OTP.type, true)) {
           otpItemPosition = position
           return@mapIndexed FieldItem.createOtpField(totp)
         }
