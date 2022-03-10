@@ -5,6 +5,10 @@
 
 package dev.msfjarvis.aps.data.password
 
+import dev.msfjarvis.aps.data.passfile.Totp
+import kotlin.time.ExperimentalTime
+
+@OptIn(ExperimentalTime::class)
 class FieldItem(val key: String, val value: String, val action: ActionType) {
   enum class ActionType {
     COPY,
@@ -14,14 +18,18 @@ class FieldItem(val key: String, val value: String, val action: ActionType) {
   enum class ItemType(val type: String) {
     USERNAME("Username"),
     PASSWORD("Password"),
-    OTP("OTP")
+    OTP("OTP (expires in %ds)"),
   }
 
   companion object {
 
     // Extra helper methods
-    fun createOtpField(otp: String): FieldItem {
-      return FieldItem(ItemType.OTP.type, otp, ActionType.COPY)
+    fun createOtpField(totp: Totp): FieldItem {
+      return FieldItem(
+        ItemType.OTP.type.format(totp.remainingTime.inWholeSeconds),
+        totp.value,
+        ActionType.COPY,
+      )
     }
 
     fun createPasswordField(password: String): FieldItem {

@@ -15,6 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -134,7 +135,9 @@ class PasswordEntryTest {
     val entry = makeEntry("secret\nextra\n$TOTP_URI")
     assertTrue(entry.hasTotp())
     entry.totp.test2 {
-      assertEquals("818800", expectMostRecentItem())
+      val otp = expectMostRecentItem()
+      assertEquals("818800", otp.value)
+      assertEquals(30.seconds, otp.remainingTime)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -144,7 +147,9 @@ class PasswordEntryTest {
     val entry = makeEntry(TOTP_URI)
     assertNull(entry.password)
     entry.totp.test2 {
-      assertEquals("818800", expectMostRecentItem())
+      val otp = expectMostRecentItem()
+      assertEquals("818800", otp.value)
+      assertEquals(30.seconds, otp.remainingTime)
       cancelAndIgnoreRemainingEvents()
     }
   }

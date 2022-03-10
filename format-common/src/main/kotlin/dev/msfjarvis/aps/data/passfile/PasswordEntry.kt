@@ -13,12 +13,15 @@ import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import kotlin.collections.set
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 /** Represents a single entry in the password store. */
+@OptIn(ExperimentalTime::class)
 public class PasswordEntry
 @AssistedInject
 constructor(
@@ -52,12 +55,12 @@ constructor(
    * does not have a TOTP secret, the flow will never emit. Users should call [hasTotp] before
    * collection to check if it is valid to collect this [Flow].
    */
-  public val totp: Flow<String> = flow {
+  public val totp: Flow<Totp> = flow {
     if (totpSecret != null) {
       repeat(Int.MAX_VALUE) {
-        val (otp, remainingTime) = calculateTotp()
+        val otp = calculateTotp()
         emit(otp)
-        delay(remainingTime)
+        delay(1000L)
       }
     } else {
       awaitCancellation()
@@ -169,17 +172,17 @@ constructor(
     return null
   }
 
-  private fun calculateTotp(): Pair<String, Long> {
+  private fun calculateTotp(): Totp {
     val digits = totpFinder.findDigits(content)
     val totpPeriod = totpFinder.findPeriod(content)
     val totpAlgorithm = totpFinder.findAlgorithm(content)
     val issuer = totpFinder.findIssuer(content)
     val millis = clock.millis()
-    val remainingTime = totpPeriod - (millis % totpPeriod)
+    val remainingTime = (totpPeriod - ((millis / 1000) % totpPeriod)).seconds
     Otp.calculateCode(totpSecret!!, millis / (1000 * totpPeriod), totpAlgorithm, digits, issuer)
       .mapBoth(
         { code ->
-          return code to remainingTime
+          return Totp(code, remainingTime)
         },
         { throwable -> throw throwable }
       )
