@@ -30,8 +30,8 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -210,12 +210,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             binding.recyclerView.adapter = adapter
 
             if (entry.hasTotp()) {
-              lifecycleScope.launch {
-                entry
-                  .totp
-                  .onEach { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
-                  .collect()
-              }
+              entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)
             }
           }
             .onFailure { e -> logcat(ERROR) { e.asLog() } }
