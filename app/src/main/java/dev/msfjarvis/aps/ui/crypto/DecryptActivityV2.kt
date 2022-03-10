@@ -25,17 +25,18 @@ import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalTime::class)
 @AndroidEntryPoint
 class DecryptActivityV2 : BasePgpActivity() {
 
@@ -90,10 +91,9 @@ class DecryptActivityV2 : BasePgpActivity() {
    * Automatically finishes the activity 60 seconds after decryption succeeded to prevent
    * information leaks from stale activities.
    */
-  @OptIn(ExperimentalTime::class)
   private fun startAutoDismissTimer() {
     lifecycleScope.launch {
-      delay(Duration.seconds(60))
+      delay(60.seconds)
       finish()
     }
   }
@@ -198,12 +198,7 @@ class DecryptActivityV2 : BasePgpActivity() {
       binding.recyclerView.adapter = adapter
 
       if (entry.hasTotp()) {
-        lifecycleScope.launch {
-          entry
-            .totp
-            .onEach { code -> withContext(Dispatchers.Main) { adapter.updateOTPCode(code) } }
-            .collect()
-        }
+        entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)
       }
     }
 

@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.data.passfile.Totp
 import dev.msfjarvis.aps.data.password.FieldItem
 import dev.msfjarvis.aps.databinding.ItemFieldBinding
 
@@ -35,13 +36,13 @@ class FieldItemAdapter(
     return fieldItemList.size
   }
 
-  fun updateOTPCode(code: String) {
+  fun updateOTPCode(totp: Totp) {
     var otpItemPosition = -1
     fieldItemList =
       fieldItemList.mapIndexed { position, item ->
-        if (item.key.equals(FieldItem.ItemType.OTP.type, true)) {
+        if (item.key.startsWith(FieldItem.ItemType.OTP.type, true)) {
           otpItemPosition = position
-          return@mapIndexed FieldItem.createOtpField(code)
+          return@mapIndexed FieldItem.createOtpField(totp)
         }
 
         return@mapIndexed item

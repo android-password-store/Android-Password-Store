@@ -24,4 +24,10 @@ class TestUserClock(instant: Instant) : UserClock() {
   override fun getZone(): ZoneId = UTC
 
   override fun instant(): Instant = clock.instant()
+
+  companion object {
+    fun withAddedSeconds(secondsToAdd: Long): TestUserClock {
+      return TestUserClock(Instant.EPOCH.plusSeconds(secondsToAdd))
+    }
+  }
 }

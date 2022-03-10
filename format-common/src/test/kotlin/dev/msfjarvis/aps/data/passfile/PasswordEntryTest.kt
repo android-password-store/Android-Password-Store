@@ -8,6 +8,7 @@ package dev.msfjarvis.aps.data.passfile
 import dev.msfjarvis.aps.test.CoroutineTestRule
 import dev.msfjarvis.aps.test.test2
 import dev.msfjarvis.aps.util.time.TestUserClock
+import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import java.util.Locale
 import kotlin.test.Test
@@ -15,6 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -24,9 +26,9 @@ import org.junit.Rule
 class PasswordEntryTest {
 
   @get:Rule val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
-  private fun makeEntry(content: String) =
+  private fun makeEntry(content: String, clock: UserClock = fakeClock) =
     PasswordEntry(
-      fakeClock,
+      clock,
       testFinder,
       content.encodeToByteArray(),
     )
@@ -134,7 +136,26 @@ class PasswordEntryTest {
     val entry = makeEntry("secret\nextra\n$TOTP_URI")
     assertTrue(entry.hasTotp())
     entry.totp.test2 {
-      assertEquals("818800", expectMostRecentItem())
+      val otp = expectMostRecentItem()
+      assertEquals("818800", otp.value)
+      assertEquals(30.seconds, otp.remainingTime)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  /**
+   * Same as [testGeneratesOtpFromTotpUri], but advances the clock by 5 seconds. This exercises the
+   * [Totp.remainingTime] calculation logic, and acts as a regression test to resolve the bug which
+   * blocked https://msfjarvis.dev/aps/issue/1550.
+   */
+  @Test
+  fun testGeneratedOtpHasCorrectRemainingTime() = runTest {
+    val entry = makeEntry("secret\nextra\n$TOTP_URI", TestUserClock.withAddedSeconds(5))
+    assertTrue(entry.hasTotp())
+    entry.totp.test2 {
+      val otp = expectMostRecentItem()
+      assertEquals("818800", otp.value)
+      assertEquals(25.seconds, otp.remainingTime)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -144,7 +165,9 @@ class PasswordEntryTest {
     val entry = makeEntry(TOTP_URI)
     assertNull(entry.password)
     entry.totp.test2 {
-      assertEquals("818800", expectMostRecentItem())
+      val otp = expectMostRecentItem()
+      assertEquals("818800", otp.value)
+      assertEquals(30.seconds, otp.remainingTime)
       cancelAndIgnoreRemainingEvents()
     }
   }
