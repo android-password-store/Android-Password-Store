@@ -13,12 +13,14 @@ import dev.msfjarvis.aps.util.time.UserClock
 import dev.msfjarvis.aps.util.totp.Otp
 import dev.msfjarvis.aps.util.totp.TotpFinder
 import kotlin.collections.set
+import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 
 /** Represents a single entry in the password store. */
 @OptIn(ExperimentalTime::class)
@@ -57,11 +59,11 @@ constructor(
    */
   public val totp: Flow<Totp> = flow {
     if (totpSecret != null) {
-      repeat(Int.MAX_VALUE) {
+      do {
         val otp = calculateTotp()
         emit(otp)
         delay(1000L)
-      }
+      } while (coroutineContext.isActive)
     } else {
       awaitCancellation()
     }
