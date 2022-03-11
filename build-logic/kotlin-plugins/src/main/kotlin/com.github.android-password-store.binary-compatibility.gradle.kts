@@ -16,6 +16,7 @@ apiValidation {
       "format-common",
       "diceware",
       "random",
+      "sentry-stub",
       "ui-compose",
     )
 }
