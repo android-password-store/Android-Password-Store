@@ -208,6 +208,7 @@ class DecryptActivity : BasePgpActivity(), OpenPgpServiceConnection.OnBound {
             val adapter =
               FieldItemAdapter(items, showPassword) { text -> copyTextToClipboard(text) }
             binding.recyclerView.adapter = adapter
+            binding.recyclerView.itemAnimator = null
 
             if (entry.hasTotp()) {
               entry.totp.onEach(adapter::updateOTPCode).launchIn(lifecycleScope)
