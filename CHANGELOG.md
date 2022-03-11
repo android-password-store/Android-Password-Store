@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 -   Introduce a new opt-in PGP backend powered by [PGPainless](https://github.com/pgpainless/pgpainless) that does not require OpenKeychain
 -   Add the ability to run garbage collection on the internal Git repository
 -   Introduce crash reporting backed by Sentry
+-   TOTP field now shows the remaining time for which it is valid
 
 ### Fixed
 
