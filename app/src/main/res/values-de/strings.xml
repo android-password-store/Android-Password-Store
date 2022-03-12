@@ -209,7 +209,7 @@
   <string name="oreo_autofill_no_support">Kein Support</string>
   <string name="oreo_autofill_preference_directory_structure">Passwort-Datei-Organisation</string>
   <string name="oreo_autofill_enable_dialog_description">Password Store kann das Ausfüllen von Anmeldeformularen und sogar das Speichern von Anmeldedaten in Apps oder auf Webseiten übernehmen.</string>
-  <string name="oreo_autofill_enable_dialog_instructions">Um diese Funktion zu aktivieren, tippen Sie auf OK, um zu Autofill-Einstellungen zu gelangen. Dort wählen Sie \"Passwortd Store\" aus der Liste und bestätigen Sie die Bestätigungsaufforderung mit \"OK\".</string>
+  <string name="oreo_autofill_enable_dialog_instructions">Um diese Funktion zu aktivieren, tippen Sie auf OK, um zu Autofill-Einstellungen zu gelangen. Dort wählen Sie \"Password Store\" aus der Liste und bestätigen Sie die Bestätigungsaufforderung mit \"OK\".</string>
   <string name="oreo_autofill_enable_dialog_installed_browsers">Autofill-Unterstützung mit installierten Browsern:</string>
   <!-- Autofill -->
   <string name="ssh_key_does_not_exist">Der private SSH-Schlüssel konnte nicht geöffnet werden. Bitte überprüfen Sie, ob die Datei existiert</string>
