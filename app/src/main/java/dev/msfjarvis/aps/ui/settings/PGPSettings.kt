@@ -18,13 +18,15 @@ class PGPSettings(private val activity: FragmentActivity) : SettingsProvider {
 
   override fun provideSettings(builder: PreferenceScreen.Builder) {
     builder.apply {
-      checkBox(Feature.EnablePGPainlessBackend.configKey) {
-        title = "Enable new PGP backend"
-        persistent = true
-      }
+      val enablePGPainless =
+        checkBox(Feature.EnablePGPainlessBackend.configKey) {
+          title = "Enable new PGP backend"
+          persistent = true
+        }
       pref("_") {
         title = "Import PGP key"
         persistent = false
+        dependency = enablePGPainless.key
         onClick {
           activity.launchActivity(PGPKeyImportActivity::class.java)
           false
