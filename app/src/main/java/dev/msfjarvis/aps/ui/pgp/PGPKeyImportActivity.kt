@@ -29,7 +29,7 @@ class PGPKeyImportActivity : AppCompatActivity() {
     registerForActivityResult(OpenDocument()) { uri ->
       runCatching {
           if (uri == null) {
-            throw IllegalStateException("Selected URI was null")
+            return@runCatching null
           }
           val keyInputStream =
             contentResolver.openInputStream(uri)
@@ -41,13 +41,14 @@ class PGPKeyImportActivity : AppCompatActivity() {
         }
         .mapBoth(
           { key ->
-            require(key != null) { "Key cannot be null here" }
-            MaterialAlertDialogBuilder(this)
-              .setTitle(getString(R.string.pgp_key_import_succeeded))
-              .setMessage(getString(R.string.pgp_key_import_succeeded_message, tryGetId(key)))
-              .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-              .setOnCancelListener { finish() }
-              .show()
+            if (key != null) {
+              MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.pgp_key_import_succeeded))
+                .setMessage(getString(R.string.pgp_key_import_succeeded_message, tryGetId(key)))
+                .setPositiveButton(android.R.string.ok) { _, _ -> finish() }
+                .setOnCancelListener { finish() }
+                .show()
+            }
           },
           { throwable ->
             MaterialAlertDialogBuilder(this)
