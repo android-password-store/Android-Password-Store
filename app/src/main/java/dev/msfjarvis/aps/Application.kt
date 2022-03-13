@@ -15,11 +15,15 @@ import dagger.hilt.android.HiltAndroidApp
 import dev.msfjarvis.aps.injection.context.FilesDirPath
 import dev.msfjarvis.aps.injection.prefs.SettingsPreferences
 import dev.msfjarvis.aps.util.extensions.getString
+import dev.msfjarvis.aps.util.features.Feature
+import dev.msfjarvis.aps.util.features.Features
 import dev.msfjarvis.aps.util.git.sshj.setUpBouncyCastleForSshj
 import dev.msfjarvis.aps.util.proxy.ProxyUtils
 import dev.msfjarvis.aps.util.settings.GitSettings
 import dev.msfjarvis.aps.util.settings.PreferenceKeys
 import dev.msfjarvis.aps.util.settings.runMigrations
+import io.sentry.Sentry
+import io.sentry.protocol.User
 import javax.inject.Inject
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority.DEBUG
@@ -33,6 +37,7 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
   @Inject @FilesDirPath lateinit var filesDirPath: String
   @Inject lateinit var proxyUtils: ProxyUtils
   @Inject lateinit var gitSettings: GitSettings
+  @Inject lateinit var features: Features
 
   override fun onCreate() {
     super.onCreate()
@@ -48,6 +53,14 @@ class Application : android.app.Application(), SharedPreferences.OnSharedPrefere
     runMigrations(filesDirPath, prefs, gitSettings)
     proxyUtils.setDefaultProxy()
     DynamicColors.applyToActivitiesIfAvailable(this)
+    Sentry.configureScope { scope ->
+      val user = User()
+      user.others =
+        Feature.VALUES.associate { feature ->
+          "features.${feature.configKey}" to features.isEnabled(feature).toString()
+        }
+      scope.user = user
+    }
   }
 
   override fun onTerminate() {

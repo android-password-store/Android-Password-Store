@@ -15,4 +15,9 @@ enum class Feature(
 
   /** Opt into the new PGP backend powered by the PGPainless library. */
   EnablePGPainlessBackend(false, "enable_pgp_v2_backend"),
+  ;
+
+  companion object {
+    @JvmField val VALUES = values()
+  }
 }
