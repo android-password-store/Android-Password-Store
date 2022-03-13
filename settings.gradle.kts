@@ -2,6 +2,7 @@
  * Copyright © 2014-2021 The Android Password Store Authors. All Rights Reserved.
  * SPDX-License-Identifier: GPL-3.0-only
  */
+@file:Suppress("UnstableApiUsage")
 
 rootProject.name = "APS"
 
@@ -53,5 +54,7 @@ include("openpgp-ktx")
 include("passgen:diceware")
 
 include("passgen:random")
+
+include("sentry-stub")
 
 include("ui-compose")

@@ -35,4 +35,5 @@ dependencies {
   implementation(libs.build.dokka)
   implementation(libs.build.mavenpublish)
   implementation(libs.build.semver)
+  implementation(libs.build.sentry)
 }

@@ -101,6 +101,7 @@ dependencies {
   debugImplementation(libs.thirdparty.leakcanary)
   add("nonFreeImplementation", libs.thirdparty.nonfree.googlePlayAuthApiPhone)
   add("nonFreeImplementation", libs.thirdparty.nonfree.sentry)
+  add("freeImplementation", projects.sentryStub)
 
   androidTestImplementation(libs.bundles.testDependencies)
   androidTestImplementation(libs.bundles.androidTestDependencies)

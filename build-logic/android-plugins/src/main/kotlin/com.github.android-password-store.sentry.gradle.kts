@@ -2,11 +2,14 @@
 
 import flavors.FlavorDimensions
 import flavors.ProductFlavors
+import io.sentry.android.gradle.InstrumentationFeature
 
-plugins { id("com.android.application") }
+plugins {
+  id("com.android.application")
+  id("io.sentry.android.gradle")
+}
 
 val SENTRY_DSN_PROPERTY = "SENTRY_DSN"
-val INVOKED_FROM_IDE_PROPERTY = "android.injected.invoked.from.ide"
 
 android {
   androidComponents {
@@ -14,12 +17,17 @@ android {
       val sentryDsn = project.providers.environmentVariable(SENTRY_DSN_PROPERTY)
       if (sentryDsn.isPresent) {
         variant.manifestPlaceholders.put("sentryDsn", sentryDsn.get())
-      } else if (project.providers.gradleProperty(INVOKED_FROM_IDE_PROPERTY).orNull != "true") {
-        // Checking for 'INVOKED_FROM_IDE_PROPERTY' prevents failures during Gradle sync by the IDE
-        throw GradleException(
-          "The '${SENTRY_DSN_PROPERTY}' environment variable must be set when building the ${ProductFlavors.NON_FREE} flavor"
-        )
       }
     }
+  }
+}
+
+sentry {
+  autoUploadProguardMapping.set(true)
+  ignoredBuildTypes.set(setOf("debug"))
+  ignoredFlavors.set(setOf(ProductFlavors.FREE))
+  tracingInstrumentation {
+    enabled.set(true)
+    features.set(setOf(InstrumentationFeature.FILE_IO))
   }
 }
