@@ -10,4 +10,5 @@ plugins {
 dependencies {
   implementation(libs.kotlin.coroutines.core)
   implementation(libs.dagger.hilt.core)
+  api(libs.thirdparty.kotlinResult)
 }

@@ -10,6 +10,7 @@ plugins {
 
 dependencies {
   api(projects.cryptoCommon)
+  implementation(projects.coroutineUtils)
   implementation(libs.androidx.annotation)
   implementation(libs.dagger.hilt.core)
   implementation(libs.kotlin.coroutines.core)
