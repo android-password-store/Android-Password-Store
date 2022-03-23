@@ -8,9 +8,9 @@ package dev.msfjarvis.aps.crypto
 
 import androidx.annotation.VisibleForTesting
 import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.crypto.KeyUtils.tryGetId
 import dev.msfjarvis.aps.crypto.KeyUtils.tryParseKeyring
+import dev.msfjarvis.aps.util.coroutines.runSuspendCatching
 import java.io.File
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,7 +28,7 @@ constructor(
 
   override suspend fun addKey(key: PGPKey, replace: Boolean): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
-      runCatching {
+      runSuspendCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         if (tryParseKeyring(key) == null) throw KeyManagerException.InvalidKeyException
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
@@ -49,7 +49,7 @@ constructor(
 
   override suspend fun removeKey(key: PGPKey): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
-      runCatching {
+      runSuspendCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         if (tryParseKeyring(key) == null) throw KeyManagerException.InvalidKeyException
         val keyFile = File(keyDir, "${tryGetId(key)}.$KEY_EXTENSION")
@@ -63,7 +63,7 @@ constructor(
 
   override suspend fun getKeyById(id: GpgIdentifier): Result<PGPKey, Throwable> =
     withContext(dispatcher) {
-      runCatching {
+      runSuspendCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keyFiles = keyDir.listFiles()
         if (keyFiles.isNullOrEmpty()) throw KeyManagerException.NoKeysAvailableException
@@ -89,7 +89,7 @@ constructor(
           }
 
         if (matchResult != null) {
-          return@runCatching matchResult
+          return@runSuspendCatching matchResult
         }
 
         throw KeyManagerException.KeyNotFoundException("$id")
@@ -98,10 +98,10 @@ constructor(
 
   override suspend fun getAllKeys(): Result<List<PGPKey>, Throwable> =
     withContext(dispatcher) {
-      runCatching {
+      runSuspendCatching {
         if (!keyDirExists()) throw KeyManagerException.KeyDirectoryUnavailableException
         val keyFiles = keyDir.listFiles()
-        if (keyFiles.isNullOrEmpty()) return@runCatching emptyList()
+        if (keyFiles.isNullOrEmpty()) return@runSuspendCatching emptyList()
         keyFiles.map { keyFile -> PGPKey(keyFile.readBytes()) }.toList()
       }
     }
