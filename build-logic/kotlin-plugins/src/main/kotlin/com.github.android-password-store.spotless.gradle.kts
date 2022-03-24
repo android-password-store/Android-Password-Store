@@ -5,7 +5,7 @@
 
 plugins { id("com.diffplug.spotless") }
 
-val KTFMT_VERSION = "0.33"
+val KTFMT_VERSION = "0.35"
 
 spotless {
   kotlin {
