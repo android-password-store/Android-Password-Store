@@ -18,7 +18,7 @@
 
 ## Documentation
 
-We're in the process of rewriting our documentation from scratch, and the work-in-progress state can be seen [here](https://android-password-store.github.io/docs). See the [wiki](https://github.com/android-password-store/Android-Password-Store/wiki/) for the old documentation.
+We're in the process of rewriting our documentation from scratch, and the work-in-progress state can be seen [here](https://docs.passwordstore.app). See the [wiki](https://github.com/android-password-store/Android-Password-Store/wiki/) for the old documentation.
 
 ## Contributing
 
@@ -26,7 +26,9 @@ Want to contribute? See if you can [find an issue](https://github.com/android-pa
 
 Interested in helping to translate Password Store? Contribute [here](https://crowdin.com/project/android-password-store)!
 
-Wanna test development builds to find bugs and offer feedback? Read the [release channels](https://android-password-store.github.io/docs/users/release-channels) documentation to get access!
+Wanna test development builds to find bugs and offer feedback? Read the [release channels](https://docs.passwordstore.app/docs/Users/release-channels) documentation to get access!
+
+Code contributions? [Here](CONTRIBUTING.md) you are welcomed!
 
 ## Community
 
