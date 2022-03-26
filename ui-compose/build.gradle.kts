@@ -18,6 +18,6 @@ dependencies {
   api(libs.compose.foundation.core)
   api(libs.compose.foundation.layout)
   api(libs.compose.material)
-  api(libs.androidx.compose.material3)
+  api(libs.compose.material3)
   api(libs.compose.ui.core)
 }
