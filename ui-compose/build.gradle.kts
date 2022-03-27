@@ -4,14 +4,21 @@ plugins {
   id("com.github.android-password-store.kotlin-library")
 }
 
+android {
+  buildFeatures {
+    compose = true
+    composeOptions {
+      useLiveLiterals = false
+      kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    }
+  }
+  namespace = "dev.msfjarvis.aps.ui.compose"
+}
+
 dependencies {
-  implementation(libs.androidx.activity.compose)
-  implementation(libs.androidx.hilt.compose)
-  implementation(libs.compose.foundation.core)
-  implementation(libs.compose.foundation.layout)
-  implementation(libs.compose.material)
-  implementation(libs.androidx.compose.material3)
-  implementation(libs.compose.ui.core)
-  implementation(libs.compose.ui.viewbinding)
-  compileOnly(libs.compose.ui.tooling)
+  api(libs.compose.foundation.core)
+  api(libs.compose.foundation.layout)
+  api(libs.compose.material)
+  api(libs.compose.material3)
+  api(libs.compose.ui.core)
 }

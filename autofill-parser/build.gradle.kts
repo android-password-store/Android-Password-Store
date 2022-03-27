@@ -13,6 +13,7 @@ plugins {
 android {
   defaultConfig { consumerProguardFiles("consumer-rules.pro") }
   sourceSets { getByName("test") { resources.srcDir("src/main/assets") } }
+  namespace = "com.github.androidpasswordstore.autofillparser"
 }
 
 dependencies {

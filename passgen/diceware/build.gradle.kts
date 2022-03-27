@@ -9,7 +9,10 @@ plugins {
   id("com.github.android-password-store.kotlin-library")
 }
 
-android { sourceSets { getByName("test") { resources.srcDir("src/main/res/raw") } } }
+android {
+  sourceSets { getByName("test") { resources.srcDir("src/main/res/raw") } }
+  namespace = "dev.msfjarvis.aps.passgen.diceware"
+}
 
 dependencies {
   implementation(libs.dagger.hilt.core)
