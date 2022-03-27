@@ -12,6 +12,7 @@ android {
       kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
   }
+  namespace = "dev.msfjarvis.aps.ui.compose"
 }
 
 dependencies {

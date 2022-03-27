@@ -11,8 +11,8 @@ plugins {
 
 android {
   defaultConfig { consumerProguardFiles("consumer-proguard-rules.pro") }
-
   buildFeatures.aidl = true
+  namespace = "me.msfjarvis.openpgpktx"
 }
 
 dependencies { implementation(libs.kotlin.coroutines.core) }

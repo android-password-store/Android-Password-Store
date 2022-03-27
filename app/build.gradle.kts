@@ -35,6 +35,8 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
+  namespace = "dev.msfjarvis.aps"
+
   lint {
     abortOnError = true
     checkReleaseBuilds = false
