@@ -16,7 +16,6 @@ jobs:
         with:
           distribution: zulu
           java-version: 17
-          cache: gradle
 
       - name: Download new translations from Crowdin
         uses: gradle/gradle-build-action@v2.1.5
