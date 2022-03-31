@@ -33,7 +33,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -68,7 +67,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -110,7 +108,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -145,7 +142,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -180,7 +176,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"
@@ -215,7 +210,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Copy CI gradle.properties
       if: "${{ steps.service-changed.outputs.result == 'true' }}"

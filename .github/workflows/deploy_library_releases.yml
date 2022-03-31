@@ -17,7 +17,6 @@ jobs:
       with:
         distribution: zulu
         java-version: 17
-        cache: gradle
 
     - name: Determine publishing task
       id: task-select
