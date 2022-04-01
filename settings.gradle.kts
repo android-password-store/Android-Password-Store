@@ -56,5 +56,3 @@ include("passgen:diceware")
 include("passgen:random")
 
 include("sentry-stub")
-
-include("ui-compose")

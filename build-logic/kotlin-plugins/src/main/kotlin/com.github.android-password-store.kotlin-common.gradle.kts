@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val additionalCompilerArgs =
   listOf(
-    "-Xopt-in=kotlin.RequiresOptIn",
+    "-opt-in=kotlin.RequiresOptIn",
     "-P",
     "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
   )
