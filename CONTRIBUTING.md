@@ -51,6 +51,17 @@ The app comes in two 'flavors', a FOSS-only **free** variant and a **nonFree** v
 
 You can find the generated APK at `app/outputs`.
 
+The project makes use of the unstable [Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html) feature of Gradle. This has the potential to cause spurious build failures that look something like this:
+
+```
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not find build ':kotlin-plugins:generatePrecompiledScriptPluginAccessors:accessors8052664764592233112'
+```
+
+This can be resolved by simply re-running the command, or adding the `--no-configuration-cache` parameter.
+
 ## Pre-push checks
 
 The project enforces codestyle conventions and library API stability by virtue of a carefully curated Gradle build. To setup a Git pre-push hook to run them automatically, run `./gradlew installGitHooks`.
