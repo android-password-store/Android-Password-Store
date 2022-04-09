@@ -73,7 +73,7 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15on:1.70"
+thirdparty-bouncycastle = "org.bouncycastle:bcprov-jdk15to18:1.71"
 thirdparty-commons_codec = "commons-codec:commons-codec:1.14"
 thirdparty-eddsa = "net.i2p.crypto:eddsa:0.3.0"
 thirdparty-fastscroll = "me.zhanghai.android.fastscroll:library:1.1.7"
