@@ -11,6 +11,7 @@ plugins {
   id("com.github.android-password-store.versioning-plugin")
   id("com.github.android-password-store.sentry")
   id("com.github.android-password-store.rename-artifacts")
+  id("com.github.android-password-store.bouncycastle-dependency")
   id("dagger.hilt.android.plugin")
 }
 
