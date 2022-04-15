@@ -11,7 +11,7 @@ extensions.configure<TestedExtension> {
   setCompileSdkVersion(31)
   defaultConfig {
     minSdk = 23
-    targetSdk = 29
+    targetSdk = 31
   }
 
   sourceSets {

@@ -244,7 +244,7 @@ private fun getBrowserAutofillSupportLevel(
 public fun getInstalledBrowsersWithAutofillSupportLevel(
   context: Context
 ): List<Pair<String, BrowserAutofillSupportLevel>> {
-  val testWebIntent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse("http://example.org") }
+  val testWebIntent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse("https://example.org") }
   val installedBrowsers =
     context.packageManager.queryIntentActivities(testWebIntent, PackageManager.MATCH_ALL)
   return installedBrowsers
