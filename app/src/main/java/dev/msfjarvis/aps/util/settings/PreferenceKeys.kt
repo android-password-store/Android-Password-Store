@@ -8,7 +8,6 @@ package dev.msfjarvis.aps.util.settings
 object PreferenceKeys {
 
   const val APP_THEME = "app_theme"
-  const val APP_VERSION = "app_version"
   const val AUTOFILL_ENABLE = "autofill_enable"
   const val BIOMETRIC_AUTH = "biometric_auth"
   @Deprecated(
@@ -26,8 +25,11 @@ object PreferenceKeys {
   const val GIT_CONFIG = "git_config"
   const val GIT_CONFIG_AUTHOR_EMAIL = "git_config_user_email"
   const val GIT_CONFIG_AUTHOR_NAME = "git_config_user_name"
+  @Deprecated(message = "We're removing support for external storage")
   const val GIT_EXTERNAL = "git_external"
+  @Deprecated(message = "We're removing support for external storage")
   const val GIT_EXTERNAL_REPO = "git_external_repo"
+  const val GIT_EXTERNAL_MIGRATED = "git_external_migrated"
   const val GIT_REMOTE_AUTH = "git_remote_auth"
   const val GIT_REMOTE_KEY_TYPE = "git_remote_key_type"
 
@@ -50,10 +52,7 @@ object PreferenceKeys {
   const val OREO_AUTOFILL_CUSTOM_PUBLIC_SUFFIXES = "oreo_autofill_custom_public_suffixes"
   const val OREO_AUTOFILL_DEFAULT_USERNAME = "oreo_autofill_default_username"
   const val OREO_AUTOFILL_DIRECTORY_STRUCTURE = "oreo_autofill_directory_structure"
-  const val PREF_KEY_CUSTOM_DICT = "pref_key_custom_dict"
-  const val PREF_KEY_IS_CUSTOM_DICT = "pref_key_is_custom_dict"
   const val PREF_KEY_PWGEN_TYPE = "pref_key_pwgen_type"
-  const val PREF_SELECT_EXTERNAL = "pref_select_external"
   const val REPOSITORY_INITIALIZED = "repository_initialized"
   const val REPO_CHANGED = "repo_changed"
   const val SEARCH_ON_START = "search_on_start"

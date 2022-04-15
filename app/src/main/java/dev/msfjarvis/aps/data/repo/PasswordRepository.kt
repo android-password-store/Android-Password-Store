@@ -10,7 +10,6 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import dev.msfjarvis.aps.Application
 import dev.msfjarvis.aps.data.password.PasswordItem
-import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.settings.PasswordSortOrder
@@ -106,12 +105,7 @@ object PasswordRepository {
   }
 
   fun getRepositoryDirectory(): File {
-    return if (settings.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
-      val externalRepo = settings.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-      if (externalRepo != null) File(externalRepo) else File(filesDir.toString(), "/store")
-    } else {
-      File(filesDir.toString(), "/store")
-    }
+    return File(filesDir.toString(), "/store")
   }
 
   fun initialize(): Repository? {

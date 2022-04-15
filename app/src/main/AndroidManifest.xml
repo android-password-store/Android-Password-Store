@@ -8,8 +8,6 @@
   android:installLocation="auto">
 
   <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
@@ -25,7 +23,6 @@
     android:allowBackup="false"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:requestLegacyExternalStorage="true"
     android:supportsRtl="true"
     android:theme="@style/AppThemeM3"
     tools:ignore="GoogleAppIndexingWarning">
@@ -83,10 +80,6 @@
       android:name="dev.msfjarvis.aps.ui.settings.SettingsActivity"
       android:label="@string/action_settings"
       android:parentActivityName=".ui.passwords.PasswordStore" />
-
-    <activity
-      android:name="dev.msfjarvis.aps.ui.settings.DirectorySelectionActivity"
-      android:theme="@style/NoBackgroundThemeM3" />
 
     <activity
       android:name="dev.msfjarvis.aps.ui.crypto.PasswordCreationActivity"

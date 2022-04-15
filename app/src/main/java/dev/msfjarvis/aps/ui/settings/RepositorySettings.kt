@@ -23,7 +23,6 @@ import dagger.hilt.components.SingletonComponent
 import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.checkBox
-import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import dev.msfjarvis.aps.R
@@ -59,17 +58,6 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
   }
 
   private var showSshKeyPref: Preference? = null
-
-  private fun selectExternalGitRepository() {
-    MaterialAlertDialogBuilder(activity)
-      .setTitle(activity.resources.getString(R.string.external_repository_dialog_title))
-      .setMessage(activity.resources.getString(R.string.external_repository_dialog_text))
-      .setPositiveButton(R.string.dialog_ok) { _, _ ->
-        activity.launchActivity(DirectorySelectionActivity::class.java)
-      }
-      .setNegativeButton(R.string.dialog_cancel, null)
-      .show()
-  }
 
   override fun provideSettings(builder: PreferenceScreen.Builder) {
     val encryptedPreferences = hiltEntryPoint.encryptedPreferences()
@@ -162,64 +150,35 @@ class RepositorySettings(private val activity: FragmentActivity) : SettingsProvi
           true
         }
       }
-      val deleteRepoPref =
-        pref(PreferenceKeys.GIT_DELETE_REPO) {
-          titleRes = R.string.pref_git_delete_repo_title
-          summaryRes = R.string.pref_git_delete_repo_summary
-          visible = !activity.sharedPrefs.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)
-          onClick {
-            val repoDir = PasswordRepository.getRepositoryDirectory()
-            MaterialAlertDialogBuilder(activity)
-              .setTitle(R.string.pref_dialog_delete_title)
-              .setMessage(activity.getString(R.string.dialog_delete_msg, repoDir))
-              .setCancelable(false)
-              .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
-                runCatching {
-                  PasswordRepository.getRepositoryDirectory().deleteRecursively()
-                  PasswordRepository.closeRepository()
-                }
-                  .onFailure { it.message?.let { message -> activity.snackbar(message = message) } }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                  activity.getSystemService<ShortcutManager>()?.apply {
-                    removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
-                  }
-                }
-                activity.sharedPrefs.edit {
-                  putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false)
-                }
-                dialogInterface.cancel()
-                activity.finish()
-              }
-              .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ ->
-                run { dialogInterface.cancel() }
-              }
-              .show()
-            true
-          }
-        }
-      checkBox(PreferenceKeys.GIT_EXTERNAL) {
-        titleRes = R.string.pref_external_repository_title
-        summaryRes = R.string.pref_external_repository_summary
-        onCheckedChange { checked ->
-          deleteRepoPref.visible = !checked
-          deleteRepoPref.requestRebind()
-          PasswordRepository.closeRepository()
-          activity.sharedPrefs.edit { putBoolean(PreferenceKeys.REPO_CHANGED, true) }
-          true
-        }
-      }
-      pref(PreferenceKeys.GIT_EXTERNAL_REPO) {
-        val externalRepo = activity.sharedPrefs.getString(PreferenceKeys.GIT_EXTERNAL_REPO)
-        if (externalRepo != null) {
-          summary = externalRepo
-        } else {
-          summaryRes = R.string.pref_select_external_repository_summary_no_repo_selected
-        }
-        titleRes = R.string.pref_select_external_repository_title
-        dependency = PreferenceKeys.GIT_EXTERNAL
+      pref(PreferenceKeys.GIT_DELETE_REPO) {
+        titleRes = R.string.pref_git_delete_repo_title
+        summaryRes = R.string.pref_git_delete_repo_summary
         onClick {
-          selectExternalGitRepository()
+          val repoDir = PasswordRepository.getRepositoryDirectory()
+          MaterialAlertDialogBuilder(activity)
+            .setTitle(R.string.pref_dialog_delete_title)
+            .setMessage(activity.getString(R.string.dialog_delete_msg, repoDir))
+            .setCancelable(false)
+            .setPositiveButton(R.string.dialog_delete) { dialogInterface, _ ->
+              runCatching {
+                PasswordRepository.getRepositoryDirectory().deleteRecursively()
+                PasswordRepository.closeRepository()
+              }
+                .onFailure { it.message?.let { message -> activity.snackbar(message = message) } }
+
+              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                activity.getSystemService<ShortcutManager>()?.apply {
+                  removeDynamicShortcuts(dynamicShortcuts.map { it.id }.toMutableList())
+                }
+              }
+              activity.sharedPrefs.edit { putBoolean(PreferenceKeys.REPOSITORY_INITIALIZED, false) }
+              dialogInterface.cancel()
+              activity.finish()
+            }
+            .setNegativeButton(R.string.dialog_do_not_delete) { dialogInterface, _ ->
+              run { dialogInterface.cancel() }
+            }
+            .show()
           true
         }
       }

@@ -16,6 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 
@@ -50,7 +51,6 @@ class MigrationsTest {
   @Test
   fun verifySshWithCustomPortMigration() {
     sharedPrefs.edit {
-      clear()
       putString(PreferenceKeys.GIT_REMOTE_PORT, "2200")
       putString(PreferenceKeys.GIT_REMOTE_USERNAME, "msfjarvis")
       putString(PreferenceKeys.GIT_REMOTE_LOCATION, "/mnt/disk3/pass-repo")
@@ -73,7 +73,6 @@ class MigrationsTest {
   @Test
   fun verifySshWithDefaultPortMigration() {
     sharedPrefs.edit {
-      clear()
       putString(PreferenceKeys.GIT_REMOTE_USERNAME, "msfjarvis")
       putString(PreferenceKeys.GIT_REMOTE_LOCATION, "/mnt/disk3/pass-repo")
       putString(PreferenceKeys.GIT_REMOTE_SERVER, "192.168.0.102")
@@ -95,7 +94,6 @@ class MigrationsTest {
   @Test
   fun verifyHttpsWithGitHubMigration() {
     sharedPrefs.edit {
-      clear()
       putString(PreferenceKeys.GIT_REMOTE_USERNAME, "msfjarvis")
       putString(PreferenceKeys.GIT_REMOTE_LOCATION, "Android-Password-Store/pass-test")
       putString(PreferenceKeys.GIT_REMOTE_SERVER, "github.com")
@@ -116,7 +114,6 @@ class MigrationsTest {
 
   @Test
   fun verifyHiddenFoldersMigrationIfDisabled() {
-    sharedPrefs.edit { clear() }
     runMigrations(
       filesDir,
       sharedPrefs,
@@ -128,10 +125,7 @@ class MigrationsTest {
 
   @Test
   fun verifyHiddenFoldersMigrationIfEnabled() {
-    sharedPrefs.edit {
-      clear()
-      putBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true)
-    }
+    sharedPrefs.edit { putBoolean(PreferenceKeys.SHOW_HIDDEN_FOLDERS, true) }
     runMigrations(
       filesDir,
       sharedPrefs,
@@ -143,10 +137,7 @@ class MigrationsTest {
 
   @Test
   fun verifyClearClipboardHistoryMigration() {
-    sharedPrefs.edit {
-      clear()
-      putBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, true)
-    }
+    sharedPrefs.edit { putBoolean(PreferenceKeys.CLEAR_CLIPBOARD_20X, true) }
     runMigrations(
       filesDir,
       sharedPrefs,
@@ -158,10 +149,7 @@ class MigrationsTest {
 
   @Test
   fun verifyClassicPasswordGeneratorMigration() {
-    sharedPrefs.edit {
-      clear()
-      putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "classic")
-    }
+    sharedPrefs.edit { putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "classic") }
     runMigrations(
       filesDir,
       sharedPrefs,
@@ -172,15 +160,28 @@ class MigrationsTest {
 
   @Test
   fun verifyXkPasswdPasswordGeneratorMigration() {
-    sharedPrefs.edit {
-      clear()
-      putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "xkpasswd")
-    }
+    sharedPrefs.edit { putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "xkpasswd") }
     runMigrations(
       filesDir,
       sharedPrefs,
       GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
     )
     assertEquals("diceware", sharedPrefs.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE))
+  }
+
+  @Test
+  fun verifyExternalStorageMigration() {
+    sharedPrefs.edit {
+      putBoolean(PreferenceKeys.GIT_EXTERNAL, true)
+      putString(PreferenceKeys.GIT_EXTERNAL_REPO, "/sdcard/")
+    }
+    runMigrations(
+      filesDir,
+      sharedPrefs,
+      GitSettings(sharedPrefs, encryptedSharedPreferences, proxySharedPreferences, filesDir),
+    )
+    assertFalse { sharedPrefs.contains(PreferenceKeys.GIT_EXTERNAL) }
+    assertFalse { sharedPrefs.contains(PreferenceKeys.GIT_EXTERNAL_REPO) }
+    assertTrue { sharedPrefs.getBoolean(PreferenceKeys.GIT_EXTERNAL_MIGRATED, false) }
   }
 }
