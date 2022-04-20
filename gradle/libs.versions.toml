@@ -7,7 +7,7 @@ coroutines = "1.6.1"
 flowbinding = "1.2.0"
 hilt = "2.41"
 kotlin = "1.6.21"
-leakcanary = "2.8.1"
+leakcanary = "2.9"
 lifecycle = "2.4.1"
 
 [plugins]
