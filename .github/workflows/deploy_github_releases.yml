@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3.0.1
+      uses: actions/checkout@v3.0.2
 
     - name: Set up JDK
       uses: actions/setup-java@v3.1.1
@@ -61,7 +61,7 @@ jobs:
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.1
+        uses: actions/checkout@v3.0.2
 
       - name: Get Non-Free Release APK
         uses: actions/download-artifact@v3.0.0
