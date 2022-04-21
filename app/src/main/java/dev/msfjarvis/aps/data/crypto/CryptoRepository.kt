@@ -5,7 +5,6 @@
 
 package dev.msfjarvis.aps.data.crypto
 
-import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.unwrap
 import dev.msfjarvis.aps.crypto.PGPKeyManager
 import dev.msfjarvis.aps.crypto.PGPainlessCryptoHandler
@@ -42,9 +41,7 @@ constructor(
   ) {
     val keys = pgpKeyManager.getAllKeys().unwrap()
     // Iterates through the keys until the first successful decryption, then returns.
-    keys.firstOrNull { key ->
-      runCatching { pgpCryptoHandler.decrypt(key, password, message, out) }.isOk()
-    }
+    keys.firstOrNull { key -> pgpCryptoHandler.decrypt(key, password, message, out).isOk() }
   }
 
   private suspend fun encryptPgp(content: ByteArrayInputStream, out: ByteArrayOutputStream) {

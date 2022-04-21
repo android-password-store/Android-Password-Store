@@ -2,7 +2,8 @@ package dev.msfjarvis.aps.crypto.errors
 
 import dev.msfjarvis.aps.crypto.KeyManager
 
-public sealed class CryptoException(message: String? = null) : Exception(message)
+public sealed class CryptoException(message: String? = null, cause: Throwable? = null) :
+  Exception(message, cause)
 
 /** Sealed exception types for [KeyManager]. */
 public sealed class KeyManagerException(message: String? = null) : CryptoException(message)
@@ -28,3 +29,13 @@ public class KeyNotFoundException(keyId: String) :
 /** Attempting to add another key for [keyId] without requesting a replace. */
 public class KeyAlreadyExistsException(keyId: String) :
   KeyManagerException("Pre-existing key was found for $keyId")
+
+/** Sealed exception types for [CryptoHandler]. */
+public sealed class CryptoHandlerException(message: String? = null, cause: Throwable? = null) :
+  CryptoException(message, cause)
+
+/** The passphrase provided for decryption was incorrect. */
+public class IncorrectPassphraseException(cause: Throwable) : CryptoHandlerException(null, cause)
+
+/** An unexpected error that cannot be mapped to a known type. */
+public class UnknownError(cause: Throwable) : CryptoHandlerException(null, cause)
