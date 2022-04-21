@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 -   Using HTTPS without authentication is now fully supported, and no longer asks for a username
 -   Enabling 'Show hidden files and folders' no longer shows Git-related files and folders
 -   XkPasswd password generator has been removed in favor of one backed by [Diceware](https://theworld.com/~reinhold/diceware.html)
+-   Support for stores outside the hidden app directory has been removed due to technical restrictions, see [this issue](https://msfjarvis.dev/aps/issue/1849) for details.
 
 ## [1.13.5] - 2021-07-28
 
