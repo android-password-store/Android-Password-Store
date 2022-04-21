@@ -26,6 +26,7 @@ fun runMigrations(filesDirPath: String, sharedPrefs: SharedPreferences, gitSetti
   migrateToSshKey(filesDirPath, sharedPrefs)
   migrateToClipboardHistory(sharedPrefs)
   migrateToDiceware(sharedPrefs)
+  removeExternalStorageProperties(sharedPrefs)
 }
 
 private fun migrateToGitUrlBasedConfig(sharedPrefs: SharedPreferences, gitSettings: GitSettings) {
@@ -129,6 +130,21 @@ private fun migrateToDiceware(sharedPrefs: SharedPreferences) {
       if (sharedPrefs.getString(PreferenceKeys.PREF_KEY_PWGEN_TYPE) == "xkpasswd") {
         putString(PreferenceKeys.PREF_KEY_PWGEN_TYPE, "diceware")
       }
+    }
+  }
+}
+
+private fun removeExternalStorageProperties(prefs: SharedPreferences) {
+  logcat(TAG, INFO) { "Removing preferences related to external storage" }
+  prefs.edit {
+    if (prefs.contains(PreferenceKeys.GIT_EXTERNAL)) {
+      if (prefs.getBoolean(PreferenceKeys.GIT_EXTERNAL, false)) {
+        putBoolean(PreferenceKeys.GIT_EXTERNAL_MIGRATED, true)
+      }
+      remove(PreferenceKeys.GIT_EXTERNAL)
+    }
+    if (prefs.contains(PreferenceKeys.GIT_EXTERNAL_REPO)) {
+      remove(PreferenceKeys.GIT_EXTERNAL_REPO)
     }
   }
 }
